@@ -7,6 +7,9 @@
 	"scripts": {
 		"dev": "vite --force",
 		"build": "vite build",
+		"deploy": "npm run build && npm run deploy:rm && npm run deploy:scp",
+		"deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
+		"deploy:scp": "scp -r ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'mv /www/wwwroot/zhgy.sagoo.cn/* /www/wwwroot/zhgy.sagoo.cn-copy && mv /www/wwwroot/zhgy.sagoo.cn-pre/* /www/wwwroot/zhgy.sagoo.cn'",
 		"lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
 	},
 	"dependencies": {
