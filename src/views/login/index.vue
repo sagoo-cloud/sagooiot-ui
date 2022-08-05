@@ -1,7 +1,7 @@
 <template>
-	<div class="login-container">
+  <div class="login-container">
     <div class="login-content-out">
-     <div class="login-content">
+      <div class="login-content">
         <div class="login-content-main">
           <div class="login-icon-group">
             <div class="login-icon-group-title">
@@ -26,8 +26,9 @@
           </div>
         </div>
       </div>
-		</div>
+    </div>
     <div class="login-footer">
+      <!-- <amis :json="amisjson" /> -->
       <div class="login-footer-content mt15">
         <div class="login-footer-content-warp">
           <div>Copyright © 2021-2023 g-fast.cn All Rights Reserved.</div>
@@ -35,7 +36,7 @@
         </div>
       </div>
     </div>
-	</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -45,6 +46,7 @@ import Mobile from '/@/views/login/component/mobile.vue';
 import Scan from '/@/views/login/component/scan.vue';
 import { useStore } from '/@/store/index';
 import logoMini from '/@/assets/logo-mini.svg';
+import amis from '/@/components/amis/index.vue';
 
 // 定义接口来定义对象的类型
 interface LoginState {
@@ -54,7 +56,32 @@ interface LoginState {
 
 export default defineComponent({
 	name: 'loginIndex',
-	components: { Account, Mobile, Scan },
+	components: { Account, Mobile, Scan,amis },
+	data: function () {
+		return {
+			amisjson: {
+				type: 'page',
+				title: '表单页面',
+				body: {
+					type: 'form',
+					mode: 'horizontal',
+					api: '/saveForm',
+					body: [
+						{
+							label: 'Name1Name1Name1Name1',
+							type: 'input-text',
+							name: 'name123',
+						},
+						{
+							label: 'Email2Email2Email2Email2',
+							type: 'input-email',
+							name: 'email1',
+						},
+					],
+				},
+			},
+		};
+	},
 	setup() {
 		const store = useStore();
 		const state = reactive<LoginState>({
@@ -79,8 +106,8 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	position: relative;
-  background-image: url("/@/assets/bg.jpg");
-  background-size: cover;
+	background-image: url('/@/assets/bg.jpg');
+	background-size: cover;
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
@@ -105,21 +132,21 @@ export default defineComponent({
 			bottom: 0;
 		}
 	}
-  .login-content-out {
-    width: 100%;
-    height: 100%;
-    padding-top: 150px;
-  }
+	.login-content-out {
+		width: 100%;
+		height: 100%;
+		padding-top: 150px;
+	}
 	.login-content {
 		width: 500px;
 		padding: 20px;
-    margin: auto;
+		margin: auto;
 		background-color: var(--el-color-white);
 		border: 5px solid var(--el-color-primary-light-8);
 		border-radius: 5px;
 		overflow: hidden;
 		z-index: 1;
-    position: relative;
+		position: relative;
 		.login-content-main {
 			margin: 0 auto;
 			width: 80%;
@@ -172,20 +199,20 @@ export default defineComponent({
 			}
 		}
 	}
-  .login-footer{
-    position: absolute;
-    bottom: 5px;
-    width: 100%;
-    &-content {
-      width: 100%;
-      display: flex;
-      &-warp {
-        margin: auto;
-        color: #e0e3e9;
-        text-align: center;
-        animation: error-num 1s ease-in-out;
-      }
-    }
-  }
+	.login-footer {
+		position: absolute;
+		bottom: 5px;
+		width: 100%;
+		&-content {
+			width: 100%;
+			display: flex;
+			&-warp {
+				margin: auto;
+				color: #e0e3e9;
+				text-align: center;
+				animation: error-num 1s ease-in-out;
+			}
+		}
+	}
 }
 </style>

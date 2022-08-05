@@ -15,6 +15,8 @@ import {getUpFileUrl, handleTree, selectDictLabel} from "/@/utils/gfast";
 import {useDict} from "/@/api/system/dict/data";
 // 分页组件
 import pagination from '/@/components/pagination/index.vue'
+import 'amis/sdk/sdk.js';
+import 'amis/lib/themes/default.css';
 
 const app = createApp(App);
 
