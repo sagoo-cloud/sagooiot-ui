@@ -188,7 +188,7 @@ const { isRequestRoutes } = store.state.themeConfig.themeConfig;
 if (!isRequestRoutes) initFrontEndControlRoutes();
 
 
-import {isInit} from "/@/api/system/dbInit"
+// import { isInit } from "/@/api/system/dbInit"
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
@@ -198,20 +198,19 @@ router.beforeEach(async (to, from, next) => {
 		next();
 		NProgress.done();
 	}
-
-	if (Session.get("isInit") !== true) {
-		const res:any  = await isInit()
-		let {code, data}  = res
-		if (code === 0 ) {
-			if (data === false) {
-				next('/dbInit');
-				NProgress.done();
-				return
-			} else {
-				Session.set("isInit", true)
-			}
-		}
-	}
+	// if (Session.get("isInit") !== true) {
+	// 	const res: any = await isInit()
+	// 	let { code, data } = res
+	// 	if (code === 0) {
+	// 		if (data === false) {
+	// 			next('/dbInit');
+	// 			NProgress.done();
+	// 			return
+	// 		} else {
+	// 			Session.set("isInit", true)
+	// 		}
+	// 	}
+	// }
 
 
 	// 正常流程
