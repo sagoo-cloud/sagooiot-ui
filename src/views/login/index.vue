@@ -105,8 +105,9 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	position: relative;
-	background-image: url('/@/assets/bg.jpg');
+	background-image: url('/@/assets/bg.jpeg');
 	background-size: cover;
+	background-position: center;
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
@@ -136,12 +137,12 @@ export default defineComponent({
 	.login-content-out {
 		width: 100%;
 		height: 100%;
-		padding-top: 150px;
+		padding-top: calc(50vh - 227px);
 	}
 	.login-content {
 		width: 500px;
 		padding: 20px;
-		margin: auto;
+		margin-left: calc(50% - 500px);
 		background-color: var(--el-color-white);
 		border: 5px solid var(--el-color-primary-light-8);
 		border-radius: 5px;
