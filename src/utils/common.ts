@@ -1,6 +1,5 @@
 /**
  * 通用js方法封装处理
- * Copyright (c) 2022 gfast
  */
 
 const baseURL:string|undefined|boolean = import.meta.env.VITE_API_URL

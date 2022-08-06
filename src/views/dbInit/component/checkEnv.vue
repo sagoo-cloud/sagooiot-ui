@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <span>Gfast 安装向导</span>
+        <span>安装向导</span>
       </div>
     </template>
     <Step :number="1"></Step>

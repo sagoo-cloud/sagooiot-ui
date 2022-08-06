@@ -170,7 +170,7 @@ export default defineComponent({
 					})
 					.catch(() => {});
 			} else if (path === 'wareHouse') {
-				window.open('https://github.com/tiger1103/gfast');
+				window.open('https://sagoo.cn');
 			} else {
 				router.push(path);
 			}

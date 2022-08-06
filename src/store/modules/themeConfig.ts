@@ -94,7 +94,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			// 是否开启水印
 			isWartermark: false,
 			// 水印文案
-			wartermarkText: 'GFast-v3.0',
+			wartermarkText: 'sagoo IOT',
 
 			/**
 			 * 其它设置
