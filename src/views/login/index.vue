@@ -14,16 +14,16 @@
               <el-tab-pane :label="$t('message.label.one1')" name="account">
                 <Account />
               </el-tab-pane>
-              <el-tab-pane :label="$t('message.label.two2')" name="mobile">
+              <!-- <el-tab-pane :label="$t('message.label.two2')" name="mobile">
                 <Mobile />
-              </el-tab-pane>
+              </el-tab-pane> -->
             </el-tabs>
           </div>
-          <Scan v-if="isScan" />
-          <div class="login-content-main-sacn" @click="isScan = !isScan">
+          <!-- <Scan v-if="isScan" /> -->
+          <!-- <div class="login-content-main-sacn" @click="isScan = !isScan">
             <i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
             <div class="login-content-main-sacn-delta"></div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -31,8 +31,7 @@
       <!-- <amis :json="amisjson" /> -->
       <div class="login-footer-content mt15">
         <div class="login-footer-content-warp">
-          <div>Copyright © 2021-2023 g-fast.cn All Rights Reserved.</div>
-          <div class="mt5">云南奇讯科技有限公司版权所有</div>
+          <div>Copyright © 2021-2023 SAGOO All Rights Reserved.</div>
         </div>
       </div>
     </div>
@@ -45,7 +44,7 @@ import Account from '/@/views/login/component/account.vue';
 import Mobile from '/@/views/login/component/mobile.vue';
 import Scan from '/@/views/login/component/scan.vue';
 import { useStore } from '/@/store/index';
-import logoMini from '/@/assets/logo-mini.svg';
+import logoMini from '/@/assets/logo.png';
 import amis from '/@/components/amis/index.vue';
 
 // 定义接口来定义对象的类型
@@ -115,12 +114,14 @@ export default defineComponent({
 		.login-icon-group-title {
 			display: flex;
 			align-items: center;
+			justify-content: center;
+			margin: 12px 0;
 			img {
-				width: 80px;
-				height: 70px;
+				width: auto;
+				height: 40px;
 			}
 			&-text {
-				padding-left: 5px;
+				padding-left: 20px;
 				color: var(--el-color-primary);
 			}
 		}
