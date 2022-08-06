@@ -56,7 +56,7 @@ interface LoginState {
 
 export default defineComponent({
 	name: 'loginIndex',
-	components: { Account, Mobile, Scan,amis },
+	components: { Account, Mobile, Scan, amis },
 	data: function () {
 		return {
 			amisjson: {
