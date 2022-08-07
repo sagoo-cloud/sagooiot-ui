@@ -31,12 +31,12 @@ service.interceptors.response.use(
 		const res = response.data;
 		const code = response.data.code
 		if (code === 401) {
-			ElMessageBox.alert('登录状态已过期，请重新登录', '提示', {confirmButtonText:'确定'})
+			ElMessageBox.alert('登录状态已过期，请重新登录', '提示', { confirmButtonText: '确定' })
 				.then(() => {
 					Session.clear(); // 清除浏览器全部临时缓存
 					window.location.href = '/'; // 去登录页
 				})
-				.catch(() => {});
+				.catch(() => { });
 		} else if (code !== 0) {
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
@@ -60,3 +60,19 @@ service.interceptors.response.use(
 
 // 导出 axios 实例
 export default service;
+
+export function get(url: string, params?: any) {
+	return service({
+		url,
+		method: "get",
+		params
+	})
+}
+
+export function post(url: string, data?: any) {
+	return service({
+		url,
+		method: "post",
+		data
+	})
+}
