@@ -115,6 +115,7 @@ export default defineComponent({
 								Session.set('token', res.data.token);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);
+								await store.dispatch('userInfos/setUserInfos', userInfos);
 
 								currentUser();
 							})
@@ -127,16 +128,15 @@ export default defineComponent({
 				.catch(() => {});
 		};
 		// 获取登录用户信息
-    const currentUser = async () => {
-      api.currentUser().then(res => {
-        console.log(res)
-      })
-			// 设置用户菜单
-			// Session.set('userMenu', res.data.menuList);
+		const currentUser = async () => {
+			api.currentUser().then((res) => {
+				// 设置用户菜单
+				Session.set('userMenu', res.data.Data);
+				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res.data.Data);
+			});
 			// // 设置按钮权限
 			// Session.set('permissions', res.data.permissions);
 			// // 1、请注意执行顺序(存储用户信息到vuex)
-			// await store.dispatch('userInfos/setUserInfos', userInfos);
 			// await store.dispatch('userInfos/setPermissions', res.data.permissions);
 			// if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
 			// 	// 前端控制路由，2、请注意执行顺序
