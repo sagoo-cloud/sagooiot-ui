@@ -10,7 +10,7 @@ export function getMenuList(query:Object) {
 
 export function getUserMenus() {
     return request({
-        url: '/system/user/getUserMenus',
+        url: '/api/v1/system/user/getUserMenus',
         method: 'get'
     })
 }
