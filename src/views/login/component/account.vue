@@ -58,6 +58,7 @@ import { useStore } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { login, captcha } from '/@/api/login';
+import * as api from '/@/api/login';
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
@@ -126,7 +127,10 @@ export default defineComponent({
 				.catch(() => {});
 		};
 		// 获取登录用户信息
-		const currentUser = async () => {
+    const currentUser = async () => {
+      api.currentUser().then(res => {
+        console.log(res)
+      })
 			// 设置用户菜单
 			// Session.set('userMenu', res.data.menuList);
 			// // 设置按钮权限
