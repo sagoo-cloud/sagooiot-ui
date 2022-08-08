@@ -1,19 +1,7 @@
-import request from '/@/utils/request';
+import request, { get } from '/@/utils/request';
 
-export function getMenuList(query:Object) {
-    return request({
-        url: '/system/menu/tree',
-        method: 'get',
-        params:query
-    })
-}
-
-export function getUserMenus() {
-    return request({
-        url: '/system/user/getUserMenus',
-        method: 'get'
-    })
-}
+export const getMenuList = (params: Object) => get('/system/menu/tree', params)
+export const getMenuDetail = (id: number) => get('/system/menu/detail', { id })
 
 export function getMenuParams() {
     return request({
@@ -22,36 +10,36 @@ export function getMenuParams() {
     })
 }
 
-export function addMenu(data:Object) {
+export function addMenu(data: Object) {
     return request({
         url: '/system/menu/add',
         method: 'post',
-        data:data
+        data: data
     })
 }
 
-export function getMenuInfo(id:number) {
+export function getMenuInfo(id: number) {
     return request({
         url: '/system/menu/get',
         method: 'get',
-        params:{id}
+        params: { id }
     })
 }
 
-export function updateMenu(data:Object) {
+export function updateMenu(data: Object) {
     return request({
         url: '/system/menu/update',
         method: 'put',
-        data:data
+        data: data
     })
 }
 
 
 // 删除菜单
-export function delMenu(menuId:number) {
+export function delMenu(menuId: number) {
     return request({
         url: '/system/menu/delete',
         method: 'delete',
-        data:{ids:[menuId]}
+        data: { ids: [menuId] }
     })
 }
