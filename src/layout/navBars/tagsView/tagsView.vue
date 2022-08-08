@@ -17,8 +17,8 @@
 					"
 				>
 					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
-					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
-					<span>{{ v.meta.title.indexOf('.')>0?$t(v.meta.title):v.meta.title }}</span>
+					<SvgIcon :name="v.meta?.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
+					<span>{{ v.meta?.title.indexOf('.')>0?$t(v.meta?.title):v.meta?.title }}</span>
 					<template v-if="isActive(v)">
 						<SvgIcon
 							name="ele-RefreshRight"
@@ -28,14 +28,14 @@
 						<SvgIcon
 							name="ele-Close"
 							class="layout-navbars-tagsview-ul-li-icon layout-icon-active"
-							v-if="!v.meta.isAffix"
+							v-if="!v.meta?.isAffix"
 							@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 						/>
 					</template>
 					<SvgIcon
 						name="ele-Close"
 						class="layout-navbars-tagsview-ul-li-icon layout-icon-three"
-						v-if="!v.meta.isAffix"
+						v-if="!v.meta?.isAffix"
 						@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 					/>
 				</li>
@@ -151,7 +151,7 @@ export default defineComponent({
 				state.tagsViewList = await Session.get('tagsViewList');
 			} else {
 				await state.tagsViewRoutesList.map((v: any) => {
-					if (v.meta.isAffix && !v.meta.isHide) {
+					if (v.meta?.isAffix && !v.meta?.isHide) {
 						v.url = setTagsViewHighlight(v);
 						state.tagsViewList.push({ ...v });
 					}
@@ -175,8 +175,8 @@ export default defineComponent({
 			if (current.length <= 0) {
 				// 防止：Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
 				let findItem = state.tagsViewRoutesList.find((v: any) => v.path === isDynamicPath);
-				if (findItem.meta.isAffix) return false;
-				if (findItem.meta.isLink && !findItem.meta.isIframe) return false;
+				if (findItem.meta?.isAffix) return false;
+				if (findItem.meta?.isLink && !findItem.meta.isIframe) return false;
 				to.meta.isDynamic ? (findItem.params = to.params) : (findItem.query = to.query);
 				findItem.url = setTagsViewHighlight(findItem);
 				state.tagsViewList.push({ ...findItem });
@@ -219,7 +219,7 @@ export default defineComponent({
 					if (state.tagsViewList.some((v: any) => v.path === path)) return false;
 					item = state.tagsViewRoutesList.find((v: any) => v.path === path);
 				}
-				if (item.meta.isLink && !item.meta.isIframe) return false;
+				if (item.meta?.isLink && !item.meta.isIframe) return false;
 				if (to && to.meta.isDynamic) item.params = to?.params ? to?.params : route.params;
 				else item.query = to?.query ? to?.query : route.query;
 				item.url = setTagsViewHighlight(item);
@@ -234,7 +234,7 @@ export default defineComponent({
 		// 3、关闭当前 tagsView：如果是设置了固定的（isAffix），不可以关闭
 		const closeCurrentTagsView = (path: string) => {
 			state.tagsViewList.map((v: any, k: number, arr: any) => {
-				if (!v.meta.isAffix) {
+				if (!v.meta?.isAffix) {
 					if (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path) {
 						state.tagsViewList.splice(k, 1);
 						setTimeout(() => {
@@ -271,7 +271,7 @@ export default defineComponent({
 		const closeOtherTagsView = (path: string) => {
 			state.tagsViewList = [];
 			state.tagsViewRoutesList.map((v: any) => {
-				if (v.meta.isAffix && !v.meta.isHide) state.tagsViewList.push({ ...v });
+				if (v.meta?.isAffix && !v.meta?.isHide) state.tagsViewList.push({ ...v });
 			});
 			addTagsView(path, route);
 		};
@@ -279,7 +279,7 @@ export default defineComponent({
 		const closeAllTagsView = () => {
 			state.tagsViewList = [];
 			state.tagsViewRoutesList.map((v: any) => {
-				if (v.meta.isAffix && !v.meta.isHide) {
+				if (v.meta?.isAffix && !v.meta?.isHide) {
 					state.tagsViewList.push({ ...v });
 					router.push({ path: state.tagsViewList[state.tagsViewList.length - 1].path });
 				}
@@ -487,7 +487,7 @@ export default defineComponent({
 					router.push('/home');
 					state.tagsViewList = [];
 					state.tagsViewRoutesList.map((v: any) => {
-						if (v.meta.isAffix && !v.meta.isHide) {
+						if (v.meta?.isAffix && !v.meta?.isHide) {
 							v.url = setTagsViewHighlight(v);
 							state.tagsViewList.push({ ...v });
 						}

@@ -10,19 +10,19 @@
 		<template v-for="val in menuLists">
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 				<template #title>
-					<SvgIcon :name="val.meta.icon" />
-					<span>{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}</span>
+					<SvgIcon :name="val.meta?.icon" />
+					<span>{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}</span>
 				</template>
 				<SubItem :chil="val.children" />
 			</el-sub-menu>
 			<template v-else>
 				<el-menu-item :index="val.path" :key="val.path">
-					<SvgIcon :name="val.meta.icon" />
-					<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-						<span>{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}</span>
+					<SvgIcon :name="val.meta?.icon" />
+					<template #title v-if="!val.meta?.isLink || (val.meta?.isLink && val.meta.isIframe)">
+						<span>{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}</span>
 					</template>
 					<template #title v-else>
-						<a :href="val.meta.isLink" target="_blank" rel="opener" class="w100">{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}</a>
+						<a :href="val.meta?.isLink" target="_blank" rel="opener" class="w100">{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}</a>
 					</template>
 				</el-menu-item>
 			</template>
@@ -64,7 +64,7 @@ export default defineComponent({
 		const setParentHighlight = (currentRoute: any) => {
 			const { path, meta } = currentRoute;
 			const pathSplit = meta.isDynamic ? meta.isDynamicPath.split('/') : path.split('/');
-			if (pathSplit.length >= 4 && meta.isHide) return pathSplit.splice(0, 3).join('/');
+			if (pathSplit.length >= 4 && meta?.isHide) return pathSplit.splice(0, 3).join('/');
 			else return path;
 		};
 		// 设置菜单的收起/展开

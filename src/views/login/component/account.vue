@@ -62,6 +62,7 @@ import * as api from '/@/api/login';
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
+			console.log('setup')
 		const { t } = useI18n();
 		const store = useStore();
 		const route = useRoute();
@@ -86,7 +87,9 @@ export default defineComponent({
 			captchaSrc: '',
 		});
 		onMounted(() => {
+			console.log('onMounted')
 			getCaptcha();
+			currentUser();
 		});
 		// 时间获取
 		const currentTime = computed(() => {
@@ -95,8 +98,8 @@ export default defineComponent({
 
 		const getCaptcha = () => {
 			captcha().then((res: any) => {
-				state.captchaSrc = res.data.img;
-				state.ruleForm.VerifyKey = res.data.key;
+				state.captchaSrc = res.img;
+				state.ruleForm.VerifyKey = res.key;
 			});
 		};
 
@@ -109,10 +112,10 @@ export default defineComponent({
 						state.loading.signIn = true;
 						login(state.ruleForm)
 							.then(async (res: any) => {
-								const userInfos = res.data.userInfo;
+								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
-								Session.set('token', res.data.token);
+								Session.set('token', res.token);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);
 								await store.dispatch('userInfos/setUserInfos', userInfos);
@@ -131,8 +134,8 @@ export default defineComponent({
 		const currentUser = async () => {
 			api.currentUser().then((res) => {
 				// 设置用户菜单
-				Session.set('userMenu', res.data.Data);
-				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res.data.Data);
+				Session.set('userMenu', res);
+				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res);
 			});
 			// // 设置按钮权限
 			// Session.set('permissions', res.data.permissions);

@@ -16,8 +16,8 @@
 				</template>
 				<template #default="{ item }">
 					<div>
-						<SvgIcon :name="item.meta.icon" class="mr5" />
-						{{ item.meta.title.indexOf('.')>0?$t(item.meta.title):item.meta.title }}
+						<SvgIcon :name="item.meta?.icon" class="mr5" />
+						{{ item.meta?.title.indexOf('.')>0?$t(item.meta?.title):item.meta?.title }}
 					</div>
 				</template>
 			</el-autocomplete>
@@ -79,8 +79,8 @@ export default defineComponent({
 			return (restaurant: Restaurant) => {
 				return (
 					restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-					restaurant.meta.title.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-					t(restaurant.meta.title).indexOf(queryString.toLowerCase()) > -1
+					restaurant.meta?.title.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
+					t(restaurant.meta?.title).indexOf(queryString.toLowerCase()) > -1
 				);
 			};
 		};
@@ -88,13 +88,13 @@ export default defineComponent({
 		const initTageView = () => {
 			if (state.tagsViewList.length > 0) return false;
 			store.state.tagsViewRoutes.tagsViewRoutes.map((v: any) => {
-				if (!v.meta.isHide) state.tagsViewList.push({ ...v });
+				if (!v.meta?.isHide) state.tagsViewList.push({ ...v });
 			});
 		};
 		// 当前菜单选中时
 		const onHandleSelect = (item: any) => {
 			let { path, redirect } = item;
-			if (item.meta.isLink && !item.meta.isIframe) window.open(item.meta.isLink);
+			if (item.meta?.isLink && !item.meta.isIframe) window.open(item.meta?.isLink);
 			else if (redirect) router.push(redirect);
 			else router.push(path);
 			closeSearch();

@@ -5,21 +5,21 @@
 				<template v-for="val in menuLists">
 					<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 						<template #title>
-							<SvgIcon :name="val.meta.icon" />
-							<span>{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}</span>
+							<SvgIcon :name="val.meta?.icon" />
+							<span>{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}</span>
 						</template>
 						<SubItem :chil="val.children" />
 					</el-sub-menu>
 					<template v-else>
 						<el-menu-item :index="val.path" :key="val.path">
-							<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-								<SvgIcon :name="val.meta.icon" />
-								{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}
+							<template #title v-if="!val.meta?.isLink || (val.meta?.isLink && val.meta.isIframe)">
+								<SvgIcon :name="val.meta?.icon" />
+								{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}
 							</template>
 							<template #title v-else>
-								<a :href="val.meta.isLink" target="_blank" rel="opener" class="w100">
-									<SvgIcon :name="val.meta.icon" />
-									{{ val.meta.title.indexOf('.')>0?$t(val.meta.title):val.meta.title }}
+								<a :href="val.meta?.isLink" target="_blank" rel="opener" class="w100">
+									<SvgIcon :name="val.meta?.icon" />
+									{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}
 								</a>
 							</template>
 						</el-menu-item>
@@ -71,7 +71,7 @@ export default defineComponent({
 		// 路由过滤递归函数
 		const filterRoutesFun = (arr: Array<object>) => {
 			return arr
-				.filter((item: any) => !item.meta.isHide)
+				.filter((item: any) => !item.meta?.isHide)
 				.map((item: any) => {
 					item = Object.assign({}, item);
 					if (item.children) item.children = filterRoutesFun(item.children);
@@ -99,7 +99,7 @@ export default defineComponent({
 				(<any>state.defaultActive) = `/${path.split('/')[1]}`;
 			} else {
 				const pathSplit = meta.isDynamic ? meta.isDynamicPath.split('/') : path.split('/');
-				if (pathSplit.length >= 4 && meta.isHide) state.defaultActive = pathSplit.splice(0, 3).join('/');
+				if (pathSplit.length >= 4 && meta?.isHide) state.defaultActive = pathSplit.splice(0, 3).join('/');
 				else state.defaultActive = path;
 			}
 		};

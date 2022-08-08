@@ -90,7 +90,7 @@ export default defineComponent({
 		// 路由过滤递归函数
 		const filterRoutesFun = (arr: Array<object>) => {
 			return arr
-				.filter((item: any) => !item.meta.isHide)
+				.filter((item: any) => !item.meta?.isHide)
 				.map((item: any) => {
 					item = Object.assign({}, item);
 					if (item.children) item.children = filterRoutesFun(item.children);

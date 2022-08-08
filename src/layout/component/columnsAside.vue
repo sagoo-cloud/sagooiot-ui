@@ -13,19 +13,19 @@
 						}
 					"
 					:class="{ 'layout-columns-active': liIndex === k, 'layout-columns-hover': liHoverIndex === k }"
-					:title="v.meta.title.indexOf('.')>0?$t(v.meta.title):v.meta.title"
+					:title="v.meta?.title.indexOf('.')>0?$t(v.meta?.title):v.meta?.title"
 				>
-					<div :class="setColumnsAsidelayout" v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)">
-						<SvgIcon :name="v.meta.icon" />
+					<div :class="setColumnsAsidelayout" v-if="!v.meta?.isLink || (v.meta?.isLink && v.meta.isIframe)">
+						<SvgIcon :name="v.meta?.icon" />
 						<div class="columns-vertical-title font12">
-							{{tMenuTitle(v.meta.title)}}
+							{{tMenuTitle(v.meta?.title)}}
 						</div>
 					</div>
 					<div :class="setColumnsAsidelayout" v-else>
-						<a :href="v.meta.isLink" target="_blank">
-							<SvgIcon :name="v.meta.icon" />
+						<a :href="v.meta?.isLink" target="_blank">
+							<SvgIcon :name="v.meta?.icon" />
 							<div class="columns-vertical-title font12">
-								{{tMenuTitle(v.meta.title)}}
+								{{tMenuTitle(v.meta?.title)}}
 							</div>
 						</a>
 					</div>
@@ -154,7 +154,7 @@ export default defineComponent({
 		// 路由过滤递归函数
 		const filterRoutesFun = (arr: Array<object>) => {
 			return arr
-				.filter((item: any) => !item.meta.isHide)
+				.filter((item: any) => !item.meta?.isHide)
 				.map((item: any) => {
 					item = Object.assign({}, item);
 					if (item.children) item.children = filterRoutesFun(item.children);

@@ -3,7 +3,7 @@ import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { setAddRoute, setFilterMenuAndCacheTagsViewRoutes } from '/@/router/index';
 import {demoRoutes, dynamicRoutes} from '/@/router/route';
-import { getUserMenus } from '/@/api/system/menu';
+import { currentUser } from '/@/api/login';
 
 
 
@@ -31,10 +31,10 @@ export async function initBackEndControlRoutes() {
 	if (!Session.get('token')) return false;
 	// 触发初始化用户信息
 	store.dispatch('userInfos/setUserInfos');
-	store.dispatch('userInfos/setPermissions');
+	// store.dispatch('userInfos/setPermissions');
 	let menuRoute = Session.get('userMenu')
-	let permissions = Session.get('permissions')
-	if (!menuRoute || !permissions) {
+	// let permissions = Session.get('permissions')
+	if (!menuRoute) {
 		await getBackEndControlRoutes(); // 获取路由
 		menuRoute = Session.get('userMenu')
 	}
@@ -56,10 +56,11 @@ export async function initBackEndControlRoutes() {
  * @returns 返回后端路由菜单数据
  */
 export async function getBackEndControlRoutes() {
-	return getUserMenus().then((res:any)=>{
-		Session.set('userMenu',res.data.menuList)
-		Session.set('permissions',res.data.permissions)
-		store.dispatch('userInfos/setPermissions',res.data.permissions)
+	return currentUser().then((res: any) => {
+		console.log(res)
+		// Session.set('userMenu',res.data.menuList)
+		// Session.set('permissions',res.data.permissions)
+		// store.dispatch('userInfos/setPermissions',res.data.permissions)
 	})
 }
 

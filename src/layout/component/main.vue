@@ -3,7 +3,7 @@
 		<el-scrollbar
 			class="layout-scrollbar"
 			ref="layoutScrollbarRef"
-			:style="{ padding: currentRouteMeta.isLink && currentRouteMeta.isIframe ? 0 : '', transition: 'padding 0.3s ease-in-out' }"
+			:style="{ padding: currentRoutemeta?.isLink && currentRouteMeta.isIframe ? 0 : '', transition: 'padding 0.3s ease-in-out' }"
 		>
 			<LayoutParentView :style="{ minHeight: `calc(100vh - ${headerHeight})` }" />
 			<Footer v-if="getThemeConfig.isFooter" />
@@ -41,7 +41,7 @@ export default defineComponent({
 		});
 		// 设置 main 的高度
 		const initHeaderHeight = () => {
-			const bool = state.currentRouteMeta.isLink && state.currentRouteMeta.isIframe;
+			const bool = state.currentRoutemeta?.isLink && state.currentRouteMeta.isIframe;
 			let { isTagsview } = store.state.themeConfig.themeConfig;
 			if (isTagsview) return (state.headerHeight = bool ? `85px` : `114px`);
 			else return (state.headerHeight = `51px`);
@@ -60,7 +60,7 @@ export default defineComponent({
 			() => route.path,
 			() => {
 				state.currentRouteMeta = route.meta;
-				const bool = state.currentRouteMeta.isLink && state.currentRouteMeta.isIframe;
+				const bool = state.currentRoutemeta?.isLink && state.currentRouteMeta.isIframe;
 				state.headerHeight = bool ? `85px` : `114px`;
 				proxy.$refs.layoutScrollbarRef.update();
 			}
@@ -68,7 +68,7 @@ export default defineComponent({
 		// 监听 themeConfig 配置文件的变化，更新菜单 el-scrollbar 的高度
 		watch(store.state.themeConfig.themeConfig, (val) => {
 			state.currentRouteMeta = route.meta;
-			const bool = state.currentRouteMeta.isLink && state.currentRouteMeta.isIframe;
+			const bool = state.currentRoutemeta?.isLink && state.currentRouteMeta.isIframe;
 			state.headerHeight = val.isTagsview ? (bool ? `85px` : `114px`) : '51px';
 			if (val.isFixedHeaderChange !== val.isFixedHeader) {
 				if (!proxy.$refs.layoutScrollbarRef) return false;
