@@ -15,7 +15,7 @@
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
 							<span class="font30">{{ v.num1 }}</span>
-							<span class="ml5 font16" :style="{ color: v.color1 }">{{ v.num2 }}%</span>
+							<span class="ml5 font16" :style="{ color: v.color1 }">  {{ v.num2 }}</span>
 							<div class="mt10">{{ v.num3 }}</div>
 						</div>
 						<div class="home-card-item-icon flex" :style="{ background: `var(${v.color2})` }">
@@ -88,8 +88,8 @@ export default defineComponent({
 			homeOne: [
 				{
 					num1: '125,12',
-					num2: '-12.32',
-					num3: '订单统计信息',
+					num2: '离线 232',
+					num3: '设备数',
 					num4: 'icon-putong',
 					color1: '#FF6462',
 					color2: '--next-color-primary-lighter',
@@ -98,7 +98,7 @@ export default defineComponent({
 				{
 					num1: '653,33',
 					num2: '+42.32',
-					num3: '月度计划信息',
+					num3: '今日设备消息量',
 					num4: 'icon-ditu',
 					color1: '#6690F9',
 					color2: '--el-color-success-lighter',
@@ -106,8 +106,8 @@ export default defineComponent({
 				},
 				{
 					num1: '125,65',
-					num2: '+17.32',
-					num3: '年度计划信息',
+					num2: ' -17.32',
+					num3: '设备报警量',
 					num4: 'icon-zaosheng',
 					color1: '#6690F9',
 					color2: '--el-color-warning-lighter',
@@ -126,55 +126,55 @@ export default defineComponent({
 			homeThree: [
 				{
 					icon: 'iconfont icon-yangan',
-					label: '浅粉红',
+					label: '产品管理',
 					value: '2.1%OBS/M',
 					iconColor: '#F72B3F',
 				},
 				{
 					icon: 'iconfont icon-wendu',
-					label: '深红(猩红)',
+					label: '设备接入',
 					value: '30℃',
 					iconColor: '#91BFF8',
 				},
 				{
 					icon: 'iconfont icon-shidu',
-					label: '淡紫红',
+					label: '日志查看',
 					value: '57%RH',
 					iconColor: '#88D565',
 				},
 				{
 					icon: 'iconfont icon-shidu',
-					label: '弱紫罗兰红',
+					label: '用户管理',
 					value: '107w',
 					iconColor: '#88D565',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '中紫罗兰红',
+					label: '预警管理',
 					value: '57DB',
 					iconColor: '#FBD4A0',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '紫罗兰',
+					label: '预警历史',
 					value: '57PV',
 					iconColor: '#FBD4A0',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '暗紫罗兰',
+					label: '预警分析',
 					value: '517Cpd',
 					iconColor: '#FBD4A0',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '幽灵白',
+					label: '转发设置',
 					value: '12kg',
 					iconColor: '#FBD4A0',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '海军蓝',
+					label: '模拟设备',
 					value: '64fm',
 					iconColor: '#FBD4A0',
 				},
@@ -193,26 +193,26 @@ export default defineComponent({
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				title: {
-					text: '政策补贴额度',
+					text: '设备消息',
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
 				grid: { top: 70, right: 20, bottom: 30, left: 30 },
 				tooltip: { trigger: 'axis' },
-				legend: { data: ['预购队列', '最新成交价'], right: 0 },
+				legend: { data: ['消息量', '预警量'], right: 0 },
 				xAxis: {
 					data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
 				},
 				yAxis: [
 					{
 						type: 'value',
-						name: '价格',
+						name: '条数',
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 					},
 				],
 				series: [
 					{
-						name: '预购队列',
+						name: '消息量',
 						type: 'line',
 						symbolSize: 6,
 						symbol: 'circle',
@@ -228,7 +228,7 @@ export default defineComponent({
 						},
 					},
 					{
-						name: '最新成交价',
+						name: '预警量',
 						type: 'line',
 						symbolSize: 6,
 						symbol: 'circle',
@@ -272,17 +272,17 @@ export default defineComponent({
 		const initPieChart = () => {
 			if (!global.dispose.some((b: any) => b === global.homeChartTwo)) global.homeChartTwo.dispose();
 			global.homeChartTwo = <any>echarts.init(homePieRef.value, state.charts.theme);
-			var getname = ['房屋及结构物', '专用设备', '通用设备', '文物和陈列品', '图书、档案'];
+			var getname = ['提示', '建议', '警告', '严重警告', '故障'];
 			var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
 			var data = [];
 			for (var i = 0; i < getname.length; i++) {
 				data.push({ name: getname[i], value: getvalue[i] });
 			}
-			const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#968AF5', '#E790E8'];
+			const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#968AF5', '#FF0000'];
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				title: {
-					text: '房屋建筑工程',
+					text: '预警类型',
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
@@ -360,7 +360,7 @@ export default defineComponent({
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				title: {
-					text: '地热开发利用',
+					text: '供热监测',
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
@@ -416,12 +416,12 @@ export default defineComponent({
 						itemStyle: { color: '#FF8000' },
 						// data中可以使用对象，value代表相应的值，另外可加入自定义的属性
 						data: [
-							{ value: 1, stationName: 's1' },
-							{ value: 3, stationName: 's2' },
-							{ value: 4, stationName: 's3' },
-							{ value: 9, stationName: 's4' },
-							{ value: 3, stationName: 's5' },
-							{ value: 2, stationName: 's6' },
+							{ value: 50, stationName: 's1' },
+							{ value: 50, stationName: 's2' },
+							{ value: 60, stationName: 's3' },
+							{ value: 50, stationName: 's4' },
+							{ value: 90, stationName: 's5' },
+							{ value: 35, stationName: 's6' },
 						],
 					},
 					{
