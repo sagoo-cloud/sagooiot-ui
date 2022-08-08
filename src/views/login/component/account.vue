@@ -62,7 +62,7 @@ import * as api from '/@/api/login';
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
-			console.log('setup')
+		console.log('setup');
 		const { t } = useI18n();
 		const store = useStore();
 		const route = useRoute();
@@ -87,7 +87,7 @@ export default defineComponent({
 			captchaSrc: '',
 		});
 		onMounted(() => {
-			console.log('onMounted')
+			console.log('onMounted');
 			getCaptcha();
 			currentUser();
 		});
@@ -132,26 +132,26 @@ export default defineComponent({
 		};
 		// 获取登录用户信息
 		const currentUser = async () => {
-			api.currentUser().then((res) => {
+			api.currentUser().then(async (res) => {
 				// 设置用户菜单
 				Session.set('userMenu', res);
 				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res);
+				if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
+					// 前端控制路由，2、请注意执行顺序
+					await initFrontEndControlRoutes();
+					signInSuccess();
+				} else {
+					// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+					// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+					await initBackEndControlRoutes();
+					// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+					signInSuccess();
+				}
 			});
 			// // 设置按钮权限
 			// Session.set('permissions', res.data.permissions);
 			// // 1、请注意执行顺序(存储用户信息到vuex)
 			// await store.dispatch('userInfos/setPermissions', res.data.permissions);
-			// if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
-			// 	// 前端控制路由，2、请注意执行顺序
-			// 	await initFrontEndControlRoutes();
-			// 	signInSuccess();
-			// } else {
-			// 	// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-			// 	// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-			// 	await initBackEndControlRoutes();
-			// 	// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-			// 	signInSuccess();
-			// }
 		};
 		// 登录成功后的跳转
 		const signInSuccess = () => {

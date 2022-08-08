@@ -71,7 +71,7 @@ export default defineComponent({
 		// 路由过滤递归函数
 		const filterRoutesFun = (arr: Array<object>) => {
 			return arr
-				.filter((item: any) => !item.meta?.isHide)
+				.filter((item: any) => !item.meta.isHide)
 				.map((item: any) => {
 					item = Object.assign({}, item);
 					if (item.children) item.children = filterRoutesFun(item.children);
@@ -99,7 +99,7 @@ export default defineComponent({
 				(<any>state.defaultActive) = `/${path.split('/')[1]}`;
 			} else {
 				const pathSplit = meta.isDynamic ? meta.isDynamicPath.split('/') : path.split('/');
-				if (pathSplit.length >= 4 && meta?.isHide) state.defaultActive = pathSplit.splice(0, 3).join('/');
+				if (pathSplit.length >= 4 && meta.isHide) state.defaultActive = pathSplit.splice(0, 3).join('/');
 				else state.defaultActive = path;
 			}
 		};

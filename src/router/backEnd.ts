@@ -2,7 +2,7 @@ import { store } from '/@/store/index.ts';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { setAddRoute, setFilterMenuAndCacheTagsViewRoutes } from '/@/router/index';
-import {demoRoutes, dynamicRoutes} from '/@/router/route';
+import { demoRoutes, dynamicRoutes } from '/@/router/route';
 import { currentUser } from '/@/api/login';
 
 
@@ -43,7 +43,7 @@ export async function initBackEndControlRoutes() {
 	// 存储接口原始路由（未处理component），根据需求选择使用
 	store.dispatch('requestOldRoutes/setBackEndControlRoutes', JSON.parse(JSON.stringify(menuRoute)));
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children?.push(...await backEndComponent(menuRoute),...demoRoutes) ;
+	dynamicRoutes[0].children?.push(...await backEndComponent(menuRoute), ...demoRoutes);
 	// 添加动态路由
 	await setAddRoute();
 	// 设置递归过滤有权限的路由到 vuex routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
@@ -57,8 +57,7 @@ export async function initBackEndControlRoutes() {
  */
 export async function getBackEndControlRoutes() {
 	return currentUser().then((res: any) => {
-		console.log(res)
-		// Session.set('userMenu',res.data.menuList)
+		Session.set('userMenu', res)
 		// Session.set('permissions',res.data.permissions)
 		// store.dispatch('userInfos/setPermissions',res.data.permissions)
 	})
@@ -82,7 +81,19 @@ export function backEndComponent(routes: any) {
 	if (!routes) return;
 	return routes.map((item: any) => {
 		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
-		item.children && backEndComponent(item.children);
+		// 将 大写Children 转换为系统里用的小写的 children
+		item.children = item.Children
+		item.children?.length && backEndComponent(item.children);
+		// 将 meta 信息进行整理
+		item.meta = {
+			icon: item.icon,
+			isAffix: item.isAffix,
+			isHide: item.isHide,
+			isIframe: item.isIframe,
+			isKeepAlive: item.isKeepAlive,
+			isLink: item.isLink,
+			title: item.title,
+		}
 		return item;
 	});
 }
