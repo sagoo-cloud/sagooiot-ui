@@ -143,7 +143,7 @@ export default defineComponent({
 		width: 500px;
 		padding: 20px;
 		margin-left: calc(50% - 500px);
-		background-color: var(--el-color-white);
+		background-color: rgba(255,255,255,0.8);
 		border: 5px solid var(--el-color-primary-light-8);
 		border-radius: 5px;
 		overflow: hidden;

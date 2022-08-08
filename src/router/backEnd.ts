@@ -81,8 +81,6 @@ export function backEndComponent(routes: any) {
 	if (!routes) return;
 	return routes.map((item: any) => {
 		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
-		// 将 大写Children 转换为系统里用的小写的 children
-		item.children = item.Children
 		item.children?.length && backEndComponent(item.children);
 		// 将 meta 信息进行整理
 		item.meta = {
