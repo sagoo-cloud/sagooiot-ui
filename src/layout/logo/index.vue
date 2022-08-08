@@ -51,7 +51,7 @@ export default defineComponent({
 	justify-content: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
 	color: var(--el-color-primary);
-	font-size: 16px;
+	font-size: 20px;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
 	&:hover {
@@ -60,7 +60,8 @@ export default defineComponent({
 		}
 	}
 	&-medium-img {
-		width: 45px;
+		width: 35px;
+    padding-right: 5px;
 	}
 }
 .layout-logo-size {

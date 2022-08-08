@@ -8,7 +8,7 @@ export function getDicts(dictType :string,defaultValue?:string):Promise<any> {
         defaultValue:dv
     }
     return request({
-        url: '/api/v1/system/dict/data/getDictData',
+        url: '/system/dict/data/getDictData',
         method: 'get',
         params:params
     })
@@ -31,7 +31,7 @@ export function useDict(...args:string[]):ToRefs<any>{
 
 export function getDataList(query:Object) {
     return request({
-        url: '/api/v1/system/dict/data/list',
+        url: '/system/dict/data/list',
         method: 'get',
         params:query
     })
@@ -39,7 +39,7 @@ export function getDataList(query:Object) {
 
 export function getData(dictCode:number) {
     return request({
-        url: '/api/v1/system/dict/data/get',
+        url: '/system/dict/data/get',
         method: 'get',
         params:{dictCode}
     })
@@ -47,7 +47,7 @@ export function getData(dictCode:number) {
 
 export function addData(data:any) {
     return request({
-        url: '/api/v1/system/dict/data/add',
+        url: '/system/dict/data/add',
         method: 'post',
         data:data
     })
@@ -55,7 +55,7 @@ export function addData(data:any) {
 
 export function editData(data:any) {
     return request({
-        url: '/api/v1/system/dict/data/edit',
+        url: '/system/dict/data/edit',
         method: 'put',
         data:data
     })
@@ -63,7 +63,7 @@ export function editData(data:any) {
 
 export function deleteData(ids:number[]) {
     return request({
-        url: '/api/v1/system/dict/data/delete',
+        url: '/system/dict/data/delete',
         method: 'delete',
         data:{ids}
     })

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getUserList(query:Object) {
     return request({
-        url: '/api/v1/system/user/list',
+        url: '/system/user/list',
         method: 'get',
         params:query
     })
@@ -10,21 +10,21 @@ export function getUserList(query:Object) {
 
 export function getDeptTree() {
     return request({
-        url: '/api/v1/system/dept/treeSelect',
+        url: '/system/dept/treeSelect',
         method: 'get'
     })
 }
 
 export function getParams() {
     return request({
-        url: '/api/v1/system/user/params',
+        url: '/system/user/params',
         method: 'get'
     })
 }
 
 export function getEditUser(id:number) {
     return request({
-        url: '/api/v1/system/user/getEdit',
+        url: '/system/user/getEdit',
         method: 'get',
         params:{id}
     })
@@ -32,7 +32,7 @@ export function getEditUser(id:number) {
 
 export function addUser(data:object) {
     return request({
-        url: '/api/v1/system/user/add',
+        url: '/system/user/add',
         method: 'post',
         data:data
     })
@@ -41,7 +41,7 @@ export function addUser(data:object) {
 
 export function editUser(data:object) {
     return request({
-        url: '/api/v1/system/user/edit',
+        url: '/system/user/edit',
         method: 'put',
         data:data
     })
@@ -49,7 +49,7 @@ export function editUser(data:object) {
 
 export function resetUserPwd(userId:number, password:string) {
     return request({
-        url: '/api/v1/system/user/resetPwd',
+        url: '/system/user/resetPwd',
         method: 'put',
         data:{userId,password}
     })
@@ -57,7 +57,7 @@ export function resetUserPwd(userId:number, password:string) {
 
 export function changeUserStatus(userId:number, status:number) {
     return request({
-        url: '/api/v1/system/user/setStatus',
+        url: '/system/user/setStatus',
         method: 'put',
         data:{userId,status}
     })
@@ -66,7 +66,7 @@ export function changeUserStatus(userId:number, status:number) {
 
 export function deleteUser(ids:number[]) {
     return request({
-        url: '/api/v1/system/user/delete',
+        url: '/system/user/delete',
         method: 'delete',
         data:{ids}
     })
