@@ -1,9 +1,9 @@
-import request, { get, post } from '/@/utils/request';
+import request, { get, post, put } from '/@/utils/request';
 
 export const getMenuList = (params: object) => get('/system/menu/tree', params)
 export const getMenuDetail = (id: number) => get('/system/menu/detail', { id })
 export const addMenu = (data: object) => post('/system/menu/add', data)
-export const updateMenu = (data: object) => post('/system/menu/edit', data)
+export const updateMenu = (data: object) => put('/system/menu/edit', data)
 
 export function getMenuParams() {
     return request({

@@ -76,3 +76,10 @@ export function post(url: string, data?: any) {
 		data
 	})
 }
+export function put(url: string, data?: any) {
+	return service({
+		url,
+		method: "put",
+		data
+	})
+}
