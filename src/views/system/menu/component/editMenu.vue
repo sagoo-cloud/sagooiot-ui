@@ -138,7 +138,7 @@ const itemForm = {
 	path: '', // 路由路径
 	redirect: '', // 路由重定向，有子集 children 时
 	icon: '', // 菜单图标
-	roles: [], // 权限标识，取角色管理
+	// roles: [], // 权限标识，取角色管理
 	isHide: 0, // 是否隐藏
 	isAffix: 0, // 是否固定
 	linkUrl: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink:true 2、链接地址不为空`
