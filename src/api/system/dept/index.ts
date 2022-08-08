@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getDeptList(query?:Object) {
     return request({
-        url: '/api/v1/system/dept/list',
+        url: '/system/dept/list',
         method: 'get',
         params:query
     })
@@ -11,7 +11,7 @@ export function getDeptList(query?:Object) {
 
 export function addDept(data:object) {
     return request({
-        url: '/api/v1/system/dept/add',
+        url: '/system/dept/add',
         method: 'post',
         data:data
     })
@@ -20,7 +20,7 @@ export function addDept(data:object) {
 
 export function editDept(data:object) {
     return request({
-        url: '/api/v1/system/dept/edit',
+        url: '/system/dept/edit',
         method: 'put',
         data:data
     })
@@ -29,7 +29,7 @@ export function editDept(data:object) {
 
 export function deleteDept(id:number) {
     return request({
-        url: '/api/v1/system/dept/delete',
+        url: '/system/dept/delete',
         method: 'delete',
         data:{id}
     })

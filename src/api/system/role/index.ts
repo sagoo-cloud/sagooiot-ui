@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getRoleList(query:Object) {
     return request({
-        url: '/api/v1/system/role/list',
+        url: '/system/role/list',
         method: 'get',
         params:query
     })
@@ -10,14 +10,14 @@ export function getRoleList(query:Object) {
 
 export function getRoleParams() {
     return request({
-        url: '/api/v1/system/role/getParams',
+        url: '/system/role/getParams',
         method: 'get'
     })
 }
 
 export function addRole(data:object) {
     return request({
-        url: '/api/v1/system/role/add',
+        url: '/system/role/add',
         method: 'post',
         data:data
     })
@@ -25,7 +25,7 @@ export function addRole(data:object) {
 
 export function getRole(id:number) {
     return request({
-        url: '/api/v1/system/role/get',
+        url: '/system/role/get',
         method: 'get',
         params:{id}
     })
@@ -34,7 +34,7 @@ export function getRole(id:number) {
 
 export function editRole(data:object) {
     return request({
-        url: '/api/v1/system/role/edit',
+        url: '/system/role/edit',
         method: 'put',
         data:data
     })
@@ -43,7 +43,7 @@ export function editRole(data:object) {
 
 export function deleteRole(id:number) {
     return request({
-        url: '/api/v1/system/role/delete',
+        url: '/system/role/delete',
         method: 'delete',
         data:{ids:[id]}
     })

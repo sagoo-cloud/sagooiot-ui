@@ -3,7 +3,7 @@ import request from '/@/utils/request';
 
 export function logList(query:object) {
     return request({
-        url: '/api/v1/system/loginLog/list',
+        url: '/system/loginLog/list',
         method: 'get',
         params:query
     })
@@ -12,7 +12,7 @@ export function logList(query:object) {
 
 export function deleteLog(ids:number[]) {
     return request({
-        url: '/api/v1/system/loginLog/delete',
+        url: '/system/loginLog/delete',
         method: 'delete',
         params:{ids}
     })
@@ -22,7 +22,7 @@ export function deleteLog(ids:number[]) {
 
 export function clearLog() {
     return request({
-        url: '/api/v1/system/loginLog/clear',
+        url: '/system/loginLog/clear',
         method: 'delete',
     })
 }

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getMenuList(query:Object) {
     return request({
-        url: '/api/v1/system/menu/list',
+        url: '/system/menu/list',
         method: 'get',
         params:query
     })
@@ -17,14 +17,14 @@ export function getUserMenus() {
 
 export function getMenuParams() {
     return request({
-        url: '/api/v1/system/menu/getParams',
+        url: '/system/menu/getParams',
         method: 'get'
     })
 }
 
 export function addMenu(data:Object) {
     return request({
-        url: '/api/v1/system/menu/add',
+        url: '/system/menu/add',
         method: 'post',
         data:data
     })
@@ -32,7 +32,7 @@ export function addMenu(data:Object) {
 
 export function getMenuInfo(id:number) {
     return request({
-        url: '/api/v1/system/menu/get',
+        url: '/system/menu/get',
         method: 'get',
         params:{id}
     })
@@ -40,7 +40,7 @@ export function getMenuInfo(id:number) {
 
 export function updateMenu(data:Object) {
     return request({
-        url: '/api/v1/system/menu/update',
+        url: '/system/menu/update',
         method: 'put',
         data:data
     })
@@ -50,7 +50,7 @@ export function updateMenu(data:Object) {
 // 删除菜单
 export function delMenu(menuId:number) {
     return request({
-        url: '/api/v1/system/menu/delete',
+        url: '/system/menu/delete',
         method: 'delete',
         data:{ids:[menuId]}
     })
