@@ -75,8 +75,8 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
               <el-form-item label="是否隐藏">
                 <el-radio-group v-model="ruleForm.isHide">
-                  <el-radio :label="0">隐藏</el-radio>
-                  <el-radio :label="1">显示</el-radio>
+                  <el-radio :label="0">显示</el-radio>
+                  <el-radio :label="1">隐藏</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
