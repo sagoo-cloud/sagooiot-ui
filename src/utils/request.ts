@@ -83,3 +83,10 @@ export function put(url: string, data?: any) {
 		data
 	})
 }
+export function del(url: string, data?: any) {
+	return service({
+		url,
+		method: "delete",
+		data
+	})
+}

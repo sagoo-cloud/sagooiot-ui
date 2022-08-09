@@ -22,8 +22,23 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="菜单名称" prop="menuName">
+            <el-form-item label="菜单名称" prop="title">
               <el-input v-model="ruleForm.title" placeholder="请填写菜单名称" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+            <el-form-item label="规则名称" prop="name">
+              <el-input v-model="ruleForm.name" placeholder="请填写规则名称" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+            <el-form-item label="路由路径" prop="path">
+              <el-input v-model="ruleForm.path" placeholder="路由中的 path 值" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+            <el-form-item label="组件路径" prop="component">
+              <el-input v-model="ruleForm.component" placeholder="组件路径" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -32,16 +47,6 @@
             </el-form-item>
           </el-col>
           <template v-if="ruleForm.menuType === 1">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-              <el-form-item label="路由路径" prop="path">
-                <el-input v-model="ruleForm.path" placeholder="路由中的 path 值" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-              <el-form-item label="组件路径" prop="component">
-                <el-input v-model="ruleForm.component" placeholder="组件路径" clearable></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
               <el-form-item label="链接地址">
                 <el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http:xxx.com）" clearable :disabled="ruleForm.isLink===0">
@@ -129,9 +134,10 @@ import { ElMessage } from 'element-plus';
 
 const itemForm = {
 	id: undefined,
-	parentId: 0, // 上级菜单
+	parentId: -1, // 上级菜单
 	menuType: 0, // 菜单类型
 	title: '', // 菜单名称
+	name: '', // 规则名称
 	component: '', // 组件路径
 	isLink: 0, // 是否外链
 	weigh: 0, // 菜单排序
@@ -178,6 +184,7 @@ export default defineComponent({
 				component: [{ required: true, message: '组件地址不能为空', trigger: 'blur' }],
 				path: [{ required: true, message: '路由地址不能为空', trigger: 'blur' }],
 				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
 				menuType: [{ required: true, message: '菜单类型不能为空', trigger: 'blur' }],
 			},
 		});
@@ -226,6 +233,11 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.loading = true;
+					// parentId 默认-1
+					if (!state.ruleForm.parentId) {
+						state.ruleForm.parentId = -1;
+					}
+
 					if (props.acType === 'add') {
 						//添加
 						addMenu(state.ruleForm)

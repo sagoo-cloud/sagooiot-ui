@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, reactive, onBeforeMount, defineComponent, getCurrentInstance, unref } from 'vue';
+import { ref, toRefs, reactive, onBeforeMount, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import EditMenu from '/@/views/system/menu/component/editMenu.vue';
 import { delMenu, getMenuList } from '/@/api/system/menu';
@@ -113,7 +113,7 @@ export default defineComponent({
 		};
 		const menuList = () => {
 			getMenuList(state.queryParams).then((res: any) => {
-				console.log({...res[0]})
+				// console.log({...res[0]})
 				state.menuTableData = res || [];
 			});
 		};
