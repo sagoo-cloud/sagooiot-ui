@@ -1,10 +1,7 @@
 import request, { get } from '/@/utils/request';
 
-
-
-
 export const getRoleList = (params: object) => get('/system/role/tree', params)
-
+export const getRole = (id: number) => get('/system/role/getInfoById', { id })
 
 export function getRoleParams() {
     return request({
@@ -21,13 +18,6 @@ export function addRole(data: object) {
     })
 }
 
-export function getRole(id: number) {
-    return request({
-        url: '/system/role/get',
-        method: 'get',
-        params: { id }
-    })
-}
 
 
 export function editRole(data: object) {
