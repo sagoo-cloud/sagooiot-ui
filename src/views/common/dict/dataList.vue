@@ -97,8 +97,8 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage,FormInstance} from 'element-plus';
-import EditDic from '/@/views/system/dict/component/editDicData.vue';
-import {getDataList,deleteData} from "/@/api/system/dict/data";
+import EditDic from '/@/views/common/dict/component/editDicData.vue';
+import {getDataList,deleteData} from "/@/api/common/dict/data";
 import { useRoute } from 'vue-router';
 
 

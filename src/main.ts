@@ -12,7 +12,7 @@ import '/@/theme/index.scss';
 import mitt from 'mitt';
 import VueGridLayout from 'vue-grid-layout';
 import {getUpFileUrl, handleTree, selectDictLabel} from "/@/utils/common";
-import {useDict} from "/@/api/system/dict/data";
+import {useDict} from "/@/api/common/dict/data";
 // 分页组件
 import pagination from '/@/components/pagination/index.vue'
 import 'amis/sdk/sdk.js';

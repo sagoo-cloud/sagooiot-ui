@@ -81,7 +81,7 @@
         <el-table-column label="字典名称" align="center" prop="dictName" :show-overflow-tooltip="true" />
         <el-table-column label="字典类型" align="center" :show-overflow-tooltip="true">
           <template #default="scope">
-            <router-link :to="'/system/dict/data/list/' + scope.row.dictType" class="link-type">
+            <router-link :to="'/common/dict/data/list/' + scope.row.dictType" class="link-type">
               <span>{{ scope.row.dictType }}</span>
             </router-link>
           </template>
@@ -116,8 +116,8 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage,FormInstance} from 'element-plus';
-import EditDic from '/@/views/system/dict/component/editDic.vue';
-import {deleteType, getTypeList} from "/@/api/system/dict/type";
+import EditDic from '/@/views/common/dict/component/editDic.vue';
+import {deleteType, getTypeList} from "/@/api/common/dict/type";
 
 
 // 定义接口来定义对象的类型

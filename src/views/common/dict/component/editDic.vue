@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
-import { getType,addType,editType } from '/@/api/system/dict/type';
+import { getType,addType,editType } from '/@/api/common/dict/type';
 import {ElMessage} from "element-plus";
 interface RuleFormState {
   dictId:number;

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getTypeList(query:Object) {
     return request({
-        url: '/system/dict/type/list',
+        url: '/common/dict/type/list',
         method: 'get',
         params:query
     })
@@ -10,7 +10,7 @@ export function getTypeList(query:Object) {
 
 export function getType(dictId:number) {
     return request({
-        url: '/system/dict/type/get',
+        url: '/common/dict/type/get',
         method: 'get',
         params:{dictId}
     })
@@ -18,7 +18,7 @@ export function getType(dictId:number) {
 
 export function addType(data:any) {
     return request({
-        url: '/system/dict/type/add',
+        url: '/common/dict/type/add',
         method: 'post',
         data:data
     })
@@ -26,7 +26,7 @@ export function addType(data:any) {
 
 export function editType(data:any) {
     return request({
-        url: '/system/dict/type/edit',
+        url: '/common/dict/type/edit',
         method: 'put',
         data:data
     })
@@ -35,7 +35,7 @@ export function editType(data:any) {
 
 export function deleteType(dictIds:number[]) {
     return request({
-        url: '/system/dict/type/delete',
+        url: '/common/dict/type/delete',
         method: 'delete',
         data:{dictIds}
     })

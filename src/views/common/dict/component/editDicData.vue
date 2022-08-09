@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
-import { getData,addData,editData } from '/@/api/system/dict/data';
+import { getData,addData,editData } from '/@/api/common/dict/data';
 import {ElMessage} from "element-plus";
 interface RuleFormState {
   dictCode: number;
