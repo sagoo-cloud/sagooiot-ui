@@ -1,12 +1,10 @@
-import request from '/@/utils/request';
+import request, { get } from '/@/utils/request';
 
-export function getRoleList(query:Object) {
-    return request({
-        url: '/system/role/list',
-        method: 'get',
-        params:query
-    })
-}
+
+
+
+export const getRoleList = (params: object) => get('/system/role/tree', params)
+
 
 export function getRoleParams() {
     return request({
@@ -15,36 +13,36 @@ export function getRoleParams() {
     })
 }
 
-export function addRole(data:object) {
+export function addRole(data: object) {
     return request({
         url: '/system/role/add',
         method: 'post',
-        data:data
+        data: data
     })
 }
 
-export function getRole(id:number) {
+export function getRole(id: number) {
     return request({
         url: '/system/role/get',
         method: 'get',
-        params:{id}
+        params: { id }
     })
 }
 
 
-export function editRole(data:object) {
+export function editRole(data: object) {
     return request({
         url: '/system/role/edit',
         method: 'put',
-        data:data
+        data: data
     })
 }
 
 
-export function deleteRole(id:number) {
+export function deleteRole(id: number) {
     return request({
         url: '/system/role/delete',
         method: 'delete',
-        data:{ids:[id]}
+        data: { ids: [id] }
     })
 }

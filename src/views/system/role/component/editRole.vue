@@ -58,7 +58,8 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref,getCurrentInstance,unref } from 'vue';
-import {addRole, editRole, getRole, getRoleParams} from "/@/api/system/role";
+import {addRole, editRole, getRole} from "/@/api/system/role";
+import {  getMenuList } from '/@/api/system/menu';
 import {ElMessage} from "element-plus";
 import {getBackEndControlRoutes} from "/@/router/backEnd";
 
@@ -181,8 +182,8 @@ export default defineComponent({
 		};
 		// 获取菜单结构数据
 		const getMenuData = () => {
-      getRoleParams().then((res:any)=>{
-        state.menuData = proxy.handleTree(res.data.menu, "id","pid");
+      getMenuList({status: -1}).then((res:any)=>{
+        state.menuData = res
       })
 		};
     const resetForm = ()=>{

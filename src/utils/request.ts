@@ -61,7 +61,7 @@ service.interceptors.response.use(
 // 导出 axios 实例
 export default service;
 
-export function get(url: string, params?: any) {
+export function get(url: string, params?: any): any {
 	return service({
 		url,
 		method: "get",
@@ -69,21 +69,21 @@ export function get(url: string, params?: any) {
 	})
 }
 
-export function post(url: string, data?: any) {
+export function post(url: string, data?: any): any {
 	return service({
 		url,
 		method: "post",
 		data
 	})
 }
-export function put(url: string, data?: any) {
+export function put(url: string, data?: any): any {
 	return service({
 		url,
 		method: "put",
 		data
 	})
 }
-export function del(url: string, data?: any) {
+export function del(url: string, data?: any): any{
 	return service({
 		url,
 		method: "delete",
