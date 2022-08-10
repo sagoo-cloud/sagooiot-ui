@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, getCurrentInstance, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import { addRole, editRole, getRole } from '/@/api/system/role';
 import { getMenuList } from '/@/api/system/menu';
 import { ElMessage } from 'element-plus';
@@ -65,6 +65,7 @@ interface MenuDataTree {
 }
 interface DialogRow {
 	id: number;
+	parentId: number;
 	name: string;
 	status: number;
 	listOrder: number;
@@ -89,7 +90,6 @@ interface RoleState {
 export default defineComponent({
 	name: 'systemEditRole',
 	setup(props, { emit }) {
-		const { proxy } = getCurrentInstance() as any;
 		const formRef = ref<HTMLElement | null>(null);
 		const menuRef = ref();
 		const state = reactive<RoleState>({
@@ -97,6 +97,7 @@ export default defineComponent({
 			isShowDialog: false,
 			formData: {
 				id: 0,
+				parentId: -1,
 				name: '',
 				status: 1,
 				listOrder: 0,
@@ -122,7 +123,7 @@ export default defineComponent({
 			getMenuData();
 			if (row) {
 				getRole(row.id).then((res: any) => {
-					state.formData = res
+					state.formData = res;
 					// if (res.data.role) {
 					// 	state.formData = res.data.role;
 					// 	state.formData.menuIds = res.data.menuIds ?? [];
@@ -187,6 +188,7 @@ export default defineComponent({
 			state.menuNodeAll = false;
 			state.formData = {
 				id: 0,
+				parentId: -1,
 				name: '',
 				status: 1,
 				listOrder: 0,
