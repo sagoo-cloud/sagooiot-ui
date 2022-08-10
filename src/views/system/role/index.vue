@@ -29,7 +29,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" row-key="id"  :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      <el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
@@ -64,6 +64,7 @@
       <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
     </el-card>
     <EditRole ref="editRoleRef" @getRoleList="roleList" :list="tableData.data" />
+    <permissionVue ref="permissionRef" />
   </div>
 </template>
 
@@ -71,6 +72,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, toRaw, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import EditRole from '/@/views/system/role/component/editRole.vue';
+import permissionVue from '/@/views/system/role/component/permission.vue';
 import { deleteRole, getRoleList } from '/@/api/system/role';
 // 定义接口来定义对象的类型
 interface TableData {
@@ -96,11 +98,12 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'apiV1SystemRoleList',
-	components: { EditRole },
+	components: { EditRole, permissionVue },
 	setup() {
 		const { proxy } = getCurrentInstance() as any;
 		const addRoleRef = ref();
 		const editRoleRef = ref();
+		const permissionRef = ref();
 		const state = reactive<TableDataState>({
 			tableData: {
 				data: [],
@@ -118,7 +121,6 @@ export default defineComponent({
 		};
 		const roleList = () => {
 			getRoleList(state.tableData.param).then((res: Array<TableData>) => {
-				console.log(res)
 				state.tableData.data = res || [];
 			});
 		};
@@ -146,17 +148,9 @@ export default defineComponent({
 				})
 				.catch(() => {});
 		};
-		// 分页改变
-		const onHandleSizeChange = (val: number) => {
-			state.tableData.param.pageSize = val;
-		};
-		// 分页改变
-		const onHandleCurrentChange = (val: number) => {
-			state.tableData.param.pageNum = val;
-		};
 		// 设置权限
 		const permission = (row: any) => {
-			console.log(row);
+			permissionRef.value.openDialog(row);
 		};
 		// 页面加载时
 		onMounted(() => {
@@ -165,12 +159,11 @@ export default defineComponent({
 		return {
 			addRoleRef,
 			editRoleRef,
+			permissionRef,
 			permission,
 			onOpenAddRole,
 			onOpenEditRole,
 			onRowDel,
-			onHandleSizeChange,
-			onHandleCurrentChange,
 			roleList,
 			...toRefs(state),
 		};

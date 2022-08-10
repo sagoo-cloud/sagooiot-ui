@@ -30,7 +30,7 @@
     "screenfull": "^6.0.1",
     "sortablejs": "^1.14.0",
     "splitpanes": "^3.1.1",
-    "vue": "^3.2.31",
+    "vue": "^3.2.37",
     "vue-clipboard3": "^1.0.1",
     "vue-grid-layout": "^3.0.0-beta1",
     "vue-i18n": "9.1.10",
