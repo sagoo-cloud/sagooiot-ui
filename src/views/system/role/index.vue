@@ -3,13 +3,24 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :inline="true">
+          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+            <el-form-item label="上级角色">
+              <el-cascader :options="menu" :props="{ label: 'title',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="ruleForm.parentId">
+                <template #default="{ node, data }">
+                  <span>{{ data.title }}</span>
+                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                </template>
+              </el-cascader>
+            </el-form-item>
+          </el-col> -->
           <el-form-item label="角色名称">
             <el-input size="default" v-model="tableData.param.roleName" placeholder="请输入角色名称" class="w-50 m-2" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.roleStatus" clearable>
-              <el-option label="启用" value="1" />
-              <el-option label="禁用" value="0" />
+            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status" clearable>
+              <el-option label="全部" :value="-1" />
+              <el-option label="启用" :value="1" />
+              <el-option label="禁用" :value="0" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -29,21 +40,34 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%">
-        <el-table-column type="index" label="序号" width="60" />
+        <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="listOrder" label="排序" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="status" label="角色状态" show-overflow-tooltip>
+        <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="listOrder" label="排序" width="60" align="center"></el-table-column>
+        <el-table-column prop="status" label="角色状态" width="100" align="center">
           <template #default="scope">
             <el-tag type="success" v-if="scope.row.status===1">启用</el-tag>
             <el-tag type="info" v-else>禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>
         <el-table-column label="操作" width="160" align="center">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+            <el-dropdown size="small">
+              <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
+                <el-icon>
+                  <ele-ArrowDown />
+                </el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>角色成员</el-dropdown-item>
+                  <el-dropdown-item @click.native="permission(scope.row)">角色权限</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
@@ -75,9 +99,7 @@ interface TableDataState {
 		loading: boolean;
 		param: {
 			roleName: string;
-			roleStatus: string;
-			pageNum: number;
-			pageSize: number;
+			status: number;
 		};
 	};
 }
@@ -96,9 +118,7 @@ export default defineComponent({
 				loading: false,
 				param: {
 					roleName: '',
-					roleStatus: '',
-					pageNum: 1,
-					pageSize: 10,
+					status: -1,
 				},
 			},
 		});
@@ -157,6 +177,10 @@ export default defineComponent({
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
 		};
+		// 设置权限
+		const permission = (row: any) => {
+			console.log(row)
+		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -164,6 +188,7 @@ export default defineComponent({
 		return {
 			addRoleRef,
 			editRoleRef,
+			permission,
 			onOpenAddRole,
 			onOpenEditRole,
 			onRowDel,

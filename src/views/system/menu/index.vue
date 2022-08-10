@@ -34,8 +34,8 @@
         </el-table-column>
         <el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
         <el-table-column label="组件路径" prop="component" show-overflow-tooltip></el-table-column>
-        <el-table-column label="排序" prop="weigh" show-overflow-tooltip width="80"></el-table-column>
-        <el-table-column label="类型" show-overflow-tooltip width="80">
+        <el-table-column label="排序" prop="weigh" width="80" align="center"></el-table-column>
+        <el-table-column label="类型" width="80"  align="center">
           <template #default="scope">
             <el-tag :type="scope.row.menuType===0?'danger':(scope.row.menuType===1?'success':'warning')" size="small">{{scope.row.menuType===0?'目录':(scope.row.menuType===1?'菜单':'按钮') }}</el-tag>
           </template>

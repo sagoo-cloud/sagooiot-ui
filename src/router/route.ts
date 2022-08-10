@@ -108,20 +108,6 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 		},
 		children: [
 			{
-				path: '/linshi/role',
-				name: 'role',
-				component: () => import('/@/views/system/role/index.vue'),
-				meta: {
-					title: '角色管理',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					icon: 'iconfont icon-ico_shuju',
-				},
-			},
-			{
 				path: '/linshi/org',
 				name: 'org',
 				component: () => import('/@/views/system/org/index.vue'),

@@ -87,9 +87,7 @@ export default defineComponent({
 			captchaSrc: '',
 		});
 		onMounted(() => {
-			console.log('onMounted');
 			getCaptcha();
-			currentUser();
 		});
 		// 时间获取
 		const currentTime = computed(() => {
