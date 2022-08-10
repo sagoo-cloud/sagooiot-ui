@@ -90,6 +90,7 @@ export function backEndComponent(routes: any) {
 			isIframe: item.isIframe,
 			isKeepAlive: item.isKeepAlive,
 			isLink: item.isLink,
+			linkUrl: item.linkUrl,
 			title: item.title,
 		}
 		return item;
