@@ -73,7 +73,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent, toRaw, getCurrentIns
 import { ElMessageBox, ElMessage } from 'element-plus';
 import EditRole from '/@/views/system/role/component/editRole.vue';
 import permissionVue from '/@/views/system/role/component/permission.vue';
-import { deleteRole, getRoleList } from '/@/api/system/role';
+import api from '/@/api/system';
 // 定义接口来定义对象的类型
 interface TableData {
 	id: number;
@@ -120,7 +120,7 @@ export default defineComponent({
 			roleList();
 		};
 		const roleList = () => {
-			getRoleList(state.tableData.param).then((res: Array<TableData>) => {
+			api.role.getRoleList(state.tableData.param).then((res: Array<TableData>) => {
 				state.tableData.data = res || [];
 			});
 		};
@@ -140,7 +140,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					deleteRole(row.id).then(() => {
+					api.role.deleteRole(row.id).then(() => {
 						ElMessage.success('删除成功');
 						proxy.$refs['editRoleRef'].resetMenuSession();
 						roleList();

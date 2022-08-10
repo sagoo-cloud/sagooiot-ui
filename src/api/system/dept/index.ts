@@ -1,22 +1,7 @@
-import request from '/@/utils/request';
+import request,{ get, post, del, put } from '/@/utils/request';
 
-export function getDeptList(query?:Object) {
-    return request({
-        url: '/system/dept/list',
-        method: 'get',
-        params:query
-    })
-}
-
-
-export function addDept(data:object) {
-    return request({
-        url: '/system/dept/add',
-        method: 'post',
-        data:data
-    })
-}
-
+export const getDeptList = (params: object) => post('/system/dept/tree', params)
+export const addDept = (data: object) => post('/system/dept/add', data)
 
 export function editDept(data:object) {
     return request({

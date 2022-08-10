@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
-import { addRole, editRole, getRole } from '/@/api/system/role';
+import api from '/@/api/system';
 import { getMenuList } from '/@/api/system/menu';
 import { ElMessage } from 'element-plus';
 import { getBackEndControlRoutes } from '/@/router/backEnd';
@@ -139,7 +139,7 @@ export default defineComponent({
 			resetForm();
 			getMenuData();
 			if (row) {
-				getRole(row.id).then((res: any) => {
+				api.role.getRole(row.id).then((res: any) => {
 					state.formData = res;
 					// if (res.data.role) {
 					// 	state.formData = res.data.role;
@@ -170,7 +170,7 @@ export default defineComponent({
 					// state.formData.menuIds = getMenuAllCheckedKeys();
 					if (state.formData.id === 0) {
 						//添加
-						addRole(state.formData)
+						api.role.addRole(state.formData)
 							.then(() => {
 								ElMessage.success('角色添加成功');
 								closeDialog(); // 关闭弹窗
@@ -182,7 +182,7 @@ export default defineComponent({
 							});
 					} else {
 						//修改
-						editRole(state.formData)
+						api.role.editRole(state.formData)
 							.then(() => {
 								ElMessage.success('角色修改成功');
 								closeDialog(); // 关闭弹窗
@@ -250,6 +250,7 @@ export default defineComponent({
 			menuRef,
 			formRef,
 			handleCheckedTreeExpand,
+			getMenuAllCheckedKeys,
 			handleCheckedTreeNodeAll,
 			handleCheckedTreeConnect,
 			resetMenuSession,
