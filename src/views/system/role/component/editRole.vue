@@ -23,7 +23,7 @@
               <el-input v-model="formData.remark" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
             <el-form-item label="菜单权限">
               <el-row :gutter="35">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -36,7 +36,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
       <template #footer>
@@ -70,7 +70,7 @@ interface DialogRow {
 	status: number;
 	listOrder: number;
 	remark: string;
-	menuIds: Array<number>;
+	// menuIds: Array<number>;
 }
 interface RoleState {
 	loading: boolean;
@@ -87,6 +87,16 @@ interface RoleState {
 	rules: object;
 }
 
+const baseForm = {
+	id: 0,
+	parentId: -1,
+	name: '',
+	status: 1,
+	listOrder: 0,
+	remark: '',
+	// menuIds: [],
+};
+
 export default defineComponent({
 	name: 'systemEditRole',
 	setup(props, { emit }) {
@@ -96,13 +106,7 @@ export default defineComponent({
 			loading: false,
 			isShowDialog: false,
 			formData: {
-				id: 0,
-				parentId: -1,
-				name: '',
-				status: 1,
-				listOrder: 0,
-				remark: '',
-				menuIds: [],
+				...baseForm,
 			},
 			// 表单校验
 			rules: {
@@ -147,7 +151,7 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.loading = true;
-					state.formData.menuIds = getMenuAllCheckedKeys();
+					// state.formData.menuIds = getMenuAllCheckedKeys();
 					if (state.formData.id === 0) {
 						//添加
 						addRole(state.formData)
@@ -187,13 +191,7 @@ export default defineComponent({
 			state.menuExpand = false;
 			state.menuNodeAll = false;
 			state.formData = {
-				id: 0,
-				parentId: -1,
-				name: '',
-				status: 1,
-				listOrder: 0,
-				remark: '',
-				menuIds: [],
+				...baseForm
 			};
 		};
 		/** 树权限（展开/折叠）*/

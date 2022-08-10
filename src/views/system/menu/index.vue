@@ -42,14 +42,31 @@
         </el-table-column>
         <el-table-column prop="isHide" label="显示状态" align="center" width="120">
           <template #default="{row}">
-					{{row.isHide?'隐藏':'显示'}}
+            {{row.isHide?'隐藏':'显示'}}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="140" align="center" fixed="right">
+        <el-table-column label="操作" width="160" align="center" fixed="right">
           <template #default="scope">
             <el-button v-if="!scope.row.menuType" size="small" type="text" @click="onOpenAddMenu(scope.row)">新增</el-button>
-            <el-button size="small" type="text" @click="onOpenEditMenu(scope.row)">修改</el-button>
-            <el-button size="small" type="text" @click="onTabelRowDel(scope.row)">删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditMenu(scope.row)">修改</el-button>
+            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">删除</el-button>
+            <el-dropdown v-if="scope.row.menuType" size="small">
+              <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
+                <el-icon>
+                  <ele-ArrowDown />
+                </el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>按钮权限</el-dropdown-item>
+                  <el-dropdown-item>列表权限</el-dropdown-item>
+                  <el-dropdown-item>数据权限</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+              <!-- <el-dropdown-item @click.native="download(scope.row)" v-has="'btn_download'">
+                  下载代码
+                </el-dropdown-item> -->
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
