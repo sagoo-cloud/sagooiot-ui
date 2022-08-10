@@ -92,7 +92,7 @@ export default defineComponent({
 				loading: false,
 				param: {
 					name: '',
-					status: 1,
+					status: -1,
 				},
 			},
 		});

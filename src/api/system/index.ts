@@ -13,5 +13,11 @@ export default {
     del: (id: number) => del('/system/organization/del', { id }),
     add: (data: object) => post('/system/organization/add',data),
     edit: (data: object) => put('/system/organization/edit',data),
+  },
+  dept: {
+    getList: (params: object) => get('/system/dept/tree', params),
+    del: (deptId: number) => del('/system/dept/del', { deptId }),
+    add: (data: object) => post('/system/dept/add',data),
+    edit: (data: object) => put('/system/dept/edit',data),
   }
 }
