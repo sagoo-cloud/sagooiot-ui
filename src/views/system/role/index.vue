@@ -3,21 +3,11 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :inline="true">
-          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="上级角色">
-              <el-cascader :options="menu" :props="{ label: 'title',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="ruleForm.parentId">
-                <template #default="{ node, data }">
-                  <span>{{ data.title }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item>
-          </el-col> -->
           <el-form-item label="角色名称">
-            <el-input size="default" v-model="tableData.param.roleName" placeholder="请输入角色名称" class="w-50 m-2" clearable />
+            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50 m-2" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status" clearable>
+            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status">
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
@@ -39,7 +29,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%">
+      <el-table :data="tableData.data" style="width: 100%" row-key="id"  :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
@@ -73,7 +63,7 @@
       </el-table>
       <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
     </el-card>
-    <EditRole ref="editRoleRef" @getRoleList="roleList" />
+    <EditRole ref="editRoleRef" @getRoleList="roleList" :list="tableData.data" />
   </div>
 </template>
 
@@ -98,7 +88,7 @@ interface TableDataState {
 		// total: number;
 		loading: boolean;
 		param: {
-			roleName: string;
+			name: string;
 			status: number;
 		};
 	};
@@ -117,7 +107,7 @@ export default defineComponent({
 				// total: 0,
 				loading: false,
 				param: {
-					roleName: '',
+					name: '',
 					status: -1,
 				},
 			},
@@ -127,22 +117,9 @@ export default defineComponent({
 			roleList();
 		};
 		const roleList = () => {
-			const data: Array<TableData> = [];
-			getRoleList(state.tableData.param).then((res: TableData[]) => {
-				const list = res || [];
-				list.map((item: TableData) => {
-					data.push({
-						id: item.id,
-						status: item.status,
-						listOrder: item.listOrder,
-						name: item.name,
-						remark: item.remark,
-						dataScope: item.dataScope,
-						createdAt: item.createdAt,
-					});
-				});
-				state.tableData.data = data;
-				// state.tableData.total = res.data.total;
+			getRoleList(state.tableData.param).then((res: Array<TableData>) => {
+				console.log(res)
+				state.tableData.data = res || [];
 			});
 		};
 		// 打开新增角色弹窗
@@ -179,7 +156,7 @@ export default defineComponent({
 		};
 		// 设置权限
 		const permission = (row: any) => {
-			console.log(row)
+			console.log(row);
 		};
 		// 页面加载时
 		onMounted(() => {

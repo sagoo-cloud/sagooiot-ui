@@ -41,7 +41,7 @@ service.interceptors.response.use(
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
 		} else {
-			return res.data?.Data || res.data
+			return res.data?.Data || (res.data?.Data === undefined ? res.data : res.data.Data)
 		}
 	},
 	(error) => {

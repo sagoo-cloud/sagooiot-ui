@@ -1,14 +1,10 @@
 <template>
-	<el-main class="layout-main">
-		<el-scrollbar
-			class="layout-scrollbar"
-			ref="layoutScrollbarRef"
-			:style="{ padding: currentRoutemeta?.isLink && currentRouteMeta.isIframe ? 0 : '', transition: 'padding 0.3s ease-in-out' }"
-		>
-			<LayoutParentView :style="{ minHeight: `calc(100vh - ${headerHeight})` }" />
-			<Footer v-if="getThemeConfig.isFooter" />
-		</el-scrollbar>
-	</el-main>
+  <el-main class="layout-main">
+    <el-scrollbar class="layout-scrollbar" ref="layoutScrollbarRef" :style="{ padding: currentRoutemeta?.isLink && currentRouteMeta.isIframe ? 0 : '', transition: 'padding 0.3s ease-in-out' }">
+      <LayoutParentView :style="{ minHeight: `calc(100vh - ${headerHeight})` }" />
+      <Footer v-if="getThemeConfig.isFooter" />
+    </el-scrollbar>
+  </el-main>
 </template>
 
 <script lang="ts">

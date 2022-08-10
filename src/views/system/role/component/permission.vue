@@ -3,16 +3,6 @@
     <el-dialog :title="(formData.id===0?'添加':'修改')+'角色'" v-model="isShowDialog" width="769px">
       <el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
         <el-row :gutter="35">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="上级角色">
-              <el-cascader :options="list" :props="{ label: 'name',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="formData.parentId">
-                <template #default="{ node, data }">
-                  <span>{{ data.name }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item>
-          </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="角色名称" prop="name">
               <el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
@@ -109,9 +99,6 @@ const baseForm = {
 
 export default defineComponent({
 	name: 'systemEditRole',
-	props: {
-		list: Array,
-	},
 	setup(props, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 		const menuRef = ref();
@@ -164,9 +151,6 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.loading = true;
-					if (!state.formData.parentId) {
-						state.formData.parentId = -1;
-					}
 					// state.formData.menuIds = getMenuAllCheckedKeys();
 					if (state.formData.id === 0) {
 						//添加
@@ -207,7 +191,7 @@ export default defineComponent({
 			state.menuExpand = false;
 			state.menuNodeAll = false;
 			state.formData = {
-				...baseForm,
+				...baseForm
 			};
 		};
 		/** 树权限（展开/折叠）*/
