@@ -46,8 +46,8 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
-import { getData,addData,editData } from '/@/api/common/dict/data';
 import {ElMessage} from "element-plus";
+import api from '/@/api/system';
 interface RuleFormState {
   dictCode: number;
   dictLabel: string;
@@ -102,7 +102,7 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState|null) => {
       resetForm();
       if (row){
-        getData(row.dictCode).then((res:any)=>{
+        api.dict.getData(row.dictCode).then((res:any)=>{
           state.ruleForm = res.data.dict
         })
         state.ruleForm = row;
@@ -137,14 +137,14 @@ export default defineComponent({
         if (valid) {
           if(state.ruleForm.dictCode!==0){
             //修改
-            editData(state.ruleForm).then(()=>{
+            api.dict.editData(state.ruleForm).then(()=>{
               ElMessage.success('字典数据修改成功');
               closeDialog(); // 关闭弹窗
               emit('dataList')
             })
           }else{
             //添加
-            addData(state.ruleForm).then(()=>{
+            api.dict.addData(state.ruleForm).then(()=>{
               ElMessage.success('字典数据添加成功');
               closeDialog(); // 关闭弹窗
               emit('dataList')

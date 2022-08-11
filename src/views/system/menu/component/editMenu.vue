@@ -149,6 +149,7 @@ const itemForm = {
 	isAffix: 0, // 是否固定
 	linkUrl: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink:true 2、链接地址不为空`
 	isIframe: 0, // 是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
+	status: 1, 
 };
 
 export default defineComponent({

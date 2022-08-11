@@ -11,6 +11,7 @@
           </el-form-item>
           <el-form-item label="状态" prop="status" style="width: 200px;">
             <el-select v-model="tableData.param.status" placeholder="字典状态" clearable size="default" style="width: 240px">
+              <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
             </el-select>
@@ -74,7 +75,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/editDicData.vue';
-import { getDataList, deleteData } from '/@/api/common/dict/data';
+import api from '/@/api/system';
 import { useRoute } from 'vue-router';
 
 // 定义接口来定义对象的类型
@@ -99,7 +100,7 @@ interface TableDataState {
 			pageSize: number;
 			dictType: string;
 			dictLabel: string;
-			status: string;
+			status: number;
 		};
 	};
 }
@@ -123,7 +124,7 @@ export default defineComponent({
 					pageSize: 10,
 					dictLabel: '',
 					dictType: '',
-					status: '',
+					status: -1,
 				},
 			},
 		});
@@ -132,7 +133,7 @@ export default defineComponent({
 			dataList();
 		};
 		const dataList = () => {
-			getDataList(state.tableData.param).then((res: any) => {
+			api.dict.getDataList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.data.list;
 				state.tableData.total = res.data.total;
 			});
@@ -165,7 +166,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					deleteData(ids).then(() => {
+					api.dict.deleteData(ids).then(() => {
 						ElMessage.success('删除成功');
 						dataList();
 					});
@@ -174,8 +175,7 @@ export default defineComponent({
 		};
 		// 页面加载时
 		onMounted(() => {
-      const dictType = route.params && route.params.dictType;
-      console.log(dictType)
+			const dictType = route.params && route.params.dictType;
 			state.tableData.param.dictType = <string>dictType;
 			initTableData();
 		});

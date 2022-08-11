@@ -32,7 +32,12 @@ export default {
     getTypeList: (params: object) => get('/common/dict/type/list', params),
     getType: (dictId: number) => get('/common/dict/type/get', { dictId }),
     addType: (data: object) => post('/common/dict/type/add', data),
+    addData: (data: object) => post('/common/dict/data/add', data),
     editType: (data: object) => put('/common/dict/type/edit', data),
-    deleteType: (dictIds: object) => del('/common/dict/type/delete', { dictIds }),
+    editData: (data: object) => put('/common/dict/data/edit', data),
+    deleteType: (dictIds: object[]) => del('/common/dict/type/delete', { dictIds }),
+    getDataList: (params: object) => get('/common/dict/data/list', params),
+    getData: (dictCode: string) => get('/common/dict/data/get', { dictCode }),
+    deleteData: (ids: object[]) => del('/common/dict/data/delete', { ids }),
   }
 }
