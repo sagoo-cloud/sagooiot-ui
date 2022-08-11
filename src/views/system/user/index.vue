@@ -5,7 +5,7 @@
         <el-card shadow="hover">
           <el-scrollbar>
             <el-input :prefix-icon="search" v-model="filterText" placeholder="请输入部门名称" clearable size="default" style="width: 100%;" />
-            <el-tree ref="treeRef" class="filter-tree mt-4"  :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick" />
+            <el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick" />
           </el-scrollbar>
         </el-card>
       </el-col>
@@ -58,24 +58,24 @@
           </div>
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
-            <el-table-column type="index" label="序号" width="60" />
-            <el-table-column prop="userName" label="账户名称" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
+            <el-table-column type="index" label="序号" width="60" align="center" />
+            <el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="userNickname" label="用户昵称"  min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dept.deptName" label="部门" show-overflow-tooltip></el-table-column>
             <el-table-column label="角色" align="center" prop="roleInfo" :show-overflow-tooltip="true">
               <template #default="scope">
                 <span v-for="(item,index) of scope.row.roleInfo" :key="'role-'+index"> {{item.name+'   '}} </span>
               </template>
             </el-table-column>
-            <el-table-column prop="mobile" label="手机号" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="userStatus" label="用户状态" show-overflow-tooltip>
+            <el-table-column prop="mobile" label="手机号"  width="120" align="center"></el-table-column>
+            <el-table-column prop="userStatus" label="用户状态" width="120" align="center">
               <template #default="scope">
                 <el-switch v-model="scope.row.userStatus" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column prop="createdAt" label="创建时间" show-overflow-tooltip></el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column prop="createdAt" label="创建时间" width="180" align="center"></el-table-column>
+            <el-table-column label="操作" width="150" align="center" fixed="right">
               <template #default="scope">
                 <el-button size="small" type="text" @click="onOpenEditUser(scope.row)">修改</el-button>
                 <el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
@@ -112,9 +112,8 @@ interface TableDataState {
 			pageNum: number;
 			pageSize: number;
 			deptId: string;
-			mobile: string;
-			status: string;
-			keyWords: string;
+			userNickname: string;
+			userName: string;
 			dateRange: string[];
 		};
 	};
@@ -139,27 +138,7 @@ export default defineComponent({
 				children: 'children',
 				label: 'deptName',
 			},
-			deptData: [
-				{
-					label: '集团总部',
-					children: [
-						{
-							label: '曲靖分部',
-							children: [
-								{
-									label: '总经办',
-								},
-								{
-									label: '市场部',
-								},
-								{
-									label: '研发部',
-								},
-							],
-						},
-					],
-				},
-			],
+			deptData: [],
 			tableData: {
 				data: [],
 				total: 0,
@@ -168,25 +147,23 @@ export default defineComponent({
 					pageNum: 1,
 					pageSize: 10,
 					deptId: '',
-					mobile: '',
-					status: '',
-					keyWords: '',
+					userNickname: '',
+					userName: '',
 					dateRange: [],
 				},
 			},
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			console.log(statusParams);
 			api.dept.getList(statusParams).then((res: any) => {
 				state.deptData = res;
 			});
 			userList();
 		};
 		const userList = () => {
-			getUserList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.data.userList ?? [];
-				state.tableData.total = res.data.total;
+			api.user.getList(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.list;
+				state.tableData.total = res.total;
 			});
 		};
 		// 打开新增用户弹窗

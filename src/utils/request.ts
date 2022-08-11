@@ -41,7 +41,20 @@ service.interceptors.response.use(
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
 		} else {
-			return res.data?.Data || (res.data?.Data === undefined ? res.data : res.data.Data)
+			// 分页的数据
+			if (res.data?.Total !== undefined) {
+				return {
+					list: res.data.Data,
+					total: res.data.Total,
+					page: res.data.currentPage,
+				}
+			}
+			if (res.data?.Data) {
+				return res.data.Data 
+			}
+			if (res.data?.Data === undefined) {
+				return res.data
+			}
 		}
 	},
 	(error) => {
