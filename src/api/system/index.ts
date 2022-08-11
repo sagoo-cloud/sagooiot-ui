@@ -28,6 +28,13 @@ export default {
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
   },
+  config: {
+    getList: (params: object) => get('/common/config/list', params),
+    detail: (id: number) => get('/common/config/get', { id }),
+    add: (data: object) => post('/common/config/add', data),
+    del: (ids: number[]) => del('/common/config/delete', { ids }),
+    edit: (data: object) => put('/common/config/edit', data),
+  },
   dict: {
     getTypeList: (params: object) => get('/common/dict/type/list', params),
     getType: (dictId: number) => get('/common/dict/type/get', { dictId }),
@@ -35,9 +42,9 @@ export default {
     addData: (data: object) => post('/common/dict/data/add', data),
     editType: (data: object) => put('/common/dict/type/edit', data),
     editData: (data: object) => put('/common/dict/data/edit', data),
-    deleteType: (dictIds: object[]) => del('/common/dict/type/delete', { dictIds }),
+    deleteType: (dictIds: number[]) => del('/common/dict/type/delete', { dictIds }),
     getDataList: (params: object) => get('/common/dict/data/list', params),
     getData: (dictCode: string) => get('/common/dict/data/get', { dictCode }),
-    deleteData: (ids: object[]) => del('/common/dict/data/delete', { ids }),
+    deleteData: (ids: number[]) => del('/common/dict/data/delete', { ids }),
   }
 }

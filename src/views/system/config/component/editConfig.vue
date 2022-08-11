@@ -11,7 +11,7 @@
         <el-form-item label="参数键值" prop="configValue">
           <el-input v-model="ruleForm.configValue" placeholder="请输入参数键值" />
         </el-form-item>
-        <el-form-item label="系统内置" prop="configType">
+        <!-- <el-form-item label="系统内置" prop="configType">
           <el-radio-group v-model="ruleForm.configType">
             <el-radio
                 v-for="dict in sysYesNoOptions"
@@ -19,7 +19,7 @@
                 :label="dict.value"
             >{{dict.label}}</el-radio>
           </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="ruleForm.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
 import {ElMessage} from "element-plus";
-import {addConfig, editConfig, getConfig} from "/@/api/system/config";
+import api from "/@/api/system";
 interface RuleFormState {
   configId: number;
   configName: string;
@@ -88,7 +88,7 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState|null) => {
       resetForm();
       if (row){
-        getConfig(row.configId).then((res:any)=>{
+        api.config.detail(row.configId).then((res:any)=>{
           const data:RuleFormState = res.data.data
           data.configType = String(data.configType)
           state.ruleForm = data
@@ -123,14 +123,14 @@ export default defineComponent({
         if (valid) {
           if(state.ruleForm.configId!==0){
             //修改
-            editConfig(state.ruleForm).then(()=>{
+            api.config.edit(state.ruleForm).then(()=>{
               ElMessage.success('参数修改成功');
               closeDialog(); // 关闭弹窗
               emit('dataList')
             })
           }else{
             //添加
-            addConfig(state.ruleForm).then(()=>{
+            api.config.add(state.ruleForm).then(()=>{
               ElMessage.success('参数添加成功');
               closeDialog(); // 关闭弹窗
               emit('dataList')
