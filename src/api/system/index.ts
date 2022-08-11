@@ -27,5 +27,9 @@ export default {
     resetPassword: (data: object) => post('/system/user/resetPassword', data),
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
+  },
+  dict: {
+    getTypeList: (params: object) => get('/common/dict/type/list', params),
+    deleteType: (dictIds: object) => del('/common/dict/type/delete', { dictIds }),
   }
 }

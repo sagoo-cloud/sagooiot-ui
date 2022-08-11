@@ -44,6 +44,7 @@ service.interceptors.response.use(
 			// 分页的数据
 			if (res.data?.Total !== undefined) {
 				return {
+					...res.data,
 					list: res.data.Data,
 					total: res.data.Total,
 					page: res.data.currentPage,

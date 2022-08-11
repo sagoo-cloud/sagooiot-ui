@@ -14,8 +14,8 @@
             </el-form-item>
           </el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称" prop="nickName">
-							<el-input v-model="ruleForm.nickName" placeholder="请输入用户昵称" clearable></el-input>
+						<el-form-item label="用户昵称" prop="userNickname">
+							<el-input v-model="ruleForm.userNickname" placeholder="请输入用户昵称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -34,7 +34,7 @@
 						<el-form-item label="部门" prop="deptId">
 							<el-cascader
 								:options="deptData"
-								:props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }"
+								:props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'name' }"
 								placeholder="请选择部门"
 								clearable
 								class="w100"
@@ -142,7 +142,7 @@ export default defineComponent({
         userId: 0,
         deptId: 0,
         userName: '',
-        nickName: '',
+        userNickname: '',
         password: '',
         mobile:'',
         email: '',
@@ -158,7 +158,7 @@ export default defineComponent({
         userName: [
           { required: true, message: "用户名称不能为空", trigger: "blur" }
         ],
-        nickName: [
+        userNickname: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
         ],
         deptId: [
@@ -194,7 +194,7 @@ export default defineComponent({
             userId: user.id,
             deptId: user.deptId,
             userName: user.userName,
-            nickName: user.userNickname,
+            userNickname: user.useruserNickname,
             password: '-',
             mobile:user.mobile,
             email: user.userEmail,
@@ -258,7 +258,7 @@ export default defineComponent({
         userId: 0,
         deptId: 0,
         userName: '',
-        nickName: '',
+        userNickname: '',
         password: '',
         mobile:'',
         email: '',

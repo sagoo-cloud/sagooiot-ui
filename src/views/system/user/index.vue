@@ -60,14 +60,14 @@
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column type="index" label="序号" width="60" align="center" />
             <el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="userNickname" label="用户昵称"  min-width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="userNickname" label="用户昵称" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dept.deptName" label="部门" show-overflow-tooltip></el-table-column>
             <el-table-column label="角色" align="center" prop="roleInfo" :show-overflow-tooltip="true">
               <template #default="scope">
                 <span v-for="(item,index) of scope.row.roleInfo" :key="'role-'+index"> {{item.name+'   '}} </span>
               </template>
             </el-table-column>
-            <el-table-column prop="mobile" label="手机号"  width="120" align="center"></el-table-column>
+            <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
             <el-table-column prop="userStatus" label="用户状态" width="120" align="center">
               <template #default="scope">
                 <el-switch v-model="scope.row.userStatus" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
@@ -77,9 +77,9 @@
             <el-table-column prop="createdAt" label="创建时间" width="180" align="center"></el-table-column>
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template #default="scope">
-                <el-button size="small" type="text" @click="onOpenEditUser(scope.row)">修改</el-button>
-                <el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
-                <el-button size="small" type="text" @click="handleResetPwd(scope.row)">重置</el-button>
+                <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)">修改</el-button>
+                <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+                <el-button size="small" text type="success" @click="handleResetPwd(scope.row)">重置</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -96,7 +96,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent, watch, getCurrentIns
 import { ElMessageBox, ElMessage, ElTree, FormInstance } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
-import { getUserList, resetUserPwd, changeUserStatus, deleteUser } from '/@/api/system/user/index';
+import { resetUserPwd, changeUserStatus, deleteUser } from '/@/api/system/user/index';
 import api from '/@/api/system';
 import useCommon from '/@/hooks/useCommon';
 
