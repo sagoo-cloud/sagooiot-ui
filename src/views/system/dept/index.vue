@@ -7,7 +7,7 @@
             <el-input size="default" v-model="tableData.param.deptName" placeholder="请输入部门名称" class="w-50 m-2" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status" clearable>
+            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status">
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
@@ -48,7 +48,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <EditDept ref="editDeptRef" @deptList="deptList"/>
+    <EditDept ref="editDeptRef" @deptList="deptList" />
   </div>
 </template>
 
@@ -119,13 +119,12 @@ export default defineComponent({
 				confirmButtonText: '删除',
 				cancelButtonText: '取消',
 				type: 'warning',
-			})
-				.then(() => {
-					api.dept.del(row.deptId).then(() => {
-						ElMessage.success('删除成功');
-						deptList();
-					});
-				})
+			}).then(() => {
+				api.dept.del(row.deptId).then(() => {
+					ElMessage.success('删除成功');
+					deptList();
+				});
+			});
 		};
 		// 页面加载时
 		onMounted(() => {

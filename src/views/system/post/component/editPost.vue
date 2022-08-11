@@ -1,10 +1,17 @@
 <template>
   <div class="system-edit-post-container">
-    <el-dialog v-model="isShowDialog" width="769px">
-      <template #title>
-        <div v-drag="['.system-edit-post-container .el-dialog', '.system-edit-post-container .el-dialog__header']">{{(formData.postId===0?'添加':'修改')+'岗位'}}</div>
-      </template>
+    <el-dialog v-model="isShowDialog" :title="(!formData.postId?'添加':'修改')+'岗位'" width="769px">
       <el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-form-item label="上级岗位">
+            <el-cascader :options="postData" :props="{ checkStrictly: true,emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择组织" clearable class="w100" v-model="formData.parentId">
+              <template #default="{ node, data }">
+                <span>{{ data.postName }}</span>
+                <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+              </template>
+            </el-cascader>
+          </el-form-item>
+        </el-col>
         <el-form-item label="岗位名称" prop="postName">
           <el-input v-model="formData.postName" placeholder="请输入岗位名称" />
         </el-form-item>
@@ -52,6 +59,7 @@ interface PostState {
 	menuExpand: boolean;
 	menuNodeAll: boolean;
 	menuCheckStrictly: boolean;
+	postData: DialogRow[];
 	menuProps: {
 		children: string;
 		label: string;
@@ -75,6 +83,7 @@ export default defineComponent({
 		const state = reactive<PostState>({
 			loading: false,
 			isShowDialog: false,
+			postData: [],
 			formData: {
 				...baseForm,
 			},
@@ -97,6 +106,10 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row?: DialogRow) => {
 			resetForm();
+      api.post.getList({ status: 1 }).then((res: any) => {
+        console.log(res)
+				state.postData = res || [];
+			});
 			if (row) {
 				state.formData = row;
 			}
@@ -153,7 +166,7 @@ export default defineComponent({
 			state.menuExpand = false;
 			state.menuNodeAll = false;
 			state.formData = {
-				...baseForm
+				...baseForm,
 			};
 		};
 

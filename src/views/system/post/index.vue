@@ -10,7 +10,7 @@
             <el-input size="default" v-model="tableData.param.postCode" placeholder="请输入岗位编码" class="w-50 m-2" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status" clearable>
+            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status">
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
@@ -38,10 +38,10 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="postCode" label="岗位编码" width="180" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="postCode" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
         <el-table-column prop="postName" label="岗位名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="postSort" label="排序" width="60" align="center"></el-table-column>
         <el-table-column prop="status" label="岗位状态" width="120" align="center">
