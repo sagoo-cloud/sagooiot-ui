@@ -10,7 +10,7 @@ export function getUserList(query:Object) {
 
 export function getDeptTree() {
     return request({
-        url: '/system/dept/treeSelect',
+        url: '/system/dept/tree',
         method: 'get'
     })
 }
