@@ -45,7 +45,7 @@
         <el-table-column label="字典键值" align="center" prop="dictValue" />
         <el-table-column label="字典排序" width="100" align="center" prop="dictSort" />
         <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-        <el-table-column label="创建时间" align="center" prop="createdAt" width="180" />
+        <!-- <el-table-column label="创建时间" align="center" prop="createdAt" width="180" /> -->
         <el-table-column prop="status" label="字典状态" width="120" align="center">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>

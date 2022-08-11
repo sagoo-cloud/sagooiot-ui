@@ -11,8 +11,8 @@ import 'element-plus/dist/index.css';
 import '/@/theme/index.scss';
 import mitt from 'mitt';
 import VueGridLayout from 'vue-grid-layout';
-import {getUpFileUrl, handleTree, selectDictLabel} from "/@/utils/common";
-import {useDict} from "/@/api/common/dict/data";
+import { getUpFileUrl, handleTree, selectDictLabel } from "/@/utils/common";
+import { useDict } from "/@/api/common/dict/data";
 // 分页组件
 import pagination from '/@/components/pagination/index.vue'
 import 'amis/sdk/sdk.js';
@@ -32,10 +32,9 @@ app.use(router)
     .use(VueGridLayout)
     .mount('#app');
 
-
 // 全局挂载
-app.config.globalProperties.getUpFileUrl=getUpFileUrl
-app.config.globalProperties.handleTree=handleTree
-app.config.globalProperties.useDict=useDict
-app.config.globalProperties.selectDictLabel=selectDictLabel
+app.config.globalProperties.getUpFileUrl = getUpFileUrl
+app.config.globalProperties.handleTree = handleTree
+app.config.globalProperties.useDict = useDict
+app.config.globalProperties.selectDictLabel = selectDictLabel
 app.config.globalProperties.mittBus = mitt();

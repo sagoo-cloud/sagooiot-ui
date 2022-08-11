@@ -59,12 +59,12 @@
         </el-table-column>
         <el-table-column prop="status" label="字典状态" width="120" align="center">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.status">启用</el-tag>
-            <el-tag type="info" v-else>禁用</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
+            <el-tag type="info" size="small" v-else>禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="字典描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
+        <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
         <el-table-column label="操作" width="100" align="center">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>

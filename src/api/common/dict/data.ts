@@ -3,10 +3,12 @@ import { ref, toRefs, ToRefs } from 'vue'
 
 // 根据字典类型查询字典数据信息
 export function getDicts(dictType: string, defaultValue?: string): Promise<any> {
-  let dv = defaultValue ?? ''
-  return get('/common/dict/data/get', {
+  return get('/common/dict/data/list', {
     dictType: dictType,
-    defaultValue: dv
+    status: 1,
+    pageNum: 1,
+    pageSize: 50,
+    defaultValue: defaultValue ?? ''
   })
 }
 
@@ -18,7 +20,7 @@ export function useDict(...args: string[]): ToRefs<any> {
   args.forEach((d: string) => {
     res.value[d] = [];
     getDicts(d).then(resp => {
-      res.value[d] = resp.data.values.map((p: any) => ({ label: p.value, value: p.key, isDefault: p.isDefault }))
+      res.value[d] = resp.list.map((p: any) => ({ label: p.dictLabel, value: p.dictValue, isDefault: p.isDefault }))
     })
   })
   return toRefs(res.value);

@@ -52,12 +52,12 @@
         <el-table-column label="参数键名" prop="configKey" :show-overflow-tooltip="true" />
         <el-table-column label="参数键值" prop="configValue" />
         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" />
-        <el-table-column label="创建时间" prop="createdAt" width="180" align="center" />
-        <!-- <el-table-column label="系统内置" align="center" prop="configType" width="100">
+        <!-- <el-table-column label="创建时间" prop="createdAt" width="180" align="center" /> -->
+        <el-table-column label="系统内置" align="center" prop="configType" width="100">
           <template #default="{row}">
             {{row.configType?'是':'否'}}
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column label="操作" width="100" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
