@@ -245,8 +245,8 @@ export default defineComponent({
 		const initTableData = () => {
       //获取角色岗位选项
       getParams().then((res:any)=>{
-        roleList.value = res.data.roleList??[];
-        postList.value = res.data.posts??[];
+        roleList.value = res.roleList??[];
+        postList.value = res.posts??[];
       });
 		};
 		// 页面加载时

@@ -69,9 +69,9 @@
               </template>
             </el-table-column>
             <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
-            <el-table-column prop="userStatus" label="用户状态" width="120" align="center">
+            <el-table-column prop="status" label="用户状态" width="120" align="center">
               <template #default="scope">
-                <el-switch v-model="scope.row.userStatus" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+                <el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
                 </el-switch>
               </template>
             </el-table-column>
@@ -249,20 +249,20 @@ export default defineComponent({
 		};
 		// 用户状态修改
 		const handleStatusChange = (row: any) => {
-			let text = row.userStatus === 1 ? '启用' : '停用';
+			let text = row.status === 1 ? '启用' : '停用';
 			ElMessageBox.confirm('确认要"' + text + '"："' + row.userName + '"用户吗?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(function () {
-					return changeUserStatus(row.id, row.userStatus);
+					return changeUserStatus(row.id, row.status);
 				})
 				.then(() => {
 					ElMessage.success(text + '成功');
 				})
 				.catch(function () {
-					row.userStatus = row.userStatus === 0 ? 1 : 0;
+					row.status = row.status === 0 ? 1 : 0;
 				});
 		};
 		/** 重置按钮操作 */
