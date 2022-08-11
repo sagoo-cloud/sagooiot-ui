@@ -53,5 +53,6 @@ export default {
     getDataList: (params: object) => get('/common/dict/data/list', params),
     getData: (dictCode: string) => get('/common/dict/data/get', { dictCode }),
     deleteData: (ids: number[]) => del('/common/dict/data/delete', { ids }),
-  }
+  },
+  getSysInfo: () => get('/system/monitor/server'),
 }

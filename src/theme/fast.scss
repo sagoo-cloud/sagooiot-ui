@@ -52,6 +52,47 @@ image {
   text-decoration: underline;
 }
 
+.flex-row {
+  display        : flex;
+  justify-content: space-between;
+  align-items    : center;
+  overflow       : hidden;
+}
+
+.flex-center {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+}
+
+.flex-around {
+  display        : flex;
+  justify-content: space-around;
+  align-items    : center;
+  overflow       : hidden;
+}
+
+.flex-column {
+  display        : flex;
+  flex-flow      : column nowrap;
+  justify-content: space-between;
+}
+
+.flex {
+  display    : flex;
+  align-items: center;
+}
+
+.flex1 {
+  flex    : 1;
+  overflow: hidden;
+}
+
+.flex2 {
+  flex    : 2;
+  overflow: hidden;
+}
+
 .flex1 {
   flex: 1 !important;
 }
