@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
-import { getType,addType,editType } from '/@/api/common/dict/type';
+import api from '/@/api/system';
 import {ElMessage} from "element-plus";
 interface RuleFormState {
   dictId:number;
@@ -71,7 +71,7 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState|null) => {
       resetForm();
       if (row){
-        getType(row.dictId).then((res:any)=>{
+        api.dict.getType(row.dictId).then((res:any)=>{
           state.ruleForm = res.data.dictType
         })
         state.ruleForm = row;
@@ -103,14 +103,14 @@ export default defineComponent({
         if (valid) {
           if(state.ruleForm.dictId!==0){
             //修改
-            editType(state.ruleForm).then(()=>{
+            api.dict.editType(state.ruleForm).then(()=>{
               ElMessage.success('字典类型修改成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
           }else{
             //添加
-            addType(state.ruleForm).then(()=>{
+            api.dict.addType(state.ruleForm).then(()=>{
               ElMessage.success('字典类型添加成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')

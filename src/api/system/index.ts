@@ -30,6 +30,9 @@ export default {
   },
   dict: {
     getTypeList: (params: object) => get('/common/dict/type/list', params),
+    getType: (dictId: number) => get('/common/dict/type/get', { dictId }),
+    addType: (data: object) => post('/common/dict/type/add', data),
+    editType: (data: object) => put('/common/dict/type/edit', data),
     deleteType: (dictIds: object) => del('/common/dict/type/delete', { dictIds }),
   }
 }
