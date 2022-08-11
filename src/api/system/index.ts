@@ -20,6 +20,13 @@ export default {
     add: (data: object) => post('/system/dept/add', data),
     edit: (data: object) => put('/system/dept/edit', data),
   },
+  post: {
+    getList: (params: object) => get('/system/post/tree', params),
+    detail: (postId: number) => get('/system/post/detail', { postId }),
+    del: (postId: number) => del('/system/post/del', { postId }),
+    add: (data: object) => post('/system/post/add', data),
+    edit: (data: object) => put('/system/post/edit', data),
+  },
   user: {
     getList: (params: object) => get('/system/user/list', params),
     detail: (id: number) => get('/system/user/getInfoById', { id }),
