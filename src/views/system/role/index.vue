@@ -36,8 +36,8 @@
         <el-table-column prop="listOrder" label="排序" width="60" align="center"></el-table-column>
         <el-table-column prop="status" label="角色状态" width="100" align="center">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.status===1">启用</el-tag>
-            <el-tag type="info" v-else>禁用</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status===1">启用</el-tag>
+            <el-tag type="info" size="small" v-else>禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>

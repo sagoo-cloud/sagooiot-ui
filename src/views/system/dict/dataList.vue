@@ -23,12 +23,6 @@
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
             <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
               <el-icon>
                 <ele-FolderAdd />
@@ -46,22 +40,22 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="字典编码" align="center" prop="dictCode" />
+        <el-table-column label="字典编码" width="90"  align="center" prop="dictCode" />
         <el-table-column label="字典标签" align="center" prop="dictLabel" />
         <el-table-column label="字典键值" align="center" prop="dictValue" />
-        <el-table-column label="字典排序" align="center" prop="dictSort" />
+        <el-table-column label="字典排序" width="100" align="center" prop="dictSort" />
         <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
         <el-table-column label="创建时间" align="center" prop="createdAt" width="180" />
-        <el-table-column prop="status" label="字典状态" show-overflow-tooltip>
+        <el-table-column prop="status" label="字典状态" width="120" align="center">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.status">启用</el-tag>
-            <el-tag type="info" v-else>禁用</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
+            <el-tag type="info" size="small" v-else>禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column label="操作" width="100" align="center">
           <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -134,8 +128,8 @@ export default defineComponent({
 		};
 		const dataList = () => {
 			api.dict.getDataList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.data.list;
-				state.tableData.total = res.data.total;
+				state.tableData.data = res.list;
+				state.tableData.total = res.total;
 			});
 		};
 		// 打开新增字典弹窗
