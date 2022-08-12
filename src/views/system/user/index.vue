@@ -58,7 +58,7 @@
               </el-form-item>
             </el-form>
           </div>
-          <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table :data="tableData.data" style="width: 100%" v-loading="loading" @selection-change="handleSelectionChange">
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column type="index" label="序号" width="60" align="center" />
             <el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
@@ -89,12 +89,12 @@
         </el-card>
       </el-col>
     </el-row>
-    <EditUser ref="editUserRef" :dept-data="deptData" :gender-data="sys_user_sex" @getUserList="userList" />
+    <EditUser ref="editUserRef" :dept-data="deptData" :post-data="postData" :role-data="roleData" @getUserList="userList" />
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, watch, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, watch } from 'vue';
 import { ElMessageBox, ElMessage, ElTree, FormInstance } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
@@ -103,12 +103,14 @@ import useCommon from '/@/hooks/useCommon';
 
 interface TableDataState {
 	ids: number[];
+	loading: boolean;
 	deptProps: {};
 	deptData: any[];
+	roleData: any[];
+	postData: any[];
 	tableData: {
 		data: any[];
 		total: number;
-		loading: boolean;
 		param: {
 			pageNum: number;
 			pageSize: number;
@@ -125,8 +127,6 @@ export default defineComponent({
 	name: 'systemUser',
 	components: { EditUser },
 	setup() {
-		const { proxy } = <any>getCurrentInstance();
-		const { sys_user_sex } = proxy.useDict('sys_user_sex');
 		const editUserRef = ref();
 		const queryRef = ref();
 		const filterText = ref('');
@@ -134,6 +134,7 @@ export default defineComponent({
 		const search = Search;
 		const { statusParams } = useCommon();
 		const state = reactive<TableDataState>({
+			loading: false,
 			ids: [],
 			deptProps: {
 				id: 'deptId',
@@ -141,10 +142,11 @@ export default defineComponent({
 				label: 'deptName',
 			},
 			deptData: [],
+			postData: [],
+			roleData: [],
 			tableData: {
 				data: [],
 				total: 0,
-				loading: false,
 				param: {
 					status: -1,
 					pageNum: 1,
@@ -161,13 +163,25 @@ export default defineComponent({
 			api.dept.getList(statusParams).then((res: any) => {
 				state.deptData = res;
 			});
+			api.post.getList(statusParams).then((res: any) => {
+				state.postData = res;
+			});
+			api.role.getList(statusParams).then((res: any) => {
+				state.roleData = res;
+			});
 			userList();
 		};
 		const userList = () => {
-			api.user.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.list;
-				state.tableData.total = res.total;
-			});
+			state.loading = true;
+			api.user
+				.getList(state.tableData.param)
+				.then((res: any) => {
+					state.tableData.data = res.list;
+					state.tableData.total = res.total;
+				})
+				.finally(() => {
+					state.loading = false;
+				});
 		};
 		// 打开新增用户弹窗
 		const onOpenAddUser = () => {
@@ -285,7 +299,6 @@ export default defineComponent({
 			filterText,
 			treeRef,
 			search,
-			sys_user_sex,
 			userList,
 			handleSelectionChange,
 			handleNodeClick,

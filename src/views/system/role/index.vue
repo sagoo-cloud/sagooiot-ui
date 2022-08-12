@@ -63,7 +63,7 @@
       </el-table>
       <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
     </el-card>
-    <EditRole ref="editRoleRef" @getRoleList="roleList" :list="tableData.data" />
+    <EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
     <permissionVue ref="permissionRef" />
   </div>
 </template>
@@ -120,7 +120,7 @@ export default defineComponent({
 			roleList();
 		};
 		const roleList = () => {
-			api.role.getRoleList(state.tableData.param).then((res: Array<TableData>) => {
+			api.role.getList(state.tableData.param).then((res: Array<TableData>) => {
 				state.tableData.data = res || [];
 			});
 		};

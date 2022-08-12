@@ -20,10 +20,12 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="关联角色" prop="roleIds">
-              <el-select v-model="ruleForm.roleIds" placeholder="请选择" clearable class="w100" multiple>
-                <el-option v-for="role in roleList" :key="'role-'+role.id" :label="role.name" :value="role.id">
-                </el-option>
-              </el-select>
+              <el-cascader :options="roleData" :props="{ checkStrictly: true,multiple:true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.roleIds">
+                <template #default="{ node, data }">
+                  <span>{{ data.name }}</span>
+                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                </template>
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -57,10 +59,12 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="岗位" prop="postIds">
-              <el-select v-model="ruleForm.postIds" placeholder="请选择" clearable class="w100" multiple>
-                <el-option v-for="post in postList" :key="'post-'+post.postId" :label="post.postName" :value="post.postId">
-                </el-option>
-              </el-select>
+              <el-cascader :options="postData" :props="{ checkStrictly: true,multiple:true,emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.postIds">
+                <template #default="{ node, data }">
+                  <span>{{ data.postName }}</span>
+                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                </template>
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -102,7 +106,7 @@ interface DialogRow {
 	id?: number;
 	userName: string; // 用户名
 	userNickname: string; // 用户昵称
-	deptId: number; // 部门id
+	deptId: number | null; // 部门id
 	mobile: string; // 中国手机不带国家代码，国际手机号格式为：国家代码-手机号
 	roleIds: number[]; // 角色ID数组
 	postIds: number[]; // 岗位ID数组
@@ -122,7 +126,7 @@ interface DialogRow {
 const baseForm: DialogRow = {
 	userName: '',
 	userNickname: '',
-	deptId: 0,
+	deptId: null,
 	mobile: '',
 	birthday: '',
 	userPassword: '',
@@ -146,13 +150,16 @@ export default defineComponent({
 			type: Array,
 			default: () => [],
 		},
-		genderData: {
+		roleData: {
+			type: Array,
+			default: () => [],
+		},
+		postData: {
 			type: Array,
 			default: () => [],
 		},
 	},
 	setup(prop, { emit }) {
-		const roleList = ref([]);
 		const postList = ref([]);
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive({
@@ -165,6 +172,8 @@ export default defineComponent({
 				userName: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
 				userNickname: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
 				deptId: [{ required: true, message: '归属部门不能为空', trigger: 'blur' }],
+				postIds: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
+				roleIds: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
 				mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
 				password: [{ required: true, message: '用户密码不能为空', trigger: 'blur' }],
 				userEmail: [
@@ -184,7 +193,7 @@ export default defineComponent({
 					state.ruleForm = user;
 				});
 			}
-      state.isShowDialog = true;
+			state.isShowDialog = true;
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -200,7 +209,7 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					if (state.ruleForm.id === 0) {
+					if (!state.ruleForm.id) {
 						//添加
 						api.user.add(state.ruleForm).then(() => {
 							ElMessage.success('用户添加成功');
@@ -220,11 +229,6 @@ export default defineComponent({
 		};
 		// 初始化部门数据
 		const initTableData = () => {
-			//获取角色岗位选项
-			// getParams().then((res:any)=>{
-			//   roleList.value = res.roleList??[];
-			//   postList.value = res.posts??[];
-			// });
 		};
 		// 页面加载时
 		onMounted(() => {
@@ -240,7 +244,6 @@ export default defineComponent({
 			closeDialog,
 			onCancel,
 			onSubmit,
-			roleList,
 			postList,
 			formRef,
 			...toRefs(state),
