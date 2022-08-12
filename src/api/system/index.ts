@@ -32,7 +32,7 @@ export default {
     params: () => get('/system/user/params'),
     detail: (id: number) => get('/system/user/getInfoById', { id }),
     add: (data: object) => post('/system/user/add', data),
-    resetPassword: (data: object) => post('/system/user/resetPassword', data),
+    resetPassword: (id: number, userPassword: string) => post('/system/user/resetPassword', { id, userPassword }),
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),

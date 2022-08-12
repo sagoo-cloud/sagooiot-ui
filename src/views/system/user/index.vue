@@ -64,10 +64,7 @@
             <el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="userNickname" label="用户昵称" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dept.deptName" label="部门" show-overflow-tooltip></el-table-column>
-            <el-table-column label="角色" align="center" prop="roleInfo" :show-overflow-tooltip="true">
-              <template #default="scope">
-                <span v-for="(item,index) of scope.row.roleInfo" :key="'role-'+index"> {{item.name+'   '}} </span>
-              </template>
+            <el-table-column label="角色" min-width="120" prop="rolesNames" :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
             <el-table-column prop="status" label="用户状态" width="120" align="center">
@@ -101,6 +98,12 @@ import EditUser from '/@/views/system/user/component/editUser.vue';
 import api from '/@/api/system';
 import useCommon from '/@/hooks/useCommon';
 
+interface Tree {
+	id: number;
+	label: string;
+	children?: Tree[];
+}
+
 interface TableDataState {
 	ids: number[];
 	loading: boolean;
@@ -116,6 +119,8 @@ interface TableDataState {
 			pageSize: number;
 			status: number;
 			deptId: string;
+			keyWords: string;
+			mobile: string;
 			userNickname: string;
 			userName: string;
 			dateRange: string[];
@@ -154,6 +159,8 @@ export default defineComponent({
 					deptId: '',
 					userNickname: '',
 					userName: '',
+					keyWords: '',
+					mobile: '',
 					dateRange: [],
 				},
 			},
@@ -235,7 +242,7 @@ export default defineComponent({
 		});
 		const deptFilterNode = (value: string, data: any) => {
 			if (!value) return true;
-			return data.label.includes(value);
+			return data.deptName.includes(value);
 		};
 		// 多选框选中数据
 		const handleSelectionChange = (selection: any[]) => {
