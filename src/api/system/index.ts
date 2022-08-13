@@ -1,6 +1,20 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  menu: {
+    getList: (params: object) => get('/system/menu/tree', params),
+    detail: (id: number) => get('/system/menu/detail', { id }),
+    add: (data: object) => post('/system/menu/add', data),
+    del: (id: number) => del('/system/menu/del', { id }),
+    edit: (data: object) => put('/system/menu/edit', data),
+    btn: {
+      getList: (params: object) => get('/system/menu/button/tree', params),
+      detail: (id: number) => get('/system/menu/button/detail', { id }),
+      add: (data: object) => post('/system/menu/button/add', data),
+      del: (id: number) => del('/system/menu/button/del', { id }),
+      edit: (data: object) => put('/system/menu/button/edit', data)
+    }
+  },
   role: {
     getList: (params: object) => get('/system/role/tree', params),
     getRole: (id: number) => get('/system/role/getInfoById', { id }),

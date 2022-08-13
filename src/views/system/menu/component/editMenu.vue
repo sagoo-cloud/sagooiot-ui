@@ -129,7 +129,7 @@
 import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import IconSelector from '/@/components/iconSelector/index.vue';
 import { getBackEndControlRoutes } from '/@/router/backEnd';
-import { addMenu, getMenuDetail, updateMenu } from '/@/api/system/menu';
+import api from '/@/api/system';
 import { ElMessage } from 'element-plus';
 
 const itemForm = {
@@ -205,7 +205,7 @@ export default defineComponent({
 					if (props.acType === 'add') {
 						state.ruleForm.parentId = row.id;
 					} else if (props.acType === 'edit') {
-						getMenuDetail(row.id).then((data: any) => {
+						api.menu.detail(row.id).then((data: any) => {
 							state.ruleForm = data;
 						});
 					}
@@ -241,7 +241,7 @@ export default defineComponent({
 
 					if (props.acType === 'add') {
 						//添加
-						addMenu(state.ruleForm)
+						api.menu.add(state.ruleForm)
 							.then(() => {
 								ElMessage.success('菜单添加成功');
 								closeDialog(); // 关闭弹窗
@@ -253,7 +253,7 @@ export default defineComponent({
 							});
 					} else {
 						//修改
-						updateMenu(state.ruleForm)
+						api.menu.edit(state.ruleForm)
 							.then(() => {
 								ElMessage.success('菜单修改成功');
 								closeDialog(); // 关闭弹窗
