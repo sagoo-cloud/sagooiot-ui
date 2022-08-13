@@ -41,7 +41,7 @@
               <el-icon>
                 <ele-Delete />
               </el-icon>
-              删除删除
+              删除
             </el-button>
           </el-form-item>
         </el-form>
@@ -51,6 +51,8 @@
         <el-table-column label="ID" align="center" prop="id" width="80" />
         <el-table-column label="产品名称" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="产品标识" prop="key" :show-overflow-tooltip="true" />
+        <el-table-column label="分类名称" prop="categoryName" :show-overflow-tooltip="true" />
+        <el-table-column label="部门名称" prop="deptName" :show-overflow-tooltip="true" />
         <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" />
         <el-table-column label="传输协议" prop="transportProtocol" :show-overflow-tooltip="true" />
         <el-table-column label="设备类型" prop="deviceType" :show-overflow-tooltip="true" />
@@ -78,7 +80,7 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import EditDic from './component/editDic.vue';
+import EditDic from './component/editPro.vue';
 import api from '/@/api/device';
 
 // 定义接口来定义对象的类型
