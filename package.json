@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.0.0",
-    "amis": "^2.1.0",
+    "amis": "^2.1.1-beta.2",
     "axios": "^0.26.0",
     "countup.js": "^2.1.0",
     "cropperjs": "^1.5.12",
