@@ -12,7 +12,7 @@ export default {
       detail: (id: number) => get('/system/menu/button/detail', { id }),
       add: (data: object) => post('/system/menu/button/add', data),
       del: (id: number) => del('/system/menu/button/del', { id }),
-      edit: (data: object) => put('/system/menu/button/edit', data)
+      edit: (data: object) => post('/system/menu/button/edit', data)
     }
   },
   role: {
