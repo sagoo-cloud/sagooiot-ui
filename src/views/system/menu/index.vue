@@ -1,22 +1,22 @@
 <template>
-  <div class="system-menu-container">
+  <div class="system-user-container">
     <el-card shadow="hover">
-      <div class="system-menu-search mb15">
-        <el-form :inline="true">
+      <div class="system-menu-search ">
+        <el-form inline>
           <el-form-item label="菜单名称">
-            <el-input v-model="state.queryParams.title" placeholder="请输入菜单名称" clearable class="w-50 m-2" size="default" />
+            <el-input v-model="state.queryParams.title" placeholder="请输入菜单名称" size="default" clearable class="w-50" />
           </el-form-item>
           <!-- <el-form-item label="组件路径">
-            <el-input v-model="queryParams.component" placeholder="请输入组件路径" clearable size="default" class="w-50 m-2" />
+            <el-input v-model="queryParams.component" placeholder="请输入组件路径" clearable  class="w-50" />
           </el-form-item> -->
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="handleQuery">
+            <el-button type="primary" class="ml10" @click="handleQuery">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddMenu(null)">
+            <el-button type="success" class="ml10" @click="onOpenAddMenu(null)">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -25,7 +25,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="state.menuTableData" style="width: 100%" row-key="path" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      <el-table :data="state.menuTableData" default-expand-all style="width: 100%" row-key="path" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column label="菜单名称" show-overflow-tooltip>
           <template #default="scope">
             <SvgIcon :name="scope.row.icon" />
@@ -58,8 +58,8 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click.native="btnAuthOpen(scope.row)">按钮权限</el-dropdown-item>
-                  <el-dropdown-item>列表权限</el-dropdown-item>
+                  <el-dropdown-item @click.native="authOpen(scope.row,'buttonAuthorizeList')">按钮权限</el-dropdown-item>
+                  <el-dropdown-item @click.native="authOpen(scope.row,'listAuthorizeList')">列表权限</el-dropdown-item>
                   <el-dropdown-item>数据权限</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -70,6 +70,7 @@
     </el-card>
     <EditMenu ref="editMenuRef" @menuList="menuList" :menu="state.menuTableData" :visibleOptions="sys_show_hide" :acType="acType" />
     <ButtonAuthorizeListDrawer ref="buttonAuthorizeList" />
+    <ListAuthorizeListDrawer ref="listAuthorizeList" />
   </div>
 </template>
 
@@ -79,8 +80,10 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import EditMenu from '/@/views/system/menu/component/editMenu.vue';
 import api from '/@/api/system';
 import ButtonAuthorizeListDrawer from './component/btn.vue';
+import ListAuthorizeListDrawer from './component/list.vue';
 const editMenuRef = ref();
 const buttonAuthorizeList = ref();
+const listAuthorizeList = ref();
 const state = reactive({
 	queryParams: {
 		title: '',
@@ -102,10 +105,17 @@ const onOpenEditMenu = (row: any) => {
 	acType.value = 'edit';
 	editMenuRef.value.openDialog(row);
 };
+
 // 打开按钮权限抽下
-const btnAuthOpen = (row: any) => {
-	buttonAuthorizeList.value.open(row);
+const authOpen = (row: any, key: string) => {
+	if (key === 'buttonAuthorizeList') {
+		return buttonAuthorizeList.value.open(row);
+	}
+	if (key === 'listAuthorizeList') {
+		return listAuthorizeList.value.open(row);
+	}
 };
+
 // 删除当前行
 const onTabelRowDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将永久删除菜单：“${row.title}”, 是否继续?`, '提示', {

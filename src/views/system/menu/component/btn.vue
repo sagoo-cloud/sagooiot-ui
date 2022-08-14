@@ -107,8 +107,8 @@ const handleStatusChange = (row: MenuBtnRow) => {
 		type: 'warning',
 	})
 		.then(async function () {
-			// await api.user.setStatus(row.id as number, row.status);
-			// ElMessage.success('操作成功');
+			await api.menu.btn.setStatus(row.id as number, row.menuId as number, row.status);
+			ElMessage.success('操作成功');
 		})
 		.catch(function () {
 			row.status = row.status === 0 ? 1 : 0;

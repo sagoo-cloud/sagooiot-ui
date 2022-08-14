@@ -12,7 +12,16 @@ export default {
       detail: (id: number) => get('/system/menu/button/detail', { id }),
       add: (data: object) => post('/system/menu/button/add', data),
       del: (id: number) => del('/system/menu/button/del', { id }),
-      edit: (data: object) => put('/system/menu/button/edit', data)
+      edit: (data: object) => put('/system/menu/button/edit', data),
+      setStatus: (id: number, menuId: number, status: number) => put('/system/menu/button/editStatus', { id, menuId, status })
+    },
+    list: {
+      getList: (params: object) => get('/system/menu/column/tree', params),
+      detail: (id: number) => get('/system/menu/column/detail', { id }),
+      add: (data: object) => post('/system/menu/column/add', data),
+      del: (id: number) => del('/system/menu/column/del', { id }),
+      edit: (data: object) => put('/system/menu/column/edit', data),
+      setStatus: (id: number, menuId: number, status: number) => put('/system/menu/column/editStatus', { id, menuId, status })
     }
   },
   role: {

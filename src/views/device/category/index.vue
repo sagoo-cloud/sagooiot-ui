@@ -4,7 +4,7 @@
       <div class="system-dept-search mb15">
         <el-form :inline="true">
           <el-form-item label="分类名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称" class="w-50 m-2" clearable />
+            <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称" class="w-50" clearable />
           </el-form-item>
          
           <el-form-item>
