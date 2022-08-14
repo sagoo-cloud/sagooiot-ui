@@ -14,7 +14,7 @@
             :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+            <el-icon v-else class="avatar-uploader-icon"><ele-Plus /></el-icon>
           </el-upload>
         </el-form-item>
          <el-form-item label="产品标识" prop="key">
@@ -61,7 +61,6 @@
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
 import api from '/@/api/device';
 import {ElMessage,UploadProps} from "element-plus";
-import { Plus } from 'element-plus/icons-vue'
 
 interface RuleFormState {
   id:number;

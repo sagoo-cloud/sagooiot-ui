@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineExpose } from 'vue';
+import { ref } from 'vue';
 const isShowDialog = ref(false);
 
 const openDialog = (row: any) => {

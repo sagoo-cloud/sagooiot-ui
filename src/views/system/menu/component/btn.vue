@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineExpose } from 'vue';
+import { ref } from 'vue';
 import api from '/@/api/system';
 
 const title = ref('按钮权限');
-const drawer = ref(true);
+const drawer = ref(false);
 
 const open = async (row: any) => {
 	console.log(row);
