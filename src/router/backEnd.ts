@@ -3,7 +3,7 @@ import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { setAddRoute, setFilterMenuAndCacheTagsViewRoutes } from '/@/router/index';
 import { demoRoutes, dynamicRoutes } from '/@/router/route';
-import { currentUser } from '/@/api/login';
+import api from '/@/api/system';
 
 
 
@@ -56,7 +56,7 @@ export async function initBackEndControlRoutes() {
  * @returns 返回后端路由菜单数据
  */
 export async function getBackEndControlRoutes() {
-	return currentUser().then((res: any) => {
+	return api.login.currentUser().then((res: any) => {
 		Session.set('userMenu', res || [])
 		// Session.set('permissions',res.data.permissions)
 		// store.dispatch('userInfos/setPermissions',res.data.permissions)

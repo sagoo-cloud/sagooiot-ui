@@ -63,7 +63,7 @@ const onDel = (row: ApiRow) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.menu.btn.del(row.id as number);
+		await api.api.del(row.id as number);
 		ElMessage.success('删除成功');
 		getList();
 	});

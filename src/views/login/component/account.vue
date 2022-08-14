@@ -57,17 +57,15 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { useStore } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
-import { login, captcha } from '/@/api/login';
-import * as api from '/@/api/login';
+import api from '/@/api/system';
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
-		console.log('setup');
 		const { t } = useI18n();
 		const store = useStore();
 		const route = useRoute();
 		const router = useRouter();
-		const { proxy } = <any>getCurrentInstance();
+		const { proxy } = getCurrentInstance() as any;
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
@@ -95,7 +93,7 @@ export default defineComponent({
 		});
 
 		const getCaptcha = () => {
-			captcha().then((res: any) => {
+			api.login.captcha().then((res: any) => {
 				state.captchaSrc = res.img;
 				state.ruleForm.VerifyKey = res.key;
 			});
@@ -108,7 +106,8 @@ export default defineComponent({
 				.validate((valid: boolean) => {
 					if (valid) {
 						state.loading.signIn = true;
-						login(state.ruleForm)
+						api.login
+							.login(state.ruleForm)
 							.then(async (res: any) => {
 								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
@@ -130,7 +129,7 @@ export default defineComponent({
 		};
 		// 获取登录用户信息
 		const currentUser = async () => {
-			api.currentUser().then(async (res) => {
+			api.login.currentUser().then(async (res: any) => {
 				// 设置用户菜单
 				Session.set('userMenu', res);
 				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res);
@@ -160,8 +159,8 @@ export default defineComponent({
 			// 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
 			if (route.query?.redirect) {
 				router.push({
-					path: <string>route.query?.redirect,
-					query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
+					path: route.query?.redirect as string,
+					query: Object.keys(route.query?.params as string).length > 0 ? JSON.parse(route.query?.params as string) : '',
 				});
 			} else {
 				router.push('/');

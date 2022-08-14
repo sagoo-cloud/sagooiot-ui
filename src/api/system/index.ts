@@ -1,11 +1,17 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  login: {
+    login: (data: object) => post('/login', data),
+    currentUser: () => get('/system/user/currentUser'),
+    captcha: () => get('/captcha'),
+    logout: () => post('/loginOut'),
+  },
   api: {
     getList: (params?: object) => get('/system/api/GetAll', params),
-    add: (data: object) => post('/system/api/ApiAdd', data),
-    del: (id: number) => del('/system/api/apiDel', { id }),
-    edit: (data: object) => put('/system/api/apiEdit', data),
+    add: (data: object) => post('/system/api/add', data),
+    del: (id: number) => del('/system/api/del', { id }),
+    edit: (data: object) => put('/system/api/edit', data),
   },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
