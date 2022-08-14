@@ -5,7 +5,7 @@
         <el-icon>
           <ele-FolderAdd />
         </el-icon>
-        新增
+        新增按钮
       </el-button>
 
       <el-dropdown @command="addCommonType">

@@ -17,3 +17,12 @@ export interface MenuListRow {
   description?: string; // 描述
   status: 0 | 1; // 0 停用 1启用
 }
+
+export interface ApiRow {
+  id?: number; // ID
+  menuIds: number[]; // 名称
+  name: string; // 名称
+  address: string; // 接口地址
+  remark: string; // 备注
+  status: 0 | 1; // 0 停用 1启用
+}

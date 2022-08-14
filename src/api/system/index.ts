@@ -1,15 +1,18 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  api: {
+    getList: (params?: object) => get('/system/api/GetAll', params),
+    add: (data: object) => post('/system/api/ApiAdd', data),
+    del: (id: number) => del('/system/api/apiDel', { id }),
+    edit: (data: object) => put('/system/api/apiEdit', data),
+  },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
     detail: (id: number) => get('/system/menu/detail', { id }),
     add: (data: object) => post('/system/menu/add', data),
     del: (id: number) => del('/system/menu/del', { id }),
     edit: (data: object) => put('/system/menu/edit', data),
-    api: {
-      getList: (params: object) => get('/system/menu/api/list', params),
-    },
     btn: {
       getList: (params: object) => get('/system/menu/button/tree', params),
       detail: (id: number) => get('/system/menu/button/detail', { id }),

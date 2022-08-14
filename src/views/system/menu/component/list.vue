@@ -5,7 +5,7 @@
         <el-icon>
           <ele-FolderAdd />
         </el-icon>
-        新增
+        新增列
       </el-button>
     </div>
 
