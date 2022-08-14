@@ -50,7 +50,7 @@
             <el-button v-if="!scope.row.menuType" size="small" type="text" @click="onOpenAddMenu(scope.row)">新增</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditMenu(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">删除</el-button>
-            <el-dropdown v-if="scope.row.menuType" size="small">
+            <el-dropdown v-if="scope.row.menuType">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
                   <ele-ArrowDown />
@@ -78,7 +78,7 @@ import { ref, reactive, onBeforeMount, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import EditMenu from '/@/views/system/menu/component/editMenu.vue';
 import api from '/@/api/system';
-import ButtonAuthorizeListDrawer from './component/btn.vue'
+import ButtonAuthorizeListDrawer from './component/btn.vue';
 const editMenuRef = ref();
 const buttonAuthorizeList = ref();
 const state = reactive({

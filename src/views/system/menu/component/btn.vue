@@ -8,7 +8,7 @@
         新增
       </el-button>
 
-      <el-dropdown  @command="addCommonType">
+      <el-dropdown @command="addCommonType">
         <el-button text type="primary">
           <el-icon>
             <ele-Plus />
@@ -25,10 +25,9 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-
     </div>
 
-    <el-table :data=" tableData" style="width: 100%" row-key="id" border :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+    <el-table :data="tableData" style="width: 100%" row-key="id" border :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column type="index" label="序号" width="60" align="center" />
       <el-table-column prop="name" label="按钮名称" width="220" show-overflow-tooltip></el-table-column>
       <el-table-column prop="types" label="按钮编码" show-overflow-tooltip></el-table-column>
@@ -57,15 +56,15 @@ import api from '/@/api/system';
 import { ElMessageBox, ElMessage } from 'element-plus';
 
 const title = ref('按钮权限');
-const drawer = ref(true);
-const tableData = ref([]);
-const menuRow = ref({ id: 34 });
+const drawer = ref(false);
+const tableData = ref<MenuBtnRow[]>([]);
+const menuRow = ref();
 const btnFormRef = ref();
 const getList = async () => {
-	let res = await api.menu.btn.getList({ menuID: menuRow.value.id, status: -1 });
+	tableData.value = [];
+	let res = await api.menu.btn.getList({ menuId: menuRow.value.id as number, status: -1 });
 	tableData.value = res || [];
 };
-getList();
 
 const open = async (row: any) => {
 	// console.log(row);
@@ -84,8 +83,19 @@ const onEdit = (row: MenuBtnRow) => {
 };
 
 // 添加常用类型
-const addCommonType = (command: string) => {
-	console.log(command);
+const addCommonType = async (command: string) => {
+	const [types, name] = command.split('-');
+	const formData: MenuBtnRow = {
+		parentId: -1,
+		menuId: menuRow.value.id as number,
+		name,
+		types,
+		description: '',
+		status: 1,
+	};
+	await api.menu.btn.add(formData);
+	ElMessage.success('操作成功');
+	getList();
 };
 
 // 修改启用停用状态

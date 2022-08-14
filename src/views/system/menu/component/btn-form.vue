@@ -45,7 +45,6 @@ const formRef = ref();
 const baseForm: MenuBtnRow = {
 	parentId: -1,
 	menuId: 0,
-	code: '',
 	name: '',
 	types: '',
 	description: '',
@@ -67,7 +66,6 @@ const onSubmit = async () => {
 	if (!formData.parentId) {
 		formData.parentId = -1;
 	}
-	formData.code = Date.now();
 
 	const theApi = formData.id ? api.menu.btn.edit : api.menu.btn.add;
 
