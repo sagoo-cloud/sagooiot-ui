@@ -7,6 +7,9 @@ export default {
     add: (data: object) => post('/system/menu/add', data),
     del: (id: number) => del('/system/menu/del', { id }),
     edit: (data: object) => put('/system/menu/edit', data),
+    api: {
+      getList: (params: object) => get('/system/menu/api/list', params),
+    },
     btn: {
       getList: (params: object) => get('/system/menu/button/tree', params),
       detail: (id: number) => get('/system/menu/button/detail', { id }),

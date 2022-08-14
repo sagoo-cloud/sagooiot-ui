@@ -1,7 +1,7 @@
 export interface MenuBtnRow {
   id?: number; // ID
   parentId: number; // 父ID
-  menuId?: number | undefined; // 菜单ID
+  menuId: number | undefined; // 菜单ID
   name: string;// 名称
   types: string | 'add' | 'edit' | 'del'; // 自定义 add添加 edit编辑 del 删除
   description?: string; // 描述
@@ -11,7 +11,7 @@ export interface MenuBtnRow {
 export interface MenuListRow {
   id?: number; // ID
   parentId: number; // 父ID
-  menuId?: number | undefined; // 菜单ID
+  menuId: number | undefined; // 菜单ID
   name: string;// 名称
   code: string; // 列表 key
   description?: string; // 描述

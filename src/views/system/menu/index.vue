@@ -60,7 +60,6 @@
                 <el-dropdown-menu>
                   <el-dropdown-item @click.native="authOpen(scope.row,'buttonAuthorizeList')">按钮权限</el-dropdown-item>
                   <el-dropdown-item @click.native="authOpen(scope.row,'listAuthorizeList')">列表权限</el-dropdown-item>
-                  <el-dropdown-item>数据权限</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -71,6 +70,7 @@
     <EditMenu ref="editMenuRef" @menuList="menuList" :menu="state.menuTableData" :visibleOptions="sys_show_hide" :acType="acType" />
     <ButtonAuthorizeListDrawer ref="buttonAuthorizeList" />
     <ListAuthorizeListDrawer ref="listAuthorizeList" />
+    <ApiAuthorizeListDrawer ref="apiAuthorizeList" />
   </div>
 </template>
 

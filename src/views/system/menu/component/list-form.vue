@@ -44,6 +44,7 @@ const formRef = ref();
 
 const baseForm: MenuListRow = {
 	parentId: -1,
+	menuId: 0,
 	name: '',
 	code: '',
 	description: '',
@@ -83,8 +84,8 @@ const resetForm = async () => {
 
 const open = async (row: any) => {
 	resetForm();
-	showDialog.value = true;
 	Object.assign(formData, { ...row });
+	showDialog.value = true;
 	// console.log(row);
 };
 
