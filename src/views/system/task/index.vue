@@ -59,11 +59,13 @@
         <el-table-column label="任务方法名" prop="invokeTarget" />
         <el-table-column label="cron执行表达式" prop="cronExpression" />
         <el-table-column label="状态" align="center" prop="status" width="100">
-          <template #default="{ row }">
-            {{ row.status ? '正常' : '暂停' }}
+          <template #default="scope">
+            <!-- {{ row.status ? '正常' : '暂停' }} -->
+						<el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+						</el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100" align="center" fixed="right">
+        <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
@@ -191,6 +193,27 @@ export default defineComponent({
 				});
 			});
 		}
+		const handleStatusChange = (row: TableDataRow) => {
+			let text = row.status === 0 ? '启用' : '停用';
+			ElMessageBox.confirm('确认要"' + text + '"："' + row.jobName + '"任务吗?', '警告', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(function () {
+					if (row.status === 0) {
+						return api.task.start(row.jobId)
+					} else {
+						return api.task.stop(row.jobId)
+					}
+				})
+				.then(() => {
+					ElMessage.success(text + '成功');
+				})
+				.catch(function () {
+					row.status = row.status === 0 ? 1 : 0;
+				});
+		}
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -219,6 +242,7 @@ export default defineComponent({
 			onOpenEditDic,
 			onRowDel,
 			onRowRun,
+			handleStatusChange,
 			dataList,
 			resetQuery,
 			handleSelectionChange,
