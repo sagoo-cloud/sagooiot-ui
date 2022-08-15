@@ -8,7 +8,9 @@ export default {
     logout: () => post('/loginOut'),
   },
   api: {
-    getList: (params?: object) => get('/system/api/GetAll', params),
+    getList: (params?: object) => get('/system/api/list', params),
+    getAll: () => get('/system/api/GetAll'),
+    detail: (id: number) => get('/system/api/detail', { id }),
     add: (data: object) => post('/system/api/add', data),
     del: (id: number) => del('/system/api/del', { id }),
     edit: (data: object) => put('/system/api/edit', data),
