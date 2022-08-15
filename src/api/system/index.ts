@@ -96,17 +96,28 @@ export default {
   getSysInfo: () => get('/system/monitor/server'),
   log: {
     getList: (params: object) => get('/system/login/log/list', params),
-    del: (infoId: number) => del('/system/login/log/del', { infoId }),
+    del: (infoIds: number) => del('/system/login/log/del', { infoIds }),
     detail: (infoId: number) => get('/system/login/log/detail', { infoId }),
     clearLog: () => post('/system/login/log/clear'),
   },
+  oper: {
+    getList: (params: object) => get('/system/oper/log/list', params),
+    del: (operIds: number) => del('/system/oper/log/del', { operIds }),
+    detail: (operId: number) => get('/system/oper/log/detail', { operId }),
+    clearLog: () => post('/system/oper/log/clear'),
+  },
+  online: {
+    getList: (params: object) => get('/system/userOnline/list', params),
+    strongBack: (id: number) => del('/system/userOnline/strongBack', { id }),
+  },
   task: {
-    getList: (params: object) => get('system/job/list', params),
-    add: (data: object) => post('system/job/add', data),
-    edit: (data: object) => put('system/job//edit', data),
-    del: (id: number) => del('system/job/delJobById', { id }),
-    detail: (id: number) => get('system/job/getJobById', { id }),
-    run: (id: number) => get('system/job/run', { id }),
-    // clearLog: () => post('/system/login/log/clear'),
+    getList: (params: object) => get('/system/job/list', params),
+    add: (data: object) => post('/system/job/add', data),
+    edit: (data: object) => put('/system/job//edit', data),
+    del: (id: number) => del('/system/job/delJobById', { id }),
+    detail: (id: number) => get('/system/job/getJobById', { id }),
+    run: (id: number) => put('/system/job/run', { id }),
+    start: (id: number) => put('/system/job/start', { id }),
+    stop: (id: number) => put('/system/job/stop', { id })
   }
 }
