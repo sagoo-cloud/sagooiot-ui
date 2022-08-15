@@ -8,8 +8,17 @@ export default function () {
   return { statusParams }
 }
 
-export function useSearch<T>(expandParams?: any) {
-  //  <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList" />
+export function useSearch<T>(api: any, resKey: string, expandParams?: any) {
+
+  //  <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+
+  // import api from '/@/api/system';
+  // import { ApiRow } from '/@/api/model/system/menu';
+  // import { useSearch } from '/@/hooks/useCommon';
+
+  // const { params, tableData, getList } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '' });
+  // getList() // 获取列表数据
+
   interface SearchParams {
     status: -1 | 0 | 1,
     pageNum: number;
@@ -17,6 +26,7 @@ export function useSearch<T>(expandParams?: any) {
     total: number;
     [key: string]: any;
   }
+
   const params = reactive<SearchParams>({
     status: -1,
     pageNum: 1,
@@ -27,5 +37,14 @@ export function useSearch<T>(expandParams?: any) {
 
   const tableData = ref<T | []>([])
 
-  return { params, tableData }
+  const getList = async (pageNum?: number) => {
+    pageNum && (params.pageNum = pageNum);
+    tableData.value = [];
+    params.total = 0;
+    let res = await api(params)
+    tableData.value = (resKey ? (res[resKey]) : (res)) || [];
+    params.total = res.total;
+  };
+
+  return { params, tableData, getList }
 }

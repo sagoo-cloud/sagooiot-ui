@@ -64,15 +64,8 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
 
 const editFormRef = ref();
-const { params, tableData } = useSearch<ApiRow[]>({ name: '', address: '' });
 
-const getList = async (pageNum?: number) => {
-	pageNum && (params.pageNum = pageNum);
-	tableData.value = [];
-	let res = await api.api.getList(params);
-	tableData.value = res.Info || [];
-	params.total = res.total;
-};
+const { params, tableData, getList } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '' });
 
 getList();
 

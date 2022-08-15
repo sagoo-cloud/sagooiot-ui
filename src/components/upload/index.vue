@@ -15,10 +15,10 @@
 		<!-- 上传多长图片 需增加limit属性，设定图片最多张数 -->
     <!-- <uploadVue @set-imgs="youImgs=$event" :limit="2"></uploadVue> -->
 
-    <!-- 上传单张图片，可以恢复表单图片显示 -->
+    <!-- 上传单张图片，img属性可以恢复表单图片显示 -->
     <!-- <uploadVue img="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" @set-img="youImg=$event"></uploadVue> -->
 
-    <!-- 上传多张图片，可以恢复表单图片显示 需增加limit属性，设定图片最多张数 -->
+    <!-- 上传多张图片，imgs属性可以恢复表单图片多图显示 需增加limit属性，设定图片最多张数 -->
     <!-- <uploadVue :imgs="['https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png']" @set-imgs="youImgs=$event" :limit="2"></uploadVue> -->
 		
   </div>
