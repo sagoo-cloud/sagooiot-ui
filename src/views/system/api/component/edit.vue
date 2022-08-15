@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/system';
 import { ApiRow } from '/@/api/model/system/menu';
 import { ruleRequired } from '/@/utils/validator';
@@ -41,6 +41,7 @@ const menuData = ref<any[]>([]);
 
 const baseForm: ApiRow = {
 	menuIds: [],
+	id: undefined,
 	name: '',
 	address: '',
 	remark: '',
@@ -82,9 +83,10 @@ const resetForm = async () => {
 
 const open = async (row: any) => {
 	resetForm();
-	Object.assign(formData, { ...row });
 	showDialog.value = true;
-	// console.log(row);
+	nextTick(() => {
+		Object.assign(formData, { ...row });
+	});
 };
 
 defineExpose({ open });

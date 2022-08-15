@@ -30,6 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList" />
     </el-card>
     <EditForm ref="editFormRef" @getList="getList"></EditForm>
   </div>
@@ -41,20 +42,28 @@ import EditForm from './component/edit.vue';
 import { ApiRow } from '/@/api/model/system/menu';
 import api from '/@/api/system';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { useSearch } from '/@/hooks/useCommon';
 
-const tableData = ref<ApiRow[]>([]);
 const editFormRef = ref();
+const { params, tableData } = useSearch<ApiRow[]>({ name: '' });
 
 const getList = async () => {
 	tableData.value = [];
-	let res = await api.api.getList();
-	tableData.value = res || [];
+	let res = await api.api.getList(params);
+	tableData.value = res.Info || [];
+	params.total = res.total;
 };
 
 getList();
 
-const addOrEdit = (row?: ApiRow) => {
-	editFormRef.value.open(row);
+const addOrEdit = async (row?: ApiRow) => {
+	if (row) {
+		let res = await api.api.detail(row.id as number).then();
+		editFormRef.value.open(res);
+		return;
+	} else {
+		editFormRef.value.open();
+	}
 };
 
 const onDel = (row: ApiRow) => {

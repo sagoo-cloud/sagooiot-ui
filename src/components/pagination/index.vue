@@ -74,7 +74,8 @@ export default defineComponent({
         emit('update:limit', val)
       }
     });
-    const handleSizeChange = (val:number) => {
+    const handleSizeChange = (val: number) => {
+      currentPage.value = 1
       emit('pagination', { page: currentPage.value, limit: val })
     };
     const handleCurrentChange=(val:number) => {
