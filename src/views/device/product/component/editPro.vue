@@ -1,14 +1,15 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.dictId!==0?'修改':'添加')+'产品'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'产品'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
         <el-form-item label="产品名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入产品名称" />
         </el-form-item>
         <el-form-item label="产品图片" prop="imageUrl">
         <el-upload
+            name="icon"
             class="avatar-uploader"
-            action="http://zhgy.sagoo.cn:8899/api/v1/common/singleImg"
+            :action="singleImg"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -20,37 +21,66 @@
          <el-form-item label="产品标识" prop="key">
           <el-input v-model="ruleForm.key" placeholder="请输入产品标识" />
         </el-form-item>
-        <el-form-item label="产品分类">
-              <el-cascader :options="cateData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.parentId">
+        <el-form-item label="产品分类" prop="categoryId">
+              <el-cascader :options="cateData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.categoryId">
                 <template #default="{ node, data }">
                   <span>{{ data.name }}</span>
                   <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
                 </template>
               </el-cascader>
             </el-form-item>
-             <el-form-item label="所属部门">
+
+        <el-form-item label="所属部门" prop="deptId">
               <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
                 <template #default="{ node, data }">
                   <span>{{ data.deptName }}</span>
                   <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
                 </template>
               </el-cascader>
-            </el-form-item>
+            </el-form-item> 
+
+           
+          <el-form-item label="消息协议" prop="messageProtocol">
       
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="ruleForm.status">
-            <el-radio :label="1" >启用</el-radio>
-            <el-radio :label="0" >禁用</el-radio>
+
+               <el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
+              <el-option
+                v-for="item in messageData"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key"
+              />
+            </el-select>
+            </el-form-item> 
+
+            <el-form-item label="传输协议" prop="transportProtocol">
+           
+
+                 <el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+              <el-option
+                v-for="item in tranData"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key"
+              />
+            </el-select>
+            </el-form-item>
+
+      
+        <el-form-item label="设备类型" prop="deviceType">
+          <el-radio-group v-model="ruleForm.deviceType">
+            <el-radio label="网关" >网关</el-radio>
+            <el-radio label="设备" >设备</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="ruleForm.remark" type="textarea" placeholder="请输入内容"></el-input>
+        <el-form-item label="产品描述	" prop="desc">
+          <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入产品描述"></el-input>
         </el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ruleForm.dictId!==0?'修 改':'添 加'}}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -66,15 +96,17 @@ interface RuleFormState {
   id:number;
   name:string;
   dictType:string;
+  deviceType:string;
   status:number;
-  remark:string;
-  imageUrl:string;
+  desc:string;
 }
 interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
   cateData: RuleFormState[];
   deptData: RuleFormState[];
+  messageData:RuleFormState[];
+  tranData:RuleFormState[];
   rules:{}
 }
 
@@ -82,17 +114,27 @@ export default defineComponent({
 	name: 'deviceEditPro',
 	setup(prop,{emit}) {
     const formRef = ref<HTMLElement | null>(null);
+    const baseURL:string|undefined|boolean = import.meta.env.VITE_API_URL
+
 		const state = reactive<DicState>({
 			isShowDialog: false,
     	cateData: [], // 分类数据
-    	deptData: [], // 分类数据
+    	deptData: [], // 
+    	messageData: [], // 
+    	tranData: [], // 
+    	imageUrl: "", // 
+      singleImg:baseURL+"/product/icon/upload",
 
 			ruleForm: {
-        dictId:0,
-        dictName:'',
-        dictType:'',
+        id:0,
+        name:'',
+        categoryId:'',
+        deptId:'',
+        messageProtocol:'',
+        transportProtocol:'',
+        deviceType:'网关',
         status:1,
-        remark:''
+        desc:''
 			},
       rules: {
         name: [
@@ -100,7 +142,12 @@ export default defineComponent({
         ],
          key: [
           { required: true, message: "产品标识不能为空", trigger: "blur" }
-        ]
+        ],
+        parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
+        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
+        transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
+        deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
 		});
 
@@ -108,10 +155,9 @@ export default defineComponent({
       response,
       uploadFile
     ) => {
-      console.log(response);
-      console.log(11111111);
-      console.log(uploadFile);
-      imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+
+      state.imageUrl = response.data.name
+        state.ruleForm.imageUrl=response.data.name
     }
 
     const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -131,16 +177,18 @@ export default defineComponent({
           state.cateData = res.category || [];
         });
         api.dept.getList({ status: -1 }).then((res: any) => {
-          console.log(res)
-          
           state.deptData = res || [];
+        });
+        api.product.message_protocol_list({ status: -1 }).then((res: any) => {
+          state.messageData = res.data || [];
+        });
+        api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
+          state.tranData = res.data || [];
         });
       if (row){
         // api.dict.getType(row.dictId).then((res:any)=>{
         //   state.ruleForm = res.data.dictType
-        // })
-
-      
+        // }
 
         state.ruleForm = row;
       }
@@ -148,11 +196,11 @@ export default defineComponent({
 		};
     const resetForm = ()=>{
       state.ruleForm = {
-        dictId:0,
-        dictName:'',
+        id:0, 
+        name:'',
         dictType:'',
         status:1,
-        remark:''
+        desc:''
       }
     };
 		// 关闭弹窗
@@ -169,20 +217,21 @@ export default defineComponent({
       if (!formWrap) return;
       formWrap.validate((valid: boolean) => {
         if (valid) {
-          if(state.ruleForm.dictId!==0){
+          if(state.ruleForm.id!==0){
             //修改
-            // api.dict.editType(state.ruleForm).then(()=>{
-            //   ElMessage.success('产品类型修改成功');
-            //   closeDialog(); // 关闭弹窗
-            //   emit('typeList')
-            // })
+            api.product.edit(state.ruleForm).then(()=>{
+              ElMessage.success('产品类型修改成功');
+              closeDialog(); // 关闭弹窗
+              emit('typeList')
+            })
           }else{
             //添加
-            // api.dict.addType(state.ruleForm).then(()=>{
-            //   ElMessage.success('产品类型添加成功');
-            //   closeDialog(); // 关闭弹窗
-            //   emit('typeList')
-            // })
+            console.log(state.ruleForm);
+            api.product.add(state.ruleForm).then(()=>{
+              ElMessage.success('产品类型添加成功');
+              closeDialog(); // 关闭弹窗
+              emit('typeList')
+            })
           }
         }
       });
@@ -191,7 +240,7 @@ export default defineComponent({
 
 		return {
 			openDialog,
-      beforeAvatarUpload,
+      handleAvatarSuccess,
       beforeAvatarUpload,
 			closeDialog,
 			onCancel,

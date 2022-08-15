@@ -67,8 +67,11 @@
         </el-table-column>
          <el-table-column prop="registryTime" label="激活时间" align="center" width="180"></el-table-column> 
          <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="180"></el-table-column> 
-        <el-table-column label="操作" width="100" align="center">
+        <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
+		   <router-link :to="'/device/instance/detail/id/' + scope.row.id" class="link-type" style="padding-right: 10px;color: #409eff;">
+              <span>详情</span>
+            </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
@@ -128,8 +131,8 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					dictName: '',
-					dictType: '',
+					name: '',
+					key: '',
 					status: '',
 					dateRange: [],
 				},
@@ -159,8 +162,8 @@ export default defineComponent({
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除用户：“${row.name}”，是否继续?`;
-				ids = [row.dictId];
+				msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
+				ids = [row.id];
 			} else {
 				ids = state.ids;
 			}
@@ -193,7 +196,7 @@ export default defineComponent({
 		};
 		// 多选框选中数据
 		const handleSelectionChange = (selection: TableDataRow[]) => {
-			state.ids = selection.map((item) => item.dictId);
+			state.ids = selection.map((item) => item.id);
 		};
 		return {
 			addDicRef,

@@ -156,8 +156,8 @@ export default defineComponent({
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除用户：“${row.name}”，是否继续?`;
-				ids = [row.dictId];
+				msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
+				ids = [row.id];
 			} else {
 				ids = state.ids;
 			}
@@ -171,7 +171,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					api.dict.deleteType(ids).then(() => {
+					api.product.delete(ids).then(() => {
 						ElMessage.success('删除成功');
 						typeList();
 					});
@@ -190,7 +190,7 @@ export default defineComponent({
 		};
 		// 多选框选中数据
 		const handleSelectionChange = (selection: TableDataRow[]) => {
-			state.ids = selection.map((item) => item.dictId);
+			state.ids = selection.map((item) => item.id);
 		};
 		return {
 			addDicRef,
