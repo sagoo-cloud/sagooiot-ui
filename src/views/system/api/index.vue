@@ -3,8 +3,27 @@
     <el-card shadow="hover">
       <div class="search">
         <el-form :inline="true">
+          <el-form-item label="接口名称">
+            <el-input v-model="params.name" placeholder="请输入接口名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+          </el-form-item>
+          <el-form-item label="接口地址">
+            <el-input v-model="params.address" placeholder="请输入接口地址" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+          </el-form-item>
+          <el-form-item label="状态" prop="status" style="width: 200px;">
+            <el-select v-model="params.status" placeholder="接口状态" clearablestyle="width: 240px">
+              <el-option label="全部" :value="-1" />
+              <el-option label="启用" :value="1" />
+              <el-option label="禁用" :value="0" />
+            </el-select>
+          </el-form-item>
           <el-form-item>
-            <el-button size="default" type="success" class="mr-3" @click="addOrEdit()">
+            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+              <el-icon>
+                <ele-Search />
+              </el-icon>
+              查询
+            </el-button>
+            <el-button type="success" @click="addOrEdit()">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -30,9 +49,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList" />
+      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
     </el-card>
-    <EditForm ref="editFormRef" @getList="getList"></EditForm>
+    <EditForm ref="editFormRef" @getList="getList()"></EditForm>
   </div>
 </template>
 
@@ -45,9 +64,10 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
 
 const editFormRef = ref();
-const { params, tableData } = useSearch<ApiRow[]>({ name: '' });
+const { params, tableData } = useSearch<ApiRow[]>({ name: '', address: '' });
 
-const getList = async () => {
+const getList = async (pageNum?: number) => {
+	pageNum && (params.pageNum = pageNum);
 	tableData.value = [];
 	let res = await api.api.getList(params);
 	tableData.value = res.Info || [];
