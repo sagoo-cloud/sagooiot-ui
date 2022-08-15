@@ -98,4 +98,13 @@ export default {
     detail: (infoId: number) => get('/system/login/log/detail', { infoId }),
     clearLog: () => post('/system/login/log/clear'),
   },
+  task: {
+    getList: (params: object) => get('system/job/list', params),
+    add: (data: object) => post('system/job/add', data),
+    edit: (data: object) => put('system/job//edit', data),
+    del: (id: number) => del('system/job/delJobById', { id }),
+    detail: (id: number) => get('system/job/getJobById', { id }),
+    run: (id: number) => get('system/job/run', { id }),
+    // clearLog: () => post('/system/login/log/clear'),
+  }
 }
