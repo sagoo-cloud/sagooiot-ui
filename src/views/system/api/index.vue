@@ -87,7 +87,7 @@ const addOrEdit = async (row?: ApiRow) => {
 };
 
 const onDel = (row: ApiRow) => {
-	ElMessageBox.confirm(`此操作将删除按钮：“${row.name}”，是否继续?`, '提示', {
+	ElMessageBox.confirm(`此操作将删除接口：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
