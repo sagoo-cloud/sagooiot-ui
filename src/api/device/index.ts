@@ -33,6 +33,8 @@ export default {
 
   model: {
     property: (params: object) => get('/product/tsl/property/list', params),
+    propertyadd: (data: object) => post('/product/tsl/property/add', data),
+
     function: (params: object) => get('/product/tsl/function/list', params),
     event: (params: object) => get('/product/tsl/event/list', params),
     tag: (params: object) => get('/product/tsl/tag/list', params),

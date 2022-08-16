@@ -162,10 +162,10 @@
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
-		<EditAttr ref="editAttrRef" @typeList="typeList" />
-		<EditFun ref="editFunRef" @typeList="typeList" />
-		<EditEvent ref="editEventRef" @typeList="typeList" />
-		<EditTab ref="editTabRef" @typeList="typeList" />
+		<EditAttr ref="editAttrRef" @typeList="getproperty" />
+		<EditFun ref="editFunRef" @typeList="getfunction" />
+		<EditEvent ref="editEventRef" @typeList="getevent" />
+		<EditTab ref="editTabRef" @typeList="gettab" />
 	</div>
 </template>
 <script lang="ts">
@@ -264,32 +264,49 @@ export default defineComponent({
 			editDicRef.value.openDialog(row);
 		};
 
+
+
+		const getproperty=()=>{
+			api.model.property(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
+		const getfunction=()=>{
+			api.model.function(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+		const getevent=()=>{
+			api.model.event(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
+		const gettab=()=>{
+			api.model.tag(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
 		const wuhandleClick = (tab: TabsPaneContext) => {
 			state.activetab = tab.props.name;
 			switch (tab.props.name) {
 				case 'attr':
-					api.model.property(state.tableData.param).then((res: any) => {
-						state.tableData.data = res.Data;
-						state.tableData.total = res.Total;
-					});
+					getproperty();
 					break;
 				case 'fun':
-					api.model.function(state.tableData.param).then((res: any) => {
-						state.tableData.data = res.Data;
-						state.tableData.total = res.Total;
-					});
+					getfunction();
 					break;
 				case 'event':
-					api.model.event(state.tableData.param).then((res: any) => {
-						state.tableData.data = res.Data;
-						state.tableData.total = res.Total;
-					});
+					getevent();
 					break;
 				case 'tab':
-					api.model.tag(state.tableData.param).then((res: any) => {
-						state.tableData.data = res.Data;
-						state.tableData.total = res.Total;
-					});
+					gettab();
 					break;
 			}
 		};
@@ -305,6 +322,10 @@ export default defineComponent({
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			getproperty,
+			getfunction,
+			getevent,
+			gettab,
 			wuhandleClick,
 			onOpenEditTab,
 			onOpenEditEvent,

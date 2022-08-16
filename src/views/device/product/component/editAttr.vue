@@ -9,8 +9,8 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入属性定义名称" />
 				</el-form-item>
 
-				<el-form-item label="数据类型" prop="valueType">
-					<el-select v-model="ruleForm.valueType" placeholder="请选择数据类型" @change="seletChange">
+				<el-form-item label="数据类型" prop="type">
+					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
 							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
 						</el-option-group>
@@ -20,19 +20,19 @@
         <!--根据数据类型输出不同表单-->
 
              <el-form-item label="精度" prop="maxLength1" v-if="type=='float' || type=='double'">
-                <el-input v-model="ruleForm.valueType.maxLength1" placeholder="请输入精度" />
+                <el-input v-model="valueType.maxLength1" placeholder="请输入精度" />
               </el-form-item>
 
             	<el-form-item label="单位" prop="maxLength" v-if="type=='int' || type=='long' || type=='float'  || type=='double'">
-                <el-input v-model="ruleForm.valueType.maxLength" placeholder="请输入单位" />
+                <el-input v-model="valueType.maxLength" placeholder="请输入单位" />
               </el-form-item>
 
               <el-form-item label="最大长度" prop="maxLength" v-if="type=='string'">
-                <el-input v-model="ruleForm.valueType.maxLength" placeholder="请输入最大长度" />
+                <el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
               </el-form-item>
 
                <el-form-item label="时间格式" prop="maxLength" v-if="type=='date'">
-                <el-input v-model="ruleForm.valueType.maxLength" placeholder="请输入时间格式" />
+                <el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
               </el-form-item>
              
 
@@ -91,29 +91,36 @@ export default defineComponent({
 	components: { uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
-		const baseURL: string | undefined | boolean = import.meta.env.VITE_API_URL;
 
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			typeData: [], //
       type: '',
+       valueType: {
+          type:'',
+          maxLength:'',
+
+        },
 
 			ruleForm: {
-				id: 0,
 				name: '',
 				key: '',
 				transportProtocol: '',
 				accessMode: '0',
 				status: 1,
+        valueType: {
+          type:'',
+          maxLength:'',
+
+        },
 				
 				desc: '',
 			},
 			rules: {
 				name: [{ required: true, message: '属性定义名称不能为空', trigger: 'blur' }],
 				key: [{ required: true, message: '属性定义标识不能为空', trigger: 'blur' }],
-				accessMode: [{ required: true, message: '属性定义分类不能为空', trigger: 'blur' }],
-				deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
-				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
+				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
+		
 			},
 		});
 
@@ -182,8 +189,11 @@ export default defineComponent({
 						});
 					} else {
 						//添加
-						console.log(state.ruleForm);
-						api.product.add(state.ruleForm).then(() => {
+         
+            console.log(state.valueType);
+            state.ruleForm.valueType=state.valueType;
+           console.log(state.ruleForm);
+						api.model.propertyadd(state.ruleForm).then(() => {
 							ElMessage.success('属性定义类型添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
