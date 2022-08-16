@@ -9,3 +9,8 @@ export const phoneValidate = (rule: any, value: any, callback: any) => {
     callback(new Error('请填写正确手机号'))
   }
 }
+
+
+export const ruleRequired = (message = '不能为空', trigger = 'blur') => {
+  return { required: true, message, trigger }
+}

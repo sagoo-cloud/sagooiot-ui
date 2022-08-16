@@ -1,7 +1,7 @@
 <template>
   <div class="system-user-container">
     <el-row :gutter="10">
-      <el-col :span="6">
+      <el-col :span="5">
         <el-card shadow="hover">
           <el-scrollbar>
             <el-input :prefix-icon="search" v-model="filterText" placeholder="请输入部门名称" clearable size="default" style="width: 100%;" />
@@ -9,7 +9,7 @@
           </el-scrollbar>
         </el-card>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="19">
         <el-card shadow="hover">
           <div class="system-user-search mb15">
             <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
@@ -24,6 +24,7 @@
                   <el-option label="全部" :value="-1" />
                   <el-option label="启用" :value="1" />
                   <el-option label="禁用" :value="0" />
+                  <el-option label="未验证" :value="2" />
                 </el-select>
               </el-form-item>
               <el-form-item label="创建时间" prop="dateRange">
@@ -48,30 +49,27 @@
                   </el-icon>
                   新增用户
                 </el-button>
-                <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+                <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
                   <el-icon>
                     <ele-Delete />
                   </el-icon>
                   删除用户
-                </el-button>
+                </el-button> -->
               </el-form-item>
             </el-form>
           </div>
-          <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" />
+          <el-table :data="tableData.data" style="width: 100%" v-loading="loading" @selection-change="handleSelectionChange">
+            <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column type="index" label="序号" width="60" align="center" />
             <el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="userNickname" label="用户昵称" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dept.deptName" label="部门" show-overflow-tooltip></el-table-column>
-            <el-table-column label="角色" align="center" prop="roleInfo" :show-overflow-tooltip="true">
-              <template #default="scope">
-                <span v-for="(item,index) of scope.row.roleInfo" :key="'role-'+index"> {{item.name+'   '}} </span>
-              </template>
+            <el-table-column label="角色" min-width="120" prop="rolesNames" :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
             <el-table-column prop="status" label="用户状态" width="120" align="center">
               <template #default="scope">
-                <el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+                <el-switch v-model="scope.row.status" :disabled="scope.row.id===1" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
                 </el-switch>
               </template>
             </el-table-column>
@@ -79,7 +77,7 @@
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template #default="scope">
                 <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)">修改</el-button>
-                <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.id!==1">删除</el-button>
                 <el-button size="small" text type="success" @click="handleResetPwd(scope.row)">重置</el-button>
               </template>
             </el-table-column>
@@ -88,31 +86,41 @@
         </el-card>
       </el-col>
     </el-row>
-    <EditUser ref="editUserRef" :dept-data="deptData" :gender-data="sys_user_sex" @getUserList="userList" />
+    <EditUser ref="editUserRef" :dept-data="deptData" :post-data="postData" :role-data="roleData" @getUserList="userList" />
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, watch, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, watch } from 'vue';
 import { ElMessageBox, ElMessage, ElTree, FormInstance } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
-import { resetUserPwd, changeUserStatus, deleteUser } from '/@/api/system/user/index';
 import api from '/@/api/system';
 import useCommon from '/@/hooks/useCommon';
 
+interface Tree {
+	id: number;
+	label: string;
+	children?: Tree[];
+}
+
 interface TableDataState {
 	ids: number[];
+	loading: boolean;
 	deptProps: {};
 	deptData: any[];
+	roleData: any[];
+	postData: any[];
 	tableData: {
 		data: any[];
 		total: number;
-		loading: boolean;
 		param: {
 			pageNum: number;
 			pageSize: number;
+			status: number;
 			deptId: string;
+			keyWords: string;
+			mobile: string;
 			userNickname: string;
 			userName: string;
 			dateRange: string[];
@@ -124,8 +132,6 @@ export default defineComponent({
 	name: 'systemUser',
 	components: { EditUser },
 	setup() {
-		const { proxy } = <any>getCurrentInstance();
-		const { sys_user_sex } = proxy.useDict('sys_user_sex');
 		const editUserRef = ref();
 		const queryRef = ref();
 		const filterText = ref('');
@@ -133,6 +139,7 @@ export default defineComponent({
 		const search = Search;
 		const { statusParams } = useCommon();
 		const state = reactive<TableDataState>({
+			loading: false,
 			ids: [],
 			deptProps: {
 				id: 'deptId',
@@ -140,16 +147,20 @@ export default defineComponent({
 				label: 'deptName',
 			},
 			deptData: [],
+			postData: [],
+			roleData: [],
 			tableData: {
 				data: [],
 				total: 0,
-				loading: false,
 				param: {
+					status: -1,
 					pageNum: 1,
 					pageSize: 10,
 					deptId: '',
 					userNickname: '',
 					userName: '',
+					keyWords: '',
+					mobile: '',
 					dateRange: [],
 				},
 			},
@@ -159,13 +170,25 @@ export default defineComponent({
 			api.dept.getList(statusParams).then((res: any) => {
 				state.deptData = res;
 			});
+			api.post.getList(statusParams).then((res: any) => {
+				state.postData = res;
+			});
+			api.role.getList(statusParams).then((res: any) => {
+				state.roleData = res;
+			});
 			userList();
 		};
 		const userList = () => {
-			api.user.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.list;
-				state.tableData.total = res.total;
-			});
+			state.loading = true;
+			api.user
+				.getList(state.tableData.param)
+				.then((res: any) => {
+					state.tableData.data = res.list;
+					state.tableData.total = res.total;
+				})
+				.finally(() => {
+					state.loading = false;
+				});
 		};
 		// 打开新增用户弹窗
 		const onOpenAddUser = () => {
@@ -178,24 +201,24 @@ export default defineComponent({
 		// 删除用户
 		const onRowDel = (row: any) => {
 			let msg = '你确定要删除所选用户？';
-			let ids: number[] = [];
-			if (row) {
-				msg = `此操作将永久删除用户：“${row.userName}”，是否继续?`;
-				ids = [row.id];
-			} else {
-				ids = state.ids;
-			}
-			if (ids.length === 0) {
-				ElMessage.error('请选择要删除的数据。');
-				return;
-			}
+			// let ids: number[] = [];
+			// if (row) {
+			msg = `此操作将永久删除用户：“${row.userName}”，是否继续?`;
+			// 	ids = [row.id];
+			// } else {
+			// 	ids = state.ids;
+			// }
+			// if (ids.length === 0) {
+			// 	ElMessage.error('请选择要删除的数据。');
+			// 	return;
+			// }
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					deleteUser(ids).then(() => {
+					api.user.del(row.id).then(() => {
 						ElMessage.success('删除成功');
 						userList();
 					});
@@ -219,7 +242,7 @@ export default defineComponent({
 		});
 		const deptFilterNode = (value: string, data: any) => {
 			if (!value) return true;
-			return data.label.includes(value);
+			return data.deptName.includes(value);
 		};
 		// 多选框选中数据
 		const handleSelectionChange = (selection: any[]) => {
@@ -241,7 +264,7 @@ export default defineComponent({
 						ElMessage.success('密码不能为空');
 						return;
 					}
-					resetUserPwd(row.id, value).then(() => {
+					api.user.resetPassword(row.id, value).then(() => {
 						ElMessage.success('修改成功，新密码是：' + value);
 					});
 				})
@@ -256,7 +279,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(function () {
-					return changeUserStatus(row.id, row.status);
+					return api.user.setStatus(row.id, row.status);
 				})
 				.then(() => {
 					ElMessage.success(text + '成功');
@@ -283,7 +306,6 @@ export default defineComponent({
 			filterText,
 			treeRef,
 			search,
-			sys_user_sex,
 			userList,
 			handleSelectionChange,
 			handleNodeClick,

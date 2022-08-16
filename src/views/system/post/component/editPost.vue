@@ -107,7 +107,7 @@ export default defineComponent({
 		const openDialog = (row?: DialogRow) => {
 			resetForm();
       api.post.getList({ status: 1 }).then((res: any) => {
-        console.log(res)
+        // console.log(res)
 				state.postData = res || [];
 			});
 			if (row) {

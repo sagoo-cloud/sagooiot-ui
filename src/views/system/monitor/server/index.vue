@@ -482,8 +482,6 @@ export default defineComponent({
 	height: 300px;
 	overflow-y: auto;
 }
-.system-user-container {
-}
 
 .marg-b-15 {
 	margin-bottom: 15px;

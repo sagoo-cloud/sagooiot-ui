@@ -4,10 +4,10 @@
       <div class="system-user-search mb15">
         <el-form :inline="true">
           <el-form-item label="角色名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50 m-2" clearable />
+            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status">
+            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
@@ -63,7 +63,7 @@
       </el-table>
       <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
     </el-card>
-    <EditRole ref="editRoleRef" @getRoleList="roleList" :list="tableData.data" />
+    <EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
     <permissionVue ref="permissionRef" />
   </div>
 </template>
@@ -120,7 +120,7 @@ export default defineComponent({
 			roleList();
 		};
 		const roleList = () => {
-			api.role.getRoleList(state.tableData.param).then((res: Array<TableData>) => {
+			api.role.getList(state.tableData.param).then((res: Array<TableData>) => {
 				state.tableData.data = res || [];
 			});
 		};

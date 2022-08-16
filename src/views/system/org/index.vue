@@ -4,10 +4,10 @@
       <div class="system-dept-search mb15">
         <el-form :inline="true">
           <el-form-item label="组织名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入组织名称" class="w-50 m-2" clearable />
+            <el-input size="default" v-model="tableData.param.name" placeholder="请输入组织名称" class="w-50" clearable />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50 m-2" v-model="tableData.param.status" >
+            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status" >
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />

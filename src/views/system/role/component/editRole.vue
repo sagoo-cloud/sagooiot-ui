@@ -62,7 +62,6 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/system';
-import { getMenuList } from '/@/api/system/menu';
 import { ElMessage } from 'element-plus';
 import { getBackEndControlRoutes } from '/@/router/backEnd';
 
@@ -175,7 +174,7 @@ export default defineComponent({
 								ElMessage.success('角色添加成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
-								emit('getRoleList');
+								emit('getList');
 							})
 							.finally(() => {
 								state.loading = false;
@@ -187,7 +186,7 @@ export default defineComponent({
 								ElMessage.success('角色修改成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
-								emit('getRoleList');
+								emit('getList');
 							})
 							.finally(() => {
 								state.loading = false;
@@ -198,7 +197,7 @@ export default defineComponent({
 		};
 		// 获取菜单结构数据
 		const getMenuData = () => {
-			getMenuList({ status: -1 }).then((res: any) => {
+			api.menu.getList({ status: -1 }).then((res: any) => {
 				state.menuData = res;
 			});
 		};
