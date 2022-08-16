@@ -30,6 +30,13 @@ export default {
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),
   },
+
+  model: {
+    property: (params: object) => get('/product/tsl/property/list', params),
+    function: (params: object) => get('/product/tsl/function/list', params),
+    event: (params: object) => get('/product/tsl/event/list', params),
+    tag: (params: object) => get('/product/tsl/tag/list', params),
+  },
   
   
 }
