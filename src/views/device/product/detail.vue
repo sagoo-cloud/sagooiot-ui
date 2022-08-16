@@ -70,7 +70,7 @@
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
-											<el-button size="small" text type="danger">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'attr')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -89,7 +89,7 @@
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
-											<el-button size="small" text type="danger">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'fun')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -115,7 +115,7 @@
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
-											<el-button size="small" text type="danger">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'event')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table></el-tab-pane
@@ -144,7 +144,7 @@
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
-											<el-button size="small" text type="danger">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'tab')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -171,6 +171,8 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+
 import EditDic from './component/editPro.vue';
 import EditAttr from './component/editAttr.vue';
 import EditFun from './component/editFun.vue';
@@ -265,6 +267,48 @@ export default defineComponent({
 		};
 
 
+		// 删除产品
+		const onRowDel = (key,type) => {
+			let msg = `此操作将永久删除该数据吗？，是否继续?`;
+			
+			if (key.length === 0) {
+				ElMessage.error('请选择要删除的数据。');
+				return;
+			}
+			ElMessageBox.confirm(msg, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+					if(type=='attr'){
+						api.model.propertydel(route.params.id,key).then(() => {
+							ElMessage.success('删除成功');
+							getproperty();
+						});
+					}
+					if(type=='fun'){
+						api.model.functiondel(route.params.id,key).then(() => {
+							ElMessage.success('删除成功');
+							getfunction();
+						});
+					}
+					if(type=='event'){
+						api.model.eventdel(route.params.id,key).then(() => {
+							ElMessage.success('删除成功');
+							getevent();
+						});
+					}
+					if(type=='tab'){
+						api.model.eventdel(route.params.id,key).then(() => {
+							ElMessage.success('删除成功');
+							tagdel();
+						});
+					}
+				})
+				.catch(() => {});
+		};
+
 
 		const getproperty=()=>{
 			api.model.property(state.tableData.param).then((res: any) => {
@@ -322,6 +366,7 @@ export default defineComponent({
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			onRowDel,
 			getproperty,
 			getfunction,
 			getevent,
