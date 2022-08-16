@@ -82,7 +82,7 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, unref, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import EditConfig from '/@/views/system/config/component/editConfig.vue';
+import EditConfig from '/@/views/system/task/component/editConfig.vue';
 import api from '/@/api/system';
 
 // 定义接口来定义对象的类型
