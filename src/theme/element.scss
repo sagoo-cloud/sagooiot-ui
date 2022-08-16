@@ -185,7 +185,11 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-
+.el-dialog.is-fullscreen{
+	.el-dialog__body {
+		max-height: 100vh !important;
+	}
+}
 /* Card 卡片
 ------------------------------- */
 .el-card__header {
