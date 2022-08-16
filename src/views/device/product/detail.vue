@@ -45,20 +45,28 @@
 				</el-tab-pane>
 				<el-tab-pane label="物模型" name="2">
 					<div class="wu-box">
-						<el-tabs type="border-card">
-							<el-tab-pane label="属性定义">
+						<el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
+							<el-tab-pane label="属性定义" name="attr">
 								<div class="wu-title">
 									<div class="title">属性定义</div>
 									<div><el-button type="primary" @click="onOpenEditAttr()">添加</el-button></div>
 								</div>
 
-								<el-table style="width: 100%">
-									<el-table-column label="属性标识" align="center" prop="id" />
+								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
+									<el-table-column label="属性标识" align="center" prop="key" />
 									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
-									<el-table-column label="数据类型" prop="key" :show-overflow-tooltip="true" />
-									<el-table-column label="属性值来源" prop="categoryName" :show-overflow-tooltip="true" />
-									<el-table-column label="是否只读" prop="deptName" :show-overflow-tooltip="true" />
-									<el-table-column label="说明" prop="messageProtocol" :show-overflow-tooltip="true" />
+									<el-table-column prop="valueType" label="数据类型" width="120" align="center">
+										<template #default="scope">
+											<span>{{ scope.row.valueType.type }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+										<template #default="scope">
+											<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+											<el-tag type="success" size="small" v-else>读写</el-tag>
+										</template>
+									</el-table-column>
+									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
@@ -67,17 +75,17 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-							<el-tab-pane label="功能定义">
+							<el-tab-pane label="功能定义" name="fun">
 								<div class="wu-title">
 									<div class="title">功能定义</div>
 									<div><el-button type="primary" @click="onOpenEditFun()">添加</el-button></div>
 								</div>
 
-								<el-table style="width: 100%">
-									<el-table-column label="功能标识" align="center" prop="id" />
+								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
+									<el-table-column label="功能标识" align="center" prop="key" />
 									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
-									<el-table-column label="是否异步" prop="key" :show-overflow-tooltip="true" />
-									<el-table-column label="描述" prop="categoryName" :show-overflow-tooltip="true" />
+
+									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
@@ -86,18 +94,24 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-							<el-tab-pane label="事件定义">
+							<el-tab-pane label="事件定义" name="event">
 								<div class="wu-title">
 									<div class="title">事件定义</div>
 									<div><el-button type="primary" @click="onOpenEditEvent()">添加</el-button></div>
 								</div>
 
-								<el-table style="width: 100%">
-									<el-table-column label="事件标识" align="center" prop="id" />
+								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
+									<el-table-column label="事件标识" align="center" prop="key" />
 									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
-									<el-table-column label="事件级别" prop="key" :show-overflow-tooltip="true" />
-									<el-table-column label="描述" prop="categoryName" :show-overflow-tooltip="true" />
-									
+									<el-table-column prop="level" label="事件级别" width="120" align="center">
+										<template #default="scope">
+											<el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
+											<el-tag type="warning" size="small" v-if="scope.row.level == 1">警告</el-tag>
+											<el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
+										</template>
+									</el-table-column>
+									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
@@ -106,37 +120,52 @@
 									</el-table-column>
 								</el-table></el-tab-pane
 							>
-							<el-tab-pane label="标签定义"
+							<el-tab-pane label="标签定义" name="tab"
 								><div class="wu-title">
 									<div class="title">标签定义</div>
 									<div><el-button type="primary" @click="onOpenEditTab()">添加</el-button></div>
 								</div>
 
-								<el-table style="width: 100%">
-									<el-table-column label="属性标识" align="center" prop="id" />
+								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
+									<el-table-column label="属性标识" align="center" prop="key" />
 									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
-									<el-table-column label="数据类型" prop="key" :show-overflow-tooltip="true" />
-									<el-table-column label="属性值来源" prop="categoryName" :show-overflow-tooltip="true" />
-									<el-table-column label="是否只读" prop="deptName" :show-overflow-tooltip="true" />
-									<el-table-column label="说明" prop="messageProtocol" :show-overflow-tooltip="true" />
+									<el-table-column prop="valueType" label="数据类型" width="120" align="center">
+										<template #default="scope">
+											<span>{{ scope.row.valueType.type }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+										<template #default="scope">
+											<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+											<el-tag type="success" size="small" v-else>读写</el-tag>
+										</template>
+									</el-table-column>
+									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
 											<el-button size="small" text type="warning">修改</el-button>
 											<el-button size="small" text type="danger">删除</el-button>
 										</template>
 									</el-table-column>
-								</el-table></el-tab-pane
-							>
+								</el-table>
+							</el-tab-pane>
 						</el-tabs>
+						<pagination
+							v-show="tableData.total > 0"
+							:total="tableData.total"
+							v-model:page="tableData.param.pageNum"
+							v-model:limit="tableData.param.pageSize"
+							@pagination="typeList"
+						/>
 					</div>
 				</el-tab-pane>
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
-		<EditAttr ref="editAttrRef" @typeList="typeList" />
-		<EditFun ref="editFunRef" @typeList="typeList" />
-		<EditEvent ref="editEventRef" @typeList="typeList" />
-		<EditTab ref="editTabRef" @typeList="typeList" />
+		<EditAttr ref="editAttrRef" @typeList="getproperty" />
+		<EditFun ref="editFunRef" @typeList="getfunction" />
+		<EditEvent ref="editEventRef" @typeList="getevent" />
+		<EditTab ref="editTabRef" @typeList="gettab" />
 	</div>
 </template>
 <script lang="ts">
@@ -152,9 +181,25 @@ import { useRoute } from 'vue-router';
 
 import api from '/@/api/device';
 
+interface TableDataState {
+	ids: number[];
+	tableData: {
+		data: [];
+		total: number;
+		loading: boolean;
+		param: {
+			pageNum: number;
+			pageSize: number;
+			name: string;
+			deviceType: string;
+			status: string;
+			dateRange: string[];
+		};
+	};
+}
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { EditDic,EditAttr,EditFun,EditEvent,EditTab },
+	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab },
 
 	setup(prop, context) {
 		const route = useRoute();
@@ -163,10 +208,23 @@ export default defineComponent({
 		const editFunRef = ref();
 		const editEventRef = ref();
 		const editTabRef = ref();
-		const state = reactive<DicState>({
+		const state = reactive<TableDataState>({
 			isShowDialog: false,
 			activeName: '2', // 分类数据
+			activetab: 'attr', // 分类数据
 			detail: [],
+			tableData: {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					productId: route.params && route.params.id,
+					pageSize: 10,
+					status: '',
+					dateRange: [],
+				},
+			},
 		});
 
 		onMounted(() => {
@@ -174,32 +232,83 @@ export default defineComponent({
 			api.product.detail(ids).then((res: any) => {
 				state.detail = res.data;
 			});
+
+			//第一次加载
+			api.model.property(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
 		});
 
 		//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({product_id:route.params.id,id:0});
+			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0 });
 		};
 
 		//打开添加功能弹窗
 		const onOpenEditFun = () => {
-			editFunRef.value.openDialog({product_id:route.params.id,id:0});
+			editFunRef.value.openDialog({ product_id: route.params.id, id: 0 });
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({product_id:route.params.id,id:0});
+			editEventRef.value.openDialog({ product_id: route.params.id, id: 0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({product_id:route.params.id,id:0});
+			editTabRef.value.openDialog({ product_id: route.params.id, id: 0 });
 		};
-
-
 
 		// 打开修改产品弹窗
 		const onOpenEditDic = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
+		};
+
+
+
+		const getproperty=()=>{
+			api.model.property(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
+		const getfunction=()=>{
+			api.model.function(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+		const getevent=()=>{
+			api.model.event(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
+		const gettab=()=>{
+			api.model.tag(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.Data;
+				state.tableData.total = res.Total;
+			});
+		};
+
+		const wuhandleClick = (tab: TabsPaneContext) => {
+			state.activetab = tab.props.name;
+			switch (tab.props.name) {
+				case 'attr':
+					getproperty();
+					break;
+				case 'fun':
+					getfunction();
+					break;
+				case 'event':
+					getevent();
+					break;
+				case 'tab':
+					gettab();
+					break;
+			}
 		};
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -213,6 +322,11 @@ export default defineComponent({
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			getproperty,
+			getfunction,
+			getevent,
+			gettab,
+			wuhandleClick,
 			onOpenEditTab,
 			onOpenEditEvent,
 			onOpenEditAttr,

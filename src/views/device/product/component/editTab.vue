@@ -24,7 +24,7 @@
               />
             </el-select> -->
 
-             <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型">
+             <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型" >
               <el-option-group
                 v-for="group in typeData"
                 :key="group"
