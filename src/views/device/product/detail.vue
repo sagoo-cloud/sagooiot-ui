@@ -1,0 +1,356 @@
+<template>
+	<div class="system-dic-container">
+		<div class="content">
+			<div class="cont_box">
+				<div class="title">产品：{{ detail.name }}</div>
+				<div class="pro-status"><span class="on"></span>已发布</div>
+				<div class="pro-option">停用</div>
+			</div>
+		</div>
+
+		<div class="content-box">
+			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+				<el-tab-pane label="产品信息" name="1">
+					<div class="pro-box">
+						<div class="protitle">产品信息</div>
+						<el-button type="" :icon="Edit" class="buttonedit" @click="onOpenEditDic(detail)">编辑</el-button>
+					</div>
+
+					<div class="ant-descriptions-view">
+						<table>
+							<tbody>
+								<tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品名称</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属品类</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.categoryName }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">描述</th>
+									<td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="物模型" name="2">
+					<div class="wu-box">
+						<el-tabs type="border-card">
+							<el-tab-pane label="属性定义">
+								<div class="wu-title">
+									<div class="title">属性定义</div>
+									<div><el-button type="primary" @click="onOpenEditAttr()">添加</el-button></div>
+								</div>
+
+								<el-table style="width: 100%">
+									<el-table-column label="属性标识" align="center" prop="id" />
+									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="数据类型" prop="key" :show-overflow-tooltip="true" />
+									<el-table-column label="属性值来源" prop="categoryName" :show-overflow-tooltip="true" />
+									<el-table-column label="是否只读" prop="deptName" :show-overflow-tooltip="true" />
+									<el-table-column label="说明" prop="messageProtocol" :show-overflow-tooltip="true" />
+									<el-table-column label="操作" width="300" align="center">
+										<template #default="scope">
+											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="danger">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-tab-pane>
+							<el-tab-pane label="功能定义">
+								<div class="wu-title">
+									<div class="title">功能定义</div>
+									<div><el-button type="primary" @click="onOpenEditFun()">添加</el-button></div>
+								</div>
+
+								<el-table style="width: 100%">
+									<el-table-column label="功能标识" align="center" prop="id" />
+									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="是否异步" prop="key" :show-overflow-tooltip="true" />
+									<el-table-column label="描述" prop="categoryName" :show-overflow-tooltip="true" />
+									<el-table-column label="操作" width="300" align="center">
+										<template #default="scope">
+											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="danger">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-tab-pane>
+							<el-tab-pane label="事件定义">
+								<div class="wu-title">
+									<div class="title">事件定义</div>
+									<div><el-button type="primary" @click="onOpenEditEvent()">添加</el-button></div>
+								</div>
+
+								<el-table style="width: 100%">
+									<el-table-column label="事件标识" align="center" prop="id" />
+									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="事件级别" prop="key" :show-overflow-tooltip="true" />
+									<el-table-column label="描述" prop="categoryName" :show-overflow-tooltip="true" />
+									
+									<el-table-column label="操作" width="300" align="center">
+										<template #default="scope">
+											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="danger">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table></el-tab-pane
+							>
+							<el-tab-pane label="标签定义"
+								><div class="wu-title">
+									<div class="title">标签定义</div>
+									<div><el-button type="primary" @click="onOpenEditTab()">添加</el-button></div>
+								</div>
+
+								<el-table style="width: 100%">
+									<el-table-column label="属性标识" align="center" prop="id" />
+									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="数据类型" prop="key" :show-overflow-tooltip="true" />
+									<el-table-column label="属性值来源" prop="categoryName" :show-overflow-tooltip="true" />
+									<el-table-column label="是否只读" prop="deptName" :show-overflow-tooltip="true" />
+									<el-table-column label="说明" prop="messageProtocol" :show-overflow-tooltip="true" />
+									<el-table-column label="操作" width="300" align="center">
+										<template #default="scope">
+											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="danger">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table></el-tab-pane
+							>
+						</el-tabs>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
+		</div>
+		<EditDic ref="editDicRef" @typeList="typeList" />
+		<EditAttr ref="editAttrRef" @typeList="typeList" />
+		<EditFun ref="editFunRef" @typeList="typeList" />
+		<EditEvent ref="editEventRef" @typeList="typeList" />
+		<EditTab ref="editTabRef" @typeList="typeList" />
+	</div>
+</template>
+<script lang="ts">
+import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
+import EditDic from './component/editPro.vue';
+import EditAttr from './component/editAttr.vue';
+import EditFun from './component/editFun.vue';
+import EditEvent from './component/editEvent.vue';
+import EditTab from './component/editTab.vue';
+
+import { useRoute } from 'vue-router';
+
+import api from '/@/api/device';
+
+export default defineComponent({
+	name: 'deviceEditPro',
+	components: { EditDic,EditAttr,EditFun,EditEvent,EditTab },
+
+	setup(prop, context) {
+		const route = useRoute();
+		const editDicRef = ref();
+		const editAttrRef = ref();
+		const editFunRef = ref();
+		const editEventRef = ref();
+		const editTabRef = ref();
+		const state = reactive<DicState>({
+			isShowDialog: false,
+			activeName: '2', // 分类数据
+			detail: [],
+		});
+
+		onMounted(() => {
+			const ids = route.params && route.params.id;
+			api.product.detail(ids).then((res: any) => {
+				state.detail = res.data;
+			});
+		});
+
+		//打开添加属性弹窗
+		const onOpenEditAttr = () => {
+			editAttrRef.value.openDialog({product_id:route.params.id,id:0});
+		};
+
+		//打开添加功能弹窗
+		const onOpenEditFun = () => {
+			editFunRef.value.openDialog({product_id:route.params.id,id:0});
+		};
+		//打开添加事件弹窗
+		const onOpenEditEvent = () => {
+			editEventRef.value.openDialog({product_id:route.params.id,id:0});
+		};
+
+		//打开添加事件弹窗
+		const onOpenEditTab = () => {
+			editTabRef.value.openDialog({product_id:route.params.id,id:0});
+		};
+
+
+
+		// 打开修改产品弹窗
+		const onOpenEditDic = (row: TableDataRow) => {
+			editDicRef.value.openDialog(row);
+		};
+
+		const handleClick = (tab: TabsPaneContext, event: Event) => {
+			console.log(tab, event);
+		};
+
+		return {
+			Edit,
+			editDicRef,
+			editAttrRef,
+			editFunRef,
+			editEventRef,
+			editTabRef,
+			onOpenEditTab,
+			onOpenEditEvent,
+			onOpenEditAttr,
+			onOpenEditFun,
+			onOpenEditDic,
+			handleClick,
+			...toRefs(state),
+		};
+	},
+});
+</script>
+  <style>
+.content {
+	background: #fff;
+	width: 100%;
+	padding: 20px;
+}
+.content-box {
+	background: #fff;
+	width: 100%;
+	padding: 20px;
+	margin-top: 20px;
+}
+.cont_box {
+	display: flex;
+}
+.cont_box .title {
+	font-size: 24px;
+}
+.cont_box .pro-status {
+	line-height: 40px;
+	margin-left: 30px;
+}
+.cont_box .pro-status .on {
+	background: #52c41a;
+}
+.cont_box .pro-status .off {
+	background: #c41a1a;
+}
+.cont_box .pro-status span {
+	position: relative;
+	top: -1px;
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	vertical-align: middle;
+	border-radius: 50%;
+	margin-right: 5px;
+}
+.cont_box .pro-option {
+	line-height: 40px;
+	margin-left: 10px;
+	color: #1890ff;
+}
+.content-box .pro-box {
+	display: flex;
+	padding: 10px;
+}
+.content-box .pro-box .protitle {
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 35px;
+}
+.content-box .pro-box .buttonedit {
+	border: 0px;
+	color: #1890ff;
+}
+table {
+	border-collapse: collapse;
+	text-indent: initial;
+	border-spacing: 2px;
+}
+tbody {
+	box-sizing: border-box;
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+}
+.ant-descriptions-view {
+	width: 100%;
+	overflow: hidden;
+	border-radius: 4px;
+}
+.ant-descriptions-view {
+	border: 1px solid #e8e8e8;
+}
+.ant-descriptions-view table {
+	width: 100%;
+	table-layout: fixed;
+}
+.ant-descriptions-view > table {
+	table-layout: auto;
+}
+.ant-descriptions-row {
+	border-bottom: 1px solid #e8e8e8;
+}
+.ant-descriptions-item-label {
+	color: rgba(0, 0, 0, 0.85);
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 1.5;
+}
+.ant-descriptions-item-label {
+	padding: 16px 24px;
+	border-right: 1px solid #e8e8e8;
+}
+.ant-descriptions-item-label {
+	background-color: #fafafa;
+}
+.ant-descriptions-item-content {
+	padding: 16px 24px;
+	border-right: 1px solid #e8e8e8;
+	display: table-cell;
+	color: rgba(0, 0, 0, 0.65);
+	font-size: 14px;
+	line-height: 1.5;
+}
+.wu-box {
+	border: #e8e8e8 solid 1px;
+	padding: 20px;
+	width: 100%;
+}
+.wu-box .wu-title {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 20px;
+	border-bottom: #e8e8e8 1px solid;
+}
+.wu-box .wu-title .title {
+	font-size: 18px;
+}
+</style>
+
+
