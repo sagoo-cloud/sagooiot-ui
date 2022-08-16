@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'功能定义'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
         <el-form-item label="功能定义标识" prop="key">
           <el-input v-model="ruleForm.key" placeholder="请输入功能定义标识" />
         </el-form-item>

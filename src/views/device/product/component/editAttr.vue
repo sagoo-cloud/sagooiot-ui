@@ -1,12 +1,12 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'属性'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
-        <el-form-item label="属性标识" prop="key">
-          <el-input v-model="ruleForm.key" placeholder="请输入属性标识" />
+		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'属性定义'" v-model="isShowDialog" width="769px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+        <el-form-item label="属性定义标识" prop="key">
+          <el-input v-model="ruleForm.key" placeholder="请输入属性定义标识" />
         </el-form-item>
-        <el-form-item label="属性名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入属性名称" />
+        <el-form-item label="属性定义名称" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入属性定义名称" />
         </el-form-item>
     
     
@@ -50,8 +50,8 @@
             <el-radio label="1">只读</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="属性描述	" prop="desc">
-          <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入属性描述"></el-input>
+        <el-form-item label="属性定义描述	" prop="desc">
+          <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入属性定义描述"></el-input>
         </el-form-item>
 			</el-form>
 			<template #footer>
@@ -107,12 +107,12 @@ export default defineComponent({
 			},
       rules: {
         name: [
-          { required: true, message: "属性名称不能为空", trigger: "blur" }
+          { required: true, message: "属性定义名称不能为空", trigger: "blur" }
         ],
          key: [
-          { required: true, message: "属性标识不能为空", trigger: "blur" }
+          { required: true, message: "属性定义标识不能为空", trigger: "blur" }
         ],
-        accessMode: [{ required: true, message: '属性分类不能为空', trigger: 'blur' }],
+        accessMode: [{ required: true, message: '属性定义分类不能为空', trigger: 'blur' }],
         deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
@@ -170,7 +170,7 @@ export default defineComponent({
           if(state.ruleForm.id!==0){
             //修改
             api.product.edit(state.ruleForm).then(()=>{
-              ElMessage.success('属性类型修改成功');
+              ElMessage.success('属性定义类型修改成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
@@ -178,7 +178,7 @@ export default defineComponent({
             //添加
             console.log(state.ruleForm);
             api.product.add(state.ruleForm).then(()=>{
-              ElMessage.success('属性类型添加成功');
+              ElMessage.success('属性定义类型添加成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
