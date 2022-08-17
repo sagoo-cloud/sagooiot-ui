@@ -1,9 +1,9 @@
 <template>
-	<div class="layout-view-bg-white flex layout-view-link" :style="{ height: `calc(100vh - ${setLinkHeight}` }">
-		<a :href="currentRoutemeta?.isLink" target="_blank" rel="opener" class="flex-margin">
-			{{ currentRoutemeta?.title.indexOf('.')>0?$t(currentRoutemeta?.title):currentRoutemeta?.title }}：{{ currentRoutemeta?.isLink }}
-		</a>
-	</div>
+  <div class="layout-view-bg-white flex layout-view-link" :style="{ height: `calc(100vh - ${setLinkHeight}` }">
+    <a :href="currentRouteMeta?.linkUrl" target="_blank" rel="opener" class="flex-margin">
+      {{ currentRouteMeta?.title.indexOf('.')>0?$t(currentRouteMeta?.title):currentRouteMeta?.title }}：{{ currentRouteMeta?.linkUrl }}
+    </a>
+  </div>
 </template>
 
 <script lang="ts">
@@ -15,11 +15,13 @@ import { useStore } from '/@/store/index';
 interface LinkViewState {
 	currentRouteMeta: {
 		isLink: string;
+		linkUrl: string;
 		title: string;
 	};
 }
 interface LinkViewRouteMeta extends RouteMeta {
 	isLink: string;
+	linkUrl: string;
 	title: string;
 }
 
@@ -31,6 +33,7 @@ export default defineComponent({
 		const state = reactive<LinkViewState>({
 			currentRouteMeta: {
 				isLink: '',
+				linkUrl: '',
 				title: '',
 			},
 		});
@@ -44,7 +47,7 @@ export default defineComponent({
 		watch(
 			() => route.path,
 			() => {
-				state.currentRouteMeta = <LinkViewRouteMeta>route.meta;
+				state.currentRouteMeta = route.meta as LinkViewRouteMeta;
 			},
 			{
 				immediate: true,

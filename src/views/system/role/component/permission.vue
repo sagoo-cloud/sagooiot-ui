@@ -16,9 +16,9 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-button :disabled="step <= 0" @click="step--">上一步</el-button>
+      <el-button :disabled="step <= 0" @click="prev">上一步</el-button>
       <el-button :disabled="step >= 3" @click="next">下一步</el-button>
-      <el-button type="primary" :loading="btnLoading" :disabled="step < 3">确定</el-button>
+      <el-button type="primary" :loading="btnLoading" :disabled="step < 3" @click="submit">确定</el-button>
       <el-button @click="cancel">取消</el-button>
     </div>
     <el-steps :active="step" simple>
@@ -28,7 +28,7 @@
       <el-step title="接口权限" />
     </el-steps>
     <div class="scroll-part mt-3">
-      <el-tree ref="treeRef" :data="menuData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" />
+      <el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
     </div>
   </el-dialog>
 </template>
@@ -41,10 +41,20 @@ const btnLoading = ref(false);
 const step = ref(0);
 const treeRef = ref();
 const title = ref('角色权限设置');
+const roleId = ref(0);
+const treeData = ref([]);
 const menuData = ref([]);
+const buttonData = ref([]);
+const listData = ref([]);
+const apiData = ref([]);
 const menuIds = ref([]);
+const buttonIds = ref([]);
+const columnIds = ref([]);
+const apiIds = ref([]);
 
 const typeList = ['menu', 'button', 'column', 'api'];
+const idsList = [menuIds, buttonIds, columnIds, apiIds];
+const treeDataList = [menuData, buttonData, listData, apiData];
 const defaultProps = {
 	children: 'children',
 	label: 'name',
@@ -52,25 +62,54 @@ const defaultProps = {
 
 const openDialog = async (row: any) => {
 	title.value = '角色权限设置 - ' + row.name;
+	roleId.value = row.id;
 	isShowDialog.value = true;
 	let res = await api.role.auth.getList(typeList[step.value]);
-	console.log(res);
+	// console.log(res);
+	treeData.value = res;
 	menuData.value = res;
 };
 const cancel = () => {
 	isShowDialog.value = false;
 };
-const next = async () => {
-	if (step.value === 0) {
-		const val = treeRef.value.getCheckedKeys(true);
-		console.log(val);
-		menuIds.value = val;
-		let res = await api.role.auth.getList(typeList[step.value + 1], val);
-		console.log(res);
-	}
+
+const prev = async () => {
+	const currentStep = step.value;
+	const prevStep = step.value - 1;
+	// 获取选中id
+	const val = treeRef.value.getCheckedKeys(currentStep === 0 ? false : true);
+	idsList[currentStep].value = val;
+	treeData.value = treeDataList[prevStep].value;
+	treeRef.value.setCheckedKeys(idsList[prevStep].value);
+	step.value = prevStep;
 };
 
-// openDialog({ name: '超级管理员' });
+const next = async () => {
+	const nextStep = step.value + 1;
+	let res = await api.role.auth.getList(typeList[nextStep], menuIds.value);
+	// console.log(res);
+	treeData.value = res;
+	treeDataList[nextStep].value = res;
+	treeRef.value.setCheckedKeys(idsList[nextStep].value);
+
+	step.value = nextStep;
+};
+
+const checkChange = () => {
+	idsList[step.value].value = treeRef.value.getCheckedKeys(step.value === 0 ? false : true);
+};
+const submit = async () => {
+	const data = {
+		menuIds: menuIds.value,
+		buttonIds: buttonIds.value,
+		columnIds: columnIds.value,
+		apiIds: apiIds.value,
+		roleId: roleId.value,
+	};
+	console.log(data);
+};
+
+openDialog({ name: '超级管理员', id: 3 });
 
 defineExpose({ openDialog });
 </script>
