@@ -212,7 +212,7 @@ export default defineComponent({
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
 			isShowDialog: false,
-			activeName: '2', // 分类数据
+			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
 			tableData: {
