@@ -55,7 +55,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="jobId" width="60" />
         <el-table-column label="任务名称" prop="jobName" :show-overflow-tooltip="true" />
-        <el-table-column label="任务分组" prop="jobGroup" :formatter="jobGroupFormat" />
+        <el-table-column label="任务分组" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
         <el-table-column label="任务方法名" prop="invokeTarget" />
         <el-table-column label="cron执行表达式" prop="cronExpression" />
         <el-table-column label="状态" align="center" prop="status" width="100">
