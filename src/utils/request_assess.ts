@@ -4,7 +4,7 @@ import { Session } from '/@/utils/storage';
 
 // 配置新建一个 axios 实例
 const service = axios.create({
-	baseURL: import.meta.env.VITE_API_URL,
+	baseURL: import.meta.env.VITE_ASSESS_URL,
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json' },
 });
