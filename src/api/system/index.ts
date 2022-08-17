@@ -43,7 +43,10 @@ export default {
     getRole: (id: number) => get('/system/role/getInfoById', { id }),
     addRole: (data: object) => post('/system/role/add', data),
     deleteRole: (id: number) => del('/system/role/delInfoById', { id }),
-    editRole: (data: object) => put('/system/role/edit', data)
+    editRole: (data: object) => put('/system/role/edit', data),
+    auth: {
+      getList: (itemsType: 'menu' | 'button' | 'column' | 'api' | string, menuIds?: number[]) => get('/system/authorize/query', { itemsType, menuIds }),
+    }
   },
   org: {
     getList: (params: object) => get('/system/organization/tree', params),

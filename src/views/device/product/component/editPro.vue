@@ -2,25 +2,18 @@
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'产品'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+        <el-form-item label="产品标识" prop="key">
+          <el-input v-model="ruleForm.key" placeholder="请输入产品标识" />
+        </el-form-item>
         <el-form-item label="产品名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入产品名称" />
         </el-form-item>
         <el-form-item label="产品图片" prop="imageUrl">
-        <el-upload
-            name="icon"
-            class="avatar-uploader"
-            :action="singleImg"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><ele-Plus /></el-icon>
-          </el-upload>
+     
+                     <uploadVue @set-img="handleAvatarSuccess" ></uploadVue>
+
         </el-form-item>
-         <el-form-item label="产品标识" prop="key">
-          <el-input v-model="ruleForm.key" placeholder="请输入产品标识" />
-        </el-form-item>
+       
         <el-form-item label="产品分类" prop="categoryId">
               <el-cascader :options="cateData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.categoryId">
                 <template #default="{ node, data }">
@@ -68,9 +61,10 @@
 
       
         <el-form-item label="设备类型" prop="deviceType">
-          <el-radio-group v-model="ruleForm.deviceType">
-            <el-radio label="网关" >网关</el-radio>
-            <el-radio label="设备" >设备</el-radio>
+          <el-radio-group v-model="ruleForm.deviceType" model-value="设备">
+            <el-radio label="设备">设备</el-radio>
+
+            <el-radio label="网关">网关</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="产品描述	" prop="desc">
@@ -90,13 +84,13 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
 import api from '/@/api/device';
+import uploadVue from '/@/components/upload/index.vue';
 import {ElMessage,UploadProps} from "element-plus";
 
 interface RuleFormState {
   id:number;
   name:string;
   dictType:string;
-  deviceType:string;
   status:number;
   desc:string;
 }
@@ -112,6 +106,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'deviceEditPro',
+  components: { uploadVue },
 	setup(prop,{emit}) {
     const formRef = ref<HTMLElement | null>(null);
     const baseURL:string|undefined|boolean = import.meta.env.VITE_API_URL
@@ -132,7 +127,7 @@ export default defineComponent({
         deptId:'',
         messageProtocol:'',
         transportProtocol:'',
-        deviceType:'网关',
+        deviceType:'设备',
         status:1,
         desc:''
 			},
@@ -151,25 +146,19 @@ export default defineComponent({
       }
 		});
 
+
+
+
     const handleAvatarSuccess: UploadProps['onSuccess'] = (
-      response,
-      uploadFile
-    ) => {
+      response    ) => {
 
-      state.imageUrl = response.data.name
-        state.ruleForm.imageUrl=response.data.name
+	console.log( response);
+
+         state.imageUrl = response
+        state.ruleForm.imageUrl=response
     }
 
-    const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-      if (rawFile.type !== 'image/jpeg') {
-        ElMessage.error('Avatar picture must be JPG format!')
-        return false
-      } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error('Avatar picture size can not exceed 2MB!')
-        return false
-      }
-      return true
-    }
+
 		// 打开弹窗
 		const openDialog = (row: RuleFormState|null) => {
       resetForm();
@@ -241,7 +230,6 @@ export default defineComponent({
 		return {
 			openDialog,
       handleAvatarSuccess,
-      beforeAvatarUpload,
 			closeDialog,
 			onCancel,
 			onSubmit,

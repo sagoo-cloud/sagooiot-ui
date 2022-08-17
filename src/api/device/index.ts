@@ -8,11 +8,12 @@ export default {
     getList: (params: object) => get('/product/page_list', params),
     getLists: (params: object) => get('/product/list', params),
     add: (data: object) => post('/product/add', data),
-    delete: (id: number) => del('/product/del', { id }),
+    delete: (ids: number) => del('/product/del', { ids }),
     edit: (data: object) => put('/product/edit', data),
     detail: (id: number) => get('/product/detail', { id }),
     message_protocol_list: (params: object) => get('/product/protocol/message_protocol_list', params),
     trunsport_protocol_list: (params: object) => get('/product/protocol/trunsport_protocol_list', params),
+    getDataType: (params: object) => get('/product/tsl/data_type', params),
   },
   category:{
     getList: (params: object) => get('/product/category/list', params),
@@ -24,10 +25,29 @@ export default {
     getList: (params: object) => get('/product/device/page_list', params),
     add: (data: object) => post('/product/device/add', data),
     edit: (data: object) => put('/product/device/edit', data),
-    del: (id: number) => del('/product/device/del', { id }),
+    del: (ids: number) => del('/product/device/del', { ids }),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),
+  },
+
+  model: {
+    property: (params: object) => get('/product/tsl/property/list', params),
+    propertyadd: (data: object) => post('/product/tsl/property/add', data),
+    propertydel: (productId: number,key:string) => del('/product/property/del', { productId,key }),
+
+    function: (params: object) => get('/product/tsl/function/list', params),
+    functionadd: (data: object) => post('/product/tsl/function/add', data),
+    functiondel: (productId: number,key:string) => del('/product/function/del', { productId,key }),
+
+
+    event: (params: object) => get('/product/tsl/event/list', params),
+    eventadd: (data: object) => post('/product/tsl/event/add', data),
+    eventdel: (productId: number,key:string) => del('/product/event/del', { productId,key }),
+
+    tag: (params: object) => get('/product/tsl/tag/list', params),
+    tagadd: (data: object) => post('/product/tsl/tag/add', data),
+    tagdel: (productId: number,key:string) => del('/product/tag/del', { productId,key }),
   },
   
   

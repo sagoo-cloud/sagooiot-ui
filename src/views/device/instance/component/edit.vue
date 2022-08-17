@@ -2,13 +2,14 @@
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'设备'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+       <el-form-item label="设备标识" prop="key">
+          <el-input v-model="ruleForm.key" placeholder="请输入设备标识" />
+        </el-form-item>
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
 
-         <el-form-item label="设备标识" prop="key">
-          <el-input v-model="ruleForm.key" placeholder="请输入设备标识" />
-        </el-form-item>
+        
 
            <el-form-item label="所属产品" prop="productId">
        
