@@ -65,12 +65,12 @@ const next = async () => {
 		const val = treeRef.value.getCheckedKeys(true);
 		console.log(val);
 		menuIds.value = val;
-		let res = await api.role.auth.getList(typeList[step.value + 1], val);
+		let res = await api.role.auth.getList(typeList[step.value + 1], JSON.stringify(val ));
 		console.log(res);
 	}
 };
 
-// openDialog({ name: '超级管理员' });
+openDialog({ name: '超级管理员' });
 
 defineExpose({ openDialog });
 </script>

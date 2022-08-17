@@ -45,7 +45,7 @@ export default {
     deleteRole: (id: number) => del('/system/role/delInfoById', { id }),
     editRole: (data: object) => put('/system/role/edit', data),
     auth: {
-      getList: (itemsType: 'menu' | 'button' | 'column' | 'api' | string, menuIds?: number[]) => get('/system/authorize/query', { itemsType, menuIds }),
+      getList: (itemsType: 'menu' | 'button' | 'column' | 'api' | string, menuIds?: number[] | string) => get('/system/authorize/query', { itemsType, menuIds }),
     }
   },
   org: {
