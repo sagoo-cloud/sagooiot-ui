@@ -45,7 +45,8 @@
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-            <el-dropdown size="small">
+            <el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
+            <!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
                   <ele-ArrowDown />
@@ -57,7 +58,7 @@
                   <el-dropdown-item @click.native="permission(scope.row)">角色权限</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-            </el-dropdown>
+            </el-dropdown> -->
           </template>
         </el-table-column>
       </el-table>
