@@ -9,8 +9,8 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>全部勾选</el-dropdown-item>
-            <el-dropdown-item>取消全选</el-dropdown-item>
+            <el-dropdown-item @click.native="checkAll(true)">全部勾选</el-dropdown-item>
+            <el-dropdown-item @click.native="checkAll(false)">取消全选</el-dropdown-item>
             <el-dropdown-item @click.native="expand(true)">展开所有</el-dropdown-item>
             <el-dropdown-item @click.native="expand(false)">折叠所有</el-dropdown-item>
           </el-dropdown-menu>
@@ -103,9 +103,21 @@ const next = async () => {
 	step.value = nextStep;
 };
 
+// 选中状态变化
 const checkChange = () => {
 	idsList[step.value].value = treeRef.value.getCheckedKeys(step.value === 0 ? false : true);
 };
+
+// 全选取消全选
+const checkAll = (all: boolean) => {
+	if (!all) {
+		treeRef.value.setCheckedKeys([]);
+	} else {
+		const ids = deepTree(treeDataList[step.value].value, []);
+		treeRef.value.setCheckedKeys(ids);
+	}
+};
+
 const submit = async () => {
 	const data = {
 		menuIds: menuIds.value,
@@ -124,8 +136,17 @@ const submit = async () => {
 		})
 		.finally(() => {
 			btnLoading.value = false;
+			isShowDialog.value = false;
 		});
 };
+
+function deepTree(tree: any[], arr: number[]) {
+	for (let item of tree) {
+		arr.push(item.id);
+		if (item.children?.length) deepTree(item.children, arr);
+	}
+	return arr;
+}
 
 // openDialog({ name: '超级管理员', id: 3 });
 
