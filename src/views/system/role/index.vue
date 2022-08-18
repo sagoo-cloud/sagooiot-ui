@@ -138,24 +138,30 @@ export default defineComponent({
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
-			})
-				.then(() => {
-					api.role.deleteRole(row.id).then(() => {
-						ElMessage.success('删除成功');
-						proxy.$refs['editRoleRef'].resetMenuSession();
-						roleList();
-					});
-				})
-				.catch(() => {});
+			}).then(() => {
+				api.role.deleteRole(row.id).then(() => {
+					ElMessage.success('删除成功');
+					proxy.$refs['editRoleRef'].resetMenuSession();
+					roleList();
+				});
+			});
 		};
+
 		// 设置权限
-		const permission = (row: any) => {
-			permissionRef.value.openDialog(row);
+		const permission = async (row: any) => {
+			const { isAllow } = await api.role.auth.isAllow(row.id);
+			if (isAllow) {
+				permissionRef.value.openDialog(row);
+			} else {
+				ElMessage.error('该角色禁止被授权');
+			}
 		};
+
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
 		});
+
 		return {
 			addRoleRef,
 			editRoleRef,
