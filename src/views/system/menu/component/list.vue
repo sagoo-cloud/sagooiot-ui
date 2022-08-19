@@ -27,7 +27,8 @@
       </el-table-column>
     </el-table>
   </el-drawer>
-  <listForm ref="listFormRef" :parent-data="tableData" @getList="getList"></listForm>
+  <!-- <listForm ref="listFormRef" :parent-data="tableData" @getList="getList"></listForm> -->
+  <listForm ref="listFormRef" @getList="getList"></listForm>
 </template>
 
 <script lang="ts" setup>
@@ -36,6 +37,7 @@ import listForm from './list-form.vue';
 import { MenuListRow } from '/@/api/model/system/menu';
 import api from '/@/api/system';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { getBackEndControlRoutes } from '/@/router/backEnd';
 
 const title = ref('列表权限');
 const drawer = ref(false);
@@ -75,6 +77,7 @@ const handleStatusChange = (row: MenuListRow) => {
 		.then(async function () {
 			await api.menu.list.setStatus(row.id as number, row.menuId as number, row.status);
 			ElMessage.success('操作成功');
+			getBackEndControlRoutes();
 		})
 		.catch(function () {
 			row.status = row.status === 0 ? 1 : 0;
@@ -90,6 +93,7 @@ const onDel = (row: MenuListRow) => {
 		await api.menu.list.del(row.id as number);
 		ElMessage.success('删除成功');
 		getList();
+		getBackEndControlRoutes();
 	});
 };
 

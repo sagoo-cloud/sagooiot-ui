@@ -1,9 +1,9 @@
 <template>
   <el-dialog v-model="showDialog" :title="`${formData.id?'编辑显示列':'新增显示列'}`" width="500px" :close-on-click-modal="false" :close-on-press-escape="false">
     <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-      <el-form-item label="上级" prop="parentId">
+      <!-- <el-form-item label="上级" prop="parentId">
         <el-cascader :options="parentData" :props="{ label: 'name',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="formData.parentId"></el-cascader>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="字段名称" prop="name">
         <el-input v-model="formData.name" placeholder="字段名称" />
       </el-form-item>
@@ -27,15 +27,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, PropType } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/system';
 import { MenuListRow } from '/@/api/model/system/menu';
 import { ruleRequired } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
+import { getBackEndControlRoutes } from '/@/router/backEnd';
 
-defineProps({
-	parentData: Array as PropType<MenuListRow[]>,
-});
+// defineProps({
+// 	parentData: Array as PropType<MenuListRow[]>,
+// });
 
 const emit = defineEmits(['getList']);
 
@@ -44,6 +45,7 @@ const formRef = ref();
 
 const baseForm: MenuListRow = {
 	parentId: -1,
+	id: undefined,
 	menuId: 0,
 	name: '',
 	code: '',
@@ -72,6 +74,7 @@ const onSubmit = async () => {
 	await theApi(formData);
 
 	ElMessage.success('操作成功');
+	getBackEndControlRoutes()
 	resetForm();
 	showDialog.value = false;
 	emit('getList');
@@ -84,9 +87,10 @@ const resetForm = async () => {
 
 const open = async (row: any) => {
 	resetForm();
-	Object.assign(formData, { ...row });
 	showDialog.value = true;
-	// console.log(row);
+	nextTick(() => {
+		Object.assign(formData, { ...row });
+	});
 };
 
 defineExpose({ open });

@@ -22,6 +22,7 @@
             <el-dropdown-item command="del-删除">删除</el-dropdown-item>
             <el-dropdown-item command="upload-导入">导入</el-dropdown-item>
             <el-dropdown-item command="dwonload-导出">导出</el-dropdown-item>
+            <el-dropdown-item command="reset-重置">重置</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -54,6 +55,7 @@ import btnForm from './btn-form.vue';
 import { MenuBtnRow } from '/@/api/model/system/menu';
 import api from '/@/api/system';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { getBackEndControlRoutes } from '/@/router/backEnd';
 
 const title = ref('按钮权限');
 const drawer = ref(false);
@@ -96,6 +98,7 @@ const addCommonType = async (command: string) => {
 	await api.menu.btn.add(formData);
 	ElMessage.success('操作成功');
 	getList();
+	getBackEndControlRoutes();
 };
 
 // 修改启用停用状态
@@ -109,6 +112,7 @@ const handleStatusChange = (row: MenuBtnRow) => {
 		.then(async function () {
 			await api.menu.btn.setStatus(row.id as number, row.menuId as number, row.status);
 			ElMessage.success('操作成功');
+			getBackEndControlRoutes();
 		})
 		.catch(function () {
 			row.status = row.status === 0 ? 1 : 0;
@@ -124,6 +128,7 @@ const onDel = (row: MenuBtnRow) => {
 		await api.menu.btn.del(row.id as number);
 		ElMessage.success('删除成功');
 		getList();
+		getBackEndControlRoutes();
 	});
 };
 

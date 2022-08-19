@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, PropType } from 'vue';
+import { ref, reactive, PropType, nextTick } from 'vue';
 import api from '/@/api/system';
 import { MenuBtnRow } from '/@/api/model/system/menu';
 import { ruleRequired } from '/@/utils/validator';
@@ -44,6 +44,7 @@ const formRef = ref();
 
 const baseForm: MenuBtnRow = {
 	parentId: -1,
+	id: undefined,
 	menuId: 0,
 	name: '',
 	types: '',
@@ -84,9 +85,10 @@ const resetForm = async () => {
 
 const open = async (row: any) => {
 	resetForm();
-	Object.assign(formData, { ...row });
 	showDialog.value = true;
-	// console.log(row);
+	nextTick(() => {
+		Object.assign(formData, { ...row });
+	});
 };
 
 defineExpose({ open });
