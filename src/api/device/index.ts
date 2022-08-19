@@ -14,7 +14,8 @@ export default {
     message_protocol_list: (params: object) => get('/product/protocol/message_protocol_list', params),
     trunsport_protocol_list: (params: object) => get('/product/protocol/trunsport_protocol_list', params),
     getDataType: (params: object) => get('/product/tsl/data_type', params),
-  },
+    deploy: (data: object) => post('/product/deploy', data),
+    undeploy: (data: object) => post('/product/undeploy0', data),  },
   category:{
     getList: (params: object) => get('/product/category/list', params),
     add: (data: object) => post('/product/category/add', data),

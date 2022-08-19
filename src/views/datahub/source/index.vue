@@ -57,9 +57,8 @@
         </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
-		   <router-link :to="'/datahub/source/detail/' + scope.row.id" class="link-type" style="padding-right: 10px;color: #409eff;">
-              <span>详情</span>
-            </router-link>
+		   			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
+
             <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
@@ -68,6 +67,8 @@
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
+	    <Detail ref="detailRef"  />
+
   </div>
 </template>
 
@@ -76,6 +77,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import api from '/@/api/datahub';
+import Detail from './component/detail.vue';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -105,11 +107,12 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'deviceInstance',
-	components: { EditDic },
+	components: { EditDic,Detail },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
 		const queryRef = ref();
+		const detailRef=ref();
 		const state = reactive<TableDataState>({
 			ids: [],
 			tableData: {
@@ -176,11 +179,17 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		//查看详情
+		const onOpenDetail=(row: TableDataRow)=>{
+			detailRef.value.openDialog(row);
+		}
 		return {
 			addDicRef,
 			editDicRef,
 			queryRef,
+			detailRef,
 			onOpenAdd,
+			onOpenDetail,
 			onOpenEdit,
 			onRowDel,
 			typeList,

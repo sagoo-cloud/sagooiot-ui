@@ -52,8 +52,8 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="id" width="80" />
+	    <el-table-column label="设备标识" prop="key" :show-overflow-tooltip="true" />
         <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="设备标识" prop="key" :show-overflow-tooltip="true" />
         <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
         <el-table-column label="部门名称" prop="deptName" :show-overflow-tooltip="true" />
        
@@ -69,9 +69,8 @@
          <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="180"></el-table-column> 
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
-		   <router-link :to="'/device/instance/detail/' + scope.row.id" class="link-type" style="padding-right: 10px;color: #409eff;">
-              <span>详情</span>
-            </router-link>
+	
+			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
@@ -80,6 +79,7 @@
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
+    <Detail ref="detailRef"  />
   </div>
 </template>
 
@@ -87,6 +87,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
+import Detail from './component/detail.vue';
 import api from '/@/api/device';
 
 // 定义接口来定义对象的类型
@@ -117,10 +118,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'deviceInstance',
-	components: { EditDic },
+	components: { EditDic,Detail },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
+		const detailRef=ref();
 		const queryRef = ref();
 		const state = reactive<TableDataState>({
 			ids: [],
@@ -149,6 +151,11 @@ export default defineComponent({
 				state.tableData.total = res.total;
 			});
 		};
+
+		//查看详情
+		const onOpenDetail=(row: TableDataRow)=>{
+			detailRef.value.openDialog(row);
+		}
 		// 打开新增产品弹窗
 		const onOpenAddDic = () => {
 			editDicRef.value.openDialog();
@@ -201,7 +208,9 @@ export default defineComponent({
 		return {
 			addDicRef,
 			editDicRef,
+			detailRef,
 			queryRef,
+			onOpenDetail,
 			onOpenAddDic,
 			onOpenEditDic,
 			onRowDel,
