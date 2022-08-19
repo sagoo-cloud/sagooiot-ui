@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" custom-class="full-dialog" v-model="isShowDialog" width="1100px" fullscreen>
+  <el-dialog :title="title" v-model="isShowDialog" width="1100px">
     <div class="mb-4 tr">
       <el-dropdown>
         <el-button plain class="mr-3">
@@ -155,7 +155,7 @@ defineExpose({ openDialog });
 
 <style scoped lang="scss">
 .scroll-part {
-	max-height: calc(100vh - 200px);
+	height: calc(80vh - 200px);
 	overflow-x: hidden;
 	overflow-y: auto;
 }
