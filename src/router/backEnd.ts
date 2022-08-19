@@ -92,6 +92,8 @@ export function backEndComponent(routes: any) {
 			isLink: item.linkUrl || item.isLink,
 			linkUrl: item.linkUrl,
 			title: item.title,
+			buttons: (item.button || []).map((item: any) => item.types),
+			columns: (item.column || []).map((item: any) => item.code),
 		}
 		return item;
 	});

@@ -1,6 +1,7 @@
 import type { App } from 'vue';
-import { store } from '/@/store/index.ts';
-import { judementSameArr } from '/@/utils/arrayOperation';
+import { smallInBig } from '/@/utils/arrayOperation';
+// import { useRoute } from 'vue-router';
+import router from '../router';
 
 /**
  * 用户权限指令
@@ -13,16 +14,18 @@ export function authDirective(app: App) {
 	// 单个权限验证（v-auth="xxx"）
 	app.directive('auth', {
 		mounted(el, binding) {
-			if (store.state.userInfos.permissions.includes(allPermissions)) return
-			if (!store.state.userInfos.permissions.some((v: string) => v === binding.value)) el.parentNode.removeChild(el);
+			const buttons = <string[]>router.currentRoute.value.meta.buttons
+			if (buttons.includes(allPermissions)) return
+			if (!buttons.includes(binding.value)) el.parentNode.removeChild(el)
 		},
 	});
 	// 多个权限验证，满足一个则显示（v-auths="[xxx,xxx]"）
 	app.directive('auths', {
 		mounted(el, binding) {
-			if (store.state.userInfos.permissions.includes(allPermissions)) return
+			const buttons = <string[]>router.currentRoute.value.meta.buttons
+			if (buttons.includes(allPermissions)) return
 			let flag = false;
-			store.state.userInfos.permissions.map((val: string) => {
+			buttons.map((val: string) => {
 				binding.value.map((v: string) => {
 					if (val === v) flag = true;
 				});
@@ -33,9 +36,9 @@ export function authDirective(app: App) {
 	// 多个权限验证，全部满足则显示（v-auth-all="[xxx,xxx]"）
 	app.directive('auth-all', {
 		mounted(el, binding) {
-			if (store.state.userInfos.permissions.includes(allPermissions)) return
-			const flag = judementSameArr(binding.value, store.state.userInfos.permissions);
-			if (!flag) el.parentNode.removeChild(el);
+			const buttons = <string[]>router.currentRoute.value.meta.buttons
+			if (buttons.includes(allPermissions)) return
+			!smallInBig(buttons, binding.value) && el.parentNode.removeChild(el)
 		},
 	});
 }

@@ -41,7 +41,7 @@
         <el-table-column prop="createdAt" label="创建时间" align="center" min-width="180"></el-table-column>
         <el-table-column label="操作" align="center" width="140">
           <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenAddDept(scope.row)">新增</el-button>
+            <el-button size="small" type="text" @click="onOpenAddDept(scope.row)" v-auth="'edit'">新增</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDept(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">删除</el-button>
           </template>

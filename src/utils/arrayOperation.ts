@@ -1,4 +1,13 @@
 /**
+ * 判断子数据数组是否走在总数据里
+ * @param big 总数据
+ * @param small 子数据
+ * @returns 总数据包含子数据 `true`，反之则反
+ */
+export function smallInBig(big: string[], small: string[]): boolean {
+	return small.every(i => big.includes(i))
+}
+/**
  * 判断两数组是否相同
  * @param news 新数据
  * @param old 源数据

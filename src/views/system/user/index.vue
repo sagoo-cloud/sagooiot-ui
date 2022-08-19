@@ -43,7 +43,7 @@
                   </el-icon>
                   重置
                 </el-button>
-                <el-button size="default" type="success" class="ml10" @click="onOpenAddUser">
+                <el-button size="default" type="success" class="ml10" @click="onOpenAddUser"  v-auth="'add'">
                   <el-icon>
                     <ele-FolderAdd />
                   </el-icon>
@@ -76,9 +76,11 @@
             <el-table-column prop="createdAt" label="创建时间" width="180" align="center"></el-table-column>
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template #default="scope">
-                <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)">修改</el-button>
-                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.id!==1">删除</el-button>
-                <el-button size="small" text type="success" @click="handleResetPwd(scope.row)">重置</el-button>
+                <!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
+                <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth-all="['edit','del']">修改</el-button> -->
+                <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth="'edit'">修改</el-button>
+                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.id!==1" v-auth="'del'">删除</el-button>
+                <el-button size="small" text type="success" @click="handleResetPwd(scope.row)"  v-auth="'reset'">重置</el-button>
               </template>
             </el-table-column>
           </el-table>
