@@ -1,6 +1,5 @@
 import type { App } from 'vue';
 import { smallInBig } from '/@/utils/arrayOperation';
-// import { useRoute } from 'vue-router';
 import router from '../router';
 
 /**
