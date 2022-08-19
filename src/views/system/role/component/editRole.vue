@@ -3,7 +3,7 @@
     <el-dialog :title="(formData.id===0?'添加':'修改')+'角色'" v-model="isShowDialog" width="769px">
       <el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
         <el-row :gutter="35">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-form-item label="上级角色">
               <el-cascader :options="list" :props="{ label: 'name',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="formData.parentId">
                 <template #default="{ node, data }">
@@ -13,27 +13,27 @@
               </el-cascader>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <el-form-item label="角色名称" prop="name">
               <el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <el-form-item label="排序">
               <el-input-number v-model="formData.listOrder" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <el-form-item label="角色状态">
               <el-switch v-model="formData.status" :active-value="1" :inactive-value="0" inline-prompt active-text="启" inactive-text="禁"></el-switch>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-form-item label="角色描述">
               <el-input v-model="formData.remark" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
             </el-form-item>
           </el-col>
-          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-form-item label="菜单权限">
               <el-row :gutter="35">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -41,7 +41,7 @@
                   <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event)">全选/全不选</el-checkbox>
                   <el-checkbox v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event)">父子联动</el-checkbox>
                 </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                   <el-tree :data="menuData" ref="menuRef" :props="menuProps" :default-checked-keys="formData.menuIds" node-key="id" show-checkbox class="menu-data-tree tree-border" :check-strictly="!menuCheckStrictly" />
                 </el-col>
               </el-row>

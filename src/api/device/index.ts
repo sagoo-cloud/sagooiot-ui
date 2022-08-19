@@ -34,20 +34,24 @@ export default {
   model: {
     property: (params: object) => get('/product/tsl/property/list', params),
     propertyadd: (data: object) => post('/product/tsl/property/add', data),
-    propertydel: (productId: number,key:string) => del('/product/property/del', { productId,key }),
+    propertyedit: (data: object) => put('/product/tsl/property/edit', data),
+    propertydel: (productId: number,key:string) => del('/product/tsl/property/del', { productId,key }),
 
     function: (params: object) => get('/product/tsl/function/list', params),
     functionadd: (data: object) => post('/product/tsl/function/add', data),
-    functiondel: (productId: number,key:string) => del('/product/function/del', { productId,key }),
+    functionedit: (data: object) => put('/product/tsl/function/edit', data),
+    functiondel: (productId: number,key:string) => del('/product/tsl/function/del', { productId,key }),
 
 
     event: (params: object) => get('/product/tsl/event/list', params),
     eventadd: (data: object) => post('/product/tsl/event/add', data),
-    eventdel: (productId: number,key:string) => del('/product/event/del', { productId,key }),
+    eventedit: (data: object) => put('/product/tsl/event/edit', data),
+    eventdel: (productId: number,key:string) => del('/product/tsl/event/del', { productId,key }),
 
     tag: (params: object) => get('/product/tsl/tag/list', params),
     tagadd: (data: object) => post('/product/tsl/tag/add', data),
-    tagdel: (productId: number,key:string) => del('/product/tag/del', { productId,key }),
+    tagedit: (data: object) => put('/product/tsl/tag/edit', data),
+    tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
   },
   
   

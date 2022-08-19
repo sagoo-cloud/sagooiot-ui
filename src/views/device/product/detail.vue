@@ -69,7 +69,7 @@
 									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
-											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'attr')">删除</el-button>
 										</template>
 									</el-table-column>
@@ -155,7 +155,7 @@
 							:total="tableData.total"
 							v-model:page="tableData.param.pageNum"
 							v-model:limit="tableData.param.pageSize"
-							@pagination="typeList"
+							@pagination="getList"
 						/>
 					</div>
 				</el-tab-pane>
@@ -212,7 +212,7 @@ export default defineComponent({
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
 			isShowDialog: false,
-			activeName: '2', // 分类数据
+			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
 			tableData: {
@@ -245,6 +245,11 @@ export default defineComponent({
 		//打开添加属性弹窗
 		const onOpenEditAttr = () => {
 			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0 });
+		};
+
+		//编辑属性
+		const onEditAttr=(row: TableDataRow)=>{
+			editAttrRef.value.openDialog(row,route.params.id);
 		};
 
 		//打开添加功能弹窗
@@ -310,6 +315,24 @@ export default defineComponent({
 		};
 
 
+		//根据不同类型获取列表
+		const getList=()=>{
+			switch (state.activetab) {
+				case 'attr':
+					getproperty();
+					break;
+				case 'fun':
+					getfunction();
+					break;
+				case 'event':
+					getevent();
+					break;
+				case 'tab':
+					gettab();
+					break;
+			}
+		};
+
 		const getproperty=()=>{
 			api.model.property(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
@@ -367,6 +390,8 @@ export default defineComponent({
 			editEventRef,
 			editTabRef,
 			onRowDel,
+			onEditAttr,
+			getList,
 			getproperty,
 			getfunction,
 			getevent,

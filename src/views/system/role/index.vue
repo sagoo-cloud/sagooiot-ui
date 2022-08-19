@@ -45,7 +45,8 @@
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-            <el-dropdown size="small">
+            <el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
+            <!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
                   <ele-ArrowDown />
@@ -57,7 +58,7 @@
                   <el-dropdown-item @click.native="permission(scope.row)">角色权限</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-            </el-dropdown>
+            </el-dropdown> -->
           </template>
         </el-table-column>
       </el-table>
@@ -138,24 +139,30 @@ export default defineComponent({
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
-			})
-				.then(() => {
-					api.role.deleteRole(row.id).then(() => {
-						ElMessage.success('删除成功');
-						proxy.$refs['editRoleRef'].resetMenuSession();
-						roleList();
-					});
-				})
-				.catch(() => {});
+			}).then(() => {
+				api.role.deleteRole(row.id).then(() => {
+					ElMessage.success('删除成功');
+					proxy.$refs['editRoleRef'].resetMenuSession();
+					roleList();
+				});
+			});
 		};
+
 		// 设置权限
-		const permission = (row: any) => {
-			permissionRef.value.openDialog(row);
+		const permission = async (row: any) => {
+			const { isAllow } = await api.role.auth.isAllow(row.id);
+			if (isAllow) {
+				permissionRef.value.openDialog(row);
+			} else {
+				ElMessage.error('该角色禁止被授权');
+			}
 		};
+
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
 		});
+
 		return {
 			addRoleRef,
 			editRoleRef,
