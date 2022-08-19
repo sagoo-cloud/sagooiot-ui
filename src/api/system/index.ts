@@ -46,6 +46,9 @@ export default {
     editRole: (data: object) => put('/system/role/edit', data),
     auth: {
       getList: (itemsType: 'menu' | 'button' | 'column' | 'api' | string, menuIds?: number[]) => get('/system/authorize/query', { itemsType, menuIds }),
+      set: (data: object) => post('/system/authorize/Add', data),
+      // 判断是否允许给角色授权
+      isAllow: (roleId: number) => get('/system/authorize/isAllow', { roleId }),
     }
   },
   org: {

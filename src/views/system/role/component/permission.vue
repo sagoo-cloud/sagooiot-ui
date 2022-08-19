@@ -9,10 +9,10 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>全部勾选</el-dropdown-item>
-            <el-dropdown-item>取消全选</el-dropdown-item>
-            <el-dropdown-item>展开所有</el-dropdown-item>
-            <el-dropdown-item>折叠所有</el-dropdown-item>
+            <el-dropdown-item @click.native="checkAll(true)">全部勾选</el-dropdown-item>
+            <el-dropdown-item @click.native="checkAll(false)">取消全选</el-dropdown-item>
+            <el-dropdown-item @click.native="expand(true)">展开所有</el-dropdown-item>
+            <el-dropdown-item @click.native="expand(false)">折叠所有</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import api from '/@/api/system';
+import { ElMessage } from 'element-plus';
 const isShowDialog = ref(false);
 const btnLoading = ref(false);
 const step = ref(0);
@@ -73,6 +74,13 @@ const cancel = () => {
 	isShowDialog.value = false;
 };
 
+const expand = (expand: boolean) => {
+	const nodes = treeRef.value.store.nodesMap;
+	for (let i in nodes) {
+		nodes[i].expanded = expand;
+	}
+};
+
 const prev = async () => {
 	const currentStep = step.value;
 	const prevStep = step.value - 1;
@@ -95,9 +103,21 @@ const next = async () => {
 	step.value = nextStep;
 };
 
+// 选中状态变化
 const checkChange = () => {
 	idsList[step.value].value = treeRef.value.getCheckedKeys(step.value === 0 ? false : true);
 };
+
+// 全选取消全选
+const checkAll = (all: boolean) => {
+	if (!all) {
+		treeRef.value.setCheckedKeys([]);
+	} else {
+		const ids = deepTree(treeDataList[step.value].value, []);
+		treeRef.value.setCheckedKeys(ids);
+	}
+};
+
 const submit = async () => {
 	const data = {
 		menuIds: menuIds.value,
@@ -106,10 +126,29 @@ const submit = async () => {
 		apiIds: apiIds.value,
 		roleId: roleId.value,
 	};
-	console.log(data);
+	// console.log(data);
+
+	btnLoading.value = true;
+	api.role.auth
+		.set(data)
+		.then(() => {
+			ElMessage.success('权限设置成功');
+		})
+		.finally(() => {
+			btnLoading.value = false;
+			isShowDialog.value = false;
+		});
 };
 
-openDialog({ name: '超级管理员', id: 3 });
+function deepTree(tree: any[], arr: number[]) {
+	for (let item of tree) {
+		arr.push(item.id);
+		if (item.children?.length) deepTree(item.children, arr);
+	}
+	return arr;
+}
+
+// openDialog({ name: '超级管理员', id: 3 });
 
 defineExpose({ openDialog });
 </script>
