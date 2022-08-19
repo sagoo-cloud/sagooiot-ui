@@ -3,8 +3,9 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">产品：{{ detail.name }}</div>
-				<div class="pro-status"><span class="on"></span>已发布</div>
-				<div class="pro-option">停用</div>
+				<div class="pro-status" ><span :class="developer_status==1?'on':'off'"></span>{{developer_status==1?'已发布':'未发布'}}</div>
+			
+				<div class="pro-option"  @click="CkOption"> {{developer_status==1?'停用':'启用'}}</div>
 			</div>
 		</div>
 
@@ -215,6 +216,7 @@ export default defineComponent({
 			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
+			developer_status:0,
 			tableData: {
 				data: [],
 				total: 0,
@@ -233,6 +235,7 @@ export default defineComponent({
 			const ids = route.params && route.params.id;
 			api.product.detail(ids).then((res: any) => {
 				state.detail = res.data;
+				state.developer_status=res.data.status
 			});
 
 			//第一次加载
@@ -382,6 +385,25 @@ export default defineComponent({
 			console.log(tab, event);
 		};
 
+		const CkOption=()=>{
+
+			if(state.developer_status==1){
+				api.product.undeploy({id:route.params.id}).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status=0;
+				});
+			}else{
+				api.product.deploy({id:route.params.id}).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status=1;
+				});
+			}
+			
+
+			
+
+		}
+
 		return {
 			Edit,
 			editDicRef,
@@ -389,6 +411,7 @@ export default defineComponent({
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			CkOption,
 			onRowDel,
 			onEditAttr,
 			getList,
@@ -450,6 +473,7 @@ export default defineComponent({
 	line-height: 40px;
 	margin-left: 10px;
 	color: #1890ff;
+	cursor: pointer;
 }
 .content-box .pro-box {
 	display: flex;
