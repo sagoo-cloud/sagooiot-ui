@@ -289,14 +289,10 @@ export default defineComponent({
 							state.valueType.elements=state.enumdata;
 						}
 
-					
-
-						
-
 						state.ruleForm.valueType = state.valueType;
 						ElMessage.success('参数类型添加成功');
 							closeDialog(); // 关闭弹窗
-							emit('typeList',state.ruleForm);
+							emit('typeList',state.ruleForm,state.ruleForm.type_data);
 					}
 				}
 			});

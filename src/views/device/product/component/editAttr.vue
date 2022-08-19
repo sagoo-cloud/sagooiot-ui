@@ -235,6 +235,7 @@ export default defineComponent({
 			jsondata: [],
 
 			ruleForm: {
+				id:0,
 				productId:0,
 				name: '',
 				key: '',
@@ -272,10 +273,11 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				console.log(datat);
+				console.log(row);
+				console.log(productId);
 				state.typeData = datat || [];
 			});
-
+	
 			if (row.valueType) {	
 				state.ruleForm = row;
 

@@ -39,15 +39,18 @@ export default {
 
     function: (params: object) => get('/product/tsl/function/list', params),
     functionadd: (data: object) => post('/product/tsl/function/add', data),
+    functionedit: (data: object) => put('/product/tsl/function/edit', data),
     functiondel: (productId: number,key:string) => del('/product/tsl/function/del', { productId,key }),
 
 
     event: (params: object) => get('/product/tsl/event/list', params),
     eventadd: (data: object) => post('/product/tsl/event/add', data),
+    eventedit: (data: object) => put('/product/tsl/event/edit', data),
     eventdel: (productId: number,key:string) => del('/product/tsl/event/del', { productId,key }),
 
     tag: (params: object) => get('/product/tsl/tag/list', params),
     tagadd: (data: object) => post('/product/tsl/tag/add', data),
+    tagedit: (data: object) => put('/product/tsl/tag/edit', data),
     tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
   },
   
