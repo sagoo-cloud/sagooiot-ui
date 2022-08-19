@@ -16,10 +16,10 @@
 					新建
 				</el-button>
 			</div>
-			<el-table border stripe :data="tableData.data" style="width: 100%">
+			<el-table :data="tableData.data" style="width: 100%">
 				<!-- <el-table-column type="index" label="序号" width="60" /> -->
-				<el-table-column align="center" prop="userName" label="名称" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="description" label="描述" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="title" label="名称" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="explain" label="描述" show-overflow-tooltip></el-table-column>
 				<!-- <el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="roleSign" label="关联角色" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="department" label="部门" show-overflow-tooltip></el-table-column>
@@ -32,7 +32,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column> -->
-				<el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+				<!-- <el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column> -->
 				<el-table-column align="center" label="操作" width="180">
 					<template #default="scope">
 						<el-button size="small" type="text"  @click="onOpenEditUser(scope.row)">编辑</el-button>
@@ -41,7 +41,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
+			<!-- <el-pagination
 				@size-change="onHandleSizeChange"
 				@current-change="onHandleCurrentChange"
 				class="mt15"
@@ -53,7 +53,7 @@
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="tableData.total"
 			>
-			</el-pagination>
+			</el-pagination> -->
 		</el-card>
 		<!-- <AddUer ref="addUserRef" /> -->
 		<EditUser ref="editUserRef" />
@@ -118,23 +118,23 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			const data: Array<TableDataRow> = [];
-			for (let i = 0; i < 9; i++) {
-				data.push({
-					userName: '这里是名称',
-					description: '这里是描述这里是描述这里是描述这里是描述',
-					createTime: new Date().toLocaleString(),
+			// const data: Array<TableDataRow> = [];
+			// for (let i = 0; i < 9; i++) {
+			// 	data.push({
+			// 		userName: '这里是名称',
+			// 		description: '这里是描述这里是描述这里是描述这里是描述',
+			// 		createTime: new Date().toLocaleString(),
 
-				});
-			}
-			state.tableData.data = data;
-			state.tableData.total = state.tableData.data.length;
-			console.log(data)
-			// api.getList().then((res: any) => {
-			// 	console.log(res);
-			// 	state.tableData.data = res.product;
-			// 	state.tableData.total = res.total;
-			// });
+			// 	});
+			// }
+			// state.tableData.data = data;
+			// state.tableData.total = state.tableData.data.length;
+			// console.log(data)
+			api.getList().then((res: any) => {
+				console.log(res);
+				state.tableData.data = res;
+				// state.tableData.total = res.total;
+			});
 		};
 		// 打开新增用户弹窗
 		const onOpenAddItem = () => {
