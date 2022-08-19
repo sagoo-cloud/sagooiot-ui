@@ -181,9 +181,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style>
-.el-table th.el-table__cell {
-	background-color: #e3e3e3;
-}
-</style>
