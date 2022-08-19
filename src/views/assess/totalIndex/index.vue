@@ -118,23 +118,23 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			// const data: Array<TableDataRow> = [];
-			// for (let i = 0; i < 9; i++) {
-			// 	data.push({
-			// 		userName: '这里是名称',
-			// 		description: '这里是描述这里是描述这里是描述这里是描述',
-			// 		createTime: new Date().toLocaleString(),
+			const data: Array<TableDataRow> = [];
+			for (let i = 0; i < 9; i++) {
+				data.push({
+					userName: '这里是名称',
+					description: '这里是描述这里是描述这里是描述这里是描述',
+					createTime: new Date().toLocaleString(),
 
-			// 	});
-			// }
-			// state.tableData.data = data;
-			// state.tableData.total = state.tableData.data.length;
-			// console.log(data)
-			api.product.getList(state.tableData.param).then((res: any) => {
-				console.log(res);
-				state.tableData.data = res.product;
-				state.tableData.total = res.total;
-			});
+				});
+			}
+			state.tableData.data = data;
+			state.tableData.total = state.tableData.data.length;
+			console.log(data)
+			// api.getList().then((res: any) => {
+			// 	console.log(res);
+			// 	state.tableData.data = res.product;
+			// 	state.tableData.total = res.total;
+			// });
 		};
 		// 打开新增用户弹窗
 		const onOpenAddItem = () => {
