@@ -66,7 +66,8 @@
         <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
         <el-table-column label="操作" width="300" align="center">
           <template #default="scope">
-		     <router-link :to="'/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 10px;color: #409eff;">
+		     <router-link :to="'/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 10px;
+    font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>

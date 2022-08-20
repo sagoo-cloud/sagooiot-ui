@@ -11,14 +11,14 @@
 
                 <el-form-item label="事件级别" prop="level">
 					<el-radio-group v-model="ruleForm.level" >
-						<el-radio label="0">普通</el-radio>
+						<el-radio :label="0">普通</el-radio>
 
-						<el-radio label="1">警告</el-radio>
-						<el-radio label="2">紧急</el-radio>
+						<el-radio :label="1">警告</el-radio>
+						<el-radio :label="2">紧急</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="输出参数" prop="type" required>
+				<el-form-item label="输出参数" prop="type" >
 					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
 							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
@@ -289,6 +289,19 @@ export default defineComponent({
 				state.ruleForm.valueType.type = row.valueType.type;
 				state.ruleForm.type = row.valueType.type;
 				state.type = row.valueType.type ;
+				state.ruleForm.accessMode=row.accessMode
+				if(row.valueType.elementType){
+					state.elementType=row.valueType.elementType;
+					state.types = row.valueType.elementType.type;
+				}
+
+				if (row.type == 'enum') {
+							state.enumdata = row.valueType.elements;;
+				}
+
+				if (row.type == 'object') {
+					state.jsondata = row.valueType.properties;
+				}
 			}
 			state.isShowDialog = true;
 		};
@@ -305,6 +318,10 @@ export default defineComponent({
 
 				desc: '',
 			};
+				state.type="";
+			state.types="";
+			state.valueType = {};
+			state.elementType={};
 		};
 
 		const seletChange = (val) => {

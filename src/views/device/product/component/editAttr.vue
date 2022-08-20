@@ -157,7 +157,6 @@
 				<el-form-item label="是否只读" prop="accessMode">
 					<el-radio-group v-model="ruleForm.accessMode" >
 						<el-radio label="0">读写</el-radio>
-
 						<el-radio label="1">只读</el-radio>
 					</el-radio-group>
 				</el-form-item>
@@ -277,7 +276,7 @@ export default defineComponent({
 				console.log(productId);
 				state.typeData = datat || [];
 			});
-	
+			state.ruleForm = row;
 			if (row.valueType) {	
 				state.ruleForm = row;
 
@@ -287,6 +286,8 @@ export default defineComponent({
 				state.ruleForm.type = row.valueType.type;
 				state.type = row.valueType.type ;
 			}
+
+			
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {

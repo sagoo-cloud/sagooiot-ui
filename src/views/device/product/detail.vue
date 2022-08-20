@@ -270,7 +270,7 @@ export default defineComponent({
 
 			//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0,accessMode:0 });
 		};
 
 		//打开添加功能弹窗
@@ -279,12 +279,12 @@ export default defineComponent({
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editEventRef.value.openDialog({ product_id: route.params.id, id: 0,level:0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editTabRef.value.openDialog({ product_id: route.params.id, id: 0,accessMode:0 });
 		};
 
 		// 打开修改产品弹窗
