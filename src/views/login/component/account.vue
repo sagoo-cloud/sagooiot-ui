@@ -160,7 +160,7 @@ export default defineComponent({
 			if (route.query?.redirect) {
 				router.push({
 					path: route.query?.redirect as string,
-					query: Object.keys(route.query?.params as string).length > 0 ? JSON.parse(route.query?.params as string) : '',
+					query: route.query.params ? (Object.keys(route.query?.params as string).length > 0 ? JSON.parse(route.query?.params as string) : '') : '',
 				});
 			} else {
 				router.push('/');

@@ -220,7 +220,12 @@ router.beforeEach(async (to, from, next) => {
 		NProgress.done();
 	} else {
 		if (!token) {
-			next(`/login?redirect=${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`);
+			const params = Object.keys(to.query).length || Object.keys(to.params).length
+			let paramsStr = ''
+			if (params) {
+				paramsStr = `&params=${JSON.stringify(Object.keys(to.query).length ? to.query : to.params)}`
+			}
+			next(`/login?redirect=${to.path}${paramsStr}`);
 			Session.clear();
 			resetRoute();
 			NProgress.done();
