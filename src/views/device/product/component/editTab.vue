@@ -368,7 +368,6 @@ export default defineComponent({
 							state.valueType.elementType = state.elementType;
 						}
 
-						console.log(state.valueType);
 
 						state.ruleForm.valueType = state.valueType;
 						state.ruleForm.productId = state.productId
@@ -391,7 +390,6 @@ export default defineComponent({
 							state.valueType.elementType = state.elementType;
 						}
 
-						console.log(state.valueType);
 
 						state.ruleForm.valueType = state.valueType;
 						api.model.tagadd(state.ruleForm).then(() => {

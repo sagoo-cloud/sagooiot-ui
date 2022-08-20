@@ -89,7 +89,7 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
-											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'fun')">删除</el-button>
 										</template>
 									</el-table-column>
@@ -115,7 +115,7 @@
 
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
-											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="warning"  @click="onEditEvent(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'event')">删除</el-button>
 										</template>
 									</el-table-column>
@@ -144,7 +144,7 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center">
 										<template #default="scope">
-											<el-button size="small" text type="warning">修改</el-button>
+											<el-button size="small" text type="warning"  @click="onEditTag(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'tab')">删除</el-button>
 										</template>
 									</el-table-column>
@@ -245,14 +245,32 @@ export default defineComponent({
 			});
 		});
 
-		//打开添加属性弹窗
-		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0 });
-		};
+	
 
 		//编辑属性
 		const onEditAttr=(row: TableDataRow)=>{
 			editAttrRef.value.openDialog(row,route.params.id);
+		};
+
+		//编辑功能
+		const onEditFun=(row: TableDataRow)=>{
+			editFunRef.value.openDialog(row,route.params.id);
+		}
+
+
+		//编辑事件
+		const onEditEvent=(row: TableDataRow)=>{
+			editEventRef.value.openDialog(row,route.params.id);
+		}
+
+		//编辑标签
+		const onEditTag=(row: TableDataRow)=>{
+			editTabRef.value.openDialog(row,route.params.id);
+		}
+
+			//打开添加属性弹窗
+		const onOpenEditAttr = () => {
+			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0 });
 		};
 
 		//打开添加功能弹窗
@@ -308,7 +326,7 @@ export default defineComponent({
 						});
 					}
 					if(type=='tab'){
-						api.model.eventdel(route.params.id,key).then(() => {
+						api.model.tagdel(route.params.id,key).then(() => {
 							ElMessage.success('删除成功');
 							tagdel();
 						});
@@ -413,6 +431,9 @@ export default defineComponent({
 			editTabRef,
 			CkOption,
 			onRowDel,
+			onEditFun,
+			onEditEvent,
+			onEditTag,
 			onEditAttr,
 			getList,
 			getproperty,
