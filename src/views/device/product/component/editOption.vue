@@ -236,6 +236,9 @@ export default defineComponent({
 				name: '',
 				desc: '',
 			};
+			state.valueType={};
+			state.enumdata=[];
+			state.elementType={};
 		};
 
 		const seletChange = (val) => {
