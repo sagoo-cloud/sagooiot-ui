@@ -135,7 +135,7 @@
 					<div v-for="(item, index) in jsondata" :key="index" class="jslist">
 						<div class="jsonlist">
 							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.data.name }}</div>
+							<div style="width: 60%">{{ item.name }}</div>
 							<div class="jsonoption">
 								<el-link type="primary">编辑</el-link>
 								<el-link type="primary">删除</el-link>
@@ -275,6 +275,7 @@ export default defineComponent({
 
 				state.typeData = datat || [];
 			});
+			console.log(row);
 			state.ruleForm = row;
 			if (row.valueType) {
 				state.ruleForm = row;
@@ -296,6 +297,13 @@ export default defineComponent({
 
 				if (row.type == 'object') {
 					state.jsondata = row.valueType.properties;
+				}
+
+				if(row.type == 'array' && state.types=='enum'){
+					state.enumdata=row.valueType.elementType.elements
+				}
+				if(row.type == 'array' && state.types=='object'){
+					state.jsondata=row.valueType.elementType.properties
 				}
 			}
 
@@ -320,6 +328,8 @@ export default defineComponent({
 			state.types = '';
 			state.valueType = {};
 			state.elementType = {};
+			state.jsondata = [];
+			state.enumdata = [];
 		};
 
 		const seletChange = (val) => {
@@ -353,6 +363,8 @@ export default defineComponent({
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
+
+			console.log(state.jsondata);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -387,6 +399,13 @@ export default defineComponent({
 									type: 'enum'
 								}
 							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
+								}
+							}
 						}
 						state.ruleForm.valueType = state.valueType;
 						state.ruleForm.productId = state.productId;
@@ -413,6 +432,13 @@ export default defineComponent({
 							if(state.types=='enum'){
 								state.valueType.elementType = {
 									elements: state.enumdata
+								}
+							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
 								}
 							}
 						}

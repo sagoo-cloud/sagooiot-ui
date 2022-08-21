@@ -9,14 +9,14 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入功能定义名称" />
 				</el-form-item>
 
-        <el-form-item label="输入参数" prop="maxLength">
+				<el-form-item label="输入参数" prop="maxLength">
 					<div v-for="(item, index) in inputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
 							<div>参数名称：</div>
 							<div style="width: 60%">{{ item.name }}</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
-								<el-link type="primary" @click="deljson(index,'fun')">删除</el-link>
+								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
 					</div>
@@ -29,9 +29,7 @@
 					</div>
 				</el-form-item>
 
-
-
-				<el-form-item label="输出参数" prop="type" required>
+				<el-form-item label="输出参数" prop="type" >
 					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
 							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
@@ -89,7 +87,7 @@
 							<div style="width: 60%">{{ item.name }}</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
-								<el-link type="primary" @click="deljson(index,'fun')">删除</el-link>
+								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
 					</div>
@@ -153,7 +151,6 @@
 					</el-form-item>
 				</div>
 
-				
 				<el-form-item label="JSON对象" prop="maxLength" v-if="types == 'object'">
 					<div v-for="(item, index) in jsondata" :key="index" class="jslist">
 						<div class="jsonlist">
@@ -175,7 +172,6 @@
 				</el-form-item>
 
 				<!--根据数据类型输出不同表单-->
-	
 
 				<el-form-item label="功能定义描述	" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入功能定义描述"></el-input>
@@ -230,14 +226,14 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId:0,
+			productId: 0,
 			valueType: {
 				type: '',
 				maxLength: '',
-				trueText:'是',
-				trueValue:'true',
-				falseText:'否',
-				falseValue:'false',
+				trueText: '是',
+				trueValue: 'true',
+				falseText: '否',
+				falseValue: 'false',
 			},
 			elementType: {
 				type: '',
@@ -251,14 +247,14 @@ export default defineComponent({
 			],
 
 			jsondata: [],
-      inputsdata:[],
+			inputsdata: [],
 
 			ruleForm: {
-				productId:0,
+				productId: 0,
 				name: '',
 				key: '',
-        inputs:[],
-        output:[],
+				inputs: [],
+				output: [],
 				valueType: {
 					type: '',
 					maxLength: '',
@@ -270,12 +266,11 @@ export default defineComponent({
 				name: [{ required: true, message: '功能定义名称不能为空', trigger: 'blur' }],
 				key: [{ required: true, message: '功能定义标识不能为空', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
-				
 			},
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null,productId:number | null) => {
+		const openDialog = (row: RuleFormState | null, productId: number | null) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
@@ -292,15 +287,24 @@ export default defineComponent({
 				console.log(datat);
 				state.typeData = datat || [];
 			});
-      state.ruleForm = row;
-			if (row.valueType) {	
+
+			state.ruleForm = row;
+			if (row.inputs) {
 				state.ruleForm = row;
 
-				state.productId=productId;
-				state.valueType = row.valueType;
-				state.ruleForm.valueType.type = row.valueType.type;
-				state.ruleForm.type = row.valueType.type;
-				state.type = row.valueType.type ;
+				state.productId = productId;
+				state.valueType = row.output;
+				
+				//state.ruleForm.valueType.type = row.valueType.type;
+				//state.ruleForm.type = row.valueType.type;
+				state.type = row.output.type;
+				if(row.output.elementType){
+					state.elementType = row.output.elementType;
+					state.types = row.output.elementType.type;
+				}
+				
+				state.inputsdata = row.inputs;
+				
 			}
 			state.isShowDialog = true;
 		};
@@ -316,13 +320,17 @@ export default defineComponent({
 
 				desc: '',
 			};
+			state.type='';
+			state.types='';
+			state.inputsdata =[];
+			state.elementType=[];
+			state.valueType=[];
 		};
 
 		const seletChange = (val) => {
 			state.type = val;
 			state.ruleForm.type = val;
-		
-			
+
 			console.log(val);
 		};
 		const seletChanges = (val) => {
@@ -341,27 +349,23 @@ export default defineComponent({
 			state.enumdata.splice(index, 1);
 		};
 
-		const deljson = (index,type) => {
-      if(type=='fun'){
-        state.inputsdata.splice(index, 1);
-      }else{
-        state.jsondata.splice(index, 1);
-      }
-			
-		}
+		const deljson = (index, type) => {
+			if (type == 'fun') {
+				state.inputsdata.splice(index, 1);
+			} else {
+				state.jsondata.splice(index, 1);
+			}
+		};
 
 		const addJson = (type) => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0,type_data:type });
+			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
 		};
-		const getOptionData = (data,type_data) => {
-
-      if(type_data=='fun'){
-        	state.inputsdata.push(data);
-      }else{
-        	state.jsondata.push(data);
-      }
-
-		
+		const getOptionData = (data, type_data) => {
+			if (type_data == 'fun') {
+				state.inputsdata.push(data);
+			} else {
+				state.jsondata.push(data);
+			}
 
 			console.log(state.jsondata);
 			console.log(type_data);
@@ -396,9 +400,9 @@ export default defineComponent({
 
 						console.log(state.valueType);
 
-					state.ruleForm.inputs = state.inputsdata;
-            state.ruleForm.output =state.valueType; 
-						state.ruleForm.productId = state.productId
+						state.ruleForm.inputs = state.inputsdata;
+						state.ruleForm.output = state.valueType;
+						state.ruleForm.productId = state.productId;
 						api.model.functionedit(state.ruleForm).then(() => {
 							ElMessage.success('功能定义类型修改成功');
 							closeDialog(); // 关闭弹窗
@@ -418,10 +422,8 @@ export default defineComponent({
 							state.valueType.elementType = state.elementType;
 						}
 
-
-
 						state.ruleForm.inputs = state.inputsdata;
-            state.ruleForm.output =state.valueType; 
+						state.ruleForm.output = state.valueType;
 
 						api.model.functionadd(state.ruleForm).then(() => {
 							ElMessage.success('功能定义类型添加成功');

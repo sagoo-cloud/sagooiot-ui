@@ -302,6 +302,13 @@ export default defineComponent({
 				if (row.type == 'object') {
 					state.jsondata = row.valueType.properties;
 				}
+
+				if(row.type == 'array' && state.types=='enum'){
+					state.enumdata=row.valueType.elementType.elements
+				}
+				if(row.type == 'array' && state.types=='object'){
+					state.jsondata=row.valueType.elementType.properties
+				}
 			}
 			state.isShowDialog = true;
 		};
@@ -322,6 +329,8 @@ export default defineComponent({
 			state.types="";
 			state.valueType = {};
 			state.elementType={};
+			state.jsondata = [];
+			state.enumdata = [];
 		};
 
 		const seletChange = (val) => {
@@ -385,6 +394,20 @@ export default defineComponent({
 
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
+							//如果是选中数组，并选择了枚举
+							if(state.types=='enum'){
+								state.valueType.elementType = {
+									elements: state.enumdata,
+									type: 'enum'
+								}
+							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
+								}
+							}
 						}
 
 						console.log(state.valueType);
@@ -408,9 +431,21 @@ export default defineComponent({
 
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
+							//如果是选中数组，并选择了枚举
+							if(state.types=='enum'){
+								state.valueType.elementType = {
+									elements: state.enumdata,
+									type: 'enum'
+								}
+							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
+								}
+							}
 						}
-
-						console.log(state.valueType);
 
 						state.ruleForm.valueType = state.valueType;
 						api.model.eventadd(state.ruleForm).then(() => {
