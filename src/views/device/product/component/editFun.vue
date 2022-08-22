@@ -288,12 +288,15 @@ export default defineComponent({
 				state.typeData = datat || [];
 			});
 
+
+console.log(row);
 			state.ruleForm = row;
 			if (row.inputs) {
 				state.ruleForm = row;
 
 				state.productId = productId;
 				state.valueType = row.output;
+			
 				
 				//state.ruleForm.valueType.type = row.valueType.type;
 				//state.ruleForm.type = row.valueType.type;
@@ -301,8 +304,19 @@ export default defineComponent({
 				if(row.output.elementType){
 					state.elementType = row.output.elementType;
 					state.types = row.output.elementType.type;
+
+						if(state.type == 'array' && state.types=='enum'){
+							state.enumdata=row.output.elementType.elements
+						}
+						if(state.type == 'array' && state.types=='object'){
+							state.jsondata=row.output.elementType.properties
+						}
+						
 				}
-				
+			
+				if (state.type == 'object') {
+						state.jsondata = row.output.properties;
+				}
 				state.inputsdata = row.inputs;
 				
 			}
@@ -324,7 +338,7 @@ export default defineComponent({
 			state.types='';
 			state.inputsdata =[];
 			state.elementType=[];
-			state.valueType=[];
+			state.valueType={};
 		};
 
 		const seletChange = (val) => {
@@ -396,6 +410,20 @@ export default defineComponent({
 
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
+							//如果是选中数组，并选择了枚举
+							if(state.types=='enum'){
+								state.valueType.elementType = {
+									elements: state.enumdata,
+									type: 'enum'
+								}
+							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
+								}
+							}
 						}
 
 						console.log(state.valueType);
@@ -420,6 +448,20 @@ export default defineComponent({
 
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
+							//如果是选中数组，并选择了枚举
+							if(state.types=='enum'){
+								state.valueType.elementType = {
+									elements: state.enumdata,
+									type: 'enum'
+								}
+							}
+							//如果是选中数组，并选择了object
+							if(state.types=='object'){
+								state.valueType.elementType = {
+									properties: state.jsondata,
+									type: 'object'
+								}
+							}
 						}
 
 						state.ruleForm.inputs = state.inputsdata;

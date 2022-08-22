@@ -329,7 +329,10 @@ export default defineComponent({
 			state.valueType = {};
 			state.elementType = {};
 			state.jsondata = [];
-			state.enumdata = [];
+			state.enumdata = [{
+					text: '',
+					value: '',
+				},];
 		};
 
 		const seletChange = (val) => {

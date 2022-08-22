@@ -237,7 +237,10 @@ export default defineComponent({
 				desc: '',
 			};
 			state.valueType={};
-			state.enumdata=[];
+			state.enumdata=[{
+					'text': '',
+					'value': '',
+				}];
 			state.elementType={};
 		};
 
