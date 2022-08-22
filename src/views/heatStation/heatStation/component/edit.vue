@@ -176,8 +176,7 @@ export default defineComponent({
 		}
 		const onMapClick = (e: any) => {
 			console.log('onMapClick', e)
-			console.log('onMapClick', e.QA.K.title)
-			console.log(state.mapResult.find((item: any) => item.marker.da) === e.currentTarget.da)
+			// console.log(state.mapResult.find((item: any) => item.marker.da) === e.currentTarget.da)
 		}
 		const onMarkersset = (e: any) => {
 			console.log('onMarkersset', e)
