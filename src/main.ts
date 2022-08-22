@@ -19,7 +19,7 @@ import pagination from '/@/components/pagination/index.vue'
 import 'amis/sdk/sdk.js';
 import 'amis/lib/themes/default.css';
 // 引入百度地图组件
-import BaiduMap from 'vue-baidu-map-3x'
+// import BaiduMap from 'vue-baidu-map-3x'
 
 const app = createApp(App);
 
@@ -32,7 +32,7 @@ app.use(router)
     .use(ElementPlus, { i18n: i18n.global.t })
     .use(i18n)
     .use(VueGridLayout)
-    .use(BaiduMap, { ak: 'Kp8XHK81HSF6rfRkYP7OxYKtK8IaG51d' })
+    // .use(BaiduMap, { ak: 'Kp8XHK81HSF6rfRkYP7OxYKtK8IaG51d', type: 'WebGl', v: '2.0' })
     .mount('#app');
 
 // 全局挂载

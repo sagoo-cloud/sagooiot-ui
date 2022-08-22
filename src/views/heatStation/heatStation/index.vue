@@ -49,7 +49,7 @@
           <template #default="scope">
 			 			<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+            <!-- <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>

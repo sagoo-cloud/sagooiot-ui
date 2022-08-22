@@ -13,7 +13,7 @@ export default {
   heatStation: {
     getList: (params: object) => get('/region/heatStation/tree', params),
     add: (data: object) => post('/region/heatStation/add', data),
-    edit: (data: object) => post('/region/heatStation/edit', data),
+    edit: (data: object) => put('/region/heatStation/edit', data),
     // delete: (ids: number) => del('/product/del', { ids }),
     // detail: (id: number) => get('/product/detail', { id }),
   }

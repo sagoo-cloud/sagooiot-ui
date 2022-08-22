@@ -34,17 +34,14 @@
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
 				</el-form-item>
         <el-form-item label="地图展示" prop="decade">
-					<div class="mb10" style="width: 100%">
-						<el-input v-model="ruleForm.keyword" placeholder="请输入关键字进行搜索" clearable style="width: 100%;"></el-input>
-						<!-- <span class="mr10">经度</span>
-						<el-input v-model="ruleForm.lnt" style="width: 120px" class="mr10" placeholder="经度"></el-input>
-						<span class="mr10">纬度</span>
-						<el-input v-model="ruleForm.lat" style="width: 120px" placeholder="纬度"></el-input> -->
+					<div>
+						<span>经度：{{ ruleForm.lnt ? `${ruleForm.lnt}，` : '' }}</span>
+						<span style="margin-left: 10px">纬度：{{ ruleForm.lat }}</span>
 					</div>
-          <baidu-map class="map" :center="{ lng: ruleForm.lnt, lat: ruleForm.lat }" :scroll-wheel-zoom="true" :zoom="15" style="width: 100%; height: 300px" @click="onMapClick">
-            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
-						<bm-local-search :keyword="ruleForm.keyword" :panel="false" :auto-viewport="true" @markersset="onMarkersset"></bm-local-search>
-          </baidu-map>
+					<div class="mb10" style="width: 100%">
+						<el-input v-model="keyword" @change="onLocalChange" placeholder="请输入关键字进行搜索" clearable style="width: 100%;"></el-input>
+					</div>
+					<div style="width: 100%; height: 300px" id="map-container"></div>
         </el-form-item>
 			</el-form>
 			<template #footer>
@@ -58,10 +55,11 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/heatStation';
 import { ElMessage } from 'element-plus';
 import { Console } from 'console';
+import { loadBMap } from '/@/utils/loadMap.js'
 interface RuleFormState {
 	id: number;
 	parentId: number | string;
@@ -80,17 +78,19 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive({
 			dialogVisible: false,
+			map: null,
 			ruleForm: {
 				id: 0,
 				parentId: '',
 				name: '',
 				position: '',
-				lnt: 116.404,
-				lat: 39.915,
+				lnt: '',
+				lat: '',
 				principal: '',
 				types: 1,
 				status: 1
 			},
+			keyword: '',
 			rules: {
 				name: [{ required: true, message: '换热站名称不能为空', trigger: 'blur' }],
 				position: [{ required: true, message: '换热站位置不能为空', trigger: 'blur' }],
@@ -98,25 +98,13 @@ export default defineComponent({
 				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
 			},
 			treeData: [],
-			mapResult: [] // 地图搜索点结果
+			mapResult: [], // 地图搜索点结果
+			mapLocal: null as any
 		})
 		// 打开弹窗
 		const openDialog = (row: any, tree: any) => {
 			resetForm()
 			state.treeData = tree
-			// nextTick(() => {
-			// 	let BMap = (window as any).BMap
-			// 	if (BMap) {
-			// 		let geolocation = new BMap.Geolocation();//返回用户当前的位置
-			// 		geolocation.getCurrentPosition(function(r: any) {
-			// 			console.log(r)
-			// 			state.center.lat = r.latitude
-			// 			state.center.lng = r.longitude
-			// 			// latitude: 22.322230460245
-			// 			// longitude: 114.1808934593
-			// 		});
-			// 	}
-			// }) 
 
 			if (row) {
 				state.ruleForm = {
@@ -124,6 +112,22 @@ export default defineComponent({
 					parentId: row.parentId === -1 ? '' : row.parentId
 				}
 			}
+			nextTick(() => {
+				initMap()
+				// let BMap = (window as any).BMap
+				// if (BMap) {
+				// 	let geolocation = new BMap.Geolocation();//返回用户当前的位置
+				// 	geolocation.getCurrentPosition(function(r: any) {
+				// 		console.log(r)
+						
+				// 		initMap(r.longitude, r.latitude)
+				// 		// state.center.lat = r.latitude
+				// 		// state.center.lng = r.longitude
+				// 		// latitude: 22.322230460245
+				// 		// longitude: 114.1808934593
+				// 	});
+				// }
+			}) 
 			state.dialogVisible = true
 		}
 		const resetForm = () => {
@@ -131,10 +135,9 @@ export default defineComponent({
 				id: 0,
 				parentId: '',
 				name: '',
-				// code: '',
 				position: '',
-				lnt: 116.404,
-				lat: 39.915,
+				lnt: '',
+				lat: '',
 				principal: '',
 				types: 1,
 				status: 1
@@ -147,6 +150,7 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog()
+			state.keyword = ''
 		}
 		// 新增
 		const onSubmit = () => {
@@ -174,13 +178,37 @@ export default defineComponent({
 				}
 			})
 		}
-		const onMapClick = (e: any) => {
-			console.log('onMapClick', e)
-			// console.log(state.mapResult.find((item: any) => item.marker.da) === e.currentTarget.da)
+		const initMap = () => {
+			let BMapGL = (window as any).BMapGL
+			let map = new BMapGL.Map("map-container");
+			// 116.404, 39.915
+			let point = new BMapGL.Point(state.ruleForm.lnt || 116.404, state.ruleForm.lat || 39.915);
+			let zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
+			let cityCtrl = new BMapGL.CityListControl()
+			map.centerAndZoom(point, 15); 
+			map.enableScrollWheelZoom(true); // 开启滚轮缩放
+			map.addControl(zoomCtrl);
+			map.addControl(cityCtrl);
+			if (state.ruleForm.lnt && state.ruleForm.lat) {
+				let marker = new BMapGL.Marker(new BMapGL.Point(state.ruleForm.lnt, state.ruleForm.lat));
+				// 在地图上添加点标记
+				map.addOverlay(marker);
+			}
+
+			state.mapLocal = new BMapGL.LocalSearch(map, {
+				renderOptions:{map: map}
+			})
+
+			map.addEventListener('click', (e: any) => {
+				console.log('map--click', e)
+				let point = e.latlng
+				state.ruleForm.lnt = point.lng
+				state.ruleForm.lat = point.lat
+			})
 		}
-		const onMarkersset = (e: any) => {
-			console.log('onMarkersset', e)
-			state.mapResult = e
+
+		const onLocalChange = () => {
+			state.mapLocal.search(state.keyword)
 		}
 
 		return {
@@ -189,8 +217,10 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
-			onMapClick,
-			onMarkersset,
+			onLocalChange,
+			// onMapClick,
+			// onMarkersset,
+			// mapReady,
 			...toRefs(state)
 		}
 	}
