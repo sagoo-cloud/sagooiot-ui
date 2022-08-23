@@ -10,7 +10,7 @@
         </el-form-item>
         <el-form-item label="产品图片" prop="imageUrl">
      
-                     <uploadVue @set-img="handleAvatarSuccess" ></uploadVue>
+                     <uploadVue :img="imageUrl" @set-img="handleAvatarSuccess" ></uploadVue>
 
         </el-form-item>
        
@@ -155,7 +155,7 @@ export default defineComponent({
 	console.log( response);
 
          state.imageUrl = response
-        state.ruleForm.imageUrl=response
+        state.ruleForm.icon=response
     }
 
 
@@ -178,6 +178,9 @@ export default defineComponent({
         // api.dict.getType(row.dictId).then((res:any)=>{
         //   state.ruleForm = res.data.dictType
         // }
+
+
+        state.imageUrl = row.icon
 
         state.ruleForm = row;
       }
