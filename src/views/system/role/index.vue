@@ -41,11 +41,12 @@
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>
-        <el-table-column label="操作" width="160" align="center">
+        <el-table-column label="操作" width="220" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
             <el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
+            <el-button size="small" text type="info" @click="dataPermission(scope.row)">数据权限</el-button>
             <!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
@@ -66,6 +67,7 @@
     </el-card>
     <EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
     <permissionVue ref="permissionRef" />
+    <EditPer ref="dataPermissionRef" :dept-data="deptData" />
   </div>
 </template>
 
@@ -73,6 +75,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, toRaw, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import EditRole from '/@/views/system/role/component/editRole.vue';
+import EditPer from '/@/views/system/role/component/editPer.vue';
 import permissionVue from '/@/views/system/role/component/permission.vue';
 import api from '/@/api/system';
 // 定义接口来定义对象的类型
@@ -86,6 +89,7 @@ interface TableData {
 	createdAt: string;
 }
 interface TableDataState {
+	deptData: any[];
 	tableData: {
 		data: Array<TableData>;
 		// total: number;
@@ -99,13 +103,15 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'apiV1SystemRoleList',
-	components: { EditRole, permissionVue },
+	components: { EditRole, permissionVue, EditPer },
 	setup() {
 		const { proxy } = getCurrentInstance() as any;
 		const addRoleRef = ref();
 		const editRoleRef = ref();
 		const permissionRef = ref();
+		const dataPermissionRef = ref();
 		const state = reactive<TableDataState>({
+			deptData: [],
 			tableData: {
 				data: [],
 				// total: 0,
@@ -119,6 +125,13 @@ export default defineComponent({
 		// 初始化表格数据
 		const initTableData = () => {
 			roleList();
+			api.dept
+				.getList({
+					status: 1,
+				})
+				.then((res: any) => {
+					state.deptData = res;
+				});
 		};
 		const roleList = () => {
 			api.role.getList(state.tableData.param).then((res: Array<TableData>) => {
@@ -157,6 +170,10 @@ export default defineComponent({
 				ElMessage.error('该角色禁止被授权');
 			}
 		};
+		// 设置数据权限
+		const dataPermission = async (row: any) => {
+			dataPermissionRef.value.openDialog(row);
+		};
 
 		// 页面加载时
 		onMounted(() => {
@@ -167,6 +184,8 @@ export default defineComponent({
 			addRoleRef,
 			editRoleRef,
 			permissionRef,
+			dataPermissionRef,
+			dataPermission,
 			permission,
 			onOpenAddRole,
 			onOpenEditRole,
