@@ -4,7 +4,9 @@ export default {
   loop: {
     getList: (params: object) => get('/region/loop/list', params),
     add: (data: object) => post('/region/loop/add', data),
-    edit: (data: object) => post('/region/loop/edit', data)
+    edit: (data: object) => put('/region/loop/edit', data),
+    del: (id: number) => del('/region/loop/del', { id }),
+    detail: (id: number) => get('/region/loop/getInfoById', { id }),
   },
   heatStation: {
     getList: (params: object) => get('/region/heatStation/tree', params),

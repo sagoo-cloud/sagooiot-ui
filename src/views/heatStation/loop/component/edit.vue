@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '环路'" v-model="dialogVisible" width="769px">
+		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '环路'" v-model="dialogVisible" width="950px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="环路名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入环路名称" />
@@ -67,19 +67,28 @@
         <el-form-item label="环路年代" prop="decade">
           <el-input v-model="ruleForm.decade" placeholder="请输入环路年代" />
         </el-form-item>
-        <el-form-item label="编辑路线信息" prop="">
-					<div class="mb10">
-						<el-button type="primary">添加途经点</el-button>
-					</div>
-					<div class="mb10" style="width: 100%">
-						<el-input v-model="keyword" @change="onLocalChange" placeholder="请输入关键字进行搜索" clearable style="width: 100%;"></el-input>
-					</div>
-					<div style="width: 100%; height: 300px" id="loop-map-container"></div>
-        </el-form-item>
 				<el-form-item label="状态" prop="status">
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
 				</el-form-item>
+        <el-form-item label="编辑路线信息" prop="">
+					<div class="mb10">
+						<el-button type="primary" @click="onAddPoint">添加途经点</el-button>
+					</div>
+
+					<div class="mb10" style="width: 100%">
+						<div style="display: flex;" class="mb10" v-for="(item, index) in pointList" :key="index">
+							<el-input v-model="item.position" :disabled="!item.editFalg" @change="onLocalChange(item, index)" placeholder="请输入关键字进行搜索" clearable style="flex: 1; margin-right: 10px"></el-input>
+							<span>排序：</span>
+							<el-input-number v-model="item.sort" :controls="false" :disabled="!item.editFalg" placeholder="排序" clearable style="width: 100px; margin-right: 10px"></el-input-number>
+
+							<el-button type="primary" v-if="item.editFalg" @click="onSavePoint(item, index)">保存</el-button>
+							<el-button type="primary" v-else @click="item.editFalg = true">修改</el-button>
+							<el-button type="danger" @click="onRemovePoint(index)">删除</el-button>
+						</div>
+					</div>
+					<div style="width: 100%; height: 300px" id="loop-map-container"></div>
+        </el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -101,7 +110,7 @@ interface Point {
 	lat: number
 }
 interface RuleFormState {
-	id: number;
+	id?: number;
 	name: string;
 	code: string;
 	stationId: string;
@@ -138,15 +147,22 @@ export default defineComponent({
         status: 1
 			},
 			rules: {
-				name: [{ required: true, message: '环路名称不能为空', trigger: 'blur' }],
-				code: [{ required: true, message: '环路编号不能为空', trigger: 'blur' }],
-				stationId: [{ required: true, message: '所属换热站不能为空', trigger: 'blur' }],
-				loopTypes: [{ required: true, message: '环路类型不能为空', trigger: 'blur' }],
-				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
+				name: [{ required: true, message: '环路名称不能为空', trigger: ['blur', 'change'] }],
+				code: [{ required: true, message: '环路编号不能为空', trigger: ['blur', 'change'] }],
+				stationId: [{ required: true, message: '所属换热站不能为空', trigger: ['blur', 'change'] }],
+				loopTypes: [{ required: true, message: '环路类型不能为空', trigger: ['blur', 'change'] }],
+				energyTypes: [{ required: true, message: '节能类型不能为空', trigger: ['blur', 'change'] }],
+				heatingObject: [{ required: true, message: '供暖对象不能为空', trigger: ['blur', 'change'] }],
+				heatingTypes: [{ required: true, message: '供暖类型不能为空', trigger: ['blur', 'change'] }],
+				heatingArea: [{ required: true, message: '供暖面积不能为空', trigger: ['blur', 'change'] }],
+				forRealArea: [{ required: true, message: '实际面积不能为空', trigger: ['blur', 'change'] }],
+				decade: [{ required: true, message: '年代不能为空', trigger: ['blur', 'change'] }],
+				status: [{ required: true, message: '状态不能为空', trigger: ['blur', 'change'] }]
 			},
 			treeData: [],
-			keyword: '', // 地图关键字
-			mapLocal: null as any
+			mapLocal: null as any, // 地图搜索
+			pointList: [] as any,
+			pointIndex: -1,
 		})
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
@@ -156,7 +172,8 @@ export default defineComponent({
 				initMap()
 			})
 			if (row) {
-				(state.ruleForm as any) = row
+				(state.ruleForm as any).id = row.id
+				getDetail()
 			}
 			state.dialogVisible = true
 		}
@@ -180,11 +197,12 @@ export default defineComponent({
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.dialogVisible = false
+			state.pointList = [];
+			(formRef.value as any).clearValidate()
 		}
 		// 取消
 		const onCancel = () => {
 			closeDialog()
-			state.keyword = ''
 		}
 		const queryTree = () => {
 			api.heatStation.getList({
@@ -196,29 +214,77 @@ export default defineComponent({
 					state.treeData = res || [];
 				});
 		};
+		const getDetail = () => {
+			api.loop.detail(state.ruleForm.id)
+				.then((res: any) => {
+					state.ruleForm = {
+						...res
+					}
+					state.pointList = state.ruleForm.viaPoint.map((item: any) => ({
+						...item,
+						editFlag: false
+					}))
+				})
+		}
 		// 新增
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					if (state.ruleForm.id) {
+					if (!state.pointList.length) {
+						ElMessage.warning('请选择途经点')
+						return
+					}
+					for (let i = 0; i < state.pointList.length; i++) {
+						let item = state.pointList[i]
+						if (!item.lnt && !item.lat) {
+							ElMessage.warning('途经点填错错误')
+							return
+						}
+					}
+					let params = { ...state.ruleForm }
+					params.viaPoint = state.pointList.map((item: any, index: number) => ({
+						sort: index + 1,
+						lnt: item.lnt,
+						lat: item.lat,
+						position: item.position
+					}))
+					if (params.id) {
 						//修改
-						api.loop.edit(state.ruleForm).then(() => {
+						api.loop.edit(params).then(() => {
 							ElMessage.success('环路修改成功')
 							closeDialog() // 关闭弹窗
-							emit('querylist')
+							emit('queryList')
 						})
 					} else {
 						//添加
-						api.loop.add(state.ruleForm).then(() => {
+						api.loop.add(params).then(() => {
 							ElMessage.success('环路添加成功')
 							closeDialog() // 关闭弹窗
-							emit('querylist')
+							emit('queryList')
 						})
 					}
 				}
 			})
+		}
+		// 新增途经点
+		const onAddPoint = () => {
+			state.pointList.push({
+				sort: undefined,
+				position: '',
+				lnt: '',
+				lat: '',
+				editFalg: true
+			})
+		}
+		// 保存途经点
+		const onSavePoint = (item: any, index: number) => {
+			item.editFalg = false
+		}
+		// 移除途经点
+		const onRemovePoint = (index: number) => {
+			state.pointList.splice(index, 1)
 		}
 		
 		const initMap = () => {
@@ -241,17 +307,26 @@ export default defineComponent({
 			state.mapLocal = new BMapGL.LocalSearch(map, {
 				renderOptions:{map: map}
 			})
-
+			console.log('map', map)
 			map.addEventListener('click', (e: any) => {
 				console.log('map--click', e)
 				let point = e.latlng
+				if (state.pointIndex > -1) {
+					state.pointList[state.pointIndex].lnt = point.lng
+					state.pointList[state.pointIndex].lat = point.lat
+					let str = e.currentTarget.infoWindow.centerDiv.innerText
+					let address = str.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
+					state.pointList[state.pointIndex].position = address
+				}
 				// state.ruleForm.lnt = point.lng
 				// state.ruleForm.lat = point.lat
+				// .replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
 			})
 		}
 
-		const onLocalChange = () => {
-			state.mapLocal.search(state.keyword)
+		const onLocalChange = (item: any, index: number) => {
+			state.mapLocal.search(item.position)
+			state.pointIndex = index
 		}
 
 		return {
@@ -261,6 +336,9 @@ export default defineComponent({
 			onSubmit,
 			formRef,
 			onLocalChange,
+			onAddPoint,
+			onRemovePoint,
+			onSavePoint,
 			...toRefs(state)
 		}
 	}

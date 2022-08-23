@@ -143,6 +143,7 @@ interface TableDataState {
 			code: string;
 			loopTypes: string;
 			heatingObject: string;
+			status: number;
 		};
 	};
 }
@@ -167,7 +168,8 @@ export default defineComponent({
 					name: '',
 					code: '',
 					loopTypes: '',
-					heatingObject: ''
+					heatingObject: '',
+					status: -1
 				},
 			},
 		});
@@ -197,28 +199,28 @@ export default defineComponent({
 		};
 		// 删除产品
 		const onRowDel = (row: TableDataRow) => {
-			let msg = '你确定要删除所选数据？';
-			let ids: number[] = [];
-			if (row) {
-				msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
-				ids = [row.id];
-			} else {
-				ids = state.ids;
-			}
-			if (ids.length === 0) {
-				ElMessage.error('请选择要删除的数据。');
-				return;
-			}
+			// let msg = '你确定要删除所选数据？';
+			// let ids: number[] = [];
+			// if (row) {
+			let msg = `此操作将永久删除环路：“${row.name}”，是否继续?`;
+			// 	ids = [row.id];
+			// } else {
+			// 	ids = state.ids;
+			// }
+			// if (ids.length === 0) {
+			// 	ElMessage.error('请选择要删除的数据。');
+			// 	return;
+			// }
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					// api.loop.del(ids).then(() => {
-					// 	ElMessage.success('删除成功');
-					// 	queryList();
-					// });
+					api.loop.del(row.id).then(() => {
+						ElMessage.success('删除成功');
+						queryList();
+					});
 				})
 				.catch(() => {});
 		};
