@@ -110,6 +110,11 @@ import Detail from './component/detail.vue';
 import api from '/@/api/heatStation';
 
 // 定义接口来定义对象的类型
+interface Point {
+	sort?: number;
+	lnt: number;
+	lat: number
+}
 interface TableDataRow {
 	id: number;
 	name: string;
@@ -121,6 +126,7 @@ interface TableDataRow {
 	heatingTypes: number;
 	heatingArea: string;
 	forRealArea: string;
+	viaPoint: Array<Point>;
 	decade: string;
 	status: number;
 }

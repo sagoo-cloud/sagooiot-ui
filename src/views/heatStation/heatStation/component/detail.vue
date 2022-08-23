@@ -1,36 +1,24 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog title="查看设备" v-model="isShowDialog" width="769px">
+		<el-dialog title="换热站详情" v-model="isShowDialog" width="575px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="设备标识" prop="key">
-					{{ ruleForm.key }}
-				</el-form-item>
-				<el-form-item label="设备名称" prop="name">
+				<el-form-item label="换热站名称" prop="name">
 					{{ ruleForm.name }}
 				</el-form-item>
-
-				<el-form-item label="所属产品" prop="productId">
-					{{ ruleForm.productName }}
+				<el-form-item label="换热站位置" prop="position">
+					{{ ruleForm.position }}
 				</el-form-item>
-
-				<el-form-item label="所属部门" prop="deptId">
-					{{ ruleForm.deptName }}
+				<el-form-item label="负责人" prop="principal">
+					{{ ruleForm.principal }}
 				</el-form-item>
-
-				<el-form-item label="设备证书" prop="certificate">
-					{{ ruleForm.certificate }}
+				<el-form-item label="状态" prop="status">
+					{{ ruleForm.status === 1 ? '在线' : '不在线' }}
 				</el-form-item>
-
-				<el-form-item label="设备秘钥" prop="secureKey">
-					{{ ruleForm.secureKey }}
-				</el-form-item>
-
-				<el-form-item label="固件版本号" prop="version">
-					{{ ruleForm.version }}
-				</el-form-item>
-
-				<el-form-item label="备注" prop="desc">
-					{{ ruleForm.desc }}
+        <el-form-item label="地图展示" prop="">
+					<div>
+						<span>经度：{{ ruleForm.lnt ? `${ruleForm.lnt}，` : '' }}</span>
+						<span style="margin-left: 10px">纬度：{{ ruleForm.lat }}</span>
+					</div>
 				</el-form-item>
 			</el-form>
 		</el-dialog>

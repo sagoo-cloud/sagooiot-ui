@@ -9,7 +9,19 @@
 					<el-input v-model="ruleForm.code" placeholder="请输入环路编号" />
 				</el-form-item>
 				<el-form-item label="所属换热站" prop="stationId">
-					<el-input v-model="ruleForm.stationId" placeholder="请输入所属换热站" />
+					<el-tree-select
+						v-model="ruleForm.stationId"
+						:data="treeData"
+						:props="{
+							label: 'name',
+							children: 'children'
+						}"
+						node-key="id"
+						:clearable="true"
+						check-strictly
+						style="width: 100%;"
+						:render-after-expand="true"
+					/>
 				</el-form-item>
         <el-form-item label="环路类型" prop="loopTypes">
           <el-select v-model="ruleForm.loopTypes" placeholder="请选择环路类型" clearable size="default" style="width: 100%">
@@ -53,12 +65,16 @@
           </el-col>
         </el-row>
         <el-form-item label="环路年代" prop="decade">
-          <el-input v-model="ruleForm.name" placeholder="请输入环路年代" />
+          <el-input v-model="ruleForm.decade" placeholder="请输入环路年代" />
         </el-form-item>
-        <el-form-item label="编辑路线信息" prop="decade">
-          <baidu-map class="map" :center="{ lng: 116.404, lat: 39.915 }" :zoom="15" style="width: 100%; height: 300px">
-            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
-          </baidu-map>
+        <el-form-item label="编辑路线信息" prop="">
+					<div class="mb10">
+						<el-button type="primary">添加途经点</el-button>
+					</div>
+					<div class="mb10" style="width: 100%">
+						<el-input v-model="keyword" @change="onLocalChange" placeholder="请输入关键字进行搜索" clearable style="width: 100%;"></el-input>
+					</div>
+					<div style="width: 100%; height: 300px" id="loop-map-container"></div>
         </el-form-item>
 				<el-form-item label="状态" prop="status">
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
@@ -76,9 +92,14 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/heatStation';
 import { ElMessage } from 'element-plus';
+interface Point {
+	sort?: number;
+	lnt: number;
+	lat: number
+}
 interface RuleFormState {
 	id: number;
 	name: string;
@@ -90,6 +111,7 @@ interface RuleFormState {
 	heatingTypes: string;
 	heatingArea: string;
 	forRealArea: string;
+	viaPoint: Array<Point>;
 	decade: string;
 	status: number;
 }
@@ -112,6 +134,7 @@ export default defineComponent({
         heatingArea: '',
         forRealArea: '',
         decade: '',
+				viaPoint: [],
         status: 1
 			},
 			rules: {
@@ -120,21 +143,20 @@ export default defineComponent({
 				stationId: [{ required: true, message: '所属换热站不能为空', trigger: 'blur' }],
 				loopTypes: [{ required: true, message: '环路类型不能为空', trigger: 'blur' }],
 				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
-			}
+			},
+			treeData: [],
+			keyword: '', // 地图关键字
+			mapLocal: null as any
 		})
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm()
-
-			// api.product.getLists({ status: 1 }).then((res: any) => {
-			// 	state.productData = res.product || [];
-			// });
-			// api.dept.getList({ status: -1 }).then((res: any) => {
-			// 	state.deptData = res || [];
-			// });
-
+			queryTree()
+			nextTick(() => {
+				initMap()
+			})
 			if (row) {
-				state.ruleForm = row
+				(state.ruleForm as any) = row
 			}
 			state.dialogVisible = true
 		}
@@ -150,6 +172,7 @@ export default defineComponent({
         heatingTypes: '',
         heatingArea: '',
         forRealArea: '',
+				viaPoint: [],
         decade: '',
         status: 1
 			}
@@ -161,7 +184,18 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog()
+			state.keyword = ''
 		}
+		const queryTree = () => {
+			api.heatStation.getList({
+					name: '',
+					code: '',
+					status: -1
+				})
+				.then((res: any) => {
+					state.treeData = res || [];
+				});
+		};
 		// 新增
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any
@@ -186,6 +220,39 @@ export default defineComponent({
 				}
 			})
 		}
+		
+		const initMap = () => {
+			let BMapGL = (window as any).BMapGL
+			let map = new BMapGL.Map("loop-map-container");
+			// 116.404, 39.915
+			let point = new BMapGL.Point(116.404, 39.915);
+			let zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
+			let cityCtrl = new BMapGL.CityListControl()
+			map.centerAndZoom(point, 15); 
+			map.enableScrollWheelZoom(true); // 开启滚轮缩放
+			map.addControl(zoomCtrl);
+			map.addControl(cityCtrl);
+			// if (state.ruleForm.lnt && state.ruleForm.lat) {
+			// 	let marker = new BMapGL.Marker(new BMapGL.Point(state.ruleForm.lnt, state.ruleForm.lat));
+			// 	// 在地图上添加点标记
+			// 	map.addOverlay(marker);
+			// }
+
+			state.mapLocal = new BMapGL.LocalSearch(map, {
+				renderOptions:{map: map}
+			})
+
+			map.addEventListener('click', (e: any) => {
+				console.log('map--click', e)
+				let point = e.latlng
+				// state.ruleForm.lnt = point.lng
+				// state.ruleForm.lat = point.lat
+			})
+		}
+
+		const onLocalChange = () => {
+			state.mapLocal.search(state.keyword)
+		}
 
 		return {
 			openDialog,
@@ -193,6 +260,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
+			onLocalChange,
 			...toRefs(state)
 		}
 	}

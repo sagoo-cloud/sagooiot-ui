@@ -2,7 +2,7 @@
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '换热站'" v-model="dialogVisible" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="上级换热站" prop="">
+				<el-form-item label="所属换热站" prop="">
 					<el-tree-select
 						v-model="ruleForm.parentId"
 						:data="treeData"
@@ -20,9 +20,6 @@
 				<el-form-item label="换热站名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入换热站名称" />
 				</el-form-item>
-				<!-- <el-form-item label="换热站编号" prop="code">
-					<el-input v-model="ruleForm.code" placeholder="请输入换热站编号" />
-				</el-form-item> -->
 				<el-form-item label="换热站位置" prop="position">
 					<el-input v-model="ruleForm.position" placeholder="请输入换热站位置" />
 				</el-form-item>
@@ -59,7 +56,6 @@ import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } fr
 import api from '/@/api/heatStation';
 import { ElMessage } from 'element-plus';
 import { Console } from 'console';
-import { loadBMap } from '/@/utils/loadMap.js'
 interface RuleFormState {
 	id: number;
 	parentId: number | string;
@@ -98,7 +94,6 @@ export default defineComponent({
 				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
 			},
 			treeData: [],
-			mapResult: [], // 地图搜索点结果
 			mapLocal: null as any
 		})
 		// 打开弹窗
@@ -164,15 +159,15 @@ export default defineComponent({
 						//修改
 						api.heatStation.edit(params).then(() => {
 							ElMessage.success('换热站修改成功')
+							emit('queryList')
 							closeDialog() // 关闭弹窗
-							emit('querylist')
 						})
 					} else {
 						//添加
 						api.heatStation.add(params).then(() => {
 							ElMessage.success('换热站添加成功')
+							emit('queryList')
 							closeDialog() // 关闭弹窗
-							emit('querylist')
 						})
 					}
 				}
