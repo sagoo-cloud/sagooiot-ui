@@ -1,13 +1,13 @@
 <template>
-	<div class="h100">
-		<router-view v-slot="{ Component }">
-			<transition :name="setTransitionName" mode="out-in">
-				<keep-alive :include="keepAliveNameList">
-					<component :is="Component" :key="refreshRouterViewKey" class="w100" :style="{ minHeight }" />
-				</keep-alive>
-			</transition>
-		</router-view>
-	</div>
+  <div class="height:100%" style="overflow-y:auto">
+    <router-view v-slot="{ Component }">
+      <transition :name="setTransitionName" mode="out-in">
+        <keep-alive :include="keepAliveNameList">
+          <component :is="Component" :key="refreshRouterViewKey" class="w100" :style="{ minHeight }" />
+        </keep-alive>
+      </transition>
+    </router-view>
+  </div>
 </template>
 
 <script lang="ts">

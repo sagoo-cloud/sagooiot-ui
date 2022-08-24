@@ -89,7 +89,7 @@ export function backEndComponent(routes: any) {
 			isHide: item.isHide,
 			isIframe: item.isIframe,
 			isKeepAlive: item.isKeepAlive,
-			isLink: item.linkUrl || item.isLink,
+			isLink: item.isLink,
 			linkUrl: item.linkUrl,
 			title: item.title,
 			buttons: (item.button || []).map((item: any) => item.types),
