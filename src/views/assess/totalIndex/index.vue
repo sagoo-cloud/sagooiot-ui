@@ -35,9 +35,9 @@
 				<!-- <el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column> -->
 				<el-table-column align="center" label="操作" width="180">
 					<template #default="scope">
-						<el-button size="small" type="text"  @click="onOpenEditUser(scope.row)">编辑</el-button>
+						<el-button size="small" type="text"  @click="onOpenEditItem(scope.row)">编辑</el-button>
 						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
-						<el-button size="small" type="text" @click="onRowDel(scope.row)">详细信息</el-button>
+						<el-button size="small" type="text" @click="onOpenDetailItem(scope.row)">详细信息</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -56,9 +56,13 @@
 			</el-pagination> -->
 		</el-card>
 		<!-- <AddUer ref="addUserRef" /> -->
-		<EditUser ref="editUserRef" />
+		<EditItem ref="editItemRef" />
 
 		<AddItem ref="addItemRef" />
+
+		<DetailItem ref="detailItemRef" />
+
+		
 	</div>
 </template>
 
@@ -66,9 +70,12 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 // import AddUer from '/@/views/system/user/component/addUser.vue';
-import EditUser from './component/editUser.vue';
+import EditItem from './component/editItem.vue';
 
 import AddItem from './component/addItem.vue';
+
+import DetailItem from './component/detailItem.vue';
+
 import api from '/@/api/assess';
 
 // 定义接口来定义对象的类型
@@ -101,10 +108,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'systemUser',
-	components: {  EditUser, AddItem },
+	components: {  EditItem, AddItem, DetailItem },
 	setup() {
 		const addItemRef = ref();
-		const editUserRef = ref();
+		const editItemRef = ref();
+		const detailItemRef = ref();
 		const state = reactive<TableDataState>({
 			tableData: {
 				data: [],
@@ -141,12 +149,16 @@ export default defineComponent({
 			addItemRef.value.openDialog();
 		};
 		// 打开修改用户弹窗
-		const onOpenEditUser = (row: TableDataRow) => {
-			editUserRef.value.openDialog(row);
+		const onOpenEditItem = (row: TableDataRow) => {
+			editItemRef.value.openDialog(row);
+		};
+		// 打开详细信息弹窗
+		const onOpenDetailItem = (row: TableDataRow) => {
+			detailItemRef.value.openDialog(row);
 		};
 		// 删除用户
 		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
@@ -170,9 +182,11 @@ export default defineComponent({
 		});
 		return {
 			addItemRef,
-			editUserRef,
+			editItemRef,
+			detailItemRef,
 			onOpenAddItem,
-			onOpenEditUser,
+			onOpenEditItem,
+			onOpenDetailItem,
 			onRowDel,
 			onHandleSizeChange,
 			onHandleCurrentChange,
