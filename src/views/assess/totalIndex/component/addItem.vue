@@ -9,7 +9,7 @@
 						</el-form-item>
 					<!-- </el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
-						<el-form-item label="描述" required>
+						<el-form-item label="描述">
 							<el-input width="400"  size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
 						</el-form-item>
 					<!-- </el-col> -->
@@ -19,19 +19,19 @@
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
-				新建
+				增加
 			</el-button>
 			<el-table border stripe :data="tableData.data" style="width: 100%">
-				<el-table-column type="index" label="序号" width="66" />
-				<el-table-column prop="userName" label="标识" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="num" label="权重(%)" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="description" label="取值范围" show-overflow-tooltip width="200" >
+				<el-table-column align="center" type="index" label="序号" width="58" />
+				<el-table-column align="center" prop="userName" label="标识" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="num" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
 					<template #default="scope">
 						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{item}}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="153">
+				<el-table-column align="center" label="操作" width="160">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditSign(scope.row)">编辑</el-button>
 						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
@@ -56,7 +56,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">新 增</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>

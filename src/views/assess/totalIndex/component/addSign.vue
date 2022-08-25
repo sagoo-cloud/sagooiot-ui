@@ -23,7 +23,11 @@
 			</el-form>
 			<!-- 添加取值范围 -->
 			<div class="add-value-range">
-				<p>添加取值范围</p>
+				<div class="header">
+					<p>添加取值范围</p>
+					<el-button @click="addRange" size="small" plain type="primary">添加</el-button>
+
+				</div>
 				<div class="add-value-range-wrap">
 					<section class="add-value-range-item" v-for="(item, index) in ruleForm.list" :key="index">
 						<div class="left-wrap">
@@ -38,7 +42,7 @@
 							<span class="label">得分</span>
 							<el-input size="small" v-model="item.score" placeholder="请输入得分" clearable></el-input>
 						</div>
-						 <el-button :disabled="index!==ruleForm.list.length-1" @click="addRange(item)" size="default" plain type="primary">添加</el-button>
+						<el-button @click="deleteRange(index)" size="small" type="danger">删除</el-button>
 
 					</section>
 				</div>
@@ -46,7 +50,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">新 增</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -162,7 +166,16 @@ export default defineComponent({
 				score: 90
 			}]
 		};
-		const addRange = (item: RangeData) => {
+		const addRange = () => {
+			if(!state.ruleForm.list.length) {
+				state.ruleForm.list.push({
+					minVal: '',
+					maxVal: '',
+					score: ''
+				})
+				return
+			}
+			let item = state.ruleForm.list[state.ruleForm.list.length-1]
 			const { minVal, maxVal, score } = item
 			if(!minVal || !maxVal || !score.toString()) {
 				ElMessage.error('请完善表单');
@@ -174,6 +187,20 @@ export default defineComponent({
 				score: ''
 			})
 		};
+		const deleteRange = (index: number) => {
+			console.log(index)
+			state.ruleForm.list.splice(index, 1)
+			// const { minVal, maxVal, score } = item
+			// if(!minVal || !maxVal || !score.toString()) {
+			// 	ElMessage.error('请完善表单');
+			// 	return 
+			// }
+			// state.ruleForm.list.push({
+			// 	minVal: '',
+			// 	maxVal: '',
+			// 	score: ''
+			// })
+		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -182,6 +209,7 @@ export default defineComponent({
 			openDialog,
 			closeDialog,
 			addRange,
+			deleteRange,
 			onCancel,
 			onSubmit,
 			...toRefs(state),
@@ -204,6 +232,12 @@ export default defineComponent({
 .add-value-range {
 	// background-color: pink;
 	padding: 10px 0;
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+	}
 	.add-value-range-wrap {
 		display: flex;
 		flex-direction: column;
@@ -235,5 +269,8 @@ export default defineComponent({
 			}
 		}
 	}
+}
+::v-deep  .el-dialog__body {
+	border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 </style>

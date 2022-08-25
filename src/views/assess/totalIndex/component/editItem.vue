@@ -1,95 +1,77 @@
 <template>
-	<div class="system-edit-user-container">
-		<el-dialog title="修改用户" v-model="isShowDialog" width="769px">
+	<div class="system-add-user-container">
+		<el-dialog title="编辑指标" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" size="default" label-width="90px">
-				<el-row :gutter="35">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户名称">
-							<el-input v-model="ruleForm.userName" placeholder="请输入账户名称" clearable></el-input>
+				<!-- <el-row :gutter="35">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
+						<el-form-item label="评价名称" required>
+							<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称">
-							<el-input v-model="ruleForm.userNickname" placeholder="请输入用户昵称" clearable></el-input>
+					<!-- </el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
+						<el-form-item label="描述">
+							<el-input width="400"  size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="关联角色">
-							<el-select v-model="ruleForm.roleSign" placeholder="请选择" clearable class="w100">
-								<el-option label="超级管理员" value="admin"></el-option>
-								<el-option label="普通用户" value="common"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="部门">
-							<el-cascader
-								:options="deptData"
-								:props="{ checkStrictly: true, value: 'deptName', label: 'deptName' }"
-								placeholder="请选择部门"
-								clearable
-								class="w100"
-								v-model="ruleForm.department"
-							>
-								<template #default="{ node, data }">
-									<span>{{ data.deptName }}</span>
-									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-								</template>
-							</el-cascader>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="手机号">
-							<el-input v-model="ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="邮箱">
-							<el-input v-model="ruleForm.email" placeholder="请输入" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="性别">
-							<el-select v-model="ruleForm.sex" placeholder="请选择" clearable class="w100">
-								<el-option label="男" value="男"></el-option>
-								<el-option label="女" value="女"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户密码">
-							<el-input v-model="ruleForm.password" placeholder="请输入" type="password" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户过期">
-							<el-date-picker v-model="ruleForm.overdueTime" type="date" placeholder="请选择" class="w100"> </el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户状态">
-							<el-switch v-model="ruleForm.status" inline-prompt active-text="启" inactive-text="禁"></el-switch>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="用户描述">
-							<el-input v-model="ruleForm.describe" type="textarea" placeholder="请输入用户描述" maxlength="150"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
+					<!-- </el-col> -->
+				<!-- </el-row> -->
 			</el-form>
+			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
+				<el-icon>
+					<ele-FolderAdd />
+				</el-icon>
+				增加
+			</el-button>
+			<el-table border stripe :data="tableData.data" style="width: 100%">
+				<el-table-column align="center" type="index" label="序号" width="58" />
+				<el-table-column align="center" prop="userName" label="标识" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="num" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
+					<template #default="scope">
+						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{item}}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column align="center" label="操作" width="160">
+					<template #default="scope">
+						<el-button size="small" type="text" @click="onOpenEditSign(scope.row)">编辑</el-button>
+						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" type="text" @click="onRowDetail(scope.row)">任务接口</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<el-pagination
+				@size-change="onHandleSizeChange"
+				@current-change="onHandleCurrentChange"
+				class="mt15"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				v-model:current-page="tableData.param.pageNum"
+				background
+				v-model:page-size="tableData.param.pageSize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="tableData.total"
+			>
+			</el-pagination>
+
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">修 改</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>
+		<AddSign ref="addSignRef" />
+		<SetTask ref="setTaskRef" />
 	</div>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, onMounted, defineComponent } from 'vue';
+import { reactive, toRefs, onMounted, ref, defineComponent } from 'vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import AddSign from './addSign.vue';
+import SetTask from './setTask.vue';
+
+
 
 // 定义接口来定义对象的类型
 interface DeptData {
@@ -101,29 +83,52 @@ interface DeptData {
 	id: number;
 	children?: DeptData[];
 }
-interface RuleFormRow {
+// 定义接口来定义对象的类型
+interface TableDataRow {
 	userName: string;
-	userNickname: string;
-	roleSign: string;
-	department: any;
-	phone: string;
-	email: string;
-	sex: string;
-	password: string;
-	overdueTime: string;
-	status: boolean;
-	describe: string;
+	description: string;
+	dataType: string;
+	createTime: string;
+	num: string;
+	range: string;
 }
-interface UserState {
+// 定义整个dialog的数据类型
+interface ItemState {
 	isShowDialog: boolean;
-	ruleForm: RuleFormRow;
-	deptData: Array<DeptData>;
+	ruleForm: {
+		userName: string;
+		userNickname: string;
+		roleSign: string;
+		department: any;
+		phone: string;
+		email: string;
+		sex: string;
+		password: string;
+		overdueTime: string;
+		status: boolean;
+		describe: string;
+	};
+	tableData: {
+		data: Array<TableDataRow>;
+		total: number;
+		loading: boolean;
+		param: {
+			pageNum: number;
+			pageSize: number;
+		};
+	};
 }
 
+
+
+
 export default defineComponent({
-	name: 'systemEditUser',
+	name: 'systemAddUser',
+	components: { AddSign, SetTask},
 	setup() {
-		const state = reactive<UserState>({
+		const addSignRef = ref();
+		const setTaskRef = ref();
+		const state = reactive<ItemState>({
 			isShowDialog: false,
 			ruleForm: {
 				userName: '', // 账户名称
@@ -138,11 +143,20 @@ export default defineComponent({
 				status: true, // 用户状态
 				describe: '', // 用户描述
 			},
-			deptData: [], // 部门数据
+			// deptData: [], // 部门数据
+			// 标识列表数据
+			tableData: {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					pageSize: 10,
+				},
+			}
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormRow) => {
-			state.ruleForm = row;
+		const openDialog = () => {
 			state.isShowDialog = true;
 		};
 		// 关闭弹窗
@@ -157,40 +171,71 @@ export default defineComponent({
 		const onSubmit = () => {
 			closeDialog();
 		};
+		// 打开新增用户弹窗
+		const onOpenAddSign = () => {
+			addSignRef.value.openDialog();
+		};
+				
+		// 打开编辑弹窗
+		const onOpenEditSign = (row: TableDataRow) => {
+			addSignRef.value.openDialog(row);
+		};
+		// 打开任务接口弹窗
+		const onRowDetail = (row: TableDataRow) => {
+			setTaskRef.value.openDialog(row);
+		};
+		// 删除标识项
+		const onRowDel = (row: TableDataRow) => {
+			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+					ElMessage.success('删除成功');
+				})
+				.catch(() => {});
+		};
+		// 分页改变
+		const onHandleSizeChange = (val: number) => {
+			state.tableData.param.pageSize = val;
+		};
+		// 分页改变
+		const onHandleCurrentChange = (val: number) => {
+			state.tableData.param.pageNum = val;
+		};
 		// 初始化部门数据
 		const initTableData = () => {
-			state.deptData.push({
-				deptName: 'vueNextAdmin',
-				createTime: new Date().toLocaleString(),
-				status: true,
-				sort: Math.random(),
-				describe: '顶级部门',
-				id: Math.random(),
-				children: [
-					{
-						deptName: 'IT外包服务',
-						createTime: new Date().toLocaleString(),
-						status: true,
-						sort: Math.random(),
-						describe: '总部',
-						id: Math.random(),
-					},
-					{
-						deptName: '资本控股',
-						createTime: new Date().toLocaleString(),
-						status: true,
-						sort: Math.random(),
-						describe: '分部',
-						id: Math.random(),
-					},
-				],
-			});
+			const data: Array<TableDataRow> = [];
+			for (let i = 0; i < 6; i++) {
+				data.push({
+					userName: '这里是标识',
+					dataType: '设备评分',
+					description: '这里是描述这里是描述这里是描述这里是描述',
+					num: '88',
+					range: '10~20, 30~40',
+					createTime: new Date().toLocaleString(),
+
+				});
+			}
+			state.tableData.data = data;
+			state.tableData.total = data.length;
 		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
 		});
 		return {
+			setTaskRef,
+			addSignRef,
+			onOpenAddSign,// 打开添加标识项弹窗
+			onOpenEditSign,// 打开编辑某一个标识项弹窗
+			onRowDel,// 删除某一个标识项
+			onRowDetail,// 打开数据源配置接口弹窗
+
+			onHandleSizeChange,// 标识项分页每页展示条数变化
+			onHandleCurrentChange,// 标识项分页页数变化变化
+
 			openDialog,
 			closeDialog,
 			onCancel,
@@ -200,3 +245,32 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+
+
+::v-deep .el-form {
+	// display: flex;
+	// justify-self: center;
+	// flex-direction: column;
+	// align-content: center;
+	.el-form-item {
+		width: 500px;
+		margin: 8px auto;
+	}
+	::v-deep .el-input__inner,
+	::v-deep .el-textarea__inner {
+		width: 400px;
+		// flex-grow: 0;
+	}
+	::v-deep .el-input__inner {
+		padding: 1px 10px;
+	}
+	::v-deep .el-input__wrapper {
+		flex-grow: 0;
+		padding: 0
+	}
+}
+
+
+</style>
