@@ -48,23 +48,23 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="80" />
-        <el-table-column label="产品名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="产品标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="分类名称" prop="categoryName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门名称" prop="deptName" :show-overflow-tooltip="true" />
+        <el-table-column label="ID" align="center" prop="id" width="60" />
+        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" />
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" />
+        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" />
         <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" />
         <el-table-column label="传输协议" prop="transportProtocol" :show-overflow-tooltip="true" />
-        <el-table-column label="设备类型" prop="deviceType" :show-overflow-tooltip="true" />
-        
-        <el-table-column prop="status" label="发布状态" width="120" align="center">
+        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" />
+
+        <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
             <el-tag type="info" size="small" v-else>未发布</el-tag>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
-        <el-table-column label="操作" width="300" align="center">
+        <el-table-column label="操作" width="150" align="center">
           <template #default="scope">
 		     <router-link :to="'/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
     font-size: 12px;color: #409eff;">
