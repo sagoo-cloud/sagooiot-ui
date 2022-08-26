@@ -247,8 +247,8 @@ export default defineComponent({
 
            res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
-						state.rule[index].params.name = item.params.name;
-						state.rule[index].params.value = item.params.value;
+						state.rule[index].params.name =Object.keys(item.params) ;
+						state.rule[index].params.value = item.params[Object.keys(item.params)];
 					});
 
 
