@@ -44,7 +44,7 @@
               <el-icon>
                 <ele-Delete />
               </el-icon>
-              删除删除
+              删除
             </el-button>
           </el-form-item>
         </el-form>

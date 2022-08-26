@@ -38,7 +38,12 @@
               </el-icon>
               新增数据源
             </el-button>
-      
+       <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+              <el-icon>
+                <ele-Delete />
+              </el-icon>
+              删除
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -93,7 +98,7 @@ import Detail from './component/detail.vue';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
-	id: number;
+	sourceId: number;
 	name: string;
 	key: string;
 	status: number;
@@ -150,7 +155,7 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					types: '',
-					status:'-1',
+					status:'',
 				},
 			},
 		});
@@ -164,27 +169,34 @@ export default defineComponent({
 				state.tableData.total = res.Total;
 			});
 		};
-		// 打开新增产品弹窗
+		// 打开新增数据源弹窗
 		const onOpenAdd = () => {
 			editDicRef.value.openDialog();
 		};
-		// 打开修改产品弹窗
+		// 打开修改数据源弹窗
 		const onOpenEdit = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
 		};
-		// 删除产品
 		const onRowDel = (row: TableDataRow) => {
-
 			let msg = '你确定要删除所选数据？';
-			msg = `此操作将永久删除数据源：“${row.name}”，是否继续?`;
-			
+			let ids: number[] = [];
+			if (row) {
+				msg = `此操作将永久删除数据源：“${row.name}”，是否继续?`;
+				ids = [row.sourceId];
+			} else {
+				ids = state.ids;
+			}
+			if (ids.length === 0) {
+				ElMessage.error('请选择要删除的数据。');
+				return;
+			}
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					api.common.delete(row.id).then(() => {
+					api.common.delete(ids).then(() => {
 						ElMessage.success('删除成功');
 						typeList();
 					});
@@ -203,7 +215,7 @@ export default defineComponent({
 		};
 		// 多选框选中数据
 		const handleSelectionChange = (selection: TableDataRow[]) => {
-			state.ids = selection.map((item) => item.id);
+			state.ids = selection.map((item) => item.sourceId);
 		};
 		//查看详情
 		const onOpenDetail=(row: TableDataRow)=>{
