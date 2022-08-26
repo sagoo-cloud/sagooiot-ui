@@ -7,7 +7,7 @@ export default {
     add: (data: object) => post('/source/api/add', data),
     delete: (id: number) => del('/source/del', { id }),
     edit: (data: object) => put('/source/api/edit', data),
-    detail: (id: number) => get('/source/detail', { id }),
+    detail: (sourceId: number) => get('/source/detail', { sourceId }),
   },
   
 }

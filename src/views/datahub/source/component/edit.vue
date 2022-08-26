@@ -206,10 +206,7 @@ export default defineComponent({
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '数据源名称不能为空', trigger: 'blur' }],
 				from: [{ required: true, message: '数据源类型不能为空', trigger: 'blur' }],
-				host: [{ required: true, message: '地址不能为空', trigger: 'blur' }],
-				port: [{ required: true, message: '端口不能为空', trigger: 'blur' }],
-				userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-				password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+			
 			},
 		});
 		const delParams = (index) => {
@@ -243,20 +240,36 @@ export default defineComponent({
 			resetForm();
 
 			if (row) {
-				// api.dict.getType(row.id).then((res:any)=>{
-				//   state.ruleForm = res.data.dictType
-				// })
-				state.ruleForm = row;
+				 api.common.detail(row.sourceId).then((res:any)=>{
+				   state.ruleForm = res.data
+           state.config=res.data.apiConfig
+           state.requestParams=res.data.apiConfig.requestParams
+
+           res.data.sourceRule.forEach((item, index) => {
+						state.rule[index].expression = item.expression;
+						state.rule[index].params.name = item.params.name;
+						state.rule[index].params.value = item.params.value;
+					});
+
+
+				 })
 			}
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
 			state.ruleForm = {
-				sourceId: 0,
+						sourceId: 0,
 				name: '',
 				from: 1,
 				key: '',
-				port: '',
+				rule: [],
+				config: {
+					method: '',
+					url: '',
+					interval: '',
+					intervalUnit: '',
+					requestParams: [],
+				},
 				description: '',
 			};
 		};
