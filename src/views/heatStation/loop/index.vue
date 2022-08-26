@@ -52,10 +52,10 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
-	    	<el-table-column label="环路编号" prop="code" :show-overflow-tooltip="true" />
-	    	<el-table-column label="所属换热站" prop="stationId" :show-overflow-tooltip="true" />
-	    	<el-table-column label="环路类型" prop="loopTypes">
+        <el-table-column label="编号" prop="code" :show-overflow-tooltip="true" />
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+	    	<el-table-column label="换热站" prop="stationId" :show-overflow-tooltip="true" />
+	    	<el-table-column label="类型" prop="loopTypes">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.loopTypes === 1">一网</el-tag>
             <el-tag type="info" size="small" v-else-if="scope.row.loopTypes === 2">二网</el-tag>
@@ -80,14 +80,14 @@
         </el-table-column>
 	    	<el-table-column label="供暖面积" prop="heatingArea" :show-overflow-tooltip="true" />
 	    	<el-table-column label="实际面积" prop="forRealArea" :show-overflow-tooltip="true" />
-	    	<el-table-column label="环路年代" prop="decade" :show-overflow-tooltip="true" />
+<!--	    	<el-table-column label="环路年代" prop="decade" :show-overflow-tooltip="true" />-->
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status === 0">不在线</el-tag>
-            <el-tag type="info" size="small" v-else-if="scope.row.status === 1">在线</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status === 0">不在线</el-tag>
+            <el-tag type="success" size="small" v-else-if="scope.row.status === 1">在线</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="150" align="center">
           <template #default="scope">
 			 			<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
