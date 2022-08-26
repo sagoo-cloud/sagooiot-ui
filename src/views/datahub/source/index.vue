@@ -123,7 +123,7 @@ interface TableDataState {
 }
 
 export default defineComponent({
-	name: 'deviceInstance',
+	name: 'sourcelist',
 	components: { EditDic,Detail },
 	setup() {
 		const addDicRef = ref();
