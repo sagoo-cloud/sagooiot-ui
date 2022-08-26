@@ -3,20 +3,22 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" >
+
+		 <el-form-item label="数据源标识" prop="key">
+            <el-input v-model="tableData.param.key" placeholder="数据源标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+          </el-form-item>
           <el-form-item label="数据源名称" prop="name">
             <el-input v-model="tableData.param.name" placeholder="请输入数据源名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
-		  <el-form-item label="数据源类型" prop="types">
-            <el-input v-model="tableData.param.types" placeholder="请输入数据源类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="数据源地址" prop="host">
-            <el-input v-model="tableData.param.host" placeholder="请输入数据源地址" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+		 
+          <el-form-item label="数据源类型" prop="host">
+				<el-select v-model="tableData.param.from" placeholder="请选择数据源类型" @keyup.enter.native="typeList">
+						<el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
           </el-form-item>
       
         
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
+         
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
               <el-icon>
@@ -42,19 +44,29 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="80" />
+        <el-table-column label="ID" align="center" prop="sourceId" width="80" />
+        <el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />
         <el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="类型" prop="types" :show-overflow-tooltip="true" />
-        <el-table-column label="地址" prop="host" :show-overflow-tooltip="true" />
-        <el-table-column label="端口" prop="port" :show-overflow-tooltip="true" />
+         <el-table-column prop="from" label="数据源类型"  align="center">
+          <template #default="scope">
+		  	<span v-if="scope.row.from==1">api导入</span>
+		  	<span v-if="scope.row.from==2">数据库</span>
+		  	<span v-if="scope.row.from==3">文件</span>
+          </template>
+        </el-table-column>
+
+
        
         
         <el-table-column prop="status" label="状态" width="120" align="center">
           <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status==1">启用</el-tag>
-            <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status==0">未发布</el-tag>
           </template>
         </el-table-column>
+
+		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
+
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
 		   			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
@@ -85,7 +97,7 @@ interface TableDataRow {
 	name: string;
 	key: string;
 	status: number;
-	desc: string;
+	from: string;
 	createBy: string;
 }
 interface TableDataState {
@@ -99,8 +111,8 @@ interface TableDataState {
 			pageSize: number;
 			name: string;
 			key: string;
-			status: string;
-			dateRange: string[];
+			from: string;
+			
 		};
 	};
 }
@@ -114,6 +126,20 @@ export default defineComponent({
 		const queryRef = ref();
 		const detailRef=ref();
 		const state = reactive<TableDataState>({
+			typeData: [
+				{
+					label: 'api导入',
+					value: '1',
+				},
+				{
+					label: '数据库',
+					value: '2',
+				},
+				{
+					label: '文件',
+					value: '3',
+				},
+			],
 			ids: [],
 			tableData: {
 				data: [],
@@ -134,8 +160,8 @@ export default defineComponent({
 		};
 		const typeList = () => {
 			api.common.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.Data;
-				state.tableData.total = res.total;
+				state.tableData.data = res.list;
+				state.tableData.total = res.Total;
 			});
 		};
 		// 打开新增产品弹窗
