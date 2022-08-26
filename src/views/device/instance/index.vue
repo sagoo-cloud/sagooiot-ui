@@ -9,7 +9,7 @@
 		  <el-form-item label="设备标识" prop="key">
             <el-input v-model="tableData.param.key" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
-          
+
           <el-form-item label="状态" prop="status" style="width: 200px;">
             <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 240px">
               <el-option label="在线" :value="2" />
@@ -17,7 +17,7 @@
               <el-option label="未启用" :value="0" />
             </el-select>
           </el-form-item>
-        
+
           <el-form-item label="创建时间" prop="dateRange">
             <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -51,25 +51,25 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="80" />
-	    <el-table-column label="设备标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column label="ID" align="center" prop="id" width="60" />
+	    <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" />
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门名称" prop="deptName" :show-overflow-tooltip="true" />
-       
-        
-        <el-table-column prop="status" label="状态" width="120" align="center">
+        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" />
+
+
+        <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="scope">
             <el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
             <el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
             <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
           </template>
         </el-table-column>
-         <el-table-column prop="registryTime" label="激活时间" align="center" width="180"></el-table-column> 
-         <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="180"></el-table-column> 
+         <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
+         <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
-	
+
 			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>

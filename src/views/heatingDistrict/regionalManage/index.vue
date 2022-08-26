@@ -54,12 +54,12 @@
       <el-table :data="tableData.data" style="width: 100%" >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="组织名称" prop="">
+        <el-table-column label="小区名称" prop="name" />
+        <el-table-column label="组织名称" prop="">
 					<template #default="{ row }">
 						{{ row.SysOrganization.name }}
 					</template>
 				</el-table-column>
-	    	<el-table-column label="小区名称" prop="name" />
 	    	<el-table-column label="更新时间" prop="createdAt" />
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
