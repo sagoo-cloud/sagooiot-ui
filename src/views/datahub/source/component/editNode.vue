@@ -9,8 +9,17 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
 				</el-form-item>
 
+
+					
 			<el-form-item label="数据类型" prop="dataType">
-					<el-input v-model="ruleForm.dataType" placeholder="请输入数据类型" />
+					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型" >
+						<el-option
+						v-for="item in tabData"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value"
+						/>
+					</el-select>
 				</el-form-item>
 
 				<el-form-item label="取值项" prop="value">
@@ -88,6 +97,37 @@ export default defineComponent({
 			
 			isShowDialog: false,
 			config: {},
+			tabData:[{
+				label: 'varchar',
+				value: 'varchar',
+			},{
+				label: 'string',
+				value: 'string',
+			},{
+				label: 'int',
+				value: 'int',
+			},{
+				label: 'bigint',
+				value: 'bigint',
+			},{
+				label: 'tinyint',
+				value: 'tinyint',
+			},{
+				label: 'float',
+				value: 'float',
+			},{
+				label: 'double',
+				value: 'double',
+			},{
+				label: 'text',
+				value: 'text',
+			},{
+				label: 'datetime',
+				value: 'datetime',
+			},{
+				label: 'timestamp',
+				value: 'timestamp',
+			}],
 			ruledata:  [
 				{
 					expression: '',
