@@ -9,8 +9,17 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
 				</el-form-item>
 
+
+					
 			<el-form-item label="数据类型" prop="dataType">
-					<el-input v-model="ruleForm.dataType" placeholder="请输入数据类型" />
+					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型" >
+						<el-option
+						v-for="item in tabData"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value"
+						/>
+					</el-select>
 				</el-form-item>
 
 				<el-form-item label="取值项" prop="value">
@@ -22,11 +31,11 @@
 				<el-divider content-position="left">规则表达式</el-divider>
 
 				<div v-for="(item, index) in rule" :key="index">
-					<el-form-item label="表达式" prop="expression">
+					<el-form-item label="表达式" >
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数" prop="params">
+					<el-form-item label="参数" >
 						<el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" />
 						<div class="conicon">
@@ -88,10 +97,44 @@ export default defineComponent({
 			
 			isShowDialog: false,
 			config: {},
-			ruledata: [
+			tabData:[{
+				label: 'varchar',
+				value: 'varchar',
+			},{
+				label: 'string',
+				value: 'string',
+			},{
+				label: 'int',
+				value: 'int',
+			},{
+				label: 'bigint',
+				value: 'bigint',
+			},{
+				label: 'tinyint',
+				value: 'tinyint',
+			},{
+				label: 'float',
+				value: 'float',
+			},{
+				label: 'double',
+				value: 'double',
+			},{
+				label: 'text',
+				value: 'text',
+			},{
+				label: 'datetime',
+				value: 'datetime',
+			},{
+				label: 'timestamp',
+				value: 'timestamp',
+			}],
+			ruledata:  [
 				{
 					expression: '',
-					params: {},
+					params: {
+						name: '',
+						value: '',
+					},
 				},
 			],
 			rule: [
@@ -185,14 +228,15 @@ export default defineComponent({
 			const formWrap = unref(formRef) as any;
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
-				if (valid) {
+			if (valid) {
 					//修改rule数据
 					state.rule.forEach((item, index) => {
-						state.ruledata[index].expression = item.expression;
-						state.ruledata[index].params[item.params.name] = item.params.value;
+						item.params[item.params.name] = item.params.value;
+						delete item.params.name;
+						delete item.params.value;
 					});
 
-					state.ruleForm.rule = state.ruledata;
+					state.ruleForm.rule = state.rule;
 
 					if (state.ruleForm.nodeId !== 0) {
 						//修改
