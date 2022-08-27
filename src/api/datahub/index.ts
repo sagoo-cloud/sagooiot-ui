@@ -10,6 +10,13 @@ export default {
     detail: (sourceId: number) => get('/source/detail', { sourceId }),
     deploy: (data: object) => post('/source/deploy', data),
     undeploy: (data: object) => post('/source/undeploy', data),  
-    }
+    },
+   
+   node:{
+      getList: (params: object) => get('/source/node/list', params),
+      add: (data: object) => post('/source/node/add', data),
+      delete: (nodeId: number) => del('/source/node/del', { nodeId }),
+      edit: (data: object) => put('/source/node/edit', data),
+   } 
   
 }

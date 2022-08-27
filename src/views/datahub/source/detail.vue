@@ -87,7 +87,34 @@
                     </el-tab-pane>
 
                     <el-tab-pane label="数据节点" name="2">
-                    
+                        <div class="wu-box">
+                            <div class="wu-title">
+									<div class="title">数据节点</div>
+									<div><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
+								</div>
+
+                         <el-table :data="tableData.data" style="width: 100%" >
+        <el-table-column label="ID" align="center" prop="nodeId" width="80" />
+        <el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" />
+        <el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column label="数据类型" prop="dataType" :show-overflow-tooltip="true" />
+        <el-table-column label="数据取值项" prop="value" :show-overflow-tooltip="true" />
+        
+   
+
+		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
+
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+	
+
+            <el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)">修改</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
+           </div>         
                     </el-tab-pane>
 
                 </el-tabs>
@@ -96,7 +123,7 @@
 
 
         </div>
-
+ <EditDic ref="editDicRef" @typeList="typeList" />
 	</div>
 </template>            
 <script lang="ts">
@@ -104,6 +131,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import { useRoute } from 'vue-router';
+import EditDic from './component/editNode.vue';
 import api from '/@/api/datahub';
 
 interface TableDataState {
@@ -124,7 +152,10 @@ interface TableDataState {
 }
 export default defineComponent({
     name: 'dataDetail',
+    components: { EditDic },
     setup(prop, context) {
+        		const editDicRef = ref();
+
 		const route = useRoute();
         const state = reactive<TableDataState>({
             config: {},
@@ -163,6 +194,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
+                    sourceId: route.params && route.params.sourceId,
 					status: '',
 					dateRange: [],
 				},
@@ -187,8 +219,15 @@ export default defineComponent({
            	
 			});
 
-	
+                typeList();
 		});
+
+        const typeList = () => {
+			api.node.getList(state.tableData.param).then((res: any) => {
+				state.tableData.data = res.list;
+				state.tableData.total = res.Total;
+			});
+		};
 
 
         const CkOption=()=>{
@@ -208,8 +247,48 @@ export default defineComponent({
 			console.log(tab, event);
 		};
 
+        	const onRowDel = (row: TableDataRow) => {
+			let msg = '你确定要删除所选数据？';
+			let ids: number[] = [];
+			if (row) {
+				msg = `此操作将永久删除数据节点：“${row.name}”，是否继续?`;
+				ids = row.nodeId;
+			} else {
+				ids = state.ids;
+			}
+			if (ids.length === 0) {
+				ElMessage.error('请选择要删除的数据。');
+				return;
+			}
+			ElMessageBox.confirm(msg, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+					api.node.delete(ids).then(() => {
+						ElMessage.success('删除成功');
+						typeList();
+					});
+				})
+				.catch(() => {});
+		};
+
+        	// 打开修改数据源弹窗
+		const onOpenEdit = () => {
+			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0 });
+		};
+        const onOpenEdit1 = (row: TableDataRow) => {
+			editDicRef.value.openDialog(row);
+		};
+
         	return {
 			Edit,
+            editDicRef,
+            typeList,
+            onRowDel,
+            onOpenEdit,
+            onOpenEdit1,
             handleClick,
 			CkOption,
 			...toRefs(state),

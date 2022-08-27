@@ -111,8 +111,10 @@ export default defineComponent({
 	components: { Delete, Minus, Right },
 
 	setup(prop, { emit }) {
+		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
+			
 			isShowDialog: false,
 			config: {},
 			ruledata: [
@@ -241,11 +243,11 @@ export default defineComponent({
 
 			if (row) {
 				 api.common.detail(row.sourceId).then((res:any)=>{
-				   state.ruleForm = res.data
-           state.config=res.data.apiConfig
-           state.requestParams=res.data.apiConfig.requestParams
+				    state.ruleForm = res.data
+					state.config=res.data.apiConfig
+					state.requestParams=res.data.apiConfig.requestParams
 
-           res.data.sourceRule.forEach((item, index) => {
+           			res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
 						state.rule[index].params.name =Object.keys(item.params) ;
 						state.rule[index].params.value = item.params[Object.keys(item.params)];

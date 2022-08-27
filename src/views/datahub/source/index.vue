@@ -59,10 +59,6 @@
 		  	<span v-if="scope.row.from==3">文件</span>
           </template>
         </el-table-column>
-
-
-       
-        
         <el-table-column prop="status" label="状态" width="120" align="center">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
