@@ -24,13 +24,13 @@
 				<el-divider content-position="left">规则表达式</el-divider>
 
 				<div v-for="(item, index) in rule" :key="index">
-					<el-form-item label="表达式" prop="expression">
+					<el-form-item label="表达式">
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数" prop="params">
-						<el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
-						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" />
+					<el-form-item label="参数" >
+						<el-input v-model="item.params.name" placeholder="请输入键值" class="w-35" />
+						<el-input v-model="item.params.value" placeholder="请输入值" class="w-35" />
 						<div class="conicon">
 							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
 						</div>
@@ -41,17 +41,17 @@
 				</div>
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<el-form-item label="请求方法" prop="method">
+				<el-form-item label="请求方法" >
 					<el-select v-model="config.method" placeholder="请选择请求方法">
 						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="请求地址" prop="url">
+				<el-form-item label="请求地址" >
 					<el-input v-model="config.url" placeholder="请输入请求地址" />
 				</el-form-item>
 
-				<el-form-item label="更新时间" prop="interval">
+				<el-form-item label="更新时间" >
 					<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
 					<el-select v-model="config.intervalUnit" placeholder="请选择单位">
 						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
@@ -111,7 +111,6 @@ export default defineComponent({
 	components: { Delete, Minus, Right },
 
 	setup(prop, { emit }) {
-		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			
@@ -291,11 +290,12 @@ export default defineComponent({
 				if (valid) {
 					//修改rule数据
 					state.rule.forEach((item, index) => {
-						state.ruledata[index].expression = item.expression;
-						state.ruledata[index].params[item.params.name] = item.params.value;
+						item.params[item.params.name] = item.params.value;
+						delete item.params.name;
+						delete item.params.value;
 					});
 
-					state.ruleForm.rule = state.ruledata;
+					state.ruleForm.rule = state.rule;
 					state.config.requestParams = state.requestParams;
 					state.ruleForm.config = state.config;
 
