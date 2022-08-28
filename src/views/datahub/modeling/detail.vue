@@ -2,7 +2,7 @@
 	<div class="system-dic-container">
 		<div class="content">
 			<div class="cont_box">
-				<div class="title">数据表名：{{ detail.name }}</div>
+				<div class="title">数据表名称：{{ detail.name }}</div>
 				<div class="title">数据表表名：{{ detail.name }}</div>
 		
 			</div>
