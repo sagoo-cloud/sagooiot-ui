@@ -204,7 +204,7 @@ export default defineComponent({
 		};
 		// 打开任务接口弹窗
 		const onRowDetail = (row: TableDataRow) => {
-			setTaskRef.value.openDialog(row);
+			setTaskRef.value.openDialog(row, state.ruleForm.item_code);
 		};
 		// 接收数据
 		const handleChange = (data: any, index: any, isEdit: Boolean) => {
