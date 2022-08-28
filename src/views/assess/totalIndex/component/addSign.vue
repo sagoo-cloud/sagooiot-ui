@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item class="has-symbol" label="权重" prop="weight">
-							<el-input v-model="ruleForm.weight" placeholder="请输入权重" clearable></el-input>
+							<el-input v-model.number="ruleForm.weight" placeholder="请输入权重" clearable></el-input>
 							<span class="symbol">%</span>
 						</el-form-item>
 					</el-col>
@@ -40,7 +40,7 @@
 						<div class="right-wrap">
 							<span class="symbol">*</span>
 							<span class="label">得分</span>
-							<el-input size="small" v-model="item.base_value" placeholder="请输入得分" clearable></el-input>
+							<el-input size="small" v-model.number="item.base_value" placeholder="请输入得分" clearable></el-input>
 						</div>
 						<el-button @click="deleteRange(index)" size="small" type="danger">删除</el-button>
 
@@ -162,6 +162,7 @@ export default defineComponent({
 							return 
 						}
 					}
+					console.log(state.ruleForm)
 					emit('handleChange', state.ruleForm, state.index, state.isEdit)
 					closeDialog();
 				} else {

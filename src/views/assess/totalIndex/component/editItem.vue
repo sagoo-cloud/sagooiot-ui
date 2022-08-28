@@ -102,6 +102,9 @@ interface ItemState {
 	ruleForm: {
 		title: string;
 		explain: string;
+		config: string;
+		item_code: string;
+		targets: Array<any>
 	};
 	tableData: {
 		data: Array<TableDataRow>;
@@ -128,6 +131,9 @@ export default defineComponent({
 			ruleForm: {
 				title: '', // 评价名称
 				explain: '', // 描述
+				config: '',
+				item_code: '',
+				targets: []
 			},
 			// deptData: [], // 部门数据
 			// 标识列表数据
@@ -172,9 +178,18 @@ export default defineComponent({
 			await formEl.validate((valid, fields) => {
 				console.log(valid)
 				if (valid) {
-				console.log('submit!')
+					state.ruleForm.targets = state.tableData.data
+					
+					api.setItem(state.ruleForm).then((res: any) => {
+						console.log(res);
+						ElMessage.success('提交成功');
+						emit('fetchList');
+						closeDialog(); // 关闭弹窗
+						// state.tableData.total = res.total;
+					});
+					console.log('submit!')
 				} else {
-				console.log('error submit!', fields)
+					console.log('error submit!', fields)
 				}
 			})
 		}

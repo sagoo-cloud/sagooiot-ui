@@ -56,7 +56,7 @@
 			</el-pagination> -->
 		</el-card>
 		<!-- <AddUer ref="addUserRef" /> -->
-		<EditItem ref="editItemRef" />
+		<EditItem ref="editItemRef" @fetchList="fetchList" />
 
 		<AddItem ref="addItemRef" />
 
@@ -126,6 +126,8 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
+			console.log('刷新数据了')
+			fetchList()
 			// const data: Array<TableDataRow> = [];
 			// for (let i = 0; i < 9; i++) {
 			// 	data.push({
@@ -138,6 +140,9 @@ export default defineComponent({
 			// state.tableData.data = data;
 			// state.tableData.total = state.tableData.data.length;
 			// console.log(data)
+			
+		};
+		const fetchList = () => {
 			api.getList().then((res: any) => {
 				console.log(res);
 				state.tableData.data = res;
@@ -190,6 +195,7 @@ export default defineComponent({
 			onRowDel,
 			onHandleSizeChange,
 			onHandleCurrentChange,
+			fetchList,
 			...toRefs(state),
 		};
 	},
