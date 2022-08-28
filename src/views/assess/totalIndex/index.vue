@@ -56,9 +56,9 @@
 			</el-pagination> -->
 		</el-card>
 		<!-- <AddUer ref="addUserRef" /> -->
-		<EditItem ref="editItemRef" @fetchList="fetchList" />
+		<EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
 
-		<AddItem ref="addItemRef" />
+		<!-- <AddItem ref="addItemRef" /> -->
 
 		<DetailItem ref="detailItemRef" />
 
@@ -70,9 +70,9 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 // import AddUer from '/@/views/system/user/component/addUser.vue';
-import EditItem from './component/editItem.vue';
+import EditOrAddItem from './component/editItem.vue';
 
-import AddItem from './component/addItem.vue';
+// import AddItem from './component/addItem.vue';
 
 import DetailItem from './component/detailItem.vue';
 
@@ -108,10 +108,10 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'systemUser',
-	components: {  EditItem, AddItem, DetailItem },
+	components: {  EditOrAddItem, DetailItem },
 	setup() {
-		const addItemRef = ref();
-		const editItemRef = ref();
+		// const addItemRef = ref();
+		const EditOrAddItem = ref();
 		const detailItemRef = ref();
 		const state = reactive<TableDataState>({
 			tableData: {
@@ -151,11 +151,11 @@ export default defineComponent({
 		};
 		// 打开新增用户弹窗
 		const onOpenAddItem = () => {
-			addItemRef.value.openDialog();
+			EditOrAddItem.value.openDialog();
 		};
 		// 打开修改用户弹窗
 		const onOpenEditItem = (row: TableDataRow) => {
-			editItemRef.value.openDialog(row);
+			EditOrAddItem.value.openDialog(row);
 		};
 		// 打开详细信息弹窗
 		const onOpenDetailItem = (row: TableDataRow) => {
@@ -186,8 +186,8 @@ export default defineComponent({
 			initTableData();
 		});
 		return {
-			addItemRef,
-			editItemRef,
+			// addItemRef,
+			EditOrAddItem,
 			detailItemRef,
 			onOpenAddItem,
 			onOpenEditItem,

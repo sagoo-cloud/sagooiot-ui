@@ -1,6 +1,6 @@
 <template>
 	<div class="system-add-user-container">
-		<el-dialog title="编辑指标" v-model="isShowDialog" width="769px">
+		<el-dialog :title="ruleForm.item_code ? '编辑指标' : '新增指标'" v-model="isShowDialog" width="769px">
 			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
 				<!-- <el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
@@ -156,10 +156,10 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row:any) => {
 			state.isShowDialog = true;
+			if(!row) return
 			console.log(row.item_code)
 			api.getList({itemcode: row.item_code}).then((res: any) => {
 				console.log(res)
-
 				state.ruleForm = res;
 				state.tableData.data = res.targets
 			});
@@ -185,7 +185,6 @@ export default defineComponent({
 						ElMessage.success('提交成功');
 						emit('fetchList');
 						closeDialog(); // 关闭弹窗
-						// state.tableData.total = res.total;
 					});
 					console.log('submit!')
 				} else {
@@ -193,9 +192,6 @@ export default defineComponent({
 				}
 			})
 		}
-		// const onSubmit = () => {
-		// 	closeDialog();
-		// };
 		// 打开新增用户弹窗
 		const onOpenAddSign = () => {
 			addSignRef.value.openDialog(null, null, false);

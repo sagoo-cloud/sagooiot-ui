@@ -5,7 +5,7 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="指标名称:">
-							{{ruleForm.userName}}
+							{{ruleForm.name}}
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
@@ -56,6 +56,7 @@ import { ElMessage } from 'element-plus';
 
 // 定义接口来定义对象的类型
 interface RuleFormRow {
+	name: string;
 	userName: string;
 	isUse: string;
 	dataType: string;
@@ -73,6 +74,7 @@ export default defineComponent({
 		const state = reactive<ItemState>({
 			isShowDialog: false,
 			ruleForm: {
+				name: '',// 指标名称
 				userName: '', // 指标名称
 				isUse: "1", // 是否启用
 				dataType: '', // 数据项
