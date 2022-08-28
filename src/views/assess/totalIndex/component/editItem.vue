@@ -1,19 +1,19 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog title="编辑指标" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" size="default" label-width="90px">
+			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
 				<!-- <el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
-						<el-form-item label="评价名称" required>
-							<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
+						<el-form-item label="评价名称" prop="title" class="mb20">
+							<el-input size="small" v-model="ruleForm.title" placeholder="请输入评价名称" clearable></el-input>
 						</el-form-item>
 					<!-- </el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
 						<el-form-item label="描述">
-							<el-input width="400"  size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
+							<el-input width="400"  size="small" v-model="ruleForm.explain" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
 						</el-form-item>
-					<!-- </el-col> -->
-				<!-- </el-row> -->
+					<!-- </el-col>
+				</el-row> -->
 			</el-form>
 			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
 				<el-icon>
@@ -23,23 +23,23 @@
 			</el-button>
 			<el-table border stripe :data="tableData.data" style="width: 100%">
 				<el-table-column align="center" type="index" label="序号" width="58" />
-				<el-table-column align="center" prop="userName" label="标识" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="num" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="name" label="标识" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="title" label="数据项" show-overflow-tooltip></el-table-column>
+				<el-table-column align="center" prop="weight" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
 					<template #default="scope">
-						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{item}}</el-tag>
+						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.ranges" :key="index">{{`${item.start_value}~${item.end_value}`}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column align="center" label="操作" width="160">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="onOpenEditSign(scope.row)">编辑</el-button>
-						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" type="text" @click="onOpenEditSign(scope.row, scope.$index)">编辑</el-button>
+						<el-button size="small" type="text" @click="onRowDel(scope.row, scope.$index)">删除</el-button>
 						<el-button size="small" type="text" @click="onRowDetail(scope.row)">任务接口</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
+			<!-- <el-pagination
 				@size-change="onHandleSizeChange"
 				@current-change="onHandleCurrentChange"
 				class="mt15"
@@ -51,25 +51,29 @@
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="tableData.total"
 			>
-			</el-pagination>
+			</el-pagination> -->
 
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">保 存</el-button>
+					<el-button type="primary" @click="onSubmit(ruleFormRef)" size="default">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>
-		<AddSign ref="addSignRef" />
+		<AddSign ref="addSignRef" @handleChange="handleChange" />
 		<SetTask ref="setTaskRef" />
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, onMounted, ref, defineComponent } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessageBox, ElMessage } from 'element-plus';
 import AddSign from './addSign.vue';
 import SetTask from './setTask.vue';
+
+
+import api from '/@/api/assess';
 
 
 
@@ -85,7 +89,7 @@ interface DeptData {
 }
 // 定义接口来定义对象的类型
 interface TableDataRow {
-	userName: string;
+	title: string;
 	description: string;
 	dataType: string;
 	createTime: string;
@@ -96,17 +100,8 @@ interface TableDataRow {
 interface ItemState {
 	isShowDialog: boolean;
 	ruleForm: {
-		userName: string;
-		userNickname: string;
-		roleSign: string;
-		department: any;
-		phone: string;
-		email: string;
-		sex: string;
-		password: string;
-		overdueTime: string;
-		status: boolean;
-		describe: string;
+		title: string;
+		explain: string;
 	};
 	tableData: {
 		data: Array<TableDataRow>;
@@ -125,23 +120,14 @@ interface ItemState {
 export default defineComponent({
 	name: 'systemAddUser',
 	components: { AddSign, SetTask},
-	setup() {
+	setup(prop, { emit }) {
 		const addSignRef = ref();
 		const setTaskRef = ref();
 		const state = reactive<ItemState>({
 			isShowDialog: false,
 			ruleForm: {
-				userName: '', // 账户名称
-				userNickname: '', // 用户昵称
-				roleSign: '', // 关联角色
-				department: [], // 部门
-				phone: '', // 手机号
-				email: '', // 邮箱
-				sex: '', // 性别
-				password: '', // 账户密码
-				overdueTime: '', // 账户过期
-				status: true, // 用户状态
-				describe: '', // 用户描述
+				title: '', // 评价名称
+				explain: '', // 描述
 			},
 			// deptData: [], // 部门数据
 			// 标识列表数据
@@ -155,9 +141,22 @@ export default defineComponent({
 				},
 			}
 		});
+		const ruleFormRef = ref<FormInstance>()
+		const rules = reactive<FormRules>({
+			title: [
+				{ required: true, message: '评价名称', trigger: 'blur' },
+			]
+		})
 		// 打开弹窗
-		const openDialog = () => {
+		const openDialog = (row:any) => {
 			state.isShowDialog = true;
+			console.log(row.item_code)
+			api.getList({itemcode: row.item_code}).then((res: any) => {
+				console.log(res)
+
+				state.ruleForm = res;
+				state.tableData.data = res.targets
+			});
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -168,30 +167,55 @@ export default defineComponent({
 			closeDialog();
 		};
 		// 新增
-		const onSubmit = () => {
-			closeDialog();
-		};
+		const onSubmit = async (formEl: FormInstance | undefined) => {
+			if (!formEl) return
+			await formEl.validate((valid, fields) => {
+				console.log(valid)
+				if (valid) {
+				console.log('submit!')
+				} else {
+				console.log('error submit!', fields)
+				}
+			})
+		}
+		// const onSubmit = () => {
+		// 	closeDialog();
+		// };
 		// 打开新增用户弹窗
 		const onOpenAddSign = () => {
-			addSignRef.value.openDialog();
+			addSignRef.value.openDialog(null, null, false);
 		};
 				
 		// 打开编辑弹窗
-		const onOpenEditSign = (row: TableDataRow) => {
-			addSignRef.value.openDialog(row);
+		const onOpenEditSign = (row: TableDataRow, index: number) => {
+			console.log(index)
+			addSignRef.value.openDialog(row, index, true);
 		};
 		// 打开任务接口弹窗
 		const onRowDetail = (row: TableDataRow) => {
 			setTaskRef.value.openDialog(row);
 		};
+		// 接收数据
+		const handleChange = (data: any, index: any, isEdit: Boolean) => {
+			if(!isEdit) {
+				// 新增
+				state.tableData.data.push(data)
+			}else {
+				state.tableData.data[index] = data
+			}
+			console.log(data);
+			console.log(index)
+			console.log(isEdit)
+		};
 		// 删除标识项
-		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+		const onRowDel = (row: TableDataRow, index: number) => {
+			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
+					state.tableData.data.splice(index, 1)
 					ElMessage.success('删除成功');
 				})
 				.catch(() => {});
@@ -223,9 +247,11 @@ export default defineComponent({
 		};
 		// 页面加载时
 		onMounted(() => {
-			initTableData();
+			// initTableData();
 		});
 		return {
+			rules,
+			ruleFormRef,
 			setTaskRef,
 			addSignRef,
 			onOpenAddSign,// 打开添加标识项弹窗
@@ -235,6 +261,8 @@ export default defineComponent({
 
 			onHandleSizeChange,// 标识项分页每页展示条数变化
 			onHandleCurrentChange,// 标识项分页页数变化变化
+
+			handleChange,
 
 			openDialog,
 			closeDialog,
