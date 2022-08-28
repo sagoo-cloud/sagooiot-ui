@@ -4,18 +4,12 @@
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" >
 
-		 <el-form-item label="数据源标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="数据源标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="数据源名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入数据源名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+		 
+          <el-form-item label="自建表名称" prop="name">
+            <el-input v-model="tableData.param.name" placeholder="请输入自建表名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
 		 
-          <el-form-item label="数据源类型" prop="host">
-				<el-select v-model="tableData.param.from" placeholder="请选择数据源类型" @keyup.enter.native="typeList">
-						<el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
-					</el-select>
-          </el-form-item>
+         
       
         
          
@@ -36,7 +30,7 @@
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
-              新增数据源
+              新增自建表
             </el-button>
        <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
@@ -50,29 +44,18 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="sourceId" width="80" />
-        <el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
-         <el-table-column prop="from" label="数据源类型"  align="center">
-          <template #default="scope">
-		  	<span v-if="scope.row.from==1">api导入</span>
-		  	<span v-if="scope.row.from==2">数据库</span>
-		  	<span v-if="scope.row.from==3">文件</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
-            <el-tag type="info" size="small" v-if="scope.row.status==0">未发布</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column label="自建表名称" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column label="自建表表名" prop="name" :show-overflow-tooltip="true" />
+        
+      
 
 		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
 
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
-		   	<router-link :to="'/datahub/source/detail/' + scope.row.sourceId" class="link-type" style="padding-right: 12px;
+		   	<router-link :to="'/datahub/modeling/detail/' + scope.row.sourceId" class="link-type" style="padding-right: 12px;
     font-size: 12px;color: #409eff;">
-              <span>详情</span>
+              <span>字段管理</span>
             </router-link>
 
             <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
@@ -166,11 +149,11 @@ export default defineComponent({
 				state.tableData.total = res.Total;
 			});
 		};
-		// 打开新增数据源弹窗
+		// 打开新增自建表弹窗
 		const onOpenAdd = () => {
 			editDicRef.value.openDialog();
 		};
-		// 打开修改数据源弹窗
+		// 打开修改自建表弹窗
 		const onOpenEdit = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
 		};
@@ -178,7 +161,7 @@ export default defineComponent({
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除数据源：“${row.name}”，是否继续?`;
+				msg = `此操作将永久删除自建表：“${row.name}”，是否继续?`;
 				ids = [row.sourceId];
 			} else {
 				ids = state.ids;
