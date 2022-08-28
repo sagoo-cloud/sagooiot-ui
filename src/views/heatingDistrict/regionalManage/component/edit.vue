@@ -20,6 +20,10 @@
 				<el-form-item label="小区名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入小区名称" />
 				</el-form-item>
+				<el-form-item label="状态" prop="status">
+					<el-radio v-model="ruleForm.status" :label="1">启用</el-radio>
+					<el-radio v-model="ruleForm.status" :label="0">禁用</el-radio>
+				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -51,6 +55,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
         organizationId: '',
+				status: 1
 			},
 			rules: {
 				name: [{ required: true, message: '小区名称不能为空', trigger: ['blur', 'change'] }],
@@ -71,7 +76,8 @@ export default defineComponent({
 			state.ruleForm = {
 				id: 0,
 				name: '',
-        organizationId: ''
+        organizationId: '',
+				status: 1
 			}
 		}
 		// 关闭弹窗

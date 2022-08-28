@@ -21,7 +21,7 @@
 						/>
           </el-form-item>
           <el-form-item label="小区名称" prop="plotId">
-            <el-select v-model="tableData.param.plotId" placeholder="选择小区名称" filterable clearable size="default">
+            <el-select v-model="tableData.param.plotId" @change="onPlotChange" placeholder="选择小区名称" filterable clearable size="default">
 							<el-option
 								v-for="item in plotList"
 								:key="item.id"
@@ -30,8 +30,28 @@
 							</el-option>
 						</el-select>
           </el-form-item>
-          <el-form-item label="楼宇名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入楼宇名称" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
+          <el-form-item label="楼宇名称" prop="floorId">
+            <el-select v-model="tableData.param.floorId" @change="onFloorChange" placeholder="选择楼宇名称" filterable clearable size="default">
+							<el-option
+								v-for="item in floorList"
+								:key="item.id"
+								:label="item.name"
+								:value="item.id">
+							</el-option>
+						</el-select>
+          </el-form-item>
+          <el-form-item label="单元名称" prop="unitId">
+            <el-select v-model="tableData.param.unitId" placeholder="选择单元名称" filterable clearable size="default">
+							<el-option
+								v-for="item in unitList"
+								:key="item.id"
+								:label="item.name"
+								:value="item.id">
+							</el-option>
+						</el-select>
+          </el-form-item>
+          <el-form-item label="住户名称" prop="name">
+            <el-input v-model="tableData.param.name" placeholder="请输入住户名称" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="queryList">
@@ -64,19 +84,24 @@
       <el-table :data="tableData.data" style="width: 100%" >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="楼宇名称" prop="name" />
-	    	<el-table-column label="楼号" prop="number" />
-	    	<!-- <el-table-column label="单元数" prop="name" /> -->
-        <el-table-column label="小区名称" prop="">
-          <template #default="{ row }">
-            {{ row.ZhgyPlotInfo ? row.ZhgyPlotInfo.name : '-' }}
-          </template>
-        </el-table-column>
         <el-table-column label="组织名称" prop="">
           <template #default="{ row }">
-            {{ row.SysOrganization ? row.SysOrganization.name : '-' }}
+            {{ row.SysOrganization.name }}
           </template>
         </el-table-column>
+        <el-table-column label="小区名称" prop="">
+          <template #default="{ row }">
+            {{ row.ZhgyPlotInfo.name }}
+          </template>
+        </el-table-column>
+        <el-table-column label="楼宇名称" prop="">
+          <template #default="{ row }">
+            {{ row.floorInfo.name }}
+          </template>
+        </el-table-column>
+	    	<el-table-column label="单元名称" prop="name" />
+	    	<el-table-column label="单元号" prop="number" />
+	    	<el-table-column label="住户姓名" prop="name" />
 	    	<el-table-column label="更新时间" prop="createdAt" />
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
@@ -119,6 +144,8 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					plotId: '',
+					floorId: '',
+					unitId: '',
 					organizationId: '',
 					status: -1
 				},
@@ -128,6 +155,10 @@ export default defineComponent({
 		const orgList = ref([])
 		// 小区
 		const plotList = ref([])
+		// 楼宇
+		const floorList = ref([])
+		// 单元
+		const unitList = ref([])
 		// 初始化表格数据
 		const initTableData = () => {
 			queryList();
@@ -145,14 +176,43 @@ export default defineComponent({
 					plotList.value = res.Info || []
 				})
 		}
+		// 获取楼宇
+		const getFloorList = () => {
+			api.floor.allList({})
+				.then((res: any) => {
+					floorList.value = res.Info || []
+				})
+		}
+		// 获取单元
+		const getUnitList = () => {
+			api.unit.getListByFloorId({ floorId: state.tableData.param.floorId })
+				.then((res: any) => {
+					(unitList.value as any) = res ? [res] : []
+				})
+		}
 		const queryList = () => {
-			api.floor.getList(state.tableData.param).then((res: any) => {
+			api.resident.getList(state.tableData.param).then((res: any) => {
 				console.log(res);
 				state.tableData.data = res.Info || [];
 				state.tableData.total = res.Total;
 			});
 		};
-
+		const onPlotChange = () => { 
+			floorList.value = []
+			unitList.value = []
+			state.tableData.param.floorId = ''
+			state.tableData.param.unitId = ''
+			if (state.tableData.param.plotId) {
+				getFloorList()
+			}
+		}
+		const onFloorChange = () => {
+			unitList.value = []
+			state.tableData.param.unitId = ''
+			if (state.tableData.param.floorId) {
+				getUnitList()
+			}
+		}
 		//查看详情
 		const onOpenDetail=(row: any)=>{
 			detailRef.value.openDialog(row);
@@ -165,25 +225,14 @@ export default defineComponent({
 		};
 		// 删除产品
 		const onRowDel = (row: any) => {
-			// let msg = '你确定要删除所选数据？';
-			// let ids: number[] = [];
-			// if (row) {
-			let msg = `此操作将永久删除楼宇：“${row.name}”，是否继续?`;
-			// 	ids = [row.id];
-			// } else {
-			// 	ids = state.ids;
-			// }
-			// if (ids.length === 0) {
-			// 	ElMessage.error('请选择要删除的数据。');
-			// 	return;
-			// }
+			let msg = `此操作将永久删除住户：“${row.name}”，是否继续?`;
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					api.floor.del(row.id).then(() => {
+					api.resident.del(row.id).then(() => {
 						ElMessage.success('删除成功');
 						queryList();
 					});
@@ -195,6 +244,8 @@ export default defineComponent({
 			initTableData();
 			getOrgList();
 			getPlotList()
+			// getFloorList()
+			// getUnitList()
 		});
 		/** 重置按钮操作 */
 		const resetQuery = (formEl: FormInstance | undefined) => {
@@ -215,6 +266,10 @@ export default defineComponent({
 			resetQuery,
 			orgList,
 			plotList,
+			floorList,
+			unitList,
+			onPlotChange,
+			onFloorChange,
 			...toRefs(state),
 		};
 	},
