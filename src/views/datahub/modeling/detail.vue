@@ -3,81 +3,90 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">模型标识：{{ detail.key }}</div>
-				<div class="title" style="margin-left: 20px;">模型表名：{{ detail.name }}</div>
-		
+				<div class="title" style="margin-left: 20px">模型表名：{{ detail.name }}</div>
 			</div>
 		</div>
 
 		<div class="content-box">
+			<div class="wu-box">
+				<div class="system-user-search mb15">
+					<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="130px">
+						<el-form-item label="字段节点标题" prop="key">
+							<el-input
+								v-model="tableData.param.key"
+								placeholder="请输入字段节点标题"
+								clearable
+								size="default"
+								style="width: 240px"
+								@keyup.enter.native="typeList"
+							/>
+						</el-form-item>
+						<el-form-item label="字段节点名称" prop="name">
+							<el-input
+								v-model="tableData.param.name"
+								placeholder="请输入字段节点名称"
+								clearable
+								size="default"
+								style="width: 240px"
+								@keyup.enter.native="typeList"
+							/>
+						</el-form-item>
 
-
-                        <div class="wu-box">
-						 <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="130px">
-          <el-form-item label="字段节点标题" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入字段节点标题" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="字段节点名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入字段节点名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-        
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增字段节点
-            </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+						<el-form-item>
+							<el-button size="default" type="primary" class="ml10" @click="typeList">
+								<el-icon>
+									<ele-Search />
+								</el-icon>
+								查询
+							</el-button>
+							<el-button size="default" @click="resetQuery(queryRef)">
+								<el-icon>
+									<ele-Refresh />
+								</el-icon>
+								重置
+							</el-button>
+							<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+								<el-icon>
+									<ele-FolderAdd />
+								</el-icon>
+								新增字段节点
+							</el-button>
+							<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               删除
             </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-                       
+						</el-form-item>
+					</el-form>
+				</div>
 
-                         <el-table :data="tableData.data" style="width: 100%" >
-        <el-table-column label="ID" align="center" prop="id" width="80" />
-        <el-table-column label="字段节点标题" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="字段节点名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="字段节点类型" prop="dataType" :show-overflow-tooltip="true" />
-        <el-table-column label="默认值" prop="default" :show-overflow-tooltip="true" />
-        <el-table-column label="备注说明" prop="value" :show-overflow-tooltip="true" />
-		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
+				<el-table :data="tableData.data" style="width: 100%">
+					<el-table-column label="ID" align="center" prop="id" width="80" />
+					<el-table-column label="字段节点标题" prop="key" :show-overflow-tooltip="true" />
+					<el-table-column label="字段节点名称" prop="name" :show-overflow-tooltip="true" />
+					<el-table-column label="字段节点类型" prop="dataType" :show-overflow-tooltip="true" />
+					<el-table-column label="默认值" prop="default" :show-overflow-tooltip="true" />
+					<el-table-column label="备注说明" prop="value" :show-overflow-tooltip="true" />
+					<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
 
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-	
-
-            <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
-           </div>         
-                  
-
-
-
-
-        </div>
- <EditDic ref="editDicRef" @typeList="typeList" />
+					<el-table-column label="操作" width="200" align="center">
+						<template #default="scope">
+							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
+							<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<pagination
+					v-show="tableData.total > 0"
+					:total="tableData.total"
+					v-model:page="tableData.param.pageNum"
+					v-model:limit="tableData.param.pageSize"
+					@pagination="typeList"
+				/>
+			</div>
+		</div>
+		<EditDic ref="editDicRef" @typeList="typeList" />
 	</div>
 </template>            
 <script lang="ts">
@@ -105,18 +114,18 @@ interface TableDataState {
 	};
 }
 export default defineComponent({
-    name: 'dataDetail',
-    components: { EditDic },
-    setup(prop, context) {
-        		const editDicRef = ref();
+	name: 'dataDetail',
+	components: { EditDic },
+	setup(prop, context) {
+		const editDicRef = ref();
 
 		const route = useRoute();
-        const state = reactive<TableDataState>({
-            config: {},
-		
+		const state = reactive<TableDataState>({
+			config: {},
+
 			isShowDialog: false,
 			detail: [],
-            
+
 			tableData: {
 				data: [],
 				total: 0,
@@ -124,38 +133,34 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-                    tid: route.params && route.params.id,
+					tid: route.params && route.params.id,
 					status: '',
 					dateRange: [],
 				},
 			},
 		});
 
-
-
-        onMounted(() => {
+		onMounted(() => {
 			const ids = route.params && route.params.id;
 			api.template.detail(ids).then((res: any) => {
 				state.detail = res.data;
 			});
 
-                typeList();
+			typeList();
 		});
 
-        const typeList = () => {
+		const typeList = () => {
 			api.tnode.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;
 				//state.tableData.total = res.Total;
 			});
 		};
 
-
-   
-        const handleClick = (tab: TabsPaneContext, event: Event) => {
+		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event);
 		};
 
-        	const onRowDel = (row: TableDataRow) => {
+		const onRowDel = (row: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
@@ -182,28 +187,27 @@ export default defineComponent({
 				.catch(() => {});
 		};
 
-        	// 打开修改数据源弹窗
-        const onOpenEdit = (row: TableDataRow) => {
+		// 打开修改数据源弹窗
+		const onOpenEdit = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
 		};
 
-		const onOpenAdd =()=>{
-			editDicRef.value.openDialog({tid:route.params.id,id:0,from:1});
+		const onOpenAdd = () => {
+			editDicRef.value.openDialog({ tid: route.params.id, id: 0, from: 1 });
 		};
 
-        	return {
+		return {
 			Edit,
-            editDicRef,
+			editDicRef,
 			onOpenAdd,
-            typeList,
-            onRowDel,
-            onOpenEdit,
-            handleClick,
+			typeList,
+			onRowDel,
+			onOpenEdit,
+			handleClick,
 			...toRefs(state),
 		};
-    },
+	},
 });
-
 </script>
 <style>
 .content {
@@ -262,6 +266,4 @@ export default defineComponent({
 	border: 0px;
 	color: #1890ff;
 }
-
-
 </style>

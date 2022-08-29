@@ -2,69 +2,32 @@
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '字段节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-
-
-
-			<el-form-item label="类型" prop="from">
+				<el-form-item label="类型" prop="from">
 					<el-radio-group v-model="ruleForm.from">
 						<el-radio :label="1">自定义</el-radio>
 						<el-radio :label="2">数据源</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
+				<div v-if="ruleForm.from == 2">
+					<el-form-item label="数据源" prop="sourceId">
+						<el-select v-model="ruleForm.sourceId" filterable placeholder="请选择数据源" @change="getNodeList">
+							<el-option v-for="item in sourceData" :key="item.sourceId" :label="item.key" :value="item.sourceId">
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+							</el-option>
+						</el-select>
+					</el-form-item>
 
-
-
-
-				<div v-if="ruleForm.from==2">
-				
-						
-			<el-form-item label="数据源" prop="sourceId">
-					<el-select v-model="ruleForm.sourceId" filterable  placeholder="请选择数据源" @change="getNodeList">
-						<el-option
-						v-for="item in sourceData"
-						:key="item.sourceId"
-						:label="item.key"
-						:value="item.sourceId"
-						>
-						<span style="float: left">{{ item.key }}</span>
-						<span
-							style="
-							float: right;
-							font-size: 13px;
-							"
-							>{{ item.name }}</span
-						>
-						</el-option>
-					</el-select>
-				
-			</el-form-item>
-
-				<el-form-item label="数据源节点" prop="nodeId">
-					<el-select v-model="ruleForm.nodeId" filterable  placeholder="请选择数据源" @change="setNode">
-						<el-option
-						v-for="item in nodeData"
-						:key="item.nodeId"
-						:label="item.key"
-						:value="item.nodeId"
-						>
-						<span style="float: left">{{ item.key }}</span>
-						<span
-							style="
-							float: right;
-							font-size: 13px;
-							"
-							>{{ item.name }}</span
-						>
-						</el-option>
-					</el-select>
-				
-			</el-form-item>
-
-
+					<el-form-item label="数据源节点" prop="nodeId">
+						<el-select v-model="ruleForm.nodeId" filterable placeholder="请选择数据源" @change="setNode">
+							<el-option v-for="item in nodeData" :key="item.nodeId" :label="item.key" :value="item.nodeId">
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+							</el-option>
+						</el-select>
+					</el-form-item>
 				</div>
-
-
 
 				<el-form-item label="字段节点标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称" />
@@ -73,16 +36,9 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
 
-
-					
-			<el-form-item label="数据类型" prop="dataType">
-					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型" >
-						<el-option
-						v-for="item in tabData"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
-						/>
+				<el-form-item label="数据类型" prop="dataType">
+					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
+						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
@@ -90,10 +46,9 @@
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
-	<el-form-item label="描述" prop="desc">
+				<el-form-item label="描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
-			
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -137,53 +92,61 @@ export default defineComponent({
 		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
-			
 			isShowDialog: false,
-			tabData:[{
-				label: 'varchar',
-				value: 'varchar',
-			},{
-				label: 'string',
-				value: 'string',
-			},{
-				label: 'int',
-				value: 'int',
-			},{
-				label: 'bigint',
-				value: 'bigint',
-			},{
-				label: 'tinyint',
-				value: 'tinyint',
-			},{
-				label: 'float',
-				value: 'float',
-			},{
-				label: 'double',
-				value: 'double',
-			},{
-				label: 'text',
-				value: 'text',
-			},{
-				label: 'datetime',
-				value: 'datetime',
-			},{
-				label: 'timestamp',
-				value: 'timestamp',
-			}],
-		
-	
-			sourceData:[],
-			nodeData:[],
+			tabData: [
+				{
+					label: 'varchar',
+					value: 'varchar',
+				},
+				{
+					label: 'string',
+					value: 'string',
+				},
+				{
+					label: 'int',
+					value: 'int',
+				},
+				{
+					label: 'bigint',
+					value: 'bigint',
+				},
+				{
+					label: 'tinyint',
+					value: 'tinyint',
+				},
+				{
+					label: 'float',
+					value: 'float',
+				},
+				{
+					label: 'double',
+					value: 'double',
+				},
+				{
+					label: 'text',
+					value: 'text',
+				},
+				{
+					label: 'datetime',
+					value: 'datetime',
+				},
+				{
+					label: 'timestamp',
+					value: 'timestamp',
+				},
+			],
 
-		
+			sourceData: [],
+			nodeData: [],
+
 			ruleForm: {
 				id: 0,
-				sourceId:0,
-				nodeId:0,
+				sourceId: 0,
+				nodeId: 0,
 				name: '',
 				key: '',
-				from:1,
-				default:'',
+				from: 1,
+				default: '',
 				desc: '',
 			},
 			rules: {
@@ -191,71 +154,67 @@ export default defineComponent({
 				name: [{ required: true, message: '字段节点名称不能为空', trigger: 'blur' }],
 				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
-			
 			},
 		});
-		
 
-		
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 
-
 			console.log(row);
 			if (row?.id) {
-				  state.ruleForm = row
+				state.ruleForm = row;
 			}
 
-			if(row.sourceId){
+			if (row.sourceId) {
 				getNodeList(row.sourceId);
 			}
-			 state.ruleForm = row
+			state.ruleForm = row;
 			state.isShowDialog = true;
 
 			getSouData();
 		};
 
-
-		const getSouData=()=>{
-			api.common.getList({
+		const getSouData = () => {
+			api.common
+				.getList({
 					pageNum: 1,
 					pageSize: 50,
-					
-				}).then((res: any) => {
-				state.sourceData = res.list;
-			});
-
+				})
+				.then((res: any) => {
+					state.sourceData = res.list;
+				});
 		};
 
-		const getNodeList=(event)=>{
-
-			api.node.getList({
+		const getNodeList = (event) => {
+			api.node
+				.getList({
 					pageNum: 1,
 					pageSize: 50,
 					sourceId: event,
-				}).then((res: any) => {
-				state.nodeData = res.list;
-			});
+				})
+				.then((res: any) => {
+					state.nodeData = res.list;
+				});
 		};
-		const setNode=(event)=>{
+		const setNode = (event) => {
 			state.nodeData.forEach((item, index) => {
-					if(item.nodeId==event){
-						state.ruleForm.name=item.name;
-						state.ruleForm.key=item.key;
-						state.ruleForm.dataType=item.dataType;
-					}
-			})
+				if (item.nodeId == event) {
+					state.ruleForm.name = item.name;
+					state.ruleForm.key = item.key;
+					state.ruleForm.dataType = item.dataType;
+				}
+			});
 		};
 		const resetForm = () => {
 			state.ruleForm = {
 				id: 0,
 				name: '',
-				sourceId:0,
-				nodeId:0,
+				sourceId: 0,
+				nodeId: 0,
 				key: '',
-				from:1,
-				default:'',
+				from: 1,
+				default: '',
 				desc: '',
 			};
 		};
@@ -272,9 +231,8 @@ export default defineComponent({
 			const formWrap = unref(formRef) as any;
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
-			if (valid) {
-
-				if (state.ruleForm.id !== 0) {
+				if (valid) {
+					if (state.ruleForm.id !== 0) {
 						//修改
 						api.tnode.edit(state.ruleForm).then(() => {
 							ElMessage.success('字段节点类型修改成功');

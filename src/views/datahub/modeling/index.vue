@@ -1,72 +1,90 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" >
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true">
+					<el-form-item label="模型标识" prop="key">
+						<el-input
+							v-model="tableData.param.key"
+							placeholder="请输入模型标识"
+							clearable
+							size="default"
+							style="width: 240px"
+							@keyup.enter.native="typeList"
+						/>
+					</el-form-item>
+					<el-form-item label="模型名称" prop="name">
+						<el-input
+							v-model="tableData.param.name"
+							placeholder="请输入模型名称"
+							clearable
+							size="default"
+							style="width: 240px"
+							@keyup.enter.native="typeList"
+						/>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="typeList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+							<el-icon>
+								<ele-FolderAdd />
+							</el-icon>
+							新增模型
+						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55" align="center" />
+				<el-table-column label="ID" align="center" prop="id" width="80" />
+				<el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" />
+				<el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" />
 
-		 
-          <el-form-item label="模型标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入模型标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-		  <el-form-item label="模型名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入模型名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增模型
-            </el-button>
-       <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="80" />
-        <el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" />
-        
-      
+				<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
 
-		  <el-table-column prop="createdAt" label="创建时间" align="center" ></el-table-column> 
+				<el-table-column label="操作" width="200" align="center">
+					<template #default="scope">
+						<router-link
+							:to="'/datahub/modeling/detail/' + scope.row.id"
+							class="link-type"
+							style="padding-right: 12px; font-size: 12px; color: #409eff"
+						>
+							<span>字段管理</span>
+						</router-link>
 
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-		   	<router-link :to="'/datahub/modeling/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
-    font-size: 12px;color: #409eff;">
-              <span>字段管理</span>
-            </router-link>
-
-            <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
-    </el-card>
-    <EditDic ref="editDicRef" @typeList="typeList" />
-	    <Detail ref="detailRef"  />
-
-  </div>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="typeList"
+			/>
+		</el-card>
+		<EditDic ref="editDicRef" @typeList="typeList" />
+		<Detail ref="detailRef" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -80,7 +98,7 @@ interface TableDataRow {
 	id: number;
 	name: string;
 	key: string;
-	
+
 	createBy: string;
 }
 interface TableDataState {
@@ -94,7 +112,6 @@ interface TableDataState {
 			pageSize: number;
 			name: string;
 			key: string;
-			
 		};
 	};
 }
@@ -107,7 +124,6 @@ export default defineComponent({
 		const editDicRef = ref();
 		const queryRef = ref();
 		const state = reactive<TableDataState>({
-			
 			tableData: {
 				data: [],
 				total: 0,
@@ -117,7 +133,6 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					key: '',
-
 				},
 			},
 		});
@@ -179,7 +194,7 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
-	
+
 		return {
 			addDicRef,
 			editDicRef,

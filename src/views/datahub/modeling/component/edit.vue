@@ -12,7 +12,6 @@
 				<el-form-item label="描述" prop="description">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
-
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -52,22 +51,21 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				
+
 				desc: '',
 			},
 			rules: {
 				key: [{ required: true, message: '模型标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
-			
 			},
 		});
-		
+
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 
 			if (row) {
-				state.ruleForm = row
+				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
 		};
@@ -76,7 +74,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				
+
 				desc: '',
 			};
 		};
@@ -94,8 +92,6 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-	
-
 					if (state.ruleForm.id !== 0) {
 						//修改
 						api.template.edit(state.ruleForm).then(() => {
@@ -117,7 +113,6 @@ export default defineComponent({
 		};
 
 		return {
-		
 			openDialog,
 			closeDialog,
 			onCancel,
