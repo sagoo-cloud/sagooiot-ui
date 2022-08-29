@@ -22,8 +22,8 @@
 						<el-form-item class="inline-row" label="取值周期:" prop="get_time">
 							<el-input v-model="ruleForm.get_time" placeholder="请输入取值周期" clearable></el-input>
 							<div class="tip"  @click="isShow=!isShow" >
-								<span v-if="!isShow" class="ico_up"></span>
-								<span  v-else class="ico_down"></span>
+								<span v-if="!isShow" class="ico_down"></span>
+								<span v-else class="ico_up"></span>
 								帮助
 							</div>
 						</el-form-item>
@@ -214,6 +214,7 @@ export default defineComponent({
 			api.addDataSourceInfo(params).then((res: any) => {
 				ElMessage.success('数据提交成功');
 				closeDialog();
+				state.isShow = false
 			});
 		};
 		// 编辑数据
@@ -221,6 +222,7 @@ export default defineComponent({
 			api.editataSourceInfo(params).then((res: any) => {
 				ElMessage.success('数据提交成功');
 				closeDialog();
+				state.isShow = false
 			});
 		};
 		// 打开弹窗
