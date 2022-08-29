@@ -17,6 +17,21 @@ export default {
       add: (data: object) => post('/source/node/add', data),
       delete: (nodeId: number) => del('/source/node/del', { nodeId }),
       edit: (data: object) => put('/source/node/edit', data),
-   } 
+   },
+
+   template:{
+      getList: (params: object) => get('/source/template/search', params),
+      add: (data: object) => post('/source/template/add', data),
+      delete: (ids: number) => del('/source/template/del', { ids }),
+      edit: (data: object) => put('/source/template/edit', data),
+      detail: (id: number) => get('/source/template/detail', { id }),
+   } ,
+
+   tnode:{
+      getList: (params: object) => get('/source/template/node/list', params),
+      add: (data: object) => post('/source/template/node/add', data),
+      delete: (id: number) => del('/source/template/node/del', { id }),
+      edit: (data: object) => put('/source/template/node/edit', data),
+   },
   
 }

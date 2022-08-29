@@ -1,7 +1,71 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '字段节点'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '字段节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+
+
+
+			<el-form-item label="类型" prop="from">
+					<el-radio-group v-model="ruleForm.from">
+						<el-radio :label="1">自定义</el-radio>
+						<el-radio :label="2">数据源</el-radio>
+					</el-radio-group>
+				</el-form-item>
+
+
+
+
+
+				<div v-if="ruleForm.from==2">
+				
+						
+			<el-form-item label="数据源" prop="sourceId">
+					<el-select v-model="ruleForm.sourceId" filterable  placeholder="请选择数据源" @change="getNodeList">
+						<el-option
+						v-for="item in sourceData"
+						:key="item.sourceId"
+						:label="item.key"
+						:value="item.sourceId"
+						>
+						<span style="float: left">{{ item.key }}</span>
+						<span
+							style="
+							float: right;
+							font-size: 13px;
+							"
+							>{{ item.name }}</span
+						>
+						</el-option>
+					</el-select>
+				
+			</el-form-item>
+
+				<el-form-item label="数据源节点" prop="nodeId">
+					<el-select v-model="ruleForm.nodeId" filterable  placeholder="请选择数据源" @change="setNode">
+						<el-option
+						v-for="item in nodeData"
+						:key="item.nodeId"
+						:label="item.key"
+						:value="item.nodeId"
+						>
+						<span style="float: left">{{ item.key }}</span>
+						<span
+							style="
+							float: right;
+							font-size: 13px;
+							"
+							>{{ item.name }}</span
+						>
+						</el-option>
+					</el-select>
+				
+			</el-form-item>
+
+
+				</div>
+
+
+
 				<el-form-item label="字段节点标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称" />
 				</el-form-item>
@@ -22,42 +86,19 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="取值项" prop="value">
-					<el-input v-model="ruleForm.value" placeholder="请输入取值项" />
+				<el-form-item label="默认值" prop="default">
+					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
-		
-
-				<el-divider content-position="left">规则表达式</el-divider>
-
-				<div v-for="(item, index) in rule" :key="index">
-					<el-form-item label="表达式" >
-						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
-					</el-form-item>
-
-					<el-form-item label="参数" >
-						<el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
-						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" />
-						<div class="conicon">
-							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
-						</div>
-					</el-form-item>
-				</div>
-				<div style="padding: 10px">
-					<el-button type="primary" class="addbutton" @click="addRule">增加</el-button>
-				</div>
-
-	
-
-			
-			
-
+	<el-form-item label="描述" prop="desc">
+					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
+				</el-form-item>
 			
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.nodeId !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -71,13 +112,15 @@ import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
 
 interface RuleFormState {
-	nodeId: number;
+	id: number;
 	name: string;
 	from: number;
+	sourceId: number;
+	nodeId: number;
 	key: string;
 	dataType: string;
-	value: string;
-	description: string;
+	default: string;
+	desc: string;
 	status: number;
 }
 interface DicState {
@@ -96,7 +139,6 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			
 			isShowDialog: false,
-			config: {},
 			tabData:[{
 				label: 'varchar',
 				value: 'varchar',
@@ -128,37 +170,21 @@ export default defineComponent({
 				label: 'timestamp',
 				value: 'timestamp',
 			}],
-			ruledata:  [
-				{
-					expression: '',
-					params: {
-						name: '',
-						value: '',
-					},
-				},
-			],
-			rule: [
-				{
-					expression: '',
-					params: {
-						name: '',
-						value: '',
-					},
-				},
-			],
-			
 		
+	
+			sourceData:[],
+			nodeData:[],
 
 		
 			ruleForm: {
-				nodeId: 0,
+				id: 0,
+				sourceId:0,
+				nodeId:0,
 				name: '',
 				key: '',
-				dataType:'',
-				value:'',
-				rule: [],
-				
-				description: '',
+				from:1,
+				default:'',
+				desc: '',
 			},
 			rules: {
 				key: [{ required: true, message: '字段节点标识不能为空', trigger: 'blur' }],
@@ -170,49 +196,67 @@ export default defineComponent({
 		});
 		
 
-		const delRule = (index) => {
-			state.rule.splice(index, 1);
-		};
-
-		const addRule = () => {
-			state.rule.push({
-				expression: '',
-				params: {
-					name: '',
-					value: '',
-				},
-			});
-		};
+		
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 
-			if (row?.nodeId) {
 
+			console.log(row);
+			if (row?.id) {
 				  state.ruleForm = row
-
-				 var data=JSON.parse(row.rule)
-           			 console.log(data);
-
-					data.forEach((item, index) => {
-						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
-						state.rule[index].params.value = item.params[Object.keys(item.params)];
-					});
 			}
 
-			state.ruleForm = row;
+			if(row.sourceId){
+				getNodeList(row.sourceId);
+			}
+			 state.ruleForm = row
 			state.isShowDialog = true;
+
+			getSouData();
+		};
+
+
+		const getSouData=()=>{
+			api.common.getList({
+					pageNum: 1,
+					pageSize: 50,
+					
+				}).then((res: any) => {
+				state.sourceData = res.list;
+			});
+
+		};
+
+		const getNodeList=(event)=>{
+
+			api.node.getList({
+					pageNum: 1,
+					pageSize: 50,
+					sourceId: event,
+				}).then((res: any) => {
+				state.nodeData = res.list;
+			});
+		};
+		const setNode=(event)=>{
+			state.nodeData.forEach((item, index) => {
+					if(item.nodeId==event){
+						state.ruleForm.name=item.name;
+						state.ruleForm.key=item.key;
+						state.ruleForm.dataType=item.dataType;
+					}
+			})
 		};
 		const resetForm = () => {
 			state.ruleForm = {
-				nodeId: 0,
+				id: 0,
 				name: '',
-				from: 1,
+				sourceId:0,
+				nodeId:0,
 				key: '',
-				rule: [],
-				
-				description: '',
+				from:1,
+				default:'',
+				desc: '',
 			};
 		};
 		// 关闭弹窗
@@ -229,18 +273,10 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 			if (valid) {
-					//修改rule数据
-					state.rule.forEach((item, index) => {
-						item.params[item.params.name] = item.params.value;
-						delete item.params.name;
-						delete item.params.value;
-					});
 
-					state.ruleForm.rule = state.rule;
-
-					if (state.ruleForm.nodeId !== 0) {
+				if (state.ruleForm.id !== 0) {
 						//修改
-						api.node.edit(state.ruleForm).then(() => {
+						api.tnode.edit(state.ruleForm).then(() => {
 							ElMessage.success('字段节点类型修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
@@ -248,7 +284,7 @@ export default defineComponent({
 					} else {
 						//添加
 
-						api.node.add(state.ruleForm).then(() => {
+						api.tnode.add(state.ruleForm).then(() => {
 							ElMessage.success('字段节点类型添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
@@ -259,8 +295,9 @@ export default defineComponent({
 		};
 
 		return {
-			addRule,
-			delRule,
+			getSouData,
+			getNodeList,
+			setNode,
 			openDialog,
 			closeDialog,
 			onCancel,
@@ -271,34 +308,4 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
-.el-input__wrapper {
-	width: 98%;
-}
 
-.box-content {
-	border: 1px solid #e8e8e8;
-	margin: 10px;
-	padding: 10px;
-}
-
-.content-f {
-	display: flex;
-	margin-bottom: 10px;
-}
-.content-f .el-input__wrapper {
-	margin-right: 5px;
-}
-.addbutton {
-	width: 100%;
-	margin-top: 10px;
-}
-.conicon {
-	width: 55px;
-	height: 25px;
-
-	font-size: 28px;
-	line-height: 28px;
-	cursor: pointer;
-}
-</style>
