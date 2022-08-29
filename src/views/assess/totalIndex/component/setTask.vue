@@ -67,6 +67,8 @@ interface RuleFormRow {
 interface ItemState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormRow;
+	status: number,
+	item_code: string
 }
 
 export default defineComponent({
@@ -81,6 +83,8 @@ export default defineComponent({
 				object: '', // 取值项
 				get_time: '', // 取值周期
 			},
+			status: 0,
+			item_code: ''
 		});
 		const formSize = ref('default')
 		const ruleFormRef = ref<FormInstance>()
@@ -100,12 +104,39 @@ export default defineComponent({
 			await formEl.validate((valid, fields) => {
 				console.log(valid)
 				if (valid) {
-				console.log('submit!')
+					if(state.status === 1) {
+						// 编辑
+						editataSourceInfo(state.ruleForm)
+					}else {
+						// 新增
+						let params = {
+							...state.ruleForm,
+							item_code: state.item_code
+						}
+						addDataSourceInfo(params)
+					}
 				} else {
-				console.log('error submit!', fields)
+					console.log('error submit!', fields)
 				}
 			})
 		}
+		// 新增数据
+		const addDataSourceInfo = (params: any) => {
+			api.addDataSourceInfo(params).then((res: any) => {
+				console.log(res)
+				ElMessage.success('数据提交成功');
+				closeDialog()
+			});
+		};
+		// 编辑数据
+		const editataSourceInfo = (params: any) => {
+			api.editataSourceInfo(params).then((res: any) => {
+				console.log(res)
+				ElMessage.success('数据提交成功');
+				closeDialog()
+			});
+
+		};
 		// 打开弹窗
 		const openDialog = (row: RuleFormRow, item_code: string) => {
 			// state.ruleForm = row;
@@ -118,18 +149,14 @@ export default defineComponent({
 				item_code: item_code,
 				target_name: row.name
 			}
+			state.item_code = item_code
+			console.log(item_code)
 			api.getDataSourceInfo(params).then((res:any) => {
 				console.log(res)
 				if(res) {
 					// 编辑
 					state.ruleForm = res
-					// data_code: "17216f21isrc5lpgppsjr8o100z8jlwv"
-					// get_time: "*/30 * * * * *"
-					// item_code: "17216f2f0k0c5jee0vdn08g100u6rfhd"
-					// object: "Data.0.TemperatureHigh"
-					// state: 1
-					// target: "device"
-					// uri: "https://api.gugudata.com/weather/weatherinfo/demo"
+					state.status = 1
 				}else {
 					// 新增
 					state.ruleForm = {
@@ -139,6 +166,7 @@ export default defineComponent({
 						object: '', // 取值项
 						get_time: '', // 取值周期
 					}
+					state.status = 2
 				}
 			});
 		};
@@ -150,10 +178,6 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog();
 		};
-		// 新增
-		// const onSubmit = () => {
-		// 	closeDialog();
-		// };
 		// 初始化部门数据
 		const initTableData = () => {
 			
@@ -169,6 +193,8 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			getDataSourceInfo,
+			addDataSourceInfo,
+			editataSourceInfo,
 			...toRefs(state),
 			formSize,
 			ruleFormRef
