@@ -9,7 +9,12 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
 				</el-form-item>
 
-
+				<el-form-item label="是否主键" prop="isPk">
+					<el-radio-group v-model="ruleForm.isPk">
+						<el-radio :label="0">否</el-radio>
+						<el-radio :label="1">是</el-radio>
+					</el-radio-group>
+				</el-form-item>
 					
 			<el-form-item label="数据类型" prop="dataType">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型" >
@@ -74,6 +79,7 @@ interface RuleFormState {
 	nodeId: number;
 	name: string;
 	from: number;
+	isPk: number;
 	key: string;
 	dataType: string;
 	value: string;
@@ -152,6 +158,7 @@ export default defineComponent({
 		
 			ruleForm: {
 				nodeId: 0,
+				isPk:0,
 				name: '',
 				key: '',
 				dataType:'',
@@ -163,6 +170,7 @@ export default defineComponent({
 			rules: {
 				key: [{ required: true, message: '数据节点标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '数据节点名称不能为空', trigger: 'blur' }],
+				isPk: [{ required: true, message: '请选择是否主键', trigger: 'blur' }],
 				dataType: [{ required: true, message: '数据节点类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '数据节点取值项不能为空', trigger: 'blur' }],
 			
@@ -208,6 +216,7 @@ export default defineComponent({
 			state.ruleForm = {
 				nodeId: 0,
 				name: '',
+				isPk:0,
 				from: 1,
 				key: '',
 				rule: [],
