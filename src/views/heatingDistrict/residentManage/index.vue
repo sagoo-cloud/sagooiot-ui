@@ -86,12 +86,12 @@
         <el-table-column label="ID" align="center" prop="id" width="60" />
         <el-table-column label="组织名称" prop="">
           <template #default="{ row }">
-            {{ row.SysOrganization.name }}
+            {{ row.organizationInfo.name }}
           </template>
         </el-table-column>
         <el-table-column label="小区名称" prop="">
           <template #default="{ row }">
-            {{ row.ZhgyPlotInfo.name }}
+            {{ row.plotInfo.name }}
           </template>
         </el-table-column>
         <el-table-column label="楼宇名称" prop="">
@@ -99,10 +99,29 @@
             {{ row.floorInfo.name }}
           </template>
         </el-table-column>
-	    	<el-table-column label="单元名称" prop="name" />
-	    	<el-table-column label="单元号" prop="number" />
+	    	<el-table-column label="单元名称" prop="name">
+          <template #default="{ row }">
+            {{ row.unitInfo.name }}
+          </template>
+        </el-table-column>
+	    	<el-table-column label="单元号" prop="number">
+          <template #default="{ row }">
+            {{ row.unitInfo.number }}
+          </template>
+        </el-table-column>
 	    	<el-table-column label="住户姓名" prop="name" />
+	    	<el-table-column label="楼层" prop="floorLevel" />
+	    	<el-table-column label="房间号" prop="roomNumber" />
+	    	<el-table-column label="电话号码" prop="phone" />
+	    	<el-table-column label="建筑面积" prop="buildingArea" />
+	    	<el-table-column label="实供面积" prop="forRealArea" />
 	    	<el-table-column label="更新时间" prop="createdAt" />
+				<el-table-column prop="status" label="启用状态" width="120" align="center">
+					<template #default="scope">
+						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+						</el-switch>
+					</template>
+				</el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenDialog(scope.row)">修改</el-button>
@@ -193,7 +212,7 @@ export default defineComponent({
 		const queryList = () => {
 			api.resident.getList(state.tableData.param).then((res: any) => {
 				console.log(res);
-				state.tableData.data = res.Info || [];
+				state.tableData.data = res.Data || [];
 				state.tableData.total = res.Total;
 			});
 		};
@@ -222,6 +241,25 @@ export default defineComponent({
 			editDicRef.value.orgList = orgList.value
 			editDicRef.value.plotList = plotList.value
 			editDicRef.value.openDialog(row);
+		};
+		
+		// 状态修改
+		const handleStatusChange = (row: any) => {
+			let text = row.status === 1 ? '启用' : '停用';
+			ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"住户吗?', '警告', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(function () {
+					return api.resident.setStatus(row.id, row.status);
+				})
+				.then(() => {
+					ElMessage.success(text + '成功');
+				})
+				.catch(function () {
+					row.status = row.status === 0 ? 1 : 0;
+				});
 		};
 		// 删除产品
 		const onRowDel = (row: any) => {
@@ -270,6 +308,7 @@ export default defineComponent({
 			unitList,
 			onPlotChange,
 			onFloorChange,
+			handleStatusChange,
 			...toRefs(state),
 		};
 	},
