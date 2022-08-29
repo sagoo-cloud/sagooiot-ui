@@ -1,12 +1,12 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '字段节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="数据节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" />
+				<el-form-item label="字段节点标识" prop="key">
+					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称" />
 				</el-form-item>
-				<el-form-item label="数据节点名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
+				<el-form-item label="字段节点名称" prop="name">
+					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
 
 
@@ -161,10 +161,10 @@ export default defineComponent({
 				description: '',
 			},
 			rules: {
-				key: [{ required: true, message: '数据节点标识不能为空', trigger: 'blur' }],
-				name: [{ required: true, message: '数据节点名称不能为空', trigger: 'blur' }],
-				dataType: [{ required: true, message: '数据节点类型不能为空', trigger: 'blur' }],
-				value: [{ required: true, message: '数据节点取值项不能为空', trigger: 'blur' }],
+				key: [{ required: true, message: '字段节点标识不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '字段节点名称不能为空', trigger: 'blur' }],
+				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
+				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
 			
 			},
 		});
@@ -241,7 +241,7 @@ export default defineComponent({
 					if (state.ruleForm.nodeId !== 0) {
 						//修改
 						api.node.edit(state.ruleForm).then(() => {
-							ElMessage.success('数据节点类型修改成功');
+							ElMessage.success('字段节点类型修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});
@@ -249,7 +249,7 @@ export default defineComponent({
 						//添加
 
 						api.node.add(state.ruleForm).then(() => {
-							ElMessage.success('数据节点类型添加成功');
+							ElMessage.success('字段节点类型添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});

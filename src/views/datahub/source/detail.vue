@@ -276,7 +276,7 @@ export default defineComponent({
 
         	// 打开修改数据源弹窗
 		const onOpenEdit = () => {
-			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0 });
+			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0 ,isPk:0});
 		};
         const onOpenEdit1 = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
