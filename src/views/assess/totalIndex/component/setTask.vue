@@ -22,8 +22,8 @@
 						<el-form-item class="inline-row" label="取值周期:" prop="get_time">
 							<el-input v-model="ruleForm.get_time" placeholder="请输入取值周期" clearable></el-input>
 							<div class="tip"  @click="isShow=!isShow" >
-								<span v-if="!isShow" class="ico_up"></span>
-								<span  v-else class="ico_down"></span>
+								<span v-if="!isShow" class="ico_down"></span>
+								<span v-else class="ico_up"></span>
 								帮助
 							</div>
 						</el-form-item>
@@ -127,7 +127,12 @@
 								<el-radio size="large" :label="1">启用</el-radio>
 								<el-radio size="large" :label="2">禁用</el-radio>
 							</el-radio-group>
-							<el-button style="margin-left: 20px" size="small" type="primary">检测</el-button>
+							<el-button v-if="ruleForm.uri&&ruleForm.object" @click="test" style="margin-left: 20px" size="small" type="primary">检测</el-button>
+						</el-form-item>
+					</el-col>
+					<el-col v-if="testRes || testRes.toString()" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="测试结果:">
+							<span>数据源返回数据值:{{testRes}}</span>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -164,6 +169,7 @@ interface ItemState {
 	status: number;
 	item_code: string;
 	isShow: boolean;
+	testRes: string;
 }
 
 export default defineComponent({
@@ -180,7 +186,8 @@ export default defineComponent({
 			},
 			status: 0,
 			item_code: '',
-			isShow: false
+			isShow: false,
+			testRes: ''
 		});
 		const formSize = ref('default');
 		const ruleFormRef = ref<FormInstance>();
@@ -214,6 +221,7 @@ export default defineComponent({
 			api.addDataSourceInfo(params).then((res: any) => {
 				ElMessage.success('数据提交成功');
 				closeDialog();
+				state.isShow = false
 			});
 		};
 		// 编辑数据
@@ -221,13 +229,29 @@ export default defineComponent({
 			api.editataSourceInfo(params).then((res: any) => {
 				ElMessage.success('数据提交成功');
 				closeDialog();
+				state.isShow = false
 			});
 		};
 		// 打开弹窗
 		const openDialog = (row: RuleFormRow, item_code: string) => {
 			// state.ruleForm = row;
 			state.isShowDialog = true;
+			state.testRes = ''
 			getDataSourceInfo(row, item_code);
+		};
+		// 检测
+		const test = () => {
+			let params = {
+				uri: state.ruleForm.uri,
+				object: state.ruleForm.object
+			}
+			api.testDataSource(params).then((res: any) => {
+				console.log(res)
+				state.testRes = res
+				// ElMessage.success('数据提交成功');
+				// closeDialog();
+				// state.isShow = false
+			});
 		};
 		// 获取数据源配置数据
 		const getDataSourceInfo = (row: any, item_code: string) => {
@@ -277,6 +301,7 @@ export default defineComponent({
 			getDataSourceInfo,
 			addDataSourceInfo,
 			editataSourceInfo,
+			test,
 			...toRefs(state),
 			formSize,
 			ruleFormRef,

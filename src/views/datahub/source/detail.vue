@@ -3,127 +3,111 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">数据源名称：{{ detail.name }}</div>
-				<div class="pro-status" ><span :class="developer_status==1?'on':'off'"></span>{{developer_status==1?'已发布':'未发布'}}</div>
-			
-				<div class="pro-option"  @click="CkOption"> {{developer_status==1?'停用':'发布'}}</div>
+				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
+
+				<div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
 			</div>
 		</div>
 
 		<div class="content-box">
-                <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+				<el-tab-pane label="数据源信息" name="1">
+					<el-form size="default" label-width="110px" :inline="true">
+						<el-divider content-position="left">基本信息</el-divider>
 
-                    <el-tab-pane label="数据源信息" name="1">
-                        
-                        <el-form size="default" label-width="110px" :inline="true">
+						<el-form-item label="数据源标识:">
+							{{ detail.key }}
+						</el-form-item>
 
-                        <el-divider content-position="left">基本信息</el-divider>
+						<el-form-item label="数据源名称:">
+							{{ detail.name }}
+						</el-form-item>
+						<el-form-item label="数据源描述:">
+							{{ detail.description }}
+						</el-form-item>
+						<el-form-item label="数据来源:">
+							<span v-if="detail.from == 1">api导入</span>
+							<span v-if="detail.from == 2">数据库</span>
+							<span v-if="detail.from == 3">文件</span>
+						</el-form-item>
 
-                            <el-form-item label="数据源标识:">
-                                  {{detail.key}}
-                                </el-form-item>
+						<el-divider content-position="left">规则表达式</el-divider>
 
-                                 <el-form-item label="数据源名称:">
-                                  {{detail.name}}
-                                </el-form-item>
-                                 <el-form-item label="数据源描述:">
-                                  {{detail.description}}
-                                </el-form-item>
-                                 <el-form-item label="数据来源:">
-                                 
-                                  <span v-if="detail.from==1">api导入</span>
-                                  <span v-if="detail.from==2">数据库</span>
-                                  <span v-if="detail.from==3">文件</span>
-                                </el-form-item>
+						<div v-for="(item, index) in rule" :key="index">
+							<el-form-item label="表达式:">
+								{{ item.expression }}
+							</el-form-item>
 
-                                	<el-divider content-position="left">规则表达式</el-divider>
+							<el-form-item label="参数:"> {{ item.params.name }}~ {{ item.params.value }} </el-form-item>
 
+							<el-divider content-position="left">数据源配置</el-divider>
 
-                                    <div v-for="(item, index) in rule" :key="index">
-                                <el-form-item label="表达式:">
-                                   {{item.expression}}
-                                </el-form-item>
+							<el-form-item label="请求方法:" prop="method">
+								{{ config.method }}
+							</el-form-item>
+							<el-form-item label="请求地址:" prop="method">
+								{{ config.url }}
+							</el-form-item>
+							<el-form-item label="更新时间:" prop="method">
+								{{ config.interval }}
+								{{ config.intervalUnit }}
+							</el-form-item>
 
-                                <el-form-item label="参数:" >
-                                     {{item.params.name}}~ {{item.params.value}}
-                                   
-                                </el-form-item>
+							<el-divider content-position="left">请求参数</el-divider>
 
-                                <el-divider content-position="left">数据源配置</el-divider>
+							<div class="content-f" v-for="(item, index) in requestParams" :key="index">
+								<el-form-item label="参数类型:">
+									{{ item.type }}
+								</el-form-item>
+								<el-form-item label="参数标题:">
+									{{ item.name }}
+								</el-form-item>
+								<el-form-item label="参数名:">
+									{{ item.key }}
+								</el-form-item>
+								<el-form-item label="参数值:">
+									{{ item.value }}
+								</el-form-item>
+							</div>
+						</div>
+					</el-form>
+				</el-tab-pane>
 
-                                <el-form-item label="请求方法:" prop="method">
-                                        {{config.method}}
-                                </el-form-item>
-                                <el-form-item label="请求地址:" prop="method">
-                                        {{config.url}}
-                                </el-form-item>
-                                 <el-form-item label="更新时间:" prop="method">
-                                        {{config.interval}}
-                                        {{config.intervalUnit}}
-                                </el-form-item>
+				<el-tab-pane label="数据节点" name="2">
+					<div class="wu-box">
+						<div class="wu-title">
+							<div class="title">数据节点</div>
+							<div><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
+						</div>
 
-                                <el-divider content-position="left">请求参数</el-divider>
+						<el-table :data="tableData.data" style="width: 100%">
+							<el-table-column label="ID" align="center" prop="nodeId" width="80" />
+							<el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" />
+							<el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" />
+							<el-table-column label="数据类型" prop="dataType" :show-overflow-tooltip="true" />
+							<el-table-column label="数据取值项" prop="value" :show-overflow-tooltip="true" />
 
-                                <div class="content-f" v-for="(item, index) in requestParams" :key="index">
+							<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
 
-                                <el-form-item label="参数类型:">
-                                        {{item.type}}
-                                </el-form-item>
-                                <el-form-item label="参数标题:">
-                                        {{item.name}}
-                                </el-form-item>
-                                 <el-form-item label="参数名:">
-                                        {{item.key}}
-                                </el-form-item>
-                                 <el-form-item label="参数值:">
-                                        {{item.value}}
-                                </el-form-item>
-
-                                    
-                                       
-                                    </div>
-                            </div>
-                        </el-form>
-
-                    </el-tab-pane>
-
-                    <el-tab-pane label="数据节点" name="2">
-                        <div class="wu-box">
-                            <div class="wu-title">
-									<div class="title">数据节点</div>
-									<div><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
-								</div>
-
-                         <el-table :data="tableData.data" style="width: 100%" >
-        <el-table-column label="ID" align="center" prop="nodeId" width="80" />
-        <el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="数据类型" prop="dataType" :show-overflow-tooltip="true" />
-        <el-table-column label="数据取值项" prop="value" :show-overflow-tooltip="true" />
-        
-   
-
-		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
-
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-	
-
-            <el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
-           </div>         
-                    </el-tab-pane>
-
-                </el-tabs>
-
-
-
-
-        </div>
- <EditDic ref="editDicRef" @typeList="typeList" />
+							<el-table-column label="操作" width="200" align="center">
+								<template #default="scope">
+									<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)">修改</el-button>
+									<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+						<pagination
+							v-show="tableData.total > 0"
+							:total="tableData.total"
+							v-model:page="tableData.param.pageNum"
+							v-model:limit="tableData.param.pageSize"
+							@pagination="typeList"
+						/>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
+		</div>
+		<EditDic ref="editDicRef" @typeList="typeList" />
 	</div>
 </template>            
 <script lang="ts">
@@ -151,14 +135,14 @@ interface TableDataState {
 	};
 }
 export default defineComponent({
-    name: 'dataDetail',
-    components: { EditDic },
-    setup(prop, context) {
-        		const editDicRef = ref();
+	name: 'dataDetail',
+	components: { EditDic },
+	setup(prop, context) {
+		const editDicRef = ref();
 
 		const route = useRoute();
-        const state = reactive<TableDataState>({
-            config: {},
+		const state = reactive<TableDataState>({
+			config: {},
 			ruledata: [
 				{
 					expression: '',
@@ -182,11 +166,11 @@ export default defineComponent({
 					value: '',
 				},
 			],
-          
+
 			isShowDialog: false,
 			detail: [],
-            activeName: '1',
-			developer_status:0,
+			activeName: '1',
+			developer_status: 0,
 			tableData: {
 				data: [],
 				total: 0,
@@ -194,60 +178,55 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-                    sourceId: route.params && route.params.sourceId,
+					sourceId: route.params && route.params.sourceId,
 					status: '',
 					dateRange: [],
 				},
 			},
 		});
 
-
-
-        onMounted(() => {
+		onMounted(() => {
 			const ids = route.params && route.params.sourceId;
 			api.common.detail(ids).then((res: any) => {
 				state.detail = res.data;
-				state.developer_status=res.data.status
-				state.config=res.data.apiConfig
-				state.requestParams=res.data.apiConfig.requestParams
-                res.data.sourceRule.forEach((item, index) => {
-						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
-						state.rule[index].params.value = item.params[Object.keys(item.params)];
-					});
-
-           	
+				state.developer_status = res.data.status;
+				state.config = res.data.apiConfig;
+				state.requestParams = res.data.apiConfig.requestParams;
+				res.data.sourceRule.forEach((item, index) => {
+					state.rule[index].expression = item.expression;
+					state.rule[index].params.name = Object.keys(item.params);
+					state.rule[index].params.value = item.params[Object.keys(item.params)];
+				});
 			});
 
-                typeList();
+			typeList();
 		});
 
-        const typeList = () => {
+		const typeList = () => {
 			api.node.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;
 				state.tableData.total = res.Total;
 			});
 		};
 
-
-        const CkOption=()=>{
-                if(state.developer_status==1){
-                    api.common.undeploy({sourceId:route.params.sourceId}).then((res: any) => {
-                        ElMessage.success('操作成功');
-                        state.developer_status=0;
-                    });
-                }else{
-                    api.common.deploy({sourceId:route.params.sourceId}).then((res: any) => {
-                        ElMessage.success('操作成功');
-                        state.developer_status=1;
-                    });
-                }
-		}
-        const handleClick = (tab: TabsPaneContext, event: Event) => {
+		const CkOption = () => {
+			if (state.developer_status == 1) {
+				api.common.undeploy({ sourceId: route.params.sourceId }).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 0;
+				});
+			} else {
+				api.common.deploy({ sourceId: route.params.sourceId }).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 1;
+				});
+			}
+		};
+		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event);
 		};
 
-        	const onRowDel = (row: TableDataRow) => {
+		const onRowDel = (row: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
@@ -274,28 +253,27 @@ export default defineComponent({
 				.catch(() => {});
 		};
 
-        	// 打开修改数据源弹窗
+		// 打开修改数据源弹窗
 		const onOpenEdit = () => {
-			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0 ,isPk:0});
+			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0, isPk: 0 });
 		};
-        const onOpenEdit1 = (row: TableDataRow) => {
+		const onOpenEdit1 = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
 		};
 
-        	return {
+		return {
 			Edit,
-            editDicRef,
-            typeList,
-            onRowDel,
-            onOpenEdit,
-            onOpenEdit1,
-            handleClick,
+			editDicRef,
+			typeList,
+			onRowDel,
+			onOpenEdit,
+			onOpenEdit1,
+			handleClick,
 			CkOption,
 			...toRefs(state),
 		};
-    },
+	},
 });
-
 </script>
 <style>
 .content {

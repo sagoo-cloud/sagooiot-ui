@@ -28,7 +28,7 @@
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数" >
+					<el-form-item label="参数">
 						<el-input v-model="item.params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="item.params.value" placeholder="请输入值" class="w-35" />
 						<div class="conicon">
@@ -41,17 +41,17 @@
 				</div>
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<el-form-item label="请求方法" >
+				<el-form-item label="请求方法">
 					<el-select v-model="config.method" placeholder="请选择请求方法">
 						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="请求地址" >
+				<el-form-item label="请求地址">
 					<el-input v-model="config.url" placeholder="请输入请求地址" />
 				</el-form-item>
 
-				<el-form-item label="更新时间" >
+				<el-form-item label="更新时间">
 					<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
 					<el-select v-model="config.intervalUnit" placeholder="请选择单位">
 						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
@@ -113,7 +113,6 @@ export default defineComponent({
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
-			
 			isShowDialog: false,
 			config: {},
 			ruledata: [
@@ -207,7 +206,6 @@ export default defineComponent({
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '数据源名称不能为空', trigger: 'blur' }],
 				from: [{ required: true, message: '数据源类型不能为空', trigger: 'blur' }],
-			
 			},
 		});
 		const delParams = (index) => {
@@ -241,25 +239,23 @@ export default defineComponent({
 			resetForm();
 
 			if (row) {
-				 api.common.detail(row.sourceId).then((res:any)=>{
-				    state.ruleForm = res.data
-					state.config=res.data.apiConfig
-					state.requestParams=res.data.apiConfig.requestParams
+				api.common.detail(row.sourceId).then((res: any) => {
+					state.ruleForm = res.data;
+					state.config = res.data.apiConfig;
+					state.requestParams = res.data.apiConfig.requestParams;
 
-           			res.data.sourceRule.forEach((item, index) => {
+					res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
+						state.rule[index].params.name = Object.keys(item.params);
 						state.rule[index].params.value = item.params[Object.keys(item.params)];
 					});
-
-
-				 })
+				});
 			}
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
 			state.ruleForm = {
-						sourceId: 0,
+				sourceId: 0,
 				name: '',
 				from: 1,
 				key: '',
