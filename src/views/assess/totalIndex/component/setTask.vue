@@ -170,7 +170,7 @@ export default defineComponent({
 	name: 'systemAddUser',
 	setup() {
 		const state = reactive<ItemState>({
-			isShowDialog: true,
+			isShowDialog: false,
 			ruleForm: {
 				target: '', // 指标名称
 				uri: '', // URL
@@ -192,7 +192,6 @@ export default defineComponent({
 		const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (!formEl) return;
 			await formEl.validate((valid, fields) => {
-				console.log(valid);
 				if (valid) {
 					if (state.status === 1) {
 						// 编辑
@@ -213,7 +212,6 @@ export default defineComponent({
 		// 新增数据
 		const addDataSourceInfo = (params: any) => {
 			api.addDataSourceInfo(params).then((res: any) => {
-				console.log(res);
 				ElMessage.success('数据提交成功');
 				closeDialog();
 			});
@@ -221,7 +219,6 @@ export default defineComponent({
 		// 编辑数据
 		const editataSourceInfo = (params: any) => {
 			api.editataSourceInfo(params).then((res: any) => {
-				console.log(res);
 				ElMessage.success('数据提交成功');
 				closeDialog();
 			});
@@ -239,9 +236,7 @@ export default defineComponent({
 				target_name: row.name,
 			};
 			state.item_code = item_code;
-			console.log(item_code);
 			api.getDataSourceInfo(params).then((res: any) => {
-				console.log(res);
 				if (res) {
 					// 编辑
 					state.ruleForm = res;
