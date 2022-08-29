@@ -80,10 +80,11 @@ import api from '/@/api/assess';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
-	userName: string;
-	description: string;
-	// userNickname: string;
-	// roleSign: string;
+	title: string;
+	explain: string;
+	config: string;
+	item_code: string;
+	targets: Array<any>
 	// department: string[];
 	// phone: string;
 	// email: string;
@@ -92,7 +93,7 @@ interface TableDataRow {
 	// overdueTime: Date;
 	// status: boolean;
 	// describe: string;
-	createTime: string;
+	// createTime: string;
 }
 interface TableDataState {
 	tableData: {
@@ -169,7 +170,10 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					ElMessage.success('删除成功');
+					api.deleteItem({itemcode: row.item_code}).then((res: any) => {
+						fetchList()
+						ElMessage.success('删除成功');
+					});
 				})
 				.catch(() => {});
 		};
