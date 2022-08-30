@@ -10,6 +10,7 @@ export default {
     detail: (sourceId: number) => get('/source/detail', { sourceId }),
     deploy: (data: object) => post('/source/deploy', data),
     undeploy: (data: object) => post('/source/undeploy', data),  
+    api: (sourceId: number) => get('/source/api/get', { sourceId }),
     },
    
    node:{

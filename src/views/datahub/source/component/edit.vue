@@ -76,17 +76,36 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
+
+					<el-button @click="onTest" type="warning" size="default">测试</el-button>
 					<el-button @click="onCancel" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.sourceId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog
+				v-model="dialogVisible"
+				title="返回Json数据"
+				width="30%"
+				:before-close="handleClose"
+			>
+				<json-viewer :value="jsonData"  boxed sort :expand-depth=20 />
+
+				<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false">关闭</el-button>
+				
+				</span>
+				</template>
+			</el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
+
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
 
@@ -114,7 +133,10 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+			dialogVisible:false,
 			config: {},
+			sourceId:0,
+			jsonData:'',
 			ruledata: [
 				{
 					expression: '',
@@ -239,6 +261,7 @@ export default defineComponent({
 			resetForm();
 
 			if (row) {
+				state.sourceId=row.sourceId
 				api.common.detail(row.sourceId).then((res: any) => {
 					state.ruleForm = res.data;
 					state.config = res.data.apiConfig;
@@ -278,6 +301,14 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog();
 		};
+
+		const onTest=()=>{
+				api.common.api(state.sourceId).then((res: any) => {
+					state.jsonData=JSON.parse(res.data);
+					state.dialogVisible=true
+						console.log(res);
+				})
+		};
 		// 新增
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any;
@@ -316,6 +347,7 @@ export default defineComponent({
 		};
 
 		return {
+			onTest,
 			addRule,
 			delRule,
 			addParams,
