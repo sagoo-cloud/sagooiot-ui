@@ -59,8 +59,11 @@
 
 				<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
 
-				<el-table-column label="操作" width="200" align="center">
+				<el-table-column label="操作" width="400" align="center">
 					<template #default="scope">
+
+						
+
 						<router-link
 							:to="'/datahub/modeling/detail/' + scope.row.id"
 							class="link-type"
@@ -68,7 +71,7 @@
 						>
 							<span>字段管理</span>
 						</router-link>
-
+						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)" >数据记录</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
 						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
@@ -91,6 +94,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
+import Detail from './component/detail.vue';
 import api from '/@/api/datahub';
 
 // 定义接口来定义对象的类型
@@ -118,10 +122,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'sourcelist',
-	components: { EditDic },
+	components: { EditDic,Detail },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
+		const detailRef=ref();
 		const queryRef = ref();
 		const state = reactive<TableDataState>({
 			tableData: {
@@ -153,6 +158,10 @@ export default defineComponent({
 		// 打开修改模型弹窗
 		const onOpenEdit = (row: TableDataRow) => {
 			editDicRef.value.openDialog(row);
+		};
+		//打开数据记录
+		const onOpenRecord=(row: TableDataRow)=>{
+			detailRef.value.openDialog(row);
 		};
 		const onRowDel = (row: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
@@ -198,7 +207,9 @@ export default defineComponent({
 		return {
 			addDicRef,
 			editDicRef,
+			detailRef,
 			queryRef,
+			onOpenRecord,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,

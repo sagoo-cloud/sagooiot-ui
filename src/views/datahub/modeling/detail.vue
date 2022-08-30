@@ -4,6 +4,10 @@
 			<div class="cont_box">
 				<div class="title">模型标识：{{ detail.key }}</div>
 				<div class="title" style="margin-left: 20px">模型表名：{{ detail.name }}</div>
+
+				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
+
+				<div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
 			</div>
 		</div>
 
@@ -125,6 +129,7 @@ export default defineComponent({
 
 			isShowDialog: false,
 			detail: [],
+			developer_status:0,
 
 			tableData: {
 				data: [],
@@ -144,6 +149,7 @@ export default defineComponent({
 			const ids = route.params && route.params.id;
 			api.template.detail(ids).then((res: any) => {
 				state.detail = res.data;
+				state.developer_status=res.data.status
 			});
 
 			typeList();
@@ -196,8 +202,23 @@ export default defineComponent({
 			editDicRef.value.openDialog({ tid: route.params.id, id: 0, from: 1 });
 		};
 
+		const CkOption = () => {
+			if (state.developer_status == 1) {
+				api.tnode.undeploy({ id: route.params.id }).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 0;
+				});
+			} else {
+				api.tnode.deploy({ id: route.params.id }).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 1;
+				});
+			}
+		};
+
 		return {
 			Edit,
+			CkOption,
 			editDicRef,
 			onOpenAdd,
 			typeList,

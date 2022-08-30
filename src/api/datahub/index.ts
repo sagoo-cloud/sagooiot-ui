@@ -26,6 +26,7 @@ export default {
       delete: (ids: number) => del('/source/template/del', { ids }),
       edit: (data: object) => put('/source/template/edit', data),
       detail: (id: number) => get('/source/template/detail', { id }),
+      getdata: (id: number) => get('/source/template/getdata', { id }),
    } ,
 
    tnode:{
@@ -33,6 +34,8 @@ export default {
       add: (data: object) => post('/source/template/node/add', data),
       delete: (id: number) => del('/source/template/node/del', { id }),
       edit: (data: object) => put('/source/template/node/edit', data),
+      deploy: (data: object) => post('/source/template/deploy', data),
+      undeploy: (data: object) => post('/source/template/undeploy', data),  
    },
   
 }
