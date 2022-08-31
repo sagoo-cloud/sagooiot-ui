@@ -36,11 +36,22 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
 
+
+
+
+
 				<el-form-item label="数据类型" prop="dataType">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
 						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
+
+				<el-form-item label="取值方式" prop="method" v-if="ruleForm.dataType=='int' || ruleForm.dataType=='bigint' || ruleForm.dataType=='float' || ruleForm.dataType=='double'">
+					<el-select v-model="ruleForm.method"  placeholder="请选择数据类型">
+						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+
 
 				<el-form-item label="默认值" prop="default">
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
@@ -93,6 +104,18 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+			methodData:[
+				{
+					label: 'max',
+					value: 'max',
+				},{
+					label: 'min',
+					value: 'min',
+				},{
+					label: 'avg',
+					value: 'avg',
+				}
+			],
 			tabData: [
 				{
 					label: 'varchar',
@@ -154,6 +177,7 @@ export default defineComponent({
 				name: [{ required: true, message: '字段节点名称不能为空', trigger: 'blur' }],
 				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
+				method: [{ required: true, message: '请选择取值方式', trigger: 'blur' }],
 			},
 		});
 
