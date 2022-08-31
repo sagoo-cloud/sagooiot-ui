@@ -9,7 +9,14 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />
 				</el-form-item>
 
-				<el-form-item label="描述" prop="description">
+				<el-form-item label="更新时间" prop="interval">
+					<el-input v-model="ruleForm.interval" placeholder="请输入更新时间" class="w-35" />
+					<el-select v-model="ruleForm.intervalUnit" placeholder="请选择单位">
+						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+
+				<el-form-item label="描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
 			</el-form>
@@ -31,6 +38,7 @@ import { ElMessage } from 'element-plus';
 interface RuleFormState {
 	id?: number;
 	name: string;
+	interval: string;
 	key: string;
 	desc: string;
 }
@@ -47,6 +55,24 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+			unitData: [
+				{
+					label: '秒',
+					value: 'second',
+				},
+				{
+					label: '分',
+					value: 'minute',
+				},
+				{
+					label: '时',
+					value: 'hour',
+				},
+				{
+					label: '天',
+					value: 'day',
+				},
+			],
 			ruleForm: {
 				id: 0,
 				name: '',
@@ -57,6 +83,7 @@ export default defineComponent({
 			rules: {
 				key: [{ required: true, message: '模型标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
+				interval: [{ required: true, message: '请输入更新时间', trigger: 'blur' }],
 			},
 		});
 
