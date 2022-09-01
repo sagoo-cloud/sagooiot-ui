@@ -1,23 +1,29 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.sourceId !== 0 ? '修改' : '添加') + '自建表'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '模型'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="自建表标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入自建表名称" />
+				<el-form-item label="模型标识" prop="key">
+					<el-input v-model="ruleForm.key" placeholder="请输入模型名称" />
 				</el-form-item>
-				<el-form-item label="自建表名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入自建表名称" />
-				</el-form-item>
-
-				<el-form-item label="描述" prop="description">
-					<el-input v-model="ruleForm.description" type="textarea" placeholder="请输入内容"></el-input>
+				<el-form-item label="模型名称" prop="name">
+					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />
 				</el-form-item>
 
+				<el-form-item label="更新时间" prop="interval">
+					<el-input v-model="ruleForm.interval" placeholder="请输入更新时间" class="w-35" />
+					<el-select v-model="ruleForm.intervalUnit" placeholder="请选择单位">
+						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+
+				<el-form-item label="描述" prop="desc">
+					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
+				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.sourceId !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -28,14 +34,13 @@
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
-import { Delete, Minus, Right } from '@element-plus/icons-vue';
 
 interface RuleFormState {
-	id: number;
+	id?: number;
 	name: string;
+	interval: string;
 	key: string;
-	description: string;
-	status: number;
+	desc: string;
 }
 interface DicState {
 	isShowDialog: boolean;
@@ -45,99 +50,59 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Minus, Right },
 
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
-			
 			isShowDialog: false,
-			
-
-			ruleForm: {
-				sourceId: 0,
-				name: '',
-				from: 1,
-				key: '',
-				rule: [],
-				config: {
-					method: '',
-					url: '',
-					interval: '',
-					intervalUnit: '',
-					requestParams: [],
+			unitData: [
+				{
+					label: '秒',
+					value: 'second',
 				},
-				description: '',
+				{
+					label: '分',
+					value: 'minute',
+				},
+				{
+					label: '时',
+					value: 'hour',
+				},
+				{
+					label: '天',
+					value: 'day',
+				},
+			],
+			ruleForm: {
+				id: 0,
+				name: '',
+				key: '',
+
+				desc: '',
 			},
 			rules: {
-				key: [{ required: true, message: '自建表标识不能为空', trigger: 'blur' }],
-				name: [{ required: true, message: '自建表名称不能为空', trigger: 'blur' }],
-				from: [{ required: true, message: '自建表类型不能为空', trigger: 'blur' }],
-			
+				key: [{ required: true, message: '模型标识不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
+				interval: [{ required: true, message: '请输入更新时间', trigger: 'blur' }],
 			},
 		});
-		const delParams = (index) => {
-			state.requestParams.splice(index, 1);
-		};
 
-		const addParams = () => {
-			state.requestParams.push({
-				type: '',
-				key: '',
-				name: '',
-				value: '',
-			});
-		};
-
-		const delRule = (index) => {
-			state.rule.splice(index, 1);
-		};
-
-		const addRule = () => {
-			state.rule.push({
-				expression: '',
-				params: {
-					name: '',
-					value: '',
-				},
-			});
-		};
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 
 			if (row) {
-				 api.common.detail(row.sourceId).then((res:any)=>{
-				    state.ruleForm = res.data
-					state.config=res.data.apiConfig
-					state.requestParams=res.data.apiConfig.requestParams
-
-           			res.data.sourceRule.forEach((item, index) => {
-						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
-						state.rule[index].params.value = item.params[Object.keys(item.params)];
-					});
-
-
-				 })
+				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
 			state.ruleForm = {
-						sourceId: 0,
+				id: 0,
 				name: '',
-				from: 1,
 				key: '',
-				rule: [],
-				config: {
-					method: '',
-					url: '',
-					interval: '',
-					intervalUnit: '',
-					requestParams: [],
-				},
-				description: '',
+
+				desc: '',
 			};
 		};
 		// 关闭弹窗
@@ -154,29 +119,18 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					//修改rule数据
-					state.rule.forEach((item, index) => {
-						item.params[item.params.name] = item.params.value;
-						delete item.params.name;
-						delete item.params.value;
-					});
-
-					state.ruleForm.rule = state.rule;
-					state.config.requestParams = state.requestParams;
-					state.ruleForm.config = state.config;
-
-					if (state.ruleForm.sourceId !== 0) {
+					if (state.ruleForm.id !== 0) {
 						//修改
-						api.common.edit(state.ruleForm).then(() => {
-							ElMessage.success('自建表类型修改成功');
+						api.template.edit(state.ruleForm).then(() => {
+							ElMessage.success('模型类型修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});
 					} else {
 						//添加
 
-						api.common.add(state.ruleForm).then(() => {
-							ElMessage.success('自建表类型添加成功');
+						api.template.add(state.ruleForm).then(() => {
+							ElMessage.success('模型类型添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});
@@ -186,10 +140,6 @@ export default defineComponent({
 		};
 
 		return {
-			addRule,
-			delRule,
-			addParams,
-			delParams,
 			openDialog,
 			closeDialog,
 			onCancel,
@@ -200,34 +150,4 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
-.el-input__wrapper {
-	width: 98%;
-}
 
-.box-content {
-	border: 1px solid #e8e8e8;
-	margin: 10px;
-	padding: 10px;
-}
-
-.content-f {
-	display: flex;
-	margin-bottom: 10px;
-}
-.content-f .el-input__wrapper {
-	margin-right: 5px;
-}
-.addbutton {
-	width: 100%;
-	margin-top: 10px;
-}
-.conicon {
-	width: 55px;
-	height: 25px;
-
-	font-size: 28px;
-	line-height: 28px;
-	cursor: pointer;
-}
-</style>

@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import Vue from 'vue';
+// import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import { store, key } from './store';
@@ -21,6 +21,10 @@ import 'amis/lib/themes/default.css';
 // 引入百度地图组件
 // import BaiduMap from 'vue-baidu-map-3x'
 
+//引入json数据展示
+import JsonViewer from "vue3-json-viewer"
+
+
 const app = createApp(App);
 
 directive(app);
@@ -31,6 +35,7 @@ app.use(router)
     .use(store, key)
     .use(ElementPlus, { i18n: i18n.global.t })
     .use(i18n)
+    .use(JsonViewer)
     .use(VueGridLayout)
     // .use(BaiduMap, { ak: 'Kp8XHK81HSF6rfRkYP7OxYKtK8IaG51d', type: 'WebGl', v: '2.0' })
     .mount('#app');

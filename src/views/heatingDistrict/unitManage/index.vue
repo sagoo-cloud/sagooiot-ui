@@ -80,6 +80,12 @@
 	    	<el-table-column label="单元名称" prop="name" />
 	    	<el-table-column label="单元号" prop="number" />
 	    	<el-table-column label="更新时间" prop="updatedAt" />
+				<el-table-column prop="status" label="启用状态" width="120" align="center">
+					<template #default="scope">
+						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+						</el-switch>
+					</template>
+				</el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenDialog(scope.row)">修改</el-button>
@@ -181,6 +187,25 @@ export default defineComponent({
 			editDicRef.value.plotList = plotList.value
 			editDicRef.value.openDialog(row);
 		};
+		
+		// 状态修改
+		const handleStatusChange = (row: any) => {
+			let text = row.status === 1 ? '启用' : '停用';
+			ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"单元吗?', '警告', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(function () {
+					return api.unit.setStatus(row.id, row.status);
+				})
+				.then(() => {
+					ElMessage.success(text + '成功');
+				})
+				.catch(function () {
+					row.status = row.status === 0 ? 1 : 0;
+				});
+		};
 		// 删除产品
 		const onRowDel = (row: any) => {
 			let msg = `此操作将永久删除单元：“${row.name}”，是否继续?`;
@@ -224,6 +249,7 @@ export default defineComponent({
 			plotList,
 			floorList,
 			onPlotChange,
+			handleStatusChange,
 			...toRefs(state),
 		};
 	},

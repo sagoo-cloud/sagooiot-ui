@@ -8,6 +8,7 @@ export default {
     edit: (data: object) => put('/region/plot/edit', data),
     del: (id: number) => del('/region/plot/del', { id }),
     detail: (id: number) => get('/region/plot/detail', { id }),
+    setStatus: (id: number, status: number) => put('/region/plot/editStatus', { id, status }),
   },
   floor: {
     allList: (params: object) => get('/region/floor/all', params),
@@ -16,6 +17,7 @@ export default {
     edit: (data: object) => put('/region/floor/edit', data),
     del: (id: number) => del('/region/floor/del', { id }),
     detail: (id: number) => get('/region/floor/detail', { id }),
+    setStatus: (id: number, status: number) => put('/region/floor/editStatus', { id, status }),
   },
   unit: {
     getListByFloorId: (params: object) => get('/region/unit/getInfoByFloorId', params),
@@ -24,6 +26,7 @@ export default {
     edit: (data: object) => put('/region/unit/edit', data),
     del: (id: number) => del('/region/unit/del', { id }),
     detail: (id: number) => get('/region/unit/getInfoById', { id }),
+    setStatus: (id: number, status: number) => put('/region/unit/editStatus', { id, status }),
   },
   resident: {
     allList: (params: object) => get('/region/resident/all', params),
@@ -31,6 +34,7 @@ export default {
     add: (data: object) => post('/region/resident/add', data),
     edit: (data: object) => put('/region/resident/edit', data),
     del: (id: number) => del('/region/resident/del', { id }),
-    detail: (id: number) => get('/region/resident/detail', { id }),
+    detail: (id: number) => get('/region/resident/getInfoById', { id }),
+    setStatus: (id: number, status: number) => put('/region/resident/editStatus', { id, status }),
   }
 }

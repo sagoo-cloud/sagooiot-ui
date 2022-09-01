@@ -15,15 +15,10 @@
 						<el-radio :label="1">是</el-radio>
 					</el-radio-group>
 				</el-form-item>
-					
-			<el-form-item label="数据类型" prop="dataType">
-					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型" >
-						<el-option
-						v-for="item in tabData"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
-						/>
+
+				<el-form-item label="数据类型" prop="dataType">
+					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
+						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
@@ -31,16 +26,14 @@
 					<el-input v-model="ruleForm.value" placeholder="请输入取值项" />
 				</el-form-item>
 
-		
-
 				<el-divider content-position="left">规则表达式</el-divider>
 
 				<div v-for="(item, index) in rule" :key="index">
-					<el-form-item label="表达式" >
+					<el-form-item label="表达式">
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数" >
+					<el-form-item label="参数">
 						<el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" />
 						<div class="conicon">
@@ -51,13 +44,6 @@
 				<div style="padding: 10px">
 					<el-button type="primary" class="addbutton" @click="addRule">增加</el-button>
 				</div>
-
-	
-
-			
-			
-
-			
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -100,41 +86,51 @@ export default defineComponent({
 		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
-			
 			isShowDialog: false,
 			config: {},
-			tabData:[{
-				label: 'varchar',
-				value: 'varchar',
-			},{
-				label: 'string',
-				value: 'string',
-			},{
-				label: 'int',
-				value: 'int',
-			},{
-				label: 'bigint',
-				value: 'bigint',
-			},{
-				label: 'tinyint',
-				value: 'tinyint',
-			},{
-				label: 'float',
-				value: 'float',
-			},{
-				label: 'double',
-				value: 'double',
-			},{
-				label: 'text',
-				value: 'text',
-			},{
-				label: 'datetime',
-				value: 'datetime',
-			},{
-				label: 'timestamp',
-				value: 'timestamp',
-			}],
-			ruledata:  [
+			tabData: [
+				{
+					label: 'varchar',
+					value: 'varchar',
+				},
+				{
+					label: 'string',
+					value: 'string',
+				},
+				{
+					label: 'int',
+					value: 'int',
+				},
+				{
+					label: 'bigint',
+					value: 'bigint',
+				},
+				{
+					label: 'tinyint',
+					value: 'tinyint',
+				},
+				{
+					label: 'float',
+					value: 'float',
+				},
+				{
+					label: 'double',
+					value: 'double',
+				},
+				{
+					label: 'text',
+					value: 'text',
+				},
+				{
+					label: 'datetime',
+					value: 'datetime',
+				},
+				{
+					label: 'timestamp',
+					value: 'timestamp',
+				},
+			],
+			ruledata: [
 				{
 					expression: '',
 					params: {
@@ -152,19 +148,16 @@ export default defineComponent({
 					},
 				},
 			],
-			
-		
 
-		
 			ruleForm: {
 				nodeId: 0,
-				isPk:0,
+				isPk: 0,
 				name: '',
 				key: '',
-				dataType:'',
-				value:'',
+				dataType: '',
+				value: '',
 				rule: [],
-				
+
 				description: '',
 			},
 			rules: {
@@ -173,10 +166,8 @@ export default defineComponent({
 				isPk: [{ required: true, message: '请选择是否主键', trigger: 'blur' }],
 				dataType: [{ required: true, message: '数据节点类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '数据节点取值项不能为空', trigger: 'blur' }],
-			
 			},
 		});
-		
 
 		const delRule = (index) => {
 			state.rule.splice(index, 1);
@@ -196,17 +187,16 @@ export default defineComponent({
 			resetForm();
 
 			if (row?.nodeId) {
+				state.ruleForm = row;
 
-				  state.ruleForm = row
+				var data = JSON.parse(row.rule);
+				console.log(data);
 
-				 var data=JSON.parse(row.rule)
-           			 console.log(data);
-
-					data.forEach((item, index) => {
-						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
-						state.rule[index].params.value = item.params[Object.keys(item.params)];
-					});
+				data.forEach((item, index) => {
+					state.rule[index].expression = item.expression;
+					state.rule[index].params.name = Object.keys(item.params);
+					state.rule[index].params.value = item.params[Object.keys(item.params)];
+				});
 			}
 
 			state.ruleForm = row;
@@ -216,11 +206,11 @@ export default defineComponent({
 			state.ruleForm = {
 				nodeId: 0,
 				name: '',
-				isPk:0,
+				isPk: 0,
 				from: 1,
 				key: '',
 				rule: [],
-				
+
 				description: '',
 			};
 		};
@@ -237,7 +227,7 @@ export default defineComponent({
 			const formWrap = unref(formRef) as any;
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
-			if (valid) {
+				if (valid) {
 					//修改rule数据
 					state.rule.forEach((item, index) => {
 						item.params[item.params.name] = item.params.value;

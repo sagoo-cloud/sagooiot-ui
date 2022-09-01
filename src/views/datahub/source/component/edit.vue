@@ -28,7 +28,7 @@
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数" >
+					<el-form-item label="参数">
 						<el-input v-model="item.params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="item.params.value" placeholder="请输入值" class="w-35" />
 						<div class="conicon">
@@ -41,17 +41,17 @@
 				</div>
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<el-form-item label="请求方法" >
+				<el-form-item label="请求方法">
 					<el-select v-model="config.method" placeholder="请选择请求方法">
 						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="请求地址" >
+				<el-form-item label="请求地址">
 					<el-input v-model="config.url" placeholder="请输入请求地址" />
 				</el-form-item>
 
-				<el-form-item label="更新时间" >
+				<el-form-item label="更新时间">
 					<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
 					<el-select v-model="config.intervalUnit" placeholder="请选择单位">
 						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
@@ -76,17 +76,36 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
+
+					<el-button @click="onTest" type="warning" size="default">测试</el-button>
 					<el-button @click="onCancel" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.sourceId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog
+				v-model="dialogVisible"
+				title="返回Json数据"
+				width="30%"
+				:before-close="handleClose"
+			>
+				<json-viewer :value="jsonData"  boxed sort :expand-depth=20 theme="my-awesome-json-theme" />
+
+				<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false">关闭</el-button>
+				
+				</span>
+				</template>
+			</el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
+
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
 
@@ -113,9 +132,11 @@ export default defineComponent({
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
-			
 			isShowDialog: false,
+			dialogVisible:false,
 			config: {},
+			sourceId:0,
+			jsonData:'',
 			ruledata: [
 				{
 					expression: '',
@@ -207,7 +228,6 @@ export default defineComponent({
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '数据源名称不能为空', trigger: 'blur' }],
 				from: [{ required: true, message: '数据源类型不能为空', trigger: 'blur' }],
-			
 			},
 		});
 		const delParams = (index) => {
@@ -241,25 +261,24 @@ export default defineComponent({
 			resetForm();
 
 			if (row) {
-				 api.common.detail(row.sourceId).then((res:any)=>{
-				    state.ruleForm = res.data
-					state.config=res.data.apiConfig
-					state.requestParams=res.data.apiConfig.requestParams
+				state.sourceId=row.sourceId
+				api.common.detail(row.sourceId).then((res: any) => {
+					state.ruleForm = res.data;
+					state.config = res.data.apiConfig;
+					state.requestParams = res.data.apiConfig.requestParams;
 
-           			res.data.sourceRule.forEach((item, index) => {
+					res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
-						state.rule[index].params.name =Object.keys(item.params) ;
+						state.rule[index].params.name = Object.keys(item.params);
 						state.rule[index].params.value = item.params[Object.keys(item.params)];
 					});
-
-
-				 })
+				});
 			}
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
 			state.ruleForm = {
-						sourceId: 0,
+				sourceId: 0,
 				name: '',
 				from: 1,
 				key: '',
@@ -281,6 +300,14 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog();
+		};
+
+		const onTest=()=>{
+				api.common.api(state.sourceId).then((res: any) => {
+					state.jsonData=JSON.parse(res.data);
+					state.dialogVisible=true
+						console.log(res);
+				})
 		};
 		// 新增
 		const onSubmit = () => {
@@ -320,6 +347,7 @@ export default defineComponent({
 		};
 
 		return {
+			onTest,
 			addRule,
 			delRule,
 			addParams,
@@ -335,6 +363,7 @@ export default defineComponent({
 });
 </script>
 <style>
+
 .el-input__wrapper {
 	width: 98%;
 }
@@ -364,4 +393,17 @@ export default defineComponent({
 	line-height: 28px;
 	cursor: pointer;
 }
+.jv-node{
+	margin-left: 25px;
+}
+.jv-my-awesome-json-theme {
+	background: #d9f1e9;
+  white-space: nowrap;
+  color: #525252;
+  font-size: 14px;
+  font-family: Consolas, Menlo, Courier, monospace;
+
+ 
+}
+
 </style>

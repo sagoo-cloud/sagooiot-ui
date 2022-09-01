@@ -198,7 +198,7 @@ export default defineComponent({
 				});
 		};
 		const getDetail = () => {
-			api.floor.detail(state.ruleForm.id)
+			api.resident.detail(state.ruleForm.id)
 				.then((res: any) => {
 					state.ruleForm = {
 						...res
@@ -207,7 +207,7 @@ export default defineComponent({
 		}
 		// 获取楼宇
 		const getFloorList = () => {
-			api.floor.allList({})
+			api.floor.allList({ plotId: state.ruleForm.plotId })
 				.then((res: any) => {
 					state.floorList = res.Info || []
 				})

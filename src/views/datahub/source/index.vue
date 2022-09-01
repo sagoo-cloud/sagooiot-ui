@@ -1,91 +1,110 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" >
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true">
+					<el-form-item label="数据源标识" prop="key">
+						<el-input
+							v-model="tableData.param.key"
+							placeholder="数据源标识"
+							clearable
+							size="default"
+							style="width: 240px"
+							@keyup.enter.native="typeList"
+						/>
+					</el-form-item>
+					<el-form-item label="数据源名称" prop="name">
+						<el-input
+							v-model="tableData.param.name"
+							placeholder="请输入数据源名称"
+							clearable
+							size="default"
+							style="width: 240px"
+							@keyup.enter.native="typeList"
+						/>
+					</el-form-item>
 
-		 <el-form-item label="数据源标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="数据源标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="数据源名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入数据源名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-		 
-          <el-form-item label="数据源类型" prop="host">
-				<el-select v-model="tableData.param.from" placeholder="请选择数据源类型" @keyup.enter.native="typeList">
-						<el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
-					</el-select>
-          </el-form-item>
-      
-        
-         
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增数据源
-            </el-button>
-       <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="sourceId" width="80" />
-        <el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
-         <el-table-column prop="from" label="数据源类型"  align="center">
-          <template #default="scope">
-		  	<span v-if="scope.row.from==1">api导入</span>
-		  	<span v-if="scope.row.from==2">数据库</span>
-		  	<span v-if="scope.row.from==3">文件</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
-            <el-tag type="info" size="small" v-if="scope.row.status==0">未发布</el-tag>
-          </template>
-        </el-table-column>
+					<el-form-item label="数据源类型" prop="host">
+						<el-select v-model="tableData.param.from" placeholder="请选择数据源类型" @keyup.enter.native="typeList">
+							<el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</el-form-item>
 
-		  <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> 
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="typeList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+							<el-icon>
+								<ele-FolderAdd />
+							</el-icon>
+							新增数据源
+						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55" align="center" />
+				<el-table-column label="ID" align="center" prop="sourceId" width="80" />
+				<el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />
+				<el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
+				<el-table-column prop="from" label="数据源类型" align="center">
+					<template #default="scope">
+						<span v-if="scope.row.from == 1">api导入</span>
+						<span v-if="scope.row.from == 2">数据库</span>
+						<span v-if="scope.row.from == 3">文件</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="status" label="状态" width="120" align="center">
+					<template #default="scope">
+						<el-tag type="success" size="small" v-if="scope.row.status == 1">已发布</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.status == 0">未发布</el-tag>
+					</template>
+				</el-table-column>
 
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-		   	<router-link :to="'/datahub/source/detail/' + scope.row.sourceId" class="link-type" style="padding-right: 12px;
-    font-size: 12px;color: #409eff;">
-              <span>详情</span>
-            </router-link>
+				<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
 
-            <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
-    </el-card>
-    <EditDic ref="editDicRef" @typeList="typeList" />
-	    <Detail ref="detailRef"  />
+				<el-table-column label="操作" width="200" align="center">
+					<template #default="scope">
+						<router-link
+							:to="'/datahub/source/detail/' + scope.row.sourceId"
+							class="link-type"
+							style="padding-right: 12px; font-size: 12px; color: #409eff"
+						>
+							<span>详情</span>
+						</router-link>
 
-  </div>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="typeList"
+			/>
+		</el-card>
+		<EditDic ref="editDicRef" @typeList="typeList" />
+		<Detail ref="detailRef" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -115,7 +134,6 @@ interface TableDataState {
 			name: string;
 			key: string;
 			from: string;
-			
 		};
 	};
 }
@@ -152,7 +170,7 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					types: '',
-					status:'',
+					status: '',
 				},
 			},
 		});
@@ -214,7 +232,7 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.sourceId);
 		};
-	
+
 		return {
 			addDicRef,
 			editDicRef,
