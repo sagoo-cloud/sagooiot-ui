@@ -26,7 +26,7 @@ export default {
       delete: (ids: number) => del('/source/template/del', { ids }),
       edit: (data: object) => put('/source/template/edit', data),
       detail: (id: number) => get('/source/template/detail', { id }),
-      getdata: (id: number) => get('/source/template/getdata', { id }),
+      getdata: (params: object) => get('/source/template/getdata',  params ),
    } ,
 
    tnode:{
