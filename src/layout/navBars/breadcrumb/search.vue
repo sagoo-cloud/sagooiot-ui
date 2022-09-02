@@ -94,7 +94,7 @@ export default defineComponent({
 		// 当前菜单选中时
 		const onHandleSelect = (item: any) => {
 			let { path, redirect } = item;
-			if (item.meta?.isLink && !item.meta.isIframe) window.open(item.meta?.isLink);
+			if (item.meta?.isLink && !item.meta.isIframe) window.open(item.meta?.linkUrl);
 			else if (redirect) router.push(redirect);
 			else router.push(path);
 			closeSearch();
