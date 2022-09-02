@@ -33,10 +33,7 @@
                         <el-divider direction="vertical" />
                         <el-button link size="small" key="warning" type="warning">禁 用</el-button>
                         <el-divider direction="vertical" />
-                        <el-button link size="small" key="danger" type="danger">删 除</el-button>
-                        <!-- <div style="text-align:center;cursor: pointer;">启 用</div>
-                        <div style="border-bottom: 1px solid #ebeef5;border-top: 1px solid #ebeef5;padding: 4px 0;text-align:center;cursor: pointer;">禁 用</div>
-                        <div style="text-align:center;cursor: pointer;">删 除</div> -->
+                        <el-button @click="onRowDel(scope.row)" link size="small" key="danger" type="danger">删 除</el-button>
                     </div>
                     </el-popover>
                 </template>
@@ -61,6 +58,8 @@
 
 <script lang="ts">
 import { ref, toRefs, reactive, onMounted, nextTick, computed, watch, defineComponent } from 'vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
+
 import api from '/@/api/network';
 
 // 定义接口来定义对象的类型
@@ -113,6 +112,10 @@ export default defineComponent({
 		};
         // 初始化表格数据
 		const initTableData = () => {
+            fetchList()
+		};
+        // 获取数据
+        const fetchList = () => {
             console.log(props.queryForm.title)
             let params = {
                 OrderBy: props.queryForm.title,
@@ -129,12 +132,27 @@ export default defineComponent({
 
 
 		};
+        // 删除
+		const onRowDel = (row: TableDataForm) => {
+			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.name}”，是否继续?`, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+					api.deleteItem({ids: [row.id]}).then((res: any) => {
+						fetchList()
+						ElMessage.success('删除成功');
+					});
+				})
+				.catch(() => {});
+		};
         // 监听双向绑定 queryForm 的变化
 		watch(
             () => props.queryForm,
             // 新数据
             () => {
-                initTableData()
+                fetchList()
             },
             {   deep: true,
                 immediate: true
@@ -145,6 +163,8 @@ export default defineComponent({
 			initTableData();
 		});
         return {
+            fetchList,
+            onRowDel,
             onHandleSizeChange,
             onHandleCurrentChange,
             ...toRefs(state),

@@ -162,7 +162,7 @@ export default defineComponent({
 		const onOpenDetailItem = (row: TableDataRow) => {
 			detailItemRef.value.openDialog(row);
 		};
-		// 删除用户
+		// 删除
 		const onRowDel = (row: TableDataRow) => {
 			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
