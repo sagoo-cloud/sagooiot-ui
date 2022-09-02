@@ -29,13 +29,14 @@
 				<el-divider content-position="left">规则表达式</el-divider>
 
 				<div v-for="(item, index) in rule" :key="index">
-					<el-form-item label="表达式">
+					<el-form-item label="正则表达式">
 						<el-input v-model="item.expression" placeholder="请输入规则表达式" />
 					</el-form-item>
 
-					<el-form-item label="参数">
-						<el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
-						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" />
+					<el-form-item label="替换内容">
+						<el-input v-model="item.replace" placeholder="请输入替换内容" class="w-35" />
+						<!-- <el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
+						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" /> -->
 						<div class="conicon">
 							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
 						</div>
@@ -133,19 +134,21 @@ export default defineComponent({
 			ruledata: [
 				{
 					expression: '',
-					params: {
-						name: '',
-						value: '',
-					},
+					replace: '',
+					// params: {
+					// 	name: '',
+					// 	value: '',
+					// },
 				},
 			],
 			rule: [
 				{
 					expression: '',
-					params: {
-						name: '',
-						value: '',
-					},
+					replace: '',
+					// params: {
+					// 	name: '',
+					// 	value: '',
+					// },
 				},
 			],
 
@@ -176,10 +179,11 @@ export default defineComponent({
 		const addRule = () => {
 			state.rule.push({
 				expression: '',
-				params: {
-					name: '',
-					value: '',
-				},
+				replace: '',
+				// params: {
+				// 	name: '',
+				// 	value: '',
+				// },
 			});
 		};
 		// 打开弹窗
@@ -194,8 +198,9 @@ export default defineComponent({
 
 				data.forEach((item, index) => {
 					state.rule[index].expression = item.expression;
-					state.rule[index].params.name = Object.keys(item.params);
-					state.rule[index].params.value = item.params[Object.keys(item.params)];
+					state.rule[index].replace = item.replace;
+					// state.rule[index].params.name = Object.keys(item.params);
+					// state.rule[index].params.value = item.params[Object.keys(item.params)];
 				});
 			}
 
@@ -229,11 +234,11 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					//修改rule数据
-					state.rule.forEach((item, index) => {
-						item.params[item.params.name] = item.params.value;
-						delete item.params.name;
-						delete item.params.value;
-					});
+					// state.rule.forEach((item, index) => {
+					// 	item.params[item.params.name] = item.params.value;
+					// 	delete item.params.name;
+					// 	delete item.params.value;
+					// });
 
 					state.ruleForm.rule = state.rule;
 
