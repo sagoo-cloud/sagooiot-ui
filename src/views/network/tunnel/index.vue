@@ -9,9 +9,9 @@
                         </el-icon>
                         新建
                     </el-button>
-                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="queryParams.title" placeholder="请输入搜索关键字" clearable>
+                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
                     </el-input>
-                    <el-button type="primary" plain size="default">搜索</el-button>
+                    <el-button  type="primary" plain size="default" @click="searchData">搜索</el-button>
                 </div>
                 <div class="right">  
                     <el-button @click="index=1" :class="index==1?'active':''" size="default" class="fa fa-th"></el-button>
@@ -56,6 +56,7 @@ interface RuleFormRow {
 interface ItemState {
 	queryParams: RuleFormRow;
     index: number;
+    key: string;
 }
 
 export default defineComponent({
@@ -63,12 +64,18 @@ export default defineComponent({
     components: { listTunnel, tableTunnel },
 	setup() {
 		const state = reactive<ItemState>({
-            index: 1,
+            index: 2,
 			queryParams: {
                 title: ''
 			},
+            key: ''
 		});
+        const searchData = () => {
+            console.log(state.key)
+            state.queryParams.title = state.key
+        };
         return {
+            searchData,
 			...toRefs(state),
 		};
     },

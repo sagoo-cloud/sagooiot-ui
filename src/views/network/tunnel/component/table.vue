@@ -133,6 +133,17 @@ export default defineComponent({
 
 
 		};
+        // 监听双向绑定 queryForm 的变化
+		watch(
+            () => props.queryForm,
+            // 新数据
+            () => {
+                initTableData()
+            },
+            {   deep: true,
+                immediate: true
+            },
+        );
         // 页面加载时
 		onMounted(() => {
 			initTableData();

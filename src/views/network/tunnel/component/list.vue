@@ -1,13 +1,13 @@
 <template>
     <div>
         <el-table v-loading="loading" border stripe :data="data" style="width: 100%">
-            <el-table-column align="center" prop="id" label="ID"/>
-            <el-table-column align="center" prop="server" label="服务器"/>
+            <el-table-column align="center" prop="id" label="ID" width="80"/>
+            <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
             <el-table-column align="center" prop="name" label="名称"/>
             <el-table-column align="center" prop="types" label="类型"/>
             <el-table-column align="center" prop="addr" label="地址"/>
-            <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间"/>
-            <el-table-column align="center" prop="last" label="最近上线"/>
+            <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间" width="170"/>
+            <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
             <el-table-column align="center" prop="types" label="状态">
                 <template #default="scope">
                     <el-tag v-if="!scope.row.status" class="ml-2" type="danger">离线</el-tag>
@@ -16,10 +16,29 @@
             </el-table-column>
             <el-table-column align="center" label="操作" width="200">
                 <template #default="scope">
-                    <el-button size="small" type="text" @click="onRowDel(scope.row)">详情</el-button>
-
-                    <el-button size="small" type="text" @click="onOpenEditSign(scope.row)">编辑</el-button>
-                    <el-button size="small" type="text" @click="onRowDetail(scope.row)">更多</el-button>
+                    
+                    <router-link :to="'/network/tunnel/detail/' + scope.row.id" class="link-type" style="padding-right: 12px; font-size: 12px;color: #409eff;">
+                        <el-button size="small" type="text">详情</el-button>
+                    </router-link>
+                    <el-button size="small" link key="info" type="info" @click="onOpenEditSign(scope.row)">编辑</el-button>
+                   
+                    <el-popover placement="bottom" :width="160" trigger="click">
+                        <template #reference>
+                            <el-button  size="small" type="text" class="more-btn" @click="isShowMore = !isShowMore">更多
+                                <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down':'fa fa-angle-up'"></i>
+                            </el-button>
+                        </template>
+                    <div class="more-opearte-wrap">
+                        <el-button link size="small" key="success" type="success">启 用</el-button>
+                        <el-divider direction="vertical" />
+                        <el-button link size="small" key="warning" type="warning">禁 用</el-button>
+                        <el-divider direction="vertical" />
+                        <el-button link size="small" key="danger" type="danger">删 除</el-button>
+                        <!-- <div style="text-align:center;cursor: pointer;">启 用</div>
+                        <div style="border-bottom: 1px solid #ebeef5;border-top: 1px solid #ebeef5;padding: 4px 0;text-align:center;cursor: pointer;">禁 用</div>
+                        <div style="text-align:center;cursor: pointer;">删 除</div> -->
+                    </div>
+                    </el-popover>
                 </template>
             </el-table-column>
         </el-table>
@@ -59,6 +78,7 @@ interface TableData {
         page: number;
         pageSize: number;
     };
+    isShowMore: boolean
 }
 
 export default defineComponent({
@@ -79,6 +99,7 @@ export default defineComponent({
                 page: 1,
                 pageSize: 10,
             },
+            isShowMore: true
             
             
 		});
@@ -108,6 +129,17 @@ export default defineComponent({
 
 
 		};
+        // 监听双向绑定 queryForm 的变化
+		watch(
+            () => props.queryForm,
+            // 新数据
+            () => {
+                initTableData()
+            },
+            {   deep: true,
+                immediate: true
+            },
+        );
         // 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -120,3 +152,16 @@ export default defineComponent({
     }
 });
 </script>
+
+<style lang="scss" scoped>
+::v-deep div.more-opearte-wrap {
+    flex-direction: row;
+    background-color: pink;
+    // padding: 4px!important;
+    div {
+       
+    }
+    
+}
+    
+</style>
