@@ -121,7 +121,7 @@ export default defineComponent({
 		const initTableData = () => {
             console.log(props.queryForm.title)
             let params = {
-                OrderBy: props.queryForm.title,
+                searchKey: props.queryForm.title,
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }

@@ -118,7 +118,7 @@ export default defineComponent({
         const fetchList = () => {
             console.log(props.queryForm.title)
             let params = {
-                OrderBy: props.queryForm.title,
+                searchKey: props.queryForm.title,
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }
