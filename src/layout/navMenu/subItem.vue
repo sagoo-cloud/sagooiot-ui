@@ -14,7 +14,7 @@
 					<span>{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}</span>
 				</template>
 				<template v-else>
-					<a :href="val.meta?.isLink" target="_blank" rel="opener" class="w100">
+					<a :href="val.meta?.linkUrl" target="_blank" rel="opener" class="w100">
 						<SvgIcon :name="val.meta?.icon" />
 						{{ val.meta?.title.indexOf('.')>0?$t(val.meta?.title):val.meta?.title }}
 					</a>

@@ -2,19 +2,11 @@
 	<div class="layout-columns-aside">
 		<el-scrollbar>
 			<ul @mouseleave="onColumnsAsideMenuMouseleave()">
-				<li
-					v-for="(v, k) in columnsAsideList"
-					:key="k"
-					@click="onColumnsAsideMenuClick(v, k)"
-					@mouseenter="onColumnsAsideMenuMouseenter(v, k)"
-					:ref="
-						(el) => {
-							if (el) columnsAsideOffsetTopRefs[k] = el;
-						}
-					"
-					:class="{ 'layout-columns-active': liIndex === k, 'layout-columns-hover': liHoverIndex === k }"
-					:title="v.meta?.title.indexOf('.')>0?$t(v.meta?.title):v.meta?.title"
-				>
+				<li v-for="(v, k) in columnsAsideList" :key="k" @click="onColumnsAsideMenuClick(v, k)" @mouseenter="onColumnsAsideMenuMouseenter(v, k)" :ref="
+					(el) => {
+						if (el) columnsAsideOffsetTopRefs[k] = el;
+					}
+				" :class="{ 'layout-columns-active': liIndex === k, 'layout-columns-hover': liHoverIndex === k }" :title="v.meta?.title.indexOf('.')>0?$t(v.meta?.title):v.meta?.title">
 					<div :class="setColumnsAsidelayout" v-if="!v.meta?.isLink || (v.meta?.isLink && v.meta.isIframe)">
 						<SvgIcon :name="v.meta?.icon" />
 						<div class="columns-vertical-title font12">
