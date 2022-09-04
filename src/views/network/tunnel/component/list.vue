@@ -17,9 +17,7 @@
             <el-table-column align="center" label="操作" width="200">
                 <template #default="scope">
                     
-                    <router-link :to="'/network/tunnel/detail/' + scope.row.id" class="link-type" style="padding-right: 12px; font-size: 12px;color: #409eff;">
-                        <el-button size="small" type="text">详情</el-button>
-                    </router-link>
+                    <el-button @click="toDetail(scope.row.id)" size="small" type="text">详情</el-button>
                     <el-button size="small" link key="info" type="info" @click="onOpenEditSign(scope.row)">编辑</el-button>
                    
                     <el-popover placement="bottom" :width="160" trigger="click">
@@ -59,6 +57,7 @@
 <script lang="ts">
 import { ref, toRefs, reactive, onMounted, nextTick, computed, watch, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 import api from '/@/api/network';
 
@@ -90,6 +89,7 @@ export default defineComponent({
 		},
     },
     setup(props, { emit }) {
+        const router = useRouter();
         const state = reactive<TableData>({
 			data: [],
             total: 0,
@@ -147,6 +147,9 @@ export default defineComponent({
 				})
 				.catch(() => {});
 		};
+        const toDetail = (id: number) => {
+            router.push(`/network/tunnel/detail/${id}`)
+        };
         // 监听双向绑定 queryForm 的变化
 		watch(
             () => props.queryForm,
@@ -164,6 +167,7 @@ export default defineComponent({
 		});
         return {
             fetchList,
+            toDetail,
             onRowDel,
             onHandleSizeChange,
             onHandleCurrentChange,

@@ -25,7 +25,7 @@
         </el-table> -->
         <div class="content">
             <!-- <section v-for="(item, index) in data" :key="index"> -->
-            <el-card class="item" shadow="hover" v-for="(item, index) in data" :key="index">
+            <el-card class="item" @click="toDetail(item.id)" shadow="hover" v-for="(item, index) in data" :key="index">
                 <div class="top-inner-wrap">
                     <span>通道：{{item.id}}</span>
                     <span class="more">更多
@@ -67,6 +67,7 @@
 
 <script lang="ts">
 import { ref, toRefs, reactive, onMounted, nextTick, computed, watch, defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '/@/api/network';
 
 // 定义接口来定义对象的类型
@@ -96,6 +97,7 @@ export default defineComponent({
 		},
     },
     setup(props, { emit }) {
+        const router = useRouter();
         const state = reactive<TableData>({
 			data: [],
             total: 0,
@@ -133,6 +135,9 @@ export default defineComponent({
 
 
 		};
+        const toDetail = (id: number) => {
+            router.push(`/network/tunnel/detail/${id}`)
+        };
         // 监听双向绑定 queryForm 的变化
 		watch(
             () => props.queryForm,
@@ -149,6 +154,7 @@ export default defineComponent({
 			initTableData();
 		});
         return {
+            toDetail,
             onHandleSizeChange,
             onHandleCurrentChange,
             ...toRefs(state),
