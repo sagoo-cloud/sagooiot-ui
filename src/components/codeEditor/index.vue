@@ -7,8 +7,16 @@
 // 引入全局实例
 import _CodeMirror from "codemirror/lib/codemirror.js";
 // 核心样式
+
+import "codemirror/theme/oceanic-next.css";
+import "codemirror/theme/ayu-mirage.css";
+import "codemirror/theme/abcdef.css";
+import "codemirror/theme/abbott.css";
+import "codemirror/theme/3024-day.css";
+import "codemirror/theme/3024-night.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/monokai.css";
+import "codemirror/theme/material-ocean.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/display/fullscreen.css";
 import "codemirror/addon/dialog/dialog.css";
@@ -64,7 +72,7 @@ nextTick(() => {
     // 显示行号
     lineNumbers: true,
     lineWrapping: true,
-    theme: "material-ocean",
+    theme: "ayu-mirage",
     matchTags: { bothTags: true },
     foldGutter: true,
     autoCloseTags: true,

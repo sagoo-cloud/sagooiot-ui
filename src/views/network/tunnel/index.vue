@@ -3,7 +3,7 @@
         <el-card shadow="hover">
             <div class="top-operate-wrap">
                 <div class="left">
-                    <el-button size="default" type="success" class="ml10">
+                    <el-button @click="toPage" size="default" type="success" class="ml10">
                         <el-icon>
                             <ele-FolderAdd />
                         </el-icon>
@@ -39,6 +39,7 @@
 <script lang="ts">
 import { reactive, toRefs, onMounted, defineComponent, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
+import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
 import listTunnel from './component/list.vue';
@@ -63,6 +64,7 @@ export default defineComponent({
     name: 'tunnalManage',
     components: { listTunnel, tableTunnel },
 	setup() {
+        const router = useRouter();
 		const state = reactive<ItemState>({
             index: 2,
 			queryParams: {
@@ -74,7 +76,11 @@ export default defineComponent({
             console.log(state.key)
             state.queryParams.title = state.key
         };
+        const toPage = () => {
+            router.push('/network/tunnel/create')
+        };
         return {
+            toPage,
             searchData,
 			...toRefs(state),
 		};

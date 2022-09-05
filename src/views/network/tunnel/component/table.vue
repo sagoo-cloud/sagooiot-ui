@@ -37,7 +37,7 @@
                     <div class="name-and-status">
                         <span>{{item.name}}</span>
                         [
-                        <span>{{item.status?'在线':'离线'}}</span>
+                        <span>{{item.status?'启动':'未启动'}}</span>
                         ]
                     </div>
                     <div class="">
