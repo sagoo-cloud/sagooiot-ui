@@ -2,7 +2,7 @@
  * @Author: vera_min vera_min@163.com
  * @Date: 2022-09-05 08:41:57
  * @LastEditors: vera_min vera_min@163.com
- * @LastEditTime: 2022-09-05 09:33:15
+ * @LastEditTime: 2022-09-05 19:56:59
  * @FilePath: /sagoo-admin-ui/src/views/network/tunnel/component/serverDetail.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -28,7 +28,7 @@
          <div class="server-detail-item-wrap">
             <div class="label">禁用</div>
             <div class="value">
-                <el-switch @change="onChangeStatus(detail.status)" :disabled="!detail.status" active-text="启" inactive-text="禁" :active-value="1"  :inactive-value="0" size="small" v-model="value1" />
+                <el-switch :loading="loading" :before-change="onChangeStatus" :disabled="!detail.status" :active-value="0"  :inactive-value="1" size="small" v-model="detail.status" />
             </div>
         </div>
         <div class="server-detail-item-wrap">
@@ -40,12 +40,13 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
 
 import api from '/@/api/network';
 
 interface TableDataState {
 	// detail: object,
-    value1: boolean
+    loading: boolean
 }
 export default defineComponent({
 	name: 'serverDetail',
@@ -57,14 +58,23 @@ export default defineComponent({
 	},
 	setup(props, context) {
 		const state = reactive<TableDataState>({
-            value1: true
+            loading: false
 		});
-        const onChangeStatus = (status: any) => {
-            console.log(status)
-        };
 		onMounted(() => {
             console.log(props.detail)
 		});
+        // 禁用操作
+        const onChangeStatus = () => {
+            state.loading = true
+            return new Promise((resolve) => {
+                api.changeTunneStatus({id: props.detail.id, status: 0}).then((res:any) => {
+                state.loading = false
+		        ElMessage.success('已关闭');
+                props.detail.status = 0
+            })
+            })
+            
+        };
 		return {
             onChangeStatus,
 			...toRefs(props),

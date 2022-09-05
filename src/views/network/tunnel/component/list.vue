@@ -27,9 +27,9 @@
                             </el-button>
                         </template>
                     <div class="more-opearte-wrap">
-                        <el-button link size="small" key="success" type="success">启 用</el-button>
+                        <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" link size="small" key="success" type="success">启 用</el-button>
                         <el-divider direction="vertical" />
-                        <el-button link size="small" key="warning" type="warning">禁 用</el-button>
+                        <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" link size="small" key="warning" type="warning">禁 用</el-button>
                         <el-divider direction="vertical" />
                         <el-button @click="onRowDel(scope.row)" link size="small" key="danger" type="danger">删 除</el-button>
                     </div>
@@ -102,6 +102,13 @@ export default defineComponent({
             
             
 		});
+        // 改变状态
+        const onChangeStatus = (id: number, status: number) => {
+            api.changeTunneStatus({id: id, status: status}).then((res:any) => {
+		        ElMessage.success(status?'已开启':'已关闭');
+                fetchList();
+            })
+        };
         // 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.param.pageSize = val;
@@ -168,6 +175,7 @@ export default defineComponent({
         return {
             fetchList,
             toDetail,
+            onChangeStatus,
             onRowDel,
             onHandleSizeChange,
             onHandleCurrentChange,
