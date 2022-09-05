@@ -3,7 +3,7 @@
 	<div class="server-detail-wrap">
         <div class="server-detail-item-wrap">
             <div class="label">名称</div>
-            <div class="value">新建服务器</div>
+            <div class="value">{{detail.name}}</div>
         </div>
         <div class="server-detail-item-wrap">
             <div class="label">类型</div>
@@ -33,27 +33,26 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 
-
+import api from '/@/api/network';
 
 interface TableDataState {
-	ids: number,
+	// detail: object,
     value1: boolean
 }
 export default defineComponent({
 	name: 'serverDetail',
 	props: {
-		data: {
-			type: String,
-			default: 'add'
+		detail: {
+			type: Object,
+			default: ''
 		}
 	},
-
 	setup(props, context) {
 		const state = reactive<TableDataState>({
-            ids: 0,
             value1: true
 		});
 		onMounted(() => {
+            console.log(state.detail)
 		});
 		return {
 			...toRefs(props),

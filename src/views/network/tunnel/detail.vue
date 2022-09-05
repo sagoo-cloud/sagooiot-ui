@@ -2,7 +2,7 @@
 	<el-card class="system-dic-container" style="position: relative;">
 		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 			<el-tab-pane label="服务器详情" name="first">
-				<serverDetail />
+				<serverDetail :detail="detail" />
 			</el-tab-pane>
 			<el-tab-pane label="相关详情" name="second">相关详情</el-tab-pane>
 			<el-tab-pane label="通道" name="third">通道</el-tab-pane>
@@ -12,6 +12,7 @@
 			<el-icon style="font-size: 16px;margin: 0 6px;"><ele-Operation /></el-icon>
 			<el-icon style="font-size: 16px;"><ele-Edit /></el-icon>
 		</div>
+
 	  	 <!-- <codeEditor ref="mirrorRef"
 	  :mode="resourceModalPro.mode"
 	  :content="resourceModalPro.content"
@@ -34,12 +35,13 @@ import api from '/@/api/network';
 
 interface TableDataState {
 	// ids: number[];
-	ids: number,
+	// id: string;
 	resourceModalPro: {
 		mode: string,
 		content: string,
 		// content: object,
-	}
+	},
+	detail: {}
 }
 export default defineComponent({
 	name: 'tunnelDetail',
@@ -47,30 +49,33 @@ export default defineComponent({
 	props: {
 		type: {
 			type: String,
-			default: 'add'
+			default: ''
 		}
 	},
 
 	setup(props, context) {
 		const route = useRoute();
 		const state = reactive<TableDataState>({
-            ids: 0,
+            // id: "",
 			resourceModalPro: {
 				mode: '',
-				// content: '{\n "id": 100,\n "name": "vera", \n}'
 				content: ''
-			}
+			},
+			detail:{}
 		});
 		const activeName = ref('first')
 		const getDetail = () => {
 			const id = route.params && route.params.id;
 			api.getDetail({"id": id}).then((res: any) => {
 				console.log(res)
+				state.detail = res
 			})
 		};
 		onMounted(() => {
-			
+			// state.id = route.params && route.params.id;
+			// console.log(state.id)
 			getDetail()
+			return;
 			let obj = {
 						"id": 1,
 						"name": "新建服务器",
