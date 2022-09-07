@@ -96,7 +96,6 @@ export default defineComponent({
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        .left,
         .right {
             display: flex;
             .el-button:nth-child(2) {
