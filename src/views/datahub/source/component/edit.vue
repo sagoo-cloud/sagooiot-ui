@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.sourceId !== 0 ? '修改' : '添加') + '数据源'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="数据源标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据源名称" />
+					<el-input v-model="ruleForm.key" placeholder="请输入数据源名称"  :disabled="ruleForm.sourceId"/>
 				</el-form-item>
 				<el-form-item label="数据源名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据源名称" />

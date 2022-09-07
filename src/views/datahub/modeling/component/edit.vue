@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '模型'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="模型标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入模型名称" />
+					<el-input v-model="ruleForm.key" placeholder="请输入模型名称"  :disabled="ruleForm.id"/>
 				</el-form-item>
 				<el-form-item label="模型名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />

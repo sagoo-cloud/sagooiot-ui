@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '功能定义'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
 				<el-form-item label="功能定义标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入功能定义标识" />
+					<el-input v-model="ruleForm.key" placeholder="请输入功能定义标识"  :disabled="ruleForm.id!== 0 ?true : false"/>
 				</el-form-item>
 				<el-form-item label="功能定义名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入功能定义名称" />
