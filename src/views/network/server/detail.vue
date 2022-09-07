@@ -66,7 +66,7 @@ export default defineComponent({
 		const activeName = ref('first')
 		const getDetail = () => {
 			const id = route.params && route.params.id;
-			api.tunnel.getDetail({"id": id}).then((res: any) => {
+			api.server.getDetail({"id": id}).then((res: any) => {
 				console.log(res)
 				state.detail = res
 			})

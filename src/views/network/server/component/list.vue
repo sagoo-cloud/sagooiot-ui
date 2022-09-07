@@ -104,7 +104,7 @@ export default defineComponent({
 		});
         // 改变状态
         const onChangeStatus = (id: number, status: number) => {
-            api.tunnel.changeTunnelStatus({id: id, status: status}).then((res:any) => {
+            api.server.changeServerStatus({id: id, status: status}).then((res:any) => {
 		        ElMessage.success(status?'已开启':'已关闭');
                 fetchList();
             })
@@ -129,7 +129,7 @@ export default defineComponent({
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }
-            api.tunnel.getList(params).then((res: any) => {
+            api.server.getList(params).then((res: any) => {
 				console.log(res);
                 const { list, total, page } = res
                 state.data = list
@@ -147,7 +147,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					api.tunnel.deleteItem({ids: [row.id]}).then((res: any) => {
+					api.server.deleteItem({ids: [row.id]}).then((res: any) => {
 						fetchList()
 						ElMessage.success('删除成功');
 					});
@@ -155,7 +155,7 @@ export default defineComponent({
 				.catch(() => {});
 		};
         const toDetail = (id: number) => {
-            router.push(`/network/tunnel/detail/${id}`)
+            router.push(`/network/server/detail/${id}`)
         };
         // 监听双向绑定 queryForm 的变化
 		watch(

@@ -125,7 +125,7 @@ export default defineComponent({
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }
-            api.tunnel.getList(params).then((res: any) => {
+            api.server.getList(params).then((res: any) => {
 				console.log(res);
                 const { list, total, page } = res
                 state.data = list
@@ -136,7 +136,7 @@ export default defineComponent({
 
 		};
         const toDetail = (id: number) => {
-            router.push(`/network/tunnel/detail/${id}`)
+            router.push(`/network/server/detail/${id}`)
         };
         // 监听双向绑定 queryForm 的变化
 		watch(
