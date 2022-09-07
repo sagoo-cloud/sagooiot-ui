@@ -11,6 +11,7 @@ import { get, post, del } from '/@/utils/request';
 export default {
   tunnel: {
     getList: (params?: object) => get('/network/tunnel/list', params),
+    addItem: (params?: object) => post('/network/tunnel/add', params),
     deleteItem: (params?: object) => del('/network/tunnel/delete', params),
     getDetail: (params?: object) => get('/network/tunnel/get', params),
     changeTunnelStatus: (params?: object) => post('/network/tunnel/status', params),

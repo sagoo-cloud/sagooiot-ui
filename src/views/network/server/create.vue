@@ -11,8 +11,12 @@
                                 </el-form-item>
                                 <el-form-item label="类型">
                                 <el-select v-model="form.region" placeholder="请选择类型">
-                                    <el-option label="Zone one" value="shanghai" />
-                                    <el-option label="Zone two" value="beijing" />
+                                   <el-option
+                                        v-for="dict in network_server_type"
+                                        :key="dict.value"
+                                        :label="dict.label"
+                                        :value="dict.value">
+                                    </el-option>
                                 </el-select>
                                 </el-form-item>
                                 <el-form-item label="禁用">
@@ -104,7 +108,7 @@
 	</el-card>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus'
@@ -139,7 +143,10 @@ export default defineComponent({
 	},
 
 	setup(props, context) {
+        const { proxy } = getCurrentInstance() as any;
 		const route = useRoute();
+        const { network_server_type } = proxy.useDict('network_server_type');
+        console.log(network_server_type)
 		const state = reactive<TableDataState>({
             // id: "",
 			resourceModalPro: {
@@ -210,6 +217,7 @@ export default defineComponent({
 			activeName,
 			getDetail,
 			handleClick,
+            network_server_type,
 			// editDicRef,
 			// editAttrRef,
 			// editFunRef,
