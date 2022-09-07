@@ -77,7 +77,7 @@ export default defineComponent({
             state.queryParams.title = state.key
         };
         const toPage = () => {
-            router.push('/network/tunnel/create')
+            router.push('/network/server/create')
         };
         return {
             toPage,
