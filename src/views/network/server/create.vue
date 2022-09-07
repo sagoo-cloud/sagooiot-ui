@@ -87,14 +87,13 @@
                     </el-collapse-item>
                 </el-collapse>
 			</el-tab-pane>
-			<el-tab-pane label="专家视图" name="second">
+			<!-- <el-tab-pane label="专家视图" name="second">
                 <h1>专家视图</h1>
-            </el-tab-pane>
+            </el-tab-pane> -->
 		</el-tabs>
-		<div style="position: absolute;right:20px;top: 34px;">
-			<el-icon style="font-size: 16px;"><ele-RefreshRight /></el-icon>
-			<el-icon style="font-size: 16px;margin: 0 6px;"><ele-Operation /></el-icon>
-			<el-icon style="font-size: 16px;"><ele-Edit /></el-icon>
+		<div style="position: absolute;right:20px;top: 20px;">
+            <el-button>取消</el-button>
+            <el-button type="primary">提交</el-button>
 		</div>
 
 	  	 <!-- <codeEditor ref="mirrorRef"
