@@ -92,8 +92,8 @@
             </el-tab-pane> -->
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 20px;">
-            <el-button>取消</el-button>
-            <el-button type="primary">提交</el-button>
+            <el-button size="medium">取消</el-button>
+            <el-button size="medium" type="primary">提交</el-button>
 		</div>
 
 	  	 <!-- <codeEditor ref="mirrorRef"
