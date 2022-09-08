@@ -199,7 +199,7 @@ export default defineComponent({
 		};
 
 		const onOpenAdd = () => {
-			editDicRef.value.openDialog({ tid: route.params.id, id: 0, from: 1 });
+			editDicRef.value.openDialog({ tid: route.params.id, id: 0, from: 1,isSorting:0,isDesc:1 });
 		};
 
 		const CkOption = () => {

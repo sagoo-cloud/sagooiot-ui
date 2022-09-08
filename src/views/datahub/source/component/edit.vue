@@ -18,6 +18,7 @@
 						<el-radio :label="1">api导入</el-radio>
 						<el-radio :label="2">数据库</el-radio>
 						<el-radio :label="3">文件</el-radio>
+						<el-radio :label="4">设备</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
