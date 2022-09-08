@@ -3,20 +3,31 @@
         <el-card shadow="hover">
             <div class="top-operate-wrap">
                 <div class="left">
-                    <el-button @click="toPage" size="default" type="success" class="ml10">
-                        <el-icon>
-                            <ele-FolderAdd />
-                        </el-icon>
-                        新建
-                    </el-button>
-                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
-                    </el-input>
-                    <el-button  type="primary" plain size="default" @click="searchData">搜索</el-button>
+                    <el-form :inline="true" label-width="68px">
+                        <el-form-item label="通道名称">
+                            <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
+                        </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button size="default" type="primary" class="ml10" @click="searchData">
+                                <el-icon>
+                                    <ele-Search />
+                                </el-icon>
+                                查询
+                            </el-button>
+                            <el-button @click="toPage" size="default" type="success" class="ml10">
+                                <el-icon>
+                                    <ele-FolderAdd />
+                                </el-icon>
+                                新建
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
                 </div>
-                <div class="right">  
+                <!-- <div class="right">  
                     <el-button @click="index=1" :class="index==1?'active':''" size="default" class="fa fa-th"></el-button>
                     <el-button @click="index=2" :class="index==2?'active':''" size="default" class="fa fa-list"></el-button>
-                </div>        
+                </div>         -->
             </div>
             <!-- 页面主要内容 -->
             <tempalte v-if="index==1">
