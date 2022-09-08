@@ -91,6 +91,7 @@ nextTick(() => {
  * 对外提供赋值
  */
 const setValue = (val: string) => {
+  console.log(val)
   coder.setValue(val);
 };
 

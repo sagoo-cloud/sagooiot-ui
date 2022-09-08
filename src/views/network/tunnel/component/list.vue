@@ -112,10 +112,12 @@ export default defineComponent({
         // 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.param.pageSize = val;
+            fetchList()
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.param.page = val;
+            fetchList()
 		};
         // 初始化表格数据
 		const initTableData = () => {

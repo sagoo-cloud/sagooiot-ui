@@ -199,7 +199,7 @@ export default defineComponent({
                 // 类型
                 types: 'serial',
                 // 禁用
-                status: false,
+                status: true,
                 // 地址
                 addr: '',
                 // 串口参数

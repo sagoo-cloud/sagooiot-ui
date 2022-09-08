@@ -103,7 +103,7 @@
                     <el-collapse-item title="协议适配" name="5">
                         <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="68px">
                             <el-form-item label="协议">
-                                <el-select v-model="form.protocol.name" placeholder="请选择协议适配">
+                                <el-select v-model="form.protoccol.name" placeholder="请选择协议适配">
                                     <el-option label="Modbus RTU" value="Modbus RTU" />
                                     <el-option label="Modbus TCP" value="Modbus TCP" />
                                     <el-option label="Omron Hostlink" value="Omron Hostlink" />
@@ -217,7 +217,7 @@ export default defineComponent({
                     maximum: 0,
                 },
                 // 协议适配
-                protocol: {
+                protoccol: {
                     name: "Modbus RTU",
                     options: {}
                 },
@@ -232,6 +232,7 @@ export default defineComponent({
             }
 		});
 		const activeName = ref('first')
+        const mirrorRef = ref('mirrorRef')
         const submit = () => {
             console.log(state.form)
             // 串口参数-检验位-无
@@ -259,7 +260,7 @@ export default defineComponent({
 			const id = route.params && route.params.id;
 			api.tunnel.getDetail({"id": id}).then((res: any) => {
 				console.log(res)
-                const {id, name, types, status, addr, serial, retry, protocol, heartbeat } = res
+                const {id, name, types, status, addr, serial, retry, protoccol, heartbeat } = res
                 state.form['name'] = name
                 state.form['types'] = types
                 state.form['addr'] = addr
@@ -267,42 +268,47 @@ export default defineComponent({
                 state.form['serial'] = JSON.parse(serial)
                 state.form['retry'] = JSON.parse(retry)
                 state.form['heartbeat'] = JSON.parse(heartbeat)
-                state.form['protocol'] = protocol?JSON.parse(protocol):{name: "Modbus RTU",options: {}}
+                state.form['protoccol'] = protoccol?JSON.parse(protoccol):{name: "Modbus RTU",options: {}}
                 state.form['id'] = id
+                console.log(JSON.parse(protoccol).options)
+                let jsonData = JSON.stringify(JSON.parse(protoccol).options);
+				state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+                console.log(state.resourceModalPro.content)
+                mirrorRef.value.setValue(state.resourceModalPro.content);
 			})
 		};
 		onMounted(() => {
             getDetail()
-			let obj = {
-						// "id": 1,
-						// "name": "新建服务器",
-						// "type": "tcp",
-						// "addr": "10010",
-						// "register": {
-						// 	"regex": "^\\w+$"
-						// },
-						// "heartbeat": {
-						// 	"enable": false,
-						// 	"timeout": 30,
-						// 	"regex": "^\\w+$"
-						// },
-						// "protocol": {
-						// 	"name": "ModbusTCP",
-						// 	"options": {}
-						// },
-						// "devices": [
-						// 	{
-						// 		"station": 1,
-						// 		"product_id": ""
-						// 	}
-						// ],
-						// "disabled": false,
-						// "updated": "2022-08-26T15:10:07+08:00",
-						// "created": "2022-08-20T18:44:20+08:00",
-						// "running": true
-					}
-					var jsonData = JSON.stringify(obj);
-					state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+			// let obj = {
+			// 			// "id": 1,
+			// 			// "name": "新建服务器",
+			// 			// "type": "tcp",
+			// 			// "addr": "10010",
+			// 			// "register": {
+			// 			// 	"regex": "^\\w+$"
+			// 			// },
+			// 			// "heartbeat": {
+			// 			// 	"enable": false,
+			// 			// 	"timeout": 30,
+			// 			// 	"regex": "^\\w+$"
+			// 			// },
+			// 			// "protocol": {
+			// 			// 	"name": "ModbusTCP",
+			// 			// 	"options": {}
+			// 			// },
+			// 			// "devices": [
+			// 			// 	{
+			// 			// 		"station": 1,
+			// 			// 		"product_id": ""
+			// 			// 	}
+			// 			// ],
+			// 			// "disabled": false,
+			// 			// "updated": "2022-08-26T15:10:07+08:00",
+			// 			// "created": "2022-08-20T18:44:20+08:00",
+			// 			// "running": true
+			// 		}
+			// 		var jsonData = JSON.stringify(obj);
+			// 		state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
 		});
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event)
@@ -310,6 +316,7 @@ export default defineComponent({
 
 		return {
 			Edit,
+            mirrorRef,
 			activeName,
 			getDetail,
 			handleClick,
