@@ -14,7 +14,7 @@
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
-							新增大屏
+							新增大屏项目
 						</el-button>
 					</el-form-item>
 				</el-form>
@@ -41,20 +41,32 @@
 import api from '/@/api/screen';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
-import { getUUID } from '/@/utils/uuid';
 
 const { params, tableData, getList } = useSearch<any[]>(api.getList, 'Data', { name: '', address: '' });
 
 getList();
 
 const add = async () => {
-	await api.add({
-		indexImage: null,
-		projectName: getUUID(),
-		remarks: null,
+	ElMessageBox.prompt('请输入项目名称', '创建大屏项目', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		inputValidator: (value: string) => {
+			if (value.trim()) {
+				return true;
+			} else {
+				return '请输入项目名称';
+			}
+		},
+		inputErrorMessage: '请输入项目名称',
+	}).then(async ({ value }) => {
+		await api.add({
+			indexImage: null,
+			projectName: value,
+			remarks: null,
+		});
+		ElMessage.success('新增成功');
+		getList();
 	});
-	ElMessage.success('新增成功');
-	getList();
 };
 
 const edit = async (row: any) => {
