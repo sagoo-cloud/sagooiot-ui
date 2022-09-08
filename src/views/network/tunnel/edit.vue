@@ -1,7 +1,7 @@
 <template>
 	<el-card class="system-dic-container" style="position: relative;">
 		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-			<el-tab-pane label="标准视图" name="first">
+			<el-tab-pane label="编辑通道" name="first">
 				<el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
@@ -22,8 +22,8 @@
                                 <el-form-item v-show="form.types!='serial'" label="地址">
                                     <el-input v-model="form.addr" placeholder="端口号，IP:端口" />
                                 </el-form-item>
-                                <el-form-item label="禁用">
-                                    <el-switch style="--el-switch-on-color: #dc1414;" v-model="form.status" />
+                                <el-form-item label="启用">
+                                    <el-switch v-model="form.status" />
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -36,7 +36,7 @@
                                 </el-form-item>
                                 <el-form-item label="波特率">
                                     <el-select v-model="form.serial.baud_rate" placeholder="请选择波特率">
-                                        <el-option label="150" :value="150" />
+                                        <!-- <el-option label="150" :value="150" />
                                         <el-option label="200" :value="200" />
                                         <el-option label="300" :value="300" />
                                         <el-option label="600" :value="600" />
@@ -53,28 +53,52 @@
                                         <el-option label="57600" :value="57600" />
                                         <el-option label="76800" :value="76800" />
                                         <el-option label="115200" :value="115200" />
-                                        <el-option label="230400" :value="230400" />
+                                        <el-option label="230400" :value="230400" /> -->
+                                        <el-option
+                                            v-for="dict in tunnel_serial_baudrate"
+                                            :key="dict.value"
+                                            :label="dict.label"
+                                            :value="dict.value">
+                                        </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="数据位">
                                     <el-select v-model="form.serial.data_bits" placeholder="请选择数据位">
-                                        <el-option label="5" :value="5" />
+                                        <!-- <el-option label="5" :value="5" />
                                         <el-option label="6" :value="6" />
                                         <el-option label="7" :value="7" />
-                                        <el-option label="8" :value="8" />
+                                        <el-option label="8" :value="8" /> -->
+                                        <el-option
+                                            v-for="dict in tunnel_serial_databits"
+                                            :key="dict.value"
+                                            :label="dict.label"
+                                            :value="dict.value">
+                                        </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="停止位">
                                     <el-select v-model="form.serial.stop_bits" placeholder="请选择停止位">
-                                        <el-option label="1" :value="1" />
-                                        <el-option label="2" :value="2" />
+                                        <!-- <el-option label="1" :value="1" />
+                                        <el-option label="2" :value="2" /> -->
+                                        <el-option
+                                            v-for="dict in tunnel_serial_stopbits"
+                                            :key="dict.value"
+                                            :label="dict.label"
+                                            :value="dict.value">
+                                        </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="检验位">
                                     <el-select v-model="form.serial.parity" placeholder="请选择检验位">
-                                        <el-option label="无" :value="0" />
+                                        <!-- <el-option label="无" :value="0" />
                                         <el-option label="偶" :value="1" />
-                                        <el-option label="奇" :value="2" />
+                                        <el-option label="奇" :value="2" /> -->
+                                        <el-option
+                                            v-for="dict in tunnel_serial_parity"
+                                            :key="dict.value"
+                                            :label="dict.label"
+                                            :value="dict.value">
+                                        </el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-form>
@@ -104,7 +128,7 @@
                         <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="68px">
                             <el-form-item label="协议">
                                 <el-select v-model="form.protoccol.name" placeholder="请选择协议适配">
-                                    <el-option label="Modbus RTU" value="Modbus RTU" />
+                                    <!-- <el-option label="Modbus RTU" value="Modbus RTU" />
                                     <el-option label="Modbus TCP" value="Modbus TCP" />
                                     <el-option label="Omron Hostlink" value="Omron Hostlink" />
                                     <el-option label="Omron FINS UDP" value="Omron FINS UDP" />
@@ -114,7 +138,13 @@
                                     <el-option label="Simatic S7-300" value="Simatic S7-300" />
                                     <el-option label="Simatic S7-400" value="Simatic S7-400" />
                                     <el-option label="Simatic S7-1200" value="Simatic S7-1200" />
-                                    <el-option label="Simatic S7-1500" value="Simatic S7-1500" />
+                                    <el-option label="Simatic S7-1500" value="Simatic S7-1500" /> -->
+                                    <el-option
+                                        v-for="dict in network_protocols"
+                                        :key="dict.value"
+                                        :label="dict.label"
+                                        :value="dict.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="协议参数">
@@ -183,7 +213,7 @@ export default defineComponent({
         const { proxy } = getCurrentInstance() as any;
 		const route = useRoute();
         const router = useRouter();
-        const { network_tunnel_type } = proxy.useDict('network_tunnel_type');
+        const { network_tunnel_type, tunnel_serial_baudrate, tunnel_serial_databits, tunnel_serial_stopbits, tunnel_serial_parity, network_protocols } = proxy.useDict('network_tunnel_type', 'tunnel_serial_baudrate', 'tunnel_serial_databits', 'tunnel_serial_stopbits', 'tunnel_serial_parity', 'network_protocols');
 		
         const state = reactive<TableDataState>({
             // id: "",
@@ -205,10 +235,10 @@ export default defineComponent({
                 addr: '',
                 // 串口参数
                 serial:{
-                    baud_rate: 9600,
-                    data_bits: 8,
-                    stop_bits: 1,
-                    parity: 0
+                    baud_rate: "9600",
+                    data_bits: "6",
+                    stop_bits: "1",
+                    parity: '0'
                 },
                 // 断线重连
                 retry: {
@@ -321,6 +351,11 @@ export default defineComponent({
 			getDetail,
 			handleClick,
             network_tunnel_type,
+            tunnel_serial_baudrate,
+            tunnel_serial_databits,
+            tunnel_serial_stopbits,
+            tunnel_serial_parity,
+            network_protocols,
 			// editDicRef,
 			// editAttrRef,
 			// editFunRef,

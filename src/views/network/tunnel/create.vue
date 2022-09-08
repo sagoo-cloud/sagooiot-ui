@@ -1,7 +1,7 @@
 <template>
 	<el-card class="system-dic-container" style="position: relative;">
 		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-			<el-tab-pane label="标准视图" name="first">
+			<el-tab-pane label="新增通道" name="first">
 				<el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
@@ -22,8 +22,8 @@
                                 <el-form-item v-show="form.types!='serial'" label="地址">
                                     <el-input v-model="form.addr" placeholder="端口号，IP:端口" />
                                 </el-form-item>
-                                <el-form-item label="禁用">
-                                    <el-switch style="--el-switch-on-color: #dc1414;" v-model="form.status" />
+                                <el-form-item label="启用">
+                                    <el-switch v-model="form.status" />
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -229,7 +229,7 @@ export default defineComponent({
                 name: '新建通道',
                 // 类型
                 types: 'serial',
-                // 禁用
+                // 启用
                 status: false,
                 // 地址
                 addr: '',
