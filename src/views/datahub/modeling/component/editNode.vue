@@ -57,6 +57,22 @@
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
+
+				<el-form-item label="是否排序" prop="isSorting">
+					<el-radio-group v-model="ruleForm.isSorting" >
+						<el-radio :label="0">否</el-radio>
+						<el-radio :label="1">是</el-radio>
+					</el-radio-group>
+				</el-form-item>
+
+
+				<el-form-item label="排序方式" prop="isDesc">
+					<el-radio-group v-model="ruleForm.isDesc" >
+						<el-radio :label="1">倒序</el-radio>
+						<el-radio :label="2">正序</el-radio>
+					</el-radio-group>
+				</el-form-item>
+
 				<el-form-item label="描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
@@ -86,6 +102,8 @@ interface RuleFormState {
 	key: string;
 	dataType: string;
 	default: string;
+	isSorting: number;
+	isDesc: number;
 	desc: string;
 	status: number;
 }
@@ -169,6 +187,8 @@ export default defineComponent({
 				name: '',
 				key: '',
 				from: 1,
+				isSorting: 0,
+				isDesc: 1,
 				default: '',
 				desc: '',
 			},
@@ -178,6 +198,8 @@ export default defineComponent({
 				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
 				method: [{ required: true, message: '请选择取值方式', trigger: 'blur' }],
+				isSorting: [{ required: true, message: '请选择是否参与排序', trigger: 'blur' }],
+				isDesc: [{ required: true, message: '请选择排序方式', trigger: 'blur' }],
 			},
 		});
 
@@ -238,6 +260,8 @@ export default defineComponent({
 				nodeId: 0,
 				key: '',
 				from: 1,
+				isSorting: 0,
+				isDesc: 1,
 				default: '',
 				desc: '',
 			};
