@@ -24,8 +24,10 @@
 						<section>
 							<div class="inner-label">请求Body参数</div>
 							<div class="inner-value">
-								<div>itemcode：17216k2f0k0c5jee0vdn08g100u6rfhd</div>
-								<div>name：divice breed</div>
+								<div>itemcode：{{ruleForm.item_code}}</div>
+								<div>name：
+									<span v-for="(item, index) in ruleForm.targets" :key="index">{{`${item.name} `}} </span>
+								</div>
 								<div>value：当前值</div>
 								<div>form_info：平台数据</div>
 							</div>
@@ -46,7 +48,7 @@
 						<section>
 							<div class="inner-label">请求Query参数</div>
 							<div class="inner-value">
-								<div>itemcode：17216k2f0k0c5jee0vdn08g100u6rfhd</div>
+								<div>itemcode：{{ruleForm.item_code}}</div>
 							</div>
 						</section>
 					</div>
@@ -60,13 +62,15 @@
 import { reactive, toRefs, onMounted, defineComponent } from 'vue';
 import { ElMessage } from 'element-plus';
 
+import api from '/@/api/assess';
+
 // 定义接口来定义对象的类型
 interface RuleFormRow {
-	userName: string;
-	isUse: string;
-	dataType: string;
-	num: string;
-	description: any;
+	title: string;
+	explain: string;
+	config: string;
+	item_code: string;
+	targets: Array<any>
 }
 interface ItemState {
 	isShowDialog: boolean;
@@ -79,18 +83,22 @@ export default defineComponent({
 		const state = reactive<ItemState>({
 			isShowDialog: false,
 			ruleForm: {
-				userName: '', // 指标名称
-				isUse: "1", // 是否启用
-				dataType: '', // 数据项
-				num: '', // 权重(%)
-				description: '', // 取值范围
+				title: '', // 评价名称
+				explain: '', // 描述
+				config: '',
+				item_code: '',
+				targets: []
 			},
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormRow) => {
-			state.ruleForm = row;
-			state.ruleForm.isUse = "1"
-			state.isShowDialog = true;
+		const openDialog = (row: any) => {
+			api.getList({itemcode: row.item_code}).then((res: any) => {
+				console.log(res)
+				state.ruleForm = res
+				console.log(state.ruleForm)
+				state.isShowDialog = true;
+
+			});
 		};
 		// 关闭弹窗
 		const closeDialog = () => {

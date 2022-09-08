@@ -17,22 +17,8 @@
 				</el-button>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%">
-				<!-- <el-table-column type="index" label="序号" width="60" /> -->
 				<el-table-column align="center" prop="title" label="名称" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="explain" label="描述" show-overflow-tooltip></el-table-column>
-				<!-- <el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="关联角色" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="department" label="部门" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="用户状态" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column> -->
-				<!-- <el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column> -->
 				<el-table-column align="center" label="操作" width="180">
 					<template #default="scope">
 						<el-button size="small" type="text"  @click="onOpenEditItem(scope.row)">编辑</el-button>
@@ -55,11 +41,7 @@
 			>
 			</el-pagination> -->
 		</el-card>
-		<!-- <AddUer ref="addUserRef" /> -->
 		<EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
-
-		<!-- <AddItem ref="addItemRef" /> -->
-
 		<DetailItem ref="detailItemRef" />
 
 		

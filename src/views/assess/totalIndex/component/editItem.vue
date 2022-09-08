@@ -155,13 +155,14 @@ export default defineComponent({
 		})
 		// 打开弹窗
 		const openDialog = (row:any) => {
-			state.isShowDialog = true;
 			if(!row) return
 			console.log(row.item_code)
 			api.getList({itemcode: row.item_code}).then((res: any) => {
 				console.log(res)
 				state.ruleForm = res;
 				state.tableData.data = res.targets
+				state.isShowDialog = true;
+
 			});
 		};
 		// 关闭弹窗
