@@ -194,6 +194,7 @@ export default defineComponent({
 			detail:{},
             activeViewName: ['1','2','3','4','5'],
             form:{
+                id: '',
                 // 名称
                 name: '新建通道',
                 // 类型
@@ -231,13 +232,6 @@ export default defineComponent({
             }
 		});
 		const activeName = ref('first')
-		const getDetail = () => {
-			const id = route.params && route.params.id;
-			api.tunnel.getDetail({"id": id}).then((res: any) => {
-				console.log(res)
-				state.detail = res
-			})
-		};
         const submit = () => {
             console.log(state.form)
             // 串口参数-检验位-无
@@ -255,18 +249,30 @@ export default defineComponent({
             }
             console.log(params)
             // return
-            api.tunnel.addItem({...state.form}).then((res: any) => {
+            api.tunnel.editItem({...state.form}).then((res: any) => {
 				console.log(res);
-                ElMessage.success('添加成功')
+                ElMessage.success('修改成功')
                 router.go(-1);
-                // const { list, total, page } = res
-                // state.data = list
-                // state.total = total
-                // state.param.page = page
 			});
         };
+        const getDetail = () => {
+			const id = route.params && route.params.id;
+			api.tunnel.getDetail({"id": id}).then((res: any) => {
+				console.log(res)
+                const {id, name, types, status, addr, serial, retry, protocol, heartbeat } = res
+                state.form['name'] = name
+                state.form['types'] = types
+                state.form['addr'] = addr
+                state.form['status'] = status
+                state.form['serial'] = JSON.parse(serial)
+                state.form['retry'] = JSON.parse(retry)
+                state.form['heartbeat'] = JSON.parse(heartbeat)
+                state.form['protocol'] = protocol?JSON.parse(protocol):{name: "Modbus RTU",options: {}}
+                state.form['id'] = id
+			})
+		};
 		onMounted(() => {
-            
+            getDetail()
 			let obj = {
 						// "id": 1,
 						// "name": "新建服务器",
