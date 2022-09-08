@@ -82,7 +82,7 @@
 					</el-table-column>
 				</el-table>
 				<pagination
-					v-show="tableData.total > 0"
+					v-show="tableData.data.length > 0"
 					:total="tableData.total"
 					v-model:page="tableData.param.pageNum"
 					v-model:limit="tableData.param.pageSize"
@@ -154,6 +154,8 @@ export default defineComponent({
 
 			typeList();
 		});
+
+
 
 		const typeList = () => {
 			api.tnode.getList(state.tableData.param).then((res: any) => {
