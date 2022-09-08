@@ -112,13 +112,21 @@ export default defineComponent({
         // 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.param.pageSize = val;
+            fetchList()
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.param.page = val;
+            fetchList()
 		};
         // 初始化表格数据
 		const initTableData = () => {
+            fetchList()
+
+
+		};
+        // 获取数据
+        const fetchList = () => {
             console.log(props.queryForm.title)
             let params = {
                 keyWord: props.queryForm.title,
@@ -143,7 +151,7 @@ export default defineComponent({
             () => props.queryForm,
             // 新数据
             () => {
-                initTableData()
+                fetchList()
             },
             {   deep: true,
                 immediate: true
@@ -154,6 +162,7 @@ export default defineComponent({
 			initTableData();
 		});
         return {
+            fetchList,
             toDetail,
             onHandleSizeChange,
             onHandleCurrentChange,
