@@ -1,10 +1,10 @@
 <template>
 	<div class="system-add-user-container">
-		<el-dialog title="平台健康度" v-model="isShowDialog" width="780px">
+		<el-dialog title="平台健康度" v-model="isShowDialog" width="790px">
 			<div class="table-wrap">
 				<div class="table-item-wrap">
 					<div class="label">详细介绍</div>
-					<div class="value">平台整体情况评价，综合设备、养殖、海域等指标</div>
+					<div class="value">{{ruleForm.explain}}</div>
 				</div>
 				<div class="table-item-wrap">
 					<div class="label">SecretKey</div>
@@ -15,7 +15,7 @@
 					<div class="value">
 						<section>
 							<div class="inner-label">入口URL</div>
-							<div class="inner-value url">http://10.80.2.35:8199/v1/data</div>
+							<div class="inner-value url">{{baseUrl}}/data</div>
 						</section>
 						<section>
 							<div class="inner-label">请求方式</div>
@@ -39,7 +39,7 @@
 					<div class="value">
 						<section>
 							<div class="inner-label">出口URL</div>
-							<div class="inner-value url">http://10.80.2.35:8199/v1/index</div>
+							<div class="inner-value url">{{baseUrl}}/index</div>
 						</section>
 						<section>
 							<div class="inner-label">请求方式</div>
@@ -64,6 +64,7 @@ import { ElMessage } from 'element-plus';
 
 import api from '/@/api/assess';
 
+
 // 定义接口来定义对象的类型
 interface RuleFormRow {
 	title: string;
@@ -75,6 +76,7 @@ interface RuleFormRow {
 interface ItemState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormRow;
+	baseUrl: string
 }
 
 export default defineComponent({
@@ -89,6 +91,7 @@ export default defineComponent({
 				item_code: '',
 				targets: []
 			},
+			baseUrl: import.meta.env.VITE_ASSESS_URL
 		});
 		// 打开弹窗
 		const openDialog = (row: any) => {
@@ -147,7 +150,7 @@ export default defineComponent({
 		border-right: 1px var(--el-border-color) var(--el-border-style);
 		.value,
 		.label {
-			padding: 20px;
+			padding: 16px;
 			section {
 				display: flex;
 			}
@@ -164,7 +167,7 @@ export default defineComponent({
 			background-color: #f3f3f3;
 		}
 		.value {
-			width: 400px;
+			width: 410px;
 			.inner-label {
 				width: 80px;
 			}
