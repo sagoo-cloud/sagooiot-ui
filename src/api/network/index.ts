@@ -19,6 +19,8 @@ export default {
   },
   server: {
     getList: (params?: object) => get('/network/server/list', params),
+    addItem: (params?: object) => post('/network/server/add', params),
+    editItem: (params?: object) => put('/network/server/edit', params),
     deleteItem: (params?: object) => del('/network/server/delete', params),
     getDetail: (params?: object) => get('/network/get', params),
     changeServerStatus: (params?: object) => post('/network/server/status', params),

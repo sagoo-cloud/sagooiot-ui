@@ -18,7 +18,7 @@
                 <template #default="scope">
                     
                     <el-button @click="toDetail(scope.row.id)" size="small" type="text">详情</el-button>
-                    <el-button size="small" link key="info" type="info" @click="onOpenEditSign(scope.row)">编辑</el-button>
+                    <el-button size="small" link key="info" type="info" @click="toEdit(scope.row.id)">编辑</el-button>
                    
                     <el-popover placement="bottom" :width="160" trigger="click">
                         <template #reference>
@@ -157,6 +157,9 @@ export default defineComponent({
         const toDetail = (id: number) => {
             router.push(`/network/server/detail/${id}`)
         };
+        const toEdit = (id: number) => {
+            router.push(`/network/server/edit/${id}`)
+        };
         // 监听双向绑定 queryForm 的变化
 		watch(
             () => props.queryForm,
@@ -175,6 +178,7 @@ export default defineComponent({
         return {
             fetchList,
             toDetail,
+            toEdit,
             onChangeStatus,
             onRowDel,
             onHandleSizeChange,

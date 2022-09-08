@@ -1,7 +1,7 @@
 <template>
 	<el-card class="system-dic-container" style="position: relative;">
 		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-			<el-tab-pane label="新建服务器" name="first">
+			<el-tab-pane label="编辑服务器" name="first">
 				<el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
@@ -127,6 +127,7 @@ export default defineComponent({
         const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
 		
         const state = reactive<TableDataState>({
+            // id: "",
 			resourceModalPro: {
 				mode: '',
 				content: ''
@@ -134,8 +135,6 @@ export default defineComponent({
 			detail:{},
             activeViewName: ['1','2','3'],
             form:{
-                id: "",
-
                 // 名称
                 name: '新建服务器',
                 // 类型
@@ -168,9 +167,26 @@ export default defineComponent({
 		const activeName = ref('first')
 		const getDetail = () => {
 			const id = route.params && route.params.id;
-			api.tunnel.getDetail({"id": id}).then((res: any) => {
+			api.server.getDetail({"id": id}).then((res: any) => {
 				console.log(res)
-				state.detail = res
+                const {id, name, types, status, addr, register, protocol, heartbeat, devices} = res
+                state.form["id"] = id
+                state.form["name"] = name
+                state.form["types"] = types
+                state.form["status"] = status
+                state.form["addr"] = addr
+                state.form["register"] = JSON.parse(register)
+                state.form["protocol"] = JSON.parse(protocol)
+                state.form["heartbeat"] = JSON.parse(heartbeat)
+                state.form["devices"] = JSON.parse(devices)
+
+                console.log(JSON.parse(protocol).options)
+                let jsonData = JSON.stringify(JSON.parse(protocol).options);
+				state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+                console.log(state.resourceModalPro.content)
+                mirrorRef.value.setValue(state.resourceModalPro.content);
+				// state.detail = res
+                console.log(state.form)
 			})
 		};
         const submit = () => {
@@ -183,7 +199,7 @@ export default defineComponent({
             }
             console.log(params)
             // return
-            api.server.addItem({...state.form}).then((res: any) => {
+            api.server.editItem({...state.form}).then((res: any) => {
 				console.log(res);
                 ElMessage.success('添加成功')
                 router.go(-1);
@@ -194,10 +210,10 @@ export default defineComponent({
 			});
         };
 		onMounted(() => {
-            
-			let obj = {}
-			var jsonData = JSON.stringify(obj);
-			state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+            getDetail()
+			// let obj = {}
+			// var jsonData = JSON.stringify(obj);
+			// state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
 		});
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event)
