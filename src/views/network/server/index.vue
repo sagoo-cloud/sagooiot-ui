@@ -1,34 +1,30 @@
 <template>
-    <div class="container">
-        <el-card shadow="hover">
-            <el-form :inline="true" label-width="82px">
-                <el-form-item label="服务器名称">
-                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
-                </el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button size="default" type="primary" class="ml10" @click="searchData">
-                        <el-icon>
-                            <ele-Search />
-                        </el-icon>
-                        查询
-                    </el-button>
-                    <el-button @click="toPage" size="default" type="success" class="ml10">
-                        <el-icon>
-                            <ele-FolderAdd />
-                        </el-icon>
-                        新建
-                    </el-button>
-                </el-form-item>
-            </el-form>
-            <!-- 页面主要内容 -->
-            <tempalte>
-                <list-server :keyWord="keyWord" />
-            </tempalte>
-
-        </el-card>
-        
-    </div>
+    <el-card shadow="hover">
+        <el-form :inline="true" label-width="82px">
+            <el-form-item label="服务器名称">
+                <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
+            </el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button size="default" type="primary" class="ml10" @click="searchData">
+                    <el-icon>
+                        <ele-Search />
+                    </el-icon>
+                    查询
+                </el-button>
+                <el-button @click="toPage" size="default" type="success" class="ml10">
+                    <el-icon>
+                        <ele-FolderAdd />
+                    </el-icon>
+                    新建
+                </el-button>
+            </el-form-item>
+        </el-form>
+        <!-- 页面主要内容 -->
+        <tempalte>
+            <list-server :keyWord="keyWord" />
+        </tempalte>
+    </el-card>
 </template>
 
 <script lang="ts" setup>
