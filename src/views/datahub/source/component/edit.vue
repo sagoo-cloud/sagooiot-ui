@@ -16,13 +16,13 @@
 				<el-form-item label="数据来源" prop="from">
 					<el-radio-group v-model="ruleForm.from">
 						<el-radio :label="1">api导入</el-radio>
-						<el-radio :label="2">数据库</el-radio>
-						<el-radio :label="3">文件</el-radio>
+						<!-- <el-radio :label="2">数据库</el-radio>
+						<el-radio :label="3">文件</el-radio> -->
 						<el-radio :label="4">设备</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
-				<el-divider content-position="left">规则表达式</el-divider>
+				<!-- <el-divider content-position="left">规则表达式</el-divider>
 
 				<div v-for="(item, index) in rule" :key="index">
 					<el-form-item label="正则表达式">
@@ -31,8 +31,7 @@
 
 					<el-form-item label="替换内容">
 						<el-input v-model="item.replace" placeholder="请输入替换内容" class="w-35" />
-						<!-- <el-input v-model="item.params.name" placeholder="请输入键值" class="w-35" />
-						<el-input v-model="item.params.value" placeholder="请输入值" class="w-35" /> -->
+		
 						<div class="conicon">
 							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
 						</div>
@@ -40,7 +39,7 @@
 				</div>
 				<div style="padding: 10px">
 					<el-button type="primary" class="addbutton" @click="addRule">增加</el-button>
-				</div>
+				</div> -->
 				<el-divider content-position="left">数据源配置</el-divider>
 
 				<div v-if="ruleForm.from==1">
