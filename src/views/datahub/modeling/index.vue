@@ -56,7 +56,12 @@
 				<el-table-column label="ID" align="center" prop="id" width="80" />
 				<el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" />
 				<el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" />
-
+				<el-table-column prop="status" label="状态" width="100" align="center">
+          <template #default="scope">
+            <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
+            <el-tag type="info" size="small" v-else>未发布</el-tag>
+          </template>
+        </el-table-column>
 				<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
 
 				<el-table-column label="操作" width="400" align="center">
@@ -71,7 +76,7 @@
 						>
 							<span>字段管理</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)" >数据记录</el-button>
+						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
 						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
 					</template>

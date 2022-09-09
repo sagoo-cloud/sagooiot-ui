@@ -95,6 +95,15 @@ export default defineComponent({
 		const resetForm = () => {
 			state.jsonsData = [];
 			state.jData = [];
+			state.tableData= {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					pageSize: 10,
+				},
+			}
 		};
 		// 关闭弹窗
 		const closeDialog = () => {

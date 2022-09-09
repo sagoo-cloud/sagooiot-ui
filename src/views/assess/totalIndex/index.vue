@@ -17,8 +17,8 @@
 				</el-button>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%">
-				<el-table-column align="center" prop="title" label="名称" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="explain" label="描述" show-overflow-tooltip></el-table-column>
+				<el-table-column align="left" prop="title" label="名称"  width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column align="left" prop="explain" label="描述" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" label="操作" width="180">
 					<template #default="scope">
 						<el-button size="small" type="text"  @click="onOpenEditItem(scope.row)">编辑</el-button>
@@ -44,7 +44,7 @@
 		<EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
 		<DetailItem ref="detailItemRef" />
 
-		
+
 	</div>
 </template>
 
@@ -123,7 +123,7 @@ export default defineComponent({
 			// state.tableData.data = data;
 			// state.tableData.total = state.tableData.data.length;
 			// console.log(data)
-			
+
 		};
 		const fetchList = () => {
 			api.getList().then((res: any) => {
