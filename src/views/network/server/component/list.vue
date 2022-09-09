@@ -83,7 +83,7 @@ export default defineComponent({
     name: 'tunnel',
 	props: {
 		// 输入框前置内容
-		queryForm: {
+		keyWord: {
 			type: Object,
 			default: () => {},
 		},
@@ -125,9 +125,9 @@ export default defineComponent({
 		};
         // 获取数据
         const fetchList = () => {
-            console.log(props.queryForm.title)
+            console.log(props.keyWord)
             let params = {
-                keyWord: props.queryForm.title,
+                keyWord: props.keyWord,
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }
@@ -162,9 +162,9 @@ export default defineComponent({
         const toEdit = (id: number) => {
             router.push(`/network/server/edit/${id}`)
         };
-        // 监听双向绑定 queryForm 的变化
+        // 监听双向绑定 keyWord 的变化
 		watch(
-            () => props.queryForm,
+            () => props.keyWord,
             // 新数据
             () => {
                 fetchList()

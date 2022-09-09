@@ -1,54 +1,29 @@
 <template>
     <div class="container">
         <el-card shadow="hover">
-            <div class="top-operate-wrap">
-                <div class="left">
-                    <el-form :inline="true" label-width="82px">
-                        <el-form-item label="服务器名称">
-                            <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
-                        </el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button size="default" type="primary" class="ml10" @click="searchData">
-                                <el-icon>
-                                    <ele-Search />
-                                </el-icon>
-                                查询
-                            </el-button>
-                            <el-button @click="toPage" size="default" type="success" class="ml10">
-                                <el-icon>
-                                    <ele-FolderAdd />
-                                </el-icon>
-                                新建
-                            </el-button>
-                        </el-form-item>
-                    </el-form>
-                    <!-- <el-button @click="toPage" size="default" type="success" class="ml10">
+            <el-form :inline="true" label-width="82px">
+                <el-form-item label="服务器名称">
+                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
+                </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="default" type="primary" class="ml10" @click="searchData">
+                        <el-icon>
+                            <ele-Search />
+                        </el-icon>
+                        查询
+                    </el-button>
+                    <el-button @click="toPage" size="default" type="success" class="ml10">
                         <el-icon>
                             <ele-FolderAdd />
                         </el-icon>
                         新建
                     </el-button>
-                    <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
-                    </el-input>
-                    <el-button  type="primary" plain size="default" @click="searchData">搜索</el-button> -->
-                </div>
-                <!-- <div class="right">  
-                    <el-button @click="index=1" :class="index==1?'active':''" size="default" class="fa fa-th"></el-button>
-                    <el-button @click="index=2" :class="index==2?'active':''" size="default" class="fa fa-list"></el-button>
-                </div>         -->
-            </div>
+                </el-form-item>
+            </el-form>
             <!-- 页面主要内容 -->
-            <tempalte v-if="index==1">
-                <!-- table -->
-                <tableTunnel :queryForm="queryParams" />
-
-            </tempalte>
-
-            <tempalte v-if="index==2">
-                <!-- list -->
-                <listTunnel :queryForm="queryParams" />
-
+            <tempalte>
+                <list-server :keyWord="keyWord" />
             </tempalte>
 
         </el-card>
@@ -56,85 +31,24 @@
     </div>
 </template>
 
-<script lang="ts">
-import { reactive, toRefs, onMounted, defineComponent, ref } from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import listServer from './component/list.vue';
 
-import listTunnel from './component/list.vue';
-import tableTunnel from './component/table.vue';
+// 向组件传递通道名称关键字
+let keyWord = ref('');
+// 搜索的key
+const key = ref('');
 
-// import api from '/@/api/assess';
+// 声明router
+const router = useRouter();
 
-
-// 定义接口来定义对象的类型
-interface RuleFormRow {
-    title: string;
-	
-}
-
-interface ItemState {
-	queryParams: RuleFormRow;
-    index: number;
-    key: string;
-}
-
-export default defineComponent({
-    name: 'tunnalManage',
-    components: { listTunnel, tableTunnel },
-	setup() {
-        const router = useRouter();
-		const state = reactive<ItemState>({
-            index: 2,
-			queryParams: {
-                title: ''
-			},
-            key: ''
-		});
-        const searchData = () => {
-            console.log(state.key)
-            state.queryParams.title = state.key
-        };
-        const toPage = () => {
-            router.push('/network/server/create')
-        };
-        return {
-            toPage,
-            searchData,
-			...toRefs(state),
-		};
-    },
-    
-});
+// 按照通道名称进行搜索
+const searchData = () => {
+    keyWord.value= key.value
+};
+const toPage = () => {
+    router.push('/network/server/create')
+};
 </script>
-
-<style lang="scss" scoped>
-.container {
-    .top-operate-wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        .right {
-            display: flex;
-            .el-button:nth-child(2) {
-                margin-left: 0;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-            }
-            .el-button:nth-child(1) {
-               border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                border-right: none;
-            }
-            .active {
-                color: var(--el-button-hover-text-color);
-                border-color: var(--el-button-hover-border-color);
-                background-color: var(--el-button-hover-bg-color);
-                outline: 0;
-            }
-        }
-    }
-}
-</style>
