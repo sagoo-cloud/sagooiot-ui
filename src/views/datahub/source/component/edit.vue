@@ -43,43 +43,90 @@
 				</div>
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<el-form-item label="请求方法">
-					<el-select v-model="config.method" placeholder="请选择请求方法">
-						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
-					</el-select>
-				</el-form-item>
+				<div v-if="ruleForm.from==1">
 
-				<el-form-item label="请求地址">
-					<el-input v-model="config.url" placeholder="请输入请求地址" />
-				</el-form-item>
+						<el-form-item label="请求方法">
+							<el-select v-model="config.method" placeholder="请选择请求方法">
+								<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
+							</el-select>
+						</el-form-item>
 
-				<el-form-item label="更新时间">
-					<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
-					<el-select v-model="config.intervalUnit" placeholder="请选择单位">
-						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
-					</el-select>
-				</el-form-item>
+						<el-form-item label="请求地址">
+							<el-input v-model="config.url" placeholder="请输入请求地址" />
+						</el-form-item>
 
-				<div class="box-content">
-					<el-divider content-position="left">请求参数</el-divider>
-					<div class="content-f" v-for="(item, index) in requestParams" :key="index">
-						<el-select v-model="item.type" placeholder="参数类型" style="width: 320px">
-							<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-						<el-input v-model="item.name" placeholder="请输入参数标题" style="width: 320px" />
-						<el-input v-model="item.key" placeholder="请输入参数名" style="width: 320px" />
-						<el-input v-model="item.value" placeholder="请输入参数值" style="width: 320px" />
-						<div class="conicon">
-							<el-icon @click="delParams(index)" v-if="index > 0"><Delete /></el-icon>
+						<el-form-item label="更新时间">
+							<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
+							<el-select v-model="config.intervalUnit" placeholder="请选择单位">
+								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
+							</el-select>
+						</el-form-item>
+
+						<div class="box-content">
+							<el-divider content-position="left">请求参数</el-divider>
+							<div class="content-f" v-for="(item, index) in requestParams" :key="index">
+								<el-select v-model="item.type" placeholder="参数类型" style="width: 320px">
+									<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
+								</el-select>
+								<el-input v-model="item.name" placeholder="请输入参数标题" style="width: 320px" />
+								<el-input v-model="item.key" placeholder="请输入参数名" style="width: 320px" />
+								<el-input v-model="item.value" placeholder="请输入参数值" style="width: 320px" />
+								<div class="conicon">
+									<el-icon @click="delParams(index)" v-if="index > 0"><Delete /></el-icon>
+								</div>
+							</div>
+							<el-button type="primary" class="addbutton" @click="addParams">增加</el-button>
 						</div>
-					</div>
-					<el-button type="primary" class="addbutton" @click="addParams">增加</el-button>
 				</div>
+
+
+
+
+				<div v-if="ruleForm.from==4">
+						<el-form-item label="主机地址" >
+							<el-input v-model="devconfig.host" placeholder="请输入主机地址"   />
+						</el-form-item>
+
+						<el-form-item label="端口号">
+							<el-input v-model="devconfig.port" placeholder="请输入端口号" />
+						</el-form-item>
+
+						<el-form-item label="用户名">
+							<el-input v-model="devconfig.user" placeholder="请输入用户名" />
+						</el-form-item>
+
+						<el-form-item label="密码">
+							<el-input v-model="devconfig.password" placeholder="请输入密码" />
+						</el-form-item>
+
+						<el-form-item label="数据库名称">
+							<el-input v-model="devconfig.dbname" placeholder="请输入数据库名称" />
+						</el-form-item>
+
+						<el-form-item label="表名称">
+							<el-input v-model="devconfig.table" placeholder="请输入表名称" />
+						</el-form-item>
+
+						<el-form-item label="更新时间">
+							<el-input v-model="devconfig.interval" placeholder="请输入更新时间" class="w-35" />
+							<el-select v-model="devconfig.intervalUnit" placeholder="请选择单位">
+								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
+							</el-select>
+						</el-form-item>
+
+				</div>
+
+
+
+
+
+
+
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 
-					<el-button @click="onTest" type="warning" size="default">测试</el-button>
+					<el-button @click="onTest" type="warning" size="default" v-if="ruleForm.sourceId>0">测试</el-button>
 					<el-button @click="onCancel" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.sourceId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
@@ -137,6 +184,7 @@ export default defineComponent({
 			isShowDialog: false,
 			dialogVisible:false,
 			config: {},
+			devconfig: {},
 			sourceId:0,
 			jsonData:'',
 			ruledata: [
@@ -269,9 +317,12 @@ export default defineComponent({
 				state.sourceId=row.sourceId
 				api.common.detail(row.sourceId).then((res: any) => {
 					state.ruleForm = res.data;
-					state.config = res.data.apiConfig;
-					state.requestParams = res.data.apiConfig.requestParams;
-
+					if(res.data.from==1){
+						state.config = res.data.apiConfig;
+						state.requestParams = res.data.apiConfig.requestParams;
+					}else if(res.data.from==4){
+						state.devconfig = res.data.deviceConfig;
+					}
 					res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
 						state.rule[index].replace = item.replace;
@@ -309,11 +360,20 @@ export default defineComponent({
 		};
 
 		const onTest=()=>{
+			if(state.ruleForm.from==1){
 				api.common.api(state.sourceId).then((res: any) => {
 					state.jsonData=JSON.parse(res.data);
 					state.dialogVisible=true
 						console.log(res);
 				})
+			}else if(state.ruleForm.from==4){
+				api.common.devapi(state.sourceId).then((res: any) => {
+					state.jsonData=JSON.parse(res.data);
+					state.dialogVisible=true
+						console.log(res);
+				})
+			}
+			
 		};
 		// 新增
 		const onSubmit = () => {
@@ -329,24 +389,47 @@ export default defineComponent({
 					// });
 
 					state.ruleForm.rule = state.rule;
-					state.config.requestParams = state.requestParams;
-					state.ruleForm.config = state.config;
-
+					if(state.ruleForm.from==1 ){
+						state.config.requestParams = state.requestParams;
+						state.ruleForm.config = state.config;
+					}else if(state.ruleForm.from==4 ){
+						state.ruleForm.config = state.devconfig;
+					}
+					
 					if (state.ruleForm.sourceId !== 0) {
 						//修改
-						api.common.edit(state.ruleForm).then(() => {
-							ElMessage.success('数据源类型修改成功');
-							closeDialog(); // 关闭弹窗
-							emit('typeList');
-						});
+
+						if(state.ruleForm.from==1 ){
+							api.common.edit(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型修改成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
+						}else if(state.ruleForm.from==4 ){
+							api.common.devedit(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型修改成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
+						}
+
+
+
 					} else {
 						//添加
-
-						api.common.add(state.ruleForm).then(() => {
-							ElMessage.success('数据源类型添加成功');
-							closeDialog(); // 关闭弹窗
-							emit('typeList');
-						});
+						if(state.ruleForm.from==1 ){
+							api.common.add(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型添加成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
+						}else if(state.ruleForm.from==4 ){
+							api.common.devadd(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型添加成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
+						}
 					}
 				}
 			});

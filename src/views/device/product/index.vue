@@ -64,7 +64,7 @@
           </template>
         </el-table-column>
         <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
-        <el-table-column label="操作" width="150" align="center">
+        <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
 		     <router-link :to="'/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
     font-size: 12px;color: #409eff;">

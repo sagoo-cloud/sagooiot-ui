@@ -68,7 +68,7 @@
 										</template>
 									</el-table-column>
 									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
-									<el-table-column label="操作" width="300" align="center">
+									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'attr')">删除</el-button>
@@ -87,7 +87,7 @@
 									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
 
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
-									<el-table-column label="操作" width="300" align="center">
+									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'fun')">删除</el-button>
@@ -113,7 +113,7 @@
 									</el-table-column>
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 
-									<el-table-column label="操作" width="300" align="center">
+									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning"  @click="onEditEvent(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'event')">删除</el-button>
@@ -142,7 +142,7 @@
 										</template>
 									</el-table-column>
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
-									<el-table-column label="操作" width="300" align="center">
+									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning"  @click="onEditTag(scope.row)">修改</el-button>
 											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'tab')">删除</el-button>

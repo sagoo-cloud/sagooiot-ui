@@ -68,6 +68,7 @@
 						<span v-if="scope.row.from == 1">api导入</span>
 						<span v-if="scope.row.from == 2">数据库</span>
 						<span v-if="scope.row.from == 3">文件</span>
+						<span v-if="scope.row.from == 4">设备</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="status" label="状态" width="120" align="center">
@@ -79,7 +80,7 @@
 
 				<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
 
-				<el-table-column label="操作" width="200" align="center">
+				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
 						<router-link
 							:to="'/datahub/source/detail/' + scope.row.sourceId"
@@ -158,6 +159,10 @@ export default defineComponent({
 				{
 					label: '文件',
 					value: '3',
+				},
+				{
+					label: '设备',
+					value: '4',
 				},
 			],
 			ids: [],

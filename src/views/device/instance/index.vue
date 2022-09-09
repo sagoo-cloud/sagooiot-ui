@@ -67,7 +67,7 @@
         </el-table-column>
          <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
          <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150"></el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
 
 			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>

@@ -89,7 +89,7 @@
 
 							<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
 
-							<el-table-column label="操作" width="200" align="center">
+							<el-table-column label="操作" width="200" align="center" fixed="right">
 								<template #default="scope">
 									<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)">修改</el-button>
 									<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
