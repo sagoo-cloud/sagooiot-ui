@@ -1,245 +1,244 @@
 <template>
-  <div class="system-user-container">
-    <div class="flex-row gap-3">
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>运行资源</span>
-            </div>
-          </template>
-          <div class=" el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="cell">操作系统:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.sysOsName}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">系统架构:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.sysOsArch}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">服务器名称:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.sysComputerName}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">服务器IP:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.sysComputerIp}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">Go语言版本</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.goVersion}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">启动时间</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{sysInfo.goStartTime}}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">运行时长:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{timeFormat(sysInfo.goRunTime)}}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>硬盘资源</span>
-            </div>
-          </template>
-          <div class=" el-table--enable-row-hover el-table--medium" style="height:280px;overflow:auto">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="cell">盘符路径</div>
-                  </td>
-                  <td>
-                    <div class="cell">文件系统</div>
-                  </td>
-                  <td>
-                    <div class="cell">总大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">可用大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">已用大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">已用百分比</div>
-                  </td>
-                </tr>
-                <tr v-for="(sysFile, index) in sysInfo.diskList" :key="index">
-                  <td>
-                    <div class="cell">{{ sysFile.path }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysFile.fstype }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.total) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.free) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.used) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysFile.usedPercent }}%</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </el-card>
-      </el-col>
-    </div>
-    <div class="flex-row gap-3">
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>CPU</span>
-            </div>
-          </template>
-          <div class=" el-table--enable-row-hover el-table--medium">
-            <el-row :gutter="30">
-              <el-col :xs="24" :sm="24" :md="12">
-                <table cellspacing="0" style="width: 100%;">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="cell">核心数:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{sysInfo.cpuNum}}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">使用率:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{sysInfo.cpuUsed}}%</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">Load Avg 5:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{sysInfo.cpuAvg5}}%</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">Load Avg 15:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{sysInfo.cpuAvg15}}%</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </el-col>
-              <el-col :xs="24" :sm="24" :md="12">
-                <div style="min-height: 280px;" ref="chartsWarningRef1"></div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>内存</span>
-            </div>
-          </template>
-          <div class=" el-table--enable-row-hover el-table--medium">
-            <el-row :gutter="30">
-              <el-col :xs="24" :sm="24" :md="12">
-                <table cellspacing="0" style="width: 100%;">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="cell">总数:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{ memorySizeFormat(sysInfo.memTotal) }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">已使用:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{ memorySizeFormat(sysInfo.memUsed)}}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">剩余:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{ memorySizeFormat(sysInfo.memFree) }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="cell">系统使用:</div>
-                      </td>
-                      <td>
-                        <div class="cell">{{ memorySizeFormat(sysInfo.goUsed)}}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </el-col>
-              <el-col :xs="24" :sm="24" :md="12">
-                <div style="min-height: 280px;" ref="chartsWarningRef2"></div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-    </div>
-  </div>
+	<div class="system-user-container">
+		<div class="flex-row gap-3">
+			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
+				<el-card class="box-card">
+					<template #header>
+						<div class="card-header">
+							<span>运行资源</span>
+						</div>
+					</template>
+					<div class="el-table--enable-row-hover el-table--medium">
+						<table cellspacing="0" style="width: 100%">
+							<tbody>
+								<tr>
+									<td>
+										<div class="cell">操作系统:</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.sysOsName }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">系统架构:</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.sysOsArch }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">服务器名称:</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.sysComputerName }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">服务器IP:</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.sysComputerIp }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">Go语言版本</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.goVersion }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">启动时间</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysInfo.goStartTime }}</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cell">运行时长:</div>
+									</td>
+									<td>
+										<div class="cell">{{ timeFormat(sysInfo.goRunTime) }}</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
+				<el-card class="box-card">
+					<template #header>
+						<div class="card-header">
+							<span>硬盘资源</span>
+						</div>
+					</template>
+					<div class="el-table--enable-row-hover el-table--medium" style="height: 280px; overflow: auto">
+						<table cellspacing="0" style="width: 100%">
+							<tbody>
+								<tr>
+									<td>
+										<div class="cell">盘符路径</div>
+									</td>
+									<td>
+										<div class="cell">文件系统</div>
+									</td>
+									<td>
+										<div class="cell">总大小</div>
+									</td>
+									<td>
+										<div class="cell">可用大小</div>
+									</td>
+									<td>
+										<div class="cell">已用大小</div>
+									</td>
+									<td>
+										<div class="cell">已用百分比</div>
+									</td>
+								</tr>
+								<tr v-for="(sysFile, index) in sysInfo.diskList" :key="index">
+									<td>
+										<div class="cell">{{ sysFile.path }}</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysFile.fstype }}</div>
+									</td>
+									<td>
+										<div class="cell">{{ memorySizeFormat(sysFile.total) }}</div>
+									</td>
+									<td>
+										<div class="cell">{{ memorySizeFormat(sysFile.free) }}</div>
+									</td>
+									<td>
+										<div class="cell">{{ memorySizeFormat(sysFile.used) }}</div>
+									</td>
+									<td>
+										<div class="cell">{{ sysFile.usedPercent }}%</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</el-card>
+			</el-col>
+		</div>
+		<div class="flex-row gap-3">
+			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
+				<el-card class="box-card">
+					<template #header>
+						<div class="card-header">
+							<span>CPU</span>
+						</div>
+					</template>
+					<div class="el-table--enable-row-hover el-table--medium">
+						<el-row :gutter="30">
+							<el-col :xs="24" :sm="24" :md="12">
+								<table cellspacing="0" style="width: 100%">
+									<tbody>
+										<tr>
+											<td>
+												<div class="cell">核心数:</div>
+											</td>
+											<td>
+												<div class="cell">{{ sysInfo.cpuNum }}</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">使用率:</div>
+											</td>
+											<td>
+												<div class="cell">{{ sysInfo.cpuUsed }}%</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">Load Avg 5:</div>
+											</td>
+											<td>
+												<div class="cell">{{ sysInfo.cpuAvg5 }}%</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">Load Avg 15:</div>
+											</td>
+											<td>
+												<div class="cell">{{ sysInfo.cpuAvg15 }}%</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</el-col>
+							<el-col :xs="24" :sm="24" :md="12">
+								<div style="min-height: 280px" ref="chartsWarningRef1"></div>
+							</el-col>
+						</el-row>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
+				<el-card class="box-card">
+					<template #header>
+						<div class="card-header">
+							<span>内存</span>
+						</div>
+					</template>
+					<div class="el-table--enable-row-hover el-table--medium">
+						<el-row :gutter="30">
+							<el-col :xs="24" :sm="24" :md="12">
+								<table cellspacing="0" style="width: 100%">
+									<tbody>
+										<tr>
+											<td>
+												<div class="cell">总数:</div>
+											</td>
+											<td>
+												<div class="cell">{{ memorySizeFormat(sysInfo.memTotal) }}</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">已使用:</div>
+											</td>
+											<td>
+												<div class="cell">{{ memorySizeFormat(sysInfo.memUsed) }}</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">剩余:</div>
+											</td>
+											<td>
+												<div class="cell">{{ memorySizeFormat(sysInfo.memFree) }}</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="cell">系统使用:</div>
+											</td>
+											<td>
+												<div class="cell">{{ memorySizeFormat(sysInfo.goUsed) }}</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</el-col>
+							<el-col :xs="24" :sm="24" :md="12">
+								<div style="min-height: 280px" ref="chartsWarningRef2"></div>
+							</el-col>
+						</el-row>
+					</div>
+				</el-card>
+			</el-col>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -400,6 +399,28 @@ export default defineComponent({
 			initChartRAM();
 		});
 
+		let ws: WebSocket | null = null;
+
+		function startWs() {
+			ws = null;
+			ws = new WebSocket(import.meta.env.VITE_WS_URL + '/monitorServer/ws');
+			ws.onopen = () => {};
+			ws.onmessage = ({ data: dataStr }) => {
+				const data = JSON.parse(dataStr);
+				state.sysInfo = data;
+				setOptChart1(data.cpuUsed);
+				setOptChart2(data.memUsage);
+				// console.log(data);
+			};
+			ws.onclose = () => {
+				setTimeout(() => {
+					startWs();
+				}, 3000);
+			};
+		}
+
+		startWs();
+
 		function getSystemInfo() {
 			api.getSysInfo().then((res: any) => {
 				state.sysInfo = res;
@@ -416,12 +437,12 @@ export default defineComponent({
 		};
 	},
 	created() {
-		this.getSystemInfo();
-		if (interval === null) {
-			interval = setInterval(() => {
-				this.getSystemInfo();
-			}, 5000);
-		}
+		// this.getSystemInfo();
+		// if (interval === null) {
+		// 	interval = setInterval(() => {
+		// 		this.getSystemInfo();
+		// 	}, 5000);
+		// }
 	},
 	unmounted() {
 		if (interval !== null) {
@@ -502,4 +523,3 @@ export default defineComponent({
 	min-height: 380px;
 }
 </style>
-
