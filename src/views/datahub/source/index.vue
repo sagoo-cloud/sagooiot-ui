@@ -149,6 +149,10 @@ export default defineComponent({
 		const state = reactive<TableDataState>({
 			typeData: [
 				{
+					label: '全部',
+					value: '-1',
+				},
+				{
 					label: 'api导入',
 					value: '1',
 				},

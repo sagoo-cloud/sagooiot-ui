@@ -333,6 +333,7 @@ export default defineComponent({
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
+			state.devconfig={};
 			state.ruleForm = {
 				sourceId: 0,
 				name: '',
