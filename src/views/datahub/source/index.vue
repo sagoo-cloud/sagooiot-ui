@@ -61,9 +61,9 @@
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="ID" align="center" prop="sourceId" width="80" />
-				<el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />
+<!--				<el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />-->
 				<el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
-				<el-table-column prop="from" label="数据源类型" align="center">
+				<el-table-column prop="from" label="数据源类型" width="160" align="center">
 					<template #default="scope">
 						<span v-if="scope.row.from == 1">api导入</span>
 						<span v-if="scope.row.from == 2">数据库</span>
@@ -71,14 +71,14 @@
 						<span v-if="scope.row.from == 4">设备</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="status" label="状态" width="120" align="center">
+				<el-table-column prop="status" label="状态" width="100" align="center">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status == 1">已发布</el-tag>
 						<el-tag type="info" size="small" v-if="scope.row.status == 0">未发布</el-tag>
 					</template>
 				</el-table-column>
 
-				<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
+<!--				<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>-->
 
 				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
