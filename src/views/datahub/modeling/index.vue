@@ -62,9 +62,9 @@
             <el-tag type="info" size="small" v-else>未发布</el-tag>
           </template>
         </el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间"  width="200" align="center"></el-table-column>
 
-				<el-table-column label="操作" width="400" align="center" fixed="right">
+				<el-table-column label="操作" width="180" align="center" fixed="right">
 					<template #default="scope">
 						<router-link
 							:to="'/datahub/modeling/detail/' + scope.row.id"
