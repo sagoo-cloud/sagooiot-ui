@@ -23,6 +23,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import api from '/@/api/configuration';
+import { Session } from '/@/utils/storage';
 
 const tableData = ref<any[]>([]);
 
@@ -48,6 +49,7 @@ const load = (row: any, treeNode: unknown, resolve: any) => {
 };
 
 const view = (row: any) => {
-	window.open(import.meta.env.VITE_TOPO_URL + '#/show/' + row.id);
+	const url = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/show/' + row.id;
+	window.open(url);
 };
 </script>

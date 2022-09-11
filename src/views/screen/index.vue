@@ -25,8 +25,9 @@
 				<el-table-column prop="projectName" label="项目名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
 				<el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>
-				<el-table-column label="操作" width="100" align="center">
+				<el-table-column label="操作" width="150" align="center">
 					<template #default="scope">
+						<el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
 						<el-button size="small" text type="warning" @click="edit(scope.row)">编辑</el-button>
 						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 					</template>
@@ -41,6 +42,7 @@
 import api from '/@/api/screen';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
+import { Session } from '/@/utils/storage';
 
 const { params, tableData, getList } = useSearch<any[]>(api.getList, 'Data', { name: '', address: '' });
 
@@ -70,7 +72,13 @@ const add = async () => {
 };
 
 const edit = async (row: any) => {
-	window.open(import.meta.env.VITE_SCREEN_URL + '#/chart/home/' + row.id);
+	const url = import.meta.env.VITE_SCREEN_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/chart/home/' + row.id;
+	window.open(url);
+};
+
+const preview = async (row: any) => {
+	const url = import.meta.env.VITE_SCREEN_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/chart/preview/' + row.id;
+	window.open(url);
 };
 
 const onDel = (row: any) => {
