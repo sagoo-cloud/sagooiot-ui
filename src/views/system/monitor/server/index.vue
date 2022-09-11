@@ -412,11 +412,11 @@ export default defineComponent({
 				setOptChart2(data.memUsage);
 				// console.log(data);
 			};
-			ws.onclose = () => {
-				setTimeout(() => {
-					startWs();
-				}, 3000);
-			};
+			// ws.onclose = () => {
+			// 	setTimeout(() => {
+			// 		startWs();
+			// 	}, 3000);
+			// };
 		}
 
 		startWs();
@@ -434,6 +434,7 @@ export default defineComponent({
 			getSystemInfo,
 			setOptChart1,
 			setOptChart2,
+			ws,
 		};
 	},
 	created() {
@@ -445,7 +446,10 @@ export default defineComponent({
 		// }
 	},
 	unmounted() {
-		if (interval !== null) {
+		if (this.ws) {
+			(this.ws as WebSocket).close();
+		}
+		if (interval) {
 			clearInterval(interval);
 			interval = null;
 		}
