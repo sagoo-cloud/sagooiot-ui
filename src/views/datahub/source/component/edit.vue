@@ -9,8 +9,8 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入数据源名称" />
 				</el-form-item>
 
-				<el-form-item label="描述" prop="description">
-					<el-input v-model="ruleForm.description" type="textarea" placeholder="请输入内容"></el-input>
+				<el-form-item label="描述" prop="desc">
+					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
 
 				<el-form-item label="数据来源" prop="from">
@@ -174,7 +174,7 @@ interface RuleFormState {
 	key: string;
 	userName: string;
 	password: string;
-	description: string;
+	desc: string;
 	status: number;
 }
 interface DicState {
@@ -284,7 +284,7 @@ export default defineComponent({
 					intervalUnit: '',
 					requestParams: [],
 				},
-				description: '',
+				desc: '',
 			},
 			rules: {
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
@@ -358,7 +358,7 @@ export default defineComponent({
 					intervalUnit: '',
 					requestParams: [],
 				},
-				description: '',
+				desc: '',
 			};
 		};
 		// 关闭弹窗
