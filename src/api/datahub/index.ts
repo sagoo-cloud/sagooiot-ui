@@ -14,6 +14,8 @@ export default {
     devadd: (data: object) => post('/source/device/add', data),
     devedit: (data: object) => put('/source/device/edit', data),
     devapi: (sourceId: number) => get('/source/device/get', { sourceId }),
+    getdevList: (params: object) => get('/product/device/list', params),
+
     },
    
    node:{

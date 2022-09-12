@@ -82,7 +82,17 @@
 
 
 				<div v-if="ruleForm.from==4">
-						<el-form-item label="主机地址" >
+
+
+					<el-form-item label="选择设备">
+						<el-select v-model="devconfig.deviceKey" filterable placeholder="请选择设备" @change="setNode">
+							<el-option v-for="item in sourceData" :key="item.id" :label="item.key" :value="item.id">
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+							</el-option>
+						</el-select>
+					</el-form-item>
+						<!-- <el-form-item label="主机地址" >
 							<el-input v-model="devconfig.host" placeholder="请输入主机地址"   />
 						</el-form-item>
 
@@ -111,7 +121,7 @@
 							<el-select v-model="devconfig.intervalUnit" placeholder="请选择单位">
 								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
-						</el-form-item>
+						</el-form-item> -->
 
 				</div>
 
@@ -184,6 +194,7 @@ export default defineComponent({
 			dialogVisible:false,
 			config: {},
 			devconfig: {},
+			sourceData: [],
 			sourceId:0,
 			jsonData:'',
 			ruledata: [
@@ -311,7 +322,7 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
-
+			getDevData();
 			if (row) {
 				state.sourceId=row.sourceId
 				api.common.detail(row.sourceId).then((res: any) => {
@@ -357,6 +368,23 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog();
+		};
+
+		const getDevData = () => {
+			api.common
+				.getdevList({})
+				.then((res: any) => {
+					state.sourceData = res.device;
+				});
+		};
+
+		const setNode = (event) => {
+			state.sourceData.forEach((item, index) => {
+				if (item.id == event) {
+					state.devconfig.productKey = item.product.key;
+					state.devconfig.deviceKey = item.key;
+				}
+			});
 		};
 
 		const onTest=()=>{
@@ -442,7 +470,9 @@ export default defineComponent({
 			addParams,
 			delParams,
 			openDialog,
+			setNode,
 			closeDialog,
+			getDevData,
 			onCancel,
 			onSubmit,
 			formRef,
