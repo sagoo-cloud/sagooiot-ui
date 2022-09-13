@@ -39,13 +39,11 @@
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 import api from '/@/api/network';
 
 interface TableDataState {
-	// detail: object,
     loading: boolean
 }
 export default defineComponent({
@@ -61,7 +59,6 @@ export default defineComponent({
             loading: false
 		});
 		onMounted(() => {
-            console.log(props.detail)
 		});
         // 禁用状态
         const onChangeStatus = () => {

@@ -2,12 +2,10 @@
     <div>
         <el-table v-loading="loading" :data="data" style="width: 100%">
             <el-table-column align="center" prop="id" label="ID" width="80"/>
-            <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
             <el-table-column align="center" prop="name" label="名称"/>
             <el-table-column align="center" prop="types" label="类型"/>
             <el-table-column align="center" prop="addr" label="地址"/>
             <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间" width="170"/>
-            <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
             <el-table-column align="center" prop="types" label="状态">
                 <template #default="scope">
                     <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="danger">未启动</el-tag>
@@ -125,14 +123,12 @@ export default defineComponent({
 		};
         // 获取数据
         const fetchList = () => {
-            console.log(props.keyWord)
             let params = {
                 keyWord: props.keyWord,
                 pageNum: state.param.page,
                 PageSize: state.param.pageSize
             }
             api.tunnel.getList(params).then((res: any) => {
-				console.log(res);
                 const { list, total, page } = res
                 state.data = list
                 state.total = total
