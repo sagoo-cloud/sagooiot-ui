@@ -19,7 +19,7 @@
 				</el-form-item>
 				<el-form-item label="所属换热站" prop="">
 					<el-tree-select
-						v-model="ruleForm.heatId"
+						v-model="ruleForm.heatStaId"
 						:data="heatList"
 						:props="{
 							label: 'name',
@@ -118,7 +118,7 @@ export default defineComponent({
 			ruleForm: {
 				id: 0,
 				organizationId: '',
-				heatId: '',
+				heatStaId: '',
 				plotId: '',
 				floorId: '',
 				unitId: '',
@@ -137,7 +137,7 @@ export default defineComponent({
 				plotId: [{ required: true, message: '小区名称不能为空', trigger: ['blur', 'change'] }],
 				floorId: [{ required: true, message: '楼宇名称不能为空', trigger: ['blur', 'change'] }],
 				unitId: [{ required: true, message: '单元名称不能为空', trigger: ['blur', 'change'] }],
-				heatId: [{ required: true, message: '所属换热站不能为空', trigger: ['blur', 'change'] }],
+				heatStaId: [{ required: true, message: '所属换热站不能为空', trigger: ['blur', 'change'] }],
 				floorLevel: [{ required: true, message: '楼层不能为空', trigger: ['blur', 'change'] }],
 				roomNumber: [{ required: true, message: '房间号不能为空', trigger: ['blur', 'change'] }],
 				phone: [{ required: true, message: '手机号码不能为空', trigger: ['blur', 'change'] }],
@@ -164,7 +164,7 @@ export default defineComponent({
 			state.ruleForm = {
 				id: 0,
 				organizationId: '',
-				heatId: '',
+				heatStaId: '',
 				plotId: '',
 				floorId: '',
 				unitId: '',

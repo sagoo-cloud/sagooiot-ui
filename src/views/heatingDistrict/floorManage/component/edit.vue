@@ -17,9 +17,9 @@
 						:render-after-expand="true"
 					/>
 				</el-form-item>
-				<el-form-item label="所属换热站" prop="heatId">
+				<el-form-item label="所属换热站" prop="heatStaId">
 					<el-tree-select
-						v-model="ruleForm.heatId"
+						v-model="ruleForm.heatStaId"
 						:data="heatList"
 						:props="{
 							label: 'name',
@@ -88,7 +88,7 @@ export default defineComponent({
 				name: '',
         organizationId: '',
         plotId: '',
-        heatId: '',
+        heatStaId: '',
         number: '',
         remark: '',
 				status: 1
@@ -97,7 +97,7 @@ export default defineComponent({
 				name: [{ required: true, message: '楼宇名称不能为空', trigger: ['blur', 'change'] }],
 				organizationId: [{ required: true, message: '所属组织不能为空', trigger: ['blur', 'change'] }],
 				plotId: [{ required: true, message: '小区名称不能为空', trigger: ['blur', 'change'] }],
-				heatId: [{ required: true, message: '所属换热站不能为空', trigger: ['blur', 'change'] }],
+				heatStaId: [{ required: true, message: '所属换热站不能为空', trigger: ['blur', 'change'] }],
 				number: [{ required: true, message: '楼号不能为空', trigger: ['blur', 'change'] }],
 			},
 			orgList: [],
@@ -120,7 +120,7 @@ export default defineComponent({
 				name: '',
         organizationId: '',
         plotId: '',
-        heatId: '',
+        heatStaId: '',
         number: '',
         remark: '',
 				status: 1

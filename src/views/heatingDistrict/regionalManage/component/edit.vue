@@ -17,6 +17,22 @@
 						:render-after-expand="true"
 					/>
 				</el-form-item>
+				<!-- heatStaId -->
+				<el-form-item label="所属换热站" prop="heatStaId">
+					<el-tree-select
+						v-model="ruleForm.heatStaId"
+						:data="heatList"
+						:props="{
+							label: 'name',
+							children: 'children'
+						}"
+						node-key="id"
+						:clearable="true"
+						check-strictly
+						style="width: 100%;"
+						:render-after-expand="true"
+					/>
+				</el-form-item>
 				<el-form-item label="小区名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入小区名称" />
 				</el-form-item>
@@ -38,6 +54,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/heatingDistrict';
+import heatApi from '/@/api/heatStation';
 import { ElMessage } from 'element-plus';
 interface RuleFormState {
 	id?: number;
@@ -61,11 +78,13 @@ export default defineComponent({
 				name: [{ required: true, message: '小区名称不能为空', trigger: ['blur', 'change'] }],
 				organizationId: [{ required: true, message: '所属组织不能为空', trigger: ['blur', 'change'] }]
 			},
-			orgList: []
+			orgList: [],
+			heatList: []
 		})
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm()
+			queryTree()
 			if (row) {
 				(state.ruleForm as any).id = row.id
 				getDetail()
@@ -89,6 +108,16 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog()
 		}
+		const queryTree = () => {
+			heatApi.heatStation.getList({
+					name: '',
+					code: '',
+					status: -1
+				})
+				.then((res: any) => {
+					state.heatList = res || [];
+				});
+		};
 		const getDetail = () => {
 			api.regionalManage.detail(state.ruleForm.id)
 				.then((res: any) => {
