@@ -146,9 +146,8 @@
 				v-model="dialogVisible"
 				title="返回Json数据"
 				width="30%"
-				:before-close="handleClose"
 			>
-				<json-viewer :value="jsonData"  boxed sort :expand-depth=20 theme="my-awesome-json-theme" />
+					<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
 
 				<template #footer>
 				<span class="dialog-footer">
@@ -163,6 +162,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
+import "vue3-json-viewer/dist/index.css";
 
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
@@ -188,6 +188,7 @@ export default defineComponent({
 	components: { Delete, Minus, Right },
 
 	setup(prop, { emit }) {
+		const myRef = ref<HTMLElement | null>(null);
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -343,6 +344,14 @@ export default defineComponent({
 			}
 			state.isShowDialog = true;
 		};
+		const onKeyclick=(e)=>{
+			if(e.target.innerText && e.target.className=='jv-key'){
+				let str = e.target.innerText;  
+				str = str.substr(0, str.length - 1);
+				console.log(str);
+			}
+			
+		};
 		const resetForm = () => {
 			state.devconfig={};
 			state.ruleForm = {
@@ -469,6 +478,7 @@ export default defineComponent({
 			delRule,
 			addParams,
 			delParams,
+			onKeyclick,
 			openDialog,
 			setNode,
 			closeDialog,
@@ -476,6 +486,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
+			myRef,
 			...toRefs(state),
 		};
 	},
@@ -515,14 +526,7 @@ export default defineComponent({
 .jv-node{
 	margin-left: 25px;
 }
-.jv-my-awesome-json-theme {
-	background: #d9f1e9;
-  white-space: nowrap;
-  color: #525252;
-  font-size: 14px;
-  font-family: Consolas, Menlo, Courier, monospace;
 
- 
-}
+
 
 </style>

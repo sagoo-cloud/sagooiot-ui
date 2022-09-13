@@ -23,6 +23,7 @@ export default {
       add: (data: object) => post('/source/node/add', data),
       delete: (nodeId: number) => del('/source/node/del', { nodeId }),
       edit: (data: object) => put('/source/node/edit', data),
+      getpropertyList: (params: object) => get('/product/tsl/property/all', params),
    },
 
    template:{

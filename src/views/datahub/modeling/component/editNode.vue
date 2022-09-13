@@ -136,24 +136,12 @@ export default defineComponent({
 			],
 			tabData: [
 				{
-					label: 'varchar',
-					value: 'varchar',
-				},
-				{
-					label: 'string',
-					value: 'string',
-				},
-				{
 					label: 'int',
 					value: 'int',
 				},
 				{
-					label: 'bigint',
-					value: 'bigint',
-				},
-				{
-					label: 'tinyint',
-					value: 'tinyint',
+					label: 'long',
+					value: 'long',
 				},
 				{
 					label: 'float',
@@ -164,16 +152,16 @@ export default defineComponent({
 					value: 'double',
 				},
 				{
-					label: 'text',
-					value: 'text',
+					label: 'string',
+					value: 'string',
 				},
 				{
-					label: 'datetime',
-					value: 'datetime',
+					label: 'boolean',
+					value: 'boolean',
 				},
 				{
-					label: 'timestamp',
-					value: 'timestamp',
+					label: 'date',
+					value: 'date',
 				},
 			],
 

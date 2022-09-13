@@ -22,8 +22,17 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="取值项" prop="value">
-					<el-input v-model="ruleForm.value" placeholder="请输入取值项" />
+				<el-form-item label="取值项" prop="value" v-if="detail.from==1">
+					<el-input v-model="ruleForm.value" placeholder="请输入取值项" class="w-35" /><el-button type="success" @click="onTest">选择值</el-button>
+
+				</el-form-item>
+				<el-form-item label="取值项" prop="value" v-if="detail.from==4">
+					<el-select v-model="ruleForm.value" filterable placeholder="请选择数取值项" @change="getNodeList">
+							<el-option v-for="item in propertyData" :key="item.key" :label="item.name" :value="item.key">
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+							</el-option>
+						</el-select>
 				</el-form-item>
 
 				<el-divider content-position="left">规则表达式</el-divider>
@@ -53,12 +62,29 @@
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog
+				v-model="dialogVisible"
+				title="点击蓝色key值进行选择"
+				width="30%"
+			>
+					<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
+
+				<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false">关闭</el-button>
+				
+				</span>
+				</template>
+			</el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
+import "vue3-json-viewer/dist/index.css";
+
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
 
@@ -88,27 +114,19 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+			dialogVisible:false,
+			jsonData:'',
+			propertyData:[],
 			config: {},
+			detail:{},
 			tabData: [
-				{
-					label: 'varchar',
-					value: 'varchar',
-				},
-				{
-					label: 'string',
-					value: 'string',
-				},
-				{
+			{
 					label: 'int',
 					value: 'int',
 				},
 				{
-					label: 'bigint',
-					value: 'bigint',
-				},
-				{
-					label: 'tinyint',
-					value: 'tinyint',
+					label: 'long',
+					value: 'long',
 				},
 				{
 					label: 'float',
@@ -119,16 +137,16 @@ export default defineComponent({
 					value: 'double',
 				},
 				{
-					label: 'text',
-					value: 'text',
+					label: 'string',
+					value: 'string',
 				},
 				{
-					label: 'datetime',
-					value: 'datetime',
+					label: 'boolean',
+					value: 'boolean',
 				},
 				{
-					label: 'timestamp',
-					value: 'timestamp',
+					label: 'date',
+					value: 'date',
 				},
 			],
 			ruledata: [
@@ -172,6 +190,23 @@ export default defineComponent({
 			},
 		});
 
+		const onTest=()=>{
+			if(state.detail.from==1){
+				api.common.api(state.detail.sourceId).then((res: any) => {
+					state.jsonData=JSON.parse(res.data);
+					state.dialogVisible=true
+						console.log(res);
+				})
+			}else if(state.detail.from==4){
+				api.common.devapi(state.detail.sourceId).then((res: any) => {
+					state.jsonData=JSON.parse(res.data);
+					state.dialogVisible=true
+						console.log(res);
+				})
+			}
+			
+		};
+
 		const delRule = (index) => {
 			state.rule.splice(index, 1);
 		};
@@ -202,7 +237,19 @@ export default defineComponent({
 					// state.rule[index].params.name = Object.keys(item.params);
 					// state.rule[index].params.value = item.params[Object.keys(item.params)];
 				});
+
+			
 			}
+
+				api.common.detail(row.sourceId).then((res: any) => {
+					state.detail = res.data;
+					if(res.data.from==4){
+						//propertyData
+						api.node.getpropertyList({key:res.data.deviceConfig.productKey}).then((re: any) => {
+							state.propertyData=re
+						});
+					}
+				});
 
 			state.ruleForm = row;
 			state.isShowDialog = true;
@@ -262,8 +309,20 @@ export default defineComponent({
 			});
 		};
 
+		const onKeyclick=(e)=>{
+			if(e.target.innerText && e.target.className=='jv-key'){
+				let str = e.target.innerText;  
+				str = str.substr(0, str.length - 1);
+				state.ruleForm.value=str;
+				state.dialogVisible = false;
+			}
+			
+		};
+
 		return {
+			onKeyclick,
 			addRule,
+			onTest,
 			delRule,
 			openDialog,
 			closeDialog,
@@ -304,5 +363,10 @@ export default defineComponent({
 	font-size: 28px;
 	line-height: 28px;
 	cursor: pointer;
+}
+.jv-key{
+	cursor: pointer;
+	color: #0034f1;
+
 }
 </style>
