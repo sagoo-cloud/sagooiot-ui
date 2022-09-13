@@ -1,6 +1,6 @@
 <template>
 	<el-card class="system-dic-container" style="position: relative;">
-		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+		<el-tabs v-model="activeName" class="demo-tabs">
 			<el-tab-pane label="编辑服务器" name="first">
 				<el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
@@ -45,17 +45,6 @@
                                         :label="dict.label"
                                         :value="dict.value">
                                     </el-option>
-                                    <!-- <el-option label="Modbus RTU" value="Modbus RTU" />
-                                    <el-option label="Modbus TCP" value="Modbus TCP" />
-                                    <el-option label="Omron Hostlink" value="Omron Hostlink" />
-                                    <el-option label="Omron FINS UDP" value="Omron FINS UDP" />
-                                    <el-option label="Omron FINS TCP" value="Omron FINS TCP" />
-                                    <el-option label="Simatic S7-200 Smart" value="Simatic S7-200 Smart" />
-                                    <el-option label="Simatic S7-200" value="Simatic S7-200" />
-                                    <el-option label="Simatic S7-300" value="Simatic S7-300" />
-                                    <el-option label="Simatic S7-400" value="Simatic S7-400" />
-                                    <el-option label="Simatic S7-1200" value="Simatic S7-1200" />
-                                    <el-option label="Simatic S7-1500" value="Simatic S7-1500" /> -->
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="协议参数">
@@ -69,26 +58,16 @@
                     </el-collapse-item>
                 </el-collapse>
 			</el-tab-pane>
-			<!-- <el-tab-pane label="专家视图" name="second">
-                <h1>专家视图</h1>
-            </el-tab-pane> -->
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 20px;">
 			<el-button size="medium">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
 		</div>
-
-	  	 <!-- <codeEditor ref="mirrorRef"
-	  :mode="resourceModalPro.mode"
-	  :content="resourceModalPro.content"
-	  >
-	  </codeEditor> -->
 	</el-card>
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus'
 import codeEditor from '/@/components/codeEditor/index.vue'
 
@@ -99,13 +78,10 @@ import { useRoute, useRouter } from 'vue-router';
 import api from '/@/api/network';
 
 interface TableDataState {
-	// ids: number[];
-	// id: string;
     activeViewName: string[];
 	resourceModalPro: {
 		mode: string,
 		content: string,
-		// content: object,
 	},
 	detail: object,
     form: object
@@ -168,7 +144,6 @@ export default defineComponent({
 		const getDetail = () => {
 			const id = route.params && route.params.id;
 			api.server.getDetail({"id": id}).then((res: any) => {
-				console.log(res)
                 const {id, name, types, status, addr, register, protocol, heartbeat, devices} = res
                 state.form["id"] = id
                 state.form["name"] = name
@@ -180,17 +155,12 @@ export default defineComponent({
                 state.form["heartbeat"] = JSON.parse(heartbeat)
                 state.form["devices"] = JSON.parse(devices)
 
-                console.log(JSON.parse(protocol).options)
                 let jsonData = JSON.stringify(JSON.parse(protocol).options);
 				state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
-                console.log(state.resourceModalPro.content)
                 mirrorRef.value.setValue(state.resourceModalPro.content);
-				// state.detail = res
-                console.log(state.form)
 			})
 		};
         const submit = () => {
-            console.log(state.form)
             let params = {
                 ...state.form
             }
@@ -200,38 +170,20 @@ export default defineComponent({
             console.log(params)
             // return
             api.server.editItem({...state.form}).then((res: any) => {
-				console.log(res);
                 ElMessage.success('添加成功')
                 router.go(-1);
-                // const { list, total, page } = res
-                // state.data = list
-                // state.total = total
-                // state.param.page = page
 			});
         };
 		onMounted(() => {
-            getDetail()
-			// let obj = {}
-			// var jsonData = JSON.stringify(obj);
-			// state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+            getDetail();
 		});
-		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event)
-		}
 
 		return {
-			Edit,
             mirrorRef,
 			activeName,
 			getDetail,
-			handleClick,
             network_server_type,
             network_protocols,
-			// editDicRef,
-			// editAttrRef,
-			// editFunRef,
-			// editEventRef,
-			// editTabRef,
             submit,
 			...toRefs(props),
 			...toRefs(state),
@@ -239,14 +191,6 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style>
-.CodeMirror {
-  width: 100%;
-  height: 600px;
-  font-size: 16px;
-}
-</style>
 <style lang="scss" scoped>
 ::v-deep .el-collapse-item__header {
     position: relative;
