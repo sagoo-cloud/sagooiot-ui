@@ -30,6 +30,16 @@
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
 				</el-form-item>
+				<el-form-item label="数据模型" prop="dataTemplateIds">
+					<el-select v-model="ruleForm.dataTemplateIds" multiple clearable style="width: 100%;" placeholder="请选择">
+						<el-option
+							v-for="item in dataHubList"
+							:key="item.id"
+							:label="item.name"
+							:value="item.id">
+						</el-option>
+					</el-select>
+				</el-form-item>
         <el-form-item label="地图展示" prop="decade">
 					<div>
 						<span>经度：{{ ruleForm.lnt ? `${ruleForm.lnt}，` : '' }}</span>
@@ -54,8 +64,8 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/heatStation';
+import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
-import { Console } from 'console';
 interface RuleFormState {
 	id: number;
 	parentId: number | string;
@@ -94,11 +104,13 @@ export default defineComponent({
 				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
 			},
 			treeData: [],
+			dataHubList: [],
 			mapLocal: null as any
 		})
 		// 打开弹窗
 		const openDialog = (row: any, tree: any) => {
 			resetForm()
+			queryDataHubList()
 			state.treeData = tree
 
 			if (row) {
@@ -109,22 +121,20 @@ export default defineComponent({
 			}
 			nextTick(() => {
 				initMap()
-				// let BMap = (window as any).BMap
-				// if (BMap) {
-				// 	let geolocation = new BMap.Geolocation();//返回用户当前的位置
-				// 	geolocation.getCurrentPosition(function(r: any) {
-				// 		console.log(r)
-						
-				// 		initMap(r.longitude, r.latitude)
-				// 		// state.center.lat = r.latitude
-				// 		// state.center.lng = r.longitude
-				// 		// latitude: 22.322230460245
-				// 		// longitude: 114.1808934593
-				// 	});
-				// }
 			}) 
 			state.dialogVisible = true
 		}
+		
+		const queryDataHubList = () => {
+			datahubApi.template.getList({
+				pageNum: 1,
+				pageSize: 50,
+				name: '',
+				key: '',
+			}).then((res: any) => {
+				state.dataHubList = res.list || [];
+			});
+		};
 		const resetForm = () => {
 			state.ruleForm = {
 				id: 0,
