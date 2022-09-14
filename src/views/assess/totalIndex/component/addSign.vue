@@ -1,7 +1,7 @@
 <template>
-	<div class="system-add-user-container">
+	<div class="system-add-flag-container">
 		<el-dialog :title="isEdit?'编辑标识项':'新建标识项'" v-model="isShowDialog" width="569px">
-			<el-form ref="ruleTagRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
+			<el-form class="add-flag-container" ref="ruleTagRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="标识" prop="name">
