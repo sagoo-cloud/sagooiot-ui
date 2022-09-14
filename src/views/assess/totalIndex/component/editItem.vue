@@ -155,15 +155,29 @@ export default defineComponent({
 		})
 		// 打开弹窗
 		const openDialog = (row:any) => {
-			if(!row) return
-			console.log(row.item_code)
-			api.getList({itemcode: row.item_code}).then((res: any) => {
-				console.log(res)
-				state.ruleForm = res;
-				state.tableData.data = res.targets
+			// if(!row) return
+			// console.log(row.item_code)
+			if(row) {
+				api.getList({itemcode: row.item_code}).then((res: any) => {
+					console.log(res)
+					state.ruleForm = res;
+					state.tableData.data = res.targets
+					state.isShowDialog = true;
+				});
+			}else {
+				state.ruleForm = {
+					title: '', // 评价名称
+					explain: '', // 描述
+					config: '',
+					item_code: '',
+					targets: []
+				},
+				state.tableData.data = [];
 				state.isShowDialog = true;
+			}
+	
 
-			});
+
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
