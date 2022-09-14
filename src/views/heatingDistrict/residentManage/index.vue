@@ -84,45 +84,45 @@
       <el-table :data="tableData.data" style="width: 100%" >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-        <el-table-column label="组织名称" prop="">
+        <el-table-column label="组织名称" prop="" min-width="100">
           <template #default="{ row }">
             {{ row.organizationInfo.name }}
           </template>
         </el-table-column>
-        <el-table-column label="小区名称" prop="">
+        <el-table-column label="小区名称" prop="" min-width="100">
           <template #default="{ row }">
             {{ row.plotInfo.name }}
           </template>
         </el-table-column>
-        <el-table-column label="楼宇名称" prop="">
+        <el-table-column label="楼宇名称" prop="" min-width="100">
           <template #default="{ row }">
             {{ row.floorInfo.name }}
           </template>
         </el-table-column>
-	    	<el-table-column label="单元名称" prop="name">
+	    	<el-table-column label="单元名称" prop="name" min-width="100">
           <template #default="{ row }">
             {{ row.unitInfo.name }}
           </template>
         </el-table-column>
-	    	<el-table-column label="单元号" prop="number">
+	    	<el-table-column label="单元号" prop="number" min-width="100">
           <template #default="{ row }">
             {{ row.unitInfo.number }}
           </template>
         </el-table-column>
-	    	<el-table-column label="住户姓名" prop="name" />
-	    	<el-table-column label="楼层" prop="floorLevel" />
-	    	<el-table-column label="房间号" prop="roomNumber" />
-	    	<el-table-column label="电话号码" prop="phone" />
-	    	<el-table-column label="建筑面积" prop="buildingArea" />
-	    	<el-table-column label="实供面积" prop="forRealArea" />
-	    	<el-table-column label="更新时间" prop="createdAt" />
+	    	<el-table-column label="住户姓名" prop="name" min-width="100" />
+	    	<el-table-column label="楼层" prop="floorLevel" min-width="100" />
+	    	<el-table-column label="房间号" prop="roomNumber" min-width="100" />
+	    	<el-table-column label="电话号码" prop="phone" min-width="100" />
+	    	<el-table-column label="建筑面积" prop="buildingArea" min-width="100" />
+	    	<el-table-column label="实供面积" prop="forRealArea" min-width="100" />
+	    	<el-table-column label="更新时间" prop="createdAt" width="180"/>
 				<el-table-column prop="status" label="启用状态" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenDialog(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
