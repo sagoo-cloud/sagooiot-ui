@@ -79,7 +79,7 @@
 							<div class="title">数据节点</div>
 							<div><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
 						</div>
-
+				
 						<el-table :data="tableData.data" style="width: 100%">
 							<el-table-column label="ID" align="center" prop="nodeId" width="80" />
 							<el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" />
@@ -91,8 +91,8 @@
 
 							<el-table-column label="操作" width="200" align="center" fixed="right">
 								<template #default="scope">
-									<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)">修改</el-button>
-									<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+									<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)" v-if="developer_status==0">修改</el-button>
+									<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0" >删除</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -100,7 +100,6 @@
 							v-show="tableData.total > 0"
 							:total="tableData.total"
 							v-model:page="tableData.param.pageNum"
-							v-model:limit="tableData.param.pageSize"
 							@pagination="typeList"
 						/>
 					</div>

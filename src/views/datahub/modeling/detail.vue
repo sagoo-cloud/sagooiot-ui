@@ -76,8 +76,8 @@
 
 					<el-table-column label="操作" width="200" align="center" fixed="right">
 						<template #default="scope">
-							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-							<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status==0">修改</el-button>
+							<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
