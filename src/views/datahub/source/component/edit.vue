@@ -71,7 +71,7 @@
 								<el-input v-model="item.key" placeholder="请输入参数名" style="width: 320px" />
 								<el-input v-model="item.value" placeholder="请输入参数值" style="width: 320px" />
 								<div class="conicon">
-									<el-icon @click="delParams(index)" v-if="index > 0"><Delete /></el-icon>
+									<el-icon @click="delParams(index)" ><Delete /></el-icon>
 								</div>
 							</div>
 							<el-button type="primary" class="addbutton" @click="addParams">增加</el-button>
@@ -216,12 +216,7 @@ export default defineComponent({
 				},
 			],
 			requestParams: [
-				{
-					type: '',
-					key: '',
-					name: '',
-					value: '',
-				},
+				
 			],
 			methodData: [
 				{

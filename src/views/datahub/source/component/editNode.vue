@@ -68,7 +68,7 @@
 				title="点击蓝色key值进行选择"
 				width="30%"
 			>
-					<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
+					<JsonViewer :value="jsonData" :show-double-quotes="true"	  boxed sort theme="jv-dark" @click="onKeyclick" />
 
 				<template #footer>
 				<span class="dialog-footer">
@@ -310,17 +310,54 @@ export default defineComponent({
 		};
 
 		const onKeyclick=(e)=>{
+			//console.log(e);
 			if(e.target.innerText && e.target.className=='jv-key'){
 				let str = e.target.innerText;  
 				str = str.substr(0, str.length - 1);
 				state.ruleForm.value=str;
 				state.dialogVisible = false;
+				var con={
+					...
+					state.jsonData
+				}
+				var jsonstr=getOrgIdArr([],str,con);
+				state.ruleForm.value=jsonstr.join('.');
+			
 			}
 			
 		};
 
+		const getOrgIdArr=(parents, childNode, treeData)=>{
+			
+			if (treeData instanceof Object) {
+			
+				for (var key in treeData) {
+					
+						// 父节点查询条件
+						if (key === childNode) {
+							// 如果找到结果,保存当前节点
+							parents.push(key)
+							// 用当前节点再去原数据查找当前节点的父节点
+							//getOrgIdArr(parents, childNode,treeData[key])
+							break
+						} else {
+							if (treeData[key] instanceof Object) {
+							//	没找到，遍历该节点的子节点
+								parents.push(key)
+								getOrgIdArr(parents, childNode, treeData[key])
+								break
+							}
+						}
+					}
+			}
+				return parents
+
+		};
+
+
 		return {
 			onKeyclick,
+			getOrgIdArr,
 			addRule,
 			onTest,
 			delRule,
