@@ -68,7 +68,7 @@
 				title="点击蓝色key值进行选择"
 				width="30%"
 			>
-					<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
+					<JsonViewer :value="jsonData" :show-double-quotes="true"	  boxed sort theme="jv-dark" @click="onKeyclick" />
 
 				<template #footer>
 				<span class="dialog-footer">
@@ -310,17 +310,47 @@ export default defineComponent({
 		};
 
 		const onKeyclick=(e)=>{
+			//console.log(e);
 			if(e.target.innerText && e.target.className=='jv-key'){
 				let str = e.target.innerText;  
 				str = str.substr(0, str.length - 1);
 				state.ruleForm.value=str;
 				state.dialogVisible = false;
+				//console.log(getOrgIdArr(state.jsonData,str));
 			}
 			
 		};
 
+		const getOrgIdArr=(obj, child, parent)=>{
+			
+			for (var key in obj) { 
+				console.log(key);
+				if (child === key) {
+					return parent; 
+				} else { 
+					return getOrgIdArr(obj[key], child, obj);
+				}
+			} 
+
+		};
+
+		const findKey=(obj, key)=>{
+			var queue = Object.keys(obj).map(k => ({item: obj[k], parent: obj, key: k}))
+                while(queue.length > 0) {
+                    var top = queue.shift()
+                    if (top.key === key) {
+                        return top.parent
+                    }
+                    if (typeof top.item === 'object') {
+                        queue.push(...Object.keys(top.item).map(k => ({item: top.item[k], parent: top.item, key: k})))
+                    }
+                }
+		}
+
 		return {
+			findKey,
 			onKeyclick,
+			getOrgIdArr,
 			addRule,
 			onTest,
 			delRule,
