@@ -110,7 +110,11 @@
 	.el-loading-mask {
 		background: var(--next-color-primary-lighter) !important;
 	}
-
+	// 
+	.el-drawer.rtl.open {
+		background: var(--el-color-white) !important;
+	}
+	 
 	// 组态管理-组态设计
 	.page-wrapper > iframe {
 		background: var(--next-color-primary-lighter) !important;

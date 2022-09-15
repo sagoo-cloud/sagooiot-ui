@@ -16,23 +16,36 @@
 
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import api from '/@/api/heatStation';
 import { setMarker } from '/@/utils/map';
+import { useStore } from '/@/store/index';
 
 const mapRef = ref();
 const checkList = ref([]);
+const store = useStore();
 
 let BMapGL = (window as any).BMapGL;
 let map: any = null;
+let getThemeConfig:any = null
 
 onMounted(() => {
+
+	// 获取布局配置信息
+	getThemeConfig =  store.state.themeConfig.themeConfig;
 	map = new BMapGL.Map(mapRef.value, {
-		backgroundColor: '#ff9900',
 	});
+
 	const testPt = new BMapGL.Point(104.5, 38);
 	map.centerAndZoom(testPt, 5);
 	map.enableScrollWheelZoom();
+	if(getThemeConfig.isIsDark) {
+		map.setMapStyleV2({     
+			styleId: 'b8d841ee37fd5bd41e742049b6fcd0f5'
+		});
+	}
+
+
 	setTimeout(() => {
 		document.querySelectorAll('.anchorBL')[1].remove();
 		document.querySelectorAll('.anchorBL')[0].remove();
@@ -47,7 +60,6 @@ onMounted(() => {
 		console.log(res);
 	});
 });
-
 const renderStation = (list: any[]) => {
 	setMarker(list, map);
 };
