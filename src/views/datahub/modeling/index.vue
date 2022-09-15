@@ -74,8 +74,8 @@
 							<span>字段管理</span>
 						</router-link>
 						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
-						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
