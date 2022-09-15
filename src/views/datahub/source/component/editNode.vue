@@ -316,39 +316,46 @@ export default defineComponent({
 				str = str.substr(0, str.length - 1);
 				state.ruleForm.value=str;
 				state.dialogVisible = false;
-				//console.log(getOrgIdArr(state.jsonData,str));
+				var con={
+					...
+					state.jsonData
+				}
+				var jsonstr=getOrgIdArr([],str,con);
+				state.ruleForm.value=jsonstr.join('.');
+			
 			}
 			
 		};
 
-		const getOrgIdArr=(obj, child, parent)=>{
+		const getOrgIdArr=(parents, childNode, treeData)=>{
 			
-			for (var key in obj) { 
-				console.log(key);
-				if (child === key) {
-					return parent; 
-				} else { 
-					return getOrgIdArr(obj[key], child, obj);
-				}
-			} 
+			if (treeData instanceof Object) {
+			
+				for (var key in treeData) {
+					
+						// 父节点查询条件
+						if (key === childNode) {
+							// 如果找到结果,保存当前节点
+							parents.push(key)
+							// 用当前节点再去原数据查找当前节点的父节点
+							//getOrgIdArr(parents, childNode,treeData[key])
+							break
+						} else {
+							if (treeData[key] instanceof Object) {
+							//	没找到，遍历该节点的子节点
+								parents.push(key)
+								getOrgIdArr(parents, childNode, treeData[key])
+								break
+							}
+						}
+					}
+			}
+				return parents
 
 		};
 
-		const findKey=(obj, key)=>{
-			var queue = Object.keys(obj).map(k => ({item: obj[k], parent: obj, key: k}))
-                while(queue.length > 0) {
-                    var top = queue.shift()
-                    if (top.key === key) {
-                        return top.parent
-                    }
-                    if (typeof top.item === 'object') {
-                        queue.push(...Object.keys(top.item).map(k => ({item: top.item[k], parent: top.item, key: k})))
-                    }
-                }
-		}
 
 		return {
-			findKey,
 			onKeyclick,
 			getOrgIdArr,
 			addRule,

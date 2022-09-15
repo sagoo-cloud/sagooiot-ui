@@ -71,6 +71,16 @@
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
 				</el-form-item>
+				<el-form-item label="数据模型" prop="dataTemplateIds">
+					<el-select v-model="ruleForm.dataTemplateIds" multiple clearable style="width: 100%;" placeholder="请选择">
+						<el-option
+							v-for="item in dataHubList"
+							:key="item.id"
+							:label="item.name"
+							:value="item.id">
+						</el-option>
+					</el-select>
+				</el-form-item>
         <el-form-item label="编辑路线信息" prop="">
 					<div class="mb10">
 						<el-button type="primary" @click="onAddPoint">添加途经点</el-button>
@@ -103,6 +113,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/heatStation';
+import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
 interface Point {
 	sort?: number;
@@ -163,11 +174,13 @@ export default defineComponent({
 			mapLocal: null as any, // 地图搜索
 			pointList: [] as any,
 			pointIndex: -1,
+			dataHubList: []
 		})
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm()
 			queryTree()
+			queryDataHubList()
 			nextTick(() => {
 				initMap()
 			})
@@ -213,6 +226,16 @@ export default defineComponent({
 				.then((res: any) => {
 					state.treeData = res || [];
 				});
+		};
+		const queryDataHubList = () => {
+			datahubApi.template.getList({
+				pageNum: 1,
+				pageSize: 50,
+				name: '',
+				key: '',
+			}).then((res: any) => {
+				state.dataHubList = res.list || [];
+			});
 		};
 		const getDetail = () => {
 			api.loop.detail(state.ruleForm.id)

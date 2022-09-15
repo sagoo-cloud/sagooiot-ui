@@ -30,8 +30,9 @@ service.interceptors.response.use(
 		// 对响应数据做点什么
 		const res = response.data;
 		const code = response.data.code
-		if (code === 401) {
-			ElMessageBox.alert('登录状态已过期，请重新登录', '提示', { confirmButtonText: '确定' })
+		if (code === 401 || code === 51) {
+			ElMessageBox.alert('登录状态已过期，请重新登录', '提示',
+				{ confirmButtonText: '确定', showCancelButton: false, closeOnHashChange: false, closeOnPressEscape: false, closeOnClickModal: false, showClose: false })
 				.then(() => {
 					Session.clear(); // 清除浏览器全部临时缓存
 					window.location.href = '/'; // 去登录页
@@ -51,7 +52,7 @@ service.interceptors.response.use(
 				}
 			}
 			if (res.data?.Data) {
-				return res.data.Data 
+				return res.data.Data
 			}
 			if (res.data?.Data === undefined) {
 				return res.data
@@ -97,7 +98,7 @@ export function put(url: string, data?: any): any {
 		data
 	})
 }
-export function del(url: string, data?: any): any{
+export function del(url: string, data?: any): any {
 	return service({
 		url,
 		method: "delete",
