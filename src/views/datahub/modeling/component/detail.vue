@@ -1,6 +1,22 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog title="数据记录" v-model="isShowDialog" width="75%">
+		<el-dialog  v-model="isShowDialog" :show-close="false"  width="75%" :fullscreen="dialogFullScreen">
+		 <template #header="{ close, titleId, titleClass }">
+      <div class="my-header">
+        <h4 :id="titleId" :class="titleClass">数据记录</h4>
+		 
+		 <div>
+			<el-button @click="quanping">
+			<span v-if="dialogFullScreen==false">全屏</span>
+			<span v-if="dialogFullScreen==true">缩小</span>
+			</el-button>
+			<el-button @click="close">
+			关闭
+			</el-button>
+		</div>
+      </div>
+    </template>
+
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center">
 				</el-table-column>
@@ -53,6 +69,8 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+		    dialogFullScreen: false,
+
 			jsonsData: [],
 			jData: [],
 			tableData: {
@@ -109,12 +127,16 @@ export default defineComponent({
 		const closeDialog = () => {
 			state.isShowDialog = false;
 		};
+		const quanping=()=>{
+			state.dialogFullScreen = state.dialogFullScreen?false:true;
+		}
 		// 取消
 		const onCancel = () => {
 			closeDialog();
 		};
 
 		return {
+			quanping,
 			typeList,
 			openDialog,
 			closeDialog,
@@ -125,3 +147,10 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.my-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+</style>
