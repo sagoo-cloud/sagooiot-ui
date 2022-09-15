@@ -228,14 +228,10 @@ export default defineComponent({
 				});
 		};
 		const queryDataHubList = () => {
-			datahubApi.template.getList({
-				pageNum: 1,
-				pageSize: 50,
-				name: '',
-				key: '',
-			}).then((res: any) => {
-				state.dataHubList = res.list || [];
-			});
+			datahubApi.template.allList({})
+				.then((res: any) => {
+					state.dataHubList = res.list || [];
+				});
 		};
 		const getDetail = () => {
 			api.loop.detail(state.ruleForm.id)
