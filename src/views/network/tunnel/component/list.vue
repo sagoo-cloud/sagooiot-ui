@@ -8,7 +8,7 @@
             <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间" width="170"/>
             <el-table-column align="center" prop="types" label="状态">
                 <template #default="scope">
-                    <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="danger">未启动</el-tag>
+                    <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
                     <el-tag size="medium" v-else class="ml-2" type="success">启动</el-tag>
                 </template>
             </el-table-column>
