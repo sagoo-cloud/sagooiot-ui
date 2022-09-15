@@ -32,6 +32,7 @@ export default {
       delete: (ids: number) => del('/source/template/del', { ids }),
       edit: (data: object) => put('/source/template/edit', data),
       detail: (id: number) => get('/source/template/detail', { id }),
+      allList: (params: object) => get('/source/template/list', params), // 获取所有已发布列表
       getdata: (params: object) => get('/source/template/getdata',  params ),
    } ,
 
