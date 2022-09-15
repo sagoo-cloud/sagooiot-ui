@@ -10,7 +10,7 @@
             <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
             <el-table-column align="center" prop="types" label="状态">
                 <template #default="scope">
-                    <el-tag v-if="!scope.row.status" class="ml-2" type="danger">未启动</el-tag>
+                    <el-tag v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
                     <el-tag v-else class="ml-2" type="success">启动</el-tag>
                 </template>
             </el-table-column>
