@@ -49,7 +49,7 @@
 								</el-icon>
 								重置
 							</el-button>
-							<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+							<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-if="developer_status==0">
 								<el-icon>
 									<ele-FolderAdd />
 								</el-icon>
