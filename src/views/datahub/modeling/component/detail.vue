@@ -6,13 +6,9 @@
         <h4 :id="titleId" :class="titleClass">数据记录</h4>
 		 
 		 <div>
-			<el-button @click="quanping">
-			<span v-if="dialogFullScreen==false">全屏</span>
-			<span v-if="dialogFullScreen==true">缩小</span>
-			</el-button>
-			<el-button @click="close">
-			关闭
-			</el-button>
+			<i class="iconfont "  :class="!dialogFullScreen ? 'icon-fullscreen' : 'icon-tuichuquanping'"   @click="quanping"  style="font-size: 22px;cursor: pointer;"></i>
+			<i class="el-icon"  @click="close" style="font-size: 22px;cursor: pointer;    margin-left: 10px; position: relative; top: 3px;"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path></svg></i>
+			
 		</div>
       </div>
     </template>
