@@ -14,5 +14,6 @@ export default {
     add: (data: object) => post('/region/heatStation/add', data),
     edit: (data: object) => put('/region/heatStation/edit', data),
     del: (id: number) => del('/region/heatStation/del', { id }),
+    detail: (id: number) => get('/region/heatStation/getInfoById', { id }),
   }
 }
