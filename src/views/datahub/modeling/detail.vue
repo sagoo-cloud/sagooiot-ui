@@ -81,13 +81,13 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<pagination
+				<!-- <pagination
 					v-show="tableData.data.length > 0"
 					:total="tableData.total"
 					v-model:page="tableData.param.pageNum"
 					v-model:limit="tableData.param.pageSize"
 					@pagination="typeList"
-				/>
+				/> -->
 			</div>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />

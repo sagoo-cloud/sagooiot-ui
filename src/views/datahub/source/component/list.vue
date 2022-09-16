@@ -17,17 +17,8 @@
       </div>
     </template>
 
-			<el-table :data="tableData.data" style="width: 100%">
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center">
-					<template #header>
-					<div >
-						{{item}}
-					</div>
-					<div >
-						<span v-if="item=='created_at'">时间</span>
-						{{titleData[item]}}
-					</div>
-				</template>
 				</el-table-column>
 			</el-table>
 			<pagination
@@ -79,7 +70,6 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 		    dialogFullScreen: false,
-			titleData:{},
 
 			jsonsData: [],
 			jData: [],
@@ -99,15 +89,6 @@ export default defineComponent({
 			resetForm();
 			if (row) {
 				state.tableData.param.id = row.id;
-
-				api.tnode.getList({tid:row.id}).then((res: any) => {
-					res.list.forEach((item, index) => {
-						state.titleData[item.key] = item.name;
-					});
-					console.log(state.titleData);
-						//state.titleData = res.list;
-						//state.tableData.total = res.Total;
-					});
 				typeList();
 
 			}
@@ -116,7 +97,7 @@ export default defineComponent({
 
 		const typeList = () => {
 			console.log(state.tableData.param);
-			api.template.getdata(state.tableData.param).then((res: any) => {
+			api.common.getdata(state.tableData.param).then((res: any) => {
 				const jsonData = JSON.parse(res.data);
 				state.tableData.data = jsonData;
 				state.jData = Object.keys(jsonData[0]);

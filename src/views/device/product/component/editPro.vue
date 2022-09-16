@@ -61,7 +61,7 @@
 
       
         <el-form-item label="设备类型" prop="deviceType">
-          <el-radio-group v-model="ruleForm.deviceType" model-value="设备">
+          <el-radio-group v-model="ruleForm.deviceType" >
             <el-radio label="设备">设备</el-radio>
 
             <el-radio label="网关">网关</el-radio>

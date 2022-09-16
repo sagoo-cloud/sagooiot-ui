@@ -16,7 +16,7 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="数据类型" prop="dataType">
+				<el-form-item label="数据类型" prop="dataType" v-if="detail.from==1">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
 						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
@@ -309,6 +309,14 @@ export default defineComponent({
 			});
 		};
 
+		const getNodeList=(e)=>{
+			state.propertyData.forEach((item, index) => {
+				if(item.key===e){
+					state.ruleForm.dataType=item.valueType.type;
+				}
+			});
+		}
+
 		const onKeyclick=(e)=>{
 			//console.log(e);
 			if(e.target.innerText && e.target.className=='jv-key'){
@@ -356,6 +364,7 @@ export default defineComponent({
 
 
 		return {
+			getNodeList,
 			onKeyclick,
 			getOrgIdArr,
 			addRule,
