@@ -40,7 +40,7 @@
       </el-col>
     </el-form-item>
     <el-form-item class="login-animation4">
-      <el-button type="primary" class="login-content-submit" round @click="onSignIn" :loading="loading.signIn">
+      <el-button type="primary" class="login-content-submit"  @click="onSignIn" :loading="loading.signIn">
         <span>{{ $t('message.account.accountBtnText') }}</span>
       </el-button>
     </el-form-item>
@@ -182,6 +182,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .login-content-form {
+	width: 400px;
 	margin-top: 20px;
 	@for $i from 1 through 4 {
 		.login-animation#{$i} {

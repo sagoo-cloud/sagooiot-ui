@@ -1,51 +1,25 @@
 <template>
-  <div class="login-container">
-    <div class="login-content-out">
-      <div class="login-content">
-        <div class="login-content-main">
-          <div class="login-icon-group">
-            <div class="login-icon-group-title">
-              <img :src="logoMini" />
-              <div class="login-icon-group-title-text font25">{{ getThemeConfig.globalViceTitle }}</div>
-            </div>
-          </div>
-          <div v-if="!isScan">
-            <el-tabs v-model="tabsActiveName">
-              <el-tab-pane :label="$t('message.label.one1')" name="account">
-                <Account />
-              </el-tab-pane>
-              <!-- <el-tab-pane :label="$t('message.label.two2')" name="mobile">
-                <Mobile />
-              </el-tab-pane> -->
-            </el-tabs>
-          </div>
-          <!-- <Scan v-if="isScan" /> -->
-          <!-- <div class="login-content-main-sacn" @click="isScan = !isScan">
-            <i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
-            <div class="login-content-main-sacn-delta"></div>
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <div class="login-footer">
-      <!-- <amis :json="amisjson" /> -->
-      <div class="login-footer-content mt15">
-        <div class="login-footer-content-warp">
-          <div>Copyright © 2021-2023 SAGOO All Rights Reserved.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="login-container flex-row">
+		<div class="part left">
+			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />IOT管理系统</div>
+			<img class="img" src="/@/assets/login-box-bg.svg" />
+		</div>
+		<div class="part">
+			<!-- <img :src="logoMini" />
+							<div class="login-icongroup-title-text font25">{{ getThemeConfig.globalViceTitle }}</div> -->
+			<div class="title">登录</div>
+			<Account />
+		</div>
+		<!-- <amis :json="amisjson" /> -->
+	</div>
 </template>
 
 <script lang="ts">
 import { toRefs, reactive, computed, defineComponent } from 'vue';
 import Account from '/@/views/login/component/account.vue';
-import Mobile from '/@/views/login/component/mobile.vue';
-import Scan from '/@/views/login/component/scan.vue';
 import { useStore } from '/@/store/index';
 import logoMini from '/@/assets/logo.png';
-import amis from '/@/components/amis/index.vue';
+// import amis from '/@/components/amis/index.vue';
 
 // 定义接口来定义对象的类型
 interface LoginState {
@@ -55,7 +29,10 @@ interface LoginState {
 
 export default defineComponent({
 	name: 'loginIndex',
-	components: { Account, Mobile, Scan, amis },
+	components: {
+		Account,
+		// amis,
+	},
 	data: function () {
 		return {
 			amisjson: {
@@ -101,13 +78,49 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.flex {
+	display: flex;
+	align-items: center;
+}
 .login-container {
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	position: relative;
-	background-image: url('/@/assets/bg.jpeg');
-	background-size: cover;
-	background-position: center;
+	background: #293146;
+	.title {
+		font-size: 30px;
+		color: #fff;
+		font-weight: bold;
+		letter-spacing: 20px;
+	}
+	.logo {
+		font-size: 30px;
+		color: #fff;
+		.logoimg {
+			height: 50px;
+			display: block;
+			margin-right: 12px;
+		}
+	}
+	.img {
+		width: 50%;
+		display: block;
+		margin: 15vh 0;
+	}
+	.part {
+		flex: 1;
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: center;
+	}
+	.left {
+		height: 100vh;
+		background-image: url(/@/assets/login-bg-dark.svg);
+		background-repeat: no-repeat;
+		background-size: auto 100%;
+		background-position: right center;
+	}
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
@@ -143,7 +156,7 @@ export default defineComponent({
 		width: 500px;
 		padding: 20px;
 		margin-left: calc(50% - 500px);
-		background-color: rgba(255,255,255,0.8);
+		background-color: rgba(255, 255, 255, 0.8);
 		border: 5px solid var(--el-color-primary-light-8);
 		border-radius: 5px;
 		overflow: hidden;
