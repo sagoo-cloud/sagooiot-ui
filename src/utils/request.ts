@@ -30,7 +30,7 @@ service.interceptors.response.use(
 		// 对响应数据做点什么
 		const res = response.data;
 		const code = response.data.code
-		if (code === 401 || code === 51) {
+		if (code === 401) {
 			ElMessageBox.alert('登录状态已过期，请重新登录', '提示',
 				{ confirmButtonText: '确定', showCancelButton: false, closeOnHashChange: false, closeOnPressEscape: false, closeOnClickModal: false, showClose: false })
 				.then(() => {
