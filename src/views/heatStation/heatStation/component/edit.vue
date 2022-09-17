@@ -66,6 +66,7 @@ import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } fr
 import api from '/@/api/heatStation';
 import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
+import { useStore } from '/@/store/index';
 interface RuleFormState {
 	id: number;
 	parentId: number | string;
@@ -107,6 +108,7 @@ export default defineComponent({
 			dataHubList: [],
 			mapLocal: null as any
 		})
+		const store = useStore();
 		// 打开弹窗
 		const openDialog = (row: any, tree: any) => {
 			resetForm()
@@ -188,11 +190,20 @@ export default defineComponent({
 		const initMap = () => {
 			let BMapGL = (window as any).BMapGL
 			let map = new BMapGL.Map("map-container");
+			// 获取布局配置信息
+			let getThemeConfig =  store.state.themeConfig.themeConfig;
 			// 116.404, 39.915
 			let point = new BMapGL.Point(state.ruleForm.lnt || 116.404, state.ruleForm.lat || 39.915);
 			let zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
 			let cityCtrl = new BMapGL.CityListControl()
+			if(getThemeConfig.isIsDark) {
+				map.setMapStyleV2({     
+					styleId: 'b8d841ee37fd5bd41e742049b6fcd0f5'
+				});
+			}
+
 			map.centerAndZoom(point, 15); 
+			
 			map.enableScrollWheelZoom(true); // 开启滚轮缩放
 			map.addControl(zoomCtrl);
 			map.addControl(cityCtrl);
