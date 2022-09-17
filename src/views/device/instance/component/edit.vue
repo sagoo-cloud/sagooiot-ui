@@ -108,9 +108,7 @@ export default defineComponent({
         ],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
         deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
-        certificate: [{ required: true, message: '请输入设备证书', trigger: 'blur' }],
-        secureKey: [{ required: true, message: '请输入设备秘钥', trigger: 'blur' }],
-        version: [{ required: true, message: '请输入固件版本号', trigger: 'blur' }],
+       
       }
 		});
 		// 打开弹窗

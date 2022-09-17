@@ -34,34 +34,30 @@
 
            
           <el-form-item label="消息协议" prop="messageProtocol">
-      
-
-               <el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
-              <el-option
-                v-for="item in messageData"
-                :key="item.key"
-                :label="item.name"
-                :value="item.key"
-              />
-            </el-select>
+              <el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
+                <el-option
+                                        v-for="dict in network_protocols"
+                                        :key="dict.value"
+                                        :label="dict.label"
+                                        :value="dict.value">
+                                    </el-option>
+              </el-select>
             </el-form-item> 
 
             <el-form-item label="传输协议" prop="transportProtocol">
-           
-
-                 <el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
-              <el-option
-                v-for="item in tranData"
-                :key="item.key"
-                :label="item.name"
-                :value="item.key"
-              />
-            </el-select>
+              <el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+                <el-option
+                                            v-for="dict in network_server_type"
+                                            :key="dict.value"
+                                            :label="dict.label"
+                                            :value="dict.value">
+                                        </el-option>
+              </el-select>
             </el-form-item>
 
       
         <el-form-item label="设备类型" prop="deviceType">
-          <el-radio-group v-model="ruleForm.deviceType" model-value="设备">
+          <el-radio-group v-model="ruleForm.deviceType" >
             <el-radio label="设备">设备</el-radio>
 
             <el-radio label="网关">网关</el-radio>
@@ -82,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent,ref, unref,getCurrentInstance } from 'vue';
 import api from '/@/api/device';
 import uploadVue from '/@/components/upload/index.vue';
 import {ElMessage,UploadProps} from "element-plus";
@@ -110,6 +106,9 @@ export default defineComponent({
 	setup(prop,{emit}) {
     const formRef = ref<HTMLElement | null>(null);
     const baseURL:string|undefined|boolean = import.meta.env.VITE_API_URL
+
+    const { proxy } = getCurrentInstance() as any;
+    const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
 
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -168,12 +167,12 @@ export default defineComponent({
         api.dept.getList({ status: -1 }).then((res: any) => {
           state.deptData = res || [];
         });
-        api.product.message_protocol_list({ status: -1 }).then((res: any) => {
-          state.messageData = res.data || [];
-        });
-        api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
-          state.tranData = res.data || [];
-        });
+        // api.product.message_protocol_list({ status: -1 }).then((res: any) => {
+        //   state.messageData = res.data || [];
+        // });
+        // api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
+        //   state.tranData = res.data || [];
+        // });
       if (row){
         // api.dict.getType(row.dictId).then((res:any)=>{
         //   state.ruleForm = res.data.dictType
@@ -236,6 +235,8 @@ export default defineComponent({
 			closeDialog,
 			onCancel,
 			onSubmit,
+      network_server_type,
+      network_protocols,
       formRef,
 			...toRefs(state),
 		};

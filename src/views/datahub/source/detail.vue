@@ -77,7 +77,7 @@
 					<div class="wu-box">
 						<div class="wu-title">
 							<div class="title">数据节点</div>
-							<div><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
+							<div v-if="developer_status==0"><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
 						</div>
 				
 						<el-table :data="tableData.data" style="width: 100%">

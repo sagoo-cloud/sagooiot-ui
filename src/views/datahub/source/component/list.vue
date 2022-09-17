@@ -6,24 +6,15 @@
         <h4 :id="titleId" :class="titleClass">数据记录</h4>
 		 
 		 <div>
-			<i class="iconfont "  :class="!dialogFullScreen ? 'icon-fullscreen' : 'icon-tuichuquanping'"   @click="quanping"  style="font-size: 22px;cursor: pointer;"></i>
+            <i class="iconfont "  :class="!dialogFullScreen ? 'icon-fullscreen' : 'icon-tuichuquanping'"   @click="quanping"  style="font-size: 22px;cursor: pointer;"></i>
 			<i class="el-icon"  @click="close" style="font-size: 22px;cursor: pointer;    margin-left: 10px; position: relative; top: 3px;"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path></svg></i>
 			
 		</div>
       </div>
     </template>
 
-			<el-table :data="tableData.data" style="width: 100%">
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center">
-					<template #header>
-					<div >
-						{{item}}
-					</div>
-					<div >
-						<span v-if="item=='created_at'">时间</span>
-						{{titleData[item]}}
-					</div>
-				</template>
 				</el-table-column>
 			</el-table>
 			<pagination
@@ -39,6 +30,8 @@
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { Close } from '@element-plus/icons-vue';
+
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
 
@@ -75,7 +68,6 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 		    dialogFullScreen: false,
-			titleData:{},
 
 			jsonsData: [],
 			jData: [],
@@ -86,7 +78,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					id: 0,
+					sourceId: 0,
 				},
 			},
 		});
@@ -94,16 +86,11 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 			if (row) {
-				state.tableData.param.id = row.id;
+				console.log(row);
+				state.tableData.param.sourceId = row.sourceId;
 
-				api.tnode.getList({tid:row.id}).then((res: any) => {
-					res.list.forEach((item, index) => {
-						state.titleData[item.key] = item.name;
-					});
-					console.log(state.titleData);
-						//state.titleData = res.list;
-						//state.tableData.total = res.Total;
-					});
+
+      
 				typeList();
 
 			}
@@ -112,7 +99,7 @@ export default defineComponent({
 
 		const typeList = () => {
 			console.log(state.tableData.param);
-			api.template.getdata(state.tableData.param).then((res: any) => {
+			api.common.getdata(state.tableData.param).then((res: any) => {
 				const jsonData = JSON.parse(res.data);
 				state.tableData.data = jsonData;
 				state.jData = Object.keys(jsonData[0]);
@@ -151,6 +138,7 @@ export default defineComponent({
 		};
 
 		return {
+            Close,
 			quanping,
 			typeList,
 			openDialog,

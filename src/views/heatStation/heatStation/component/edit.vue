@@ -114,10 +114,8 @@ export default defineComponent({
 			state.treeData = tree
 
 			if (row) {
-				state.ruleForm = {
-					...row,
-					parentId: row.parentId === -1 ? '' : row.parentId
-				}
+				(state.ruleForm as any).id = row.id
+				getDetail()
 			}
 			nextTick(() => {
 				initMap()
@@ -152,6 +150,14 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog()
 			state.keyword = ''
+		}
+		const getDetail = () => {
+			api.heatStation.detail(state.ruleForm.id)
+				.then((res: any) => {
+					state.ruleForm = {
+						...res
+					}
+				})
 		}
 		// 新增
 		const onSubmit = () => {

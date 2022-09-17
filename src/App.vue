@@ -17,9 +17,16 @@ import setIntroduction from '/@/utils/setIconfont';
 import LockScreen from '/@/layout/lockScreen/index.vue';
 import Setings from '/@/layout/navBars/breadcrumb/setings.vue';
 import CloseFull from '/@/layout/navBars/breadcrumb/closeFull.vue';
+import api from '/@/api/system';
 export default defineComponent({
 	name: 'app',
 	components: { LockScreen, Setings, CloseFull },
+	created() {
+		api.sysinfo().then((res) => {
+			console.log(res);
+			localStorage.setItem('sysinfo', JSON.stringify(res));
+		});
+	},
 	setup() {
 		const { proxy } = <any>getCurrentInstance();
 		const setingsRef = ref();

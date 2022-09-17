@@ -89,9 +89,9 @@
 						>
 							<span>详情</span>
 						</router-link>
-
-						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="success" @click="onOpenList(scope.row)">数据记录</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -104,7 +104,7 @@
 			/>
 		</el-card>
 		<EditDic ref="editDicRef" @typeList="typeList" />
-		<Detail ref="detailRef" />
+		<ListDic ref="listDicRef" />
 	</div>
 </template>
 
@@ -112,6 +112,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
+import ListDic from './component/list.vue';
 import api from '/@/api/datahub';
 
 // 定义接口来定义对象的类型
@@ -141,10 +142,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'sourcelist',
-	components: { EditDic },
+	components: { EditDic,ListDic },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
+		const listDicRef=ref();
 		const queryRef = ref();
 		const state = reactive<TableDataState>({
 			typeData: [
@@ -193,6 +195,11 @@ export default defineComponent({
 				state.tableData.total = res.Total;
 			});
 		};
+
+		//打开数据记录
+		const onOpenList=(row: TableDataRow)=>{
+			listDicRef.value.openDialog(row);
+		}
 		// 打开新增数据源弹窗
 		const onOpenAdd = () => {
 			editDicRef.value.openDialog();
@@ -245,7 +252,9 @@ export default defineComponent({
 		return {
 			addDicRef,
 			editDicRef,
+			listDicRef,
 			queryRef,
+			onOpenList,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,

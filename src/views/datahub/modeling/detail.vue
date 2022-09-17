@@ -49,7 +49,7 @@
 								</el-icon>
 								重置
 							</el-button>
-							<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+							<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-if="developer_status==0">
 								<el-icon>
 									<ele-FolderAdd />
 								</el-icon>
@@ -81,13 +81,13 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<pagination
+				<!-- <pagination
 					v-show="tableData.data.length > 0"
 					:total="tableData.total"
 					v-model:page="tableData.param.pageNum"
 					v-model:limit="tableData.param.pageSize"
 					@pagination="typeList"
-				/>
+				/> -->
 			</div>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
