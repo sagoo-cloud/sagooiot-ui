@@ -1,7 +1,7 @@
 <template>
 	<div class="login-container flex-row">
 		<div class="part left">
-			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />IOT管理系统</div>
+			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
 			<img class="img" src="/@/assets/login-box-bg.svg" />
 		</div>
 		<div class="part">
@@ -35,6 +35,11 @@ export default defineComponent({
 	},
 	data: function () {
 		return {
+			sysinfo: {
+				buildVersion: '',
+				systemName: '',
+				systemCopyright: '',
+			},
 			amisjson: {
 				type: 'page',
 				title: '表单页面',
@@ -57,6 +62,9 @@ export default defineComponent({
 				},
 			},
 		};
+	},
+	created() {
+		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 	},
 	setup() {
 		const store = useStore();
@@ -120,6 +128,8 @@ export default defineComponent({
 		background-repeat: no-repeat;
 		background-size: auto 100%;
 		background-position: right center;
+		align-items: flex-start;
+		padding-left: 8%;
 	}
 	.login-icon-group {
 		width: 100%;

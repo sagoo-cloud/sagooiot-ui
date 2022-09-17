@@ -1,6 +1,7 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  sysinfo: () => get('/sysinfo'),
   login: {
     login: (data: object) => post('/login', data),
     currentUser: () => get('/system/user/currentUser'),
