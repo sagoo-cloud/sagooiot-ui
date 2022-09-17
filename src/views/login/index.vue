@@ -1,5 +1,14 @@
 <template>
 	<div class="login-container flex-row">
+		<el-switch
+			class="switch"
+			v-model="getThemeConfig.isIsDark"
+			size="large"
+			inline-prompt
+			@change="onAddDarkChange"
+			:active-icon="Moon"
+			:inactive-icon="Sunny"
+		></el-switch>
 		<div class="part left">
 			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
 			<img class="img" src="/@/assets/login-box-bg.svg" />
@@ -19,7 +28,10 @@ import { toRefs, reactive, computed, defineComponent } from 'vue';
 import Account from '/@/views/login/component/account.vue';
 import { useStore } from '/@/store/index';
 import logoMini from '/@/assets/logo.png';
+import { Sunny, Moon } from '@element-plus/icons-vue';
 // import amis from '/@/components/amis/index.vue';
+
+const store = useStore();
 
 // 定义接口来定义对象的类型
 interface LoginState {
@@ -35,6 +47,8 @@ export default defineComponent({
 	},
 	data: function () {
 		return {
+			Sunny,
+			Moon,
 			sysinfo: {
 				buildVersion: '',
 				systemName: '',
@@ -76,7 +90,16 @@ export default defineComponent({
 		const getThemeConfig = computed(() => {
 			return store.state.themeConfig.themeConfig;
 		});
+
+		// 4、界面显示 --> 深色模式
+		const onAddDarkChange = () => {
+			const body = document.documentElement as HTMLElement;
+			if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
+			else body.setAttribute('data-theme', '');
+		};
+
 		return {
+			onAddDarkChange,
 			logoMini,
 			getThemeConfig,
 			...toRefs(state),
@@ -86,18 +109,34 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+html[data-theme='dark'] {
+	.login-container {
+		background: #293146;
+	}
+	.left {
+		background-image: url(/@/assets/login-bg-dark.svg);
+	}
+	.title{
+		color: #aaa;
+	}
+}
 .flex {
 	display: flex;
 	align-items: center;
+}
+.switch {
+	position: fixed;
+	right: 20px;
+	top: 20px;
 }
 .login-container {
 	width: 100vw;
 	height: 100vh;
 	position: relative;
-	background: #293146;
+	background: #fff;
 	.title {
 		font-size: 30px;
-		color: #fff;
+		color: #333;
 		font-weight: bold;
 		letter-spacing: 20px;
 	}
@@ -124,7 +163,7 @@ export default defineComponent({
 	}
 	.left {
 		height: 100vh;
-		background-image: url(/@/assets/login-bg-dark.svg);
+		background-image: url(/@/assets/login-bg.svg);
 		background-repeat: no-repeat;
 		background-size: auto 100%;
 		background-position: right center;
