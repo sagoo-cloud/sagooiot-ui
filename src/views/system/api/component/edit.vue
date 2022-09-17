@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="showDialog" :title="`${formData.id?'编辑接口':'新增接口'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
+  <el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id?'编辑接口':'新增接口'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
     <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
       <el-form-item label="关联页面" prop="parentId">
         <el-cascader :options="menuData" :props="{ checkStrictly: false,multiple:true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.menuIds"></el-cascader>

@@ -114,6 +114,22 @@
 	.el-drawer.rtl.open {
 		background: var(--el-color-white) !important;
 	}
+
+	// 
+	.box-content {
+		border-color: var(--next-border-color-light) !important;
+	}
+	
+	.el-cascader__tags .el-tag--info {
+		background: var(--next-border-color-light) !important;
+	}
+
+	// input:-internal-autofill-selected {
+	// 	background: var(--next-border-color-light) !important;
+	// }
+	input:-webkit-autofill{
+		-webkit-box-shadow:0 0 0 1000px var(--next-border-color-light) inset !important;
+	}
 	 
 	// 组态管理-组态设计
 	.page-wrapper > iframe {

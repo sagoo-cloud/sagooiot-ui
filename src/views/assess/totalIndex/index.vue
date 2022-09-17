@@ -1,5 +1,5 @@
 <template>
-	<div class="system-user-container">
+	<div class="assess-total-container">
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
 				<!-- <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
