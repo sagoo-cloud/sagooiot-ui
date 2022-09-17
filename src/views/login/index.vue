@@ -6,12 +6,14 @@
 			size="large"
 			inline-prompt
 			@change="onAddDarkChange"
-			:active-icon="Moon"
-			:inactive-icon="Sunny"
+			:active-icon="Sunny"
+			:inactive-icon="Moon"
 		></el-switch>
 		<div class="part left">
 			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
 			<img class="img" src="/@/assets/login-box-bg.svg" />
+			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
+			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
 		<div class="part">
 			<!-- <img :src="logoMini" />
@@ -29,6 +31,7 @@ import Account from '/@/views/login/component/account.vue';
 import { useStore } from '/@/store/index';
 import logoMini from '/@/assets/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
+import dayjs from 'dayjs';
 // import amis from '/@/components/amis/index.vue';
 
 const store = useStore();
@@ -49,9 +52,11 @@ export default defineComponent({
 		return {
 			Sunny,
 			Moon,
+			dayjs,
 			sysinfo: {
 				buildVersion: '',
 				systemName: '',
+				buildTime: '',
 				systemCopyright: '',
 			},
 			amisjson: {
@@ -116,13 +121,16 @@ html[data-theme='dark'] {
 	.left {
 		background-image: url(/@/assets/login-bg-dark.svg);
 	}
-	.title{
+	.title {
 		color: #aaa;
 	}
 }
 .flex {
 	display: flex;
 	align-items: center;
+}
+.text {
+	color: #fff;
 }
 .switch {
 	position: fixed;
