@@ -16,7 +16,7 @@
 
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, nextTick } from 'vue';
 import api from '/@/api/heatStation';
 import { setMarker } from '/@/utils/map';
 import { useStore } from '/@/store/index';
@@ -60,6 +60,24 @@ onMounted(() => {
 		console.log(res);
 	});
 });
+// 监听 vuex 中是否开启深色主题
+watch(
+	() => store.state.themeConfig.themeConfig.isIsDark,
+	(isIsDark) => {
+		nextTick(() => {
+			setTimeout(() => {
+				map.setMapStyleV2({     
+					styleId: isIsDark ? 'b8d841ee37fd5bd41e742049b6fcd0f5' : '48b5759a53d0d6f607c049543d4c92e4'
+				});
+				
+			}, 500);
+		});
+	},
+	{
+		deep: true,
+		immediate: true,
+	}
+);
 const renderStation = (list: any[]) => {
 	setMarker(list, map);
 };
