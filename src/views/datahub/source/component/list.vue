@@ -78,7 +78,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					id: 0,
+					sourceId: 0,
 				},
 			},
 		});
@@ -86,7 +86,8 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 			if (row) {
-				state.tableData.param.id = row.id;
+				console.log(row);
+				state.tableData.param.sourceId = row.sourceId;
 
 
       
