@@ -1,135 +1,155 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="系统模块" prop="title">
-            <el-input v-model="tableData.param.title" placeholder="请输入系统模块" clearable style="width: 180px;" size="default" @keyup.enter="dataList" />
-          </el-form-item>
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+					<el-form-item label="系统模块" prop="title">
+						<el-input
+							v-model="tableData.param.title"
+							placeholder="请输入系统模块"
+							clearable
+							style="width: 180px"
+							size="default"
+							@keyup.enter="dataList"
+						/>
+					</el-form-item>
 
-          <el-form-item label="操作人员" prop="operName">
-            <el-input v-model="tableData.param.operName" placeholder="请输入操作人员" clearable style="width: 180px;" size="default" @keyup.enter="dataList" />
-          </el-form-item>
+					<el-form-item label="操作人员" prop="operName">
+						<el-input
+							v-model="tableData.param.operName"
+							placeholder="请输入操作人员"
+							clearable
+							style="width: 180px"
+							size="default"
+							@keyup.enter="dataList"
+						/>
+					</el-form-item>
 
-          <el-form-item label="业务类型" prop="businessType">
-            <el-select v-model="tableData.param.businessType" placeholder="请选择类型" clearable size="default" style="width: 180px">
-              <el-option label="新增" :value="1" />
-              <el-option label="修改" :value="2" />
-              <el-option label="删除" :value="3" />
-              <el-option label="其它" :value="0" />
-            </el-select>
-          </el-form-item>
+					<el-form-item label="业务类型" prop="businessType">
+						<el-select v-model="tableData.param.businessType" placeholder="请选择类型" clearable size="default" style="width: 180px">
+							<el-option label="新增" :value="1" />
+							<el-option label="修改" :value="2" />
+							<el-option label="删除" :value="3" />
+							<el-option label="其它" :value="0" />
+						</el-select>
+					</el-form-item>
 
-          <el-form-item label="状态" prop="status">
-            <el-select v-model="tableData.param.status" placeholder="请选择状态" clearable size="default" style="width: 180px">
-              <el-option label="全部" :value="-1" />
-              <el-option label="正常" :value="0" />
-              <el-option label="停用" :value="1" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除日志
-            </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowClear()">
+					<el-form-item label="状态" prop="status">
+						<el-select v-model="tableData.param.status" placeholder="请选择状态" clearable size="default" style="width: 180px">
+							<el-option label="全部" :value="-1" />
+							<el-option label="正常" :value="0" />
+							<el-option label="停用" :value="1" />
+						</el-select>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="dataList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除日志
+						</el-button>
+						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowClear()">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               清空日志
             </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="编号" align="center" width="60" prop="operId" />
-        <el-table-column label="系统模块" align="center" prop="title" />
-        <el-table-column label="业务类型" align="center" prop="businessType" width="130">
-          <template #default="scope">
-            <span size="small" v-if="scope.row.businessType === 0">其他</span>
-            <span size="small" v-else-if="scope.row.businessType === 1">新增</span>
-            <span size="small" v-else-if="scope.row.businessType === 2">修改</span>
-            <span size="small" v-else-if="scope.row.businessType === 3">删除</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作类型" align="center" prop="operatorType" width="130">
-          <template #default="scope">
-            <span size="small" v-if="scope.row.operatorType === 0">其他</span>
-            <span size="small" v-else-if="scope.row.operatorType === 1">后台用户</span>
-            <span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作人员" align="center" prop="operName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门名称" align="center" prop="deptName" />
-        <el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
-        <el-table-column label="操作地点" show-overflow-tooltip align="center" prop="operLocation" />
-        <el-table-column label="操作状态" align="center" prop="status" width="90">
-          <template #default="scope">
-            <el-tag type="info" size="small" v-if="scope.row.status === 1">停用</el-tag>
-            <el-tag type="success" size="small" v-else-if="scope.row.status === 0">正常</el-tag>
-            <el-tag type="info" size="small" v-else-if="scope.row.status === -1">全部</el-tag>
-            <el-tag type="info" size="small" v-else>-</el-tag>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column label="操作信息" show-overflow-tooltip prop="msg" /> -->
-        <el-table-column label="操作" width="160" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenDetail(scope.row)">详细</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-    </el-card>
-		
-    <el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
-      <el-form :model="currentRow" ref="formRef" size="default" label-width="90px">
-        <el-form-item label="模块标题" prop="title">
-          {{ currentRow.title }}
-        </el-form-item>
-        <el-form-item label="请求方式" prop="title">
-          {{ currentRow.requestMethod }}
-        </el-form-item>
-        <el-form-item label="方法名称" prop="title">
-          {{ currentRow.method }}
-        </el-form-item>
-        <el-form-item label="操作地点" prop="title">
-          {{ currentRow.operLocation }}
-        </el-form-item>
-        <el-form-item label="请求参数" prop="title">
-          {{ currentRow.operParam }}
-        </el-form-item>
-        <el-form-item label="返回参数" prop="title">
-          {{ currentRow.jsonResult }}
-        </el-form-item>
-        <el-form-item label="操作状态" prop="title">
-          {{ currentRow.status === 0 ? '正常' : '异常' }}
-        </el-form-item>
-        <el-form-item label="操作时间" prop="title">
-          {{ currentRow.operTime }}
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" size="default">关 闭</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+				<el-table-column type="selection" width="55" align="center" />
+				<el-table-column label="编号" align="center" width="80" prop="operId" />
+				<el-table-column label="系统模块" align="center" prop="title" />
+				<el-table-column label="业务类型" align="center" prop="businessType" width="130">
+					<template #default="scope">
+						<span size="small" v-if="scope.row.businessType === 0">其他</span>
+						<span size="small" v-else-if="scope.row.businessType === 1">新增</span>
+						<span size="small" v-else-if="scope.row.businessType === 2">修改</span>
+						<span size="small" v-else-if="scope.row.businessType === 3">删除</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作类型" align="center" prop="operatorType" width="130">
+					<template #default="scope">
+						<span size="small" v-if="scope.row.operatorType === 0">其他</span>
+						<span size="small" v-else-if="scope.row.operatorType === 1">后台用户</span>
+						<span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作人员" align="center" prop="operName" :show-overflow-tooltip="true" />
+				<el-table-column label="部门名称" align="center" prop="deptName" />
+				<el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
+				<el-table-column label="操作地点" show-overflow-tooltip align="center" prop="operLocation" />
+				<el-table-column label="操作状态" align="center" prop="status" width="80">
+					<template #default="scope">
+						<el-tag type="info" size="small" v-if="scope.row.status === 1">停用</el-tag>
+						<el-tag type="success" size="small" v-else-if="scope.row.status === 0">正常</el-tag>
+						<el-tag type="info" size="small" v-else-if="scope.row.status === -1">全部</el-tag>
+						<el-tag type="info" size="small" v-else>-</el-tag>
+					</template>
+				</el-table-column>
+				<!-- <el-table-column label="操作信息" show-overflow-tooltip prop="msg" /> -->
+				<el-table-column label="操作" width="100" align="center" fixed="right">
+					<template #default="scope">
+						<el-button size="small" type="text" @click="onOpenDetail(scope.row)">详细</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="dataList"
+			/>
+		</el-card>
+
+		<el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
+			<el-form :model="currentRow" ref="formRef" size="default" label-width="90px">
+				<el-form-item label="模块标题" prop="title">
+					{{ currentRow.title }}
+				</el-form-item>
+				<el-form-item label="请求方式" prop="title">
+					{{ currentRow.requestMethod }}
+				</el-form-item>
+				<el-form-item label="方法名称" prop="title">
+					{{ currentRow.method }}
+				</el-form-item>
+				<el-form-item label="操作地点" prop="title">
+					{{ currentRow.operLocation }}
+				</el-form-item>
+				<el-form-item label="请求参数" prop="title">
+					{{ currentRow.operParam }}
+				</el-form-item>
+				<el-form-item label="返回参数" prop="title">
+					{{ currentRow.jsonResult }}
+				</el-form-item>
+				<el-form-item label="操作状态" prop="title">
+					{{ currentRow.status === 0 ? '正常' : '异常' }}
+				</el-form-item>
+				<el-form-item label="操作时间" prop="title">
+					{{ currentRow.operTime }}
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false" size="default">关 闭</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
 <script lang="ts">
@@ -187,21 +207,27 @@ export default defineComponent({
 					operName: '',
 					businessType: '',
 					status: '',
-					title: ''
+					title: '',
 				},
 			},
 		});
-		const dialogVisible = ref(false)
-		const currentRow = ref({})
+		const dialogVisible = ref(false);
+		const currentRow = ref({});
 		// 初始化表格数据
 		const initTableData = () => {
 			dataList();
 		};
 		const dataList = () => {
-			api.oper.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.list;
-				state.tableData.total = res.total;
-			});
+			state.tableData.loading = true;
+			api.oper
+				.getList(state.tableData.param)
+				.then((res: any) => {
+					state.tableData.data = res.list;
+					state.tableData.total = res.total;
+				})
+				.finally(() => {
+					state.tableData.loading = false;
+				});
 		};
 		// 删除日志
 		const onRowDel = (row: TableDataRow) => {
@@ -221,14 +247,21 @@ export default defineComponent({
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
-			})
-				.then(() => {
-					api.oper.del(ids).then(() => {
-						ElMessage.success('删除成功');
-						dataList();
-					});
-				})
-				.catch(() => {});
+				beforeClose: (action, instance, done) => {
+					if (action === 'confirm') {
+						instance.confirmButtonLoading = true;
+						instance.confirmButtonText = '删除中';
+
+						api.oper.del(ids).then(() => {
+							ElMessage.success('删除成功');
+							dataList();
+							done();
+						});
+					} else {
+						done();
+					}
+				},
+			}).catch(() => {});
 		};
 		// 清空日志
 		// const onRowClear = () => {
@@ -246,9 +279,9 @@ export default defineComponent({
 		// 		.catch(() => {});
 		// };
 		const onOpenDetail = (row: TableDataRow) => {
-			dialogVisible.value = true
-			currentRow.value = row
-		}
+			dialogVisible.value = true;
+			currentRow.value = row;
+		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
