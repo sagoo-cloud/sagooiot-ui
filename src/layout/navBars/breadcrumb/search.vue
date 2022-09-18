@@ -17,7 +17,7 @@
 				<template #default="{ item }">
 					<div>
 						<SvgIcon :name="item.meta?.icon" class="mr5" />
-						{{ item.meta?.title.indexOf('.')>0?$t(item.meta?.title):item.meta?.title }}
+						{{ item.meta?.title.indexOf('.') > 0 ? $t(item.meta?.title) : item.meta?.title }}
 					</div>
 				</template>
 			</el-autocomplete>
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, nextTick } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useStore } from '/@/store/index';
@@ -61,9 +61,9 @@ export default defineComponent({
 			state.menuQuery = '';
 			state.isShowSearch = true;
 			initTageView();
-			nextTick(() => {
+			setTimeout(() => {
 				layoutMenuAutocompleteRef.value.focus();
-			});
+			}, 0);
 		};
 		// 搜索弹窗关闭
 		const closeSearch = () => {

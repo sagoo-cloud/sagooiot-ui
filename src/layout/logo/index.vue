@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-medium-img" />
-		<span>{{ getThemeConfig.globalTitle }}</span>
+		<span>{{ sysinfo.systemName }}</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-size-img" />
@@ -16,6 +16,19 @@ import logoMini from '/@/assets/logo-mini.svg';
 
 export default defineComponent({
 	name: 'layoutLogo',
+	data() {
+		return {
+			sysinfo: {
+				buildVersion: '',
+				systemName: '',
+				buildTime: '',
+				systemCopyright: '',
+			},
+		};
+	},
+	created() {
+		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
+	},
 	setup() {
 		const store = useStore();
 		// 获取布局配置信息
@@ -50,7 +63,8 @@ export default defineComponent({
 	align-items: center;
 	justify-content: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
-	color: var(--el-color-primary);
+	// color: var(--el-color-primary);
+	color: #ffff;
 	font-size: 20px;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
@@ -61,7 +75,7 @@ export default defineComponent({
 	}
 	&-medium-img {
 		width: 35px;
-    padding-right: 5px;
+		padding-right: 5px;
 	}
 }
 .layout-logo-size {
