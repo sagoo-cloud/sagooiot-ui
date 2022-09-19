@@ -13,7 +13,7 @@
 			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 				<el-tab-pane label="实例信息" name="1">
 					<div class="pro-box">
-						<div class="protitle">产品信息</div>
+						<div class="protitle">设备信息</div>
 						<el-button type="" :icon="Edit" class="buttonedit" @click="onOpenEditDic(detail)">编辑</el-button>
 					</div>
 
@@ -30,15 +30,25 @@
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}</td>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.transportProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
 								</tr>
+
+                <tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间	</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.createdAt }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间	</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间	</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
+								</tr>
+
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">描述</th>
-									<td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
+									<td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -248,6 +258,7 @@ export default defineComponent({
 
         api.product.detail(res.data.product.id).then((res: any) => {
           state.prodetail = res.data;
+          console.log(res.data);
         });
 
             //第一次加载
