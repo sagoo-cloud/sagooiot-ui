@@ -251,7 +251,7 @@ watch(
 	() => store.state.themeConfig.themeConfig.isIsDark,
 	(isIsDark) => {
 		nextTick(() => {
-			state.charts.theme = isIsDark ? 'dark' : '';
+			state.charts.theme = isIsDark ? 'transparent' : '';
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
 			setTimeout(() => {
