@@ -38,7 +38,7 @@
         </el-form>
       </div>
 			
-      <el-table :data="tableData.data" style="width: 100%"  row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%"  row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <!-- <el-table-column label="ID" align="center" prop="id" width="60" /> -->
 	    	<el-table-column label="换热站" prop="name" :show-overflow-tooltip="true" />
@@ -120,9 +120,11 @@ export default defineComponent({
 			queryList();
 		};
 		const queryList = () => {
+			state.tableData.loading = true
 			api.heatStation.getList(state.tableData.param)
 				.then((res: any) => {
 					state.tableData.data = res || [];
+					state.tableData.loading = false
 				});
 		};
 

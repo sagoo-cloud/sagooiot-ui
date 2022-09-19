@@ -71,7 +71,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" >
+      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
         <el-table-column label="组织名称" prop="organizationInfo.name" min-width="100" />
@@ -164,10 +164,12 @@ export default defineComponent({
 				})
 		}
 		const queryList = () => {
+			state.tableData.loading = true
 			api.unit.getList(state.tableData.param).then((res: any) => {
 				console.log(res);
 				state.tableData.data = res.Data || [];
 				state.tableData.total = res.Total;
+				state.tableData.loading = false
 			});
 		};
 		const onPlotChange = () => {

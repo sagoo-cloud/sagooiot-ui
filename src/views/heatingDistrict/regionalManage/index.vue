@@ -51,7 +51,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" >
+      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
         <el-table-column label="小区名称" prop="name" min-width="100" />
@@ -125,10 +125,12 @@ export default defineComponent({
 			});
 		}
 		const queryList = () => {
+			state.tableData.loading = true
 			api.regionalManage.getList(state.tableData.param).then((res: any) => {
 				console.log(res);
 				state.tableData.data = res.Info || [];
 				state.tableData.total = res.Total;
+				state.tableData.loading = false
 			});
 		};
 
