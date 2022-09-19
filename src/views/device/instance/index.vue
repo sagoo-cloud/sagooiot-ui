@@ -70,7 +70,11 @@
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
 
-			 <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
+			 <!-- <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button> -->
+			 <router-link :to="'/device/instance/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
+    font-size: 12px;color: #409eff;">
+              <span>详情</span>
+            </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
@@ -79,7 +83,6 @@
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
-    <Detail ref="detailRef"  />
   </div>
 </template>
 
@@ -87,7 +90,6 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
-import Detail from './component/detail.vue';
 import api from '/@/api/device';
 
 // 定义接口来定义对象的类型
@@ -118,7 +120,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'deviceInstance',
-	components: { EditDic,Detail },
+	components: { EditDic },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();

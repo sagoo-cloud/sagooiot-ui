@@ -27,6 +27,7 @@ export default {
     add: (data: object) => post('/product/device/add', data),
     edit: (data: object) => put('/product/device/edit', data),
     del: (ids: number) => del('/product/device/del', { ids }),
+    detail: (id: number) => get('/product/device/detail', { id }),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),

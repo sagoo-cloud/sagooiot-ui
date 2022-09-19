@@ -104,6 +104,13 @@
 						/>
 					</div>
 				</el-tab-pane>
+				<el-tab-pane label="查看数据" name="3">
+					<div class="wu-box">
+						<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
+					</div>
+				
+
+				</el-tab-pane>
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
@@ -114,6 +121,8 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import { useRoute } from 'vue-router';
+import "vue3-json-viewer/dist/index.css";
+
 import EditDic from './component/editNode.vue';
 import api from '/@/api/datahub';
 
@@ -142,6 +151,7 @@ export default defineComponent({
 		const route = useRoute();
 		const state = reactive<TableDataState>({
 			config: {},
+			jsonData:'',
 			ruledata: [
 				{
 					expression: '',
@@ -196,7 +206,12 @@ export default defineComponent({
 					state.rule[index].params.name = Object.keys(item.params);
 					state.rule[index].params.value = item.params[Object.keys(item.params)];
 				});
-			});
+
+				
+			
+			}); 
+
+		
 
 			typeList();
 		});
@@ -222,7 +237,21 @@ export default defineComponent({
 			}
 		};
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event);
+			console.log(tab.props.name, event);
+			if(tab.props.name==3){
+				if(state.detail.from==1){
+					api.common.api(state.detail.sourceId).then((res: any) => {
+						state.jsonData=JSON.parse(res.data);
+						console.log(res);
+					})
+				}else if(state.detail.from==4){
+					api.common.devapi(state.detail.sourceId).then((res: any) => {
+						state.jsonData=JSON.parse(res.data);
+							console.log(res);
+					})
+				}
+			}
+
 		};
 
 		const onRowDel = (row: TableDataRow) => {
