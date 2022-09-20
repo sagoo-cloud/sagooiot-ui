@@ -104,13 +104,11 @@
 						/>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="查看数据" name="3">
+				<!-- <el-tab-pane label="查看数据" name="3">
 					<div class="wu-box">
 						<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
 					</div>
-				
-
-				</el-tab-pane>
+				</el-tab-pane> -->
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
@@ -151,7 +149,7 @@ export default defineComponent({
 		const route = useRoute();
 		const state = reactive<TableDataState>({
 			config: {},
-			jsonData:'',
+			jsonData:{},
 			ruledata: [
 				{
 					expression: '',
