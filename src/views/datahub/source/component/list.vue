@@ -13,8 +13,17 @@
       </div>
     </template>
 
-			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table :data="tableData.data" style="width: 100%">
 				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center">
+					<template #header>
+					<div >
+						{{item}}
+					</div>
+					<div >
+						<span v-if="item=='created_at'">时间</span>
+						{{titleData[item]}}
+					</div>
+				</template>
 				</el-table-column>
 			</el-table>
 			<pagination
@@ -68,7 +77,7 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 		    dialogFullScreen: false,
-
+			titleData:{},
 			jsonsData: [],
 			jData: [],
 			tableData: {
@@ -110,6 +119,12 @@ export default defineComponent({
 
 				state.tableData.total = res.Total;
 				//state.ruleForm = res.data.dictType
+			});
+
+			api.node.getList(state.tableData.param).then((res: any) => {
+				res.list.forEach((item, index) => {
+						state.titleData[item.key] = item.name;
+					});
 			});
 		};
 		const resetForm = () => {
