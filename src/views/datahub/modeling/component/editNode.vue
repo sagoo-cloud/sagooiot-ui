@@ -211,9 +211,8 @@ export default defineComponent({
 
 		const getSouData = () => {
 			api.common
-				.getList({
-					pageNum: 1,
-					pageSize: 50,
+				.getLists({
+					
 				})
 				.then((res: any) => {
 					state.sourceData = res.list;

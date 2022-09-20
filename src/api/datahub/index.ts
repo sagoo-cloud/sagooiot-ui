@@ -16,6 +16,7 @@ export default {
     devapi: (sourceId: number) => get('/source/device/get', { sourceId }),
     getdevList: (params: object) => get('/product/device/list', params),
     getdata: (params: object) => get('/source/getdata', params),
+    getLists: (params: object) => get('/source/list', params),
 
     },
    
