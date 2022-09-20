@@ -233,7 +233,8 @@ export default defineComponent({
 			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
-      prodetail:[],
+      		prodetail:[],
+			product_id:0,
 			developer_status:0,
 			tableData: {
 				data: [],
@@ -255,7 +256,7 @@ export default defineComponent({
 				state.detail = res.data;
 				state.developer_status=res.data.status
         state.tableData.param.productId=res.data.product.id
-
+		state.product_id=res.data.product.id;
         api.product.detail(res.data.product.id).then((res: any) => {
           state.prodetail = res.data;
           console.log(res.data);
@@ -275,42 +276,42 @@ export default defineComponent({
 
 		//编辑属性
 		const onEditAttr=(row: TableDataRow)=>{
-			editAttrRef.value.openDialog(row,route.params.id);
+			editAttrRef.value.openDialog(row,state.product_id);
 		};
 
 		//编辑功能
 		const onEditFun=(row: TableDataRow)=>{
-			editFunRef.value.openDialog(row,route.params.id);
+			editFunRef.value.openDialog(row,state.product_id);
 		}
 
 
 		//编辑事件
 		const onEditEvent=(row: TableDataRow)=>{
-			editEventRef.value.openDialog(row,route.params.id);
+			editEventRef.value.openDialog(row,state.product_id);
 		}
 
 		//编辑标签
 		const onEditTag=(row: TableDataRow)=>{
-			editTabRef.value.openDialog(row,route.params.id);
+			editTabRef.value.openDialog(row,state.product_id);
 		}
 
 			//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0,accessMode:0 });
+			editAttrRef.value.openDialog({ product_id: state.product_id, id: 0,accessMode:0 });
 		};
 
 		//打开添加功能弹窗
 		const onOpenEditFun = () => {
-			editFunRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editFunRef.value.openDialog({ product_id: state.product_id, id: 0 });
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({ product_id: route.params.id, id: 0,level:0 });
+			editEventRef.value.openDialog({ product_id: state.product_id, id: 0,level:0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({ product_id: route.params.id, id: 0,accessMode:0 });
+			editTabRef.value.openDialog({ product_id: state.product_id, id: 0,accessMode:0 });
 		};
 
 		// 打开修改产品弹窗
@@ -334,25 +335,25 @@ export default defineComponent({
 			})
 				.then(() => {
 					if(type=='attr'){
-						api.model.propertydel(route.params.id,key).then(() => {
+						api.model.propertydel(state.product_id,key).then(() => {
 							ElMessage.success('删除成功');
 							getproperty();
 						});
 					}
 					if(type=='fun'){
-						api.model.functiondel(route.params.id,key).then(() => {
+						api.model.functiondel(state.product_id,key).then(() => {
 							ElMessage.success('删除成功');
 							getfunction();
 						});
 					}
 					if(type=='event'){
-						api.model.eventdel(route.params.id,key).then(() => {
+						api.model.eventdel(state.product_id,key).then(() => {
 							ElMessage.success('删除成功');
 							getevent();
 						});
 					}
 					if(type=='tab'){
-						api.model.tagdel(route.params.id,key).then(() => {
+						api.model.tagdel(state.product_id,key).then(() => {
 							ElMessage.success('删除成功');
 							tagdel();
 						});
