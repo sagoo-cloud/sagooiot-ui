@@ -44,6 +44,12 @@
 	    	<el-table-column label="换热站" prop="name" :show-overflow-tooltip="true" />
 	    	<el-table-column label="换热站编号" prop="code" :show-overflow-tooltip="true" />
 	    	<el-table-column label="位置" prop="position" :show-overflow-tooltip="true" />
+	    	<el-table-column label="负责人" prop="principalInfo.userNickname" width="80"/>
+	    	<el-table-column label="状态" prop="status" width="80">
+          <template #default="scope">
+						{{ scope.row.status === 1 ? '在线' : '不在线' }}
+          </template>
+        </el-table-column>
 	    	<el-table-column label="创建时间" prop="createdAt" :show-overflow-tooltip="true" />
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">

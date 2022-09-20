@@ -8,8 +8,8 @@
 				<el-form-item label="换热站位置" prop="position">
 					{{ ruleForm.position }}
 				</el-form-item>
-				<el-form-item label="负责人" prop="principal">
-					{{ ruleForm.principal }}
+				<el-form-item label="负责人" prop="principalInfo.userNickname">
+					{{ ruleForm.principalInfo.userNickname }}
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
 					{{ ruleForm.status === 1 ? '在线' : '不在线' }}
