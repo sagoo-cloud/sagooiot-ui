@@ -123,6 +123,7 @@ export default defineComponent({
 		};
         // 获取数据
         const fetchList = () => {
+            state.loading = true
             let params = {
                 keyWord: props.keyWord,
                 pageNum: state.param.page,
@@ -133,6 +134,7 @@ export default defineComponent({
                 state.data = list
                 state.total = total
                 state.param.page = page
+                state.loading = false
 			});
 
 
