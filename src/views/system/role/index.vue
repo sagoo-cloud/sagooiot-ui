@@ -1,53 +1,59 @@
 <template>
-  <div class="system-role-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :inline="true">
-          <el-form-item label="角色名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="roleList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增角色
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-        <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="listOrder" label="排序" width="60" align="center"></el-table-column>
-        <el-table-column prop="status" label="角色状态" width="100" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status===1">启用</el-tag>
-            <el-tag type="info" size="small" v-else>禁用</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>
-        <el-table-column label="操作" width="220" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-            <el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
-            <el-button size="small" text type="info" @click="dataPermission(scope.row)">数据权限</el-button>
-            <!-- <el-dropdown size="small">
+	<div class="system-role-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :inline="true">
+					<el-form-item label="角色名称">
+						<el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
+					</el-form-item>
+					<el-form-item label="状态">
+						<el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
+							<el-option label="全部" :value="-1" />
+							<el-option label="启用" :value="1" />
+							<el-option label="禁用" :value="0" />
+						</el-select>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="roleList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
+							<el-icon>
+								<ele-FolderAdd />
+							</el-icon>
+							新增角色
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table
+				:data="tableData.data"
+				style="width: 100%"
+				row-key="id"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+				v-loading="tableData.loading"
+			>
+				<el-table-column type="index" label="序号" width="60" align="center" />
+				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="listOrder" label="排序" width="60" align="center"></el-table-column>
+				<el-table-column prop="status" label="角色状态" width="100" align="center">
+					<template #default="scope">
+						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
+						<el-tag type="info" size="small" v-else>禁用</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>
+				<el-table-column label="操作" width="220" align="center" fixed="right">
+					<template #default="scope">
+						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
+						<el-button size="small" text type="info" @click="dataPermission(scope.row)">数据权限</el-button>
+						<!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
                   <ele-ArrowDown />
@@ -60,15 +66,15 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown> -->
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
-    </el-card>
-    <EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
-    <permissionVue ref="permissionRef" />
-    <EditPer ref="dataPermissionRef" :dept-data="deptData" />
-  </div>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
+		</el-card>
+		<EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
+		<permissionVue ref="permissionRef" />
+		<EditPer ref="dataPermissionRef" :dept-data="deptData" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -134,9 +140,13 @@ export default defineComponent({
 				});
 		};
 		const roleList = () => {
-			api.role.getList(state.tableData.param).then((res: Array<TableData>) => {
-				state.tableData.data = res || [];
-			});
+			state.tableData.loading = true;
+			api.role
+				.getList(state.tableData.param)
+				.then((res: Array<TableData>) => {
+					state.tableData.data = res || [];
+				})
+				.finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增角色弹窗
 		const onOpenAddRole = () => {

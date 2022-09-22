@@ -32,7 +32,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData" style="width: 100%">
+			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="name" label="接口名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="address" label="接口地址" show-overflow-tooltip></el-table-column>
@@ -65,7 +65,7 @@ import { useSearch } from '/@/hooks/useCommon';
 
 const editFormRef = ref();
 
-const { params, tableData, getList } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '' });
+const { params, tableData, getList, loading } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '' });
 
 getList();
 

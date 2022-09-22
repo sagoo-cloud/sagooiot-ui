@@ -1,82 +1,91 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="任务名称" prop="configName">
-            <el-input v-model="tableData.param.configName" placeholder="请输入参数名称" clearable size="default" @keyup.enter="dataList" />
-          </el-form-item>
-          <el-form-item label="任务组名" prop="jobGroup">
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+					<el-form-item label="任务名称" prop="configName">
+						<el-input v-model="tableData.param.configName" placeholder="请输入参数名称" clearable size="default" @keyup.enter="dataList" />
+					</el-form-item>
+					<el-form-item label="任务组名" prop="jobGroup">
 						<el-select v-model="tableData.param.jobGroup" size="mini" placeholder="请选择">
-							<el-option
-								v-for="dict in sys_job_group"
-								:key="dict.value"
-								:label="dict.label"
-								:value="dict.value">
-							</el-option>
+							<el-option v-for="dict in sys_job_group" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 						</el-select>
-          </el-form-item>
-          <el-form-item label="任务状态" prop="status" style="width: 200px;">
+					</el-form-item>
+					<el-form-item label="任务状态" prop="status" style="width: 200px">
 						<el-select v-model="tableData.param.status" size="mini" placeholder="请选择">
 							<el-option label="正常" :value="1" />
 							<el-option label="暂停" :value="0" />
 						</el-select>
-          </el-form-item>
+					</el-form-item>
 
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增任务
-            </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除任务
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="jobId" width="60" />
-        <el-table-column label="任务名称" prop="jobName" :show-overflow-tooltip="true" />
-        <el-table-column label="任务分组" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
-        <el-table-column label="任务方法名" prop="invokeTarget" />
-        <el-table-column label="cron执行表达式" prop="cronExpression" />
-        <el-table-column label="状态" align="center" prop="status" width="100">
-          <template #default="scope">
-            <!-- {{ row.status ? '正常' : '暂停' }} -->
-						<el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="dataList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+						<el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+							<el-icon>
+								<ele-FolderAdd />
+							</el-icon>
+							新增任务
+						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除任务
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+				<el-table-column type="selection" width="55" align="center" />
+				<el-table-column label="ID" align="center" prop="jobId" width="60" />
+				<el-table-column label="任务名称" prop="jobName" :show-overflow-tooltip="true" />
+				<el-table-column label="任务分组" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
+				<el-table-column label="任务方法名" prop="invokeTarget" />
+				<el-table-column label="cron执行表达式" prop="cronExpression" />
+				<el-table-column label="状态" align="center" prop="status" width="100">
+					<template #default="scope">
+						<!-- {{ row.status ? '正常' : '暂停' }} -->
+						<el-switch
+							v-model="scope.row.status"
+							inline-prompt
+							:active-value="0"
+							:inactive-value="1"
+							active-text="启"
+							inactive-text="禁"
+							@change="handleStatusChange(scope.row)"
+						>
 						</el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="180" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-            <el-button size="small" text type="primary" @click="onRowRun(scope.row)">执行一次</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-    </el-card>
-    <EditConfig ref="editDicRef" @dataList="dataList" />
-  </div>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" width="180" align="center" fixed="right">
+					<template #default="scope">
+						<el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" @click="onRowRun(scope.row)">执行一次</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="dataList"
+			/>
+		</el-card>
+		<EditConfig ref="editDicRef" @dataList="dataList" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -132,7 +141,7 @@ export default defineComponent({
 					pageSize: 10,
 					jobName: '',
 					jobGroup: '',
-					status: null
+					status: null,
 				},
 			},
 		});
@@ -141,10 +150,14 @@ export default defineComponent({
 			dataList();
 		};
 		const dataList = () => {
-			api.task.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.list;
-				state.tableData.total = res.total;
-			});
+			state.tableData.loading = true;
+			api.task
+				.getList(state.tableData.param)
+				.then((res: any) => {
+					state.tableData.data = res.list;
+					state.tableData.total = res.total;
+				})
+				.finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增任务弹窗
 		const onOpenAddDic = () => {
@@ -192,7 +205,7 @@ export default defineComponent({
 					dataList();
 				});
 			});
-		}
+		};
 		const handleStatusChange = (row: TableDataRow) => {
 			let text = row.status === 0 ? '启用' : '停用';
 			ElMessageBox.confirm('确认要"' + text + '"："' + row.jobName + '"任务吗?', '警告', {
@@ -202,9 +215,9 @@ export default defineComponent({
 			})
 				.then(function () {
 					if (row.status === 0) {
-						return api.task.start(row.jobId)
+						return api.task.start(row.jobId);
 					} else {
-						return api.task.stop(row.jobId)
+						return api.task.stop(row.jobId);
 					}
 				})
 				.then(() => {
@@ -213,7 +226,7 @@ export default defineComponent({
 				.catch(function () {
 					row.status = row.status === 0 ? 1 : 0;
 				});
-		}
+		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -228,10 +241,10 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.jobId);
 		};
-    const jobGroupFormat = (row: TableDataRow) => {
-			console.log(row)
-      return proxy.selectDictLabel(unref(sys_job_group), row.jobGroup);
-    };
+		const jobGroupFormat = (row: TableDataRow) => {
+			console.log(row);
+			return proxy.selectDictLabel(unref(sys_job_group), row.jobGroup);
+		};
 		return {
 			addDicRef,
 			editDicRef,
