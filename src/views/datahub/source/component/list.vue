@@ -14,7 +14,7 @@
     </template>
 
 			<el-table :data="tableData.data" style="width: 100%">
-				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center">
+				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center" style="min-width:200px">
 					<template #header>
 					<div >
 						{{item}}

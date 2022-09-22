@@ -112,6 +112,7 @@
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
+		
 	</div>
 </template>            
 <script lang="ts">
@@ -199,11 +200,11 @@ export default defineComponent({
 				state.developer_status = res.data.status;
 				state.config = res.data.apiConfig;
 				state.requestParams = res.data.apiConfig.requestParams;
-				res.data.sourceRule.forEach((item, index) => {
-					state.rule[index].expression = item.expression;
-					state.rule[index].params.name = Object.keys(item.params);
-					state.rule[index].params.value = item.params[Object.keys(item.params)];
-				});
+				// res.data.sourceRule.forEach((item, index) => {
+				// 	state.rule[index].expression = item.expression;
+				// 	state.rule[index].params.name = Object.keys(item.params);
+				// 	state.rule[index].params.value = item.params[Object.keys(item.params)];
+				// });
 
 				
 			
