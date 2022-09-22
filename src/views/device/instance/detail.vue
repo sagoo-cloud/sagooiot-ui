@@ -3,9 +3,9 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">设备：{{ detail.name }}</div>
-				<div class="pro-status" ><span :class="developer_status==1?'on':'off'"></span>{{developer_status==1?'已发布':'未发布'}}</div>
-			
-				<div class="pro-option"  @click="CkOption"> {{developer_status==1?'停用':'启用'}}</div>
+				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
+
+				<div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '启用' }}</div>
 			</div>
 		</div>
 
@@ -37,12 +37,12 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
 								</tr>
 
-                <tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间	</th>
+								<tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.createdAt }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间	</th>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间	</th>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
 								</tr>
 
@@ -81,7 +81,7 @@
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'attr')">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -100,7 +100,7 @@
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'fun')">删除</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -125,8 +125,8 @@
 
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning"  @click="onEditEvent(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'event')">删除</el-button>
+											<el-button size="small" text type="warning" @click="onEditEvent(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table></el-tab-pane
@@ -154,8 +154,8 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning"  @click="onEditTag(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key,'tab')">删除</el-button>
+											<el-button size="small" text type="warning" @click="onEditTag(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -170,13 +170,69 @@
 						/>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="运行状态" name="3">
-        </el-tab-pane>
+				<el-tab-pane label="运行状态" name="3"> </el-tab-pane>
 
-        <el-tab-pane label="日志管理" name="4">
-        </el-tab-pane>
+				<el-tab-pane label="日志管理" name="4">
+					<div class="system-user-search mb15">
+						<el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
+							<el-form-item label="日志类型" prop="types">
+								<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
+									<el-option
+										v-for="item in logTypeData"
+										:key="item"
+										:label="item"
+										:value="item"
+									/>
+								</el-select>
+							</el-form-item>
 
+							<el-form-item label="创建时间" prop="dateRange">
+								<el-date-picker
+									v-model="logtableData.param.dateRange"
+									size="default"
+									value-format="YYYY-MM-DD"
+									type="daterange"
+									range-separator="-"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期"
+								></el-date-picker>
+							</el-form-item>
+							<el-form-item>
+								<el-button size="default" type="primary" class="ml10" @click="getlog">
+									<el-icon>
+										<ele-Search />
+									</el-icon>
+									查询
+								</el-button>
+								<el-button size="default" @click="resetQuery(queryRef)">
+									<el-icon>
+										<ele-Refresh />
+									</el-icon>
+									重置
+								</el-button>
+							</el-form-item>
+						</el-form>
+					</div>
+					<el-table style="width: 100%" :data="logtableData.data">
+						<el-table-column label="类型" align="center" prop="type" />
+						<el-table-column label="时间" prop="ts" :show-overflow-tooltip="true" />
 
+						<el-table-column label="内容" prop="content" :show-overflow-tooltip="true" />
+						<el-table-column label="操作" width="300" align="center" fixed="right">
+							<template #default="scope">
+								<el-button size="small" text type="warning" @click="onLogDetail(scope.row)">查看</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+
+					<pagination
+						v-show="logtableData.total > 0"
+						:total="logtableData.total"
+						v-model:page="logtableData.param.pageNum"
+						v-model:limit="logtableData.param.pageSize"
+						@pagination="getList"
+					/>
+				</el-tab-pane>
 			</el-tabs>
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
@@ -184,12 +240,25 @@
 		<EditFun ref="editFunRef" @typeList="getfunction" />
 		<EditEvent ref="editEventRef" @typeList="getevent" />
 		<EditTab ref="editTabRef" @typeList="gettab" />
+
+		<el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
+			<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
+
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false">关闭</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+
+import "vue3-json-viewer/dist/index.css";
+
 
 import EditDic from '../product/component/editPro.vue';
 import EditAttr from '../product/component/editAttr.vue';
@@ -216,6 +285,19 @@ interface TableDataState {
 			dateRange: string[];
 		};
 	};
+	logtableData: {
+		data: [];
+		total: number;
+		loading: boolean;
+		param: {
+			pageNum: number;
+			pageSize: number;
+			name: string;
+			deviceType: string;
+			status: string;
+			dateRange: string[];
+		};
+	};
 }
 export default defineComponent({
 	name: 'deviceEditPro',
@@ -230,19 +312,34 @@ export default defineComponent({
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
 			isShowDialog: false,
+			dialogVisible: false,
+			logTypeData:[],
+			jsonData:'',
 			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
-      		prodetail:[],
-			product_id:0,
-			developer_status:0,
+			prodetail: [],
+			product_id: 0,
+			developer_status: 0,
 			tableData: {
 				data: [],
 				total: 0,
 				loading: false,
 				param: {
 					pageNum: 1,
-					productId:0,
+					productId: 0,
+					pageSize: 10,
+					status: '',
+					dateRange: [],
+				},
+			},
+			logtableData: {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					productId: 0,
 					pageSize: 10,
 					status: '',
 					dateRange: [],
@@ -254,50 +351,53 @@ export default defineComponent({
 			const ids = route.params && route.params.id;
 			api.instance.detail(ids).then((res: any) => {
 				state.detail = res.data;
-				state.developer_status=res.data.status
-        state.tableData.param.productId=res.data.product.id
-		state.product_id=res.data.product.id;
-        api.product.detail(res.data.product.id).then((res: any) => {
-          state.prodetail = res.data;
-          console.log(res.data);
-        });
+				state.developer_status = res.data.status;
+				state.tableData.param.productId = res.data.product.id;
+				state.product_id = res.data.product.id;
+				api.product.detail(res.data.product.id).then((res: any) => {
+					state.prodetail = res.data;
+					console.log(res.data);
+				});
 
-            //第一次加载
-          api.model.property(state.tableData.param).then((res: any) => {
-            state.tableData.data = res.Data;
-            state.tableData.total = res.Total;
-          });
+				//第一次加载
+				api.model.property(state.tableData.param).then((res: any) => {
+					state.tableData.data = res.Data;
+					state.tableData.total = res.Total;
+				});
 			});
-
-			
 		});
 
-	
+		const onLogDetail = (row: TableDataRow) => {
+
+			state.jsonData=JSON.parse(row.content);
+			console.log(JSON.parse(row.content));
+			state.dialogVisible=true;
+
+		};
 
 		//编辑属性
-		const onEditAttr=(row: TableDataRow)=>{
-			editAttrRef.value.openDialog(row,state.product_id);
+		const onEditAttr = (row: TableDataRow) => {
+			editAttrRef.value.openDialog(row, state.product_id);
 		};
 
 		//编辑功能
-		const onEditFun=(row: TableDataRow)=>{
-			editFunRef.value.openDialog(row,state.product_id);
-		}
-
+		const onEditFun = (row: TableDataRow) => {
+			editFunRef.value.openDialog(row, state.product_id);
+		};
 
 		//编辑事件
-		const onEditEvent=(row: TableDataRow)=>{
-			editEventRef.value.openDialog(row,state.product_id);
-		}
+		const onEditEvent = (row: TableDataRow) => {
+			editEventRef.value.openDialog(row, state.product_id);
+		};
 
 		//编辑标签
-		const onEditTag=(row: TableDataRow)=>{
-			editTabRef.value.openDialog(row,state.product_id);
-		}
+		const onEditTag = (row: TableDataRow) => {
+			editTabRef.value.openDialog(row, state.product_id);
+		};
 
-			//打开添加属性弹窗
+		//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: state.product_id, id: 0,accessMode:0 });
+			editAttrRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
 		};
 
 		//打开添加功能弹窗
@@ -306,12 +406,12 @@ export default defineComponent({
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({ product_id: state.product_id, id: 0,level:0 });
+			editEventRef.value.openDialog({ product_id: state.product_id, id: 0, level: 0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({ product_id: state.product_id, id: 0,accessMode:0 });
+			editTabRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
 		};
 
 		// 打开修改产品弹窗
@@ -319,11 +419,10 @@ export default defineComponent({
 			editDicRef.value.openDialog(row);
 		};
 
-
 		// 删除产品
-		const onRowDel = (key,type) => {
+		const onRowDel = (key, type) => {
 			let msg = `此操作将永久删除该数据吗？，是否继续?`;
-			
+
 			if (key.length === 0) {
 				ElMessage.error('请选择要删除的数据。');
 				return;
@@ -334,26 +433,26 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					if(type=='attr'){
-						api.model.propertydel(state.product_id,key).then(() => {
+					if (type == 'attr') {
+						api.model.propertydel(state.product_id, key).then(() => {
 							ElMessage.success('删除成功');
 							getproperty();
 						});
 					}
-					if(type=='fun'){
-						api.model.functiondel(state.product_id,key).then(() => {
+					if (type == 'fun') {
+						api.model.functiondel(state.product_id, key).then(() => {
 							ElMessage.success('删除成功');
 							getfunction();
 						});
 					}
-					if(type=='event'){
-						api.model.eventdel(state.product_id,key).then(() => {
+					if (type == 'event') {
+						api.model.eventdel(state.product_id, key).then(() => {
 							ElMessage.success('删除成功');
 							getevent();
 						});
 					}
-					if(type=='tab'){
-						api.model.tagdel(state.product_id,key).then(() => {
+					if (type == 'tab') {
+						api.model.tagdel(state.product_id, key).then(() => {
 							ElMessage.success('删除成功');
 							tagdel();
 						});
@@ -362,9 +461,8 @@ export default defineComponent({
 				.catch(() => {});
 		};
 
-
 		//根据不同类型获取列表
-		const getList=()=>{
+		const getList = () => {
 			switch (state.activetab) {
 				case 'attr':
 					getproperty();
@@ -381,27 +479,27 @@ export default defineComponent({
 			}
 		};
 
-		const getproperty=()=>{
+		const getproperty = () => {
 			api.model.property(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
 				state.tableData.total = res.Total;
 			});
 		};
 
-		const getfunction=()=>{
+		const getfunction = () => {
 			api.model.function(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
 				state.tableData.total = res.Total;
 			});
 		};
-		const getevent=()=>{
+		const getevent = () => {
 			api.model.event(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
 				state.tableData.total = res.Total;
 			});
 		};
 
-		const gettab=()=>{
+		const gettab = () => {
 			api.model.tag(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
 				state.tableData.total = res.Total;
@@ -428,26 +526,43 @@ export default defineComponent({
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event);
+			if (tab.props.name == 4) {
+				//获取日志
+				getlog();
+				getlogtype();
+			}else if(tab.props.name==2){
+				getList();
+			}
 		};
 
-		const CkOption=()=>{
+		const getlogtype=()=>{
+			api.instance.getlogcate({}).then((res: any) => {
+				state.logTypeData = res.list;
+			});
+		};
 
-			if(state.developer_status==1){
-				api.product.undeploy({id:route.params.id}).then((res: any) => {
+		const getlog = () => {
+			state.logtableData.param.deviceKey = state.detail.key;
+			api.instance.getLogList(state.logtableData.param).then((res: any) => {
+				console.log(res,"22222222");
+				state.logtableData.data = res.list;
+				state.logtableData.total = res.Total;
+			});
+		};
+
+		const CkOption = () => {
+			if (state.developer_status == 1) {
+				api.product.undeploy({ id: route.params.id }).then((res: any) => {
 					ElMessage.success('操作成功');
-					state.developer_status=0;
+					state.developer_status = 0;
 				});
-			}else{
-				api.product.deploy({id:route.params.id}).then((res: any) => {
+			} else {
+				api.product.deploy({ id: route.params.id }).then((res: any) => {
 					ElMessage.success('操作成功');
-					state.developer_status=1;
+					state.developer_status = 1;
 				});
 			}
-			
-
-			
-
-		}
+		};
 
 		return {
 			Edit,
@@ -456,6 +571,9 @@ export default defineComponent({
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			getlog,
+			getlogtype,
+			onLogDetail,
 			CkOption,
 			onRowDel,
 			onEditFun,

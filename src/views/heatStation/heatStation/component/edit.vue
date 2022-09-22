@@ -157,7 +157,8 @@ export default defineComponent({
 			api.heatStation.detail(state.ruleForm.id)
 				.then((res: any) => {
 					state.ruleForm = {
-						...res
+						...res,
+						parentId: res.parentId === -1 ? '' : res.parentId
 					}
 				})
 		}

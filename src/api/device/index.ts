@@ -28,6 +28,8 @@ export default {
     edit: (data: object) => put('/product/device/edit', data),
     del: (ids: number) => del('/product/device/del', { ids }),
     detail: (id: number) => get('/product/device/detail', { id }),
+    getLogList: (params: object) => get('/product/log/search', params),
+    getlogcate: (params: object) => get('/product/log/type', params),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),

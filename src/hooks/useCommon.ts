@@ -35,16 +35,19 @@ export function useSearch<T>(api: any, resKey: string, expandParams?: any) {
     ...expandParams
   })
 
+  const loading = ref(false)
+
   const tableData = ref<T | []>([])
 
   const getList = async (pageNum?: number) => {
     pageNum && (params.pageNum = pageNum);
     tableData.value = [];
+    loading.value = true;
     params.total = 0;
-    let res = await api(params)
+    let res = await api(params).finally(() => loading.value = false)
     tableData.value = (resKey ? (res[resKey]) : (res)) || [];
     params.total = res.total;
   };
 
-  return { params, tableData, getList }
+  return { params, tableData, getList, loading }
 }
