@@ -1,59 +1,70 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15" v-if="false">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <!-- <el-form-item label="登录IP" prop="ipaddr">
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15" v-if="false">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+					<!-- <el-form-item label="登录IP" prop="ipaddr">
             <el-input v-model="tableData.param.ipaddr" placeholder="请输入登录地址" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
           </el-form-item>
 
           <el-form-item label="用户名称" prop="loginLocation">
             <el-input v-model="tableData.param.loginLocation" placeholder="请输入登录地点" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
           </el-form-item> -->
-					
-          <el-form-item label="登录时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
 
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="编号" align="center" width="60" prop="id" />
-        <el-table-column label="用户名" align="center" prop="userName" />
-        <el-table-column label="token" align="center" prop="token" :show-overflow-tooltip="true" />
-        <el-table-column label="登录地址" align="center" prop="ip"  :show-overflow-tooltip="true" />
-        <el-table-column label="登录时间" align="createdAt" prop="createdAt"  :show-overflow-tooltip="true" />
-        <el-table-column label="浏览器" align="center" prop="explorer" />
-        <el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
-					
+					<el-form-item label="登录时间" prop="dateRange">
+						<el-date-picker
+							v-model="tableData.param.dateRange"
+							size="default"
+							style="width: 240px"
+							value-format="YYYY-MM-DD"
+							type="daterange"
+							range-separator="-"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+						></el-date-picker>
+					</el-form-item>
+
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="dataList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+				<el-table-column type="selection" width="55" align="center" />
+				<el-table-column label="编号" align="center" width="60" prop="id" />
+				<el-table-column label="用户名" align="center" prop="userName" />
+				<el-table-column label="token" align="center" prop="token" :show-overflow-tooltip="true" />
+				<el-table-column label="登录地址" align="center" prop="ip" :show-overflow-tooltip="true" />
+				<el-table-column label="登录时间" align="createdAt" prop="createdAt" :show-overflow-tooltip="true" />
+				<el-table-column label="浏览器" align="center" prop="explorer" />
+				<el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
+
 				<el-table-column label="操作" align="center" class-name="small-padding fixed-width">
 					<template #default="scope">
-						<el-button
-							size="mini"
-							type="text"
-							@click="handleForceLogout(scope.row)"
-						>强退</el-button>
+						<el-button size="mini" type="text" @click="handleForceLogout(scope.row)">强退</el-button>
 					</template>
 				</el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-    </el-card>
-  </div>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="dataList"
+			/>
+		</el-card>
+	</div>
 </template>
 
 <script lang="ts">
@@ -96,7 +107,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					dateRange: []
+					dateRange: [],
 				},
 			},
 		});
@@ -105,10 +116,14 @@ export default defineComponent({
 			dataList();
 		};
 		const dataList = () => {
-			api.online.getList(state.tableData.param).then((res: any) => {
-				state.tableData.data = res.list;
-				state.tableData.total = res.total;
-			});
+			state.tableData.loading = true;
+			api.online
+				.getList(state.tableData.param)
+				.then((res: any) => {
+					state.tableData.data = res.list;
+					state.tableData.total = res.total;
+				})
+				.finally(() => (state.tableData.loading = false));
 		};
 		const handleForceLogout = (row: TableDataRow) => {
 			ElMessageBox.confirm('你确定要强制退出所选数据？', '提示', {
@@ -123,7 +138,7 @@ export default defineComponent({
 					});
 				})
 				.catch(() => {});
-		}
+		};
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
