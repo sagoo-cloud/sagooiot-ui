@@ -16,7 +16,7 @@
 					新建
 				</el-button>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%">
+			<el-table v-loading="loading" :data="tableData.data" style="width: 100%">
 				<el-table-column align="left" prop="title" label="名称"  width="260" show-overflow-tooltip></el-table-column>
 				<el-table-column align="left" prop="explain" label="描述" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" label="操作" width="180">
@@ -126,9 +126,11 @@ export default defineComponent({
 
 		};
 		const fetchList = () => {
+			state.tableData.loading = true
 			api.getList().then((res: any) => {
 				console.log(res);
 				state.tableData.data = res;
+				state.tableData.loading = false
 				// state.tableData.total = res.total;
 			});
 		};
