@@ -13,7 +13,7 @@
       </div>
     </template>
 
-			<el-table :data="tableData.data" style="width: 100%">
+			<el-table :data="tableData.data" style="width: 100%"  v-loading="tableData.loading">
 				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center" style="min-width:200px">
 					<template #header>
 					<div >
@@ -107,7 +107,7 @@ export default defineComponent({
 		};
 
 		const typeList = () => {
-			console.log(state.tableData.param);
+			state.tableData.loading = true;
 			api.common.getdata(state.tableData.param).then((res: any) => {
 				const jsonData = JSON.parse(res.data);
 				state.tableData.data = jsonData;
@@ -119,7 +119,7 @@ export default defineComponent({
 
 				state.tableData.total = res.Total;
 				//state.ruleForm = res.data.dictType
-			});
+			}).finally(() => (state.tableData.loading = false));
 
 			api.node.getList(state.tableData.param).then((res: any) => {
 				res.list.forEach((item, index) => {

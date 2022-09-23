@@ -80,7 +80,7 @@
 							<div v-if="developer_status==0"><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
 						</div>
 				
-						<el-table :data="tableData.data" style="width: 100%">
+						<el-table :data="tableData.data" style="width: 100%"  v-loading="tableData.loading">
 							<el-table-column label="ID" align="center" prop="nodeId" width="80" />
 							<el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" />
 							<el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" />
@@ -216,10 +216,11 @@ export default defineComponent({
 		});
 
 		const typeList = () => {
+			state.tableData.loading = true;
 			api.node.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;
 				state.tableData.total = res.Total;
-			});
+			}).finally(() => (state.tableData.loading = false));
 		};
 
 		const CkOption = () => {

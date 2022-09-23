@@ -170,19 +170,58 @@
 						/>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="运行状态" name="3"> </el-tab-pane>
+				<el-tab-pane label="运行状态" name="3">
+					<div style="background-color: rgb(240, 242, 245); display: flex; padding: 10px;flex-wrap: wrap;">
+						<div class="ant-card">
+							<div class="ant-card-body">
+								<div class="cardflex">
+									<div>设备状态</div>
+									<div @click="getrunData()" style="cursor: pointer;">
+										<el-icon>
+											<ele-Refresh />
+										</el-icon>
+									</div>
+								</div>
+
+								<div class="statusname" v-if="areaData.status==0">未启用</div>
+								<div class="statusname" v-if="areaData.status==1">离线</div>
+								<div class="statusname" v-if="areaData.status==2">在线</div>
+								<div class="cardflex comtest">
+									<div>最后上线时间</div>
+									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ant-card" v-for="(item, index) in areaData.properties" :key="index">
+							<div class="ant-card-body">
+								<div class="cardflex">
+									<div>{{item.name}}</div>
+									<div @click="getrunData()" style="cursor: pointer;">
+										<el-icon >
+											<ele-Refresh />
+										</el-icon>
+									</div>
+								</div>
+
+								<div class="statusname">{{item.value}}</div>
+								<div class="cardflex">
+									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int'"/>
+								</div>
+							</div>
+						</div>
+
+						
+				
+					</div>
+				</el-tab-pane>
 
 				<el-tab-pane label="日志管理" name="4">
 					<div class="system-user-search mb15">
 						<el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
 							<el-form-item label="日志类型" prop="types">
 								<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
-									<el-option
-										v-for="item in logTypeData"
-										:key="item"
-										:label="item"
-										:value="item"
-									/>
+									<el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
 								</el-select>
 							</el-form-item>
 
@@ -254,17 +293,16 @@
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 
-import "vue3-json-viewer/dist/index.css";
-
+import 'vue3-json-viewer/dist/index.css';
 
 import EditDic from '../product/component/editPro.vue';
 import EditAttr from '../product/component/editAttr.vue';
 import EditFun from '../product/component/editFun.vue';
 import EditEvent from '../product/component/editEvent.vue';
 import EditTab from '../product/component/editTab.vue';
+import devantd from '/@/components/devantd/index.vue';
 
 import { useRoute } from 'vue-router';
 
@@ -301,7 +339,7 @@ interface TableDataState {
 }
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab },
+	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab,devantd },
 
 	setup(prop, context) {
 		const route = useRoute();
@@ -311,10 +349,11 @@ export default defineComponent({
 		const editEventRef = ref();
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
+			areaData:[],
 			isShowDialog: false,
 			dialogVisible: false,
-			logTypeData:[],
-			jsonData:'',
+			logTypeData: [],
+			jsonData: '',
 			activeName: '1', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
@@ -368,11 +407,9 @@ export default defineComponent({
 		});
 
 		const onLogDetail = (row: TableDataRow) => {
-
-			state.jsonData=JSON.parse(row.content);
+			state.jsonData = JSON.parse(row.content);
 			console.log(JSON.parse(row.content));
-			state.dialogVisible=true;
-
+			state.dialogVisible = true;
 		};
 
 		//编辑属性
@@ -530,12 +567,22 @@ export default defineComponent({
 				//获取日志
 				getlog();
 				getlogtype();
-			}else if(tab.props.name==2){
+			} else if (tab.props.name == 2) {
 				getList();
+			} else if(tab.props.name==3){			
+				getrunData();
 			}
 		};
 
-		const getlogtype=()=>{
+		const getrunData=()=>{
+			api.instance.getrun_status({id:9}).then((res: any) => {
+					state.areaData=res
+				
+				});
+			
+		};
+
+		const getlogtype = () => {
 			api.instance.getlogcate({}).then((res: any) => {
 				state.logTypeData = res.list;
 			});
@@ -544,7 +591,7 @@ export default defineComponent({
 		const getlog = () => {
 			state.logtableData.param.deviceKey = state.detail.key;
 			api.instance.getLogList(state.logtableData.param).then((res: any) => {
-				console.log(res,"22222222");
+				console.log(res, '22222222');
 				state.logtableData.data = res.list;
 				state.logtableData.total = res.Total;
 			});
@@ -563,14 +610,28 @@ export default defineComponent({
 				});
 			}
 		};
+		const tinyAreas = () => {
+			var data=state.data;
 
+			const tinyArea = new TinyArea('container', {
+				height: 60,
+				autoFit: false,
+				data,
+				smooth: true,
+				areaStyle: {
+					fill: '#d6e3fd',
+				},
+				});
+				tinyArea.render();
+		}
 		return {
-			Edit,
+			tinyAreas,
 			editDicRef,
 			editAttrRef,
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			getrunData,
 			getlog,
 			getlogtype,
 			onLogDetail,
@@ -724,6 +785,39 @@ tr {
 }
 .wu-box .wu-title .title {
 	font-size: 18px;
+}
+.ant-card {
+	box-sizing: border-box;
+	margin: 10px;
+	width: 23.9%;
+	color: rgba(0, 0, 0, 0.65);
+	font-size: 14px;
+	font-variant: tabular-nums;
+	line-height: 1.5;
+	list-style: none;
+	font-feature-settings: 'tnum';
+	position: relative;
+	background: #fff;
+	border-radius: 2px;
+	transition: all 0.3s;
+}
+.ant-card-body {
+	padding: 24px;
+	zoom: 1;
+}
+.cardflex {
+	display: flex;
+	justify-content: space-between;
+}
+.statusname {
+	color: rgba(0, 0, 0, 0.85);
+	font-size: 30px;
+	margin-top: 10px;
+}
+.comtest{
+	margin-top: 20px;
+	height: 30px;
+	line-height: 30px;
 }
 </style>
 

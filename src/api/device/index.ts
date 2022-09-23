@@ -30,6 +30,7 @@ export default {
     detail: (id: number) => get('/product/device/detail', { id }),
     getLogList: (params: object) => get('/product/log/search', params),
     getlogcate: (params: object) => get('/product/log/type', params),
+    getrun_status: (params: object) => get('/product/device/run_status', params),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),

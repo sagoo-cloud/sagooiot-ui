@@ -23,7 +23,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
         <el-table-column prop="name" label="分类名称" show-overflow-tooltip> </el-table-column>
         
        
@@ -88,9 +88,10 @@ export default defineComponent({
 			getCateList();
 		};
 		const getCateList = () => {
+			state.tableData.loading = true;
 			api.category.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.category;
-			});
+			}).finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增菜单弹窗
 		const onOpenAdd = (row?: TableDataRow) => {

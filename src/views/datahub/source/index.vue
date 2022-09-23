@@ -58,7 +58,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="ID" align="center" prop="sourceId" width="80" />
 <!--				<el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />-->
@@ -190,10 +190,11 @@ export default defineComponent({
 			typeList();
 		};
 		const typeList = () => {
+			state.tableData.loading = true;
 			api.common.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;
 				state.tableData.total = res.Total;
-			});
+			}).finally(() => (state.tableData.loading = false));
 		};
 
 		//打开数据记录

@@ -65,7 +65,7 @@
 					</el-form>
 				</div>
 
-				<el-table :data="tableData.data" style="width: 100%">
+				<el-table :data="tableData.data" style="width: 100%"  v-loading="tableData.loading">
 					<el-table-column label="ID" align="center" prop="id" width="80" />
 					<el-table-column label="字段节点标题" prop="key" :show-overflow-tooltip="true" />
 					<el-table-column label="字段节点名称" prop="name" :show-overflow-tooltip="true" />
@@ -158,10 +158,11 @@ export default defineComponent({
 
 
 		const typeList = () => {
+			state.tableData.loading = true;
 			api.tnode.getList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;
 				//state.tableData.total = res.Total;
-			});
+			}).finally(() => (state.tableData.loading = false));
 		};
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {

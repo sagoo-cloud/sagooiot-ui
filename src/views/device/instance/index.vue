@@ -49,7 +49,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="id" width="60" />
 	    <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" />
@@ -147,11 +147,12 @@ export default defineComponent({
 			typeList();
 		};
 		const typeList = () => {
+			state.tableData.loading = true;
 			api.instance.getList(state.tableData.param).then((res: any) => {
 				console.log(res);
 				state.tableData.data = res.device;
 				state.tableData.total = res.total;
-			});
+			}).finally(() => (state.tableData.loading = false));
 		};
 
 		//查看详情
