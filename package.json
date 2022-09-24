@@ -14,6 +14,7 @@
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
   },
   "dependencies": {
+    "@antv/g2plot": "^2.4.20",
     "@element-plus/icons-vue": "^2.0.9",
     "amis": "^2.1.1-beta.2",
     "axios": "^0.26.0",

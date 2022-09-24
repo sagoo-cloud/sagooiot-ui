@@ -13,7 +13,7 @@
 			>
 				<div class="home-card-item">
 					<div class="item-header">
-						<img :src="v.icon" alt="">
+						<img :src="isIsDark?v.iconDark:v.icon" alt="">
 						<span>{{v.title}}</span>
 					</div>
 					<div class="item-content w100" :class="` home-one-animation${k}`">
@@ -108,9 +108,11 @@ export default defineComponent({
 		const homeBarRef = ref();
 		const store = useStore();
 		const state = reactive({
+			isIsDark: false,
 			dataOne: [
 				{
 					icon: "/@/assets/area.png",
+					iconDark: "/@/assets/area1.png",
 					title: '供暖面积',
 					contentTitle1: '供热面积',
 					val1: '2112.12',
@@ -121,6 +123,7 @@ export default defineComponent({
 				},
 				{
 					icon: "@/assets/fire.png",
+					iconDark: "/@/assets/fire1.png",
 					title: '热量',
 					contentTitle1: '总耗热',
 					val1: '4500',
@@ -131,6 +134,7 @@ export default defineComponent({
 				},
 				{
 					icon: "@/assets/ele.png",
+					iconDark: "/@/assets/ele1.png",
 					title: '电量',
 					contentTitle1: '总耗电',
 					val1: '5200',
@@ -141,6 +145,7 @@ export default defineComponent({
 				},
 				{
 					icon: "@/assets/water.png",
+					iconDark: "/@/assets/water1.png",
 					title: '水量',
 					contentTitle1: '总耗水',
 					val1: '4500',
@@ -550,6 +555,8 @@ export default defineComponent({
 		// 页面加载时
 		onMounted(() => {
 			initEchartsResize();
+				// 获取布局配置信息
+				state.isIsDark =  store.state.themeConfig.themeConfig.isIsDark;
 		});
 		// 由于页面缓存原因，keep-alive
 		onActivated(() => {
@@ -560,6 +567,17 @@ export default defineComponent({
 			() => store.state.tagsViewRoutes.isTagsViewCurrenFull,
 			() => {
 				initEchartsResizeFun();
+			}
+		);
+		// 监听 vuex 中是否开启深色主题
+		watch(
+			() => store.state.themeConfig.themeConfig.isIsDark,
+			() => {
+				state.isIsDark =  store.state.themeConfig.themeConfig.isIsDark
+			},
+			{
+				deep: true,
+				immediate: true,
 			}
 		);
 		// 监听 vuex 中是否开启深色主题
