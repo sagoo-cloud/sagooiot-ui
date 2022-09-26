@@ -201,7 +201,8 @@ export default defineComponent({
 			api.resident.detail(state.ruleForm.id)
 				.then((res: any) => {
 					state.ruleForm = {
-						...res
+						...res,
+						heatStaId: res.heatStaId || ''
 					}
 				})
 		}
