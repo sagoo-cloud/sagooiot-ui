@@ -16,8 +16,6 @@ import { getUpFileUrl, handleTree, selectDictLabel } from "/@/utils/common";
 import { useDict } from "/@/api/common/dict/data";
 // 分页组件
 import pagination from '/@/components/pagination/index.vue'
-import 'amis/sdk/sdk.js';
-import 'amis/lib/themes/default.css';
 // 引入百度地图组件
 // import BaiduMap from 'vue-baidu-map-3x'
 

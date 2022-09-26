@@ -8,6 +8,7 @@
 			@change="onAddDarkChange"
 			:active-icon="Sunny"
 			:inactive-icon="Moon"
+			style="--el-switch-on-color: #fff; --el-switch-off-color: #151515"
 		></el-switch>
 		<div class="part left">
 			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
@@ -21,7 +22,6 @@
 			<div class="title">登录</div>
 			<Account />
 		</div>
-		<!-- <amis :json="amisjson" /> -->
 	</div>
 </template>
 
@@ -32,7 +32,6 @@ import { useStore } from '/@/store/index';
 import logoMini from '/@/assets/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
-// import amis from '/@/components/amis/index.vue';
 
 const store = useStore();
 
@@ -46,7 +45,6 @@ export default defineComponent({
 	name: 'loginIndex',
 	components: {
 		Account,
-		// amis,
 	},
 	data: function () {
 		return {
