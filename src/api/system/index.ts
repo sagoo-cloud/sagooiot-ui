@@ -127,5 +127,12 @@ export default {
     run: (id: number) => put('/system/job/run', { id }),
     start: (id: number) => put('/system/job/start', { id }),
     stop: (id: number) => put('/system/job/stop', { id })
+  },
+  city: {
+    getList: (params: object) => get('/common/city/tree', params),
+    add: (data: object) => post('/common/city/tree', data),
+    edit: (data: object) => put('/common/city/edit', data),
+    del: (id: number) => del('/common/city/del', { id }),
+    detail: (id: number) => get('/common/city/getInfoById', { id }),
   }
 }
