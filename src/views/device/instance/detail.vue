@@ -177,7 +177,7 @@
 								<div class="cardflex">
 									<div>设备状态</div>
 									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon>
+										<el-icon style="font-size: 18px;">
 											<ele-Refresh />
 										</el-icon>
 									</div>
@@ -197,9 +197,12 @@
 							<div class="ant-card-body">
 								<div class="cardflex">
 									<div>{{item.name}}</div>
-									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon >
+									<div style="cursor: pointer;">
+										<el-icon  style="font-size: 18px;"  @click="getrunData()">
 											<ele-Refresh />
+										</el-icon>
+										<el-icon  style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
+											<ele-Expand />
 										</el-icon>
 									</div>
 								</div>
@@ -279,6 +282,7 @@
 		<EditFun ref="editFunRef" @typeList="getfunction" />
 		<EditEvent ref="editEventRef" @typeList="getevent" />
 		<EditTab ref="editTabRef" @typeList="gettab" />
+		<ListDic ref="listDicRef"  />
 
 		<el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
 			<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
@@ -303,6 +307,8 @@ import EditFun from '../product/component/editFun.vue';
 import EditEvent from '../product/component/editEvent.vue';
 import EditTab from '../product/component/editTab.vue';
 import devantd from '/@/components/devantd/index.vue';
+import ListDic from './component/list.vue';
+
 
 import { useRoute } from 'vue-router';
 
@@ -339,13 +345,14 @@ interface TableDataState {
 }
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab,devantd },
+	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab,devantd,ListDic },
 
 	setup(prop, context) {
 		const route = useRoute();
 		const editDicRef = ref();
 		const editAttrRef = ref();
 		const editFunRef = ref();
+		const listDicRef=ref();
 		const editEventRef = ref();
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
@@ -449,6 +456,11 @@ export default defineComponent({
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
 			editTabRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
+		};
+
+		//查看日志列表
+		const onOpenListDetail=(row: TableDataRow)=>{
+			listDicRef.value.openDialog(row, state.detail.id);
 		};
 
 		// 打开修改产品弹窗
@@ -628,9 +640,11 @@ export default defineComponent({
 			tinyAreas,
 			editDicRef,
 			editAttrRef,
+			listDicRef,
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			onOpenListDetail,
 			getrunData,
 			getlog,
 			getlogtype,
@@ -789,7 +803,7 @@ tr {
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 23.9%;
+	width: 23.8%;
 	color: rgba(0, 0, 0, 0.65);
 	font-size: 14px;
 	font-variant: tabular-nums;

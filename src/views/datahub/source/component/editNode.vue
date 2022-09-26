@@ -349,10 +349,13 @@ export default defineComponent({
 							//getOrgIdArr(parents, childNode,treeData[key])
 							break
 						} else {
+							
 							if (treeData[key] instanceof Object) {
 							//	没找到，遍历该节点的子节点
-								parents.push(key)
+								parents.push(key)	
+							
 								getOrgIdArr(parents, childNode, treeData[key])
+								
 								break
 							}
 						}
