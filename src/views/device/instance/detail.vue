@@ -3,9 +3,9 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">设备：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
+				<div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '上线' : '下线' }}</div>
 
-				<div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '启用' }}</div>
+				<div class="pro-option" @click="CkOption">{{ developer_status == 2 ? '下线' : '上线' }}</div>
 			</div>
 		</div>
 
@@ -587,7 +587,7 @@ export default defineComponent({
 		};
 
 		const getrunData=()=>{
-			api.instance.getrun_status({id:9}).then((res: any) => {
+			api.instance.getrun_status({id:state.detail.id}).then((res: any) => {
 					state.areaData=res
 				
 				});
@@ -610,15 +610,15 @@ export default defineComponent({
 		};
 
 		const CkOption = () => {
-			if (state.developer_status == 1) {
-				api.product.undeploy({ id: route.params.id }).then((res: any) => {
-					ElMessage.success('操作成功');
-					state.developer_status = 0;
-				});
-			} else {
-				api.product.deploy({ id: route.params.id }).then((res: any) => {
+			if (state.developer_status == 2) {
+				api.instance.devoffline({id:state.detail.id}).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 1;
+				});
+			} else {
+				api.instance.devonline({id:state.detail.id}).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 2;
 				});
 			}
 		};
