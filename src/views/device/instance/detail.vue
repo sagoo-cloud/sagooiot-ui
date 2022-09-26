@@ -465,7 +465,7 @@ export default defineComponent({
 
 		// 打开修改产品弹窗
 		const onOpenEditDic = (row: TableDataRow) => {
-			editDicRef.value.openDialog(row);
+			editDicRef.value.openDialog(row); 
 		};
 
 		// 删除产品
