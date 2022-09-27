@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="数据节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称"  :disabled="ruleForm.nodeId"/>
+					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="ruleForm.nodeId" />
 				</el-form-item>
 				<el-form-item label="数据节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
@@ -16,23 +16,22 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="数据类型" prop="dataType" v-if="detail.from==1">
+				<el-form-item label="数据类型" prop="dataType" v-if="detail.from == 1">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
 						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="取值项" prop="value" v-if="detail.from==1">
+				<el-form-item label="取值项" prop="value" v-if="detail.from == 1">
 					<el-input v-model="ruleForm.value" placeholder="请输入取值项" class="w-35" /><el-button type="success" @click="onTest">选择值</el-button>
-
 				</el-form-item>
-				<el-form-item label="取值项" prop="value" v-if="detail.from==4">
+				<el-form-item label="取值项" prop="value" v-if="detail.from == 4">
 					<el-select v-model="ruleForm.value" filterable placeholder="请选择数取值项" @change="getNodeList">
-							<el-option v-for="item in propertyData" :key="item.key" :label="item.name" :value="item.key">
-								<span style="float: left">{{ item.key }}</span>
-								<span style="float: right; font-size: 13px">{{ item.name }}</span>
-							</el-option>
-						</el-select>
+						<el-option v-for="item in propertyData" :key="item.key" :label="item.name" :value="item.key">
+							<span style="float: left">{{ item.key }}</span>
+							<span style="float: right; font-size: 13px">{{ item.name }}</span>
+						</el-option>
+					</el-select>
 				</el-form-item>
 
 				<el-divider content-position="left">规则表达式</el-divider>
@@ -63,27 +62,22 @@
 			</template>
 		</el-dialog>
 
-		<el-dialog
-				v-model="dialogVisible"
-				title="点击蓝色key值进行选择"
-				width="30%"
-			>
-					<JsonViewer :value="jsonData" :show-double-quotes="true"	  boxed sort theme="jv-dark" @click="onKeyclick" />
-
-				<template #footer>
+		<el-dialog v-model="dialogVisible" title="点击蓝色key值进行选择" width="40%">
+			<jsontree :data="jsonPathData" @handlePath="handlePath"></jsontree>
+			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="dialogVisible = false">关闭</el-button>
-				
 				</span>
-				</template>
-			</el-dialog>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
-import "vue3-json-viewer/dist/index.css";
+import 'vue3-json-viewer/dist/index.css';
+import jsontree from '/@/components/jsontree/index.vue';
 
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
@@ -107,20 +101,21 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Minus, Right },
+	components: { Delete, Minus, Right, jsontree },
 
 	setup(prop, { emit }) {
 		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
-			dialogVisible:false,
-			jsonData:'',
-			propertyData:[],
+			dialogVisible: false,
+			jsonPathData: [],
+			jsonData: '',
+			propertyData: [],
 			config: {},
-			detail:{},
+			detail: {},
 			tabData: [
-			{
+				{
 					label: 'int',
 					value: 'int',
 				},
@@ -190,21 +185,31 @@ export default defineComponent({
 			},
 		});
 
-		const onTest=()=>{
-			if(state.detail.from==1){
+		const onTest = () => {
+			if (state.detail.from == 1) {
 				api.common.api(state.detail.sourceId).then((res: any) => {
-					state.jsonData=JSON.parse(res.data);
-					state.dialogVisible=true
-						console.log(res);
-				})
-			}else if(state.detail.from==4){
+					state.jsonData = JSON.parse(res.data);
+
+					var jsonstr = jsonPath([], state.jsonData, '');
+					state.jsonPathData = jsonstr;
+					state.dialogVisible = true;
+				});
+			} else if (state.detail.from == 4) {
 				api.common.devapi(state.detail.sourceId).then((res: any) => {
-					state.jsonData=JSON.parse(res.data);
-					state.dialogVisible=true
-						console.log(res);
-				})
+					state.jsonData = JSON.parse(res.data);
+
+					var jsonstr = jsonPath([], state.jsonData, '');
+					state.jsonPathData = jsonstr;
+					state.dialogVisible = true;
+				});
 			}
-			
+		};
+
+		const handlePath = (path) => {
+			let data = path.slice(1);
+
+			state.ruleForm.value = data;
+			state.dialogVisible = false;
 		};
 
 		const delRule = (index) => {
@@ -230,26 +235,23 @@ export default defineComponent({
 
 				var data = JSON.parse(row.rule);
 				console.log(data);
-
 				data.forEach((item, index) => {
 					state.rule[index].expression = item.expression;
 					state.rule[index].replace = item.replace;
 					// state.rule[index].params.name = Object.keys(item.params);
 					// state.rule[index].params.value = item.params[Object.keys(item.params)];
 				});
-
-			
 			}
 
-				api.common.detail(row.sourceId).then((res: any) => {
-					state.detail = res.data;
-					if(res.data.from==4){
-						//propertyData
-						api.node.getpropertyList({key:res.data.deviceConfig.productKey}).then((re: any) => {
-							state.propertyData=re
-						});
-					}
-				});
+			api.common.detail(row.sourceId).then((res: any) => {
+				state.detail = res.data;
+				if (res.data.from == 4) {
+					//propertyData
+					api.node.getpropertyList({ key: res.data.deviceConfig.productKey }).then((re: any) => {
+						state.propertyData = re;
+					});
+				}
+			});
 
 			state.ruleForm = row;
 			state.isShowDialog = true;
@@ -309,64 +311,123 @@ export default defineComponent({
 			});
 		};
 
-		const getNodeList=(e)=>{
+		const getNodeList = (e) => {
 			state.propertyData.forEach((item, index) => {
-				if(item.key===e){
-					state.ruleForm.dataType=item.valueType.type;
+				if (item.key === e) {
+					state.ruleForm.dataType = item.valueType.type;
 				}
 			});
-		}
+		};
 
-		const onKeyclick=(e)=>{
+		const onKeyclick = (e) => {
 			//console.log(e);
-			if(e.target.innerText && e.target.className=='jv-key'){
-				let str = e.target.innerText;  
-				str = str.substr(0, str.length - 1);
-				state.ruleForm.value=str;
-				state.dialogVisible = false;
-				var con={
-					...
-					state.jsonData
-				}
-				var jsonstr=getOrgIdArr([],str,con);
-				state.ruleForm.value=jsonstr.join('.');
-			
-			}
-			
+			// if (e.target.innerText && e.target.className == 'jv-key') {
+			// 	let str = e.target.innerText;
+			// 	str = str.substr(0, str.length - 1);
+			// 	state.ruleForm.value = str;
+			// 	state.dialogVisible = false;
+			// 	var con = {
+			// 		...state.jsonData,
+			// 	};
+			// 	// var jsonstr = getOrgIdArr([], str, con);
+			// 	// state.ruleForm.value = jsonstr.join('.');
+			// }
 		};
 
-		const getOrgIdArr=(parents, childNode, treeData)=>{
-			
-			if (treeData instanceof Object) {
-			
-				for (var key in treeData) {
-					
-						// 父节点查询条件
-						if (key === childNode) {
-							// 如果找到结果,保存当前节点
-							parents.push(key)
-							// 用当前节点再去原数据查找当前节点的父节点
-							//getOrgIdArr(parents, childNode,treeData[key])
-							break
-						} else {
-							
-							if (treeData[key] instanceof Object) {
-							//	没找到，遍历该节点的子节点
-								parents.push(key)	
-							
-								getOrgIdArr(parents, childNode, treeData[key])
-								
-								break
-							}
-						}
+		const jsonPath = (arr, json, basePath) => {
+			// 生成jsonpath
+			const type = validateType(json);
+
+			if (type === 'object') {
+				for (let key in json) {
+					const item = {
+						key,
+						path: `${basePath}.${key}`,
+					};
+					const childType = validateType(json[key]);
+					item.type = childType;
+					if (childType === 'object' || childType === 'array') {
+						item.leaf = true;
+						item.children = [];
+						jsonPath(item.children, json[key], item.path);
+					} else {
+						item.leaf = false;
+						item.value = json[key];
 					}
+					arr.push(item);
+				}
+			} else if (type === 'array') {
+				json.forEach((item, index) => {
+					const childType = validateType(item);
+					const obj = {
+						key: index,
+					};
+					obj.type = childType;
+					obj.path = `${basePath}.${index}`;
+					if (childType === 'object' || childType === 'array') {
+						(obj.leaf = true), (obj.children = []);
+						jsonPath(obj.children, item, obj.path);
+					} else {
+						obj.value = item;
+						obj.leaf = false;
+					}
+					arr.push(obj);
+				});
 			}
-				return parents
 
+			return arr;
 		};
 
+		// 校验JSON数据类型
+		const validateType = (val) => {
+			let type = typeof val;
+			if (type === 'object') {
+				if (Array.isArray(val)) {
+					return 'array';
+				} else if (val === null) {
+					return 'null';
+				} else {
+					return 'object';
+				}
+			} else {
+				switch (type) {
+					case 'boolean':
+						return 'boolean';
+					case 'string':
+						return 'string';
+					case 'number':
+						return 'number';
+					default:
+						return 'error';
+				}
+			}
+		};
+
+		const getOrgIdArr = (parents, childNode, treeData) => {
+			for (var key in treeData) {
+				// 父节点查询条件
+				if (key === childNode) {
+					// 如果找到结果,保存当前节点
+					parents.push(key);
+					break;
+				} else {
+					if (treeData[key] instanceof Object) {
+						// console.log(treeData[key]);
+						parents.push(key);
+
+						//没找到，遍历该节点的子节点
+						getOrgIdArr(parents, childNode, treeData[key]);
+					}
+				}
+			}
+
+			return parents;
+		};
 
 		return {
+			jsonPath,
+			handlePath,
+			validateType,
 			getNodeList,
 			onKeyclick,
 			getOrgIdArr,
@@ -413,9 +474,8 @@ export default defineComponent({
 	line-height: 28px;
 	cursor: pointer;
 }
-.jv-key{
+.jv-key {
 	cursor: pointer;
 	color: #0034f1;
-
 }
 </style>

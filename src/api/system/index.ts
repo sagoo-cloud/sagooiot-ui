@@ -74,6 +74,7 @@ export default {
   },
   user: {
     getList: (params: object) => get('/system/user/list', params),
+    getAllList: (params: object) => get('/system/user/getAll', params),
     params: () => get('/system/user/params'),
     detail: (id: number) => get('/system/user/getInfoById', { id }),
     add: (data: object) => post('/system/user/add', data),
