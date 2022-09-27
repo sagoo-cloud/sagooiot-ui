@@ -77,6 +77,7 @@
         <el-table-column label="组织名称" prop="organizationInfo.name" min-width="100" />
         <el-table-column label="小区名称" prop="plotInfo.name" min-width="100" />
         <el-table-column label="楼宇名称" prop="floorInfo.name" min-width="100" />
+        <el-table-column label="楼号" prop="floorInfo.number" min-width="100" />
 	    	<el-table-column label="单元名称" prop="name" min-width="100" />
 	    	<el-table-column label="单元号" prop="number" min-width="100" />
 	    	<el-table-column label="更新时间" prop="updatedAt" width="180" />

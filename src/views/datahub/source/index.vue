@@ -89,7 +89,7 @@
 						>
 							<span>详情</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenList(scope.row)">数据记录</el-button>
+						<el-button size="small" text type="success" @click="onOpenList(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
 						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
 					</template>

@@ -3,9 +3,9 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">设备：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
+				<div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '上线' : '下线' }}</div>
 
-				<div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '启用' }}</div>
+				<div class="pro-option" @click="CkOption">{{ developer_status == 2 ? '下线' : '上线' }}</div>
 			</div>
 		</div>
 
@@ -177,7 +177,7 @@
 								<div class="cardflex">
 									<div>设备状态</div>
 									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon>
+										<el-icon style="font-size: 18px;">
 											<ele-Refresh />
 										</el-icon>
 									</div>
@@ -197,9 +197,12 @@
 							<div class="ant-card-body">
 								<div class="cardflex">
 									<div>{{item.name}}</div>
-									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon >
+									<div style="cursor: pointer;">
+										<el-icon  style="font-size: 18px;"  @click="getrunData()">
 											<ele-Refresh />
+										</el-icon>
+										<el-icon  style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
+											<ele-Expand />
 										</el-icon>
 									</div>
 								</div>
@@ -279,6 +282,7 @@
 		<EditFun ref="editFunRef" @typeList="getfunction" />
 		<EditEvent ref="editEventRef" @typeList="getevent" />
 		<EditTab ref="editTabRef" @typeList="gettab" />
+		<ListDic ref="listDicRef"  />
 
 		<el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
 			<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
@@ -303,6 +307,8 @@ import EditFun from '../product/component/editFun.vue';
 import EditEvent from '../product/component/editEvent.vue';
 import EditTab from '../product/component/editTab.vue';
 import devantd from '/@/components/devantd/index.vue';
+import ListDic from './component/list.vue';
+
 
 import { useRoute } from 'vue-router';
 
@@ -339,13 +345,14 @@ interface TableDataState {
 }
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab,devantd },
+	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab,devantd,ListDic },
 
 	setup(prop, context) {
 		const route = useRoute();
 		const editDicRef = ref();
 		const editAttrRef = ref();
 		const editFunRef = ref();
+		const listDicRef=ref();
 		const editEventRef = ref();
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
@@ -451,9 +458,14 @@ export default defineComponent({
 			editTabRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
 		};
 
+		//查看日志列表
+		const onOpenListDetail=(row: TableDataRow)=>{
+			listDicRef.value.openDialog(row, state.detail.id);
+		};
+
 		// 打开修改产品弹窗
 		const onOpenEditDic = (row: TableDataRow) => {
-			editDicRef.value.openDialog(row);
+			editDicRef.value.openDialog(row); 
 		};
 
 		// 删除产品
@@ -575,7 +587,7 @@ export default defineComponent({
 		};
 
 		const getrunData=()=>{
-			api.instance.getrun_status({id:9}).then((res: any) => {
+			api.instance.getrun_status({id:state.detail.id}).then((res: any) => {
 					state.areaData=res
 				
 				});
@@ -598,15 +610,15 @@ export default defineComponent({
 		};
 
 		const CkOption = () => {
-			if (state.developer_status == 1) {
-				api.product.undeploy({ id: route.params.id }).then((res: any) => {
-					ElMessage.success('操作成功');
-					state.developer_status = 0;
-				});
-			} else {
-				api.product.deploy({ id: route.params.id }).then((res: any) => {
+			if (state.developer_status == 2) {
+				api.instance.devoffline({id:state.detail.id}).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 1;
+				});
+			} else {
+				api.instance.devonline({id:state.detail.id}).then((res: any) => {
+					ElMessage.success('操作成功');
+					state.developer_status = 2;
 				});
 			}
 		};
@@ -628,9 +640,11 @@ export default defineComponent({
 			tinyAreas,
 			editDicRef,
 			editAttrRef,
+			listDicRef,
 			editFunRef,
 			editEventRef,
 			editTabRef,
+			onOpenListDetail,
 			getrunData,
 			getlog,
 			getlogtype,
@@ -789,7 +803,7 @@ tr {
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 23.9%;
+	width: 23.8%;
 	color: rgba(0, 0, 0, 0.65);
 	font-size: 14px;
 	font-variant: tabular-nums;

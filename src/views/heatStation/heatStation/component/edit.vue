@@ -24,7 +24,15 @@
 					<el-input v-model="ruleForm.position" placeholder="请输入换热站位置" />
 				</el-form-item>
 				<el-form-item label="负责人" prop="principal">
-					<el-input v-model="ruleForm.principal" placeholder="请输入负责人" />
+					<!-- <el-input v-model="ruleForm.principal" placeholder="请输入负责人" /> -->
+					<el-select v-model="ruleForm.principal" clearable style="width: 100%;" placeholder="请选择">
+						<el-option
+							v-for="item in userList"
+							:key="item.id"
+							:label="item.userNickname"
+							:value="item.id">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
@@ -64,6 +72,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/heatStation';
+import userApi from '/@/api/system';
 import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
 import { useStore } from '/@/store/index';
@@ -106,6 +115,7 @@ export default defineComponent({
 			},
 			treeData: [],
 			dataHubList: [],
+			userList: [],
 			mapLocal: null as any
 		})
 		const store = useStore();
@@ -113,6 +123,7 @@ export default defineComponent({
 		const openDialog = (row: any, tree: any) => {
 			resetForm()
 			queryDataHubList()
+			queryUserList()
 			state.treeData = tree
 
 			if (row) {
@@ -129,6 +140,12 @@ export default defineComponent({
 			datahubApi.template.allList({})
 				.then((res: any) => {
 					state.dataHubList = res.list || [];
+				});
+		};
+		const queryUserList = () => {
+			userApi.user.getAllList({})
+				.then((res: any) => {
+					state.userList = res || [];
 				});
 		};
 		const resetForm = () => {
