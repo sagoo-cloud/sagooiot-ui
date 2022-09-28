@@ -34,6 +34,7 @@
     "sortablejs": "^1.14.0",
     "splitpanes": "^3.1.1",
     "uuid": "^9.0.0",
+    "vform3-builds": "^3.0.8",
     "vue": "^3.2.37",
     "vue-baidu-map-3x": "^1.0.18",
     "vue-clipboard3": "^1.0.1",

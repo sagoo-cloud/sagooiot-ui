@@ -23,6 +23,10 @@ import pagination from '/@/components/pagination/index.vue'
 import JsonViewer from "vue3-json-viewer"
 
 
+import VForm3 from 'vform3-builds'  //引入VForm3库
+import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
+
+
 const app = createApp(App);
 
 directive(app);
@@ -35,6 +39,7 @@ app.use(router)
     .use(i18n)
     .use(JsonViewer)
     .use(VueGridLayout)
+    .use(VForm3)
     // .use(BaiduMap, { ak: 'Kp8XHK81HSF6rfRkYP7OxYKtK8IaG51d', type: 'WebGl', v: '2.0' })
     .mount('#app');
 
