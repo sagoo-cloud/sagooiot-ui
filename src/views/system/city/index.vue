@@ -28,12 +28,6 @@
               </el-icon>
               新增
             </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除
-            </el-button> -->
           </el-form-item>
         </el-form>
       </div>
@@ -162,7 +156,7 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-					api.heatStation.del(row.id).then(() => {
+					api.city.del(row.id).then(() => {
 						ElMessage.success('删除成功');
 						queryList();
 					});

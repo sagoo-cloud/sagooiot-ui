@@ -47,4 +47,10 @@ export default {
       undeploy: (data: object) => post('/source/template/undeploy', data),  
    },
   
+   weather:{
+      getCityWeatherList: () => get('/region/weather/cityWeatherList'),
+      getWhichCityWeather: (params: object) => get('/region/weather/getInfoById', params),
+      getTemperatureEchartById: (params: object) => get('/region/weather/getTemperatureEchartById', params),
+      getWindpowerEchartById: (params: object) => get('/region/weather/getWindpowerEchartById', params),
+   }
 }
