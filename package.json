@@ -9,16 +9,16 @@
     "build": "vite build",
     "deploy": "npm run build && npm run deploy:rm && npm run deploy:scp && npm run deploy:auth",
     "deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
-    "deploy:scp": "scp -r ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'mv /www/wwwroot/zhgy.sagoo.cn/* /www/wwwroot/zhgy.sagoo.cn-copy && mv /www/wwwroot/zhgy.sagoo.cn-pre/* /www/wwwroot/zhgy.sagoo.cn'",
+    "deploy:scp": "scp -r ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
     "deploy:auth": "ssh iot 'chown -R www /www/wwwroot/zhgy.sagoo.cn/'",
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
   },
   "dependencies": {
     "@antv/g2plot": "^2.4.20",
     "@element-plus/icons-vue": "^2.0.9",
-    "amis": "^2.1.1-beta.2",
     "axios": "^0.26.0",
     "clipboard": "^2.0.11",
+    "codemirror": "^5.65.9",
     "countup.js": "^2.1.0",
     "cropperjs": "^1.5.12",
     "echarts": "^5.3.3",
