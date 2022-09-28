@@ -18,7 +18,7 @@
 					/>
 				</el-form-item>
 				<el-form-item label="城市名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入换热站名称" />
+					<el-input v-model="ruleForm.name" placeholder="请输入城市名称" />
 				</el-form-item>
 				<el-form-item label="城市编号" prop="code">
 					<el-input v-model="ruleForm.code" placeholder="请输入城市编号" />
