@@ -57,6 +57,12 @@
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
+				<el-form-item label="是否主键" prop="isPk">
+					<el-radio-group v-model="ruleForm.isPk" >
+						<el-radio :label="0">否</el-radio>
+						<el-radio :label="1">是</el-radio>
+					</el-radio-group>
+				</el-form-item>
 
 				<el-form-item label="是否排序" prop="isSorting">
 					<el-radio-group v-model="ruleForm.isSorting" >
@@ -68,8 +74,8 @@
 
 				<el-form-item label="排序方式" prop="isDesc">
 					<el-radio-group v-model="ruleForm.isDesc" >
-						<el-radio :label="1">倒序</el-radio>
-						<el-radio :label="2">正序</el-radio>
+						<el-radio :label="0">倒序</el-radio>
+						<el-radio :label="1">正序</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -104,6 +110,7 @@ interface RuleFormState {
 	default: string;
 	isSorting: number;
 	isDesc: number;
+	isPk: number;
 	desc: string;
 	status: number;
 }
@@ -176,7 +183,8 @@ export default defineComponent({
 				key: '',
 				from: 1,
 				isSorting: 0,
-				isDesc: 1,
+				isDesc: 0,
+				isPk: 0,
 				default: '',
 				desc: '',
 			},
@@ -195,9 +203,9 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 
-			console.log(row);
 			if (row?.id) {
 				state.ruleForm = row;
+				console.log(state.ruleForm);
 			}
 
 			if (row.sourceId) {
@@ -207,6 +215,8 @@ export default defineComponent({
 			state.isShowDialog = true;
 
 			getSouData();
+		
+
 		};
 
 		const getSouData = () => {
@@ -248,7 +258,8 @@ export default defineComponent({
 				key: '',
 				from: 1,
 				isSorting: 0,
-				isDesc: 1,
+				isDesc: 0,
+				isPk: 0,
 				default: '',
 				desc: '',
 			};

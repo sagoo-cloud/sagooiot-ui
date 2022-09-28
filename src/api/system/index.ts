@@ -131,7 +131,7 @@ export default {
   },
   city: {
     getList: (params: object) => get('/common/city/tree', params),
-    add: (data: object) => post('/common/city/tree', data),
+    add: (data: object) => post('/common/city/add', data),
     edit: (data: object) => put('/common/city/edit', data),
     del: (id: number) => del('/common/city/del', { id }),
     detail: (id: number) => get('/common/city/getInfoById', { id }),

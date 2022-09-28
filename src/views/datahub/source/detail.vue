@@ -23,7 +23,7 @@
 							{{ detail.name }}
 						</el-form-item>
 						<el-form-item label="数据源描述:">
-							{{ detail.description }}
+							{{ detail.desc }}
 						</el-form-item>
 						<el-form-item label="数据来源:">
 							<span v-if="detail.from == 1">api导入</span>
