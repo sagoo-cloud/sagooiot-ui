@@ -997,22 +997,6 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 			title: '登录',
 		},
 	},
-	{
-		path: '/code/edit',
-		name: 'code-edit',
-		component: () => import('/@/views/code/edit.vue'),
-		meta: {
-			title: '代码生成器',
-		},
-	},
-	{
-		path: '/code/page',
-		name: 'code-page',
-		component: () => import('/@/views/code/page.vue'),
-		meta: {
-			title: '页面',
-		},
-	},
 	/**
 	 * 提示：写在这里的为全屏界面，不建议写在这里
 	 * 请写在 `dynamicRoutes` 路由数组中
