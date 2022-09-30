@@ -419,4 +419,26 @@
 	.data-overview  .home-card-one .home-card-item *span{
 		color: var(--next-color-white) !important;
 	}
+
+	.monitor-weather {
+		background-color: var(--el-color-white) !important;
+	}
+	.monitor-weather .left .city-weather-data-overview-wrap section {
+		color: #fff!important;
+
+	}
+
+	.monitor-weather .left .city-weather-data-overview-wrap,
+	.monitor-weather .left .city-weather-data-overview-wrap section span:nth-child(2) {
+		border-color: var(--next-border-color-light) !important;
+	}
+	.monitor-weather .left .city-weather-data-overview-wrap section:nth-child(2n+1) {
+		background-color: var(--el-color-white) !important;
+	}
+	.monitor-weather .left .city-weather-data-overview-wrap section:nth-child(2n) {
+		background-color: var(--next-border-color-light) !important;
+	}
+	.monitor-weather .left .city-weather-data-overview-wrap section.active {
+		background-color: #1d3f4b !important;
+	}
 }

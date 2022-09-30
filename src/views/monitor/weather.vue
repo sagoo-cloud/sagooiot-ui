@@ -21,7 +21,7 @@
 					<div  class="weather-info">
 						<section>
 							<img src="../../assets/windPowerIcon.png" alt="">
-							<span>风力: {{oneCityInfo.Windpower}}</span>
+							<span>风力: {{oneCityInfo.winddirection+oneCityInfo.windpower}}级</span>
 							<img class="sunset-sunrise" src="../../assets/sunset.png" alt="">
 							<span class="sunset">日出时间: {{oneCityInfo.sunrise}}</span>
 							<span>日落时间: {{oneCityInfo.sunset}}</span>
