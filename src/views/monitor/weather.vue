@@ -10,7 +10,7 @@
 				</section>
 				<section :class="currentcityId==item.id?'active':''" @click="currentcityId=item.id" v-for="(item, index) in cityList" :key="index">
 					<span>{{item.name}}</span>
-					<span>{{item.Windpower}}</span>
+					<span>{{item.windpower}}</span>
 					<span>{{item.sunshineDuration}}</span>
 				</section>
 			</div>
@@ -18,10 +18,16 @@
 		<div class="right">
 			<el-row :gutter="15" class="home-card-two mb15">
 				<el-col>
-					<div  class="weather-info">
+					<div class="weather-info">
+						<section>
+							<span class="temperature">{{oneCityInfo.Temperature}}℃</span>
+							<span class="weather">{{oneCityInfo.weather}}</span>
+							<span>{{oneCityInfo.reporttime}}更新</span>
+							
+						</section>
 						<section>
 							<img src="../../assets/windPowerIcon.png" alt="">
-							<span>风力: {{oneCityInfo.winddirection+oneCityInfo.windpower}}级</span>
+							<span>风力: {{oneCityInfo.winddirection+oneCityInfo.windpower}}</span>
 							<img class="sunset-sunrise" src="../../assets/sunset.png" alt="">
 							<span class="sunset">日出时间: {{oneCityInfo.sunrise}}</span>
 							<span>日落时间: {{oneCityInfo.sunset}}</span>
@@ -543,15 +549,25 @@ $homeNavLengh: 8;
 		margin-left: 47px;
 		.weather-info {
 			// width: 100%;
-			padding: 30px 30px 15px 30px;
+			padding: 15px 30px 15px 30px;
 			// background-color: pink;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
 			border: 1px solid var(--next-border-color-light);
+			section:nth-child(1) {
+				margin-bottom: 12px;
+			}
 			section {
 				display: flex;
 				justify-content: flex-start;
 				align-items: center;
+				.temperature {
+					font-size: 50px;
+					font-weight: bold;
+				}
+				.weather {
+					margin: 0 30px;
+				}
 				img {
 					width: 24px;
 				}
