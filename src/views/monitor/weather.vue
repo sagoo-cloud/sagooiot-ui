@@ -1,7 +1,7 @@
 <template>
 	<div class="monitor-weather">
 		<div class="left">
-			<el-input v-model="city" placeholder="搜索添加城市" size=“mini></el-input>
+			<!-- <el-input v-model="city" placeholder="搜索添加城市" size=“mini></el-input> -->
 			<div class="city-weather-data-overview-wrap">
 				<section class="title">
 					<span>城市</span>
@@ -510,7 +510,7 @@ $homeNavLengh: 8;
 		// background-color: pink;
 		.city-weather-data-overview-wrap {
 			border: 1px solid #F2F2F2;
-			margin-top: 45px;
+			// margin-top: 45px;
 			section.title {
 				font-size: 18px;
 				font-weight: bold;
