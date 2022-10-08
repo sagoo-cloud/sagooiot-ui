@@ -66,7 +66,7 @@ const addOrEdit = async (row?: any) => {
 };
 
 const edit = async (row: any) => {
-	const url = window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#/flow/' + row.flowId;
+	const url = window.location.protocol + '//' +  window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#/flow/' + row.flowId;
 	window.open(url);
 };
 

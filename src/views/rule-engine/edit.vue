@@ -53,13 +53,16 @@ const ruleForm = {
 };
 
 const onSubmit = async () => {
-  await formRef.value.validate();
+	await formRef.value.validate();
 
 	if (!formData.id) {
 		const { data } = await axios.post(
-			window.location.hostname + ':1880/flow',
+			window.location.protocol + '//' + window.location.hostname + ':1880/flow',
 			{
 				label: formData.name,
+				disabled: false,
+				info: '',
+				env: [],
 				nodes: [],
 			},
 			{
@@ -68,7 +71,7 @@ const onSubmit = async () => {
 				},
 			}
 		);
-    formData.flowId = data.id
+		formData.flowId = data.id;
 	}
 
 	const theApi = formData.id ? api.edit : api.add;
