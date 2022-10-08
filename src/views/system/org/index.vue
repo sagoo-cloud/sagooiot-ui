@@ -38,6 +38,7 @@
 				v-loading="tableData.loading"
 			>
 				<el-table-column prop="name" label="组织名称" show-overflow-tooltip> </el-table-column>
+				<el-table-column prop="number" label="组织编号" show-overflow-tooltip> </el-table-column>
 				<el-table-column prop="status" label="组织状态" align="center" min-width="120">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
