@@ -18,7 +18,7 @@
 					</el-select>
 				</el-form-item> -->
 
-				<el-form-item label="cron表达式">
+				<el-form-item label="定时请求">
 							<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
 							<ul style="list-style: none;">
 								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
