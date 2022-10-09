@@ -8,7 +8,7 @@
 					<span>风力</span>
 					<span>日照时长</span>
 				</section>
-				<section :class="currentcityId==item.id?'active':''" @click="currentcityId=item.id" v-for="(item, index) in cityList" :key="index">
+				<section :class="currentcityId==item.id?'active':''" @click="currentcityId=item.id, currentcityName=item.name" v-for="(item, index) in cityList" :key="index">
 					<span>{{item.name}}</span>
 					<span>{{item.windpower}}</span>
 					<span>{{item.sunshineDuration}}</span>
@@ -26,6 +26,7 @@
 							
 						</section>
 						<section>
+							<span style="margin-right: 20px;">地点：{{currentcityName}}</span>
 							<img src="../../assets/windPowerIcon.png" alt="">
 							<span>风力: {{oneCityInfo.winddirection+oneCityInfo.windpower}}</span>
 							<img class="sunset-sunrise" src="../../assets/sunset.png" alt="">
@@ -129,6 +130,7 @@ export default defineComponent({
 			temWind: [],
 			averageTemWind: [],
 			currentcityId: 0,
+			currentcityName: '',
 			homeThree: [
 				{
 					icon: 'iconfont icon-yangan',
@@ -198,6 +200,7 @@ export default defineComponent({
 				state.cityList = res.Info;
 				if(!res.Info.length) return;
 				state.currentcityId = res.Info[0].id;
+				state.currentcityName = res.Info[0].name;
 				// getWhichCityWeather(res.Info[0].id);
 				// getTemperatureEchartById(state.currentcityId);
 				// getWindpowerEchartById(state.currentcityId)
