@@ -9,12 +9,25 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />
 				</el-form-item>
 
-				<el-form-item label="更新时间" prop="interval">
+
+
+				<!-- <el-form-item label="更新时间" prop="interval">
 					<el-input v-model="ruleForm.interval" placeholder="请输入更新时间" class="w-35" />
 					<el-select v-model="ruleForm.intervalUnit" placeholder="请选择单位">
 						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
-				</el-form-item>
+				</el-form-item> -->
+
+				<el-form-item label="cron表达式">
+							<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
+							<ul style="list-style: none;">
+								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
+							</ul>
+						</el-form-item>
 
 				<el-form-item label="描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>

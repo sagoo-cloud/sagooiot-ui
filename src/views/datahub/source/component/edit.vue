@@ -54,12 +54,25 @@
 							<el-input v-model="config.url" placeholder="请输入请求地址" />
 						</el-form-item>
 
-						<el-form-item label="更新时间">
+						
+						<el-form-item label="cron表达式">
+							<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
+							<ul style="list-style: none;">
+								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
+							</ul>
+						</el-form-item>
+
+						<!-- <el-form-item label="更新时间">
 							<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
 							<el-select v-model="config.intervalUnit" placeholder="请选择单位">
 								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
-						</el-form-item>
+						</el-form-item> -->
+				
 
 						<div class="box-content">
 							<el-divider content-position="left">请求参数</el-divider>
@@ -87,8 +100,8 @@
 					<el-form-item label="选择设备">
 						<el-select v-model="devconfig.deviceKey" filterable placeholder="请选择设备" @change="setNode">
 							<el-option v-for="item in sourceData" :key="item.id" :label="item.key" :value="item.id">
-								<span style="float: left">{{ item.key }}</span>
-								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+								<span style="float: left">{{ item.name }}</span>
+								<span style="float: right; font-size: 13px">{{ item.key }}</span>
 							</el-option>
 						</el-select>
 					</el-form-item>
