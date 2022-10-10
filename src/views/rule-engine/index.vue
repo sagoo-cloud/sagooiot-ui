@@ -38,7 +38,7 @@
 			</el-table-column>
 		</el-table>
 		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<EditForm ref="editFormRef" @getList="getList()" :types="0"></EditForm>
 	</el-card>
 </template>
 
@@ -52,7 +52,7 @@ import EditForm from './edit.vue';
 
 const editFormRef = ref();
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { name: '', address: '' });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { types: 0 });
 
 getList();
 
