@@ -13,7 +13,7 @@
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
-						新增规则编排
+						新增数据转发
 					</el-button>
 				</el-form-item>
 			</el-form>
@@ -79,7 +79,7 @@ const setStatus = (id: number, status: number) => {
 };
 
 const edit = async (row: any) => {
-	const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#/flow/' + row.flowId;
+	const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#flow/' + row.flowId;
 	window.open(url);
 };
 
