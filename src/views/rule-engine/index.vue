@@ -33,7 +33,8 @@
 				<template #default="scope">
 					<el-button size="small" text type="info" v-if="scope.row.status" @click="setStatus(scope.row.id, 0)">停止</el-button>
 					<el-button size="small" text type="primary" v-else @click="setStatus(scope.row.id, 1)">启动</el-button>
-					<el-button size="small" text type="warning" @click="edit(scope.row)">编辑</el-button>
+					<el-button size="small" text type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+					<el-button size="small" text type="warning" @click="edit(scope.row)">规则编辑</el-button>
 					<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -79,7 +80,6 @@ const setStatus = (id: number, status: number) => {
 };
 
 const edit = async (row: any) => {
-	// const url = window.location.protocol + '//' + window.location.hostname + ':1880/#/flow/' + row.flowId +  '?access_token=' + Session.get('token') ;
 	const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#flow/' + row.flowId;
 	window.open(url);
 };
