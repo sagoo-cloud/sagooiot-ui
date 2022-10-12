@@ -456,6 +456,7 @@ export default defineComponent({
 				// 	textStyle: { fontSize: '15', color: state.charts.color },
 				// },
 				//  '{b0}: {c0}<br />{b1}: {c1}', 
+				grid: { top: 80, bottom: 10 },
 				tooltip: { trigger: 'item', formatter: '{b} <br/> {d}% <br/>' },
 				// graphic: {
 				// 	elements: [
@@ -479,7 +480,7 @@ export default defineComponent({
 					// orient: 'vertical',
 					// right: '0%',
 					// left: '0',
-					top: 'bottom',
+					top: 35,
 					// itemWidth: 14,
 					// itemHeight: 14,
 					// data: getname,
