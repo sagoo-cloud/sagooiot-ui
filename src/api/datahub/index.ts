@@ -17,6 +17,7 @@ export default {
     getdevList: (params: object) => get('/product/device/list', params),
     getdata: (params: object) => get('/source/getdata', params),
     getLists: (params: object) => get('/source/list', params),
+    copy: (params: object) => post('/source/copy', params),
 
     },
    
@@ -38,6 +39,8 @@ export default {
       getdata: (params: object) => get('/source/template/getdata',  params ),
       getDictData: (params: object) => get('/common/dict/data/getDictData',  params ),
       cityTree: (params: object) => get('/common/city/tree',  params ),
+      copy: (params: object) => post('/source/template/copy', params),
+      
    } ,
 
    tnode:{
@@ -54,5 +57,12 @@ export default {
       getWhichCityWeather: (params: object) => get('/region/weather/getInfoById', params),
       getTemperatureEchartById: (params: object) => get('/region/weather/getTemperatureEchartById', params),
       getWindpowerEchartById: (params: object) => get('/region/weather/getWindpowerEchartById', params),
+   },
+
+   statistics:{
+      getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),
+      getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),
+      getStatisticsTotalData: (params: object) => get('/statistics/city/data', params),
+      getStatisticsPieData: (params: object) => get('/statistics/tempering/ratio/data', params),
    }
 }

@@ -29,9 +29,16 @@ import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/rule';
 import axios from 'axios';
 import { ruleRequired } from '/@/utils/validator';
-import { ElMessage } from 'element-plus';
+import {  ElMessage } from 'element-plus';
 
 const emit = defineEmits(['getList']);
+
+const props = defineProps({
+	types: {
+		type: Number,
+		default: 0, // 规则编排是0 数据转发是1
+	},
+});
 
 const showDialog = ref(false);
 const formRef = ref();
@@ -39,7 +46,8 @@ const formRef = ref();
 const baseForm = {
 	id: undefined,
 	name: '',
-	types: 0,
+	types: props.types,
+	// types: 0,
 	flowId: '',
 	expound: '',
 };
@@ -57,7 +65,7 @@ const onSubmit = async () => {
 
 	if (!formData.id) {
 		const { data } = await axios.post(
-			window.location.protocol + '//' + window.location.hostname + ':1880/flow',
+			window.location.protocol + '//' + window.location.hostname + '/rule-engine/flow',
 			{
 				label: formData.name,
 				disabled: false,

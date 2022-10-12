@@ -70,6 +70,12 @@
 					<el-table-column label="字段节点标题" prop="key" :show-overflow-tooltip="true" />
 					<el-table-column label="字段节点名称" prop="name" :show-overflow-tooltip="true" />
 					<el-table-column label="字段节点类型" prop="dataType" :show-overflow-tooltip="true" />
+				
+					<el-table-column label="数据源名称" align="center" >
+						<template #default="scope">
+							<span v-if="scope.row.from==2">{{scope.row.source.name}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="默认值" prop="default" :show-overflow-tooltip="true" />
 					<el-table-column label="备注说明" prop="value" :show-overflow-tooltip="true" />
 					<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
