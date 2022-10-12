@@ -65,7 +65,7 @@ const onSubmit = async () => {
 
 	if (!formData.id) {
 		const { data } = await axios.post(
-			window.location.protocol + '//' + window.location.hostname + ':1880/flow',
+			window.location.protocol + '//' + window.location.hostname + '/rule-engine/flow',
 			{
 				label: formData.name,
 				disabled: false,

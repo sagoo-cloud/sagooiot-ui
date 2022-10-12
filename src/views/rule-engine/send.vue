@@ -80,7 +80,9 @@ const setStatus = (id: number, status: number) => {
 };
 
 const edit = async (row: any) => {
-	const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#flow/' + row.flowId;
+	localStorage.setItem('auth-tokens',`{"access_token":"${Session.get('token')}"}`);
+	// const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#flow/' + row.flowId;
+	const url = '/rule-engine/#flow/' + row.flowId;
 	window.open(url);
 };
 
