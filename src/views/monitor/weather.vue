@@ -21,6 +21,7 @@
 					<div class="weather-info">
 						<section>
 							<span class="temperature">{{oneCityInfo.Temperature}}℃</span>
+							<img :src="weatherObj[oneCityInfo.weather]" alt="">
 							<span class="weather">{{oneCityInfo.weather}}</span>
 							<span>{{oneCityInfo.reporttime}}更新</span>
 							
@@ -84,6 +85,22 @@ import { useStore } from '/@/store/index';
 
 import api from '/@/api/datahub';
 
+import weather1 from '/@/assets/冰雹.svg';
+import weather2 from '/@/assets/多云（白天）.svg';
+import weather3 from '/@/assets/多云（夜晚）.svg';
+import weather4 from '/@/assets/雷电.svg';
+import weather5 from '/@/assets/雷阵雨.svg';
+import weather6 from '/@/assets/沙尘.svg';
+import weather7 from '/@/assets/雾.svg';
+import weather8 from '/@/assets/雪.svg';
+import weather9 from '/@/assets/夜晚.svg';
+import weather10 from '/@/assets/阴.svg';
+import weather11 from '/@/assets/雨.svg';
+import weather12 from '/@/assets/雨加雪.svg';
+import weather13 from '/@/assets/阵雨.svg';
+import weather14 from '/@/assets/晴天.svg';
+
+
 let global: any = {
 	homeChartOne: null,
 	homeChartTwo: null,
@@ -94,6 +111,22 @@ let global: any = {
 export default defineComponent({
 	name: 'home',
 	setup() {
+		const weatherObj = ref({
+			'冰雹': weather1,
+			'多云': weather2,
+			'多云（夜晚）': weather3,
+			'雷电': weather4,
+			'雷阵雨': weather5,
+			'沙尘': weather6,
+			'雾': weather7,
+			'雪': weather8,
+			'夜晚': weather9,
+			'阴': weather10,
+			'雨': weather11,
+			'雨加雪': weather12,
+			'阵雨': weather13,
+			'晴天': weather14
+		});
 		const homeTemLineRef = ref();
 		const homeWindLineRef = ref();
 		// const homePieRef = ref();
@@ -487,6 +520,7 @@ export default defineComponent({
 			}
 		);
 		return {
+			weatherObj,
 			homeTemLineRef,
 			homeWindLineRef,
 			getWhichCityWeather,
@@ -568,8 +602,11 @@ $homeNavLengh: 8;
 					font-size: 50px;
 					font-weight: bold;
 				}
+				img {
+					margin: 0 10px 0 30px;
+				}
 				.weather {
-					margin: 0 30px;
+					margin-right: 30px;
 				}
 				img {
 					width: 24px;
