@@ -11,4 +11,6 @@ export default {
   add: (data: any) => post('/rule-engine/instance/add', data),
   // 编辑规则实例管理
   edit: (data: any) => put('/rule-engine/instance/edit', data),
+  // 修改规则实例流程状态
+  setStatus: (id: number, status: number) => post('/rule-engine/instance/status', { id, status }),
 }

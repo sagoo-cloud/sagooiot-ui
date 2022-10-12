@@ -17,6 +17,7 @@ export default {
     getdevList: (params: object) => get('/product/device/list', params),
     getdata: (params: object) => get('/source/getdata', params),
     getLists: (params: object) => get('/source/list', params),
+    copy: (params: object) => post('/source/copy', params),
 
     },
    
@@ -36,6 +37,7 @@ export default {
       detail: (id: number) => get('/source/template/detail', { id }),
       allList: (params: object) => get('/source/template/list', params), // 获取所有已发布列表
       getdata: (params: object) => get('/source/template/getdata',  params ),
+      copy: (params: object) => post('/source/template/copy', params),
    } ,
 
    tnode:{

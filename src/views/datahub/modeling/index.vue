@@ -76,6 +76,8 @@
 						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
 						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
+						<el-button size="small" text type="primary" @click="copy(scope.row)" >复制</el-button>
+
 					</template>
 				</el-table-column>
 			</el-table>
@@ -192,6 +194,25 @@ export default defineComponent({
 				})
 				.catch(() => {});
 		};
+
+		//复制数据
+		const copy=(row:TableDataRow)=>{
+			ElMessageBox.confirm("确定要复制该数据吗？", '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+
+					api.template.copy({id:row.id}).then(() => {
+						ElMessage.success('复制成功');
+						typeList();
+					});
+				})
+				.catch(() => {});
+		}
+
+
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -216,6 +237,7 @@ export default defineComponent({
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
+			copy,
 			typeList,
 			resetQuery,
 			handleSelectionChange,
