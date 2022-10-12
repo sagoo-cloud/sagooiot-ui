@@ -32,26 +32,30 @@
 		<el-row :gutter="15" class="home-card-two mb15">
 			<el-col >
 				<div class="home-card-item">
-					<div style="height: 100%" ref="homeLineRef"></div>
+					<div style="height: 100%" ref="homeBarRef"></div>
 				</div>
 			</el-col>
-			<!-- <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
-				<div class="home-card-item">
-					<div class="bar-header">
-						<p>环路回温/热用户室温占比</p>
-						<p>
-							<span>环路</span>
-							<span>热用户</span>
-						</p>
-					</div>
-					<div style="height: 90%" ref="homePieRef"></div>
-				</div>
-			</el-col> -->
 		</el-row>
 		<el-row :gutter="15" class="home-card-three">
 			<el-col :xs="24" :sm="10" :md="14" :lg="16" :xl="16">
 				<div class="home-card-item">
-					<div class="home-card-item-title">热网总能耗</div>
+					<div class="home-card-item-title" style="display: flex;justify-content:space-between;">
+						<span>热网总能耗</span>
+						<el-select @change="getStatisticsLineChartData()" v-model="rangeValue" placeholder="请选择查询范围" size="mini">
+							<el-option
+							v-for="item in [10, 30, 60]"
+							:key="item"
+							:label="'近'+item+'天'"
+							:value="item"
+							/>
+						</el-select>
+					</div>
+					<div class="lable-group">
+						<div @click="changeLineType('calorie', '总热耗')" :class="lineType == 'calorie' ? 'active' : ''">总热耗</div>
+						<div @click="changeLineType('electric', '总电耗')" :class="lineType == 'electric' ? 'active' : ''">总电耗</div>
+						<div @click="changeLineType('water', '总失水量')" :class="lineType == 'water' ? 'active' : ''">总失水量</div>
+					</div>
+					<div style="height: 100%" ref="homeLineRef"></div>
 					<!-- <div class="home-monitor">
 						<div class="flex-warp">
 							<div class="flex-warp-item" v-for="(v, k) in homeThree" :key="k">
@@ -70,11 +74,11 @@
 			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
 				<div class="home-card-item">
 					<div class="bar-header">
-						<p>环路回温/热用户室温占比</p>
-						<p>
-							<span>环路</span>
-							<span>热用户</span>
-						</p>
+						<p class='home-card-item-title'>环路回温/热用户室温占比</p>
+						<div class="lable-group1">
+							<div @click="changePieType('1')" :class="pieType == '1' ? 'active' : ''">环路</div>
+							<div @click="changePieType('2')" :class="pieType == '2' ? 'active' : ''">热用户</div>
+						</div>
 					</div>
 					<div style="height: 90%" ref="homePieRef"></div>
 				</div>
@@ -93,12 +97,29 @@ import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onA
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 
+import ele from '/@/assets/ele.svg';
+import ele1 from '/@/assets/ele1.svg';
+
+import fire from '/@/assets/fire.svg';
+import fire1 from '/@/assets/fire1.svg';
+
+import map from '/@/assets/map.svg';
+import map1 from '/@/assets/map1.svg';
+
+import water from '/@/assets/water.svg';
+import water1 from '/@/assets/water1.svg';
+
+
+import api from '/@/api/datahub';
+
 let global: any = {
 	homeChartOne: null,
 	homeChartTwo: null,
 	homeCharThree: null,
 	dispose: [null, '', undefined],
 };
+
+
 
 export default defineComponent({
 	name: 'home',
@@ -108,50 +129,52 @@ export default defineComponent({
 		const homeBarRef = ref();
 		const store = useStore();
 		const state = reactive({
+			checkList: ['一网供水温度'],
+			rangeValue: 10,
 			isIsDark: false,
 			dataOne: [
 				{
-					icon: "/@/assets/area.png",
-					iconDark: "/@/assets/area1.png",
+					icon: map,
+					iconDark: map1,
 					title: '供暖面积',
 					contentTitle1: '供热面积',
-					val1: '2112.12',
+					val1: '',
 					unit1: '㎡',
 					contentTitle2: '总面积',
-					val2: '2112.12',
+					val2: '',
 					unit2: '㎡',
 				},
 				{
-					icon: "@/assets/fire.png",
-					iconDark: "/@/assets/fire1.png",
+					icon: fire,
+					iconDark: fire1,
 					title: '热量',
 					contentTitle1: '总耗热',
-					val1: '4500',
+					val1: '',
 					unit1: 'GJ',
 					contentTitle2: '总单耗',
-					val2: '0.34',
+					val2: '',
 					unit2: 'GJ/㎡',
 				},
 				{
-					icon: "@/assets/ele.png",
-					iconDark: "/@/assets/ele1.png",
+					icon: ele,
+					iconDark: ele1,
 					title: '电量',
 					contentTitle1: '总耗电',
-					val1: '5200',
+					val1: '',
 					unit1: 'KW.h',
 					contentTitle2: '总单耗',
-					val2: '0.22',
+					val2: '',
 					unit2: 'KW.h/㎡',
 				},
 				{
-					icon: "@/assets/water.png",
-					iconDark: "/@/assets/water1.png",
+					icon: water,
+					iconDark: water1,
 					title: '水量',
 					contentTitle1: '总耗水',
-					val1: '4500',
+					val1: '',
 					unit1: 'T',
 					contentTitle2: '总单耗',
-					val2: '0.23',
+					val2: '',
 					unit2: 'T/㎡',
 					
 				},
@@ -218,99 +241,212 @@ export default defineComponent({
 				bgColor: '',
 				color: '#303133',
 			},
+			statisticsChartXAxisData: [],
+			inTemperature1: [],
+			outTemperature1: [],
+			lineType: 'calorie',
+			lineName: '总热耗',
+			lineData: [],
+			xAxisData: [],
+			calorieLineData: [],
+			calorieXAxisData: [],
+			electricLineData: [],
+			electricXAxisData: [],
+			waterLineData: [],
+			waterXAxisData: [],
+			pieData: [],
+			pieType: '1'
 		});
-		// 折线图
-		const initLineChart = () => {
+
+		// 获取顶部总数据
+		const getStatisticsTotalData = () => {
+			api.statistics.getStatisticsTotalData({tableNo:16}).then((res:any) => {
+				const { allArea, area, calorie, cityNO, electric, singleCalorie, singleElectric, singleWater, water } = res.Info;
+				// "cityNO": "C003", //城市编号
+				// "area": 7876726.23, //供热面积
+				// "allArea": 7876730, //总面积
+				// "calorie": 0, //总耗热
+				// "singleCalorie": 0, //总单耗
+				// "electric": 0, //总耗电
+				// "singleElectric": 0, //总单耗
+				// "water": 0, //总耗水
+				// "singleWater": 0 //总单耗
+				state.dataOne[0].val1 = area;
+				state.dataOne[0].val2 = allArea;
+
+				state.dataOne[1].val1 = calorie;
+				state.dataOne[1].val2 = singleWater;
+
+				state.dataOne[2].val1 = electric;
+				state.dataOne[2].val2 = singleElectric;
+
+				state.dataOne[3].val1 = water;
+				state.dataOne[3].val2 = singleWater;
+
+			});
+		};
+		
+		// 获取供热监测数据
+		const getStatisticsChartData = () => {
+			api.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
+				console.log(res)
+				const data = res.Info
+				// "huanLuNo": "D00140-4", //换热站编号
+				// "huanLuName": "8#楼高区", //换热站名称
+				// "inPressure1": 0, //一网供水压力
+				// "inPressure2": 0, //二网供水压力
+				// "inTemperature1": 0, //一网供水温度
+				// "inTemperature2": 0, //二网供水温度
+				// "outPressure1": 0, //一网回水压力
+				// "outPressure2": 0, //二网回水压力
+				// "outTemperature1": 0, //一网回水温度
+				// "outTemperature2": 0 //二网回水温度
+
+				// <el-checkbox label="一网供水温度" />
+				// <el-checkbox label="一网回水温度" />
+				// <el-checkbox label="二网供回水温差" />
+				// <el-checkbox label="二网供回水压差" />
+				// <el-checkbox label="压力值" />
+				state.statisticsChartXAxisData = [];
+				state.inTemperature1 = [];
+				state.outTemperature1 = [];
+				data.forEach((i:object) => {
+					state.statisticsChartXAxisData.push(i.huanLuName);
+					state.inTemperature1.push(i.inTemperature1);
+					state.outTemperature1.push(i.outTemperature1);
+				});
+
+				console.log(state.statisticsChartXAxisData)
+				nextTick(() => {
+					initBarChart();
+				});
+
+			});
+		};
+		// 柱状图
+		const initBarChart = () => {
+			console.log(323342)
 			if (!global.dispose.some((b: any) => b === global.homeChartOne)) global.homeChartOne.dispose();
-			global.homeChartOne = <any>echarts.init(homeLineRef.value, state.charts.theme);
+			global.homeChartOne = <any>echarts.init(homeBarRef.value, state.charts.theme);
 			const option = {
-				backgroundColor: state.charts.bgColor,
+				tooltip: {
+					trigger: 'axis'
+				},
 				title: {
-					text: '设备消息',
+					text: '供热监测',
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
-				grid: { top: 70, right: 20, bottom: 30, left: 30 },
-				tooltip: { trigger: 'axis' },
-				legend: { data: ['消息量', '预警量'], right: 0 },
-				xAxis: {
-					data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				legend: {
+					data: ['一网供水温度', '一网回水温度', '二网供回水温差', '二网供回水压差', '压力值'],
+					top: 35
 				},
+				grid: { top: 80, bottom: 30 },
+				calculable: true,
+				xAxis: [
+					{ data: state.statisticsChartXAxisData }
+				],
 				yAxis: [
 					{
-						type: 'value',
-						name: '条数',
-						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
-					},
+						type: 'value'
+					}
 				],
 				series: [
 					{
-						name: '消息量',
-						type: 'line',
-						symbolSize: 6,
-						symbol: 'circle',
-						smooth: true,
-						data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
-						lineStyle: { color: '#fe9a8b' },
-						itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
-						areaStyle: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: '#fe9a8bb3' },
-								{ offset: 1, color: '#fe9a8b03' },
-							]),
-						},
+						name: '一网供水温度',
+						type: 'bar',
+						data: state.inTemperature1,
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
 					},
 					{
-						name: '预警量',
-						type: 'line',
-						symbolSize: 6,
-						symbol: 'circle',
-						smooth: true,
-						data: [0, 24.1, 7.2, 15.5, 42.4, 42.4, 42.4, 24.1, 7.2, 15.5, 42.4, 0],
-						lineStyle: { color: '#9E87FF' },
-						itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
-						areaStyle: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: '#9E87FFb3' },
-								{ offset: 1, color: '#9E87FF03' },
-							]),
-						},
-						emphasis: {
-							itemStyle: {
-								color: {
-									type: 'radial',
-									x: 0.5,
-									y: 0.5,
-									r: 0.5,
-									colorStops: [
-										{ offset: 0, color: '#9E87FF' },
-										{ offset: 0.4, color: '#9E87FF' },
-										{ offset: 0.5, color: '#fff' },
-										{ offset: 0.7, color: '#fff' },
-										{ offset: 0.8, color: '#fff' },
-										{ offset: 1, color: '#fff' },
-									],
-								},
-								borderColor: '#9E87FF',
-								borderWidth: 2,
-							},
-						},
+						name: '一网回水温度',
+						type: 'bar',
+						data: state.outTemperature1,
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
 					},
-				],
+					{
+						name: '二网供回水温差',
+						type: 'bar',
+						data: [],
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
+					},
+					{
+						name: '二网供回水压差',
+						type: 'bar',
+						data: [],
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
+					},
+					{
+						name: '压力值',
+						type: 'bar',
+						data: [],
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
+					},
+
+					
+				]
 			};
 			(<any>global.homeChartOne).setOption(option);
 			(<any>state.myCharts).push(global.homeChartOne);
+		};
+		// 获取环路回温占比数据数据
+		const getStatisticsPieData = () => {
+			api.statistics.getStatisticsPieData({tableNo:21}).then((res:any) => {
+				console.log(res)
+				const data = res.Info
+				// "huanLuNo": "D00140-4", //换热站编号
+				// "huanLuName": "8#楼高区", //换热站名称
+				// "inPressure1": 0, //一网供水压力
+				// "inPressure2": 0, //二网供水压力
+				// "inTemperature1": 0, //一网供水温度
+				// "inTemperature2": 0, //二网供水温度
+				// "outPressure1": 0, //一网回水压力
+				// "outPressure2": 0, //二网回水压力
+				// "outTemperature1": 0, //一网回水温度
+				// "outTemperature2": 0 //二网回水温度
+
+				// <el-checkbox label="一网供水温度" />
+				// <el-checkbox label="一网回水温度" />
+				// <el-checkbox label="二网供回水温差" />
+				// <el-checkbox label="二网供回水压差" />
+				// <el-checkbox label="压力值" />
+				// state.statisticsChartXAxisData = [];
+				// state.inTemperature1 = [];
+				// state.outTemperature1 = [];
+				data.forEach((i:object) => {
+					// state.pieNameArr.push(i.temperatureRange);
+					// state.pieData.push(i.rate);
+					// state.outTemperature1.push(i.outTemperature1);
+					state.pieData.push({name: i.temperatureRange, value: i.rate, num: i.num});
+				});
+
+				console.log(state.statisticsChartXAxisData)
+				nextTick(() => {
+					initPieChart();
+				});
+
+			});
 		};
 		// 饼图
 		const initPieChart = () => {
 			if (!global.dispose.some((b: any) => b === global.homeChartTwo)) global.homeChartTwo.dispose();
 			global.homeChartTwo = <any>echarts.init(homePieRef.value, state.charts.theme);
-			var getname = ['提示', '建议', '警告', '严重警告', '故障'];
-			var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
-			var data = [];
-			for (var i = 0; i < getname.length; i++) {
-				data.push({ name: getname[i], value: getvalue[i] });
-			}
+			// var getname = ['提示', '建议', '警告', '严重警告', '故障'];
+			// var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
+			// var data = [];
+			// for (var i = 0; i < getname.length; i++) {
+			// 	data.push({ name: getname[i], value: getvalue[i] });
+			// }
 			const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#968AF5', '#FF0000'];
 			const option = {
 				backgroundColor: state.charts.bgColor,
@@ -319,7 +455,8 @@ export default defineComponent({
 				// 	x: 'left',
 				// 	textStyle: { fontSize: '15', color: state.charts.color },
 				// },
-				tooltip: { trigger: 'item', formatter: '{b} <br/> {c}%' },
+				//  '{b0}: {c0}<br />{b1}: {c1}', 
+				tooltip: { trigger: 'item', formatter: '{b} <br/> {d}% <br/>' },
 				// graphic: {
 				// 	elements: [
 				// 		{
@@ -377,28 +514,31 @@ export default defineComponent({
 						// 		return colorList[params.dataIndex];
 						// 	},
 						// },
-						radius: ['40%', '70%'],
-						avoidLabelOverlap: false,
+						radius: [60, 100],
+						center: ['50%', '50%'],
+						// roseType: 'area',
+						// avoidLabelOverlap: false,
 						itemStyle: {
-							borderRadius: 10,
-							borderColor: '#fff',
-							borderWidth: 2
+							borderRadius: 8,
+							// borderColor: '#fff',
+							// borderWidth: 2
 						},
 						label: {
-							show: false,
-							position: 'center'
-						},
-						emphasis: {
-							label: {
 							show: true,
-							fontSize: '40',
-							fontWeight: 'bold'
-							}
+							// position: 'center',
+							formatter: '{b} {d}%'
 						},
-						labelLine: {
-							show: false
-						},
-						data: data,
+						// emphasis: {
+						// 	label: {
+						// 	show: true,
+						// 	fontSize: '40',
+						// 	fontWeight: 'bold'
+						// 	}
+						// },
+						// labelLine: {
+						// 	show: false
+						// },
+						data: state.pieData,
 
 
 					},
@@ -407,136 +547,147 @@ export default defineComponent({
 			(<any>global.homeChartTwo).setOption(option);
 			(<any>state.myCharts).push(global.homeChartTwo);
 		};
-		// 柱状图
-		const initBarChart = () => {
+		// 获取热网总能耗数据
+		const getStatisticsLineChartData = () => {
+			api.statistics.getStatisticsLineChartData({tableNo:16, timeInterval: state.rangeValue}).then((res:any) => {
+				console.log(res)
+				const { calorie, electric, water } = res.Info
+				// calorie：总热耗  electric：总电耗  water：总失水量
+				state.lineType = 'calorie';
+				state.lineName = '总热耗';
+				state.calorieLineData = [];
+				state.calorieXAxisData = [];
+				state.electricLineData = [];
+				state.electricXAxisData = [];
+				state.waterLineData = [];
+				state.waterXAxisData = [];
+				calorie.forEach((i:any) => {
+					console.log(i)
+					state.calorieLineData.push(i.values)
+					state.calorieXAxisData.push(i.accessDay)
+				});
+				electric.forEach((i:any) => {
+					state.electricLineData.push(i.values)
+					state.electricXAxisData.push(i.accessDay)
+				});
+				water.forEach((i:any) => {
+					state.waterLineData.push(i.values)
+					state.waterXAxisData.push(i.accessDay)
+				});
+				state.lineData = state.calorieLineData;
+				state.xAxisData = state.calorieXAxisData;
+				console.log(state.xAxisData)
+				nextTick(() => {
+					initLineChart();
+				});
+
+				// const data = res.Info
+				// // "huanLuNo": "D00140-4", //换热站编号
+				// // "huanLuName": "8#楼高区", //换热站名称
+				// // "inPressure1": 0, //一网供水压力
+				// // "inPressure2": 0, //二网供水压力
+				// // "inTemperature1": 0, //一网供水温度
+				// // "inTemperature2": 0, //二网供水温度
+				// // "outPressure1": 0, //一网回水压力
+				// // "outPressure2": 0, //二网回水压力
+				// // "outTemperature1": 0, //一网回水温度
+				// // "outTemperature2": 0 //二网回水温度
+
+				// // <el-checkbox label="一网供水温度" />
+				// // <el-checkbox label="一网回水温度" />
+				// // <el-checkbox label="二网供回水温差" />
+				// // <el-checkbox label="二网供回水压差" />
+				// // <el-checkbox label="压力值" />
+				// state.statisticsChartXAxisData = [];
+				// state.inPressure1Data = [];
+				// data.forEach((i:object) => {
+				// 	state.statisticsChartXAxisData.push(i.huanLuName);
+				// 	state.inPressure1Data.push(i.inPressure1);
+				// });
+
+				// console.log(state.statisticsChartXAxisData)
+				// nextTick(() => {
+				// 	initBarChart();
+				// });
+
+			});
+		};
+		// 折线图
+		const initLineChart  = () => {
 			if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
-			global.homeCharThree = <any>echarts.init(homeBarRef.value, state.charts.theme);
+			global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
 			const option = {
 				backgroundColor: state.charts.bgColor,
-				title: {
-					text: '供热监测',
-					x: 'left',
-					textStyle: { fontSize: '15', color: state.charts.color },
-				},
 				tooltip: { trigger: 'axis' },
-				legend: { data: ['供温', '回温', '压力值(Mpa)'], right: 0 },
-				grid: { top: 70, right: 80, bottom: 30, left: 80 },
+				legend: { data: [state.lineName], top: 30 },
+				grid: { top: 70, right: 40, bottom: 100, left: 40 },
 				xAxis: [
 					{
 						type: 'category',
-						data: ['1km', '2km', '3km', '4km', '5km', '6km'],
+						data: state.xAxisData,
 						boundaryGap: true,
 						axisTick: { show: false },
 					},
 				],
 				yAxis: [
 					{
-						name: '供回温度(℃）',
-						nameLocation: 'middle',
-						nameTextStyle: { padding: [3, 4, 50, 6] },
-						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
-						axisLine: { show: false },
-						axisTick: { show: false },
-						axisLabel: { color: state.charts.color, formatter: '{value} ' },
-					},
-					{
-						name: '压力值(Mpa)',
-						nameLocation: 'middle',
-						nameTextStyle: { padding: [50, 4, 5, 6] },
-						splitLine: { show: false },
-						axisLine: { show: false },
-						axisTick: { show: false },
-						axisLabel: { color: state.charts.color, formatter: '{value} ' },
-					},
+						type: 'value'
+					}
 				],
 				series: [
 					{
-						name: '供温',
+						name: state.lineName,
 						type: 'line',
 						smooth: true,
 						showSymbol: true,
-						// 矢量画五角星
-						symbol: 'path://M150 0 L80 175 L250 75 L50 75 L220 175 Z',
 						symbolSize: 12,
 						yAxisIndex: 0,
 						areaStyle: {
 							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: 'rgba(250,180,101,0.3)' },
-								{ offset: 1, color: 'rgba(250,180,101,0)' },
+								{ offset: 0, color: 'rgba(22,132,252,0.3)' },
+								{ offset: 1, color: 'rgba(22,132,252,0)' },
 							]),
-							shadowColor: 'rgba(250,180,101,0.2)',
+							shadowColor: 'rgba(22,132,252,0.2)',
 							shadowBlur: 20,
 						},
-						itemStyle: { color: '#FF8000' },
-						// data中可以使用对象，value代表相应的值，另外可加入自定义的属性
-						data: [
-							{ value: 50, stationName: 's1' },
-							{ value: 50, stationName: 's2' },
-							{ value: 60, stationName: 's3' },
-							{ value: 50, stationName: 's4' },
-							{ value: 90, stationName: 's5' },
-							{ value: 35, stationName: 's6' },
-						],
-					},
-					{
-						name: '回温',
-						type: 'line',
-						smooth: true,
-						showSymbol: true,
-						symbol: 'emptyCircle',
-						symbolSize: 12,
-						yAxisIndex: 0,
-						areaStyle: {
-							color: new echarts.graphic.LinearGradient(
-								0,
-								0,
-								0,
-								1,
-								[
-									{ offset: 0, color: 'rgba(199, 237, 250,0.5)' },
-									{ offset: 1, color: 'rgba(199, 237, 250,0.2)' },
-								],
-								false
-							),
-						},
-						itemStyle: {
-							color: '#3bbc86',
-						},
-						data: [
-							{ value: 31, stationName: 's1' },
-							{ value: 36, stationName: 's2' },
-							{ value: 54, stationName: 's3' },
-							{ value: 24, stationName: 's4' },
-							{ value: 73, stationName: 's5' },
-							{ value: 22, stationName: 's6' },
-						],
-					},
-					{
-						name: '压力值(Mpa)',
-						type: 'bar',
-						barWidth: 30,
-						yAxisIndex: 1,
-						itemStyle: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: 'rgba(108,80,243,0.3)' },
-								{ offset: 1, color: 'rgba(108,80,243,0)' },
-							]),
-							//柱状图圆角
-							borderRadius: [30, 30, 0, 0],
-						},
-						data: [
-							{ value: 11, stationName: 's1' },
-							{ value: 34, stationName: 's2' },
-							{ value: 54, stationName: 's3' },
-							{ value: 39, stationName: 's4' },
-							{ value: 63, stationName: 's5' },
-							{ value: 24, stationName: 's6' },
-						],
-					},
+						itemStyle: { color: 'rgba(22, 132, 252, 1)' },
+						data: state.lineData,
+					}
 				],
 			};
 			(<any>global.homeCharThree).setOption(option);
 			(<any>state.myCharts).push(global.homeCharThree);
+		};
+		// 切换折线图类型
+		const changeLineType = (type: string, name: string) => {
+			state.lineType = type;
+			state.lineName = name;
+			console.log(type)
+			console.log(name)
+			let keyWord = type+'LineData'
+			state.lineData = state[keyWord];
+			// if(type=='calorie') {
+			// 	state.lineData = 
+			// }
+			nextTick(() => {
+				initLineChart();
+			});
+		};
+		// 切换饼图类型
+		const changePieType = (type: string, name: string) => {
+			state.pieType = type;
+			console.log(type)
+			// state.lineName = name;
+			// console.log(type)
+			// console.log(name)
+			// let keyWord = type+'LineData'
+			// state.lineData = state[keyWord];
+			// if(type=='calorie') {
+			// 	state.lineData = 
+			// }
+			nextTick(() => {
+				initPieChart();
+			});
 		};
 		// 批量设置 echarts resize
 		const initEchartsResizeFun = () => {
@@ -555,8 +706,12 @@ export default defineComponent({
 		// 页面加载时
 		onMounted(() => {
 			initEchartsResize();
-				// 获取布局配置信息
-				state.isIsDark =  store.state.themeConfig.themeConfig.isIsDark;
+			getStatisticsTotalData();
+			getStatisticsChartData();
+			getStatisticsLineChartData();
+			getStatisticsPieData();
+			// 获取布局配置信息
+			state.isIsDark =  store.state.themeConfig.themeConfig.isIsDark;
 		});
 		// 由于页面缓存原因，keep-alive
 		onActivated(() => {
@@ -589,14 +744,15 @@ export default defineComponent({
 					state.charts.bgColor = isIsDark ? 'transparent' : '';
 					state.charts.color = isIsDark ? '#dadada' : '#303133';
 					setTimeout(() => {
+						initBarChart();
+					}, 1000);
+					setTimeout(() => {
 						initLineChart();
 					}, 500);
 					setTimeout(() => {
 						initPieChart();
 					}, 700);
-					setTimeout(() => {
-						initBarChart();
-					}, 1000);
+					
 				});
 			},
 			{
@@ -608,6 +764,9 @@ export default defineComponent({
 			homeLineRef,
 			homePieRef,
 			homeBarRef,
+			changePieType,
+			getStatisticsLineChartData,
+			changeLineType,
 			...toRefs(state),
 		};
 	},
@@ -785,4 +944,33 @@ $homeNavLengh: 8;
     margin-top: 20px;
   }
 }
+.lable-group,
+.lable-group1 {
+	// background-color: pink;
+	display: flex;
+	width: 100%;
+	margin-top: 20px;
+	border: 1px solid rgba(22, 132, 252, 1);
+	>div {
+		cursor: pointer;
+		width: 33%;
+		text-align: center;
+		padding: 6px 0;
+		
+		color: rgba(22, 132, 252, 1);
+	}
+	div:nth-child(2) {
+		border-left: 1px solid rgba(22, 132, 252, 1);
+		border-right: 1px solid rgba(22, 132, 252, 1);
+	}
+	.active {
+		background-color: rgba(22, 132, 252, 1);
+		color: #fff;
+	}
+
+}
+.lable-group1 > div {
+	width: 50%;
+}
+
 </style>

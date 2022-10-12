@@ -52,5 +52,12 @@ export default {
       getWhichCityWeather: (params: object) => get('/region/weather/getInfoById', params),
       getTemperatureEchartById: (params: object) => get('/region/weather/getTemperatureEchartById', params),
       getWindpowerEchartById: (params: object) => get('/region/weather/getWindpowerEchartById', params),
+   },
+
+   statistics:{
+      getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),
+      getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),
+      getStatisticsTotalData: (params: object) => get('/statistics/city/data', params),
+      getStatisticsPieData: (params: object) => get('/statistics/tempering/ratio/data', params),
    }
 }
