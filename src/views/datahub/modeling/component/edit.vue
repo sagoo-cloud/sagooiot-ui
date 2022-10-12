@@ -32,6 +32,21 @@
 				<el-form-item label="描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
+
+				<el-form-item label="选择字典" prop="busiTypes">
+					<el-select v-model="ruleForm.busiTypes" placeholder="请选择字典" class="w100" >
+						<el-option v-for="item in zidianData" :key="item.key" :label="item.value" :value="item.key" />
+					</el-select>
+				</el-form-item>
+
+				<el-form-item label="选择城市" prop="busiId">
+					<el-cascader :options="cityData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.busiId">
+							<template #default="{ node, data }">
+							<span>{{ data.name }}</span>
+							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+							</template>
+             	 </el-cascader>
+				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -68,6 +83,8 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
+			zidianData:[],
+			cityData:[],
 			unitData: [
 				{
 					label: '秒',
@@ -103,10 +120,23 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
+			api.template.getDictData({DictType:'busi_types'}).then((res: any) => {
+				state.zidianData = res.values;
+			});
+
+
+			api.template.cityTree({status:1}).then((res: any) => {
+				state.cityData = res;
+			});
 
 			if (row) {
 				state.ruleForm = row;
 			}
+
+
+
+		
+
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
@@ -118,6 +148,10 @@ export default defineComponent({
 				desc: '',
 			};
 		};
+
+
+
+
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
