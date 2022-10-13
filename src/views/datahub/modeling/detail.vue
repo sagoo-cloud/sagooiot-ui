@@ -15,20 +15,20 @@
 			<div class="wu-box">
 				<div class="system-user-search mb15">
 					<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="130px">
-						<el-form-item label="字段节点标题" prop="key">
+						<el-form-item label="字段标题" prop="key">
 							<el-input
 								v-model="tableData.param.key"
-								placeholder="请输入字段节点标题"
+								placeholder="请输入字段标题"
 								clearable
 								size="default"
 								style="width: 240px"
 								@keyup.enter.native="typeList"
 							/>
 						</el-form-item>
-						<el-form-item label="字段节点名称" prop="name">
+						<el-form-item label="字段名称" prop="name">
 							<el-input
 								v-model="tableData.param.name"
-								placeholder="请输入字段节点名称"
+								placeholder="请输入字段名称"
 								clearable
 								size="default"
 								style="width: 240px"
@@ -66,21 +66,21 @@
 				</div>
 
 				<el-table :data="tableData.data" style="width: 100%"  v-loading="tableData.loading">
-					<el-table-column label="ID" align="center" prop="id" width="80" />
-					<el-table-column label="字段节点标题" prop="key" :show-overflow-tooltip="true" />
-					<el-table-column label="字段节点名称" prop="name" :show-overflow-tooltip="true" />
-					<el-table-column label="字段节点类型" prop="dataType" :show-overflow-tooltip="true" />
-				
+					<el-table-column label="ID" align="center" prop="id" width="60" />
+					<el-table-column label="字段名称" prop="key" width="120" :show-overflow-tooltip="true" />
+					<el-table-column label="字段标题" prop="name" width="120" :show-overflow-tooltip="true" />
+					<el-table-column label="类型" prop="dataType" width="85" :show-overflow-tooltip="true" />
+
 					<el-table-column label="数据源名称" align="center" >
 						<template #default="scope">
 							<span v-if="scope.row.from==2">{{scope.row.source.name}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="默认值" prop="default" :show-overflow-tooltip="true" />
-					<el-table-column label="备注说明" prop="value" :show-overflow-tooltip="true" />
-					<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
+					<el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" />
+					<el-table-column label="备注说明" prop="value" width="100" :show-overflow-tooltip="true" />
+					<el-table-column prop="createdAt" label="创建时间" align="center" width="160"></el-table-column>
 
-					<el-table-column label="操作" width="200" align="center" fixed="right">
+					<el-table-column label="操作" width="100" align="center" fixed="right">
 						<template #default="scope">
 							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status==0">修改</el-button>
 							<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0">删除</el-button>
@@ -98,7 +98,7 @@
 		</div>
 		<EditDic ref="editDicRef" @typeList="typeList" />
 	</div>
-</template>            
+</template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
