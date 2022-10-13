@@ -426,9 +426,9 @@ export default defineComponent({
 					state.pieData.push({name: i.temperatureRange, value: i.rate, num: i.num});
 				});
 
-				nextTick(() => {
-					initPieChart();
-				});
+				// nextTick(() => {
+				// 	initPieChart();
+				// });
 
 			});
 		};
@@ -571,6 +571,7 @@ export default defineComponent({
 				});
 				state.lineData = state.calorieLineData;
 				state.xAxisData = state.calorieXAxisData;
+				if(state.rangeValue == 10) return
 				nextTick(() => {
 					initLineChart();
 				});
