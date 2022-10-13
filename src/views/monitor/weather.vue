@@ -125,7 +125,7 @@ export default defineComponent({
 			'雨': weather11,
 			'雨加雪': weather12,
 			'阵雨': weather13,
-			'晴天': weather14
+			'晴': weather14
 		});
 		const homeTemLineRef = ref();
 		const homeWindLineRef = ref();
