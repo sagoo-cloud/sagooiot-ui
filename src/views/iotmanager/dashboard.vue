@@ -38,27 +38,27 @@
 			</el-col>
 		</el-row>
 		<el-row :gutter="15" class="home-card-three">
-			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 				<div class="home-card-item">
-					<div class="home-card-item-title">快捷导航工具</div>
-					<div class="home-monitor">
-						<div class="flex-warp">
-							<div class="flex-warp-item" v-for="(v, k) in homeThree" :key="k">
-								<div class="flex-warp-item-box" :class="`home-animation${k}`">
-									<div class="flex-margin">
-										<i :class="v.icon" :style="{ color: v.iconColor }"></i>
-										<span class="pl5">{{ v.label }}</span>
-										<div class="mt10">{{ v.value }}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</el-col>
-			<el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeBarRef"></div>
+					<div class="home-card-item-title">告警信息列表</div>
+					  <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+						<el-table-column prop="date" label="告警时间" align="center" />
+						<el-table-column prop="name" label="告警名称信息" align="center" />
+						<el-table-column prop="site" label="来源" align="center" />
+						<el-table-column prop="road" label="类型" align="center" />
+						<el-table-column prop="status" label="状态" align="center" width="100">
+							<template #default="scope">
+								<el-tag :type="scope.row.status ? 'success' : 'danger'" size="small" class="mr6">{{scope.row.status?'已处理':'未处理'}}</el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" align="center">
+							<template #default="scope">
+								<el-button type="primary" link>处理</el-button>
+								<el-button type="warning" link>查看详情</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 				</div>
 			</el-col>
 		</el-row>
@@ -77,6 +77,7 @@ let global: any = {
 	dispose: [null, '', undefined],
 };
 
+
 export default defineComponent({
 	name: 'home',
 	setup() {
@@ -85,7 +86,56 @@ export default defineComponent({
 		const homeBarRef = ref();
 		const store = useStore();
 		const state = reactive({
+			loading: false,
+			params: {
+				total: 4,
+				pageNum: 1,
+				pageSize: 10
+			},
+			tableData: [
+				{
+					date: '2016-05-03 12:00',
+					name: '设备PC31232上线告警',
+					site: 'xxxxxx设备制造有限公司',
+					road: '主二次',
+					status: 0,
+					address: 'No. 189, Grove St, Los Angeles',
+				},
+				{
+					date: '2016-05-02 09:30',
+					name: '设备PC31232上线告警',
+					site: 'xxxxxx设备制造有限公司',
+					road: 'PC31232回路',
+					status: 1,
+					address: 'No. 189, Grove St, Los Angeles',
+				},
+				{
+					date: '2016-05-04 06:56',
+					name: '设备PC31232上线告警',
+					site: 'xxxxxx设备制造有限公司',
+					road: '主二次',
+					status: 0,
+					address: 'No. 189, Grove St, Los Angeles',
+				},
+				{
+					date: '2016-05-01 15:56',
+					name: '设备PC31232上线告警',
+					site: 'xxxxxx设备制造有限公司',
+					road: '主二次',
+					status: 1,
+					address: 'No. 189, Grove St, Los Angeles',
+				},
+			],
 			homeOne: [
+				{
+					num1: '125,12',
+					num2: '+99',
+					num3: '产品数',
+					num4: 'icon-zidingyibuju',
+					color1: '#6690F9',
+					color2: '--el-color-warning-lighter',
+					color3: '--el-color-warning',
+				},
 				{
 					num1: '125,12',
 					num2: '离线 232',
@@ -113,15 +163,15 @@ export default defineComponent({
 					color2: '--el-color-warning-lighter',
 					color3: '--el-color-warning',
 				},
-				{
-					num1: '520,43',
-					num2: '-10.01',
-					num3: '访问统计信息',
-					num4: 'icon-skin',
-					color1: '#FF6462',
-					color2: '--el-color-danger-lighter',
-					color3: '--el-color-danger',
-				},
+				// {
+				// 	num1: '520,43',
+				// 	num2: '-10.01',
+				// 	num3: '访问统计信息',
+				// 	num4: 'icon-skin',
+				// 	color1: '#FF6462',
+				// 	color2: '--el-color-danger-lighter',
+				// 	color3: '--el-color-danger',
+				// },
 			],
 			homeThree: [
 				{
