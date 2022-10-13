@@ -289,7 +289,6 @@ export default defineComponent({
 		// 获取供热监测数据
 		const getStatisticsChartData = () => {
 			api.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
-				console.log(res)
 				const data = res.Info
 				// "huanLuNo": "D00140-4", //换热站编号
 				// "huanLuName": "8#楼高区", //换热站名称
@@ -316,16 +315,14 @@ export default defineComponent({
 					state.outTemperature1.push(i.outTemperature1);
 				});
 
-				console.log(state.statisticsChartXAxisData)
-				nextTick(() => {
-					initBarChart();
-				});
+				// nextTick(() => {
+				// 	initBarChart();
+				// });
 
 			});
 		};
 		// 柱状图
 		const initBarChart = () => {
-			console.log(323342)
 			if (!global.dispose.some((b: any) => b === global.homeChartOne)) global.homeChartOne.dispose();
 			global.homeChartOne = <any>echarts.init(homeBarRef.value, state.charts.theme);
 			const option = {
@@ -342,7 +339,7 @@ export default defineComponent({
 					top: 35
 				},
 				grid: { top: 80, bottom: 30 },
-				calculable: true,
+				// calculable: true,
 				xAxis: [
 					{ data: state.statisticsChartXAxisData }
 				],
@@ -402,7 +399,6 @@ export default defineComponent({
 		// 获取环路回温占比数据数据
 		const getStatisticsPieData = () => {
 			api.statistics.getStatisticsPieData({tableNo:21}).then((res:any) => {
-				console.log(res)
 				const data = res.Info
 				// "huanLuNo": "D00140-4", //换热站编号
 				// "huanLuName": "8#楼高区", //换热站名称
@@ -430,7 +426,6 @@ export default defineComponent({
 					state.pieData.push({name: i.temperatureRange, value: i.rate, num: i.num});
 				});
 
-				console.log(state.statisticsChartXAxisData)
 				nextTick(() => {
 					initPieChart();
 				});
@@ -550,8 +545,8 @@ export default defineComponent({
 		};
 		// 获取热网总能耗数据
 		const getStatisticsLineChartData = () => {
+			if(!state.rangeValue) return;
 			api.statistics.getStatisticsLineChartData({tableNo:16, timeInterval: state.rangeValue}).then((res:any) => {
-				console.log(res)
 				const { calorie, electric, water } = res.Info
 				// calorie：总热耗  electric：总电耗  water：总失水量
 				state.lineType = 'calorie';
@@ -563,7 +558,6 @@ export default defineComponent({
 				state.waterLineData = [];
 				state.waterXAxisData = [];
 				calorie.forEach((i:any) => {
-					console.log(i)
 					state.calorieLineData.push(i.values)
 					state.calorieXAxisData.push(i.accessDay)
 				});
@@ -577,7 +571,6 @@ export default defineComponent({
 				});
 				state.lineData = state.calorieLineData;
 				state.xAxisData = state.calorieXAxisData;
-				console.log(state.xAxisData)
 				nextTick(() => {
 					initLineChart();
 				});
@@ -663,13 +656,8 @@ export default defineComponent({
 		const changeLineType = (type: string, name: string) => {
 			state.lineType = type;
 			state.lineName = name;
-			console.log(type)
-			console.log(name)
 			let keyWord = type+'LineData'
 			state.lineData = state[keyWord];
-			// if(type=='calorie') {
-			// 	state.lineData = 
-			// }
 			nextTick(() => {
 				initLineChart();
 			});
@@ -677,15 +665,6 @@ export default defineComponent({
 		// 切换饼图类型
 		const changePieType = (type: string, name: string) => {
 			state.pieType = type;
-			console.log(type)
-			// state.lineName = name;
-			// console.log(type)
-			// console.log(name)
-			// let keyWord = type+'LineData'
-			// state.lineData = state[keyWord];
-			// if(type=='calorie') {
-			// 	state.lineData = 
-			// }
 			nextTick(() => {
 				initPieChart();
 			});
@@ -741,18 +720,17 @@ export default defineComponent({
 			() => store.state.themeConfig.themeConfig.isIsDark,
 			(isIsDark) => {
 				nextTick(() => {
+					console.log(isIsDark)
+					// if(!isIsDark) return
 					state.charts.theme = isIsDark ? 'dark' : '';
 					state.charts.bgColor = isIsDark ? 'transparent' : '';
 					state.charts.color = isIsDark ? '#dadada' : '#303133';
 					setTimeout(() => {
-						initBarChart();
-					}, 1000);
-					setTimeout(() => {
 						initLineChart();
-					}, 500);
-					setTimeout(() => {
 						initPieChart();
-					}, 700);
+						initBarChart();
+						
+					}, 1000);
 					
 				});
 			},
