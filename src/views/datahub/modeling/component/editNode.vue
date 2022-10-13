@@ -13,8 +13,8 @@
 					<el-form-item label="数据源" prop="sourceId">
 						<el-select v-model="ruleForm.sourceId" filterable placeholder="请选择数据源" @change="getNodeList">
 							<el-option v-for="item in sourceData" :key="item.sourceId" :label="item.key" :value="item.sourceId">
-								<span style="float: left">{{ item.key }}</span>
-								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+								<span style="float: left">{{ item.name}}</span>
+								<span style="float: right; font-size: 13px">{{ item.key }}</span>
 							</el-option>
 						</el-select>
 					</el-form-item>

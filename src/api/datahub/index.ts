@@ -37,7 +37,10 @@ export default {
       detail: (id: number) => get('/source/template/detail', { id }),
       allList: (params: object) => get('/source/template/list', params), // 获取所有已发布列表
       getdata: (params: object) => get('/source/template/getdata',  params ),
+      getDictData: (params: object) => get('/common/dict/data/getDictData',  params ),
+      cityTree: (params: object) => get('/common/city/tree',  params ),
       copy: (params: object) => post('/source/template/copy', params),
+      
    } ,
 
    tnode:{
