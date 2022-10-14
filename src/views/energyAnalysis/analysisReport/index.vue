@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <el-card shadow="hover">
-			<el-checkbox-group v-model="checkList">
+			<!-- <el-checkbox-group v-model="checkList">
 				<el-checkbox label="一网供水温度" />
 				<el-checkbox label="一网回水温度" />
 				<el-checkbox label="一网供水压力" />
@@ -10,9 +10,9 @@
 				<el-checkbox label="二网回水温度" />
 				<el-checkbox label="二网供水压力" />
 				<el-checkbox label="二网回水压力" />
-			</el-checkbox-group>
+			</el-checkbox-group> -->
 
-			<div style="height: 400px" ref="lineChartRef"></div>
+			<div style="height: 600px" ref="lineChartRef"></div>
 			<!-- <ChartDom :height="400" :option="lineChartOptions"/> -->
     </el-card>
   </div>
@@ -40,7 +40,16 @@ const state = reactive({
 		bgColor: '',
 		color: '#303133',
 	},
-	heatList: []
+	heatList: [],
+	lineChartXAxis: [],
+	inPressure1: [],
+	inPressure2: [],
+	inTemperature1: [],
+	inTemperature2: [],
+	outPressure1: [],
+	outPressure2: [],
+	outTemperature1: [],
+	outTemperature2: [],
 })
 const lineChartRef = ref()
 const checkList = ref([])
@@ -48,7 +57,7 @@ const checkList = ref([])
 
 // 获取供热监测数据
 const getStatisticsChartData = () => {
-	api.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
+	datahubApi.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
 		console.log(res)
 		const data = res.Info
 		// "huanLuNo": "D00140-4", //换热站编号
@@ -61,25 +70,30 @@ const getStatisticsChartData = () => {
 		// "outPressure2": 0, //二网回水压力
 		// "outTemperature1": 0, //一网回水温度
 		// "outTemperature2": 0 //二网回水温度
+		state.inPressure1 = []
+		state.inPressure2 = []
+		state.inTemperature1 = []
+		state.inTemperature2 = []
+		state.outPressure1 = []
+		state.outPressure2 = []
+		state.outTemperature1 = []
+		state.outTemperature2 = []
 
-		// <el-checkbox label="一网供水温度" />
-		// <el-checkbox label="一网回水温度" />
-		// <el-checkbox label="二网供回水温差" />
-		// <el-checkbox label="二网供回水压差" />
-		// <el-checkbox label="压力值" />
-		// state.statisticsChartXAxisData = [];
-		// state.inTemperature1 = [];
-		// state.outTemperature1 = [];
-		// data.forEach((i:object) => {
-		// 	state.statisticsChartXAxisData.push(i.huanLuName);
-		// 	state.inTemperature1.push(i.inTemperature1);
-		// 	state.outTemperature1.push(i.outTemperature1);
-		// });
+		data.forEach((item: any) => {
+			state.lineChartXAxis.push(item.huanLuName);
+			state.inPressure1.push(item.inPressure1);
+			state.inPressure2.push(item.inPressure2);
+			state.inTemperature1.push(item.inTemperature1);
+			state.inTemperature2.push(item.inTemperature2);
+			state.outPressure1.push(item.outPressure1);
+			state.outPressure2.push(item.outPressure2);
+			state.outTemperature1.push(item.outTemperature1);
+			state.outTemperature2.push(item.outTemperature2);
+		});
 
-		// nextTick(() => {
-		// 	initBarChart();
-		// });
-
+		nextTick(() => {
+			initLineChart();
+		});
 	});
 };
 const queryTree = () => {
@@ -101,38 +115,26 @@ const initLineChart = () => {
 		backgroundColor: state.charts.bgColor,
 		grid: { top: 70, right: 20, bottom: 30, left: 30 },
 		tooltip: { trigger: 'axis' },
-		legend: { data: ['一网回水压力', '一网供水压力'] },
+		legend: {},
 		xAxis: {
-			data: ['环路1', '环路2', '环路3', '环路4', '环路5'],
+			data: state.lineChartXAxis,
 		},
 		yAxis: [
 			{
 				type: 'value',
-				name: '条数',
+				name: '',
 				splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 			},
 		],
 		series: [
-			{
-				name: '一网回水压力',
-				type: 'line',
-				symbolSize: 6,
-				symbol: 'circle',
-				smooth: true,
-				data: [41.1, 30.4, 65.1, 53.3, 53.3],
-				lineStyle: { color: '#fe9a8b' },
-				itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' }
-			},
-			{
-				name: '一网供水压力',
-				type: 'line',
-				symbolSize: 6,
-				symbol: 'circle',
-				smooth: true,
-				data: [24.1, 7.2, 15.5, 42.4, 42.4],
-				lineStyle: { color: '#9E87FF' },
-				itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' }
-			}
+			{ name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
+			{ name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
+			{ name: '一网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature1 },
+			{ name: '二网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature2 },
+			{ name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
+			{ name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
+			{ name: '一网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature1 },
+			{ name: '二网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature2 }
 		]
 	};
 	(<any>global.lineChart).setOption(option);
@@ -155,7 +157,7 @@ const initEchartsResize = () => {
 };
 // 页面加载时
 onMounted(() => {
-	queryTree()
+	// queryTree()
 	getStatisticsChartData()
 	initEchartsResize();
 });
@@ -168,9 +170,9 @@ watch(
 			state.charts.theme = isIsDark ? 'dark' : '';
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
-			setTimeout(() => {
-				initLineChart();
-			}, 500);
+			// setTimeout(() => {
+			// 	initLineChart();
+			// }, 500);
 		});
 	},
 	{

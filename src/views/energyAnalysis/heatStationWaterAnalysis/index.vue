@@ -41,10 +41,10 @@
 						</el-select>
           </el-form-item>
           <el-form-item label="时间间隔(秒)" prop="interval">
-            <el-input-number v-model="state.param.interval"></el-input-number>
+            <el-input-number size="default" v-model="state.param.interval"></el-input-number>
           </el-form-item>
           <el-form-item label="流量限值" prop="flow">
-            <el-input-number v-model="state.param.flow"></el-input-number>
+            <el-input-number size="default" v-model="state.param.flow"></el-input-number>
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="initPage">
@@ -76,6 +76,7 @@ import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 import api from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
+import { formatDate } from '/@/utils/formatTime';
 
 let global: any = {
 	barChart: null,
@@ -100,7 +101,12 @@ const state = reactive({
 		interval: '',
 		flow: ''
 	},
-	heatList: []
+	heatList: [],
+	barChartXAxis: [],
+	barChartSeries1: [],
+	barChartSeries2: [],
+	lineChartXAixs: [],
+	lineChartSeries: []
 });
 
 const queryTree = () => {
@@ -115,19 +121,44 @@ const queryTree = () => {
 };
 
 const queryLineChart = () => {
-	api.getEnergyWaterLossLineChart(state.param).then((res: any) => {
+	api.getEnergyHuanluWaterLossLineChart({ TableNo: 24, Interval: '' }).then((res: any) => {
 		console.log(res);
+		let data = res.list || []
+		
+		state.lineChartXAixs = []
+		state.lineChartSeries = []
+		
+		data.forEach((item: any) => {
+			state.lineChartXAixs.push(formatDate(new Date(item.time), 'HH:MM'));
+			state.lineChartSeries.push(item.waterLoss);
+		});
 	});
 };
 const queryChart = () => {
-	api.getEnergyWaterLossList(state.param).then((res: any) => {
+	api.getEnergyHuanluWaterFlowList({ tableNo: 24 }).then((res: any) => {
 		console.log(res);
+		let data = res.Info || []
+		
+		state.barChartXAxis = []
+		state.barChartSeries1 = []
+		state.barChartSeries2 = []
+		
+		data.forEach((item: any) => {
+			state.barChartXAxis.push(item.huanLuName);
+			state.barChartSeries1.push(item.supplyWaterFlow1);
+			state.barChartSeries2.push(item.returnWaterFlow1);
+		});
+
+		nextTick(() => {
+			initBarChart();
+		});
 	});
 };
 // 页面加载时
 onMounted(() => {
 	queryTree()
-	// queryLineChart()
+	queryChart()
+	queryLineChart()
 });
 /** 重置按钮操作 */
 const resetQuery = (formEl: FormInstance | undefined) => {
@@ -140,7 +171,7 @@ const initPage = () => {
 		ElMessage.warning('请选择换热站')
 		return
 	}
-	queryChart()
+	// queryChart()
 	// queryLineChart()
 }
 
@@ -166,7 +197,7 @@ const initBarChart = () => {
 		xAxis: [
 			{
 				type: 'category',
-				data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+				data: state.barChartXAxis
 			}
 		],
 		yAxis: [
@@ -181,7 +212,7 @@ const initBarChart = () => {
 				emphasis: {
 					focus: 'series'
 				},
-				data: [320, 332, 301, 334, 390, 330, 320]
+				data: state.barChartSeries1
 			},
 			{
 				name: '回水流量',
@@ -190,7 +221,7 @@ const initBarChart = () => {
 				emphasis: {
 					focus: 'series'
 				},
-				data: [120, 132, 101, 134, 90, 230, 210]
+				data: state.barChartSeries2
 			}
 		]
 	};
@@ -205,37 +236,25 @@ const initLineChart = () => {
 		backgroundColor: state.charts.bgColor,
 		grid: { top: 70, right: 20, bottom: 30, left: 30 },
 		tooltip: { trigger: 'axis' },
-		legend: { data: ['一网回水压力', '一网供水压力'] },
+		legend: { data: ['失水量'] },
 		xAxis: {
-			data: ['环路1', '环路2', '环路3', '环路4', '环路5'],
+			data: state.lineChartXAixs,
 		},
 		yAxis: [
 			{
 				type: 'value',
-				name: '条数',
+				name: '',
 				splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 			},
 		],
 		series: [
 			{
-				name: '一网回水压力',
+				name: '失水量',
 				type: 'line',
 				symbolSize: 6,
 				symbol: 'circle',
 				smooth: true,
-				data: [41.1, 30.4, 65.1, 53.3, 53.3],
-				lineStyle: { color: '#fe9a8b' },
-				itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' }
-			},
-			{
-				name: '一网供水压力',
-				type: 'line',
-				symbolSize: 6,
-				symbol: 'circle',
-				smooth: true,
-				data: [24.1, 7.2, 15.5, 42.4, 42.4],
-				lineStyle: { color: '#9E87FF' },
-				itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' }
+				data: state.lineChartSeries
 			}
 		]
 	};
@@ -270,10 +289,10 @@ watch(
 			state.charts.theme = isIsDark ? 'transparent' : '';
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
-			// setTimeout(() => {
-				// initBarChart();
-				// initLineChart();
-			// }, 500)
+			setTimeout(() => {
+				initBarChart();
+				initLineChart();
+			}, 500)
 		});
 	},
 	{

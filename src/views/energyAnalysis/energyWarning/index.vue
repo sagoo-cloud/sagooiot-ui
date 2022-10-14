@@ -52,13 +52,20 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" >
-        <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="环路名称" prop="name" />
-	    	<el-table-column label="环路编号" prop="number" />
-	    	<el-table-column label="负责人" prop="number" />
-	    	<el-table-column label="温度" prop="number" />
-	    	<el-table-column label="压力" prop="number" />
+      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
+	    	<el-table-column label="换热站名称" prop="station" />
+	    	<el-table-column label="换热站编号" prop="stationNo" />
+	    	<!-- <el-table-column label="负责人" prop="number" /> -->
+	    	<el-table-column label="温度" prop="alarmT">
+					<template #default="{ row }">
+						{{ row.alarmT == '1' ? '报警' : '不报警' }}
+					</template>
+				</el-table-column>
+	    	<el-table-column label="压力" prop="alarmP">
+					<template #default="{ row }">
+						{{ row.alarmP == '1' ? '报警' : '不报警' }}
+					</template>
+				</el-table-column>
       </el-table>
       <pagination
 				v-show="tableData.total>0"
@@ -74,7 +81,7 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import api from '/@/api/heatingDistrict';
+import api from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 
 export default defineComponent({
@@ -88,11 +95,7 @@ export default defineComponent({
 				total: 0,
 				loading: false,
 				param: {
-					pageNum: 1,
-					pageSize: 10,
-					name: '',
-					heatStaId: '',
-					status: -1
+					code: ''
 				},
 			},
 			heatList: []
@@ -108,9 +111,22 @@ export default defineComponent({
 					state.heatList = res || [];
 				});
 		};
+		
+		const queryList = () => {
+			state.tableData.loading = true
+			api.getEnergyWaterWarnList({ code: 11 })
+				.then((res: any) => {
+					console.log(res);
+					state.tableData.data = res.list || []
+				})
+				.finally(() => {
+					state.tableData.loading = false
+				})
+		};
 		// 页面加载时
 		onMounted(() => {
 			queryTree()
+			queryList()
 		});
 		/** 重置按钮操作 */
 		const resetQuery = (formEl: FormInstance | undefined) => {
