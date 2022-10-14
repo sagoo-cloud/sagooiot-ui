@@ -68,7 +68,7 @@ const onSubmit = async () => {
 			window.location.protocol + '//' + window.location.hostname + '/rule-engine/flow',
 			{
 				label: formData.name,
-				disabled: false,
+				disabled: true,
 				info: '',
 				env: [],
 				nodes: [],

@@ -51,6 +51,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
 import { Session } from '/@/utils/storage';
 import EditForm from './edit.vue';
+import axios from 'axios';
 
 const editFormRef = ref();
 
@@ -67,9 +68,33 @@ const addOrEdit = async (row?: any) => {
 	}
 };
 
-const setStatus = (id: number, status: number) => {
+const setStatus = async (row: any, status: number) => {
+	// 找到所有规则
+	const { data: flows } = await axios.get(window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows?_=' + Date.now(), {
+		headers: {
+			Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+		},
+	});
+
+	const flow = flows.find((item: any) => item.id === row.flowId);
+
+	if (!flow) {
+		ElMessage.error('规则不存在');
+		return;
+	}
+
+	// 改变指定规则状态
+	flow.disabled = status ? true : false;
+
+	// 设置规则状态
+	await axios.post(window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows', flows, {
+		headers: {
+			Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+		},
+	});
+
 	api
-		.setStatus(id, status)
+		.setStatus(row.id, status)
 		.then(() => {
 			ElMessage.success('操作成功');
 			getList();
@@ -80,7 +105,7 @@ const setStatus = (id: number, status: number) => {
 };
 
 const edit = async (row: any) => {
-	localStorage.setItem('auth-tokens',`{"access_token":"${Session.get('token')}"}`);
+	localStorage.setItem('auth-tokens', `{"access_token":"${Session.get('token')}"}`);
 	// const url = window.location.protocol + '//' + window.location.hostname + ':1880/?access_token=' + Session.get('token') + '#flow/' + row.flowId;
 	const url = '/rule-engine/#flow/' + row.flowId;
 	window.open(url);
