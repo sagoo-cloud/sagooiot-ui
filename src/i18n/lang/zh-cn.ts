@@ -1,7 +1,7 @@
 // 定义内容
 export default {
 	router: {
-		home: '数据概览',
+		home: '首页',
 		system: '系统设置',
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',

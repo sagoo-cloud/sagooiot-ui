@@ -38,7 +38,7 @@
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
 				</el-form-item>
-				<el-form-item label="数据模型" prop="dataTemplateIds">
+				<!-- <el-form-item label="数据模型" prop="dataTemplateIds">
 					<el-select v-model="ruleForm.dataTemplateIds" multiple clearable style="width: 100%;" placeholder="请选择">
 						<el-option
 							v-for="item in dataHubList"
@@ -47,7 +47,7 @@
 							:value="item.id">
 						</el-option>
 					</el-select>
-				</el-form-item>
+				</el-form-item> -->
         <el-form-item label="地图展示" prop="decade">
 					<div>
 						<span>经度：{{ ruleForm.lnt ? `${ruleForm.lnt}，` : '' }}</span>
@@ -122,7 +122,7 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: any, tree: any) => {
 			resetForm()
-			queryDataHubList()
+			// queryDataHubList()
 			queryUserList()
 			state.treeData = tree
 
@@ -136,12 +136,12 @@ export default defineComponent({
 			state.dialogVisible = true
 		}
 		
-		const queryDataHubList = () => {
-			datahubApi.template.allList({})
-				.then((res: any) => {
-					state.dataHubList = res.list || [];
-				});
-		};
+		// const queryDataHubList = () => {
+		// 	datahubApi.template.allList({})
+		// 		.then((res: any) => {
+		// 			state.dataHubList = res.list || [];
+		// 		});
+		// };
 		const queryUserList = () => {
 			userApi.user.getAllList({})
 				.then((res: any) => {

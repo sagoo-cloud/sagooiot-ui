@@ -29,13 +29,6 @@
 				</div>
 			</el-col>
 		</el-row>
-		<el-row :gutter="15" class="home-card-two mb15">
-			<el-col >
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeBarRef"></div>
-				</div>
-			</el-col>
-		</el-row>
 		<el-row :gutter="15" class="home-card-three">
 			<el-col :xs="24" :sm="10" :md="14" :lg="16" :xl="16">
 				<div class="home-card-item">
@@ -56,19 +49,6 @@
 						<div @click="changeLineType('water', '总失水量')" :class="lineType == 'water' ? 'active' : ''">总失水量</div>
 					</div>
 					<div style="height: 100%" ref="homeLineRef"></div>
-					<!-- <div class="home-monitor">
-						<div class="flex-warp">
-							<div class="flex-warp-item" v-for="(v, k) in homeThree" :key="k">
-								<div class="flex-warp-item-box" :class="`home-animation${k}`">
-									<div class="flex-margin">
-										<i :class="v.icon" :style="{ color: v.iconColor }"></i>
-										<span class="pl5">{{ v.label }}</span>
-										<div class="mt10">{{ v.value }}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
 				</div>
 			</el-col>
 			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
@@ -89,7 +69,14 @@
 				</div>
 			</el-col> -->
 		</el-row>
-	</div>
+    <el-row :gutter="15" class="home-card-two mb15">
+      <el-col >
+        <div class="home-card-item">
+          <div style="height: 100%" ref="homeBarRef"></div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -97,17 +84,17 @@ import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onA
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 
-import ele from '/@/assets/ele.svg';
-import ele1 from '/@/assets/ele1.svg';
+import ele from '/@/assets/img/ele.svg';
+import ele1 from '/@/assets/img/ele1.svg';
 
-import fire from '/@/assets/fire.svg';
-import fire1 from '/@/assets/fire1.svg';
+import fire from '/@/assets/img/fire.svg';
+import fire1 from '/@/assets/img/fire1.svg';
 
-import map from '/@/assets/map.svg';
-import map1 from '/@/assets/map1.svg';
+import map from '/@/assets/img/map.svg';
+import map1 from '/@/assets/img/map1.svg';
 
-import water from '/@/assets/water.svg';
-import water1 from '/@/assets/water1.svg';
+import water from '/@/assets/img/water.svg';
+import water1 from '/@/assets/img/water1.svg';
 
 
 import api from '/@/api/datahub';
@@ -176,63 +163,7 @@ export default defineComponent({
 					contentTitle2: '总单耗',
 					val2: '',
 					unit2: 'T/㎡',
-					
-				},
-			],
-			homeThree: [
-				{
-					icon: 'iconfont icon-yangan',
-					label: '产品管理',
-					value: '2.1%OBS/M',
-					iconColor: '#F72B3F',
-				},
-				{
-					icon: 'iconfont icon-wendu',
-					label: '设备接入',
-					value: '30℃',
-					iconColor: '#91BFF8',
-				},
-				{
-					icon: 'iconfont icon-shidu',
-					label: '日志查看',
-					value: '57%RH',
-					iconColor: '#88D565',
-				},
-				{
-					icon: 'iconfont icon-shidu',
-					label: '用户管理',
-					value: '107w',
-					iconColor: '#88D565',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警管理',
-					value: '57DB',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警历史',
-					value: '57PV',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警分析',
-					value: '517Cpd',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '转发设置',
-					value: '12kg',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '模拟设备',
-					value: '64fm',
-					iconColor: '#FBD4A0',
+
 				},
 			],
 			myCharts: [],
@@ -285,7 +216,7 @@ export default defineComponent({
 
 			});
 		};
-		
+
 		// 获取供热监测数据
 		const getStatisticsChartData = () => {
 			api.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
@@ -390,7 +321,7 @@ export default defineComponent({
 						}
 					},
 
-					
+
 				]
 			};
 			(<any>global.homeChartOne).setOption(option);
@@ -450,7 +381,7 @@ export default defineComponent({
 				// 	x: 'left',
 				// 	textStyle: { fontSize: '15', color: state.charts.color },
 				// },
-				//  '{b0}: {c0}<br />{b1}: {c1}', 
+				//  '{b0}: {c0}<br />{b1}: {c1}',
 				grid: { top: 80, bottom: 10 },
 				tooltip: { trigger: 'item', formatter: '{b} <br/> {d}% <br/>' },
 				// graphic: {
@@ -730,9 +661,9 @@ export default defineComponent({
 						initLineChart();
 						initPieChart();
 						initBarChart();
-						
+
 					}, 1000);
-					
+
 				});
 			},
 			{
@@ -936,7 +867,7 @@ $homeNavLengh: 8;
 		width: 33%;
 		text-align: center;
 		padding: 6px 0;
-		
+
 		color: rgba(22, 132, 252, 1);
 	}
 	div:nth-child(2) {
