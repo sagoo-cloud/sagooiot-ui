@@ -123,7 +123,7 @@ export default defineComponent({
 				{
 					icon: map,
 					iconDark: map1,
-					title: '供暖面积',
+					title: '供热面积',
 					contentTitle1: '供热面积',
 					val1: '',
 					unit1: '㎡',
