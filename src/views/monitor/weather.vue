@@ -1,14 +1,13 @@
 <template>
 	<div class="monitor-weather">
 		<div class="left">
-			<!-- <el-input v-model="city" placeholder="搜索添加城市" size=“mini></el-input> -->
 			<div class="city-weather-data-overview-wrap">
 				<section class="title">
 					<span>城市</span>
 					<span>风力</span>
 					<span>日照时长</span>
 				</section>
-				<section :class="currentcityId==item.id?'active':''" @click="currentcityId=item.id, currentcityName=item.name" v-for="(item, index) in cityList" :key="index">
+				<section style="cursor: pointer" :class="currentcityId==item.id?'active':''" @click="currentcityId=item.id, currentcityName=item.name" v-for="(item, index) in cityList" :key="index">
 					<span>{{item.name}}</span>
 					<span>{{item.windpower}}</span>
 					<span>{{item.sunshineDuration}}</span>
@@ -99,6 +98,7 @@ import weather11 from '/@/assets/雨.svg';
 import weather12 from '/@/assets/雨加雪.svg';
 import weather13 from '/@/assets/阵雨.svg';
 import weather14 from '/@/assets/晴天.svg';
+import weather15 from '/@/assets/霾.svg';
 
 
 let global: any = {
@@ -125,12 +125,11 @@ export default defineComponent({
 			'雨': weather11,
 			'雨加雪': weather12,
 			'阵雨': weather13,
-			'晴': weather14
+			'晴': weather14,
+			'霾': weather15
 		});
 		const homeTemLineRef = ref();
 		const homeWindLineRef = ref();
-		// const homePieRef = ref();
-		// const homeBarRef = ref();
 		const store = useStore();
 		const state = reactive({
 			city: '',
@@ -164,62 +163,6 @@ export default defineComponent({
 			averageTemWind: [],
 			currentcityId: 0,
 			currentcityName: '',
-			homeThree: [
-				{
-					icon: 'iconfont icon-yangan',
-					label: '产品管理',
-					value: '2.1%OBS/M',
-					iconColor: '#F72B3F',
-				},
-				{
-					icon: 'iconfont icon-wendu',
-					label: '设备接入',
-					value: '30℃',
-					iconColor: '#91BFF8',
-				},
-				{
-					icon: 'iconfont icon-shidu',
-					label: '日志查看',
-					value: '57%RH',
-					iconColor: '#88D565',
-				},
-				{
-					icon: 'iconfont icon-shidu',
-					label: '用户管理',
-					value: '107w',
-					iconColor: '#88D565',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警管理',
-					value: '57DB',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警历史',
-					value: '57PV',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '预警分析',
-					value: '517Cpd',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '转发设置',
-					value: '12kg',
-					iconColor: '#FBD4A0',
-				},
-				{
-					icon: 'iconfont icon-zaosheng',
-					label: '模拟设备',
-					value: '64fm',
-					iconColor: '#FBD4A0',
-				},
-			],
 			myCharts: [],
 			charts: {
 				theme: '',
@@ -234,16 +177,12 @@ export default defineComponent({
 				if(!res.Info.length) return;
 				state.currentcityId = res.Info[0].id;
 				state.currentcityName = res.Info[0].name;
-				// getWhichCityWeather(res.Info[0].id);
-				// getTemperatureEchartById(state.currentcityId);
-				// getWindpowerEchartById(state.currentcityId)
 			});
 		};
 
 		// 根据ID获取指定城市的风力图表
 		const getWindpowerEchartById = (id: number) => {
 			api.weather.getWindpowerEchartById({id: id, types: state.windpowerType}).then((res:any) => {
-				console.log(res);
 				const { AvgInfo, Info } = res;
 				state.xAxisWind = [];
 				state.temWind = [];
@@ -268,7 +207,6 @@ export default defineComponent({
 		// 根据ID获取指定城市的温度图表
 		const getTemperatureEchartById = (id: number) => {
 			api.weather.getTemperatureEchartById({id: id, types: state.temperatureType}).then((res:any) => {
-				console.log(res);
 				const { AvgInfo, Info } = res;
 				state.xAxis = [];
 				state.tem = [];
@@ -306,7 +244,7 @@ export default defineComponent({
 				backgroundColor: state.charts.bgColor,
 				grid: { top: 70, right: 40, bottom: 30, left: 40 },
 				tooltip: { trigger: 'axis' },
-				legend: { data: ['气温（℃）', '当日平均（℃）'], right: 0 },
+				legend: { data: ['气温（℃）', '当日平均（℃）'], left: '40%' },
 				xAxis: {
 					data: state.xAxis
 				},
@@ -343,7 +281,6 @@ export default defineComponent({
 						symbolSize: 6,
 						symbol: 'circle',
 						smooth: true,
-						// data: [0, 24.1, 7.2, 15.5, 42.4, 42.4, 42.4, 24.1, 7.2, 15.5, 42.4, 0],
 						data: state.averageTem,
 						lineStyle: { color: '#9E87FF' },
 						itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
@@ -387,7 +324,7 @@ export default defineComponent({
 				backgroundColor: state.charts.bgColor,
 				grid: { top: 70, right: 40, bottom: 30, left: 40 },
 				tooltip: { trigger: 'axis' },
-				legend: { data: ['风力（级）', '当日风力（级）'], left: 0 },
+				legend: { data: ['风力（级）', '当日风力（级）'], left: '40%' },
 				xAxis: {
 					data: state.xAxisWind
 				},
@@ -543,11 +480,8 @@ $homeNavLengh: 8;
 	.left {
 		width: 384px;
 		height: 500px;
-
-		// background-color: pink;
 		.city-weather-data-overview-wrap {
 			border: 1px solid #F2F2F2;
-			// margin-top: 45px;
 			section.title {
 				font-size: 18px;
 				font-weight: bold;
@@ -559,9 +493,6 @@ $homeNavLengh: 8;
 				span {
 					display: inline-block;
 					width: 33%;
-					// height: 60px;
-				// line-height: 60px;
-					// padding: 20px 0;
 					text-align: center;
 				}
 				span:nth-child(2) {
@@ -585,9 +516,7 @@ $homeNavLengh: 8;
 		height: 100%;
 		margin-left: 47px;
 		.weather-info {
-			// width: 100%;
 			padding: 15px 30px 15px 30px;
-			// background-color: pink;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
 			border: 1px solid var(--next-border-color-light);
@@ -612,7 +541,7 @@ $homeNavLengh: 8;
 					width: 24px;
 				}
 				.sunset-sunrise {
-					margin: 0 38px 0 47px;
+					margin: 0 8px 0 47px;
 				}
 				.sunset {
 					margin-right: 40px;
@@ -620,7 +549,6 @@ $homeNavLengh: 8;
 			}
 		}
 	}
-	// .home-card-one,
 	.home-card-two,
 	.home-card-three {
 		.home-card-item,.home-card-top {
@@ -653,72 +581,72 @@ $homeNavLengh: 8;
 			}
 		}
 	}
-	.home-card-one {
-		@for $i from 0 through 3 {
-			.home-one-animation#{$i} {
-				opacity: 0;
-				animation-name: error-num;
-				animation-duration: 0.5s;
-				animation-fill-mode: forwards;
-				animation-delay: calc($i/10) + s;
-			}
-		}
-	}
+	// .home-card-one {
+	// 	@for $i from 0 through 3 {
+	// 		.home-one-animation#{$i} {
+	// 			opacity: 0;
+	// 			animation-name: error-num;
+	// 			animation-duration: 0.5s;
+	// 			animation-fill-mode: forwards;
+	// 			animation-delay: calc($i/10) + s;
+	// 		}
+	// 	}
+	// }
 	.home-card-item-title {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	.home-card-one .home-card-item {
-			width: 100%;
-			border-radius: 4px;
-			transition: all ease 0.3s;
-			overflow: hidden;
-			background: var(--el-color-white);
-			color: var(--el-text-color-primary);
-			border: 1px solid var(--next-border-color-light);
-			&:hover {
-				box-shadow: 0 2px 12px var(--next-color-dark-hover);
-				transition: all ease 0.3s;
-			}
-			.item-header {
-				display: flex;
-				justify-content: center;
-				align-content: center;
-				color: #101010;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--next-border-color-light);
-				font-size: 20px;
-				font-weight: bold;
-				img {
-					margin-right: 32px;
-					width: 24px;
-					height: 24px;;
-					margin-top: 3px;
-				}
-			}
-			.item-content {
-				padding: 26px;
-				p {
-					display: flex;
-					justify-content: space-between;
-					align-content: center;
-					span:nth-child(1) {
-						// padding-top: 4px;
-						line-height: 33px;;
-						font-size: 14px;
-					}
-					span:nth-child(2) {
-						color: #101010;
-						font-weight: bold;
-						font-size: 22px;
-					}
-				}
-				p:nth-child(2) {
-					margin-top: 26px;
-				}
-			}
-	}
+	// .home-card-one .home-card-item {
+	// 		width: 100%;
+	// 		border-radius: 4px;
+	// 		transition: all ease 0.3s;
+	// 		overflow: hidden;
+	// 		background: var(--el-color-white);
+	// 		color: var(--el-text-color-primary);
+	// 		border: 1px solid var(--next-border-color-light);
+	// 		&:hover {
+	// 			box-shadow: 0 2px 12px var(--next-color-dark-hover);
+	// 			transition: all ease 0.3s;
+	// 		}
+	// 		.item-header {
+	// 			display: flex;
+	// 			justify-content: center;
+	// 			align-content: center;
+	// 			color: #101010;
+	// 			padding: 10px 0;
+	// 			border-bottom: 1px solid var(--next-border-color-light);
+	// 			font-size: 20px;
+	// 			font-weight: bold;
+	// 			img {
+	// 				margin-right: 32px;
+	// 				width: 24px;
+	// 				height: 24px;;
+	// 				margin-top: 3px;
+	// 			}
+	// 		}
+	// 		.item-content {
+	// 			padding: 26px;
+	// 			p {
+	// 				display: flex;
+	// 				justify-content: space-between;
+	// 				align-content: center;
+	// 				span:nth-child(1) {
+	// 					// padding-top: 4px;
+	// 					line-height: 33px;;
+	// 					font-size: 14px;
+	// 				}
+	// 				span:nth-child(2) {
+	// 					color: #101010;
+	// 					font-weight: bold;
+	// 					font-size: 22px;
+	// 				}
+	// 			}
+	// 			p:nth-child(2) {
+	// 				margin-top: 26px;
+	// 			}
+	// 		}
+	// }
 
 	.home-card-two,
 	.home-card-three {
