@@ -53,12 +53,11 @@ export default {
    },
   
    weather:{
-      getCityWeatherList: () => get('/region/weather/cityWeatherList'),
-      getWhichCityWeather: (params: object) => get('/region/weather/getInfoById', params),
-      getTemperatureEchartById: (params: object) => get('/region/weather/getTemperatureEchartById', params),
-      getWindpowerEchartById: (params: object) => get('/region/weather/getWindpowerEchartById', params),
+      getCityWeatherList: () => get('/envirotronics/weather/cityWeatherList'),
+      getWhichCityWeather: (params: object) => get('/envirotronics/weather/getInfoById', params),
+      getTemperatureEchartById: (params: object) => get('/envirotronics/weather/getTemperatureEchartById', params),
+      getWindpowerEchartById: (params: object) => get('/envirotronics/weather/getWindpowerEchartById', params),
    },
-
    statistics:{
       getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),
       getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),

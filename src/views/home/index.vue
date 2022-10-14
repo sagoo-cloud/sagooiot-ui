@@ -106,8 +106,6 @@ let global: any = {
 	dispose: [null, '', undefined],
 };
 
-
-
 export default defineComponent({
 	name: 'home',
 	setup() {
@@ -123,7 +121,7 @@ export default defineComponent({
 				{
 					icon: map,
 					iconDark: map1,
-					title: '供暖面积',
+					title: '供热面积',
 					contentTitle1: '供热面积',
 					val1: '',
 					unit1: '㎡',
@@ -654,7 +652,7 @@ export default defineComponent({
 				nextTick(() => {
 					console.log(isIsDark)
 					// if(!isIsDark) return
-					state.charts.theme = isIsDark ? 'dark' : '';
+					state.charts.theme = isIsDark ? 'transparent' : '';
 					state.charts.bgColor = isIsDark ? 'transparent' : '';
 					state.charts.color = isIsDark ? '#dadada' : '#303133';
 					setTimeout(() => {
