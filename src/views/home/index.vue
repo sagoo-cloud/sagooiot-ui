@@ -723,7 +723,7 @@ export default defineComponent({
 				nextTick(() => {
 					console.log(isIsDark)
 					// if(!isIsDark) return
-					state.charts.theme = isIsDark ? 'dark' : '';
+					state.charts.theme = isIsDark ? 'transparent' : '';
 					state.charts.bgColor = isIsDark ? 'transparent' : '';
 					state.charts.color = isIsDark ? '#dadada' : '#303133';
 					setTimeout(() => {
