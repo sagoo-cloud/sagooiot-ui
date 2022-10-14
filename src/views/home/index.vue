@@ -84,17 +84,17 @@ import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onA
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 
-import ele from '/@/assets/ele.svg';
-import ele1 from '/@/assets/ele1.svg';
+import ele from '/@/assets/img/ele.svg';
+import ele1 from '/@/assets/img/ele1.svg';
 
-import fire from '/@/assets/fire.svg';
-import fire1 from '/@/assets/fire1.svg';
+import fire from '/@/assets/img/fire.svg';
+import fire1 from '/@/assets/img/fire1.svg';
 
-import map from '/@/assets/map.svg';
-import map1 from '/@/assets/map1.svg';
+import map from '/@/assets/img/map.svg';
+import map1 from '/@/assets/img/map1.svg';
 
-import water from '/@/assets/water.svg';
-import water1 from '/@/assets/water1.svg';
+import water from '/@/assets/img/water.svg';
+import water1 from '/@/assets/img/water1.svg';
 
 
 import api from '/@/api/datahub';
