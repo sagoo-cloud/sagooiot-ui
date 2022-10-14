@@ -255,10 +255,10 @@ export default defineComponent({
 	display: flex;
 }
 .cont_box .title {
-	font-size: 24px;
+	font-size: 18px;
 }
 .cont_box .pro-status {
-	line-height: 40px;
+	line-height: 30px;
 	margin-left: 30px;
 }
 .cont_box .pro-status .on {
@@ -278,7 +278,7 @@ export default defineComponent({
 	margin-right: 5px;
 }
 .cont_box .pro-option {
-	line-height: 40px;
+	line-height: 30px;
 	margin-left: 10px;
 	color: #1890ff;
 	cursor: pointer;

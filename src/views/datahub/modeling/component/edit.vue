@@ -107,7 +107,8 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-
+				busiTypes:0,
+				busiId:0,
 				desc: '',
 			},
 			rules: {
@@ -122,6 +123,7 @@ export default defineComponent({
 			resetForm();
 			api.template.getDictData({DictType:'busi_types'}).then((res: any) => {
 				state.zidianData = res.values;
+				
 			});
 
 
@@ -131,6 +133,8 @@ export default defineComponent({
 
 			if (row) {
 				state.ruleForm = row;
+				state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes;
+				state.ruleForm.busiId=row.dataTemplateBusi.busiId;
 			}
 
 
@@ -144,7 +148,8 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-
+				busiTypes:0,
+				busiId:0,
 				desc: '',
 			};
 		};
