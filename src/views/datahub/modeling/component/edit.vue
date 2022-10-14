@@ -68,6 +68,7 @@ interface RuleFormState {
 	name: string;
 	interval: string;
 	key: string;
+	busiTypes: string;
 	desc: string;
 }
 interface DicState {
@@ -133,7 +134,7 @@ export default defineComponent({
 
 			if (row) {
 				state.ruleForm = row;
-				state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes;
+				state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes.toString();
 				state.ruleForm.busiId=row.dataTemplateBusi.busiId;
 			}
 
