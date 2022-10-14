@@ -106,8 +106,6 @@ let global: any = {
 	dispose: [null, '', undefined],
 };
 
-
-
 export default defineComponent({
 	name: 'home',
 	setup() {
