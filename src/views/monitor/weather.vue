@@ -24,13 +24,13 @@
 							<img :src="weatherObj[oneCityInfo.weather]" alt="">
 							<span class="weather">{{oneCityInfo.weather}}</span>
 							<span>{{oneCityInfo.reporttime}}更新</span>
-							
+
 						</section>
 						<section>
 							<span style="margin-right: 20px;">地点：{{currentcityName}}</span>
-							<img src="../../assets/windPowerIcon.png" alt="">
+							<img src="../../assets/img/windPowerIcon.svg" alt="">
 							<span>风力: {{oneCityInfo.winddirection+oneCityInfo.windpower}}</span>
-							<img class="sunset-sunrise" src="../../assets/sunset.png" alt="">
+							<img class="sunset-sunrise" src="../../assets/img/sunset.svg" alt="">
 							<span class="sunset">日出时间: {{oneCityInfo.sunrise}}</span>
 							<span>日落时间: {{oneCityInfo.sunset}}</span>
 						</section>
@@ -125,7 +125,7 @@ export default defineComponent({
 			'雨': weather11,
 			'雨加雪': weather12,
 			'阵雨': weather13,
-			'晴天': weather14
+			'晴': weather14
 		});
 		const homeTemLineRef = ref();
 		const homeWindLineRef = ref();
@@ -301,7 +301,7 @@ export default defineComponent({
 		const initTemLineChart = () => {
 			if (!global.dispose.some((b: any) => b === global.homeChartOne)) global.homeChartOne.dispose();
 			global.homeChartOne = <any>echarts.init(homeTemLineRef.value, state.charts.theme);
-			
+
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				grid: { top: 70, right: 40, bottom: 30, left: 40 },
@@ -555,7 +555,7 @@ $homeNavLengh: 8;
 			}
 			section {
 				padding: 20px 0;
-				
+
 				span {
 					display: inline-block;
 					width: 33%;
