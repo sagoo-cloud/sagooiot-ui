@@ -57,6 +57,11 @@ const editFormRef = ref();
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { types: 0 });
 
+const headers = {
+	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+};
+const flowsUrl = window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows';
+
 getList();
 
 const addOrEdit = async (row?: any) => {
@@ -70,11 +75,7 @@ const addOrEdit = async (row?: any) => {
 
 const setStatus = async (row: any, status: number) => {
 	// 找到所有规则
-	const { data: flows } = await axios.get(window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows?_=' + Date.now(), {
-		headers: {
-			Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
-		},
-	});
+	const { data: flows } = await axios.get(flowsUrl, { headers });
 
 	const flow = flows.find((item: any) => item.id === row.flowId);
 
@@ -87,11 +88,7 @@ const setStatus = async (row: any, status: number) => {
 	flow.disabled = status ? true : false;
 
 	// 设置规则状态
-	await axios.post(window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows', flows, {
-		headers: {
-			Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
-		},
-	});
+	await axios.post(flowsUrl, flows, { headers });
 
 	api
 		.setStatus(row.id, status)
