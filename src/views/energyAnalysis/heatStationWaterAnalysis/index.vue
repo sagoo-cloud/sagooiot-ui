@@ -2,8 +2,8 @@
   <div class="system-dic-container">
     <el-card shadow="hover">
       <div class="system-user-search mb15">
-        <el-form :model="searchParams" ref="queryRef" :inline="true" label-width="120px">
-          <el-form-item label="环路名称" prop="plotId">
+        <el-form :model="state.param" ref="queryRef" :inline="true" label-width="120px">
+          <!-- <el-form-item label="环路名称" prop="plotId">
             <el-select v-model="searchParams.plotId" placeholder="选择环路名称" filterable clearable size="default">
 							<el-option
 								v-for="item in []"
@@ -12,10 +12,10 @@
 								:value="item.id">
 							</el-option>
 						</el-select>
-          </el-form-item>
-					<el-form-item label="所属换热站" prop="heatStaId">
+          </el-form-item> -->
+					<el-form-item label="所属换热站" prop="stationId">
 						<el-tree-select
-							v-model="searchParams.heatStaId"
+							v-model="state.param.stationId"
 							:data="state.heatList"
 							:props="{
 								label: 'name',
@@ -30,8 +30,8 @@
 							:render-after-expand="true"
 						/>
 					</el-form-item>
-          <el-form-item label="负责人" prop="plotId">
-            <el-select v-model="searchParams.plotId" placeholder="选择负责人" filterable clearable size="default">
+          <el-form-item label="负责人" prop="principal">
+            <el-select v-model="state.param.principal" placeholder="选择负责人" filterable clearable size="default">
 							<el-option
 								v-for="item in []"
 								:key="item.id"
@@ -40,31 +40,25 @@
 							</el-option>
 						</el-select>
           </el-form-item>
-          <el-form-item label="时间间隔(秒)" prop="plotId">
-            <el-input-number v-model="searchParams.xx"></el-input-number>
+          <el-form-item label="时间间隔(秒)" prop="interval">
+            <el-input-number v-model="state.param.interval"></el-input-number>
           </el-form-item>
-          <el-form-item label="流量限值" prop="plotId">
-            <el-input-number v-model="searchParams.xx"></el-input-number>
+          <el-form-item label="流量限值" prop="flow">
+            <el-input-number v-model="state.param.flow"></el-input-number>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" type="primary" class="ml10" @click="initPage">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <!-- <el-button size="default" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              导入
-            </el-button>
+            </el-button> -->
           </el-form-item>
         </el-form>
       </div>
@@ -80,7 +74,7 @@ import { toRefs, reactive, onMounted, ref, watch, nextTick } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
-import api from '/@/api/heatingDistrict';
+import api from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 
 let global: any = {
@@ -92,9 +86,6 @@ let global: any = {
 const queryRef = ref();
 const barChartRef = ref();
 const lineChartRef = ref();
-const searchParams = ref({
-
-})
 const store = useStore();
 const state = reactive({
 	myCharts: [],
@@ -103,23 +94,40 @@ const state = reactive({
 		bgColor: '',
 		color: '#303133',
 	},
-	
+	param: {
+		stationId: '',
+		principal: '',
+		interval: '',
+		flow: ''
+	},
 	heatList: []
 });
 
 const queryTree = () => {
 	heatApi.heatStation.getList({
-			name: '',
-			code: '',
-			status: -1
-		})
-		.then((res: any) => {
-			state.heatList = res || [];
-		});
+		name: '',
+		code: '',
+		status: -1
+	})
+	.then((res: any) => {
+		state.heatList = res || [];
+	});
+};
+
+const queryLineChart = () => {
+	api.getEnergyWaterLossLineChart(state.param).then((res: any) => {
+		console.log(res);
+	});
+};
+const queryChart = () => {
+	api.getEnergyWaterLossList(state.param).then((res: any) => {
+		console.log(res);
+	});
 };
 // 页面加载时
 onMounted(() => {
 	queryTree()
+	// queryLineChart()
 });
 /** 重置按钮操作 */
 const resetQuery = (formEl: FormInstance | undefined) => {
@@ -127,6 +135,14 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 	formEl.resetFields();
 	// queryList();
 };
+const initPage = () => {
+	if (!state.param.stationId) {
+		ElMessage.warning('请选择换热站')
+		return
+	}
+	queryChart()
+	// queryLineChart()
+}
 
 
 // 初始化图表
@@ -254,10 +270,10 @@ watch(
 			state.charts.theme = isIsDark ? 'transparent' : '';
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
-			setTimeout(() => {
-				initBarChart();
-				initLineChart();
-			}, 500)
+			// setTimeout(() => {
+				// initBarChart();
+				// initLineChart();
+			// }, 500)
 		});
 	},
 	{

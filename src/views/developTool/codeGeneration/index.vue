@@ -29,11 +29,11 @@
       <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="tableId" width="60" />
-	    	<el-table-column label="表名称" prop="tableName" :show-overflow-tooltip="true" />
-	    	<el-table-column label="表描述" prop="tableComment" :show-overflow-tooltip="true" />
-	    	<el-table-column label="模型名称" prop="className" :show-overflow-tooltip="true" />
-	    	<el-table-column label="创建时间" prop="createTime" min-width="100"/>
-	    	<el-table-column label="更新时间" prop="updateTime" min-width="100"/>
+	    	<el-table-column label="表名称" prop="tableName" min-width="120" :show-overflow-tooltip="true" />
+	    	<el-table-column label="表描述" prop="tableComment" min-width="120" :show-overflow-tooltip="true" />
+	    	<el-table-column label="模型名称" prop="className" min-width="120" :show-overflow-tooltip="true" />
+	    	<el-table-column label="创建时间" prop="createTime" width="180"/>
+	    	<el-table-column label="更新时间" prop="updateTime" width="180"/>
 				<el-table-column label="操作" width="280" align="center" fixed="right">
           <template #default="scope">
 			 			<el-button size="small" text type="primary" @click="operate('preview', scope.row)">预览</el-button>

@@ -23,7 +23,9 @@ import { ref, reactive, watch, nextTick, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import api from '/@/api/heatingDistrict';
+import api from '/@/api/energyAnalysis';
+import heatApi from '/@/api/heatStation';
+import datahubApi from '/@/api/datahub';
 
 let global: any = {
 	lineChart: null,
@@ -38,9 +40,58 @@ const state = reactive({
 		bgColor: '',
 		color: '#303133',
 	},
+	heatList: []
 })
 const lineChartRef = ref()
 const checkList = ref([])
+
+
+// 获取供热监测数据
+const getStatisticsChartData = () => {
+	api.statistics.getStatisticsChartData({tableNo:17}).then((res:any) => {
+		console.log(res)
+		const data = res.Info
+		// "huanLuNo": "D00140-4", //换热站编号
+		// "huanLuName": "8#楼高区", //换热站名称
+		// "inPressure1": 0, //一网供水压力
+		// "inPressure2": 0, //二网供水压力
+		// "inTemperature1": 0, //一网供水温度
+		// "inTemperature2": 0, //二网供水温度
+		// "outPressure1": 0, //一网回水压力
+		// "outPressure2": 0, //二网回水压力
+		// "outTemperature1": 0, //一网回水温度
+		// "outTemperature2": 0 //二网回水温度
+
+		// <el-checkbox label="一网供水温度" />
+		// <el-checkbox label="一网回水温度" />
+		// <el-checkbox label="二网供回水温差" />
+		// <el-checkbox label="二网供回水压差" />
+		// <el-checkbox label="压力值" />
+		// state.statisticsChartXAxisData = [];
+		// state.inTemperature1 = [];
+		// state.outTemperature1 = [];
+		// data.forEach((i:object) => {
+		// 	state.statisticsChartXAxisData.push(i.huanLuName);
+		// 	state.inTemperature1.push(i.inTemperature1);
+		// 	state.outTemperature1.push(i.outTemperature1);
+		// });
+
+		// nextTick(() => {
+		// 	initBarChart();
+		// });
+
+	});
+};
+const queryTree = () => {
+	heatApi.heatStation.getList({
+		name: '',
+		code: '',
+		status: -1
+	})
+	.then((res: any) => {
+		state.heatList = res || [];
+	});
+};
 
 // 初始化图标
 const initLineChart = () => {
@@ -104,6 +155,8 @@ const initEchartsResize = () => {
 };
 // 页面加载时
 onMounted(() => {
+	queryTree()
+	getStatisticsChartData()
 	initEchartsResize();
 });
 
