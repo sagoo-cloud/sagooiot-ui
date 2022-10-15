@@ -108,7 +108,20 @@ const edit = async (row: any) => {
 	window.open(url);
 };
 
-const onDel = (row: any) => {
+const onDel = async (row: any) => {
+	// 找到所有规则
+	const { data: flows } = await axios.get(flowsUrl, { headers });
+
+	const flowIndex = flows.findIndex((item: any) => item.id === row.flowId);
+
+	if (!flowIndex) {
+		ElMessage.error('规则不存在');
+		return;
+	}
+
+	// 删除指定规则
+	flows.splice(flowIndex, 1);
+
 	ElMessageBox.confirm(`此操作将删除：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
