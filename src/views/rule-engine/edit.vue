@@ -43,7 +43,9 @@ const props = defineProps({
 const headers = {
 	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
 };
-const flowsUrl = window.location.protocol + '//' + window.location.hostname + '/rule-engine/flow';
+const flowsUrl = window.location.origin + '/rule-engine/flow';
+// const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flow';
+
 
 const showDialog = ref(false);
 const formRef = ref();

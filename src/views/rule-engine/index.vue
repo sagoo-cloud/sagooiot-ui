@@ -60,7 +60,9 @@ const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'D
 const headers = {
 	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
 };
-const flowsUrl = window.location.protocol + '//' + window.location.hostname + '/rule-engine/flows';
+
+const flowsUrl = window.location.origin + '/rule-engine/flows';
+// const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flows';
 
 getList();
 
