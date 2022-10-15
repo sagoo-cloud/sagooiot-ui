@@ -85,7 +85,7 @@ const setStatus = async (row: any, status: number) => {
 	}
 
 	// 改变指定规则状态
-	flow.disabled = status ? true : false;
+	flow.disabled = status ? false : true;
 
 	// 设置规则状态
 	await axios.post(flowsUrl, flows, { headers });
