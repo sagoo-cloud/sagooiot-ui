@@ -108,28 +108,37 @@ const edit = async (row: any) => {
 	window.open(url);
 };
 
-const onDel = async (row: any) => {
-	// 找到所有规则
-	const { data: flows } = await axios.get(flowsUrl, { headers });
-
-	const flowIndex = flows.findIndex((item: any) => item.id === row.flowId);
-
-	if (!flowIndex) {
-		ElMessage.error('规则不存在');
-		return;
-	}
-
-	// 删除指定规则
-	flows.splice(flowIndex, 1);
-
-	// 设置规则状态
-	await axios.post(flowsUrl, flows, { headers });
-
+const onDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将删除：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
+		// 找到所有规则
+		const { data: flows } = await axios.get(flowsUrl, { headers });
+
+		const flowIndex = flows.findIndex((item: any) => item.id === row.flowId);
+
+		if (flowIndex === -1) {
+			ElMessage.error('规则不存在');
+			return;
+		}
+
+		// 删除指定规则
+		flows.splice(flowIndex, 1);
+
+		// 删除当前规则下的各个节点信息
+		const newFlows = flows.filter((item: any) => {
+			if (item.z === row.flowId) {
+				return false;
+			} else {
+				return true;
+			}
+		});
+
+		// 设置规则状态
+		await axios.post(flowsUrl, newFlows, { headers });
+
 		await api.del([row.id as string]);
 		ElMessage.success('删除成功');
 		getList();
