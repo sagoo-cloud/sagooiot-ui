@@ -121,6 +121,9 @@ const onDel = async (row: any) => {
 
 	// 删除指定规则
 	flows.splice(flowIndex, 1);
+	
+	// 设置规则状态
+	await axios.post(flowsUrl, flows, { headers });
 
 	ElMessageBox.confirm(`此操作将删除：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
