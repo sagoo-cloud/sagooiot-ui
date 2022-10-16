@@ -29,7 +29,7 @@ import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/rule';
 import axios from 'axios';
 import { ruleRequired } from '/@/utils/validator';
-import {  ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['getList']);
 
@@ -39,6 +39,13 @@ const props = defineProps({
 		default: 0, // 规则编排是0 数据转发是1
 	},
 });
+
+const headers = {
+	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+};
+const flowsUrl = window.location.origin + '/rule-engine/flow';
+// const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flow';
+
 
 const showDialog = ref(false);
 const formRef = ref();
@@ -65,21 +72,34 @@ const onSubmit = async () => {
 
 	if (!formData.id) {
 		const { data } = await axios.post(
-			window.location.protocol + '//' + window.location.hostname + '/rule-engine/flow',
+			flowsUrl,
 			{
 				label: formData.name,
-				disabled: false,
+				disabled: true,
 				info: '',
 				env: [],
 				nodes: [],
 			},
 			{
-				headers: {
-					Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
-				},
+				headers,
 			}
 		);
 		formData.flowId = data.id;
+	} else {
+		// 找到所有规则
+		const { data: flows } = await axios.get(flowsUrl + 's', { headers });
+
+		const flow = flows.find((item: any) => item.id === formData.flowId);
+
+		if (!flow) {
+			ElMessage.error('规则不存在');
+			return;
+		}
+
+		flow.label = formData.name;
+
+		// 设置规则状态
+		await axios.post(flowsUrl + 's', flows, { headers });
 	}
 
 	const theApi = formData.id ? api.edit : api.add;
