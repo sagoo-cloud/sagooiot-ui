@@ -41,7 +41,7 @@
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 				<div class="home-card-item">
 					<div class="home-card-item-title">告警信息列表</div>
-					  <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+					  <el-table :data="tableData" style="width: 100%" v-loading="loading">
 						<el-table-column prop="date" label="告警时间" align="center" />
 						<el-table-column prop="name" label="告警名称信息" align="center" />
 						<el-table-column prop="site" label="来源" align="center" />
@@ -53,8 +53,8 @@
 						</el-table-column>
 						<el-table-column label="操作" align="center">
 							<template #default="scope">
-								<el-button type="primary" link>处理</el-button>
-								<el-button type="warning" link>查看详情</el-button>
+								<el-button size="small" type="primary" link>处理</el-button>
+								<el-button size="small" type="warning" link>查看详情</el-button>
 							</template>
 						</el-table-column>
 					</el-table>

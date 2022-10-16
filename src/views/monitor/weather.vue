@@ -541,7 +541,7 @@ $homeNavLengh: 8;
 					width: 24px;
 				}
 				.sunset-sunrise {
-					margin: 0 8px 0 47px;
+					margin: 0 8xpx 0 47px;
 				}
 				.sunset {
 					margin-right: 40px;
