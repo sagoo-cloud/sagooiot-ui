@@ -22,8 +22,7 @@ export default defineComponent({
 	name: 'app',
 	components: { LockScreen, Setings, CloseFull },
 	created() {
-		api.sysinfo().then((res) => {
-			console.log(res);
+		api.sysinfo().then((res: any) => {
 			localStorage.setItem('sysinfo', JSON.stringify(res));
 		});
 	},
