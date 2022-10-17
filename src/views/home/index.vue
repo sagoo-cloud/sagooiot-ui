@@ -29,7 +29,7 @@
 				</div>
 			</el-col>
 		</el-row>
-		<el-row :gutter="15" class="home-card-three">
+		<el-row :gutter="15" class="home-card-two mb15">
 			<el-col :xs="24" :sm="10" :md="14" :lg="16" :xl="16">
 				<div class="home-card-item">
 					<div class="home-card-item-title" style="display: flex;justify-content:space-between;">
@@ -69,7 +69,7 @@
 				</div>
 			</el-col> -->
 		</el-row>
-    <el-row :gutter="15" class="home-card-two mb15">
+    <el-row :gutter="15" class="home-card-three">
       <el-col >
         <div class="home-card-item">
           <div style="height: 100%" ref="homeBarRef"></div>
