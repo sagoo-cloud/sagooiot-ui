@@ -126,8 +126,6 @@ export default defineComponent({
 				state.zidianData = res.values;
 				
 			});
-
-
 			api.template.cityTree({status:1}).then((res: any) => {
 				state.cityData = res;
 			});
@@ -137,11 +135,6 @@ export default defineComponent({
 				state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes.toString();
 				state.ruleForm.busiId=row.dataTemplateBusi.busiId;
 			}
-
-
-
-		
-
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
