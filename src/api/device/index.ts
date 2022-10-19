@@ -34,6 +34,8 @@ export default {
     getLogDetail: (params: object) => get('/product/device/property/list', params),
     devonline: (data: object) => post('/product/device/online', data),
     devoffline: (data: object) => post('/product/device/offline', data),
+    devdeploy: (data: object) => post('/product/device/deploy', data),
+    devundeploy: (data: object) => post('/product/device/undeploy', data),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),

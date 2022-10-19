@@ -76,6 +76,8 @@
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
+            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0">启用</el-button>
+            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0">停用</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -208,11 +210,25 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		const onActionStatus=(item:TableDataRow[])=>{
+			if(item.status==0){
+				api.instance.devdeploy({id:item.id}).then((res: any) => {
+						typeList();
+						ElMessage.success(res.message || '操作成功');
+				});
+			}else{
+				api.instance.devundeploy({id:item.id}).then((res: any) => {
+						typeList();
+						ElMessage.success(res.message || '操作成功');
+				});
+			}
+		}
 		return {
 			addDicRef,
 			editDicRef,
 			detailRef,
 			queryRef,
+			onActionStatus,
 			onOpenDetail,
 			onOpenAddDic,
 			onOpenEditDic,

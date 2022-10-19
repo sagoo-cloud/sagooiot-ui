@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.sourceId !== 0 ? '修改' : '添加') + '数据源'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="数据源标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据源名称"  :disabled="ruleForm.sourceId"/>
+					<el-input v-model="ruleForm.key" placeholder="请输入数据源名称" :disabled="ruleForm.sourceId" />
 				</el-form-item>
 				<el-form-item label="数据源名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据源名称" />
@@ -42,61 +42,73 @@
 				</div> -->
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<div v-if="ruleForm.from==1">
+				<div v-if="ruleForm.from == 1">
+					<el-form-item label="请求方法">
+						<el-select v-model="config.method" placeholder="请选择请求方法">
+							<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</el-form-item>
 
-						<el-form-item label="请求方法">
-							<el-select v-model="config.method" placeholder="请选择请求方法">
-								<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
-							</el-select>
-						</el-form-item>
+					<el-form-item label="请求地址">
+						<el-input v-model="config.url" placeholder="请输入请求地址" />
+					</el-form-item>
 
-						<el-form-item label="请求地址">
-							<el-input v-model="config.url" placeholder="请输入请求地址" />
-						</el-form-item>
+					<el-form-item label="定时请求">
+						<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
+						<ul style="list-style: none">
+							<li>
+								<el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次
+							</li>
+							<li>
+								<el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次
+							</li>
+							<li>
+								<el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次
+							</li>
+							<li>
+								<el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次
+							</li>
+							<li>
+								<el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次
+							</li>
+						</ul>
+					</el-form-item>
 
-						
-						<el-form-item label="定时请求">
-							<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
-							<ul style="list-style: none;">
-								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
-							</ul>
-						</el-form-item>
-
-						<!-- <el-form-item label="更新时间">
+					<!-- <el-form-item label="更新时间">
 							<el-input v-model="config.interval" placeholder="请输入更新时间" class="w-35" />
 							<el-select v-model="config.intervalUnit" placeholder="请选择单位">
 								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item> -->
-				
 
-						<div class="box-content">
-							<el-divider content-position="left">请求参数</el-divider>
-							<div class="content-f" v-for="(item, index) in requestParams" :key="index">
-								<el-select v-model="item.type" placeholder="参数类型" style="width: 320px">
+					<div class="box-content">
+						<el-divider content-position="left">请求参数</el-divider>
+
+						<div>
+						<div v-for="(item, index) in requestParams" :key="index" style="padding: 10px; border: 1px solid #eee;">
+							<div class="content-f" v-for="(aaa, bbb) in item" :key="bbb">
+								<el-select v-model="aaa.type" placeholder="参数类型" style="width: 320px">
 									<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
 								</el-select>
-								<el-input v-model="item.name" placeholder="请输入参数标题" style="width: 320px" />
-								<el-input v-model="item.key" placeholder="请输入参数名" style="width: 320px" />
-								<el-input v-model="item.value" placeholder="请输入参数值" style="width: 320px" />
+								<el-input v-model="aaa.name" placeholder="请输入参数标题" style="width: 320px" />
+								<el-input v-model="aaa.key" placeholder="请输入参数名" style="width: 320px" />
+								<el-input v-model="aaa.value" placeholder="请输入参数值" style="width: 320px" />
 								<div class="conicon">
-									<el-icon @click="delParams(index)" ><Delete /></el-icon>
+									<el-icon @click="delParamss(index,bbb)"><Delete /></el-icon>
 								</div>
 							</div>
-							<el-button type="primary" class="addbutton" @click="addParams">增加</el-button>
+							<el-button type="primary" class="addbutton" @click="addParams(index)">增加</el-button>
+							<div style=""></div>
+							<el-button type="danger" class="addbutton" @click="delParams(index)">删除分组</el-button>
+							
 						</div>
+						
+</div>
+					</div>
+					<el-button type="success" class="addbutton" @click="addParamss">增加分组</el-button>
 				</div>
 
-
-
-
-				<div v-if="ruleForm.from==4">
-
-
+				<div v-if="ruleForm.from == 4">
 					<el-form-item label="选择设备">
 						<el-select v-model="devconfig.deviceKey" filterable placeholder="请选择设备" @change="setNode">
 							<el-option v-for="item in sourceData" :key="item.id" :label="item.key" :value="item.id">
@@ -105,7 +117,7 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-						<!-- <el-form-item label="主机地址" >
+					<!-- <el-form-item label="主机地址" >
 							<el-input v-model="devconfig.host" placeholder="请输入主机地址"   />
 						</el-form-item>
 
@@ -135,47 +147,33 @@
 								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item> -->
-
 				</div>
-
-
-
-
-
-
-
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-
-					<el-button @click="onTest" type="warning" size="default" v-if="ruleForm.sourceId>0">测试</el-button>
+					<el-button @click="onTest" type="warning" size="default" v-if="ruleForm.sourceId > 0">测试</el-button>
 					<el-button @click="onCancel" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.sourceId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
 
-		<el-dialog
-				v-model="dialogVisible"
-				title="返回Json数据"
-				width="30%"
-			>
-					<JsonViewer :value="jsonData"  boxed sort theme="jv-dark" @click="onKeyclick" />
+		<el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
+			<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
 
-				<template #footer>
+			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="dialogVisible = false">关闭</el-button>
-				
 				</span>
-				</template>
-			</el-dialog>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
-import "vue3-json-viewer/dist/index.css";
+import 'vue3-json-viewer/dist/index.css';
 
 import { ElMessage } from 'element-plus';
 import { Delete, Minus, Right } from '@element-plus/icons-vue';
@@ -205,12 +203,12 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
-			dialogVisible:false,
+			dialogVisible: false,
 			config: {},
 			devconfig: {},
 			sourceData: [],
-			sourceId:0,
-			jsonData:'',
+			sourceId: 0,
+			jsonData: '',
 			ruledata: [
 				{
 					expression: '',
@@ -229,7 +227,14 @@ export default defineComponent({
 				},
 			],
 			requestParams: [
-				
+				[
+					{
+						type: '',
+						key: '',
+						name: '',
+						value: '',
+					},
+				],
 			],
 			methodData: [
 				{
@@ -305,8 +310,24 @@ export default defineComponent({
 			state.requestParams.splice(index, 1);
 		};
 
-		const addParams = () => {
-			state.requestParams.push({
+		const delParamss = (index,bbb) => {
+			state.requestParams[index].splice(bbb, 1);
+		};
+
+		const addParamss = () => {
+			state.requestParams.push([
+				{
+					type: '',
+					key: '',
+					name: '',
+					value: '',
+				},
+			]);
+
+			console.log(state.requestParams);
+		};
+		const addParams = (index) => {
+			state.requestParams[index].push({
 				type: '',
 				key: '',
 				name: '',
@@ -332,14 +353,16 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 			getDevData();
+
+			console.log(state.requestParams);
 			if (row) {
-				state.sourceId=row.sourceId
+				state.sourceId = row.sourceId;
 				api.common.detail(row.sourceId).then((res: any) => {
 					state.ruleForm = res.data;
-					if(res.data.from==1){
+					if (res.data.from == 1) {
 						state.config = res.data.apiConfig;
 						state.requestParams = res.data.apiConfig.requestParams;
-					}else if(res.data.from==4){
+					} else if (res.data.from == 4) {
 						state.devconfig = res.data.deviceConfig;
 					}
 					res.data.sourceRule.forEach((item, index) => {
@@ -352,16 +375,15 @@ export default defineComponent({
 			}
 			state.isShowDialog = true;
 		};
-		const onKeyclick=(e)=>{
-			if(e.target.innerText && e.target.className=='jv-key'){
-				let str = e.target.innerText;  
+		const onKeyclick = (e) => {
+			if (e.target.innerText && e.target.className == 'jv-key') {
+				let str = e.target.innerText;
 				str = str.substr(0, str.length - 1);
 				console.log(str);
 			}
-			
 		};
 		const resetForm = () => {
-			state.devconfig={};
+			state.devconfig = {};
 			state.ruleForm = {
 				sourceId: 0,
 				name: '',
@@ -388,11 +410,9 @@ export default defineComponent({
 		};
 
 		const getDevData = () => {
-			api.common
-				.getdevList({})
-				.then((res: any) => {
-					state.sourceData = res.device;
-				});
+			api.common.getdevList({}).then((res: any) => {
+				state.sourceData = res.device;
+			});
 		};
 
 		const setNode = (event) => {
@@ -404,21 +424,20 @@ export default defineComponent({
 			});
 		};
 
-		const onTest=()=>{
-			if(state.ruleForm.from==1){
+		const onTest = () => {
+			if (state.ruleForm.from == 1) {
 				api.common.api(state.sourceId).then((res: any) => {
-					state.jsonData=JSON.parse(res.data);
-					state.dialogVisible=true
-						console.log(res);
-				})
-			}else if(state.ruleForm.from==4){
+					state.jsonData = JSON.parse(res.data);
+					state.dialogVisible = true;
+					console.log(res);
+				});
+			} else if (state.ruleForm.from == 4) {
 				api.common.devapi(state.sourceId).then((res: any) => {
-					state.jsonData=JSON.parse(res.data);
-					state.dialogVisible=true
-						console.log(res);
-				})
+					state.jsonData = JSON.parse(res.data);
+					state.dialogVisible = true;
+					console.log(res);
+				});
 			}
-			
 		};
 		// 新增
 		const onSubmit = () => {
@@ -434,41 +453,38 @@ export default defineComponent({
 					// });
 
 					state.ruleForm.rule = state.rule;
-					if(state.ruleForm.from==1 ){
+					if (state.ruleForm.from == 1) {
 						state.config.requestParams = state.requestParams;
 						state.ruleForm.config = state.config;
-					}else if(state.ruleForm.from==4 ){
+					} else if (state.ruleForm.from == 4) {
 						state.ruleForm.config = state.devconfig;
 					}
-					
+
 					if (state.ruleForm.sourceId !== 0) {
 						//修改
 
-						if(state.ruleForm.from==1 ){
+						if (state.ruleForm.from == 1) {
 							api.common.edit(state.ruleForm).then(() => {
 								ElMessage.success('数据源类型修改成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
-						}else if(state.ruleForm.from==4 ){
+						} else if (state.ruleForm.from == 4) {
 							api.common.devedit(state.ruleForm).then(() => {
 								ElMessage.success('数据源类型修改成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
 						}
-
-
-
 					} else {
 						//添加
-						if(state.ruleForm.from==1 ){
+						if (state.ruleForm.from == 1) {
 							api.common.add(state.ruleForm).then(() => {
 								ElMessage.success('数据源类型添加成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
-						}else if(state.ruleForm.from==4 ){
+						} else if (state.ruleForm.from == 4) {
 							api.common.devadd(state.ruleForm).then(() => {
 								ElMessage.success('数据源类型添加成功');
 								closeDialog(); // 关闭弹窗
@@ -485,6 +501,8 @@ export default defineComponent({
 			addRule,
 			delRule,
 			addParams,
+			addParamss,
+			delParamss,
 			delParams,
 			onKeyclick,
 			openDialog,
@@ -501,7 +519,6 @@ export default defineComponent({
 });
 </script>
 <style>
-
 .el-input__wrapper {
 	width: 98%;
 }
@@ -531,10 +548,7 @@ export default defineComponent({
 	line-height: 28px;
 	cursor: pointer;
 }
-.jv-node{
+.jv-node {
 	margin-left: 25px;
 }
-
-
-
 </style>
