@@ -1,6 +1,9 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  heatingDistrict: {
+    getTree: (params: object) => get('/region/zhgy/tree', params),
+  },
   regionalManage: {
     allList: (params: object) => get('/region/plot/all', params),
     getList: (params: object) => get('/region/plot/list', params),
