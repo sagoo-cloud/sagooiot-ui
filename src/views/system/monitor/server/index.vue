@@ -1,6 +1,156 @@
 <template>
 	<div class="system-user-container">
-		<div class="flex-row gap-3">
+    <div class="flex-row gap-3">
+      <el-col :xs="24" :sm="12" :md="8" class="marg-b-15">
+        <el-card class="box-card-meter">
+          <div class="el-table--enable-row-hover el-table--medium">
+            <el-row :gutter="30">
+              <el-col :xs="24" :sm="24" :md="12">
+                <table cellspacing="0" style="width: 100%">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class="cell-card">核心数: </div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.cpuNum }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">使用率:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.cpuUsed }}%</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">LA5:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.cpuAvg5 }}%</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">LA15:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.cpuAvg15 }}%</div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="12">
+                <div style="min-height: 180px" ref="chartsWarningRef1"></div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :md="8" class="marg-b-15">
+        <el-card class="box-card-meter">
+          <div class="el-table--enable-row-hover el-table--medium">
+            <el-row :gutter="30">
+              <el-col :xs="24" :sm="24" :md="12">
+                <table cellspacing="0" style="width: 100%">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class="cell-card">内存总数:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.memTotal) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">已使用:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.memUsed) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">剩余:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.memFree) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">系统使用:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.goUsed) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">使用率:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.memUsage }}%</div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="12">
+                <div style="min-height: 180px" ref="chartsWarningRef2"></div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :md="8" class="marg-b-15">
+        <el-card class="box-card-meter">
+          <div class="el-table--enable-row-hover el-table--medium">
+            <el-row :gutter="30">
+              <el-col :xs="24" :sm="24" :md="12">
+                <table cellspacing="0" style="width: 100%">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class="cell-card">磁盘容量:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.diskTotal) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">已使用:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ memorySizeFormat(sysInfo.diskUsed) }}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">使用率:</div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.diskUsedPercent }}%</div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="12">
+                <div style="min-height: 180px" ref="chartsWarningRef3"></div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+
+    </div>
+    <div class="flex-row gap-3">
 			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
 				<el-card class="box-card">
 					<template #header>
@@ -128,116 +278,6 @@
 				</el-card>
 			</el-col>
 		</div>
-		<div class="flex-row gap-3">
-			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-				<el-card class="box-card">
-					<template #header>
-						<div class="card-header">
-							<span>CPU</span>
-						</div>
-					</template>
-					<div class="el-table--enable-row-hover el-table--medium">
-						<el-row :gutter="30">
-							<el-col :xs="24" :sm="24" :md="12">
-								<table cellspacing="0" style="width: 100%">
-									<tbody>
-										<tr>
-											<td>
-												<div class="cell">核心数:</div>
-											</td>
-											<td>
-												<div class="cell">{{ sysInfo.cpuNum }}</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">使用率:</div>
-											</td>
-											<td>
-												<div class="cell">{{ sysInfo.cpuUsed }}%</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">Load Avg 5:</div>
-											</td>
-											<td>
-												<div class="cell">{{ sysInfo.cpuAvg5 }}%</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">Load Avg 15:</div>
-											</td>
-											<td>
-												<div class="cell">{{ sysInfo.cpuAvg15 }}%</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</el-col>
-							<el-col :xs="24" :sm="24" :md="12">
-								<div style="min-height: 280px" ref="chartsWarningRef1"></div>
-							</el-col>
-						</el-row>
-					</div>
-				</el-card>
-			</el-col>
-			<el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-				<el-card class="box-card">
-					<template #header>
-						<div class="card-header">
-							<span>内存</span>
-						</div>
-					</template>
-					<div class="el-table--enable-row-hover el-table--medium">
-						<el-row :gutter="30">
-							<el-col :xs="24" :sm="24" :md="12">
-								<table cellspacing="0" style="width: 100%">
-									<tbody>
-										<tr>
-											<td>
-												<div class="cell">总数:</div>
-											</td>
-											<td>
-												<div class="cell">{{ memorySizeFormat(sysInfo.memTotal) }}</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">已使用:</div>
-											</td>
-											<td>
-												<div class="cell">{{ memorySizeFormat(sysInfo.memUsed) }}</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">剩余:</div>
-											</td>
-											<td>
-												<div class="cell">{{ memorySizeFormat(sysInfo.memFree) }}</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="cell">系统使用:</div>
-											</td>
-											<td>
-												<div class="cell">{{ memorySizeFormat(sysInfo.goUsed) }}</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</el-col>
-							<el-col :xs="24" :sm="24" :md="12">
-								<div style="min-height: 280px" ref="chartsWarningRef2"></div>
-							</el-col>
-						</el-row>
-					</div>
-				</el-card>
-			</el-col>
-		</div>
 	</div>
 </template>
 
@@ -259,14 +299,16 @@ export default defineComponent({
 
 		let myChart1: any;
 		let myChart2: any;
-		function setOptChart1(value: number) {
+    let myChart3: any;
+
+    function setOptChart1(value: number) {
 			myChart1.setOption({
 				series: [
 					{
 						data: [
 							{
 								value: value,
-								name: 'CPU使用率',
+								name: '',//cpu
 							},
 						],
 					},
@@ -281,13 +323,28 @@ export default defineComponent({
 						data: [
 							{
 								value: value,
-								name: '内存使用率',
+								name: '',//内存
 							},
 						],
 					},
 				],
 			});
 		}
+
+    function setOptChart3(value: number) {
+      myChart3.setOption({
+        series: [
+          {
+            data: [
+              {
+                value: value,
+                name: '',//磁盘
+              },
+            ],
+          },
+        ],
+      });
+    }
 
 		//CPU
 		const initChartCPU = () => {
@@ -300,12 +357,12 @@ export default defineComponent({
 					{
 						type: 'gauge',
 						name: 'CPU',
-						radius: '80%', //修改表盘大小
+						radius: '90%', //修改表盘大小
 						title: {
 							show: true, //控制表盘title(今日预计用电量)字体是否显示
-							fontSize: 14, //控制表盘title(今日预计用电量)字体大小
-							// 'color': 'red',           		//控制表盘title(今日预计用电量)字体颜色
-							offsetCenter: [0, '40%'], //设置表盘title(今日预计用电量)位置
+							fontSize: 12, //控制表盘title(今日预计用电量)字体大小
+							'color': 'green',           		//控制表盘title(今日预计用电量)字体颜色
+							offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
 						},
 						axisLine: {
 							show: true,
@@ -319,11 +376,13 @@ export default defineComponent({
 								],
 							},
 						},
-						detail: {
+            splitNumber: 5, //分割线之间的刻度
+
+            detail: {
 							valueAnimation: true,
 							formatter: '{value}%',
 							textStyle: {
-								fontSize: 36,
+								fontSize: 20,
 								color: 'red',
 							},
 							offsetCenter: ['0', '80%'], //表盘数据(30%)位置
@@ -352,12 +411,12 @@ export default defineComponent({
 					{
 						type: 'gauge',
 						name: '内存',
-						radius: '80%', //修改表盘大小
+						radius: '90%', //修改表盘大小
 						title: {
 							show: true, //控制表盘title(今日预计用电量)字体是否显示
-							fontSize: 14, //控制表盘title(今日预计用电量)字体大小
-							// 'color': 'red',           		//控制表盘title(今日预计用电量)字体颜色
-							offsetCenter: [0, '40%'], //设置表盘title(今日预计用电量)位置
+							fontSize: 12, //控制表盘title(今日预计用电量)字体大小
+							'color': 'green',           		//控制表盘title(今日预计用电量)字体颜色
+							offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
 						},
 						axisLine: {
 							show: true,
@@ -371,11 +430,13 @@ export default defineComponent({
 								],
 							},
 						},
-						detail: {
+            splitNumber: 5, //分割线之间的刻度
+
+            detail: {
 							valueAnimation: true,
 							formatter: '{value}%',
 							textStyle: {
-								fontSize: 36,
+								fontSize: 20,
 								color: 'red',
 							},
 							offsetCenter: ['0', '80%'], //表盘数据(30%)位置
@@ -393,11 +454,66 @@ export default defineComponent({
 			state.myCharts.push(myChart2);
 		};
 
+    //磁盘
+    const initChartDISK = () => {
+      myChart3 = echarts.init(proxy.$refs.chartsWarningRef3);
+      const option = {
+        tooltip: {
+          formatter: '{a} <br/>{b} : {c}%',
+        },
+        series: [
+          {
+            type: 'gauge',
+            name: '磁盘',
+            radius: '90%', //修改表盘大小
+            title: {
+              show: true, //控制表盘title(今日预计用电量)字体是否显示
+              fontSize: 12, //控制表盘title(今日预计用电量)字体大小
+              'color': 'green',           		//控制表盘title(今日预计用电量)字体颜色
+              offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
+            },
+            axisLine: {
+              show: true,
+              lineStyle: {
+                // 属性lineStyle控制线条样式
+                color: [
+                  [0.3, '#4dabf7'],
+                  [0.6, '#69db7c'],
+                  [0.8, '#ffa94d'],
+                  [1, '#ff6b6b'],
+                ],
+              },
+            },
+            splitNumber: 5, //分割线之间的刻度
+
+            detail: {
+              valueAnimation: true,
+              formatter: '{value}%',
+              textStyle: {
+                fontSize: 20,
+                color: 'red',
+              },
+              offsetCenter: ['0', '80%'], //表盘数据(30%)位置
+            },
+            // data: [
+            // 	{
+            // 		value: 30,
+            // 		name: '内存使用率',
+            // 	},
+            // ],
+          },
+        ],
+      };
+      myChart3.setOption(option);
+      state.myCharts.push(myChart3);
+    };
+
 		// 页面加载时
 		onMounted(() => {
 			initChartCPU();
 			initChartRAM();
-		});
+      initChartDISK();
+    });
 
 		let ws: WebSocket | null = null;
 
@@ -410,7 +526,8 @@ export default defineComponent({
 				state.sysInfo = data;
 				setOptChart1(data.cpuUsed);
 				setOptChart2(data.memUsage);
-				// console.log(data);
+        setOptChart3(data.diskUsedPercent);
+        // console.log(data);
 			};
 			// ws.onclose = () => {
 			// 	setTimeout(() => {
@@ -426,7 +543,9 @@ export default defineComponent({
 				state.sysInfo = res;
 				setOptChart1(res.cpuUsed);
 				setOptChart2(res.memUsage);
-			});
+        setOptChart3(res.diskUsedPercent);
+
+      });
 		}
 
 		return {
@@ -523,7 +642,23 @@ export default defineComponent({
 	padding-right: 10px;
 }
 
+.cell-card {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 36px;
+}
+
 .box-card {
 	min-height: 380px;
 }
+
+.box-card-meter{
+  height: 230px;
+
+  min-height: 180px;
+}
+
 </style>
