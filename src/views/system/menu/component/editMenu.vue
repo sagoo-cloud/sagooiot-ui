@@ -5,20 +5,13 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="上级菜单" prop="parentId">
-							<el-cascader
-								:options="[
-									{
-										id: -1,
-										title: '主类目',
-										children: menu,
-									},
-								]"
-								:props="{ label: 'title', value: 'id', checkStrictly: true, emitPath: false }"
-								placeholder="请选择上级菜单"
-								:clearable="false"
-								class="w100"
-								v-model="ruleForm.parentId"
-							>
+							<el-cascader :options="[
+								{
+									id: -1,
+									title: '主类目',
+									children: menu,
+								},
+							]" :props="{ label: 'title', value: 'id', checkStrictly: true, emitPath: false }" placeholder="请选择上级菜单" :clearable="false" class="w100" v-model="ruleForm.parentId">
 								<template #default="{ node, data }">
 									<span>{{ data.title }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -59,19 +52,17 @@
 							<IconSelector placeholder="请输入菜单图标" v-model="ruleForm.icon" type="all" />
 						</el-form-item>
 					</el-col>
-					<template v-if="ruleForm.menuType === 1">
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="链接地址">
-								<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http:xxx.com）" clearable :disabled="ruleForm.isLink === 0">
-								</el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="重定向">
-								<el-input v-model="ruleForm.redirect" placeholder="请输入路由重定向" clearable></el-input>
-							</el-form-item>
-						</el-col>
-					</template>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="链接地址">
+							<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http:xxx.com）" clearable :disabled="ruleForm.isLink === 0">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="重定向">
+							<el-input v-model="ruleForm.redirect" placeholder="请输入路由重定向" clearable></el-input>
+						</el-form-item>
+					</el-col> -->
 					<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="权限标识">
               <el-select v-model="ruleForm.roles" multiple placeholder="选择角色" clearable class="w100">
@@ -84,44 +75,44 @@
 							<el-input-number v-model="ruleForm.weigh" controls-position="right" placeholder="请输入排序" class="w100" />
 						</el-form-item>
 					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="是否隐藏">
+							<el-radio-group v-model="ruleForm.isHide">
+								<el-radio :label="0">显示</el-radio>
+								<el-radio :label="1">隐藏</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="是否外链">
+							<el-radio-group v-model="ruleForm.isLink" :disabled="ruleForm.isIframe === 1">
+								<el-radio :label="1">是</el-radio>
+								<el-radio :label="0">否</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="是否内嵌">
+							<el-radio-group v-model="ruleForm.isIframe" @change="onSelectIframeChange">
+								<el-radio :label="1">是</el-radio>
+								<el-radio :label="0">否</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
 					<template v-if="ruleForm.menuType === 1">
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否隐藏">
-								<el-radio-group v-model="ruleForm.isHide">
-									<el-radio :label="0">显示</el-radio>
-									<el-radio :label="1">隐藏</el-radio>
+						<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+							<el-form-item label="页面缓存">
+								<el-radio-group v-model="ruleForm.isKeepAlive">
+									<el-radio :label="1">缓存</el-radio>
+									<el-radio :label="0">不缓存</el-radio>
 								</el-radio-group>
 							</el-form-item>
-						</el-col>
-						<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-              <el-form-item label="页面缓存">
-                <el-radio-group v-model="ruleForm.isKeepAlive">
-                  <el-radio :label="1">缓存</el-radio>
-                  <el-radio :label="0">不缓存</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col> -->
+						</el-col> -->
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否固定">
 								<el-radio-group v-model="ruleForm.isAffix">
 									<el-radio :label="1">固定</el-radio>
 									<el-radio :label="0">不固定</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否外链">
-								<el-radio-group v-model="ruleForm.isLink" :disabled="ruleForm.isIframe === 1">
-									<el-radio :label="1">是</el-radio>
-									<el-radio :label="0">否</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否内嵌">
-								<el-radio-group v-model="ruleForm.isIframe" @change="onSelectIframeChange">
-									<el-radio :label="1">是</el-radio>
-									<el-radio :label="0">否</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
