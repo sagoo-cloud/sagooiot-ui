@@ -49,12 +49,6 @@ onMounted(() => {
 		});
 	}
 
-
-	// setTimeout(() => {
-	// 	document.querySelectorAll('.anchorBL')[1].remove();
-	// 	document.querySelectorAll('.anchorBL')[0].remove();
-	// }, 100);
-
 	// 获取换热站列表
 	api.heatStation.getAll().then((res: any) => {
 		renderStation(res);
