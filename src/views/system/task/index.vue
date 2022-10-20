@@ -50,21 +50,14 @@
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="ID" align="center" prop="jobId" width="60" />
 				<el-table-column label="任务名称" prop="jobName" :show-overflow-tooltip="true" />
+				<el-table-column label="任务描述" prop="remark" show-overflow-tooltip />
 				<el-table-column label="任务分组" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
 				<el-table-column label="任务方法名" prop="invokeTarget" />
 				<el-table-column label="cron执行表达式" prop="cronExpression" />
 				<el-table-column label="状态" align="center" prop="status" width="100">
 					<template #default="scope">
 						<!-- {{ row.status ? '正常' : '暂停' }} -->
-						<el-switch
-							v-model="scope.row.status"
-							inline-prompt
-							:active-value="0"
-							:inactive-value="1"
-							active-text="启"
-							inactive-text="禁"
-							@change="handleStatusChange(scope.row)"
-						>
+						<el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
@@ -76,13 +69,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 		<EditConfig ref="editDicRef" @dataList="dataList" />
 	</div>
@@ -192,7 +179,7 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		const onRowRun = (row: TableDataRow) => {
 			ElMessageBox.confirm(`是否确认立即执行一次该任务?`, '警告', {
