@@ -32,14 +32,9 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-        <el-table-column label="区域名称" prop="organizationInfo.name" min-width="100" />
-        <el-table-column label="小区名称" prop="plotInfo.name" min-width="100" />
-        <el-table-column label="楼宇名称" prop="floorInfo.name" min-width="100" />
-        <el-table-column label="楼号" prop="floorInfo.number" min-width="100" />
-	    	<el-table-column label="单元名称" prop="name" min-width="100" />
-	    	<el-table-column label="单元号" prop="number" min-width="100" />
+	    	<el-table-column label="单元名称" prop="name" />
+	    	<el-table-column label="单元号" prop="number" />
 	    	<el-table-column label="更新时间" prop="updatedAt" width="180" />
 				<el-table-column prop="status" label="启用状态" width="120" align="center">
 					<template #default="scope">

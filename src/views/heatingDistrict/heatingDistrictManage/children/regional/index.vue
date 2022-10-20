@@ -55,7 +55,7 @@
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
         <el-table-column label="小区名称" prop="name" min-width="100" />
-        <el-table-column label="组织名称" prop="" min-width="100">
+        <el-table-column label="区域名称" prop="" min-width="100">
 					<template #default="{ row }">
 						{{ row.SysOrganization.name }}
 					</template>
