@@ -22,6 +22,7 @@
 			<el-table-column type="index" label="序号" width="60" align="center" />
 			<el-table-column prop="id" label="ID" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="projectName" label="项目名称" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="remarks" label="描述" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
 			<el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>
 			<el-table-column label="操作" width="150" align="center">
@@ -57,15 +58,20 @@ const add = async () => {
 				return '请输入项目名称';
 			}
 		},
-		inputErrorMessage: '请输入项目名称',
-	}).then(async ({ value }) => {
-		await api.add({
-			indexImage: null,
-			projectName: value,
-			remarks: null,
+		inputErrorMessage: '请输入描述',
+	}).then(async ({ value: projectName }) => {
+		ElMessageBox.prompt('请输入描述', '创建大屏项目', {
+			confirmButtonText: '确认',
+			cancelButtonText: '取消',
+		}).then(async ({ value: remarks }) => {
+			await api.add({
+				indexImage: null,
+				projectName,
+				remarks,
+			});
+			ElMessage.success('新增成功');
+			getList();
 		});
-		ElMessage.success('新增成功');
-		getList();
 	});
 };
 
