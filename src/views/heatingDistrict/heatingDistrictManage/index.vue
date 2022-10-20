@@ -25,9 +25,9 @@
 			<!-- 楼宇 -->
 			<Floor v-else-if="curNode.orgType === 'plot'" :organizationId="curNode.organizationId" :plotId="curNode.id"/>
 			<!-- 单元 -->
-			<Unit v-else-if="curNode.orgType === 'floor'" :organizationId="curNode.organizationId" :floorId="curNode.id"/>
+			<Unit v-else-if="curNode.orgType === 'floor'" :organizationId="curNode.organizationId" :plotId="curNode.plotId" :floorId="curNode.id"/>
 			<!-- 住户 -->
-			<Resident v-else-if="curNode.orgType === 'unit'" :organizationId="curNode.organizationId" :unitId="curNode.id"/>
+			<Resident v-else-if="curNode.orgType === 'unit'" :organizationId="curNode.organizationId" :plotId="curNode.plotId" :floorId="curNode.floorId" :unitId="curNode.id"/>
 		</div>
   </div>
 </template>
@@ -64,8 +64,14 @@ export default defineComponent({
 		}
 		const onNodeClick = (data: any, node: any) => {
 			console.log(data)
+			console.log(node)
+			if (data.orgType === 'floor') {
+				data.plotId = node.parent.data.id
+			} else if (data.orgType === 'unit') {
+				data.floorId = node.parent.data.id
+				data.plotId = node.parent.parent.data.id
+			}
 			state.curNode = data
-			// console.log(node)
 		}
 
 		// 页面加载时

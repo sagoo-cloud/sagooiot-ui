@@ -129,7 +129,7 @@ export default defineComponent({
 		}
 		// 打开新增修改弹窗
 		const onOpenDialog = (row: any) => {
-			editDicRef.value.openDialog(row, { organizationId: prop.organizationId, floorId: prop.floorId });
+			editDicRef.value.openDialog(row, { organizationId: prop.organizationId, plotId: prop.plotId, floorId: prop.floorId, unitId: prop.unitId });
 		};
 		
 		// 状态修改
