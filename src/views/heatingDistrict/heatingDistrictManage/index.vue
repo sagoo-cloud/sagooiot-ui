@@ -25,7 +25,7 @@
 			<!-- 楼宇 -->
 			<Floor v-else-if="curNode.orgType === 'plot'" :organizationId="curNode.organizationId" :plotId="curNode.id"/>
 			<!-- 单元 -->
-			<Unit v-else-if="curNode.orgType === 'floor'" :organizationId="curNode.organizationId" :plotId="curNode.id"/>
+			<Unit v-else-if="curNode.orgType === 'floor'" :organizationId="curNode.organizationId" :floorId="curNode.id"/>
 			<!-- 住户 -->
 			<Resident v-else-if="curNode.orgType === 'unit'" :organizationId="curNode.organizationId" :plotId="curNode.id"/>
 		</div>

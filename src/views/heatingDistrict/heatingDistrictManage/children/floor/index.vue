@@ -42,7 +42,7 @@
             {{ row.ZhgyPlotInfo ? row.ZhgyPlotInfo.name : '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="组织名称" prop="" min-width="100">
+        <el-table-column label="区域名称" prop="" min-width="100">
           <template #default="{ row }">
             {{ row.SysOrganization ? row.SysOrganization.name : '-' }}
           </template>
