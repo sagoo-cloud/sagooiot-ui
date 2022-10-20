@@ -9,11 +9,11 @@
 							</el-icon>
 							查询
 						</el-button> -->
-					<el-button type="success" @click="add()">
+					<el-button type="success" @click="addOrEdit()">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
-						新增大屏项目
+						新增大屏
 					</el-button>
 				</el-form-item>
 			</el-form>
@@ -25,27 +25,42 @@
 			<el-table-column prop="remarks" label="描述" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
 			<el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>
-			<el-table-column label="操作" width="150" align="center">
+			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
 					<el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
-					<el-button size="small" text type="warning" @click="edit(scope.row)">编辑</el-button>
+					<el-button size="small" text type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+					<el-button size="small" text type="warning" @click="edit(scope.row)">设计大屏</el-button>
 					<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
 	</el-card>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import api from '/@/api/screen';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
 import { Session } from '/@/utils/storage';
+import EditForm from './edit.vue';
+
+const editFormRef = ref();
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { name: '', address: '' });
 
 getList();
+
+const addOrEdit = async (row?: any) => {
+	if (row) {
+		editFormRef.value.open(row);
+		return;
+	} else {
+		editFormRef.value.open();
+	}
+};
 
 const add = async () => {
 	ElMessageBox.prompt('请输入项目名称', '创建大屏项目', {
