@@ -21,13 +21,13 @@
 		</div>
 		<div class="right-panel">
 			<!-- 小区 -->
-			<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id"/>
+			<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id" @finish="getTreeData()"/>
 			<!-- 楼宇 -->
-			<Floor v-else-if="curNode.orgType === 'plot'" :organizationId="curNode.organizationId" :plotId="curNode.id"/>
+			<Floor v-else-if="curNode.orgType === 'plot'" :nodeId="curNode.id" @finish="getTreeData()"/>
 			<!-- 单元 -->
-			<Unit v-else-if="curNode.orgType === 'floor'" :organizationId="curNode.organizationId" :plotId="curNode.plotId" :floorId="curNode.id"/>
+			<Unit v-else-if="curNode.orgType === 'floor'" :nodeId="curNode.id" @finish="getTreeData()"/>
 			<!-- 住户 -->
-			<Resident v-else-if="curNode.orgType === 'unit'" :organizationId="curNode.organizationId" :plotId="curNode.plotId" :floorId="curNode.floorId" :unitId="curNode.id"/>
+			<Resident v-else-if="curNode.orgType === 'unit'" :nodeId="curNode.id" @finish="getTreeData()"/>
 		</div>
   </div>
 </template>
@@ -59,7 +59,9 @@ export default defineComponent({
 			api.heatingDistrict.getTree({})
 				.then((res: any) => {
 					treeList.value = res || []
-					state.curNode = treeList.value[0]
+					if (!state.curNode.id) {
+						state.curNode = treeList.value[0]
+					}
 				})
 		}
 		const onNodeClick = (data: any, node: any) => {
@@ -83,6 +85,7 @@ export default defineComponent({
 		return {
 			treeList,
 			onNodeClick,
+			getTreeData,
 			...toRefs(state),
 		};
 	},

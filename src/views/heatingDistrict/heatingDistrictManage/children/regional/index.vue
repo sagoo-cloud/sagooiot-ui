@@ -76,7 +76,7 @@
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
     </div>
-    <EditDic ref="editDicRef" @queryList="queryList" />
+    <EditDic ref="editDicRef" @queryList="handleFinish()" />
     <Detail ref="detailRef"  />
   </div>
 </template>
@@ -98,7 +98,7 @@ export default defineComponent({
 			default: ''
 		}
 	},
-	setup(prop) {
+	setup(prop, { emit }) {
 		const addDicRef = ref();
 		const editDicRef = ref();
 		const detailRef=ref();
@@ -128,6 +128,11 @@ export default defineComponent({
 				state.tableData.loading = false
 			});
 		};
+		
+		const handleFinish = () => {
+			emit('finish')
+			queryList()
+		}
 
 		watch(() => prop.organizationId, () => {
 			state.tableData.param.organizationId = prop.organizationId
@@ -204,6 +209,7 @@ export default defineComponent({
 			queryList,
 			resetQuery,
 			handleStatusChange,
+			handleFinish,
 			...toRefs(state),
 		};
 	},

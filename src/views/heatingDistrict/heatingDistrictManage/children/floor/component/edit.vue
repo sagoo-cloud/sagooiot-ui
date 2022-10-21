@@ -44,8 +44,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
         number: '',
-				plotId: '',
-				organizationId: '',
+				nodeId: '',
 				status: 1
 			},
 			rules: {
@@ -73,8 +72,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
         number: '',
-				plotId: '',
-				organizationId: '',
+				nodeId: '',
 				status: 1
 			}
 		}

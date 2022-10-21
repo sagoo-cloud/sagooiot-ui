@@ -51,7 +51,7 @@
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
     </div>
-    <EditDic ref="editDicRef" @queryList="queryList" />
+    <EditDic ref="editDicRef" @queryList="handleFinish()" />
     <Detail ref="detailRef"  />
   </div>
 </template>
@@ -68,17 +68,11 @@ export default defineComponent({
 	name: 'loop',
 	components: { EditDic,Detail },
 	props: {
-		organizationId: {
-			default: ''
-		},
-		plotId: {
-			default: ''
-		},
-		floorId: {
+		nodeId: {
 			default: ''
 		}
 	},
-	setup(prop) {
+	setup(prop, { emit }) {
 		const addDicRef = ref();
 		const editDicRef = ref();
 		const detailRef=ref();
@@ -94,8 +88,7 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					number: '',
-					organizationId: '',
-					floorId: '',
+					nodeId: '',
 					status: -1
 				},
 			},
@@ -110,9 +103,13 @@ export default defineComponent({
 			});
 		};
 		
-		watch(() => prop.floorId, () => {
-			state.tableData.param.organizationId = prop.organizationId
-			state.tableData.param.floorId = prop.floorId
+		const handleFinish = () => {
+			emit('finish')
+			queryList()
+		}
+		
+		watch(() => prop.nodeId, () => {
+			state.tableData.param.nodeId = prop.nodeId
 			queryList()
 		}, {
 			deep: true,
@@ -125,7 +122,7 @@ export default defineComponent({
 		}
 		// 打开新增修改弹窗
 		const onOpenDialog = (row: any) => {
-			editDicRef.value.openDialog(row, { organizationId: prop.organizationId, plotId: prop.plotId, floorId: prop.floorId });
+			editDicRef.value.openDialog(row, { nodeId: prop.nodeId });
 		};
 		
 		// 状态修改
@@ -184,6 +181,7 @@ export default defineComponent({
 			queryList,
 			resetQuery,
 			handleStatusChange,
+			handleFinish,
 			...toRefs(state),
 		};
 	},

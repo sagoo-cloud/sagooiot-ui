@@ -57,11 +57,7 @@ export default defineComponent({
 			dialogVisible: false,
 			ruleForm: {
 				id: 0,
-				organizationId: '',
-				heatStaId: '',
-				plotId: '',
-				floorId: '',
-				unitId: '',
+				nodeId: '',
 				name: '',
 				floorLevel: '',
 				roomNumber: '',
@@ -98,11 +94,7 @@ export default defineComponent({
 		const resetForm = () => {
 			state.ruleForm = {
 				id: 0,
-				organizationId: '',
-				heatStaId: '',
-				plotId: '',
-				floorId: '',
-				unitId: '',
+				nodeId: '',
 				name: '',
 				floorLevel: '',
 				roomNumber: '',

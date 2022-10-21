@@ -51,7 +51,7 @@
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
     </div>
-    <EditDic ref="editDicRef" @queryList="queryList" />
+    <EditDic ref="editDicRef" @queryList="handleFinish()" />
     <Detail ref="detailRef"  />
   </div>
 </template>
@@ -62,19 +62,17 @@ import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
 import api from '/@/api/heatingDistrict';
+import { emit } from 'process';
 
 export default defineComponent({
 	name: 'loop',
 	components: { EditDic,Detail },
 	props: {
-		organizationId: {
-			default: ''
-		},
-		plotId: {
+		nodeId: {
 			default: ''
 		}
 	},
-	setup(prop) {
+	setup(prop, { emit }) {
 		const editDicRef = ref();
 		const detailRef=ref();
 		const queryRef = ref();
@@ -89,8 +87,7 @@ export default defineComponent({
 					pageSize: 10,
 					name: '',
 					number: '',
-					plotId: '',
-					organizationId: '',
+					nodeId: '',
 					status: -1
 				},
 			},
@@ -104,10 +101,14 @@ export default defineComponent({
 				state.tableData.loading = false
 			});
 		};
+
+		const handleFinish = () => {
+			emit('finish')
+			queryList()
+		}
 		
-		watch(() => prop.plotId, () => {
-			state.tableData.param.organizationId = prop.organizationId
-			state.tableData.param.plotId = prop.plotId
+		watch(() => prop.nodeId, () => {
+			state.tableData.param.nodeId = prop.nodeId
 			queryList()
 		}, {
 			deep: true,
@@ -120,7 +121,7 @@ export default defineComponent({
 		}
 		// 打开新增修改弹窗
 		const onOpenDialog = (row: any) => {
-			editDicRef.value.openDialog(row, { organizationId: prop.organizationId, plotId: prop.plotId });
+			editDicRef.value.openDialog(row, { nodeId: prop.nodeId });
 		};
 		
 		// 状态修改
@@ -176,6 +177,7 @@ export default defineComponent({
 			queryList,
 			resetQuery,
 			handleStatusChange,
+			handleFinish,
 			...toRefs(state),
 		};
 	},

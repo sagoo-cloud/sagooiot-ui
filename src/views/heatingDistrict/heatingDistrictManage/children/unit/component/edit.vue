@@ -38,10 +38,7 @@ export default defineComponent({
 			ruleForm: {
 				id: 0,
 				name: '',
-        organizationId: '',
-        plotId: '',
-        floorId: '',
-        heatStaId: '',
+        nodeId: '',
         number: '',
         remark: '',
 				status: 1
@@ -71,10 +68,7 @@ export default defineComponent({
 			state.ruleForm = {
 				id: 0,
 				name: '',
-        organizationId: '',
-        plotId: '',
-        floorId: '',
-        heatStaId: '',
+        nodeId: '',
         number: '',
         remark: '',
 				status: 1
