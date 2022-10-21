@@ -13,7 +13,7 @@
 				:expand-on-click-node="false"
 			>
 				<template #default="{ node, data }">
-					<span class="custom-tree-node" :class="{ active: data.id === curNode.id }">
+					<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
 						<span>{{ data.orgName }}</span>
 					</span>
 				</template>
