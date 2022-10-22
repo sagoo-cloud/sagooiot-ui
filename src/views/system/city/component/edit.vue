@@ -23,6 +23,9 @@
 				<el-form-item label="城市编号" prop="code">
 					<el-input v-model="ruleForm.code" placeholder="请输入城市编号" />
 				</el-form-item>
+				<el-form-item label="排序" prop="code">
+					<el-input v-model.number="ruleForm.sort" placeholder="请输入序号" />
+				</el-form-item>
 				<el-form-item label="状态" prop="status">
 					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
 					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
@@ -49,7 +52,7 @@ interface RuleFormState {
 	parentId: number | string;
 	name: string;
 	code:  string;
-	// position: string;
+	sort: string;
 	// lnt: number;
 	// lat: number;
 	// principal: string;
@@ -69,6 +72,7 @@ export default defineComponent({
 				parentId: '',
 				name: '',
 				code: '',
+				sort: 0,
 				status: 1
 				// position: '',
 				// lnt: '',
@@ -79,7 +83,7 @@ export default defineComponent({
 			},
 			keyword: '',
 			rules: {
-				name: [{ required: true, message: '换热站名称不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '城市名称不能为空', trigger: 'blur' }],
 				code: [{ required: true, message: '城市编码不能为空', trigger: 'blur' }],
 				status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
 			},
@@ -115,7 +119,8 @@ export default defineComponent({
 				id: 0,
 				parentId: '',
 				name: '',
-				code: ''
+				code: '',
+				sort: 0
 			}
 		}
 		// 关闭弹窗

@@ -40,6 +40,7 @@
 					{{ scope.row.status === 1 ? '在线' : '不在线' }}
                 </template>
             </el-table-column>
+			<el-table-column label="排序" prop="sort" align="center" />
 	    	<el-table-column label="创建时间" prop="createdAt" :show-overflow-tooltip="true" />
             <el-table-column label="操作" width="200" align="center">
             <template #default="scope">

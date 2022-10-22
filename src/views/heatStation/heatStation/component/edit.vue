@@ -164,11 +164,11 @@ export default defineComponent({
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.dialogVisible = false
+			state.keyword = ''
 		}
 		// 取消
 		const onCancel = () => {
 			closeDialog()
-			state.keyword = ''
 		}
 		const getDetail = () => {
 			api.heatStation.detail(state.ruleForm.id)

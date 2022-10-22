@@ -4,25 +4,11 @@
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="系统模块" prop="title">
-						<el-input
-							v-model="tableData.param.title"
-							placeholder="请输入系统模块"
-							clearable
-							style="width: 180px"
-							size="default"
-							@keyup.enter="dataList"
-						/>
+						<el-input v-model="tableData.param.title" placeholder="请输入系统模块" clearable style="width: 180px" size="default" @keyup.enter="dataList" />
 					</el-form-item>
 
 					<el-form-item label="操作人员" prop="operName">
-						<el-input
-							v-model="tableData.param.operName"
-							placeholder="请输入操作人员"
-							clearable
-							style="width: 180px"
-							size="default"
-							@keyup.enter="dataList"
-						/>
+						<el-input v-model="tableData.param.operName" placeholder="请输入操作人员" clearable style="width: 180px" size="default" @keyup.enter="dataList" />
 					</el-form-item>
 
 					<el-form-item label="业务类型" prop="businessType">
@@ -92,6 +78,7 @@
 				<el-table-column label="部门名称" align="center" prop="deptName" />
 				<el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
 				<el-table-column label="操作地点" show-overflow-tooltip align="center" prop="operLocation" />
+				<el-table-column label="操作时间" show-overflow-tooltip align="center" prop="operTime" />
 				<el-table-column label="操作状态" align="center" prop="status" width="80">
 					<template #default="scope">
 						<el-tag type="info" size="small" v-if="scope.row.status === 1">停用</el-tag>
@@ -107,13 +94,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 
 		<el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
@@ -261,7 +242,7 @@ export default defineComponent({
 						done();
 					}
 				},
-			}).catch(() => {});
+			}).catch(() => { });
 		};
 		// 清空日志
 		// const onRowClear = () => {

@@ -1,6 +1,12 @@
 import { get, post, del, put } from '/@/utils/request';
 
 export default {
+  heatingDistrict: {
+    getTree: (params: object) => get('/region/zhgy/tree', params),
+    getPlotCount: (params: object) => get('/region/plot/count', params), // 获取小区数量
+    getResidentCount: (params: object) => get('/region/resident/count', params), // 获取住户数量
+    getOrganizationCount: (params: object) => get('/system/organization/count', params), // 获取组织数量
+  },
   regionalManage: {
     allList: (params: object) => get('/region/plot/all', params),
     getList: (params: object) => get('/region/plot/list', params),
