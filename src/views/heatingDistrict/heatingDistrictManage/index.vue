@@ -170,6 +170,11 @@ export default defineComponent({
 		display: grid;
 		grid-template-columns: 250px 1fr;
 		border: 1px solid #ddd;
+		// &::before {
+		// 	content: " ";
+		// 	display: block;
+		// 	clear: both;
+		// }
 	}
 	.left-panel {
 		padding: 20px;
@@ -179,6 +184,7 @@ export default defineComponent({
 		flex-direction: column;
 		padding: 20px;
 		border-left: 1px solid #ddd;
+		position: absolute;
 	}
 }
 
@@ -222,5 +228,10 @@ export default defineComponent({
 			}
 		}
 	}
+}
+
+:deep(.system-dic-container) {
+	position: absolute;
+	width: calc(100% - 40px);
 }
 </style>

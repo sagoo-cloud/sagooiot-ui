@@ -3,23 +3,6 @@
     <div>
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <!-- <el-form-item label="所属组织" prop="organizationId">
-						<el-tree-select
-							v-model="tableData.param.organizationId"
-							:data="orgList"
-							:props="{
-								label: 'name',
-								children: 'children'
-							}"
-							placeholder="请选择"
-							node-key="id"
-							:clearable="true"
-							check-strictly
-							style="width: 100%;"
-							:render-after-expand="true"
-							size="default"
-						/>
-          </el-form-item> -->
           <el-form-item label="小区名称" prop="name">
             <el-input v-model="tableData.param.name" placeholder="请输入小区名称" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
           </el-form-item>
@@ -51,29 +34,29 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column label="ID" align="center" prop="id" width="60" />
-        <el-table-column label="小区名称" prop="name" min-width="100" />
-        <el-table-column label="区域名称" prop="" min-width="100">
+			<el-table :data="tableData.data" v-loading="tableData.loading">
+				<!-- <el-table-column type="selection" width="55" align="center" /> -->
+				<el-table-column label="ID" align="center" prop="id" width="60" />
+				<el-table-column label="小区名称" prop="name" min-width="100" />
+				<el-table-column label="区域名称" prop="" min-width="100">
 					<template #default="{ row }">
 						{{ row.SysOrganization.name }}
 					</template>
 				</el-table-column>
-	    	<el-table-column label="更新时间" prop="createdAt" width="180" />
+				<el-table-column label="更新时间" prop="createdAt" width="180" />
 				<el-table-column prop="status" label="启用状态" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
-        <el-table-column label="操作" width="200" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+				<el-table-column label="操作" width="200" align="center" fixed="right">
+					<template #default="scope">
+						<el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
     </div>
     <EditDic ref="editDicRef" @queryList="handleFinish()" />
