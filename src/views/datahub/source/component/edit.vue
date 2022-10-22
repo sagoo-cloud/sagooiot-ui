@@ -82,28 +82,38 @@
 						</el-form-item> -->
 
 					<div class="box-content">
-						<el-divider content-position="left">请求参数</el-divider>
-
 						<div>
-						<div v-for="(item, index) in requestParams" :key="index" style="padding: 10px; border: 1px solid #eee;">
-							<div class="content-f" v-for="(aaa, bbb) in item" :key="bbb">
-								<el-select v-model="aaa.type" placeholder="参数类型" style="width: 320px">
-									<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
-								</el-select>
-								<el-input v-model="aaa.name" placeholder="请输入参数标题" style="width: 320px" />
-								<el-input v-model="aaa.key" placeholder="请输入参数名" style="width: 320px" />
-								<el-input v-model="aaa.value" placeholder="请输入参数值" style="width: 320px" />
-								<div class="conicon">
-									<el-icon @click="delParamss(index,bbb)"><Delete /></el-icon>
+							<div
+								v-for="(item, index) in requestParams"
+								:key="index"
+								style="padding: 10px; border: 1px solid #eee; margin-bottom: 10px; position: relative">
+								<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
+									<el-icon @click="delParams(index)"><CircleClose /></el-icon>
 								</div>
+
+								<div style="display: flex">
+									<el-divider content-position="left">请求参数</el-divider>
+								</div>
+								<div class="content-f" v-for="(aaa, bbb) in item" :key="bbb">
+									<el-select v-model="aaa.type" placeholder="参数类型" style="width: 320px">
+										<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
+									</el-select>
+									<el-input v-model="aaa.name" placeholder="请输入参数标题" style="width: 320px" />
+									<el-input v-model="aaa.key" placeholder="请输入参数名" style="width: 320px" />
+									<el-input v-model="aaa.value" placeholder="请输入参数值" style="width: 320px" />
+									<div class="conicon">
+										<el-icon @click="delParamss(index, bbb)"><Delete /></el-icon>
+									</div>
+								</div>
+								<el-button type="primary" class="addbutton" @click="addParams(index)">增加</el-button>
+								<div style=""></div>
+								<!-- <el-button type="danger" class="addbutton" @click="delParams(index)">删除分组</el-button> -->
+
+								<!-- <div class="conicon" style="  width: 100%; text-align: right;">
+									<el-icon @click="delParams(index)" style="border: 2px solid rgb(96 98 102);;border-radius: 5px;   "><Minus /></el-icon>
+								</div> -->
 							</div>
-							<el-button type="primary" class="addbutton" @click="addParams(index)">增加</el-button>
-							<div style=""></div>
-							<el-button type="danger" class="addbutton" @click="delParams(index)">删除分组</el-button>
-							
 						</div>
-						
-</div>
 					</div>
 					<el-button type="success" class="addbutton" @click="addParamss">增加分组</el-button>
 				</div>
@@ -176,7 +186,7 @@ import api from '/@/api/datahub';
 import 'vue3-json-viewer/dist/index.css';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Minus, Right } from '@element-plus/icons-vue';
+import { Delete, Plus, CircleClose, Minus, Right } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	sourceId: number;
@@ -196,7 +206,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Minus, Right },
+	components: { Delete, Plus, CircleClose, Minus, Right },
 
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
@@ -310,7 +320,7 @@ export default defineComponent({
 			state.requestParams.splice(index, 1);
 		};
 
-		const delParamss = (index,bbb) => {
+		const delParamss = (index, bbb) => {
 			state.requestParams[index].splice(bbb, 1);
 		};
 
@@ -539,6 +549,9 @@ export default defineComponent({
 .addbutton {
 	width: 100%;
 	margin-top: 10px;
+	background: #fff;
+	border: 1px solid #d1d1d1;
+	color: #8d8b8b;
 }
 .conicon {
 	width: 55px;

@@ -30,10 +30,10 @@
 				</div>
 
 				<el-form-item label="字段节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称"  :disabled="ruleForm.from==2"/>
+					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称"  />
 				</el-form-item>
 				<el-form-item label="字段节点名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" :disabled="ruleForm.from==2"/>
+					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
 
 
