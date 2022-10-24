@@ -184,7 +184,7 @@ export default defineComponent({
 		flex-direction: column;
 		padding: 20px;
 		border-left: 1px solid #ddd;
-		position: absolute;
+		position: relative;
 	}
 }
 
