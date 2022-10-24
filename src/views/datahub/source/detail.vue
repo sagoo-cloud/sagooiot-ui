@@ -55,19 +55,22 @@
 
 							<el-divider content-position="left">请求参数</el-divider>
 
-							<div class="content-f" v-for="(item, index) in requestParams" :key="index">
-								<el-form-item label="参数类型:">
-									{{ item.type }}
-								</el-form-item>
-								<el-form-item label="参数标题:">
-									{{ item.name }}
-								</el-form-item>
-								<el-form-item label="参数名:">
-									{{ item.key }}
-								</el-form-item>
-								<el-form-item label="参数值:">
-									{{ item.value }}
-								</el-form-item>
+							<div class="content-f" v-for="(item, index) in requestParams" :key="index" style="    border: 1px solid #d9d9d9; padding: 10px;margin-bottom: 10px;">
+								
+								<div v-for="(aa, bb) in item" :key="inbbdex">
+									<el-form-item label="参数类型:">
+										{{ aa.type }}
+									</el-form-item>
+									<el-form-item label="参数标题:">
+										{{ aa.name }}
+									</el-form-item>
+									<el-form-item label="参数名:">
+										{{ aa.key }}
+									</el-form-item>
+									<el-form-item label="参数值:">
+										{{ aa.value }}
+									</el-form-item>
+								</div>
 							</div>
 						</div>
 					</el-form>
