@@ -44,7 +44,11 @@
 				>
 					<template #default="{ node, data }">
 						<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
-							<span>{{ data.orgName }}</span>
+							<img src="/src/assets/icon-org.png" v-if="data.orgType === 'org'">
+							<img src="/src/assets/icon-plot.png" v-else-if="data.orgType === 'plot'">
+							<img src="/src/assets/icon-floor.png" v-else-if="data.orgType === 'floor'">
+							<img src="/src/assets/icon-unit.png" v-else-if="data.orgType === 'unit'">
+							<span class="name" :title="data.orgName">{{ data.orgName }}</span>
 						</span>
 					</template>
 				</el-tree>
@@ -190,6 +194,17 @@ export default defineComponent({
 
 
 .custom-tree-node {
+	display: grid;
+	grid-template-columns: 20px 1fr;
+	align-items: center;
+	img {
+		width: 16px;
+		height: 16px;
+	}
+	.name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
   &.active {
     color: var(--el-color-primary);
 		// background: var(--el-color-primary-light-9);
