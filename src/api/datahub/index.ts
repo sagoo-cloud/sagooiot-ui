@@ -19,6 +19,12 @@ export default {
     getLists: (params: object) => get('/source/list', params),
     copy: (params: object) => post('/source/copy', params),
 
+    dbadd: (data: object) => post('/source/db/add', data),
+    dbedit: (data: object) => put('/source/db/edit', data),
+    getfields: (sourceId: number) => get('/source/db/fields', { sourceId }),
+
+    devdb: (sourceId: number) => get('/source/db/get', { sourceId }),
+
     },
    
    node:{

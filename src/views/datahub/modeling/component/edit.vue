@@ -39,14 +39,14 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="单元数据" prop="busiId">
+				<!-- <el-form-item label="单元数据" prop="busiId">
 					<el-cascader :options="cityData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择单元数据" clearable class="w100" v-model="ruleForm.busiId">
 							<template #default="{ node, data }">
 							<span>{{ data.name }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
 							</template>
              	 </el-cascader>
-				</el-form-item>
+				</el-form-item> -->
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">

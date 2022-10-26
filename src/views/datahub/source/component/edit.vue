@@ -19,6 +19,7 @@
 						<!-- <el-radio :label="2">数据库</el-radio>
 						<el-radio :label="3">文件</el-radio> -->
 						<el-radio :label="4">设备</el-radio>
+						<el-radio :label="2">数据库</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -158,6 +159,60 @@
 							</el-select>
 						</el-form-item> -->
 				</div>
+
+				<div v-if="ruleForm.from == 2">
+
+					<el-form-item label="数据来源" prop="type">
+					<el-radio-group v-model="tabconfig.type" >
+						<el-radio label="mysql">mysql</el-radio>
+						<el-radio label="mssql">mssql</el-radio>
+					
+					</el-radio-group>
+				</el-form-item>
+
+					<el-form-item label="主机地址" >
+							<el-input v-model="tabconfig.host" placeholder="请输入主机地址"   />
+						</el-form-item>
+
+						<el-form-item label="端口号">
+							<el-input v-model="tabconfig.port" placeholder="请输入端口号" />
+						</el-form-item>
+
+						<el-form-item label="用户名">
+							<el-input v-model="tabconfig.user" placeholder="请输入用户名" />
+						</el-form-item>
+
+						<el-form-item label="密码">
+							<el-input v-model="tabconfig.passwd" placeholder="请输入密码" />
+						</el-form-item>
+
+						<el-form-item label="数据库名称">
+							<el-input v-model="tabconfig.dbName" placeholder="请输入数据库名称" />
+						</el-form-item>
+
+						<el-form-item label="表名称">
+							<el-input v-model="tabconfig.tableName" placeholder="请输入表名称" />
+						</el-form-item>
+
+						<el-form-item label="主键字段">
+							<el-input v-model="tabconfig.pk" placeholder="请输入主键字段" />
+						</el-form-item>
+
+						<el-form-item label="每次获取数量">
+							<el-input v-model="tabconfig.num" placeholder="请输入每次获取数量" />
+						</el-form-item>
+
+						<el-form-item label="任务表达式">
+							<el-input v-model="tabconfig.cronExpression" placeholder="请输入cron任务表达式" />
+							<ul style="list-style: none;">
+								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
+								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
+							</ul>
+						</el-form-item>
+				</div>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -216,6 +271,7 @@ export default defineComponent({
 			dialogVisible: false,
 			config: {},
 			devconfig: {},
+			tabconfig: {},
 			sourceData: [],
 			sourceId: 0,
 			jsonData: '',
@@ -374,6 +430,8 @@ export default defineComponent({
 						state.requestParams = res.data.apiConfig.requestParams;
 					} else if (res.data.from == 4) {
 						state.devconfig = res.data.deviceConfig;
+					} else if (res.data.from == 2) {
+						state.tabconfig = res.data.dbConfig;
 					}
 					res.data.sourceRule.forEach((item, index) => {
 						state.rule[index].expression = item.expression;
@@ -394,6 +452,7 @@ export default defineComponent({
 		};
 		const resetForm = () => {
 			state.devconfig = {};
+			state.tabconfig = {};
 			state.ruleForm = {
 				sourceId: 0,
 				name: '',
@@ -452,8 +511,10 @@ export default defineComponent({
 		// 新增
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any;
+			console.log(formWrap);
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
+				
 				if (valid) {
 					//修改rule数据
 					// state.rule.forEach((item, index) => {
@@ -468,8 +529,11 @@ export default defineComponent({
 						state.ruleForm.config = state.config;
 					} else if (state.ruleForm.from == 4) {
 						state.ruleForm.config = state.devconfig;
+					}else if (state.ruleForm.from == 2) {
+						state.ruleForm.config = state.tabconfig;
 					}
 
+					
 					if (state.ruleForm.sourceId !== 0) {
 						//修改
 
@@ -485,6 +549,12 @@ export default defineComponent({
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
+						}else if (state.ruleForm.from == 2) {
+							api.common.dbedit(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型修改成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
 						}
 					} else {
 						//添加
@@ -496,6 +566,12 @@ export default defineComponent({
 							});
 						} else if (state.ruleForm.from == 4) {
 							api.common.devadd(state.ruleForm).then(() => {
+								ElMessage.success('数据源类型添加成功');
+								closeDialog(); // 关闭弹窗
+								emit('typeList');
+							});
+						}else if (state.ruleForm.from == 2) {
+							api.common.dbadd(state.ruleForm).then(() => {
 								ElMessage.success('数据源类型添加成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');

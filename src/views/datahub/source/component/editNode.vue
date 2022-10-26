@@ -25,6 +25,8 @@
 				<el-form-item label="取值项" prop="value" v-if="detail.from == 1">
 					<el-input v-model="ruleForm.value" placeholder="请输入取值项" class="w-35" /><el-button type="success" @click="onTest">选择值</el-button>
 				</el-form-item>
+
+
 				<el-form-item label="取值项" prop="value" v-if="detail.from == 4">
 					<el-select v-model="ruleForm.value" filterable placeholder="请选择数取值项" @change="getNodeList">
 						<el-option v-for="item in propertyData" :key="item.key" :label="item.name" :value="item.key">
@@ -33,6 +35,18 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+
+
+				<el-form-item label="取值项" prop="value" v-if="detail.from == 2">
+					<el-select v-model="ruleForm.value" filterable placeholder="请选择数取值项" @change="getDbList">
+						<el-option v-for="item in dbData" :key="item.Name" :label="item.Comment" :value="item.Name">
+							<span style="float: left">{{ item.Name }}</span>
+							<span style="float: right; font-size: 13px">{{ item.Comment }}</span>
+						</el-option>
+					</el-select>
+				</el-form-item>
+
+
 
 				<el-divider content-position="left">规则表达式</el-divider>
 
@@ -112,6 +126,7 @@ export default defineComponent({
 			jsonPathData: [],
 			jsonData: '',
 			propertyData: [],
+			dbData: [],
 			config: {},
 			detail: {},
 			tabData: [
@@ -251,6 +266,12 @@ export default defineComponent({
 						state.propertyData = re;
 					});
 				}
+				if (res.data.from == 2) {
+					//propertyData
+					api.common.getfields(row.sourceId).then((re: any) => {
+						state.dbData = re.data;
+					});
+				}
 			});
 
 			state.ruleForm = row;
@@ -318,6 +339,10 @@ export default defineComponent({
 				}
 			});
 		};
+
+		const getDbList = (e)=>{
+			state.ruleForm.dataType = state.dbData[e].Type;
+		}
 
 		const onKeyclick = (e) => {
 			//console.log(e);
@@ -429,6 +454,7 @@ export default defineComponent({
 			handlePath,
 			validateType,
 			getNodeList,
+			getDbList,
 			onKeyclick,
 			getOrgIdArr,
 			addRule,

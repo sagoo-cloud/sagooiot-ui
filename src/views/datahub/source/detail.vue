@@ -29,7 +29,61 @@
 							<span v-if="detail.from == 1">api导入</span>
 							<span v-if="detail.from == 2">数据库</span>
 							<span v-if="detail.from == 3">文件</span>
+							<span v-if="detail.from == 4">设备</span>
 						</el-form-item>
+
+
+						<div v-if="detail.from==4">
+							<el-divider content-position="left">数据源配置</el-divider>
+							<el-form-item label="设备key:" prop="deviceKey">
+								{{ detail.deviceConfig.deviceKey }}
+							</el-form-item>
+							<el-form-item label="产品key:" prop="productKey">
+								{{ detail.deviceConfig.productKey }}
+							</el-form-item>
+						</div>
+
+						<div v-if="detail.from == 2">
+							<el-divider content-position="left">数据源配置</el-divider>
+							<el-form-item label="数据来源:" prop="type">
+								{{ detail.dbConfig.type }}
+							</el-form-item>
+
+							<el-form-item label="主机地址:" prop="host">
+								{{ detail.dbConfig.host }}
+							</el-form-item>
+
+							<el-form-item label="端口号:" prop="port">
+								{{ detail.dbConfig.port }}
+							</el-form-item>
+
+							<el-form-item label="用户名:" prop="user">
+								{{ detail.dbConfig.user }}
+							</el-form-item>
+							<el-form-item label="密码:" prop="passwd">
+								{{ detail.dbConfig.passwd }}
+							</el-form-item>
+							<el-form-item label="数据库名称:" prop="dbName">
+								{{ detail.dbConfig.dbName }}
+							</el-form-item>
+
+							<el-form-item label="表名称:" prop="tableName">
+								{{ detail.dbConfig.tableName }}
+							</el-form-item>
+							<el-form-item label="主键字段:" prop="pk">
+								{{ detail.dbConfig.pk }}
+							</el-form-item>
+
+							<el-form-item label="每次获取数量:" prop="num">
+								{{ detail.dbConfig.num }}
+							</el-form-item>
+
+							<el-form-item label="任务表达式:" prop="cronExpression">
+								{{ detail.dbConfig.cronExpression }}
+							</el-form-item>
+						
+						</div>
+						<div  v-if="detail.from == 1">
 
 						<el-divider content-position="left">规则表达式</el-divider>
 
@@ -73,6 +127,8 @@
 								</div>
 							</div>
 						</div>
+
+					</div>
 					</el-form>
 				</el-tab-pane>
 
@@ -249,6 +305,11 @@ export default defineComponent({
 					})
 				}else if(state.detail.from==4){
 					api.common.devapi(state.detail.sourceId).then((res: any) => {
+						state.jsonData=JSON.parse(res.data);
+							console.log(res);
+					})
+				}else if(state.detail.from==2){
+					api.common.devdb(state.detail.sourceId).then((res: any) => {
 						state.jsonData=JSON.parse(res.data);
 							console.log(res);
 					})
