@@ -68,7 +68,6 @@ interface RuleFormState {
 	name: string;
 	interval: string;
 	key: string;
-	busiTypes: string;
 	desc: string;
 }
 interface DicState {
@@ -108,8 +107,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:0,
-				busiId:0,
+				busiTypes:'',
 				desc: '',
 			},
 			rules: {
@@ -132,8 +130,10 @@ export default defineComponent({
 
 			if (row) {
 				state.ruleForm = row;
-				state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes.toString();
-				state.ruleForm.busiId=row.dataTemplateBusi.busiId;
+				if(row.dataTemplateBusi.busiTypes!=0){
+					state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes.toString();
+					state.ruleForm.busiId=row.dataTemplateBusi.busiId;
+				}
 			}
 			state.isShowDialog = true;
 		};
@@ -142,8 +142,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:0,
-				busiId:0,
+				busiTypes:'',
 				desc: '',
 			};
 		};
