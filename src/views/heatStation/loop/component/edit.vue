@@ -32,6 +32,7 @@
         <el-form-item label="节能类型" prop="energyTypes">
           <el-select v-model="ruleForm.energyTypes" placeholder="请选择节能类型" clearable size="default" style="width: 100%">
             <el-option label="节能" :value="1" />
+            <el-option label="非节能" :value="2" />
           </el-select>
         </el-form-item>
         <el-row :gutter="10">

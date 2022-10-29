@@ -28,7 +28,7 @@
           {{ ruleForm.loopTypes === 1 ? '一网' : '二网' }}
         </el-form-item>
         <el-form-item label="节能类型" prop="energyTypes">
-          {{ ruleForm.energyTypes === 1 ? '节能' : '' }}
+          {{ ruleForm.energyTypes === 1 ? '节能' : '非节能' }}
         </el-form-item>
         <el-row :gutter="10">
           <el-col :span="12">

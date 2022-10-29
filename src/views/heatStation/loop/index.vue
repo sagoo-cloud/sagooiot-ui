@@ -64,6 +64,7 @@
 	    	<el-table-column label="节能类型" prop="energyTypes">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.energyTypes === 1">节能</el-tag>
+            <el-tag type="success" size="small" v-else-if="scope.row.energyTypes === 2">非节能</el-tag>
           </template>
         </el-table-column>
 	    	<el-table-column label="供暖对象" prop="heatingObject" :show-overflow-tooltip="true">
