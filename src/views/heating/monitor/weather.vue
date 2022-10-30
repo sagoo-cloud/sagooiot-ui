@@ -18,12 +18,11 @@
 			<el-row :gutter="15" class="home-card-two mb15">
 				<el-col>
 					<div class="weather-info">
-						<section>
+						<section v-if="oneCityInfo.weather">
 							<span class="temperature">{{ oneCityInfo.Temperature }}℃</span>
-							<img :src="weatherObj[oneCityInfo.weather]" alt="">
+							<img :src="`/imgs/weather/${oneCityInfo.weather}.svg`" alt="">
 							<span class="weather">{{ oneCityInfo.weather }}</span>
 							<span>{{ oneCityInfo.reporttime }}更新</span>
-
 						</section>
 						<section>
 							<span style="margin-right: 20px;">地点：{{ currentcityName }}</span>
@@ -74,23 +73,6 @@ import { useStore } from '/@/store/index';
 
 import api from '/@/api/datahub';
 
-import weather1 from '/@/assets/冰雹.svg';
-import weather2 from '/@/assets/多云（白天）.svg';
-import weather3 from '/@/assets/多云（夜晚）.svg';
-import weather4 from '/@/assets/雷电.svg';
-import weather5 from '/@/assets/雷阵雨.svg';
-import weather6 from '/@/assets/沙尘.svg';
-import weather7 from '/@/assets/雾.svg';
-import weather8 from '/@/assets/雪.svg';
-import weather9 from '/@/assets/夜晚.svg';
-import weather10 from '/@/assets/阴.svg';
-import weather11 from '/@/assets/雨.svg';
-import weather12 from '/@/assets/雨加雪.svg';
-import weather13 from '/@/assets/阵雨.svg';
-import weather14 from '/@/assets/晴天.svg';
-import weather15 from '/@/assets/霾.svg';
-
-
 let global: any = {
 	homeChartOne: null,
 	homeChartTwo: null,
@@ -101,23 +83,6 @@ let global: any = {
 export default defineComponent({
 	name: 'home',
 	setup() {
-		const weatherObj = ref({
-			'冰雹': weather1,
-			'多云': weather2,
-			'多云（夜晚）': weather3,
-			'雷电': weather4,
-			'雷阵雨': weather5,
-			'沙尘': weather6,
-			'雾': weather7,
-			'雪': weather8,
-			'夜晚': weather9,
-			'阴': weather10,
-			'雨': weather11,
-			'雨加雪': weather12,
-			'阵雨': weather13,
-			'晴': weather14,
-			'霾': weather15
-		});
 		const homeTemLineRef = ref();
 		const homeWindLineRef = ref();
 		const store = useStore();
@@ -447,7 +412,6 @@ export default defineComponent({
 			}
 		);
 		return {
-			weatherObj,
 			homeTemLineRef,
 			homeWindLineRef,
 			getWhichCityWeather,
