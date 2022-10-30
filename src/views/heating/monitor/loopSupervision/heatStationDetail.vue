@@ -1,55 +1,46 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search">
-        <el-form :model="searchParams" ref="queryRef" :inline="true" label-width="100px">
-          <el-form-item label="换热站名称" prop="name">
-            <el-input v-model="searchParams.name" placeholder="换热站名称" clearable size="default"></el-input>
-          </el-form-item>
-          <el-form-item label="换热站编号" prop="name">
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search">
+				<el-form :model="searchParams" ref="queryRef" :inline="true" label-width="100px">
+					<el-form-item label="换热站名称" prop="name">
+						<el-input v-model="searchParams.name" placeholder="换热站名称" clearable size="default"></el-input>
+					</el-form-item>
+					<el-form-item label="换热站编号" prop="name">
 						<el-input v-model="searchParams.name" placeholder="换热站编号" clearable size="default"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+		</el-card>
 		<el-row :gutter="15" class="home-card-one mt15">
-			<el-col
-				:xs="24"
-				:sm="12"
-				:md="12"
-				:lg="6"
-				:xl="6"
-				v-for="(v, k) in dataOne"
-				:key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
-			>
+			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in dataOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item">
 					<div class="item-header">
-						<img :src="isIsDark?v.iconDark:v.icon" alt="">
-						<span>{{v.title}}</span>
+						<img :src="isIsDark ? v.iconDark : v.icon" alt="">
+						<span>{{ v.title }}</span>
 					</div>
 					<div class="item-content w100" :class="` home-one-animation${k}`">
 						<p>
-							<span>{{v.contentTitle1}}</span>
-							<span>{{v.val1+v.unit1}}</span>
+							<span>{{ v.contentTitle1 }}</span>
+							<span>{{ v.val1 + v.unit1 }}</span>
 						</p>
 						<p>
-							<span>{{v.contentTitle2}}</span>
-							<span>{{v.val2+v.unit2}}</span>
+							<span>{{ v.contentTitle2 }}</span>
+							<span>{{ v.val2 + v.unit2 }}</span>
 						</p>
 					</div>
 				</div>
@@ -75,7 +66,7 @@
 				</div>
 			</el-col>
 		</el-row>
-  </div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -168,17 +159,17 @@ export default defineComponent({
 		});
 
 		const goDetail = () => {
-			router.push('/monitor/loopSupervision/list/heatStationHistory')
+			router.push('/heating/monitor/loopSupervision/list/heatStationHistory')
 		}
 
 		// 折线图
-		const initLineChart  = () => {
+		const initLineChart = () => {
 			if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
 			global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				tooltip: { trigger: 'axis' },
-				legend: {  },
+				legend: {},
 				grid: { top: 40, right: 40, bottom: 40, left: 40 },
 				xAxis: [
 					{
@@ -217,7 +208,7 @@ export default defineComponent({
 			(<any>global.homeCharThree).setOption(option);
 			(<any>state.myCharts).push(global.homeCharThree);
 		};
-		
+
 		// 批量设置 echarts resize
 		const initEchartsResizeFun = () => {
 			nextTick(() => {
@@ -235,12 +226,12 @@ export default defineComponent({
 
 		// 页面加载时
 		onMounted(() => {
-			
+
 			initLineChart();
 			initEchartsResize();
 		});
 
-		
+
 		/** 重置按钮操作 */
 		const resetQuery = (formEl: FormInstance | undefined) => {
 			if (!formEl) return;
@@ -276,6 +267,7 @@ $homeNavLengh: 8;
 		}
 	}
 }
+
 .home-card-one .home-card-item {
 	width: 100%;
 	border-radius: 4px;
@@ -284,13 +276,16 @@ $homeNavLengh: 8;
 	background: var(--el-color-white);
 	color: var(--el-text-color-primary);
 	border: 1px solid var(--next-border-color-light);
+
 	&:hover {
 		box-shadow: 0 2px 12px var(--next-color-dark-hover);
 		transition: all ease 0.3s;
 	}
+
 	&.p20 {
 		padding: 20px;
 	}
+
 	.item-header {
 		display: flex;
 		justify-content: center;
@@ -300,35 +295,43 @@ $homeNavLengh: 8;
 		border-bottom: 1px solid var(--next-border-color-light);
 		font-size: 20px;
 		font-weight: bold;
+
 		img {
 			margin-right: 32px;
 			width: 24px;
-			height: 24px;;
+			height: 24px;
+			;
 			margin-top: 3px;
 		}
 	}
+
 	.item-content {
 		padding: 26px;
+
 		p {
 			display: flex;
 			justify-content: space-between;
 			align-content: center;
+
 			span:nth-child(1) {
 				// padding-top: 4px;
-				line-height: 33px;;
+				line-height: 33px;
+				;
 				font-size: 14px;
 			}
+
 			span:nth-child(2) {
 				color: #101010;
 				font-weight: bold;
 				font-size: 22px;
 			}
 		}
+
 		p:nth-child(2) {
 			margin-top: 26px;
 		}
 	}
-	
+
 	&-title {
 		font-size: 15px;
 		font-weight: bold;
