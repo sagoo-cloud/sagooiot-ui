@@ -142,7 +142,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 							{
 								path: '/demo/menu/menu1/menu11',
 								name: 'menu11',
-								component: () => import('/@/views/menu/menu1/menu11/index.vue'),
+								component: () => import('/@/views/demo/menu/menu1/menu11/index.vue'),
 								meta: {
 									title: 'message.router.menu11',
 									isLink: '',
@@ -173,7 +173,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 									{
 										path: '/demo/menu/menu1/menu12/menu121',
 										name: 'menu121',
-										component: () => import('/@/views/menu/menu1/menu12/menu121/index.vue'),
+										component: () => import('/@/views/demo/menu/menu1/menu12/menu121/index.vue'),
 										meta: {
 											title: 'message.router.menu121',
 											isLink: '',
@@ -188,7 +188,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 									{
 										path: '/demo/menu/menu1/menu12/menu122',
 										name: 'menu122',
-										component: () => import('/@/views/menu/menu1/menu12/menu122/index.vue'),
+										component: () => import('/@/views/demo/menu/menu1/menu12/menu122/index.vue'),
 										meta: {
 											title: 'message.router.menu122',
 											isLink: '',
@@ -205,7 +205,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 							{
 								path: '/demo/menu/menu1/menu13',
 								name: 'menu13',
-								component: () => import('/@/views/menu/menu1/menu13/index.vue'),
+								component: () => import('/@/views/demo/menu/menu1/menu13/index.vue'),
 								meta: {
 									title: 'message.router.menu13',
 									isLink: '',
@@ -222,7 +222,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/menu/menu2',
 						name: 'menu2',
-						component: () => import('/@/views/menu/menu2/index.vue'),
+						component: () => import('/@/views/demo/menu/menu2/index.vue'),
 						meta: {
 							title: 'message.router.menu2',
 							isLink: '',
@@ -255,7 +255,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/tagsView',
 						name: 'funTagsView',
-						component: () => import('/@/views/fun/tagsView/index.vue'),
+						component: () => import('/@/views/demo/fun/tagsView/index.vue'),
 						meta: {
 							title: 'message.router.funTagsView',
 							isLink: '',
@@ -270,7 +270,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/countup',
 						name: 'funCountup',
-						component: () => import('/@/views/fun/countup/index.vue'),
+						component: () => import('/@/views/demo/fun/countup/index.vue'),
 						meta: {
 							title: 'message.router.funCountup',
 							isLink: '',
@@ -285,7 +285,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/wangEditor',
 						name: 'funWangEditor',
-						component: () => import('/@/views/fun/wangEditor/index.vue'),
+						component: () => import('/@/views/demo/fun/wangEditor/index.vue'),
 						meta: {
 							title: 'message.router.funWangEditor',
 							isLink: '',
@@ -300,7 +300,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/cropper',
 						name: 'funCropper',
-						component: () => import('/@/views/fun/cropper/index.vue'),
+						component: () => import('/@/views/demo/fun/cropper/index.vue'),
 						meta: {
 							title: 'message.router.funCropper',
 							isLink: '',
@@ -315,7 +315,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/qrcode',
 						name: 'funQrcode',
-						component: () => import('/@/views/fun/qrcode/index.vue'),
+						component: () => import('/@/views/demo/fun/qrcode/index.vue'),
 						meta: {
 							title: 'message.router.funQrcode',
 							isLink: '',
@@ -330,7 +330,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/echartsMap',
 						name: 'funEchartsMap',
-						component: () => import('/@/views/fun/echartsMap/index.vue'),
+						component: () => import('/@/views/demo/fun/echartsMap/index.vue'),
 						meta: {
 							title: 'message.router.funEchartsMap',
 							isLink: '',
@@ -345,7 +345,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/printJs',
 						name: 'funPrintJs',
-						component: () => import('/@/views/fun/printJs/index.vue'),
+						component: () => import('/@/views/demo/fun/printJs/index.vue'),
 						meta: {
 							title: 'message.router.funPrintJs',
 							isLink: '',
@@ -360,7 +360,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/clipboard',
 						name: 'funClipboard',
-						component: () => import('/@/views/fun/clipboard/index.vue'),
+						component: () => import('/@/views/demo/fun/clipboard/index.vue'),
 						meta: {
 							title: 'message.router.funClipboard',
 							isLink: '',
@@ -375,7 +375,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/gridLayout',
 						name: 'funGridLayout',
-						component: () => import('/@/views/fun/gridLayout/index.vue'),
+						component: () => import('/@/views/demo/fun/gridLayout/index.vue'),
 						meta: {
 							title: 'message.router.funGridLayout',
 							isLink: '',
@@ -390,7 +390,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/fun/splitpanes',
 						name: 'funSplitpanes',
-						component: () => import('/@/views/fun/splitpanes/index.vue'),
+						component: () => import('/@/views/demo/fun/splitpanes/index.vue'),
 						meta: {
 							title: 'message.router.funSplitpanes',
 							isLink: '',
@@ -423,7 +423,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/filtering',
 						name: 'pagesFiltering',
-						component: () => import('/@/views/pages/filtering/index.vue'),
+						component: () => import('/@/views/demo/pages/filtering/index.vue'),
 						meta: {
 							title: 'message.router.pagesFiltering',
 							isLink: '',
@@ -444,7 +444,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 							{
 								path: '/demo/pages/filtering/details',
 								name: 'pagesFilteringDetails',
-								component: () => import('/@/views/pages/filtering/details.vue'),
+								component: () => import('/@/views/demo/pages/filtering/details.vue'),
 								meta: {
 									title: 'message.router.pagesFilteringDetails',
 									isLink: '',
@@ -461,7 +461,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/filtering/details1',
 						name: 'pagesFilteringDetails1',
-						component: () => import('/@/views/pages/filtering/details1.vue'),
+						component: () => import('/@/views/demo/pages/filtering/details1.vue'),
 						meta: {
 							title: 'message.router.pagesFilteringDetails1',
 							isLink: '',
@@ -476,7 +476,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/iocnfont',
 						name: 'pagesIocnfont',
-						component: () => import('/@/views/pages/iocnfont/index.vue'),
+						component: () => import('/@/views/demo/pages/iocnfont/index.vue'),
 						meta: {
 							title: 'message.router.pagesIocnfont',
 							isLink: '',
@@ -491,7 +491,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/element',
 						name: 'pagesElement',
-						component: () => import('/@/views/pages/element/index.vue'),
+						component: () => import('/@/views/demo/pages/element/index.vue'),
 						meta: {
 							title: 'message.router.pagesElement',
 							isLink: '',
@@ -506,7 +506,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/awesome',
 						name: 'pagesAwesome',
-						component: () => import('/@/views/pages/awesome/index.vue'),
+						component: () => import('/@/views/demo/pages/awesome/index.vue'),
 						meta: {
 							title: 'message.router.pagesAwesome',
 							isLink: '',
@@ -521,7 +521,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/formAdapt',
 						name: 'pagesFormAdapt',
-						component: () => import('/@/views/pages/formAdapt/index.vue'),
+						component: () => import('/@/views/demo/pages/formAdapt/index.vue'),
 						meta: {
 							title: 'message.router.pagesFormAdapt',
 							isLink: '',
@@ -536,7 +536,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/tableRules',
 						name: 'pagesTableRules',
-						component: () => import('/@/views/pages/tableRules/index.vue'),
+						component: () => import('/@/views/demo/pages/tableRules/index.vue'),
 						meta: {
 							title: 'message.router.pagesTableRules',
 							isLink: '',
@@ -551,7 +551,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/formI18n',
 						name: 'pagesFormI18n',
-						component: () => import('/@/views/pages/formI18n/index.vue'),
+						component: () => import('/@/views/demo/pages/formI18n/index.vue'),
 						meta: {
 							title: 'message.router.pagesFormI18n',
 							isLink: '',
@@ -566,7 +566,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/formRules',
 						name: 'pagesFormRules',
-						component: () => import('/@/views/pages/formRules/index.vue'),
+						component: () => import('/@/views/demo/pages/formRules/index.vue'),
 						meta: {
 							title: 'message.router.pagesFormRules',
 							isLink: '',
@@ -581,7 +581,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/listAdapt',
 						name: 'pagesListAdapt',
-						component: () => import('/@/views/pages/listAdapt/index.vue'),
+						component: () => import('/@/views/demo/pages/listAdapt/index.vue'),
 						meta: {
 							title: 'message.router.pagesListAdapt',
 							isLink: '',
@@ -596,7 +596,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/waterfall',
 						name: 'pagesWaterfall',
-						component: () => import('/@/views/pages/waterfall/index.vue'),
+						component: () => import('/@/views/demo/pages/waterfall/index.vue'),
 						meta: {
 							title: 'message.router.pagesWaterfall',
 							isLink: '',
@@ -611,7 +611,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/steps',
 						name: 'pagesSteps',
-						component: () => import('/@/views/pages/steps/index.vue'),
+						component: () => import('/@/views/demo/pages/steps/index.vue'),
 						meta: {
 							title: 'message.router.pagesSteps',
 							isLink: '',
@@ -626,7 +626,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/preview',
 						name: 'pagesPreview',
-						component: () => import('/@/views/pages/preview/index.vue'),
+						component: () => import('/@/views/demo/pages/preview/index.vue'),
 						meta: {
 							title: 'message.router.pagesPreview',
 							isLink: '',
@@ -641,7 +641,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/waves',
 						name: 'pagesWaves',
-						component: () => import('/@/views/pages/waves/index.vue'),
+						component: () => import('/@/views/demo/pages/waves/index.vue'),
 						meta: {
 							title: 'message.router.pagesWaves',
 							isLink: '',
@@ -656,7 +656,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/tree',
 						name: 'pagesTree',
-						component: () => import('/@/views/pages/tree/index.vue'),
+						component: () => import('/@/views/demo/pages/tree/index.vue'),
 						meta: {
 							title: 'message.router.pagesTree',
 							isLink: '',
@@ -671,7 +671,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/drag',
 						name: 'pagesDrag',
-						component: () => import('/@/views/pages/drag/index.vue'),
+						component: () => import('/@/views/demo/pages/drag/index.vue'),
 						meta: {
 							title: 'message.router.pagesDrag',
 							isLink: '',
@@ -686,7 +686,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/lazyImg',
 						name: 'pagesLazyImg',
-						component: () => import('/@/views/pages/lazyImg/index.vue'),
+						component: () => import('/@/views/demo/pages/lazyImg/index.vue'),
 						meta: {
 							title: 'message.router.pagesLazyImg',
 							isLink: '',
@@ -701,7 +701,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/dynamicForm',
 						name: 'pagesDynamicForm',
-						component: () => import('/@/views/pages/dynamicForm/index.vue'),
+						component: () => import('/@/views/demo/pages/dynamicForm/index.vue'),
 						meta: {
 							title: 'message.router.pagesDynamicForm',
 							isLink: '',
@@ -716,7 +716,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/pages/workflow',
 						name: 'pagesWorkflow',
-						component: () => import('/@/views/pages/workflow/index.vue'),
+						component: () => import('/@/views/demo/pages/workflow/index.vue'),
 						meta: {
 							title: 'message.router.pagesWorkflow',
 							isLink: '',
@@ -749,7 +749,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/make/selector',
 						name: 'makeSelector',
-						component: () => import('/@/views/make/selector/index.vue'),
+						component: () => import('/@/views/demo/make/selector/index.vue'),
 						meta: {
 							title: 'message.router.makeSelector',
 							isLink: '',
@@ -764,7 +764,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/make/noticeBar',
 						name: 'makeNoticeBar',
-						component: () => import('/@/views/make/noticeBar/index.vue'),
+						component: () => import('/@/views/demo/make/noticeBar/index.vue'),
 						meta: {
 							title: 'message.router.makeNoticeBar',
 							isLink: '',
@@ -779,7 +779,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/make/svgDemo',
 						name: 'makeSvgDemo',
-						component: () => import('/@/views/make/svgDemo/index.vue'),
+						component: () => import('/@/views/demo/make/svgDemo/index.vue'),
 						meta: {
 							title: 'message.router.makeSvgDemo',
 							isLink: '',
@@ -812,7 +812,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/params/common',
 						name: 'paramsCommon',
-						component: () => import('/@/views/params/common/index.vue'),
+						component: () => import('/@/views/demo/params/common/index.vue'),
 						meta: {
 							title: 'message.router.paramsCommon',
 							isLink: '',
@@ -827,7 +827,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/params/common/details',
 						name: 'paramsCommonDetails',
-						component: () => import('/@/views/params/common/details.vue'),
+						component: () => import('/@/views/demo/params/common/details.vue'),
 						meta: {
 							title: 'message.router.paramsCommonDetails',
 							isLink: '',
@@ -842,7 +842,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/params/dynamic',
 						name: 'paramsDynamic',
-						component: () => import('/@/views/params/dynamic/index.vue'),
+						component: () => import('/@/views/demo/params/dynamic/index.vue'),
 						meta: {
 							title: 'message.router.paramsDynamic',
 							isLink: '',
@@ -857,7 +857,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 					{
 						path: '/demo/params/dynamic/details/:t/:id',
 						name: 'paramsDynamicDetails',
-						component: () => import('/@/views/params/dynamic/details.vue'),
+						component: () => import('/@/views/demo/params/dynamic/details.vue'),
 						meta: {
 							title: 'message.router.paramsDynamicDetails',
 							isLink: '',
@@ -922,7 +922,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 			{
 				path: '/demo/chart',
 				name: 'chartIndex',
-				component: () => import('/@/views/chart/index.vue'),
+				component: () => import('/@/views/demo/chart/index.vue'),
 				meta: {
 					title: 'message.router.chartIndex',
 					isLink: '',
@@ -937,7 +937,7 @@ export const demoRoutes:Array<RouteRecordRaw> = [
 			{
 				path: '/demo/tools',
 				name: 'tools',
-				component: () => import('/@/views/tools/index.vue'),
+				component: () => import('/@/views/demo/tools/index.vue'),
 				meta: {
 					title: 'message.router.tools',
 					isLink: '',
@@ -1004,7 +1004,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 	{
 		path: '/visualizingDemo1',
 		name: 'visualizingDemo1',
-		component: () => import('/@/views/visualizing/demo1.vue'),
+		component: () => import('/@/views/demo/visualizing/demo1.vue'),
 		meta: {
 			title: 'message.router.visualizingLinkDemo1',
 		},
