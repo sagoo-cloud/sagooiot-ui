@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+	<div class="page-container">
 		<div class="head-card">
 			<div class="head-card-item">
 				<div class="item">
@@ -7,7 +7,7 @@
 					<div class="label">区域统计</div>
 				</div>
 				<div class="logo">
-					<img src="../../../assets/icon-org.png" class="img">
+					<img src="/@/assets/icon-org.png" class="img">
 				</div>
 			</div>
 			<div class="head-card-item">
@@ -16,7 +16,7 @@
 					<div class="label">小区统计</div>
 				</div>
 				<div class="logo">
-					<img src="../../../assets/icon-plot.png" class="img">
+					<img src="/@/assets/icon-plot.png" class="img">
 				</div>
 			</div>
 			<div class="head-card-item">
@@ -25,23 +25,16 @@
 					<div class="label">住户统计</div>
 				</div>
 				<div class="logo">
-					<img src="../../../assets/icon-resident.png" class="img">
+					<img src="/@/assets/icon-resident.png" class="img">
 				</div>
 			</div>
 		</div>
 		<div class="panel">
 			<div class="left-panel">
 				<el-input v-model="filterText" size="default" placeholder="搜索区域" />
-				<el-tree
-					:data="treeList"
-					node-key="id"
-					default-expand-all
-					:props="{
-						children: 'children'
-					}"
-					@node-click="onNodeClick"
-					:expand-on-click-node="false"
-				>
+				<el-tree :data="treeList" node-key="id" default-expand-all :props="{
+					children: 'children'
+				}" @node-click="onNodeClick" :expand-on-click-node="false">
 					<template #default="{ node, data }">
 						<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
 							<img src="/src/assets/icon-org.png" v-if="data.orgType === 'org'">
@@ -55,16 +48,16 @@
 			</div>
 			<div class="right-panel">
 				<!-- 小区 -->
-				<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id" @finish="initPage()"/>
+				<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id" @finish="initPage()" />
 				<!-- 楼宇 -->
-				<Floor v-else-if="curNode.orgType === 'plot'" :nodeId="curNode.id" @finish="initPage()"/>
+				<Floor v-else-if="curNode.orgType === 'plot'" :nodeId="curNode.id" @finish="initPage()" />
 				<!-- 单元 -->
-				<Unit v-else-if="curNode.orgType === 'floor'" :nodeId="curNode.id" @finish="initPage()"/>
+				<Unit v-else-if="curNode.orgType === 'floor'" :nodeId="curNode.id" @finish="initPage()" />
 				<!-- 住户 -->
-				<Resident v-else-if="curNode.orgType === 'unit'" :nodeId="curNode.id" @finish="initPage()"/>
+				<Resident v-else-if="curNode.orgType === 'unit'" :nodeId="curNode.id" @finish="initPage()" />
 			</div>
 		</div>
-  </div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -170,6 +163,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .page-container {
 	background-color: #fff;
+
 	.panel {
 		display: grid;
 		grid-template-columns: 250px 1fr;
@@ -180,9 +174,11 @@ export default defineComponent({
 		// 	clear: both;
 		// }
 	}
+
 	.left-panel {
 		padding: 20px;
 	}
+
 	.right-panel {
 		display: flex;
 		flex-direction: column;
@@ -197,30 +193,36 @@ export default defineComponent({
 	display: grid;
 	grid-template-columns: 20px 1fr;
 	align-items: center;
+
 	img {
 		width: 16px;
 		height: 16px;
 	}
+
 	.name {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-  &.active {
-    color: var(--el-color-primary);
+
+	&.active {
+		color: var(--el-color-primary);
 		// background: var(--el-color-primary-light-9);
-  }
+	}
 }
 
 .head-card {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	padding: 20px;
+
 	&-item {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
 		.item {
 			text-align: center;
+
 			// margin-right: 10px;
 			.count {
 				font-size: 32px;
@@ -229,6 +231,7 @@ export default defineComponent({
 				margin-bottom: 5px;
 			}
 		}
+
 		.logo {
 			width: 72px;
 			height: 72px;
@@ -237,6 +240,7 @@ export default defineComponent({
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
 			.img {
 				width: 32px;
 				height: 32px;
