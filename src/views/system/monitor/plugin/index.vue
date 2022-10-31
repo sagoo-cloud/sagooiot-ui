@@ -93,7 +93,6 @@ export default defineComponent({
 		};
 		const dataList = () => {
 			state.tableData.loading = true;
-            console.log(state.tableData.param)
 			api.plugin
 				.getList(state.tableData.param)
 				.then((res: any) => {
