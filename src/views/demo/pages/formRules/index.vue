@@ -1,8 +1,14 @@
 <template>
 	<div class="form-rules-container">
-		<el-card shadow="hover" header="表单组件1"> <FormRulesOne :data="formRulesOneData" ref="pagesFormRulesOneRef" /></el-card>
-		<el-card shadow="hover" header="表单组件2" class="mt15"><FormRulesTwo ref="pagesFormRulesTwoRef" /> </el-card>
-		<el-card shadow="hover" header="表单组件3" class="mt15"> <FormRulesThree ref="pagesFormRulesThreeRef" /></el-card>
+		<el-card shadow="hover" header="表单组件1">
+			<FormRulesOne :data="formRulesOneData" ref="pagesFormRulesOneRef" />
+		</el-card>
+		<el-card shadow="hover" header="表单组件2" class="mt15">
+			<FormRulesTwo ref="pagesFormRulesTwoRef" />
+		</el-card>
+		<el-card shadow="hover" header="表单组件3" class="mt15">
+			<FormRulesThree ref="pagesFormRulesThreeRef" />
+		</el-card>
 		<el-row class="flex mt15">
 			<div class="flex-margin">
 				<el-button size="default" @click="onResetForm">
@@ -21,9 +27,9 @@
 <script lang="ts">
 import { toRefs, reactive, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
-import FormRulesOne from '/@/views/pages/formRules/component/formRulesOne.vue';
-import FormRulesTwo from '/@/views/pages/formRules/component/formRulesTwo.vue';
-import FormRulesThree from '/@/views/pages/formRules/component/formRulesThree.vue';
+import FormRulesOne from './component/formRulesOne.vue';
+import FormRulesTwo from './component/formRulesTwo.vue';
+import FormRulesThree from './component/formRulesThree.vue';
 export default defineComponent({
 	name: 'pagesFormRules',
 	components: {

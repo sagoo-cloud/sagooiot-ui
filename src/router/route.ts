@@ -1012,7 +1012,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 	{
 		path: '/visualizingDemo2',
 		name: 'visualizingDemo2',
-		component: () => import('/@/views/visualizing/demo2.vue'),
+		component: () => import('/@/views/demo/visualizing/demo2.vue'),
 		meta: {
 			title: 'message.router.visualizingLinkDemo2',
 		},
