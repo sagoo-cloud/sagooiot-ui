@@ -10,12 +10,21 @@
                   <tbody>
                   <tr>
                     <td>
-                      <div class="cell-card">核心数: </div>
+                      <div class="cell-card">CPU数: </div>
                     </td>
                     <td>
                       <div class="cell-card">{{ sysInfo.cpuNum }}</div>
                     </td>
                   </tr>
+                  <tr>
+                    <td>
+                      <div class="cell-card">核心数: </div>
+                    </td>
+                    <td>
+                      <div class="cell-card">{{ sysInfo.cpuCores }}</div>
+                    </td>
+                  </tr>
+
                   <tr>
                     <td>
                       <div class="cell-card">使用率:</div>
@@ -288,7 +297,7 @@ import 'echarts-wordcloud';
 import api from '/@/api/system';
 let interval: any = null;
 export default defineComponent({
-	name: 'monitor',
+  name: 'monitor',
 	components: {},
 	setup() {
 		const { proxy } = getCurrentInstance() as any;
@@ -315,7 +324,6 @@ export default defineComponent({
 				],
 			});
 		}
-
 		function setOptChart2(value: number) {
 			myChart2.setOption({
 				series: [
@@ -330,7 +338,6 @@ export default defineComponent({
 				],
 			});
 		}
-
     function setOptChart3(value: number) {
       myChart3.setOption({
         series: [
@@ -399,7 +406,6 @@ export default defineComponent({
 			myChart1.setOption(option);
 			state.myCharts.push(myChart1);
 		};
-
 		//内存
 		const initChartRAM = () => {
 			myChart2 = echarts.init(proxy.$refs.chartsWarningRef2);
@@ -453,7 +459,6 @@ export default defineComponent({
 			myChart2.setOption(option);
 			state.myCharts.push(myChart2);
 		};
-
     //磁盘
     const initChartDISK = () => {
       myChart3 = echarts.init(proxy.$refs.chartsWarningRef3);
@@ -515,45 +520,94 @@ export default defineComponent({
       initChartDISK();
     });
 
-		let ws: WebSocket | null = null;
-
 		function startWs() {
-			ws = null;
-			ws = new WebSocket(import.meta.env.VITE_WS_URL + '/monitorServer/ws');
-			ws.onopen = () => {};
-			ws.onmessage = ({ data: dataStr }) => {
-				const data = JSON.parse(dataStr);
-				state.sysInfo = data;
-				setOptChart1(data.cpuUsed);
-				setOptChart2(data.memUsage);
-        setOptChart3(data.diskUsedPercent);
-        // console.log(data);
-			};
-			// ws.onclose = () => {
-			// 	setTimeout(() => {
-			// 		startWs();
-			// 	}, 3000);
+			// ws = null;
+			// ws = new WebSocket(import.meta.env.VITE_WS_URL + '/monitorServer/ws');
+			// ws.onopen = () => {};
+			// ws.onmessage = ({ data: dataStr }) => {
+			// 	const data = JSON.parse(dataStr);
+			// 	state.sysInfo = data;
+			// 	setOptChart1(data.cpuUsed);
+			// 	setOptChart2(data.memUsage);
+      //   setOptChart3(data.diskUsedPercent);
 			// };
-		}
+
+      const es = new EventSource(import.meta.env.VITE_SERVER_URL+"/subscribe/sysenv");
+
+      es.addEventListener("host", displayHost);
+      es.addEventListener("mem", displayMem);
+      es.addEventListener("cpu", displayCpu);
+      es.addEventListener("sysLoad", displaySysLoad);
+      es.addEventListener("disk", displayDisk);
+    }
 
 		startWs();
 
-		function getSystemInfo() {
-			api.getSysInfo().then((res: any) => {
-				state.sysInfo = res;
-				setOptChart1(res.cpuUsed);
-				setOptChart2(res.memUsage);
-        setOptChart3(res.diskUsedPercent);
+    function displayHost(event: { data: any; }) {
+      const data=JSON.parse(event.data);
+      state.sysInfo.sysOsName = data.os
+      state.sysInfo.sysOsArch = data.kernelArch
+      state.sysInfo.sysComputerName = data.hostname
+      state.sysInfo.goStartTime = data.bootTime
+      state.sysInfo.goRunTime = data.uptime
+    }
 
-      });
-		}
+    function displayMem(event: { data: any; }) {
+      const data=JSON.parse(event.data);
+      setOptChart2(data.usedPercent.toFixed(2));
+      state.sysInfo.memTotal = data.total
+      state.sysInfo.memUsed = data.used
+      state.sysInfo.memFree = data.free
+      state.sysInfo.goUsed = data.goUsed
+      state.sysInfo.memUsage = data.usedPercent.toFixed(2)
+
+    }
+
+    function displayCpu(event: { data: any; }) {
+      const data=JSON.parse(event.data);
+      state.sysInfo.cpuNum = data.Number
+      state.sysInfo.cpuCores = data.Cores
+      state.sysInfo.cpuUsed = data.UsedPercent[0].toFixed(2)
+      setOptChart1(data.UsedPercent[0].toFixed(2));
+
+
+    };
+
+    function displaySysLoad(event: { data: any; }) {
+      const data=JSON.parse(event.data)
+      state.sysInfo.cpuAvg5 = data.load5.toFixed(2)
+      state.sysInfo.cpuAvg15 = data.load15.toFixed(2)
+
+    };
+
+    function displayDisk(event: { data: any; }) {
+      const data=JSON.parse(event.data)
+      state.sysInfo.diskTotal = data.total
+      state.sysInfo.diskUsed = data.used
+      state.sysInfo.diskUsedPercent = data.usedPercent.toFixed(2)
+      setOptChart3(data.usedPercent.toFixed(2));
+
+    };
+
+
+		// function getSystemInfo() {
+		// 	api.getSysInfo().then((res: any) => {
+		// 		state.sysInfo = res;
+		// 		setOptChart1(res.cpuUsed);
+		// 		setOptChart2(res.memUsage);
+    //     setOptChart3(res.diskUsedPercent);
+    //
+    //   });
+		// }
 
 		return {
 			...toRefs(state),
-			getSystemInfo,
+			// getSystemInfo,
 			setOptChart1,
 			setOptChart2,
-			ws,
+      setOptChart3,
+
+      // ws,
 		};
 	},
 	created() {
@@ -565,9 +619,9 @@ export default defineComponent({
 		// }
 	},
 	unmounted() {
-		if (this.ws) {
-			(this.ws as WebSocket).close();
-		}
+		// if (this.ws) {
+		// 	(this.ws as WebSocket).close();
+		// }
 		if (interval) {
 			clearInterval(interval);
 			interval = null;
@@ -619,6 +673,7 @@ export default defineComponent({
 		},
 	},
 });
+
 </script>
 
 <style scoped lang="scss">

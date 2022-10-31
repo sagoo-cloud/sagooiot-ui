@@ -103,6 +103,7 @@ export default {
     deleteData: (ids: number[]) => del('/common/dict/data/delete', { ids }),
   },
   getSysInfo: () => get('/system/monitor/server'),
+
   log: {
     getList: (params: object) => get('/system/login/log/list', params),
     del: (infoIds: number) => del('/system/login/log/del', { infoIds }),
