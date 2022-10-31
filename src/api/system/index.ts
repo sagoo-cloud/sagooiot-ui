@@ -135,5 +135,9 @@ export default {
     edit: (data: object) => put('/common/city/edit', data),
     del: (id: number) => del('/common/city/del', { id }),
     detail: (id: number) => get('/common/city/getInfoById', { id }),
+  },
+  plugin: {
+    getList: (params: object) => get('/system/plugins/list', params),
+    changeStatus: (params: object) => post('/system/plugins/set', params),
   }
 }

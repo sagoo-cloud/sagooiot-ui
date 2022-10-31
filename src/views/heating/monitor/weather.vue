@@ -197,7 +197,7 @@ export default defineComponent({
 
 			const option = {
 				backgroundColor: state.charts.bgColor,
-				grid: { top: 70, right: 40, bottom: 30, left: 40 },
+				grid: { top: 70, right: 40, bottom: 50, left: 40 },
 				tooltip: { trigger: 'axis' },
 				legend: { data: ['气温（℃）', '当日平均（℃）'], left: '40%' },
 				xAxis: {
@@ -277,7 +277,7 @@ export default defineComponent({
 			global.homeChartTwo = <any>echarts.init(homeWindLineRef.value, state.charts.theme);
 			const option = {
 				backgroundColor: state.charts.bgColor,
-				grid: { top: 70, right: 40, bottom: 30, left: 40 },
+				grid: { top: 70, right: 40, bottom: 50, left: 40 },
 				tooltip: { trigger: 'axis' },
 				legend: { data: ['风力（级）', '当日风力（级）'], left: '40%' },
 				xAxis: {
