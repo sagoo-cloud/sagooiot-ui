@@ -29,13 +29,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table
-				:data="tableData.data"
-				style="width: 100%"
-				row-key="id"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				v-loading="tableData.loading"
-			>
+			<el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
@@ -80,9 +74,9 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, toRaw, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import EditRole from '/@/views/system/role/component/editRole.vue';
-import EditPer from '/@/views/system/role/component/editPer.vue';
-import permissionVue from '/@/views/system/role/component/permission.vue';
+import EditRole from './component/editRole.vue';
+import EditPer from './component/editPer.vue';
+import permissionVue from './component/permission.vue';
 import api from '/@/api/system';
 // 定义接口来定义对象的类型
 interface TableData {

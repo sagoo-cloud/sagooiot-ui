@@ -38,14 +38,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table
-				:data="tableData.data"
-				style="width: 100%"
-				@selection-change="handleSelectionChange"
-				row-key="postId"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				v-loading="tableData.loading"
-			>
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="postCode" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
@@ -74,7 +67,7 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, toRaw } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import EditPost from '/@/views/system/post/component/editPost.vue';
+import EditPost from './component/editPost.vue';
 import api from '/@/api/system';
 // 定义接口来定义对象的类型
 interface TableData {
@@ -165,7 +158,7 @@ export default defineComponent({
 						postList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 页面加载时
 		onMounted(() => {
