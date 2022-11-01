@@ -3,15 +3,7 @@
 		<div class="search">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-input
-						size="default"
-						v-model="params.keyWord"
-						style="width: 200px; margin-left: 20px"
-						class="search-input"
-						placeholder="请输入搜索关键字"
-						@keyup.enter.native="getList(1)"
-						clearable
-					>
+					<el-input size="default" v-model="params.keyWord" style="width: 200px; margin-left: 20px" class="search-input" placeholder="请输入搜索关键字" @keyup.enter.native="getList(1)" clearable>
 					</el-input>
 					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
@@ -53,27 +45,30 @@ import api from '/@/api/configuration';
 import { Session } from '/@/utils/storage';
 import { useSearch } from '/@/hooks/useCommon';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import getOrigin from '/@/utils/origin'
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'data', { keyWord: '' });
 
 getList();
 
+function getTokenUrl(url: string) {
+	const tokenUrl = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token'))
+	return getOrigin(tokenUrl + url)
+};
+
 const view = (row: any) => {
-	const url = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/show/' + row.id;
+	const url = getTokenUrl('#/show/' + row.id);
 	// const url = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token')) + `&bgColor=FF9900` + '#/show/' + row.id;
-	// console.log(url);
 	window.open(url);
 };
 
 const add = () => {
-	const url = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/editor/new';
-	// console.log(url);
+	const url = getTokenUrl('#/editor/new');
 	window.open(url);
 };
 
 const edit = (row: any) => {
-	const url = import.meta.env.VITE_TOPO_URL + '/?token=' + encodeURIComponent(Session.get('token')) + '#/editor/' + row.id;
-	// console.log(url);
+	const url = getTokenUrl('#/editor/' + row.id);
 	window.open(url);
 };
 
