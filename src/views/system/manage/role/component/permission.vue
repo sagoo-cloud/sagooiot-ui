@@ -1,36 +1,39 @@
 <template>
-  <el-dialog :title="title" v-model="isShowDialog" width="1100px">
-    <div class="mb-4 tr">
-      <el-dropdown>
-        <el-button plain class="mr-3">
-          操作<el-icon>
-            <ele-ArrowDown />
-          </el-icon>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item @click.native="checkAll(true)">全部勾选</el-dropdown-item>
-            <el-dropdown-item @click.native="checkAll(false)">取消全选</el-dropdown-item>
-            <el-dropdown-item @click.native="expand(true)">展开所有</el-dropdown-item>
-            <el-dropdown-item @click.native="expand(false)">折叠所有</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <el-button :disabled="step <= 0" @click="prev">上一步</el-button>
-      <el-button :disabled="step >= 3" @click="next">下一步</el-button>
-      <el-button type="primary" :loading="btnLoading" :disabled="step < 3" @click="submit">确定</el-button>
-      <el-button @click="cancel">取消</el-button>
-    </div>
-    <el-steps :active="step" simple>
-      <el-step name title="菜单权限" />
-      <el-step title="按钮权限" />
-      <el-step title="列表权限" />
-      <el-step title="接口权限" />
-    </el-steps>
-    <div class="scroll-part mt-3">
-      <el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
-    </div>
-  </el-dialog>
+	<el-dialog :title="title" v-model="isShowDialog" width="1100px">
+		<div class="mb-4 tr">
+			<el-dropdown>
+				<el-button plain class="mr-3">
+					操作<el-icon>
+						<ele-ArrowDown />
+					</el-icon>
+				</el-button>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item @click.native="checkAll(true)">全部勾选</el-dropdown-item>
+						<el-dropdown-item @click.native="checkAll(false)">取消全选</el-dropdown-item>
+						<el-dropdown-item @click.native="expand(true)">展开所有</el-dropdown-item>
+						<el-dropdown-item @click.native="expand(false)">折叠所有</el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+			<el-button :disabled="step <= 0" @click="prev">上一步</el-button>
+			<el-button :disabled="step >= 3" @click="next">下一步</el-button>
+			<el-button type="primary" :loading="btnLoading" :disabled="step < 3" @click="submit">确定</el-button>
+			<el-button @click="cancel">取消</el-button>
+		</div>
+		<el-steps :active="step" simple>
+			<el-step name title="菜单权限" />
+			<el-step title="按钮权限" />
+			<el-step title="列表权限" />
+			<el-step title="接口权限" />
+		</el-steps>
+		<div class="scroll-part mt-3">
+			<el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="step === 0 ? {
+				children: 'children',
+				label: 'title',
+			} : defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
+		</div>
+	</el-dialog>
 </template>
 
 <script lang="ts" setup>
