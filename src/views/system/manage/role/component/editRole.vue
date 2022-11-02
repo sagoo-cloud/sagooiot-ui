@@ -1,39 +1,39 @@
 <template>
-  <div class="system-edit-role-container">
-    <el-dialog :title="(formData.id===0?'添加':'修改')+'角色'" v-model="isShowDialog" width="769px">
-      <el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
-        <el-row :gutter="35">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <el-form-item label="上级角色">
-              <el-cascader :options="list" :props="{ label: 'name',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="formData.parentId">
-                <template #default="{ node, data }">
-                  <span>{{ data.name }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item label="角色名称" prop="name">
-              <el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item label="排序">
-              <el-input-number v-model="formData.listOrder" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item label="角色状态">
-              <el-switch v-model="formData.status" :active-value="1" :inactive-value="0" inline-prompt active-text="启" inactive-text="禁"></el-switch>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <el-form-item label="角色描述">
-              <el-input v-model="formData.remark" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
-            </el-form-item>
-          </el-col>
-          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+	<div class="system-edit-role-container">
+		<el-dialog :title="(formData.id === 0 ? '添加' : '修改') + '角色'" v-model="isShowDialog" width="769px">
+			<el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="上级角色">
+							<el-cascader :options="list" :props="{ label: 'name', value: 'id', checkStrictly: true, emitPath: false }" placeholder="请选择上级角色" clearable class="w100" v-model="formData.parentId">
+								<template #default="{ node, data }">
+									<span>{{ data.name }}</span>
+									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+								</template>
+							</el-cascader>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="角色名称" prop="name">
+							<el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="排序">
+							<el-input-number v-model="formData.listOrder" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="角色状态">
+							<el-switch v-model="formData.status" :active-value="1" :inactive-value="0" inline-prompt active-text="启" inactive-text="禁"></el-switch>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="角色描述">
+							<el-input v-model="formData.remark" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+						</el-form-item>
+					</el-col>
+					<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-form-item label="菜单权限">
               <el-row :gutter="35">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -47,16 +47,16 @@
               </el-row>
             </el-form-item>
           </el-col> -->
-        </el-row>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{formData.id===0?'新 增':'修 改'}}</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="onCancel" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{ formData.id === 0 ? '新 增' : '修 改' }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
 <script lang="ts">
@@ -266,6 +266,7 @@ export default defineComponent({
 	background: #fff none !important;
 	border-radius: 4px;
 }
+
 .system-edit-role-container {
 	.menu-data-tree {
 		border: var(--el-input-border, var(--el-border-base));
