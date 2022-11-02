@@ -61,19 +61,18 @@
 					<el-table :data="tableData.data" style="width: 100%" v-loading="loading" @selection-change="handleSelectionChange">
 						<!-- <el-table-column type="selection" width="55" align="center" /> -->
 						<el-table-column type="index" label="序号" width="60" align="center" />
-						<el-table-column prop="userName" label="账户名称" min-width="120" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="userName" label="账户名称" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="userNickname" label="用户昵称" v-col="'userNickname'" min-width="160" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="dept.deptName" label="部门" show-overflow-tooltip></el-table-column>
-						<el-table-column label="角色" min-width="120" prop="rolesNames" :show-overflow-tooltip="true">
-						</el-table-column>
+						<el-table-column prop="dept.deptName" label="部门" v-col="'deptName'" show-overflow-tooltip></el-table-column>
+						<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>
-						<el-table-column prop="status" label="用户状态" width="120" align="center">
+						<el-table-column prop="status" label="用户状态" width="120" v-col="'status'" align="center">
 							<template #default="scope">
 								<el-switch v-model="scope.row.status" :disabled="scope.row.id === 1" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 								</el-switch>
 							</template>
 						</el-table-column>
-						<el-table-column prop="createdAt" label="创建时间" width="180" align="center"></el-table-column>
+						<el-table-column prop="createdAt" label="创建时间" width="180" v-col="'createdAt'" align="center"></el-table-column>
 						<el-table-column label="操作" width="180" align="center" fixed="right">
 							<template #default="scope">
 								<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
