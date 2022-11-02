@@ -5,9 +5,9 @@
 				<el-form-item label="环路名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入环路名称" />
 				</el-form-item>
-				<el-form-item label="环路编号" prop="code">
+				<!-- <el-form-item label="环路编号" prop="code">
 					<el-input v-model="ruleForm.code" placeholder="请输入环路编号" />
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="所属换热站" prop="stationId">
 					<el-tree-select
 						v-model="ruleForm.stationId"
@@ -18,6 +18,7 @@
 						}"
 						node-key="id"
 						:clearable="true"
+						filterable
 						check-strictly
 						style="width: 100%;"
 						:render-after-expand="true"

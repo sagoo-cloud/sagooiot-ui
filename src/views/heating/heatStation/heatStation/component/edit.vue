@@ -240,6 +240,7 @@ export default defineComponent({
 				let point = e.latlng
 				state.ruleForm.lnt = point.lng
 				state.ruleForm.lat = point.lat
+				state.ruleForm.position = e.currentTarget.infoWindow.contentDiv.innerText.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
 			})
 		}
 
