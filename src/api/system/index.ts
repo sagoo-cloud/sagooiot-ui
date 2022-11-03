@@ -42,6 +42,7 @@ export default {
   role: {
     getList: (params: object) => get('/system/role/tree', params),
     getRole: (id: number) => get('/system/role/getInfoById', { id }),
+    getRoleIds: (id: number) => get('/system/role/getAuthorizeById', { id }),
     addRole: (data: object) => post('/system/role/add', data),
     dataScope: (data: object) => post('/system/role/dataScope', data),
     deleteRole: (id: number) => del('/system/role/delInfoById', { id }),

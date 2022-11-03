@@ -28,7 +28,7 @@
 			<el-step title="接口权限" />
 		</el-steps>
 		<div class="scroll-part mt-3">
-			<el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
+			<el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" />
 		</div>
 	</el-dialog>
 </template>
@@ -54,7 +54,7 @@ const columnIds = ref([]);
 const apiIds = ref([]);
 
 const typeList = ['menu', 'button', 'column', 'api'];
-const idsList = [menuIds, buttonIds, columnIds, apiIds];
+let idsList = [menuIds, buttonIds, columnIds, apiIds];
 const treeDataList = [menuData, buttonData, listData, apiData];
 const defaultProps = {
 	children: 'children',
@@ -66,7 +66,15 @@ const openDialog = async (row: any) => {
 	roleId.value = row.id;
 	isShowDialog.value = true;
 	step.value = 0;
-	let res = await api.role.auth.getList(typeList[step.value]);
+	const ids = await api.role.getRoleIds(row.id);
+	// idsList = ids.menuIds || [];
+	menuIds.value = ids.menuIds || [];
+	buttonIds.value = ids.buttonIds || [];
+	columnIds.value = ids.columnIds || [];
+	apiIds.value = ids.apiIds || [];
+	// 设置选中
+	treeRef.value.setCheckedKeys(ids.menuIds);
+	const res = await api.role.auth.getList(typeList[step.value]);
 	// console.log(res);
 	treeData.value = res;
 	menuData.value = res;
@@ -83,6 +91,7 @@ const expand = (expand: boolean) => {
 };
 
 const prev = async () => {
+	stepChange()
 	const currentStep = step.value;
 	const prevStep = step.value - 1;
 	// 获取选中id
@@ -91,21 +100,30 @@ const prev = async () => {
 	treeData.value = treeDataList[prevStep].value;
 	treeRef.value.setCheckedKeys(idsList[prevStep].value);
 	step.value = prevStep;
+	console.log(JSON.parse(JSON.stringify(idsList)))
 };
 
 const next = async () => {
+	stepChange()
 	const nextStep = step.value + 1;
-	let res = await api.role.auth.getList(typeList[nextStep], menuIds.value);
-	// console.log(res);
-	treeData.value = res;
-	treeDataList[nextStep].value = res;
+	const treeDataRes = await api.role.auth.getList(typeList[nextStep], menuIds.value);
+	// 最外层是菜单，如果菜单下没有按钮，列表或者接口，就不显示这个菜单
+	// 菜单id和其他id可能会重复，所以最外层的菜单id变一下，避免重复
+	const treeDateFilter = treeDataRes.filter((item: any) => {
+		if (item.children?.length) {
+			item.id += '_numu'
+			return true
+		}
+		return false
+	});
+	treeData.value = treeDateFilter;
+	treeDataList[nextStep].value = treeDateFilter;
 	treeRef.value.setCheckedKeys(idsList[nextStep].value);
-
 	step.value = nextStep;
 };
 
-// 选中状态变化
-const checkChange = () => {
+// 切换时候赋值
+const stepChange = () => {
 	idsList[step.value].value = treeRef.value.getCheckedKeys(step.value === 0 ? false : true);
 };
 
@@ -120,6 +138,7 @@ const checkAll = (all: boolean) => {
 };
 
 const submit = async () => {
+	stepChange()
 	const data = {
 		menuIds: menuIds.value,
 		buttonIds: buttonIds.value,
