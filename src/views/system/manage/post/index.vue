@@ -23,7 +23,7 @@
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAddPost">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAddPost" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -41,21 +41,21 @@
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column type="index" label="序号" width="60" align="center" />
-				<el-table-column prop="postCode" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="postName" label="岗位名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="postSort" label="排序" width="60" align="center"></el-table-column>
-				<el-table-column prop="status" label="岗位状态" width="120" align="center">
+				<el-table-column prop="postCode" v-col="'postCode'" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="postName" v-col="'postName'" label="岗位名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="postSort" v-col="'postSort'" label="排序" width="60" align="center"></el-table-column>
+				<el-table-column prop="status" v-col="'status'" label="岗位状态" width="120" align="center">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
 						<el-tag type="info" size="small" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="remark" label="岗位描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" width="180" align="center"></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column prop="remark" v-col="'remark'" label="岗位描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="180" align="center"></el-table-column>
+				<el-table-column label="操作" width="100" v-col="'handle'">
 					<template #default="scope">
-						<el-button size="small" text type="warning" @click="onOpenEditPost(scope.row)">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEditPost(scope.row)" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

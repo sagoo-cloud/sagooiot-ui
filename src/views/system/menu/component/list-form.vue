@@ -1,29 +1,29 @@
 <template>
-  <el-dialog v-model="showDialog" :title="`${formData.id?'编辑显示列':'新增显示列'}`" width="500px" :close-on-click-modal="false" :close-on-press-escape="false">
-    <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-      <!-- <el-form-item label="上级" prop="parentId">
+	<el-dialog v-model="showDialog" :title="`${formData.id ? '编辑显示列' : '新增显示列'}`" width="500px" :close-on-click-modal="false" :close-on-press-escape="false">
+		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px" @keyup.enter.native="onSubmit">
+			<!-- <el-form-item label="上级" prop="parentId">
         <el-cascader :options="parentData" :props="{ label: 'name',value: 'id',checkStrictly: true,emitPath: false }" placeholder="请选择上级菜单" clearable class="w100" v-model="formData.parentId"></el-cascader>
       </el-form-item> -->
-      <el-form-item label="字段名称" prop="name">
-        <el-input v-model="formData.name" placeholder="字段名称" />
-      </el-form-item>
-      <el-form-item label="字段key" prop="code">
-        <el-input v-model="formData.code" placeholder="输入字段key" />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-switch v-model="formData.status" :active-value="1" :inactive-value="0" />
-      </el-form-item>
-      <el-form-item label="说明" prop="description">
-        <el-input v-model="formData.description" type="textarea" :rows="6" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="showDialog = false">取消</el-button>
-        <el-button type="primary" @click="onSubmit">确定</el-button>
-      </div>
-    </template>
-  </el-dialog>
+			<el-form-item label="字段名称" prop="name">
+				<el-input v-model="formData.name" placeholder="字段名称" />
+			</el-form-item>
+			<el-form-item label="字段key" prop="code">
+				<el-input v-model="formData.code" placeholder="输入字段key" />
+			</el-form-item>
+			<el-form-item label="状态" prop="status">
+				<el-switch v-model="formData.status" :active-value="1" :inactive-value="0" />
+			</el-form-item>
+			<el-form-item label="说明" prop="description">
+				<el-input v-model="formData.description" type="textarea" :rows="6" />
+			</el-form-item>
+		</el-form>
+		<template #footer>
+			<div class="dialog-footer">
+				<el-button @click="showDialog = false">取消</el-button>
+				<el-button type="primary" @click="onSubmit">确定</el-button>
+			</div>
+		</template>
+	</el-dialog>
 </template>
 
 <script lang="ts" setup>

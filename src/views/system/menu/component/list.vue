@@ -1,34 +1,48 @@
 <template>
-  <el-drawer v-model="drawer" :title="title" direction="rtl" size="700px">
-    <div class="p-3">
-      <el-button size="default" type="success" class="mr-3" @click="onAddRow">
-        <el-icon>
-          <ele-FolderAdd />
-        </el-icon>
-        新增列
-      </el-button>
-    </div>
+	<el-drawer v-model="drawer" :title="title" direction="rtl" size="700px">
+		<div class="p-3">
+			<el-button size="default" type="success" class="mr-3" @click="onAddRow">
+				<el-icon>
+					<ele-FolderAdd />
+				</el-icon>
+				新增列
+			</el-button>
+			<el-dropdown @command="addCommonType">
+				<el-button text type="primary">
+					<el-icon>
+						<ele-Plus />
+					</el-icon>常用列表权限
+				</el-button>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item command="status-状态">状态</el-dropdown-item>
+						<el-dropdown-item command="createdAt-创建时间">创建时间</el-dropdown-item>
+						<el-dropdown-item command="handle-操作">操作</el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+		</div>
 
-    <el-table :data="tableData" style="width: 100%" row-key="id" border :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-      <el-table-column type="index" label="序号" width="60" align="center" />
-      <el-table-column prop="name" label="字段名称" width="220" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="code" label="字段key" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="status" label="状态" width="100" align="center">
-        <template #default="scope">
-          <el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="100" align="center">
-        <template #default="scope">
-          <el-button size="small" text type="warning" @click="onEdit(scope.row)">修改</el-button>
-          <el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-drawer>
-  <!-- <listForm ref="listFormRef" :parent-data="tableData" @getList="getList"></listForm> -->
-  <listForm ref="listFormRef" @getList="getList"></listForm>
+		<el-table :data="tableData" style="width: 100%" row-key="id" border :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+			<el-table-column type="index" label="序号" width="60" align="center" />
+			<el-table-column prop="name" label="字段名称" width="220" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="code" label="字段key" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="status" label="状态" width="100" align="center">
+				<template #default="scope">
+					<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+					</el-switch>
+				</template>
+			</el-table-column>
+			<el-table-column label="操作" width="100" align="center">
+				<template #default="scope">
+					<el-button size="small" text type="warning" @click="onEdit(scope.row)">修改</el-button>
+					<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+	</el-drawer>
+	<!-- <listForm ref="listFormRef" :parent-data="tableData" @getList="getList"></listForm> -->
+	<listForm ref="listFormRef" @getList="getList"></listForm>
 </template>
 
 <script lang="ts" setup>
@@ -50,9 +64,26 @@ const getList = async () => {
 	tableData.value = res || [];
 };
 
+// 添加常用类型
+const addCommonType = async (command: string) => {
+	const [code, name] = command.split('-');
+	const formData: MenuListRow = {
+		parentId: -1,
+		menuId: menuRow.value.id as number,
+		name,
+		code,
+		description: '',
+		status: 1,
+	};
+	await api.menu.list.add(formData);
+	ElMessage.success('操作成功');
+	getList();
+	getBackEndControlRoutes();
+};
+
 const open = async (row: any) => {
 	// console.log(row);
-	title.value = '列表权限 - ' + row.name;
+	title.value = '列表权限 - ' + row.title;
 	drawer.value = true;
 	menuRow.value = row;
 	getList();

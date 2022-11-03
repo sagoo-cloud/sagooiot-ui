@@ -40,7 +40,7 @@
 				</el-table-column>
 				<el-table-column prop="orderNum" label="排序" align="center" min-width="120" v-col="'orderNum'"></el-table-column>
 				<el-table-column prop="createdAt" label="创建时间" align="center" min-width="180" v-col="'createdAt'"></el-table-column>
-				<el-table-column label="操作" align="center" width="140">
+				<el-table-column label="操作" align="center" v-col="'handle'" width="140">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenAddDept(scope.row)" v-auth="'add'">新增</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEditDept(scope.row)" v-auth="'edit'">修改</el-button>

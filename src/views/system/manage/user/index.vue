@@ -73,7 +73,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column prop="createdAt" label="创建时间" width="180" v-col="'createdAt'" align="center"></el-table-column>
-						<el-table-column label="操作" width="180" align="center" fixed="right">
+						<el-table-column label="操作" width="180" align="center" v-col="'handle'" fixed="right">
 							<template #default="scope">
 								<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
                 <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth-all="['edit','del']">修改</el-button> -->

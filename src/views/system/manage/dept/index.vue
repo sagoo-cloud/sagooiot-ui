@@ -20,7 +20,7 @@
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAddDept">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAddDept" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -29,28 +29,21 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table
-				:data="tableData.data"
-				style="width: 100%"
-				row-key="deptId"
-				default-expand-all
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				v-loading="tableData.loading"
-			>
-				<el-table-column prop="deptName" label="部门名称" show-overflow-tooltip> </el-table-column>
-				<el-table-column prop="status" label="部门状态" align="center" min-width="120">
+			<el-table :data="tableData.data" style="width: 100%" row-key="deptId" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
+				<el-table-column prop="deptName" label="部门名称" v-col="'handle'" show-overflow-tooltip> </el-table-column>
+				<el-table-column prop="status" label="部门状态" v-col="'status'" align="center" min-width="120">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
 						<el-tag type="info" size="small" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="orderNum" label="排序" align="center" min-width="120"></el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" align="center" min-width="180"></el-table-column>
-				<el-table-column label="操作" align="center" width="140">
+				<el-table-column prop="orderNum" label="排序" v-col="'orderNum'" align="center" min-width="120"></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" v-col="'createdAt'" align="center" min-width="180"></el-table-column>
+				<el-table-column label="操作" align="center" width="140" v-col="'handle'">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="onOpenAddDept(scope.row)" v-auth="'edit'">新增</el-button>
-						<el-button size="small" text type="warning" @click="onOpenEditDept(scope.row)">修改</el-button>
-						<el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button size="small" type="text" @click="onOpenAddDept(scope.row)" v-auth="'add'">新增</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEditDept(scope.row)" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
