@@ -1,50 +1,50 @@
 <template>
-  <el-form ref="loginForm" size="large" class="login-content-form" :model="ruleForm" :rules="formRules">
-    <el-form-item class="login-animation1" prop="userName">
-      <el-input type="text" :placeholder="$t('message.account.accountPlaceholder1')" v-model="ruleForm.userName" clearable autocomplete="off">
-        <template #prefix>
-          <el-icon class="el-input__icon">
-            <ele-User />
-          </el-icon>
-        </template>
-      </el-input>
-    </el-form-item>
-    <el-form-item class="login-animation2" prop="password">
-      <el-input :type="isShowPassword ? 'text' : 'password'" :placeholder="$t('message.account.accountPlaceholder2')" v-model="ruleForm.password" autocomplete="off" @keyup.enter="onSignIn">
-        <template #prefix>
-          <el-icon class="el-input__icon">
-            <ele-Unlock />
-          </el-icon>
-        </template>
-        <template #suffix>
-          <i class="iconfont el-input__icon login-content-password" :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'" @click="isShowPassword = !isShowPassword">
-          </i>
-        </template>
-      </el-input>
-    </el-form-item>
-    <el-form-item class="login-animation3" prop="captcha">
-      <el-col :span="15">
-        <el-input type="text" maxlength="4" :placeholder="$t('message.account.accountPlaceholder3')" v-model="ruleForm.captcha" clearable autocomplete="off" @keyup.enter="onSignIn">
-          <template #prefix>
-            <el-icon class="el-input__icon">
-              <ele-Position />
-            </el-icon>
-          </template>
-        </el-input>
-      </el-col>
-      <el-col :span="1"></el-col>
-      <el-col :span="8">
-        <div class="login-content-code">
-          <img class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
-        </div>
-      </el-col>
-    </el-form-item>
-    <el-form-item class="login-animation4">
-      <el-button type="primary" class="login-content-submit"  @click="onSignIn" :loading="loading.signIn">
-        <span>{{ $t('message.account.accountBtnText') }}</span>
-      </el-button>
-    </el-form-item>
-  </el-form>
+	<el-form ref="loginForm" size="large" class="login-content-form" :model="ruleForm" :rules="formRules">
+		<el-form-item class="login-animation1" prop="userName">
+			<el-input type="text" :placeholder="$t('message.account.accountPlaceholder1')" v-model="ruleForm.userName" clearable autocomplete="off">
+				<template #prefix>
+					<el-icon class="el-input__icon">
+						<ele-User />
+					</el-icon>
+				</template>
+			</el-input>
+		</el-form-item>
+		<el-form-item class="login-animation2" prop="password">
+			<el-input :type="isShowPassword ? 'text' : 'password'" :placeholder="$t('message.account.accountPlaceholder2')" v-model="ruleForm.password" autocomplete="off" @keyup.enter="onSignIn">
+				<template #prefix>
+					<el-icon class="el-input__icon">
+						<ele-Unlock />
+					</el-icon>
+				</template>
+				<template #suffix>
+					<i class="iconfont el-input__icon login-content-password" :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'" @click="isShowPassword = !isShowPassword">
+					</i>
+				</template>
+			</el-input>
+		</el-form-item>
+		<el-form-item class="login-animation3" prop="captcha">
+			<el-col :span="15">
+				<el-input type="text" maxlength="4" :placeholder="$t('message.account.accountPlaceholder3')" v-model="ruleForm.captcha" clearable autocomplete="off" @keyup.enter="onSignIn">
+					<template #prefix>
+						<el-icon class="el-input__icon">
+							<ele-Position />
+						</el-icon>
+					</template>
+				</el-input>
+			</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="8">
+				<div class="login-content-code">
+					<img class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
+				</div>
+			</el-col>
+		</el-form-item>
+		<el-form-item class="login-animation4">
+			<el-button type="primary" class="login-content-submit" @click="onSignIn" :loading="loading.signIn">
+				<span>{{ $t('message.account.accountBtnText') }}</span>
+			</el-button>
+		</el-form-item>
+	</el-form>
 </template>
 
 <script lang="ts">
@@ -69,8 +69,8 @@ export default defineComponent({
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
-				userName: 'admin',
-				password: 'admin123456',
+				userName: 'demo',
+				password: 'demo123456',
 				captcha: '',
 				VerifyKey: '',
 			},
@@ -125,7 +125,7 @@ export default defineComponent({
 							});
 					}
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 获取登录用户信息
 		const currentUser = async () => {
@@ -184,6 +184,7 @@ export default defineComponent({
 .login-content-form {
 	width: 400px;
 	margin-top: 20px;
+
 	@for $i from 1 through 4 {
 		.login-animation#{$i} {
 			opacity: 0;
@@ -193,18 +194,22 @@ export default defineComponent({
 			animation-delay: calc($i/10) + s;
 		}
 	}
+
 	.login-content-password {
 		display: inline-block;
 		width: 20px;
 		cursor: pointer;
+
 		&:hover {
 			color: #909399;
 		}
 	}
+
 	.login-content-code {
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
+
 		.login-content-code-img {
 			width: 100%;
 			height: 40px;
@@ -215,12 +220,14 @@ export default defineComponent({
 			transition: all ease 0.2s;
 			border-radius: 4px;
 			user-select: none;
+
 			&:hover {
 				border-color: #c0c4cc;
 				transition: all ease 0.2s;
 			}
 		}
 	}
+
 	.login-content-submit {
 		width: 100%;
 		letter-spacing: 2px;
