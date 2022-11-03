@@ -49,6 +49,8 @@ const buttonData = ref([]);
 const listData = ref([]);
 const apiData = ref([]);
 const menuIds = ref([]);
+// 菜单id的半选节点
+const menuIdsHalf = ref([]);
 const buttonIds = ref([]);
 const columnIds = ref([]);
 const apiIds = ref([]);
@@ -92,11 +94,8 @@ const expand = (expand: boolean) => {
 
 const prev = async () => {
 	stepChange()
-	const currentStep = step.value;
 	const prevStep = step.value - 1;
 	// 获取选中id
-	const val = treeRef.value.getCheckedKeys(currentStep === 0 ? false : true);
-	idsList[currentStep].value = val;
 	treeData.value = treeDataList[prevStep].value;
 	treeRef.value.setCheckedKeys(idsList[prevStep].value);
 	step.value = prevStep;
@@ -105,7 +104,7 @@ const prev = async () => {
 const next = async () => {
 	stepChange()
 	const nextStep = step.value + 1;
-	const treeDataRes = await api.role.auth.getList(typeList[nextStep], menuIds.value);
+	const treeDataRes = await api.role.auth.getList(typeList[nextStep], menuIds.value.concat(menuIdsHalf.value));
 	// 最外层是菜单，如果菜单下没有按钮，列表或者接口，就不显示这个菜单
 	// 菜单id和其他id可能会重复，所以最外层的菜单id变一下，避免重复
 	const treeDateFilter = (treeDataRes || []).filter((item: any) => {
@@ -123,7 +122,14 @@ const next = async () => {
 
 // 切换时候赋值
 const stepChange = () => {
-	idsList[step.value].value = treeRef.value.getCheckedKeys(step.value === 0 ? false : true);
+	if (step.value === 0) {
+		// 包含被选中节点和半选中节点
+		idsList[step.value].value = treeRef.value.getCheckedKeys(false);
+		menuIdsHalf.value = treeRef.value.getHalfCheckedKeys()
+	} else {
+		// 只返回叶子节点
+		idsList[step.value].value = treeRef.value.getCheckedKeys(true);
+	}
 };
 
 // 全选取消全选
@@ -139,7 +145,7 @@ const checkAll = (all: boolean) => {
 const submit = async () => {
 	stepChange()
 	const data = {
-		menuIds: menuIds.value,
+		menuIds: menuIds.value.concat(menuIdsHalf.value),
 		buttonIds: buttonIds.value,
 		columnIds: columnIds.value,
 		apiIds: apiIds.value,
