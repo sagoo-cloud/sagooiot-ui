@@ -20,7 +20,7 @@
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAddRole" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -31,22 +31,22 @@
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
 				<el-table-column type="index" label="序号" width="60" align="center" />
-				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="listOrder" label="排序" width="60" align="center"></el-table-column>
-				<el-table-column prop="status" label="角色状态" width="100" align="center">
+				<el-table-column prop="name" v-col="'name'" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="remark" v-col="'remark'" label="角色描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="listOrder" v-col="'listOrder'" label="排序" width="60" align="center"></el-table-column>
+				<el-table-column prop="status" v-col="'status'" label="角色状态" width="100" align="center">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
 						<el-tag type="info" size="small" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" width="170" align="center"></el-table-column>
-				<el-table-column label="操作" width="220" align="center" fixed="right">
+				<el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="170" align="center"></el-table-column>
+				<el-table-column label="操作" width="220" v-col="'hanle'" align="center" fixed="right">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-						<el-button size="small" text type="success" @click="permission(scope.row)">角色权限</el-button>
-						<el-button size="small" text type="info" @click="dataPermission(scope.row)">数据权限</el-button>
+						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="success" @click="permission(scope.row)" v-auth="'role-premission'">角色权限</el-button>
+						<el-button size="small" text type="info" @click="dataPermission(scope.row)" v-auth="'data-premission'">数据权限</el-button>
 						<!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>

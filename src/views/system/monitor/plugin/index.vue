@@ -22,12 +22,12 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-                <el-table-column label="插件类型" align="center" prop="types" />
-				<el-table-column label="名称" align="center" prop="name" />
-                <el-table-column label="介绍" align="center" prop="intro" />
-                <el-table-column label="作者" align="center" prop="author" />
-                <el-table-column label="状态" align="center" prop="status" width="80">
+			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+				<el-table-column label="插件类型" align="center" prop="types" />
+				<el-table-column label="名称" v-col="'name'" align="center" prop="name" />
+				<el-table-column label="介绍" v-col="'intro'" align="center" prop="intro" />
+				<el-table-column label="作者" v-col="'author'" align="center" prop="author" />
+				<el-table-column label="状态" v-col="'status'" align="center" prop="status" width="80">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
 						<el-tag type="error" size="small" v-else-if="scope.row.status === 0">停用</el-tag>
@@ -35,10 +35,10 @@
 						<el-tag type="info" size="small" v-else>-</el-tag>
 					</template>
 				</el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+				<el-table-column label="操作" width="100" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
-						<el-button :disabled="scope.row.status==0" type='danger' text='danger' size="small" link @click="changeStatus(scope.row, 0)">停用</el-button>
-                        <el-button :disabled="scope.row.status==1" size="small"  type='success' text='success' link @click="changeStatus(scope.row, 1)">启用</el-button>
+						<el-button :disabled="scope.row.status == 0" type='danger' text='danger' size="small" link @click="changeStatus(scope.row, 0)" v-auth="'stop'">停用</el-button>
+						<el-button :disabled="scope.row.status == 1" size="small" type='success' text='success' link @click="changeStatus(scope.row, 1)" v-auth="'start'">启用</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -64,7 +64,7 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-            keyWord: string;
+			keyWord: string;
 		};
 	};
 }
@@ -83,7 +83,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-                    keyWord: ""
+					keyWord: ""
 				},
 			},
 		});
@@ -103,11 +103,11 @@ export default defineComponent({
 					state.tableData.loading = false;
 				});
 		};
-        const changeStatus = (row: any, status: number) => {
-			api.plugin.changeStatus({id: row.id, status: status}).then((res: any) => {
-                ElMessage.success('操作成功');
-                dataList();                
-            })
+		const changeStatus = (row: any, status: number) => {
+			api.plugin.changeStatus({ id: row.id, status: status }).then((res: any) => {
+				ElMessage.success('操作成功');
+				dataList();
+			})
 		};
 		// 页面加载时
 		onMounted(() => {
@@ -120,7 +120,8 @@ export default defineComponent({
 			dataList();
 		};
 		return {
-            changeStatus,
+			queryRef,
+			changeStatus,
 			dataList,
 			resetQuery,
 			...toRefs(state),

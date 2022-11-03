@@ -40,7 +40,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -67,19 +67,19 @@
 						<span size="small" v-else-if="scope.row.businessType === 3">删除</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作类型" align="center" prop="operatorType" width="130">
+				<el-table-column label="操作类型" v-col="'operatorType'" align="center" prop="operatorType" width="130">
 					<template #default="scope">
 						<span size="small" v-if="scope.row.operatorType === 0">其他</span>
 						<span size="small" v-else-if="scope.row.operatorType === 1">后台用户</span>
 						<span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作人员" align="center" prop="operName" :show-overflow-tooltip="true" />
+				<el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" :show-overflow-tooltip="true" />
 				<el-table-column label="部门名称" align="center" prop="deptName" />
 				<el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
-				<el-table-column label="操作地点" show-overflow-tooltip align="center" prop="operLocation" />
-				<el-table-column label="操作时间" show-overflow-tooltip align="center" prop="operTime" />
-				<el-table-column label="操作状态" align="center" prop="status" width="80">
+				<el-table-column label="操作地点" v-col="'operLocation'" show-overflow-tooltip align="center" prop="operLocation" />
+				<el-table-column label="操作时间" v-col="'operTime'" show-overflow-tooltip align="center" prop="operTime" />
+				<el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="80">
 					<template #default="scope">
 						<el-tag type="info" size="small" v-if="scope.row.status === 1">停用</el-tag>
 						<el-tag type="success" size="small" v-else-if="scope.row.status === 0">正常</el-tag>
@@ -88,9 +88,9 @@
 					</template>
 				</el-table-column>
 				<!-- <el-table-column label="操作信息" show-overflow-tooltip prop="msg" /> -->
-				<el-table-column label="操作" width="100" align="center" fixed="right">
+				<el-table-column label="操作" v-col="'handle'" width="100" align="center" fixed="right">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="onOpenDetail(scope.row)">详细</el-button>
+						<el-button size="small" type="text" @click="onOpenDetail(scope.row)" v-auth="'detail'">详细</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

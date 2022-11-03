@@ -12,16 +12,7 @@
           </el-form-item> -->
 
 					<el-form-item label="登录时间" prop="dateRange">
-						<el-date-picker
-							v-model="tableData.param.dateRange"
-							size="default"
-							style="width: 240px"
-							value-format="YYYY-MM-DD"
-							type="daterange"
-							range-separator="-"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-						></el-date-picker>
+						<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 					</el-form-item>
 
 					<el-form-item>
@@ -40,29 +31,22 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="编号" align="center" width="60" prop="id" />
-				<el-table-column label="用户名" align="center" prop="userName" />
+				<el-table-column label="用户名" v-col="'userName'" align="center" prop="userName" />
 				<el-table-column label="token" align="center" prop="token" :show-overflow-tooltip="true" />
-				<el-table-column label="登录地址" align="center" prop="ip" :show-overflow-tooltip="true" />
+				<el-table-column label="登录地址" v-col="'ip'" align="center" prop="ip" :show-overflow-tooltip="true" />
 				<el-table-column label="登录时间" align="createdAt" prop="createdAt" :show-overflow-tooltip="true" />
 				<el-table-column label="浏览器" align="center" prop="explorer" />
-				<el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
-
-				<el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+				<el-table-column label="操作系统" v-col="'os'" show-overflow-tooltip align="center" prop="os" />
+				<el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-col="'handle'">
 					<template #default="scope">
-						<el-button size="mini" type="text" @click="handleForceLogout(scope.row)">强退</el-button>
+						<el-button size="mini" type="text" @click="handleForceLogout(scope.row)" v-auth="'out'">强退</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 	</div>
 </template>
@@ -137,7 +121,7 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 页面加载时
 		onMounted(() => {

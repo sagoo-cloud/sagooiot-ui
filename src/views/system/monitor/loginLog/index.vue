@@ -4,25 +4,11 @@
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="登录IP" prop="ipaddr">
-						<el-input
-							v-model="tableData.param.ipaddr"
-							placeholder="请输入登录地址"
-							clearable
-							style="width: 180px"
-							size="default"
-							@keyup.enter.native="dataList"
-						/>
+						<el-input v-model="tableData.param.ipaddr" placeholder="请输入登录地址" clearable style="width: 180px" size="default" @keyup.enter.native="dataList" />
 					</el-form-item>
 
 					<el-form-item label="登录地点" prop="loginLocation">
-						<el-input
-							v-model="tableData.param.loginLocation"
-							placeholder="请输入登录地点"
-							clearable
-							style="width: 180px"
-							size="default"
-							@keyup.enter.native="dataList"
-						/>
+						<el-input v-model="tableData.param.loginLocation" placeholder="请输入登录地点" clearable style="width: 180px" size="default" @keyup.enter.native="dataList" />
 					</el-form-item>
 
 					<!-- <el-form-item label="用户名称" prop="userName">
@@ -38,16 +24,7 @@
 					</el-form-item>
 
 					<el-form-item label="登录时间" prop="dateRange">
-						<el-date-picker
-							v-model="tableData.param.dateRange"
-							size="default"
-							style="width: 240px"
-							value-format="YYYY-MM-DD"
-							type="daterange"
-							range-separator="-"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-						></el-date-picker>
+						<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="dataList">
@@ -62,7 +39,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -82,26 +59,20 @@
 				<el-table-column label="编号" align="center" width="60" prop="infoId" />
 				<el-table-column label="登录名称" align="center" prop="loginName" />
 				<el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
-				<el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+				<el-table-column label="登录地点" v-col="'loginLocation'" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
 				<el-table-column label="浏览器" align="center" prop="browser" />
 				<el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
-				<el-table-column label="登录状态" align="center" prop="status" width="90">
+				<el-table-column label="登录状态" v-col="'status'" align="center" prop="status" width="90">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">成功</el-tag>
 						<el-tag type="info" size="small" v-else>失败</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作信息" show-overflow-tooltip prop="msg" />
-				<el-table-column label="登录日期" align="center" prop="loginTime" width="180" />
-				<el-table-column label="登录模块" align="center" show-overflow-tooltip prop="module" width="120"></el-table-column>
+				<el-table-column label="操作信息" v-col="'msg'" show-overflow-tooltip prop="msg" />
+				<el-table-column label="登录日期" v-col="'loginTime'" align="center" prop="loginTime" width="180" />
+				<el-table-column label="登录模块" v-col="'module'" align="center" show-overflow-tooltip prop="module" width="120"></el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 	</div>
 </template>
@@ -213,7 +184,7 @@ export default defineComponent({
 						done();
 					}
 				},
-			}).catch(() => {});
+			}).catch(() => { });
 		};
 		// 清空日志
 		const onRowClear = () => {
@@ -228,7 +199,7 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 页面加载时
 		onMounted(() => {
