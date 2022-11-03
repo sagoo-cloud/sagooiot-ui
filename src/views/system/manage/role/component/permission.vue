@@ -65,6 +65,7 @@ const openDialog = async (row: any) => {
 	title.value = '角色权限设置 - ' + row.name;
 	roleId.value = row.id;
 	isShowDialog.value = true;
+	step.value = 0;
 	let res = await api.role.auth.getList(typeList[step.value]);
 	// console.log(res);
 	treeData.value = res;
