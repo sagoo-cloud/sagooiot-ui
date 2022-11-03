@@ -3,8 +3,8 @@
 		<el-card shadow="hover">
 			<div class="system-dept-search mb15">
 				<el-form :inline="true">
-					<el-form-item label="组织名称">
-						<el-input size="default" v-model="tableData.param.name" placeholder="请输入组织名称" class="w-50" clearable />
+					<el-form-item label="区域名称">
+						<el-input size="default" v-model="tableData.param.name" placeholder="请输入区域名称" class="w-50" clearable />
 					</el-form-item>
 					<el-form-item label="状态">
 						<el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
@@ -24,15 +24,15 @@
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
-							新增组织
+							新增区域
 						</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" default-expand-all row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
-				<el-table-column prop="name" label="组织名称" show-overflow-tooltip v-col="'name'"> </el-table-column>
-				<el-table-column prop="number" label="组织编号" show-overflow-tooltip v-col="'number'"> </el-table-column>
-				<el-table-column prop="status" label="组织状态" align="center" min-width="120" v-col="'status'">
+				<el-table-column prop="name" label="区域名称" show-overflow-tooltip v-col="'name'"> </el-table-column>
+				<el-table-column prop="number" label="区域编号" show-overflow-tooltip v-col="'number'"> </el-table-column>
+				<el-table-column prop="status" label="区域状态" align="center" min-width="120" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
 						<el-tag type="info" size="small" v-else>禁用</el-tag>
