@@ -28,11 +28,7 @@
 			<el-step title="接口权限" />
 		</el-steps>
 		<div class="scroll-part mt-3">
-			<el-tree ref="treeRef" v-if="step === 0" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="{
-				children: 'children',
-				label: 'title',
-			}" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
-			<el-tree ref="treeRef" v-else :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
+			<el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" @check-change="checkChange" />
 		</div>
 	</el-dialog>
 </template>
@@ -62,7 +58,7 @@ const idsList = [menuIds, buttonIds, columnIds, apiIds];
 const treeDataList = [menuData, buttonData, listData, apiData];
 const defaultProps = {
 	children: 'children',
-	label: 'name',
+	label: 'title',
 };
 
 const openDialog = async (row: any) => {
