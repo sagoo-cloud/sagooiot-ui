@@ -100,7 +100,6 @@ const prev = async () => {
 	treeData.value = treeDataList[prevStep].value;
 	treeRef.value.setCheckedKeys(idsList[prevStep].value);
 	step.value = prevStep;
-	console.log(JSON.parse(JSON.stringify(idsList)))
 };
 
 const next = async () => {
@@ -109,7 +108,7 @@ const next = async () => {
 	const treeDataRes = await api.role.auth.getList(typeList[nextStep], menuIds.value);
 	// 最外层是菜单，如果菜单下没有按钮，列表或者接口，就不显示这个菜单
 	// 菜单id和其他id可能会重复，所以最外层的菜单id变一下，避免重复
-	const treeDateFilter = treeDataRes.filter((item: any) => {
+	const treeDateFilter = (treeDataRes || []).filter((item: any) => {
 		if (item.children?.length) {
 			item.id += '_numu'
 			return true
