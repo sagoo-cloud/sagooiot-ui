@@ -10,19 +10,19 @@
             <el-input v-model="tableData.param.number" placeholder="请输入楼号" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" v-auth="'floor-query'" type="primary" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'floor-reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
+            <el-button size="default" v-auth="'floor-add'" type="success" class="ml10" @click="onOpenDialog()">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -33,16 +33,16 @@
       </div>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
         <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="楼宇名称" prop="name" />
-	    	<el-table-column label="楼号" prop="number" />
-	    	<el-table-column label="更新时间" prop="createdAt" width="180" />
-				<el-table-column prop="status" label="启用状态" width="120" align="center">
+	    	<el-table-column label="楼宇名称" v-col="'floor-name'" prop="name" />
+	    	<el-table-column label="楼号" v-col="'floor-number'" prop="number" />
+	    	<el-table-column label="更新时间" v-col="'floor-createdAt'" prop="createdAt" width="180" />
+				<el-table-column label="启用状态" v-col="'floor-status'" prop="status" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" v-col="'floor-handle'" width="200" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenDialog(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>

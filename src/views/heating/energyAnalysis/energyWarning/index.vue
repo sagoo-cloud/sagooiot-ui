@@ -31,37 +31,37 @@
 						</el-select>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
+            <!-- <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               导入
-            </el-button>
+            </el-button> -->
           </el-form-item>
         </el-form>
       </div>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
-	    	<el-table-column label="换热站名称" prop="station" />
-	    	<el-table-column label="换热站编号" prop="stationNo" />
+	    	<el-table-column label="换热站名称" prop="station" v-col="'station'"/>
+	    	<el-table-column label="换热站编号" prop="stationNo" v-col="'stationNo'"/>
 	    	<!-- <el-table-column label="负责人" prop="number" /> -->
-	    	<el-table-column label="温度" prop="alarmT">
+	    	<el-table-column label="温度" prop="alarmT" v-col="'alarmT'">
 					<template #default="{ row }">
 						{{ row.alarmT == '1' ? '报警' : '不报警' }}
 					</template>
 				</el-table-column>
-	    	<el-table-column label="压力" prop="alarmP">
+	    	<el-table-column label="压力" prop="alarmP" v-col="'alarmP'">
 					<template #default="{ row }">
 						{{ row.alarmP == '1' ? '报警' : '不报警' }}
 					</template>

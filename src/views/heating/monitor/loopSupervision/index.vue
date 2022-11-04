@@ -5,8 +5,8 @@
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="" prop="">
 						<el-radio-group v-model="radioValue" size="default">
-							<el-radio-button label="换热站" />
-							<el-radio-button label="环路" />
+							<el-radio-button label="换热站" v-auth="'heatStation'"/>
+							<el-radio-button label="环路" v-auth="'loop'"/>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="环路名称" prop="name">
@@ -22,13 +22,13 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="typeList">
+						<el-button size="default" type="primary" class="ml10" v-auth="'query'" @click="typeList">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
+						<el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
 							<el-icon>
 								<ele-Refresh />
 							</el-icon>
@@ -38,17 +38,16 @@
 				</el-form>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-				<!-- <el-table-column type="selection" width="55" align="center" /> -->
-				<el-table-column type="index" width="55" align="center" />
-				<el-table-column label="日期" prop="key" min-width="120" :show-overflow-tooltip="true" />
-				<el-table-column :label="radioValue === '换热站' ? '换热站' : '环路名称'" prop="name" :show-overflow-tooltip="true">
+				<el-table-column type="index" width="55" label="序号" align="center" />
+				<el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" />
+				<el-table-column :label="radioValue === '换热站' ? '换热站' : '环路名称'" v-col="'name'" prop="name" :show-overflow-tooltip="true">
 					<template #default="{ row }">
 						<el-button type="text" @click="goPage(row)">
 							{{ radioValue === '换热站' ? '换热站' : '环路名称' }}
 						</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column :label="radioValue === '换热站' ? '换热站编号' : '环路编号'" prop="name" min-width="120" :show-overflow-tooltip="true">
+				<el-table-column :label="radioValue === '换热站' ? '换热站编号' : '环路编号'" v-col="'number'" prop="number" min-width="120" :show-overflow-tooltip="true">
 					<template #default>
 						{{ radioValue === '换热站' ? '换热站编号' : '环路编号' }}
 					</template>

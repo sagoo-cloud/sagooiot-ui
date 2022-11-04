@@ -7,19 +7,19 @@
             <el-input v-model="tableData.param.name" placeholder="请输入住户名称" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" v-auth="'resident-query'" type="primary" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'resident-reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
+            <el-button size="default" v-auth="'resident-add'" type="success" class="ml10" @click="onOpenDialog()">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -30,20 +30,20 @@
       </div>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" >
         <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="楼层" prop="floorLevel" min-width="100" />
-	    	<el-table-column label="房间号" prop="roomNumber" min-width="100" />
-	    	<el-table-column label="建筑面积" prop="buildingArea" min-width="100" />
-	    	<el-table-column label="实供面积" prop="forRealArea" min-width="100" />
-	    	<el-table-column label="住户姓名" prop="name" min-width="100" />
-	    	<el-table-column label="电话号码" prop="phone" min-width="100" />
-	    	<el-table-column label="更新时间" prop="createdAt" width="180"/>
-				<el-table-column prop="status" label="启用状态" width="120" align="center">
+	    	<el-table-column label="楼层" v-col="'resident-floorLevel'" prop="floorLevel" min-width="100" />
+	    	<el-table-column label="房间号" v-col="'resident-roomNumber'" prop="roomNumber" min-width="100" />
+	    	<el-table-column label="建筑面积" v-col="'resident-buildingArea'" prop="buildingArea" min-width="100" />
+	    	<el-table-column label="实供面积" v-col="'resident-forRealArea'" prop="forRealArea" min-width="100" />
+	    	<el-table-column label="住户姓名" v-col="'resident-name'" prop="name" min-width="100" />
+	    	<el-table-column label="电话号码" v-col="'resident-phone'" prop="phone" min-width="100" />
+	    	<el-table-column label="更新时间" v-col="'resident-createdAt'" prop="createdAt" width="180"/>
+				<el-table-column label="启用状态" v-col="'resident-status'" prop="status" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" v-col="'resident-handle'" width="200" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenDialog(scope.row)">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>

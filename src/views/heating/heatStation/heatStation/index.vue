@@ -10,19 +10,19 @@
             <el-input v-model="tableData.param.code" placeholder="请输入换热站编号" clearable size="default" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" v-auth="'add'" class="ml10" @click="onOpenAddDic">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -41,17 +41,17 @@
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%"  row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <!-- <el-table-column label="ID" align="center" prop="id" width="60" /> -->
-	    	<el-table-column label="换热站" prop="name" :show-overflow-tooltip="true" />
-	    	<el-table-column label="换热站编号" prop="code" :show-overflow-tooltip="true" />
-	    	<el-table-column label="位置" prop="position" :show-overflow-tooltip="true" />
-	    	<el-table-column label="负责人" prop="principalInfo.userNickname" width="80"/>
-	    	<el-table-column label="状态" prop="status" width="80">
+	    	<el-table-column label="换热站" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="换热站编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="位置" prop="position" v-col="'position'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="80"/>
+	    	<el-table-column label="状态" prop="status" v-col="'status'" width="80">
           <template #default="scope">
 						{{ scope.row.status === 1 ? '在线' : '不在线' }}
           </template>
         </el-table-column>
-	    	<el-table-column label="创建时间" prop="createdAt" :show-overflow-tooltip="true" />
-        <el-table-column label="操作" width="200" align="center">
+	    	<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />
+        <el-table-column label="操作" width="200" v-col="'handle'" align="center">
           <template #default="scope">
 			 			<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>

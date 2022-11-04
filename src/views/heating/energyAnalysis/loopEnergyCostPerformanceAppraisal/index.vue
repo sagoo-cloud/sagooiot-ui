@@ -24,24 +24,24 @@
 						</el-select>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
+            <!-- <el-button size="default" type="success" class="ml10" @click="onOpenDialog()">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               导入
-            </el-button>
+            </el-button> -->
           </el-form-item>
         </el-form>
       </div>

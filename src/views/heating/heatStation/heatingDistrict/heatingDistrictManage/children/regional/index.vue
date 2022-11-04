@@ -7,50 +7,43 @@
             <el-input v-model="tableData.param.name" placeholder="请输入小区名称" clearable size="default" style="width: 240px" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" v-auth="'regional-query'" type="primary" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'regional-reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" v-auth="'regional-add'" class="ml10" @click="onOpenAddDic">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增
             </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除
-            </el-button> -->
           </el-form-item>
         </el-form>
       </div>
 			<el-table :data="tableData.data" v-loading="tableData.loading">
-				<!-- <el-table-column type="selection" width="55" align="center" /> -->
 				<el-table-column label="ID" align="center" prop="id" width="60" />
-				<el-table-column label="小区名称" prop="name" min-width="100" />
-				<el-table-column label="区域名称" prop="" min-width="100">
+				<el-table-column label="小区名称" v-col="'regional-name'" prop="name" min-width="100" />
+				<el-table-column label="区域名称" v-col="'regional-SysOrganization.name'" prop="SysOrganization.name" min-width="100">
 					<template #default="{ row }">
 						{{ row.SysOrganization.name }}
 					</template>
 				</el-table-column>
-				<el-table-column label="更新时间" prop="createdAt" width="180" />
-				<el-table-column prop="status" label="启用状态" width="120" align="center">
+				<el-table-column label="更新时间" v-col="'regional-createdAt'" prop="createdAt" width="180" />
+				<el-table-column prop="status" v-col="'regional-status'" label="启用状态" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 						</el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="200" align="center" fixed="right">
+				<el-table-column label="操作" v-col="'regional-handle'" width="200" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
 						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>

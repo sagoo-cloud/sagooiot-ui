@@ -35,7 +35,7 @@
 				<el-tree :data="treeList" node-key="id" default-expand-all :props="{
 					children: 'children'
 				}" @node-click="onNodeClick" :expand-on-click-node="false">
-					<template #default="{ node, data }">
+					<template #default="{ data }">
 						<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
 							<img src="/src/assets/icon-org.png" v-if="data.orgType === 'org'">
 							<img src="/src/assets/icon-plot.png" v-else-if="data.orgType === 'plot'">

@@ -22,19 +22,19 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" v-auth="'add'" class="ml10" @click="onOpenAddDic">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -50,45 +50,44 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" @selection-change="handleSelectionChange">
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" width="60" />
-        <el-table-column label="编号" prop="code" :show-overflow-tooltip="true" />
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
-	    	<el-table-column label="换热站" prop="stationId" :show-overflow-tooltip="true" />
-	    	<el-table-column label="类型" prop="loopTypes">
+        <el-table-column label="编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
+        <el-table-column label="名称" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="换热站" prop="stationId" v-col="'stationId'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="类型" prop="loopTypes" v-col="'loopTypes'">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.loopTypes === 1">一网</el-tag>
             <el-tag type="info" size="small" v-else-if="scope.row.loopTypes === 2">二网</el-tag>
           </template>
         </el-table-column>
-	    	<el-table-column label="节能类型" prop="energyTypes">
+	    	<el-table-column label="节能类型" prop="energyTypes" v-col="'energyTypes'">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.energyTypes === 1">节能</el-tag>
             <el-tag type="success" size="small" v-else-if="scope.row.energyTypes === 2">非节能</el-tag>
           </template>
         </el-table-column>
-	    	<el-table-column label="供暖对象" prop="heatingObject" :show-overflow-tooltip="true">
+	    	<el-table-column label="供暖对象" prop="heatingObject" v-col="'heatingObject'" :show-overflow-tooltip="true">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.heatingObject === 1">公建</el-tag>
             <el-tag type="info" size="small" v-else-if="scope.row.heatingObject === 2">居民</el-tag>
           </template>
         </el-table-column>
-	    	<el-table-column label="供暖类型" prop="heatingTypes">
+	    	<el-table-column label="供暖类型" prop="heatingTypes" v-col="'heatingTypes'">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.heatingTypes === 1">地暖</el-tag>
             <el-tag type="info" size="small" v-else-if="scope.row.heatingTypes === 2">暖气片</el-tag>
           </template>
         </el-table-column>
-	    	<el-table-column label="供暖面积" prop="heatingArea" :show-overflow-tooltip="true" />
-	    	<el-table-column label="实际面积" prop="forRealArea" :show-overflow-tooltip="true" />
+	    	<el-table-column label="供暖面积" prop="heatingArea" v-col="'heatingArea'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="实际面积" prop="forRealArea" v-col="'forRealArea'" :show-overflow-tooltip="true" />
 <!--	    	<el-table-column label="环路年代" prop="decade" :show-overflow-tooltip="true" />-->
-        <el-table-column prop="status" label="状态" align="center">
+        <el-table-column prop="status" label="状态" v-col="'status'" align="center">
           <template #default="scope">
             <el-tag type="info" size="small" v-if="scope.row.status === 0">不在线</el-tag>
             <el-tag type="success" size="small" v-else-if="scope.row.status === 1">在线</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150" align="center">
+        <el-table-column label="操作" width="150" v-col="'handle'" align="center">
           <template #default="scope">
 			 			<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
