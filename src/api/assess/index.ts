@@ -1,11 +1,15 @@
-import { get, post, del, put } from '/@/utils/request_assess';
+import { get, post, del, put } from '/@/utils/request';
+import getOrigin from '/@/utils/origin';
+
+const baseUrl = getOrigin(import.meta.env.VITE_ASSESS_URL);
+console.log(baseUrl)
 
 export default {
-  getList: (params?: object) => get('/setup', params),
-  setItem: (params?: object) => post('/setup', params),
-  deleteItem: (params?: object) => del('/setup', params),
-  getDataSourceInfo: (params?: object) => get('/datasetup/target', params),
-  testDataSource:  (params?: object) => post('/datasetup/test', params),
-  addDataSourceInfo: (params?: object) => post('/datasetup', params),
-  editataSourceInfo: (params?: object) => put('/datasetup', params),
+  getList: (params?: object) => get(baseUrl + '/setup', params),
+  setItem: (params?: object) => post(baseUrl + '/setup', params),
+  deleteItem: (params?: object) => del(baseUrl + '/setup', params),
+  getDataSourceInfo: (params?: object) => get(baseUrl + '/datasetup/target', params),
+  testDataSource: (params?: object) => post(baseUrl + '/datasetup/test', params),
+  addDataSourceInfo: (params?: object) => post(baseUrl + '/datasetup', params),
+  editataSourceInfo: (params?: object) => put(baseUrl + '/datasetup', params),
 }
