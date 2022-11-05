@@ -52,12 +52,13 @@ service.interceptors.response.use(
 					...res.data,
 				}
 			}
-			if (res.data?.Data) {
-				return res.data.Data
-			}
+			// if (res.data?.Data) {
+			// 	return res.data.Data
+			// }
 			if (res.data?.Data === undefined) {
 				return res.data
 			}
+			return res.data.Data
 		}
 	},
 	(error) => {
