@@ -49,7 +49,7 @@
 								</el-icon>
 								重置
 							</el-button>
-							<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-if="developer_status==0">
+							<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'" v-if="developer_status==0">
 								<el-icon>
 									<ele-FolderAdd />
 								</el-icon>
@@ -66,24 +66,24 @@
 				</div>
 
 				<el-table :data="tableData.data" style="width: 100%"  v-loading="tableData.loading">
-					<el-table-column label="ID" align="center" prop="id" width="60" />
-					<el-table-column label="字段名称" prop="key" width="120" :show-overflow-tooltip="true" />
-					<el-table-column label="字段标题" prop="name" width="120" :show-overflow-tooltip="true" />
-					<el-table-column label="类型" prop="dataType" width="85" :show-overflow-tooltip="true" />
+					<el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />
+					<el-table-column label="字段名称" prop="key" width="120" :show-overflow-tooltip="true"  v-col="'key'"/>
+					<el-table-column label="字段标题" prop="name" width="120" :show-overflow-tooltip="true" v-col="'name'"/>
+					<el-table-column label="类型" prop="dataType" width="85" :show-overflow-tooltip="true" v-col="'dataType'"/>
 
-					<el-table-column label="数据源名称" align="center" >
+					<el-table-column label="数据源名称" align="center"  v-col="'from'">
 						<template #default="scope">
 							<span v-if="scope.row.from==2">{{scope.row.source.name}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" />
-					<el-table-column label="备注说明" prop="value" width="100" :show-overflow-tooltip="true" />
-					<el-table-column prop="createdAt" label="创建时间" align="center" width="160"></el-table-column>
+					<el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" v-col="'default'"/>
+					<el-table-column label="备注说明" prop="value" width="100" :show-overflow-tooltip="true"v-col="'value'" />
+					<el-table-column prop="createdAt" label="创建时间" align="center" width="160" v-col="'createdAt'"></el-table-column>
 
 					<el-table-column label="操作" width="100" align="center" fixed="right">
 						<template #default="scope">
-							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status==0">修改</el-button>
-							<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0">删除</el-button>
+							<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status==0" v-auth="'edit'">修改</el-button>
+							<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0" v-auth="'del'">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

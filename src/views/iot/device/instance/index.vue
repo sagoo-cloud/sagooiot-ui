@@ -34,13 +34,13 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增设备
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -51,34 +51,34 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="60" />
-	    <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" />
+        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />
+	    <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/>
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
+        <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'"/>
+        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/>
 
 
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
             <el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
             <el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
             <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
           </template>
         </el-table-column>
-         <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
-         <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150"></el-table-column>
+         <el-table-column prop="registryTime" label="激活时间" align="center" width="150" v-col="'registryTime'"></el-table-column>
+         <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
 
 			 <!-- <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button> -->
 			 <router-link :to="'/device/instance/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
-    font-size: 12px;color: #409eff;">
+    font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>
             </router-link>
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0">启用</el-button>
-            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0">停用</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0" v-auth="'status'">启用</el-button>
+            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0" v-auth="'status'">停用</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

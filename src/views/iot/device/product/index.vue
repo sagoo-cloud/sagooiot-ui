@@ -31,13 +31,13 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增产品
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -48,16 +48,16 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="60" />
-        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" />
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" />
-        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" />
-        <el-table-column label="传输协议" prop="transportProtocol" :show-overflow-tooltip="true" />
-        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" />
+        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>
+        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true"  v-col="'key'"/>
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
+        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'"/>
+        <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/>
+        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'"/>
+        <el-table-column label="传输协议" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'"/>
+        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'"/>
 
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
             <el-tag type="info" size="small" v-else>未发布</el-tag>
@@ -70,8 +70,8 @@
     font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link>
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)"  v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)"  v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

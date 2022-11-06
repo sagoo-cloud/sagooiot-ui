@@ -43,13 +43,13 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'"> 
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
 							新增数据源
 						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -60,10 +60,9 @@
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-				<el-table-column label="ID" align="center" prop="sourceId" width="80" />
-<!--				<el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" />-->
-				<el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" />
-				<el-table-column prop="from" label="数据源类型" width="160" align="center">
+				<el-table-column label="ID" align="center" prop="sourceId" width="80" v-col="'sourceId'" />
+				<el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
+				<el-table-column prop="from" label="数据源类型" width="160" align="center" v-col="'from'">
 					<template #default="scope">
 						<span v-if="scope.row.from == 1">api导入</span>
 						<span v-if="scope.row.from == 2">数据库</span>
@@ -71,14 +70,13 @@
 						<span v-if="scope.row.from == 4">设备</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="status" label="状态" width="100" align="center">
+				<el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status == 1">已发布</el-tag>
 						<el-tag type="info" size="small" v-if="scope.row.status == 0">未发布</el-tag>
 					</template>
 				</el-table-column>
 
-<!--				<el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>-->
 
 				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
@@ -86,13 +84,14 @@
 							:to="'/datahub/source/detail/' + scope.row.sourceId"
 							class="link-type"
 							style="padding-right: 12px; font-size: 12px; color: #409eff"
+							v-auth="'detail'"
 						>
 							<span>详情</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenList(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
-						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
-						<el-button size="small" text type="primary" @click="copy(scope.row)" >复制</el-button>
+						<el-button size="small" text type="success" @click="onOpenList(scope.row)"  v-if="scope.row.status==1" v-auth="'detail'">数据记录</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

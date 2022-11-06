@@ -36,13 +36,13 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
 							新增模型
 						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -53,30 +53,30 @@
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-				<el-table-column label="ID" align="center" prop="id" width="80" />
+				<el-table-column label="ID" align="center" prop="id" width="80" v-col="'id'"/>
 <!--				<el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" />-->
-				<el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" />
-				<el-table-column prop="status" label="状态" width="100" align="center">
+				<el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true"  v-col="'name'"/>
+				<el-table-column prop="status" label="状态" width="100" align="center"  v-col="'status'"> 
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status==1">已发布</el-tag>
             <el-tag type="info" size="small" v-else>未发布</el-tag>
           </template>
         </el-table-column>
-				<el-table-column prop="createdAt" label="创建时间"  width="200" align="center"></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间"  width="200" align="center" v-col="'createdAt'"></el-table-column>
 
 				<el-table-column label="操作" width="280" align="center" fixed="right">
-					<template #default="scope">
+					<template #default="scope" >
 						<router-link
 							:to="'/datahub/modeling/detail/' + scope.row.id"
 							class="link-type"
 							style="padding-right: 12px; font-size: 12px; color: #409eff"
-						>
+							v-auth="'detail'">
 							<span>字段管理</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)"  v-if="scope.row.status==1">数据记录</el-button>
-						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
-						<el-button size="small" text type="primary" @click="copy(scope.row)" >复制</el-button>
+						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)"  v-if="scope.row.status==1" v-auth="'record'">数据记录</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
 
 					</template>
 				</el-table-column>

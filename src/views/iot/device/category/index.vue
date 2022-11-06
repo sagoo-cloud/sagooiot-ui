@@ -14,7 +14,7 @@
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+            <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -24,15 +24,15 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
-        <el-table-column prop="name" label="分类名称" show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="name" label="分类名称" v-col="'name'" show-overflow-tooltip> </el-table-column>
         
        
-        <el-table-column prop="createdAt" label="创建时间" align="center" min-width="180"></el-table-column>
+        <el-table-column prop="createdAt" label="创建时间" align="center" min-width="180" v-col="'createdAt'"></el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenAdd(scope.row)">新增</el-button>
-            <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">删除</el-button>
+            <el-button size="small" type="text" @click="onOpenAdd(scope.row)" v-auth="'add'">新增</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
