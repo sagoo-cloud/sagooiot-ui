@@ -35,7 +35,6 @@ export default {
     setStatus: (id: number, status: number) => put('/region/unit/editStatus', { id, status }),
   },
   resident: {
-    allList: (params: object) => get('/region/resident/all', params),
     getList: (params: object) => get('/region/resident/list', params),
     add: (data: object) => post('/region/resident/add', data),
     edit: (data: object) => put('/region/resident/edit', data),
