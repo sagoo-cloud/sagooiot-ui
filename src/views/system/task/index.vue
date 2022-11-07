@@ -31,13 +31,13 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic">
+            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增任务
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -48,24 +48,24 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="jobId" width="60" />
-        <el-table-column label="任务名称" prop="jobName" :show-overflow-tooltip="true" />
-        <el-table-column label="任务描述" prop="remark" show-overflow-tooltip />
-        <el-table-column label="任务分组" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
-        <el-table-column label="任务方法名" prop="invokeTarget" />
-        <el-table-column label="cron执行表达式" prop="cronExpression" />
-        <el-table-column label="状态" align="center" prop="status" width="100">
+        <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="60" />
+        <el-table-column label="任务名称" v-col="'jobName'" prop="jobName" :show-overflow-tooltip="true" />
+        <el-table-column label="任务描述" v-col="'remark'" prop="remark" show-overflow-tooltip />
+        <el-table-column label="任务分组" v-col="'jobGroup'" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
+        <el-table-column label="任务方法名" v-col="'invokeTarget'" prop="invokeTarget" />
+        <el-table-column label="cron执行表达式" v-col="'cronExpression'" prop="cronExpression" />
+        <el-table-column label="状态" v-col="'status'" align="center" prop="status" width="100">
           <template #default="scope">
             <!-- {{ row.status ? '正常' : '暂停' }} -->
             <el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center" fixed="right">
+        <el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">
           <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-            <el-button size="small" text type="primary" @click="onRowRun(scope.row)">执行一次</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="primary" @click="onRowRun(scope.row)" v-auth="'do'">执行一次</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -229,7 +229,6 @@ export default defineComponent({
       state.ids = selection.map((item) => item.jobId);
     };
     const jobGroupFormat = (row: TableDataRow) => {
-      console.log(row);
       return proxy.selectDictLabel(unref(sys_job_group), row.jobGroup);
     };
     return {
