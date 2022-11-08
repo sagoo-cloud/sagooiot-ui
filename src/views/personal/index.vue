@@ -1,138 +1,69 @@
 <template>
-	<div class="personal">
-		<el-row>
-			<!-- 个人信息 -->
-			<el-col :xs="24" :sm="12">
-				<el-card shadow="hover" header="个人信息">
-					<div class="personal-user">
-						<div class="personal-user-left">
-							<el-upload class="h100 personal-user-left-upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
-								<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg" />
-							</el-upload>
-						</div>
-						<div class="personal-user-right">
-							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，admin，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">昵称：</div>
-											<div class="personal-item-value">小柒</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">身份：</div>
-											<div class="personal-item-value">超级管理</div>
-										</el-col>
-									</el-row>
-								</el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">登录IP：</div>
-											<div class="personal-item-value">192.168.1.1</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">登录时间：</div>
-											<div class="personal-item-value">2021-02-05 18:47:26</div>
-										</el-col>
-									</el-row>
-								</el-col>
-							</el-row>
-						</div>
-					</div>
-				</el-card>
-			</el-col>
-
-			<!-- 更新信息 -->
-			<el-col  :xs="24" :sm="12">
-				<el-card shadow="hover" class="mt15 personal-edit" header="更新信息">
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">账户密码</div>
-								<div class="personal-edit-safe-item-left-value">当前密码强度：强</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button type="text">立即修改</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保手机</div>
-								<div class="personal-edit-safe-item-left-value">已绑定手机：132****4108</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button type="text">立即修改</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保问题</div>
-								<div class="personal-edit-safe-item-left-value">已设置密保问题，账号安全大幅度提升</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button type="text">立即设置</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">绑定QQ</div>
-								<div class="personal-edit-safe-item-left-value">已绑定QQ：110****566</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button type="text">立即设置</el-button>
-							</div>
-						</div>
-					</div>
-				</el-card>
-			</el-col>
-		</el-row>
-	</div>
+  <div class="personal">
+    <el-row>
+      <!-- 个人信息 -->
+      <el-col :xs="24" :sm="24">
+        <el-card shadow="hover" header="个人信息" v-loading="!info.userName">
+          <div class="personal-user">
+            <div class="personal-user-left">
+              <!-- <el-upload class="h100 personal-user-left-upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
+              <img :src="info.avatar" />
+              </el-upload> -->
+              <uploadVue @set-img="setImg">
+                <img style="width:140px;height:140px" :src="info.avatar" />
+              </uploadVue>
+            </div>
+            <div class="personal-user-right">
+              <el-row>
+                <el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{info.userName}}，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
+                <el-col :xs="24" :sm="24" class="personal-item mb6">
+                  <div class="personal-item-label">昵称：</div>
+                  <div class="personal-item-value">{{info.userNickname}}</div>
+                </el-col>
+                <el-col :xs="24" :sm="24" class="personal-item mb6">
+                  <div class="personal-item-label">性别：</div>
+                  <div class="personal-item-value">{{info.sex=='1'?'男':'女'}}</div>
+                </el-col>
+                <el-col :xs="24" :sm="24" class="personal-item mb6">
+                  <div class="personal-item-label">登录IP：</div>
+                  <div class="personal-item-value">{{info.lastLoginIp}}</div>
+                </el-col>
+                <el-col :xs="24" :sm="24" class="personal-item mb6">
+                  <div class="personal-item-label">登录时间：</div>
+                  <div class="personal-item-value">{{info.lastLoginTime}}</div>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
-<script lang="ts">
-import { toRefs, reactive, computed, defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
 import { formatAxis } from '/@/utils/formatTime';
-import { newsInfoList, recommendList } from './mock';
+import api from '/@/api/system';
+import uploadVue from '/@/components/upload-wrapper/index.vue';
 
-// 定义接口来定义对象的类型
-interface PersonalState {
-	newsInfoList: any;
-	recommendList: any;
-	personalForm: any;
-}
+const info = ref<any>({})
 
-export default defineComponent({
-	name: 'personal',
-	setup() {
-		const state = reactive<PersonalState>({
-			newsInfoList,
-			recommendList,
-			personalForm: {
-				name: '',
-				email: '',
-				autograph: '',
-				occupation: '',
-				phone: '',
-				sex: '',
-			},
-		});
-		// 当前时间提示语
-		const currentTime = computed(() => {
-			return formatAxis(new Date());
-		});
-		return {
-			currentTime,
-			...toRefs(state),
-		};
-	},
+api.login.currentUser().then((res: any) => {
+  console.log(res.Info);
+  info.value = res.Info
 });
+
+// 当前时间提示语
+const currentTime = computed(() => {
+  return formatAxis(new Date());
+});
+
+const setImg = (img: string) => {
+  api.user.edit({ avatar: img }).then((res: any) => {
+    console.log(res)
+  })
+}
 </script>
 
 <style scoped lang="scss">
@@ -143,9 +74,9 @@ export default defineComponent({
 		display: flex;
 		align-items: center;
 		.personal-user-left {
-			width: 100px;
-			height: 130px;
-			border-radius: 3px;
+			// width: 100px;
+			// height: 130px;
+			// border-radius: 3px;
 			::v-deep(.el-upload) {
 				height: 100%;
 			}
