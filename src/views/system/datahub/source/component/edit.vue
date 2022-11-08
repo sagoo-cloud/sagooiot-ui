@@ -55,8 +55,12 @@
 					</el-form-item>
 
 					<el-form-item label="定时请求">
-						<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
-						<ul style="list-style: none">
+						<div style="display:flex">
+							<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
+							<el-button type="success"  @click="showCron('config')" style="    margin-left: 5px;">设置</el-button>
+
+						</div>
+						<!-- <ul style="list-style: none">
 							<li>
 								<el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次
 							</li>
@@ -72,7 +76,7 @@
 							<li>
 								<el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次
 							</li>
-						</ul>
+						</ul> -->
 					</el-form-item>
 
 					<!-- <el-form-item label="更新时间">
@@ -128,36 +132,7 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<!-- <el-form-item label="主机地址" >
-							<el-input v-model="devconfig.host" placeholder="请输入主机地址"   />
-						</el-form-item>
-
-						<el-form-item label="端口号">
-							<el-input v-model="devconfig.port" placeholder="请输入端口号" />
-						</el-form-item>
-
-						<el-form-item label="用户名">
-							<el-input v-model="devconfig.user" placeholder="请输入用户名" />
-						</el-form-item>
-
-						<el-form-item label="密码">
-							<el-input v-model="devconfig.password" placeholder="请输入密码" />
-						</el-form-item>
-
-						<el-form-item label="数据库名称">
-							<el-input v-model="devconfig.dbname" placeholder="请输入数据库名称" />
-						</el-form-item>
-
-						<el-form-item label="表名称">
-							<el-input v-model="devconfig.table" placeholder="请输入表名称" />
-						</el-form-item>
-
-						<el-form-item label="更新时间">
-							<el-input v-model="devconfig.interval" placeholder="请输入更新时间" class="w-35" />
-							<el-select v-model="devconfig.intervalUnit" placeholder="请选择单位">
-								<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
-							</el-select>
-						</el-form-item> -->
+			
 				</div>
 
 				<div v-if="ruleForm.from == 2">
@@ -203,14 +178,13 @@
 						</el-form-item>
 
 						<el-form-item label="任务表达式">
-							<el-input v-model="tabconfig.cronExpression" placeholder="请输入cron任务表达式" />
-							<ul style="list-style: none;">
-								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
-								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
-							</ul>
+
+						<div style="display:flex">
+								<el-input v-model="tabconfig.cronExpression" placeholder="请输入cron任务表达式" />
+							    <el-button type="success"  @click="showCron('tabconfig')" style="    margin-left: 5px;">设置</el-button>
+
+						</div>
+							
 						</el-form-item>
 				</div>
 			</el-form>
@@ -232,6 +206,10 @@
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog v-model="cronShow" title="选择Cron规则" width="60%">
+			<vue3cron @handlelisten="handlelisten" :type="crontype" @close="cronclose"></vue3cron>
+		</el-dialog>
 	</div>
 </template>
 
@@ -239,6 +217,7 @@
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import 'vue3-json-viewer/dist/index.css';
+import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 
 import { ElMessage } from 'element-plus';
 import { Delete, Plus, CircleClose, Minus, Right } from '@element-plus/icons-vue';
@@ -261,7 +240,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Plus, CircleClose, Minus, Right },
+	components: { Delete, Plus, CircleClose, Minus, Right,vue3cron },
 
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
@@ -269,6 +248,8 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			dialogVisible: false,
+			cronShow:false,
+			crontype:'',
 			config: {},
 			devconfig: {},
 			tabconfig: {},
@@ -581,11 +562,31 @@ export default defineComponent({
 				}
 			});
 		};
+		
+		const handlelisten = (e) => {
+			console.log(e);
+			if(e.type=='config'){
+				state.config.cronExpression=e.cron
+			}else if(e.type=='tabconfig'){
+				state.tabconfig.cronExpression=e.cron
+			}
+		};
+		const showCron=(type)=>{
+				state.crontype=type
+				state.cronShow=true;
+
+		};
+		const cronclose=()=>{
+			state.cronShow=false;
+		}
 
 		return {
+			cronclose,
+			showCron,
 			onTest,
 			addRule,
 			delRule,
+			handlelisten,
 			addParams,
 			addParamss,
 			delParamss,

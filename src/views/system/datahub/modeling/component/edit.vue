@@ -19,14 +19,20 @@
 				</el-form-item> -->
 
 				<el-form-item label="定时请求">
+			
+					<div style="display:flex">
 							<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
-							<ul style="list-style: none;">
+							<el-button type="success"  @click="showCron('ruleForm')" style="margin-left: 5px;">设置</el-button>
+
+						</div>
+							<!-- <el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" /> -->
+							<!-- <ul style="list-style: none;">
 								<li><el-icon><ele-WarningFilled /></el-icon> */5 * * * * ? : 每隔5秒执行一次</li>
 								<li><el-icon><ele-WarningFilled /></el-icon> 20 */1 * * * ? : 每隔1分钟执行一次</li>
 								<li><el-icon><ele-WarningFilled /></el-icon> 30 0 23 * * ? : 每天23点执行一次</li>
 								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 * * ? : 每天凌晨1点执行一次</li>
 								<li><el-icon><ele-WarningFilled /></el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次</li>
-							</ul>
+							</ul> -->
 						</el-form-item>
 
 				<el-form-item label="描述" prop="desc">
@@ -55,6 +61,10 @@
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog v-model="cronShow" title="选择Cron规则" width="60%">
+			<vue3cron @handlelisten="handlelisten" :type="crontype" @close="cronclose"></vue3cron>
+		</el-dialog>
 	</div>
 </template>
 
@@ -62,6 +72,7 @@
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
+import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 
 interface RuleFormState {
 	id?: number;
@@ -78,6 +89,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
+	components: { vue3cron },
 
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
@@ -85,6 +97,8 @@ export default defineComponent({
 			isShowDialog: false,
 			zidianData:[],
 			cityData:[],
+			cronShow:false,
+			crontype:'',
 			unitData: [
 				{
 					label: '秒',
@@ -183,8 +197,22 @@ export default defineComponent({
 				}
 			});
 		};
+		const handlelisten = (e) => {
+			state.ruleForm.cronExpression=e.cron
+		};
+		const showCron=(type)=>{
+				state.crontype=type
+				state.cronShow=true;
+
+		};
+		const cronclose=()=>{
+			state.cronShow=false;
+		}
 
 		return {
+			handlelisten,
+			showCron,
+			cronclose,
 			openDialog,
 			closeDialog,
 			onCancel,
