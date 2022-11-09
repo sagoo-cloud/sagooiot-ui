@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="数据节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey==1" />
+					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey==1 && ruleForm.nodeId !== 0" />
 				</el-form-item>
 				<el-form-item label="数据节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />

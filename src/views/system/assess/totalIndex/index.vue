@@ -9,57 +9,21 @@
 					</el-icon>
 					查询
 				</el-button> -->
-        <el-button
-          size="default"
-          type="primary"
-          class="ml10"
-          @click="onOpenAddItem"
-        >
+        <el-button size="default" type="primary" class="ml10" @click="onOpenAddItem" v-auth="'add'">
           <el-icon>
             <ele-FolderAdd />
           </el-icon>
           新建
         </el-button>
       </div>
-      <el-table
-        v-loading="loading"
-        :data="tableData.data"
-        style="width: 100%"
-      >
-        <el-table-column
-          align="left"
-          prop="title"
-          label="名称"
-          width="260"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-          align="left"
-          prop="explain"
-          label="描述"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          label="操作"
-          width="180"
-        >
+      <el-table v-loading="tableData.loading" :data="tableData.data" style="width: 100%">
+        <el-table-column align="left" prop="title" v-col="'title'" label="名称" width="260" show-overflow-tooltip></el-table-column>
+        <el-table-column align="left" prop="explain" v-col="'explain'" label="描述" show-overflow-tooltip></el-table-column>
+        <el-table-column align="center" label="操作" width="180" v-col="'handle'">
           <template #default="scope">
-            <el-button
-              size="small"
-              type="text"
-              @click="onOpenEditItem(scope.row)"
-            >编辑</el-button>
-            <el-button
-              size="small"
-              type="text"
-              @click="onRowDel(scope.row)"
-            >删除</el-button>
-            <el-button
-              size="small"
-              type="text"
-              @click="onOpenDetailItem(scope.row)"
-            >详细信息</el-button>
+            <el-button size="small" type="text" @click="onOpenEditItem(scope.row)" v-auth="'edit'">编辑</el-button>
+            <el-button size="small" type="text" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" type="text" @click="onOpenDetailItem(scope.row)" v-auth="'detail'">详细信息</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,10 +41,7 @@
 			>
 			</el-pagination> -->
     </el-card>
-    <EditOrAddItem
-      ref="EditOrAddItem"
-      @fetchList="fetchList"
-    />
+    <EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
     <DetailItem ref="detailItemRef" />
 
   </div>

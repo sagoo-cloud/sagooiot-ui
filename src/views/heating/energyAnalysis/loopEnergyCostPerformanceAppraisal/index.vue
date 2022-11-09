@@ -125,7 +125,7 @@ const queryTree = () => {
 };
 // 页面加载时
 onMounted(() => {
-	queryTree()
+	// queryTree()
 });
 /** 重置按钮操作 */
 const resetQuery = (formEl: FormInstance | undefined) => {

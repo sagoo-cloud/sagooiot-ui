@@ -55,6 +55,9 @@ service.interceptors.response.use(
 			// if (res.data?.Data) {
 			// 	return res.data.Data
 			// }
+			if (res.data?.Info && res.data?.Data) { // currentUser接口
+				return res.data
+			}
 			if (res.data?.Data === undefined) {
 				return res.data
 			}
