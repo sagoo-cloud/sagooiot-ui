@@ -44,6 +44,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { formatAxis } from '/@/utils/formatTime';
+import { ElMessage } from 'element-plus';
 import api from '/@/api/system';
 import uploadVue from '/@/components/upload-wrapper/index.vue';
 
@@ -60,8 +61,9 @@ const currentTime = computed(() => {
 });
 
 const setImg = (img: string) => {
-  api.user.edit({ avatar: img }).then((res: any) => {
-    console.log(res)
+  api.user.setAvatar(info.value.id, img).then((res: any) => {
+    ElMessage.success('更新成功')
+    info.value.avatar = img
   })
 }
 </script>
