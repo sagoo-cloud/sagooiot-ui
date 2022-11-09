@@ -115,7 +115,11 @@ export default defineComponent({
       xAxis: [],
       tem: [],
       averageTem: [],
+      foreCastInfoTem: [],
+      foreCastAvgInfoTem: [],
       xAxisWind: [],
+      foreCastInfoWind: [],
+      foreCastAvgInfoWind: [],
       temWind: [],
       averageTemWind: [],
       currentcityId: 0,
@@ -140,19 +144,33 @@ export default defineComponent({
     // 根据ID获取指定城市的风力图表
     const getWindpowerEchartById = (id: number) => {
       api.weather.getWindpowerEchartById({ id: id, types: state.windpowerType }).then((res: any) => {
-        const { AvgInfo, Info } = res;
+        const { AvgInfo, Info, ForeCastInfo,  ForeCastAvgInfo} = res;
         state.xAxisWind = [];
         state.temWind = [];
+        state.foreCastInfoWind = [];
         state.averageTemWind = [];
+        state.foreCastAvgInfoWind = [];
         if (Info && Info.length) {
           Info.forEach((i: any) => {
             state.xAxisWind.push(i.time);
             state.temWind.push(i.value);
+            state.foreCastInfoWind.push('-');
           })
         }
         if (AvgInfo && AvgInfo.length) {
           AvgInfo.forEach((i: any) => {
             state.averageTemWind.push(i.value)
+            state.foreCastAvgInfoWind.push('-');
+          })
+        }
+        if([2, 3].indexOf(state.windpowerType) > -1) {
+          ForeCastInfo.forEach((i: any) => {
+            state.xAxisWind.push(i.time);
+            state.temWind.push('-');
+            state.foreCastInfoWind.push(i.value);
+          })
+          ForeCastAvgInfo.forEach((i: any) => {
+            state.foreCastAvgInfoWind.push(i.value);
           })
         }
         nextTick(() => {
@@ -164,19 +182,33 @@ export default defineComponent({
     // 根据ID获取指定城市的温度图表
     const getTemperatureEchartById = (id: number) => {
       api.weather.getTemperatureEchartById({ id: id, types: state.temperatureType }).then((res: any) => {
-        const { AvgInfo, Info } = res;
+        const { AvgInfo, Info, ForeCastInfo, ForeCastAvgInfo } = res;
         state.xAxis = [];
         state.tem = [];
+        state.foreCastInfoTem = [];
         state.averageTem = [];
+        state.foreCastAvgInfoTem = [];
         if (Info && Info.length) {
           Info.forEach((i: any) => {
             state.xAxis.push(i.time);
             state.tem.push(i.value);
+            state.foreCastInfoTem.push('-');
           })
         }
         if (AvgInfo && AvgInfo.length) {
           AvgInfo.forEach((i: any) => {
             state.averageTem.push(i.value)
+            state.foreCastAvgInfoTem.push('-');
+          })
+        }
+        if([2, 3].indexOf(state.temperatureType) > -1) {
+          ForeCastInfo.forEach((i: any) => {
+            state.xAxis.push(i.time);
+            state.tem.push('-');
+            state.foreCastInfoTem.push(i.value);
+          })
+          ForeCastAvgInfo.forEach((i: any) => {
+            state.foreCastAvgInfoTem.push(i.value);
           })
         }
         nextTick(() => {
@@ -201,7 +233,7 @@ export default defineComponent({
         backgroundColor: state.charts.bgColor,
         grid: { top: 70, right: 40, bottom: 50, left: 40 },
         tooltip: { trigger: 'axis' },
-        legend: { data: ['气温（℃）', '当日平均（℃）'], left: '40%' },
+        legend: { data: [2, 3].indexOf(state.temperatureType) > -1 ? ['气温（℃）', '平均气温（℃）', '预测气温（℃）', '预测平均气温（℃）'] : ['气温（℃）', '平均气温（℃）'], left: '0' },
         xAxis: {
           data: state.xAxis
         },
@@ -233,7 +265,24 @@ export default defineComponent({
             },
           },
           {
-            name: '当日平均（℃）',
+            name: '预测气温（℃）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            // data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
+            data: state.foreCastInfoTem,
+            lineStyle: { color: '#2b79ff' },
+            itemStyle: { color: '#2b79ff', borderColor: '#2b79ff' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#2b79ff' },
+                { offset: 1, color: '#c5e3ed' },
+              ]),
+            },
+          },
+          {
+            name: '平均气温（℃）',
             type: 'line',
             symbolSize: 6,
             symbol: 'circle',
@@ -245,6 +294,42 @@ export default defineComponent({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 { offset: 0, color: '#9E87FFb3' },
                 { offset: 1, color: '#9E87FF03' },
+              ]),
+            },
+            emphasis: {
+              itemStyle: {
+                color: {
+                  type: 'radial',
+                  x: 0.5,
+                  y: 0.5,
+                  r: 0.5,
+                  colorStops: [
+                    { offset: 0, color: '#9E87FF' },
+                    { offset: 0.4, color: '#9E87FF' },
+                    { offset: 0.5, color: '#fff' },
+                    { offset: 0.7, color: '#fff' },
+                    { offset: 0.8, color: '#fff' },
+                    { offset: 1, color: '#fff' },
+                  ],
+                },
+                borderColor: '#9E87FF',
+                borderWidth: 2,
+              },
+            },
+          },
+          {
+            name: '预测平均气温（℃）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            data: state.foreCastAvgInfoTem,
+            lineStyle: { color: '#41b883' },
+            itemStyle: { color: '#41b883', borderColor: '#41b883' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#41b883' },
+                { offset: 1, color: '#ddf2eaab' },
               ]),
             },
             emphasis: {
@@ -281,7 +366,7 @@ export default defineComponent({
         backgroundColor: state.charts.bgColor,
         grid: { top: 70, right: 40, bottom: 50, left: 40 },
         tooltip: { trigger: 'axis' },
-        legend: { data: ['风力（级）', '当日风力（级）'], left: '40%' },
+        legend: { data: [2, 3].indexOf(state.windpowerType) > -1 ? ['风力（级）', '平均风力（级）', '预测风力（级）', '预测平均风力（级）'] : ['风力（级）', '平均风力（级）'], left: '0' },
         xAxis: {
           data: state.xAxisWind
         },
@@ -301,7 +386,6 @@ export default defineComponent({
             symbolSize: 6,
             symbol: 'circle',
             smooth: true,
-            // data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
             data: state.temWind,
             lineStyle: { color: '#fe9a8b' },
             itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
@@ -313,12 +397,27 @@ export default defineComponent({
             },
           },
           {
-            name: '当日风力（级）',
+            name: '预测风力（级）',
             type: 'line',
             symbolSize: 6,
             symbol: 'circle',
             smooth: true,
-            // data: [0, 24.1, 7.2, 15.5, 42.4, 42.4, 42.4, 24.1, 7.2, 15.5, 42.4, 0],
+            data: state.foreCastInfoWind,
+            lineStyle: { color: '#2b79ff' },
+            itemStyle: { color: '#2b79ff', borderColor: '#2b79ff' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#2b79ff' },
+                { offset: 1, color: '#c5e3ed' },
+              ]),
+            },
+          },
+          {
+            name: '平均风力（级）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
             data: state.averageTemWind,
             lineStyle: { color: '#9E87FF' },
             itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
@@ -326,6 +425,42 @@ export default defineComponent({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 { offset: 0, color: '#9E87FFb3' },
                 { offset: 1, color: '#9E87FF03' },
+              ]),
+            },
+            emphasis: {
+              itemStyle: {
+                color: {
+                  type: 'radial',
+                  x: 0.5,
+                  y: 0.5,
+                  r: 0.5,
+                  colorStops: [
+                    { offset: 0, color: '#9E87FF' },
+                    { offset: 0.4, color: '#9E87FF' },
+                    { offset: 0.5, color: '#fff' },
+                    { offset: 0.7, color: '#fff' },
+                    { offset: 0.8, color: '#fff' },
+                    { offset: 1, color: '#fff' },
+                  ],
+                },
+                borderColor: '#9E87FF',
+                borderWidth: 2,
+              },
+            },
+          },
+          {
+            name: '预测平均风力（级）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            data: state.foreCastAvgInfoWind,
+            lineStyle: { color: '#41b883' },
+            itemStyle: { color: '#41b883', borderColor: '#41b883' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#41b883' },
+                { offset: 1, color: '#ddf2eaab' },
               ]),
             },
             emphasis: {
