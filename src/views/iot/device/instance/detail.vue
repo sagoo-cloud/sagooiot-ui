@@ -29,7 +29,7 @@
 								<div class="statusname" v-if="areaData.status==1">离线</div>
 								<div class="statusname" v-if="areaData.status==2">在线</div>
 								<div class="cardflex comtest">
-									<div>最后上线时间</div>
+									<div> 最后一次上传数据时间</div>
 									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
 								</div>
 							</div>
@@ -49,7 +49,7 @@
 									</div>
 								</div>
 
-								<div class="statusname">{{item.value}}</div>
+								<div class="statusname">{{item.value}}{{item.unit}}</div>
 								<div class="">
 									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int' || item.type=='float'"/>
 								</div>
