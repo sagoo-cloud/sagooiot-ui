@@ -27,7 +27,7 @@
         <el-table-column prop="name" label="分类名称" v-col="'name'" show-overflow-tooltip> </el-table-column>
         
        
-        <el-table-column prop="createdAt" label="创建时间" align="center" min-width="180" v-col="'createdAt'"></el-table-column>
+        <el-table-column prop="desc" label="描述" align="center" min-width="180" v-col="'desc'"></el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenAdd(scope.row)" v-auth="'add'">新增</el-button>

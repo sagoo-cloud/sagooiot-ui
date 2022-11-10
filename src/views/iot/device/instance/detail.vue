@@ -11,6 +11,59 @@
 
 		<div class="content-box">
 			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+
+				<el-tab-pane label="运行状态" name="3">
+					<div style="background-color: rgb(240, 242, 245); display: flex; padding: 10px;flex-wrap: wrap;">
+						<div class="ant-card">
+							<div class="ant-card-body">
+								<div class="cardflex">
+									<div>设备状态</div>
+									<div @click="getrunData()" style="cursor: pointer;">
+										<el-icon style="font-size: 18px;">
+											<ele-Refresh />
+										</el-icon>
+									</div>
+								</div>
+
+								<div class="statusname" v-if="areaData.status==0">未启用</div>
+								<div class="statusname" v-if="areaData.status==1">离线</div>
+								<div class="statusname" v-if="areaData.status==2">在线</div>
+								<div class="cardflex comtest">
+									<div>最后上线时间</div>
+									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ant-card" v-for="(item, index) in areaData.properties" :key="index">
+							<div class="ant-card-body">
+								<div class="cardflex">
+									<div>{{item.name}}</div>
+									<div style="cursor: pointer;">
+										<el-icon  style="font-size: 18px;"  @click="getrunData()">
+											<ele-Refresh />
+										</el-icon>
+										<el-icon  style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
+											<ele-Expand />
+										</el-icon>
+									</div>
+								</div>
+
+								<div class="statusname">{{item.value}}</div>
+								<div class="cardflex">
+									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int'"/>
+								</div>
+							</div>
+						</div>
+
+						
+				
+					</div>
+				</el-tab-pane>
+
+
+
+
 				<el-tab-pane label="实例信息" name="1">
 					<div class="pro-box">
 						<div class="protitle">设备信息</div>
@@ -25,21 +78,22 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属产品</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.productName }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td>
+									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.transportProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.createdAt }}</td>
 								</tr>
 
 								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.createdAt }}</td>
+									
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
@@ -170,54 +224,7 @@
 						/>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="运行状态" name="3">
-					<div style="background-color: rgb(240, 242, 245); display: flex; padding: 10px;flex-wrap: wrap;">
-						<div class="ant-card">
-							<div class="ant-card-body">
-								<div class="cardflex">
-									<div>设备状态</div>
-									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon style="font-size: 18px;">
-											<ele-Refresh />
-										</el-icon>
-									</div>
-								</div>
-
-								<div class="statusname" v-if="areaData.status==0">未启用</div>
-								<div class="statusname" v-if="areaData.status==1">离线</div>
-								<div class="statusname" v-if="areaData.status==2">在线</div>
-								<div class="cardflex comtest">
-									<div>最后上线时间</div>
-									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="ant-card" v-for="(item, index) in areaData.properties" :key="index">
-							<div class="ant-card-body">
-								<div class="cardflex">
-									<div>{{item.name}}</div>
-									<div style="cursor: pointer;">
-										<el-icon  style="font-size: 18px;"  @click="getrunData()">
-											<ele-Refresh />
-										</el-icon>
-										<el-icon  style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
-											<ele-Expand />
-										</el-icon>
-									</div>
-								</div>
-
-								<div class="statusname">{{item.value}}</div>
-								<div class="cardflex">
-									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int'"/>
-								</div>
-							</div>
-						</div>
-
-						
-				
-					</div>
-				</el-tab-pane>
+		
 
 				<el-tab-pane label="日志管理" name="4">
 					<div class="system-user-search mb15">
@@ -361,7 +368,7 @@ export default defineComponent({
 			dialogVisible: false,
 			logTypeData: [],
 			jsonData: '',
-			activeName: '1', // 分类数据
+			activeName: '3', // 分类数据
 			activetab: 'attr', // 分类数据
 			detail: [],
 			prodetail: [],
@@ -400,6 +407,7 @@ export default defineComponent({
 				state.developer_status = res.data.status;
 				state.tableData.param.productId = res.data.product.id;
 				state.product_id = res.data.product.id;
+				getrunData();
 				api.product.detail(res.data.product.id).then((res: any) => {
 					state.prodetail = res.data;
 					console.log(res.data);
@@ -411,6 +419,7 @@ export default defineComponent({
 					state.tableData.total = res.Total;
 				});
 			});
+			
 		});
 
 		const onLogDetail = (row: TableDataRow) => {

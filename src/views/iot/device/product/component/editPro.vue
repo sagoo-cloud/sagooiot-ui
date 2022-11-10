@@ -23,14 +23,14 @@
           </el-cascader>
         </el-form-item>
 
-        <el-form-item label="所属部门" prop="deptId">
+        <!-- <el-form-item label="所属部门" prop="deptId">
           <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
             <template #default="{ node, data }">
               <span>{{ data.deptName }}</span>
               <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
             </template>
           </el-cascader>
-        </el-form-item>
+        </el-form-item> -->
 
 
         <el-form-item label="消息协议" prop="messageProtocol">
@@ -116,7 +116,7 @@ export default defineComponent({
         id: 0,
         name: '',
         categoryId: '',
-        deptId: '',
+        // deptId: '',
         messageProtocol: '',
         transportProtocol: '',
         deviceType: '设备',
@@ -131,7 +131,7 @@ export default defineComponent({
           { required: true, message: "产品标识不能为空", trigger: "blur" }
         ],
         parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        // deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
         messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
         transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
@@ -183,6 +183,7 @@ export default defineComponent({
         id: 0,
         name: '',
         dictType: '',
+        deviceType: '设备',
         status: 1,
         desc: ''
       }

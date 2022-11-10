@@ -21,20 +21,21 @@
 						<table>
 							<tbody>
 								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品名称</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品标识</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属品类</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.categoryName }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td>
+									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
+									
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">描述</th>
