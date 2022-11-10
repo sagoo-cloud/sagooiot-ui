@@ -20,6 +20,7 @@ export interface MenuListRow {
 
 export interface ApiRow {
   id?: number; // ID
+  parentId?: number; // parentId
   menuIds: number[]; // 名称
   types: 1 | 2; // 1 分类 2接口
   name: string; // 名称
