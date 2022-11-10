@@ -13,7 +13,7 @@
 			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 
 				<el-tab-pane label="运行状态" name="3">
-					<div style="background-color: rgb(240, 242, 245); display: flex; padding: 10px;flex-wrap: wrap;">
+					<div style=" display: flex; padding: 10px;flex-wrap: wrap;" >
 						<div class="ant-card">
 							<div class="ant-card-body">
 								<div class="cardflex">
@@ -798,14 +798,14 @@ tr {
 	box-sizing: border-box;
 	margin: 10px;
 	width: 23.5%;
-	color: rgba(0, 0, 0, 0.65);
 	font-size: 14px;
 	font-variant: tabular-nums;
+  border: 1px solid #eee;
+
 	line-height: 1.5;
 	list-style: none;
 	font-feature-settings: 'tnum';
 	position: relative;
-	background: #fff;
 	border-radius: 2px;
 	transition: all 0.3s;
 }
@@ -818,7 +818,6 @@ tr {
 	justify-content: space-between;
 }
 .statusname {
-	color: rgba(0, 0, 0, 0.85);
 	font-size: 30px;
 	margin-top: 10px;
 }
