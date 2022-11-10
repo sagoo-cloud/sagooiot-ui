@@ -67,7 +67,7 @@ import { useSearch } from '/@/hooks/useCommon';
 
 const editFormRef = ref();
 
-const { params, tableData, getList, loading } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '' });
+const { params, tableData, getList, loading } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '', types: -1 });
 
 getList();
 

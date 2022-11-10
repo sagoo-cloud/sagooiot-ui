@@ -1,6 +1,6 @@
 <template>
   <el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id  ?  '编辑接口'  :  '新增接口'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
-    <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
+    <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px" @keyup.enter="onSubmit">
       <el-form-item label="选择类型" prop="types">
         <el-radio-group v-model="formData.types">
           <el-radio-button :label="2">接口</el-radio-button>
@@ -8,7 +8,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上级分类" prop="parentId">
-        <!-- <el-cascader :options="menuData" :props="{ checkStrictly: false,  multiple:  true,  emitPath: false, value: 'id', label: 'title' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader> -->
+        <el-cascader :options="typeData" :props="{ checkStrictly: false,  multiple:  false,  emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
       </el-form-item>
       <template v-if="formData.types===1">
         <el-form-item label="分类名称" prop="name">
@@ -51,9 +51,10 @@ import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['getList']);
 
-const showDialog = ref(true);
+const showDialog = ref(false);
 const formRef = ref();
 const menuData = ref<any[]>([]);
+const typeData = ref<any[]>([]);
 
 const baseForm: ApiRow = {
   menuIds: [],
@@ -103,6 +104,9 @@ const resetForm = async () => {
 const open = async (row: any) => {
   resetForm();
   showDialog.value = true;
+  api.api.getList({ types: 1, status: -1, }).then((res: any) => {
+    typeData.value = res.Info;
+  });
   nextTick(() => {
     Object.assign(formData, { ...row });
   });
