@@ -20,12 +20,11 @@ const props = defineProps({
 onMounted(() => {
 	const tinyArea = new TinyArea(props.antdid, {
 		height: 60,
-		autoFit: false,
+		autoFit: true,
 		data: props.json,
 		smooth: true,
 		areaStyle: {
 			fill: '#873bf4',
-			
 		},
 	// 	tooltip: {
 	// 		customContent: (title, data) => {

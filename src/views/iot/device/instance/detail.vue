@@ -50,8 +50,8 @@
 								</div>
 
 								<div class="statusname">{{item.value}}</div>
-								<div class="cardflex">
-									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int'"/>
+								<div class="">
+									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int' || item.type=='float'"/>
 								</div>
 							</div>
 						</div>
@@ -797,7 +797,7 @@ tr {
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 23.8%;
+	width: 23.5%;
 	color: rgba(0, 0, 0, 0.65);
 	font-size: 14px;
 	font-variant: tabular-nums;
