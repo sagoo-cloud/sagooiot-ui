@@ -145,14 +145,16 @@
 					</el-radio-group>
 				</el-form-item>
 
-					<el-form-item label="主机地址" >
+					<div class="inline">
+						<el-form-item label="主机地址" >
 							<el-input v-model="tabconfig.host" placeholder="请输入主机地址"   />
 						</el-form-item>
 
 						<el-form-item label="端口号">
 							<el-input v-model="tabconfig.port" placeholder="请输入端口号" />
 						</el-form-item>
-
+					</div>
+					<div class="inline">
 						<el-form-item label="用户名">
 							<el-input v-model="tabconfig.user" placeholder="请输入用户名" />
 						</el-form-item>
@@ -160,9 +162,25 @@
 						<el-form-item label="密码">
 							<el-input v-model="tabconfig.passwd" placeholder="请输入密码" />
 						</el-form-item>
-
+					</div>
+					
 						<el-form-item label="数据库名称">
 							<el-input v-model="tabconfig.dbName" placeholder="请输入数据库名称" />
+						</el-form-item>
+
+						<el-form-item label="执行方式" prop="type">
+							<el-radio-group v-model="tabconfig.tabtype" >
+								<el-radio label="tab">数据表</el-radio>
+								<el-radio label="sql">Sql</el-radio>
+							
+							</el-radio-group>
+						</el-form-item>
+						
+						<el-form-item label="">
+							<el-input
+								v-model="textarea2"
+								type="textarea"
+							/>
 						</el-form-item>
 
 						<el-form-item label="表名称">
@@ -606,6 +624,9 @@ export default defineComponent({
 });
 </script>
 <style>
+.inline{
+	display: inline-flex;
+}
 .el-input__wrapper {
 	width: 98%;
 }

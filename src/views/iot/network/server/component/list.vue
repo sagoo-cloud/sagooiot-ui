@@ -64,12 +64,14 @@
             @click="toDetail(scope.row.id)"
             size="small"
             type="text"
+            v-auth="'detail'"
           >详情</el-button>
           <el-button
             size="small"
             link
             key="info"
             type="info"
+            v-auth="'edit'"
             @click="toEdit(scope.row.id)"
           >编辑</el-button>
 
@@ -84,6 +86,7 @@
                 type="text"
                 class="more-btn"
                 @click="isShowMore = !isShowMore"
+                v-auth="'more'"
               >更多
                 <i
                   style="margin-left: 2px;"
@@ -99,6 +102,7 @@
                 size="small"
                 key="success"
                 type="success"
+                v-auth="'on'"
               >启 用</el-button>
               <el-divider direction="vertical" />
               <el-button
@@ -108,6 +112,7 @@
                 size="small"
                 key="warning"
                 type="warning"
+                v-auth="'off'"
               >禁 用</el-button>
               <el-divider direction="vertical" />
               <el-button
@@ -116,6 +121,7 @@
                 size="small"
                 key="danger"
                 type="danger"
+                v-auth="'delete'"
               >删 除</el-button>
             </div>
           </el-popover>

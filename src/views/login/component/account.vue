@@ -1,22 +1,7 @@
 <template>
-  <el-form
-    ref="loginForm"
-    size="large"
-    class="login-content-form"
-    :model="ruleForm"
-    :rules="formRules"
-  >
-    <el-form-item
-      class="login-animation1"
-      prop="userName"
-    >
-      <el-input
-        type="text"
-        :placeholder="$t('message.account.accountPlaceholder1')"
-        v-model="ruleForm.userName"
-        clearable
-        autocomplete="off"
-      >
+  <el-form ref="loginForm" size="large" class="login-content-form" :model="ruleForm" :rules="formRules">
+    <el-form-item class="login-animation1" prop="userName">
+      <el-input type="text" :placeholder="$t('message.account.accountPlaceholder1')" v-model="ruleForm.userName" clearable autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
             <ele-User />
@@ -24,46 +9,22 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item
-      class="login-animation2"
-      prop="password"
-    >
-      <el-input
-        :type="isShowPassword ? 'text' : 'password'"
-        :placeholder="$t('message.account.accountPlaceholder2')"
-        v-model="ruleForm.password"
-        autocomplete="off"
-        @keyup.enter="onSignIn"
-      >
+    <el-form-item class="login-animation2" prop="password">
+      <el-input :type="isShowPassword ? 'text' : 'password'" :placeholder="$t('message.account.accountPlaceholder2')" v-model="ruleForm.password" autocomplete="off" @keyup.enter="onSignIn">
         <template #prefix>
           <el-icon class="el-input__icon">
             <ele-Unlock />
           </el-icon>
         </template>
         <template #suffix>
-          <i
-            class="iconfont el-input__icon login-content-password"
-            :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-            @click="isShowPassword = !isShowPassword"
-          >
+          <i class="iconfont el-input__icon login-content-password" :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'" @click="isShowPassword = !isShowPassword">
           </i>
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item
-      class="login-animation3"
-      prop="captcha"
-    >
+    <el-form-item class="login-animation3" prop="captcha">
       <el-col :span="15">
-        <el-input
-          type="text"
-          maxlength="4"
-          :placeholder="$t('message.account.accountPlaceholder3')"
-          v-model="ruleForm.captcha"
-          clearable
-          autocomplete="off"
-          @keyup.enter="onSignIn"
-        >
+        <el-input type="text" maxlength="4" :placeholder="$t('message.account.accountPlaceholder3')" v-model="ruleForm.captcha" clearable autocomplete="off" @keyup.enter="onSignIn">
           <template #prefix>
             <el-icon class="el-input__icon">
               <ele-Position />
@@ -74,24 +35,12 @@
       <el-col :span="1"></el-col>
       <el-col :span="8">
         <div class="login-content-code">
-          <img
-            class="login-content-code-img"
-            @click="getCaptcha"
-            width="130"
-            height="38"
-            :src="captchaSrc"
-            style="cursor: pointer"
-          />
+          <img class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
         </div>
       </el-col>
     </el-form-item>
     <el-form-item class="login-animation4">
-      <el-button
-        type="primary"
-        class="login-content-submit"
-        @click="onSignIn"
-        :loading="loading.signIn"
-      >
+      <el-button type="primary" class="login-content-submit" @click="onSignIn" :loading="loading.signIn">
         <span>{{ $t('message.account.accountBtnText') }}</span>
       </el-button>
     </el-form-item>
@@ -182,7 +131,7 @@ export default defineComponent({
     const currentUser = async () => {
       api.login.currentUser().then(async (res: any) => {
         // 设置用户菜单
-        Session.set('userMenu', res || []);
+        Session.set('userMenu', res.Data || []);
         store.dispatch('requestOldRoutes/setBackEndControlRoutes', res || []);
         if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
           // 前端控制路由，2、请注意执行顺序

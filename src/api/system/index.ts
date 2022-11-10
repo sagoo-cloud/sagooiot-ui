@@ -9,7 +9,7 @@ export default {
     logout: () => post('/loginOut'),
   },
   api: {
-    getList: (params?: object) => get('/system/api/list', params),
+    getList: (params?: object) => get('/system/api/tree', params),
     getAll: () => get('/system/api/GetAll'),
     detail: (id: number) => get('/system/api/detail', { id }),
     add: (data: object) => post('/system/api/add', data),
@@ -83,6 +83,7 @@ export default {
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),
+    setAvatar: (id: number, avatar: string) => put('/system/user/editStatus', { id, avatar }),
   },
   config: {
     getList: (params: object) => get('/common/config/list', params),

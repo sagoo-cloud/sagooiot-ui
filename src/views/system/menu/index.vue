@@ -25,7 +25,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="state.menuTableData" default-expand-all style="width: 100%" row-key="path" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="state.loading">
+      <el-table :data="state.menuTableData" :default-expand-all="false" style="width: 100%" row-key="path" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="state.loading">
         <el-table-column label="菜单名称" show-overflow-tooltip v-col="'title'">
           <template #default="scope">
             <SvgIcon :name="scope.row.icon" />

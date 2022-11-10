@@ -57,7 +57,7 @@ export async function initBackEndControlRoutes() {
  */
 export async function getBackEndControlRoutes() {
 	return api.login.currentUser().then((res: any) => {
-		Session.set('userMenu', res || [])
+		Session.set('userMenu', res.Data || [])
 		// Session.set('permissions',res.data.permissions)
 		// store.dispatch('userInfos/setPermissions',res.data.permissions)
 	})
