@@ -32,7 +32,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData" style="width: 100%" v-loading="loading">
+      <el-table :data="tableData" style="width: 100%" v-loading="loading" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="name" v-col="'name'" label="接口名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="address" v-col="'address'" label="接口地址" show-overflow-tooltip></el-table-column>
@@ -44,8 +44,10 @@
         </el-table-column>
         <el-table-column label="操作" width="100" align="center" v-col="'handle'">
           <template #default="scope">
-            <el-button size="small" text type="warning" @click="addOrEdit(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
+            <template v-if="scope.row.types===2">
+              <el-button size="small" text type="warning" @click="addOrEdit(scope.row)" v-auth="'edit'">修改</el-button>
+              <el-button size="small" text type="danger" @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
+            </template>
           </template>
         </el-table-column>
       </el-table>
