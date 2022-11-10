@@ -9,7 +9,7 @@ export default {
     logout: () => post('/loginOut'),
   },
   api: {
-    getList: (params?: object) => get('/system/api/list', params),
+    getList: (params?: object) => get('/system/api/tree', params),
     getAll: () => get('/system/api/GetAll'),
     detail: (id: number) => get('/system/api/detail', { id }),
     add: (data: object) => post('/system/api/add', data),

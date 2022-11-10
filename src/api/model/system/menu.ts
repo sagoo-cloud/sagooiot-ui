@@ -21,6 +21,7 @@ export interface MenuListRow {
 export interface ApiRow {
   id?: number; // ID
   menuIds: number[]; // 名称
+  types: 1 | 2; // 1 分类 2接口
   name: string; // 名称
   address: string; // 接口地址
   remark: string; // 备注
