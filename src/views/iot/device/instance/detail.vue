@@ -582,8 +582,30 @@ export default defineComponent({
 
     const getrunData = () => {
       api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
-        state.areaData = res
+          state.areaData = res
+          let properties=state.areaData.properties;
 
+          var temp = new Array();
+          
+          properties.forEach(function (item, index) {
+              let datalist=item.list;
+              temp[index] = [];
+              var temps = new Array();
+              datalist.forEach(function (a, b) {
+                 if(b<15){
+                  temps.push(a);
+                 } 
+              });
+              temp[index]['name']=item.name
+              temp[index]['key']=item.key 
+              temp[index]['type']=item.type
+              temp[index]['unit']=item.unit
+              temp[index]['value']=item.value
+              temp[index]['list']=temps
+              
+          });
+        
+          state.areaData.properties=temp;
       });
 
     };
