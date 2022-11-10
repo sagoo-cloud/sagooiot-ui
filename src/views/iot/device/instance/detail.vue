@@ -13,7 +13,7 @@
 			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 
 				<el-tab-pane label="运行状态" name="3">
-					<div style="background-color: rgb(240, 242, 245); display: flex; padding: 10px;flex-wrap: wrap;">
+					<div style=" display: flex; padding: 10px;flex-wrap: wrap;" >
 						<div class="ant-card">
 							<div class="ant-card-body">
 								<div class="cardflex">
@@ -29,7 +29,7 @@
 								<div class="statusname" v-if="areaData.status==1">离线</div>
 								<div class="statusname" v-if="areaData.status==2">在线</div>
 								<div class="cardflex comtest">
-									<div>最后上线时间</div>
+									<div> 最后一次上传数据时间</div>
 									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
 								</div>
 							</div>
@@ -49,9 +49,9 @@
 									</div>
 								</div>
 
-								<div class="statusname">{{item.value}}</div>
-								<div class="cardflex">
-									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int'"/>
+								<div class="statusname">{{item.value}}{{item.unit}}</div>
+								<div class="">
+									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int' || item.type=='float'"/>
 								</div>
 							</div>
 						</div>
@@ -797,15 +797,15 @@ tr {
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 23.8%;
-	color: rgba(0, 0, 0, 0.65);
+	width: 23.5%;
 	font-size: 14px;
 	font-variant: tabular-nums;
+  border: 1px solid #eee;
+
 	line-height: 1.5;
 	list-style: none;
 	font-feature-settings: 'tnum';
 	position: relative;
-	background: #fff;
 	border-radius: 2px;
 	transition: all 0.3s;
 }
@@ -818,7 +818,6 @@ tr {
 	justify-content: space-between;
 }
 .statusname {
-	color: rgba(0, 0, 0, 0.85);
 	font-size: 30px;
 	margin-top: 10px;
 }
