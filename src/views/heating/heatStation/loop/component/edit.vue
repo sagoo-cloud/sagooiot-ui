@@ -70,8 +70,8 @@
           <el-input v-model="ruleForm.decade" placeholder="请输入环路年代" />
         </el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
-					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
+					<el-radio v-model="ruleForm.status" :label="1">启用</el-radio>
+					<el-radio v-model="ruleForm.status" :label="0">禁用</el-radio>
 				</el-form-item>
 				<!-- <el-form-item label="数据模型" prop="dataTemplateIds">
 					<el-select v-model="ruleForm.dataTemplateIds" multiple clearable style="width: 100%;" placeholder="请选择">
