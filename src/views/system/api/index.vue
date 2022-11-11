@@ -44,10 +44,8 @@
         </el-table-column>
         <el-table-column label="操作" width="100" align="center" v-col="'handle'">
           <template #default="scope">
-            <template v-if="scope.row.types===2">
-              <el-button size="small" text type="warning" @click="addOrEdit(scope.row)" v-auth="'edit'">修改</el-button>
-              <el-button size="small" text type="danger" @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
-            </template>
+            <el-button size="small" text type="warning" @click="addOrEdit(scope.row)" v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="danger" @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

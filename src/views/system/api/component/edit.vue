@@ -59,7 +59,7 @@ const typeData = ref<any[]>([]);
 const baseForm: ApiRow = {
   menuIds: [],
   id: undefined,
-  parentId: -1,
+  parentId: undefined,
   name: '',
   types: 2,
   address: '',
@@ -72,8 +72,8 @@ const formData = reactive<ApiRow>({
 });
 
 const ruleForm = {
-  parentId: [ruleRequired('上级分类不能为空')],
-  menuIds: [ruleRequired('关联页面不能为空')],
+  parentId: [ruleRequired('上级分类不能为空', 'change')],
+  menuIds: [ruleRequired('关联页面不能为空', 'change')],
   name: [ruleRequired('接口名称不能为空')],
   address: [ruleRequired('接口地址不能为空')],
 };
