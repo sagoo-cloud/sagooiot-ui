@@ -29,7 +29,7 @@
 								<div class="statusname" v-if="areaData.status==1">离线</div>
 								<div class="statusname" v-if="areaData.status==2">在线</div>
 								<div class="cardflex comtest">
-									<div> 最后一次上传数据时间</div>
+									<div> 数据时间</div>
 									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
 								</div>
 							</div>
@@ -56,50 +56,57 @@
 							</div>
 						</div>
 
-						
-				
+
+
 					</div>
 				</el-tab-pane>
 
 
 
 
-				<el-tab-pane label="实例信息" name="1">
+				<el-tab-pane label="设备信息" name="1">
 					<div class="pro-box">
 						<div class="protitle">设备信息</div>
-						<el-button type="" :icon="Edit" class="buttonedit" @click="onOpenEditDic(detail)">编辑</el-button>
-					</div>
+            <div>
+              <el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
+            </div>
+          </div>
 
 					<div class="ant-descriptions-view">
 						<table>
 							<tbody>
 								<tr class="ant-descriptions-row">
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备名称</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属产品</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.productName }}</td>
-									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
+
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.transportProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">创建时间</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.createdAt }}</td>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
 								</tr>
-
 								<tr class="ant-descriptions-row">
-									
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">固件版本</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.version }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
 								</tr>
-								</tbody>
+                <tr class="ant-descriptions-row">
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
+                  <td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
+                </tr>
+
+
+              </tbody>
 								</table>
 								</div>
 								</el-tab-pane>
@@ -403,7 +410,7 @@ export default defineComponent({
 					state.tableData.total = res.Total;
 				});
 			});
-			
+
 		});
 
 
@@ -586,7 +593,7 @@ export default defineComponent({
           let properties=state.areaData.properties;
 
           var temp = new Array();
-          
+
           properties.forEach(function (item, index) {
               let datalist=item.list;
               temp[index] = [];
@@ -594,17 +601,17 @@ export default defineComponent({
               datalist.forEach(function (a, b) {
                  if(b<15){
                   temps.push(a);
-                 } 
+                 }
               });
               temp[index]['name']=item.name
-              temp[index]['key']=item.key 
+              temp[index]['key']=item.key
               temp[index]['type']=item.type
               temp[index]['unit']=item.unit
               temp[index]['value']=item.value
               temp[index]['list']=temps
-              
+
           });
-        
+
           state.areaData.properties=temp;
       });
 
@@ -735,6 +742,8 @@ export default defineComponent({
 .content-box .pro-box {
 	display: flex;
 	padding: 10px;
+  justify-content: space-between;
+
 }
 .content-box .pro-box .protitle {
 	font-size: 18px;
