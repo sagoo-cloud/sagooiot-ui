@@ -168,9 +168,9 @@
 							<el-input v-model="tabconfig.dbName" placeholder="请输入数据库名称" />
 						</el-form-item>
 
-						<el-form-item label="执行方式" prop="type">
-							<el-radio-group v-model="tabconfig.tabtype" >
-								<el-radio label="tab">数据表</el-radio>
+						<el-form-item label="执行方式" prop="queryType">
+							<el-radio-group v-model="tabconfig.queryType" >
+								<el-radio label="tableName">数据表</el-radio>
 								<el-radio label="sql">Sql</el-radio>
 							
 							</el-radio-group>
@@ -178,14 +178,15 @@
 						
 						<el-form-item label="">
 							<el-input
-								v-model="textarea2"
+								v-model="tabconfig.tableName"
 								type="textarea"
+								:placeholder="tabconfig.queryType=='sql'?'请输入sql语句':'请输入表名称'"
 							/>
 						</el-form-item>
 
-						<el-form-item label="表名称">
+						<!-- <el-form-item label="表名称">
 							<el-input v-model="tabconfig.tableName" placeholder="请输入表名称" />
-						</el-form-item>
+						</el-form-item> -->
 
 						<el-form-item label="主键字段">
 							<el-input v-model="tabconfig.pk" placeholder="请输入主键字段" />

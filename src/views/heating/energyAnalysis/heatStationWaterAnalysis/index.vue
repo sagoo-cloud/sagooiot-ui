@@ -62,9 +62,21 @@
           </el-form-item>
         </el-form>
       </div>
-
+			
+			<div class="title">供回水对比图</div>
 			<div style="height: 300px" ref="barChartRef"></div>
+			<div class="title mt-2">失水量曲线</div>
 			<div style="height: 300px" ref="lineChartRef"></div>
+			<div class="title mt-2">数据列表</div>
+			
+      <el-table :data="state.tableData.data" style="width: 100%" v-loading="state.tableData.loading">
+        <el-table-column type="index" width="55" label="序号" align="center" />
+        <el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="环路名称" prop="value" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="回水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="失水量" prop="value" min-width="120" :show-overflow-tooltip="true" />
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -106,7 +118,11 @@ const state = reactive({
 	barChartSeries1: [],
 	barChartSeries2: [],
 	lineChartXAixs: [],
-	lineChartSeries: []
+	lineChartSeries: [],
+	tableData: {
+		data: [{ value: '-' }, { value: '-' }],
+		loading: false
+	}
 });
 
 const queryTree = () => {
@@ -234,7 +250,12 @@ const initLineChart = () => {
 	global.lineChart = <any>echarts.init(lineChartRef.value, state.charts.theme);
 	const option = {
 		backgroundColor: state.charts.bgColor,
-		grid: { top: 70, right: 20, bottom: 30, left: 30 },
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
 		tooltip: { trigger: 'axis' },
 		legend: { data: ['失水量'] },
 		xAxis: {
@@ -301,3 +322,11 @@ watch(
 	}
 );
 </script>
+
+
+<style lang="scss" scoped>
+.title {
+	font-size: 16px;
+	font-weight: bold;
+}
+</style>

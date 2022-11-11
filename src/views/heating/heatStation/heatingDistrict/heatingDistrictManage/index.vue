@@ -1,67 +1,72 @@
 <template>
 	<div class="page-container">
-		<div class="head-card">
-			<div class="head-card-item">
-				<div class="item">
-					<div class="count">{{ cardCount.org }}</div>
-					<div class="label">区域统计</div>
+		<el-card>
+			<div class="head-card">
+				<div class="head-card-item">
+					<div class="item">
+						<div class="count" :class="{ dark: isDark }">{{ cardCount.org }}</div>
+						<div class="label">区域统计</div>
+					</div>
+					<div class="logo">
+						<img src="/@/assets/icon-org.png" class="img">
+					</div>
 				</div>
-				<div class="logo">
-					<img src="/@/assets/icon-org.png" class="img">
+				<div class="head-card-item">
+					<div class="item">
+						<div class="count" :class="{ dark: isDark }">{{ cardCount.plot }}</div>
+						<div class="label">小区统计</div>
+					</div>
+					<div class="logo">
+						<img src="/@/assets/icon-plot.png" class="img">
+					</div>
+				</div>
+				<div class="head-card-item">
+					<div class="item">
+						<div class="count" :class="{ dark: isDark }">{{ cardCount.resident }}</div>
+						<div class="label">住户统计</div>
+					</div>
+					<div class="logo">
+						<img src="/@/assets/icon-resident.png" class="img">
+					</div>
 				</div>
 			</div>
-			<div class="head-card-item">
-				<div class="item">
-					<div class="count">{{ cardCount.plot }}</div>
-					<div class="label">小区统计</div>
+		</el-card>
+		<el-card class="mt-3">
+			<div class="panel" :class="{ dark: isDark }">
+				<div class="left-panel">
+					<el-input v-model="filterText" size="default" placeholder="搜索区域" />
+					<el-tree :data="treeList" node-key="id" default-expand-all :props="{
+						children: 'children'
+					}" @node-click="onNodeClick" :expand-on-click-node="false">
+						<template #default="{ data }">
+							<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
+								<img src="/src/assets/icon-org.png" v-if="data.orgType === 'org'">
+								<img src="/src/assets/icon-plot.png" v-else-if="data.orgType === 'plot'">
+								<img src="/src/assets/icon-floor.png" v-else-if="data.orgType === 'floor'">
+								<img src="/src/assets/icon-unit.png" v-else-if="data.orgType === 'unit'">
+								<span class="name" :title="data.orgName">{{ data.orgName }}</span>
+							</span>
+						</template>
+					</el-tree>
 				</div>
-				<div class="logo">
-					<img src="/@/assets/icon-plot.png" class="img">
+				<div class="right-panel" :class="{ dark: isDark }">
+					<!-- 小区 -->
+					<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id" @finish="initPage()" />
+					<!-- 楼宇 -->
+					<Floor v-else-if="curNode.orgType === 'plot'" :nodeId="curNode.id" @finish="initPage()" />
+					<!-- 单元 -->
+					<Unit v-else-if="curNode.orgType === 'floor'" :nodeId="curNode.id" @finish="initPage()" />
+					<!-- 住户 -->
+					<Resident v-else-if="curNode.orgType === 'unit'" :nodeId="curNode.id" @finish="initPage()" />
 				</div>
 			</div>
-			<div class="head-card-item">
-				<div class="item">
-					<div class="count">{{ cardCount.resident }}</div>
-					<div class="label">住户统计</div>
-				</div>
-				<div class="logo">
-					<img src="/@/assets/icon-resident.png" class="img">
-				</div>
-			</div>
-		</div>
-		<div class="panel">
-			<div class="left-panel">
-				<el-input v-model="filterText" size="default" placeholder="搜索区域" />
-				<el-tree :data="treeList" node-key="id" default-expand-all :props="{
-					children: 'children'
-				}" @node-click="onNodeClick" :expand-on-click-node="false">
-					<template #default="{ data }">
-						<span class="custom-tree-node" :class="{ active: `${data.id}-${data.orgType}` === `${curNode.id}-${curNode.orgType}` }">
-							<img src="/src/assets/icon-org.png" v-if="data.orgType === 'org'">
-							<img src="/src/assets/icon-plot.png" v-else-if="data.orgType === 'plot'">
-							<img src="/src/assets/icon-floor.png" v-else-if="data.orgType === 'floor'">
-							<img src="/src/assets/icon-unit.png" v-else-if="data.orgType === 'unit'">
-							<span class="name" :title="data.orgName">{{ data.orgName }}</span>
-						</span>
-					</template>
-				</el-tree>
-			</div>
-			<div class="right-panel">
-				<!-- 小区 -->
-				<Regional v-if="curNode.orgType === 'org'" :organizationId="curNode.id" @finish="initPage()" />
-				<!-- 楼宇 -->
-				<Floor v-else-if="curNode.orgType === 'plot'" :nodeId="curNode.id" @finish="initPage()" />
-				<!-- 单元 -->
-				<Unit v-else-if="curNode.orgType === 'floor'" :nodeId="curNode.id" @finish="initPage()" />
-				<!-- 住户 -->
-				<Resident v-else-if="curNode.orgType === 'unit'" :nodeId="curNode.id" @finish="initPage()" />
-			</div>
-		</div>
+		</el-card>
 	</div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, watch } from 'vue';
+import { useStore } from '/@/store/index';
 import api from '/@/api/heatingDistrict';
 import Regional from './children/regional/index.vue'
 import Floor from './children/floor/index.vue'
@@ -77,6 +82,7 @@ export default defineComponent({
 		Resident
 	},
 	setup() {
+		const store = useStore();
 		const treeList = ref([])
 		const state = reactive({
 			filterText: '',
@@ -85,7 +91,8 @@ export default defineComponent({
 				plot: 0,
 				resident: 0
 			},
-			curNode: {}
+			curNode: {},
+			isDark: false
 		});
 		// 获取区域树
 		const getTreeData = () => {
@@ -143,6 +150,18 @@ export default defineComponent({
 			state.curNode = data
 		}
 
+		// 监听 vuex 中是否开启深色主题
+		watch(
+			() => store.state.themeConfig.themeConfig.isIsDark,
+			(isIsDark) => {
+				state.isDark = !!isIsDark;
+			},
+			{
+				deep: true,
+				immediate: true,
+			}
+		);
+
 		// 页面加载时
 		onMounted(() => {
 			initPage()
@@ -162,17 +181,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .page-container {
-	background-color: #fff;
-
 	.panel {
 		display: grid;
 		grid-template-columns: 250px 1fr;
 		border: 1px solid #ddd;
-		// &::before {
-		// 	content: " ";
-		// 	display: block;
-		// 	clear: both;
-		// }
+		&.dark {
+			border: 1px solid rgb(51, 51, 51);
+		}
 	}
 
 	.left-panel {
@@ -185,6 +200,9 @@ export default defineComponent({
 		padding: 20px;
 		border-left: 1px solid #ddd;
 		position: relative;
+		&.dark {
+			border-left: 1px solid rgb(51, 51, 51);
+		}
 	}
 }
 
@@ -223,12 +241,14 @@ export default defineComponent({
 		.item {
 			text-align: center;
 
-			// margin-right: 10px;
 			.count {
 				font-size: 32px;
 				font-weight: 700;
 				color: #101010;
 				margin-bottom: 5px;
+				&.dark {
+					color: #dadada;
+				}
 			}
 		}
 

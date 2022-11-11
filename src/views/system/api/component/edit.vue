@@ -8,7 +8,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上级分类" prop="parentId">
-        <el-cascader :options="typeData" :props="{ checkStrictly: false,  multiple:  false,  emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
+        <el-cascader :options="typeData" :props="{ checkStrictly: true,  multiple:  false,  emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
       </el-form-item>
       <template v-if="formData.types===1">
         <el-form-item label="分类名称" prop="name">
@@ -59,7 +59,7 @@ const typeData = ref<any[]>([]);
 const baseForm: ApiRow = {
   menuIds: [],
   id: undefined,
-  parentId: -1,
+  parentId: undefined,
   name: '',
   types: 2,
   address: '',
@@ -72,8 +72,8 @@ const formData = reactive<ApiRow>({
 });
 
 const ruleForm = {
-  parentId: [ruleRequired('上级分类不能为空')],
-  menuIds: [ruleRequired('关联页面不能为空')],
+  parentId: [ruleRequired('上级分类不能为空', 'change')],
+  menuIds: [ruleRequired('关联页面不能为空', 'change')],
   name: [ruleRequired('接口名称不能为空')],
   address: [ruleRequired('接口地址不能为空')],
 };
@@ -105,7 +105,11 @@ const open = async (row: any) => {
   resetForm();
   showDialog.value = true;
   api.api.getList({ types: 1, status: -1, }).then((res: any) => {
-    typeData.value = res.Info;
+    typeData.value = [{
+      id: -1,
+      name: '主分类',
+      children: res.Info
+    }]
   });
   nextTick(() => {
     Object.assign(formData, { ...row });

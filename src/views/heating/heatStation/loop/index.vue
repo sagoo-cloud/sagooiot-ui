@@ -83,8 +83,8 @@
 <!--	    	<el-table-column label="环路年代" prop="decade" :show-overflow-tooltip="true" />-->
         <el-table-column prop="status" label="状态" v-col="'status'" align="center">
           <template #default="scope">
-            <el-tag type="info" size="small" v-if="scope.row.status === 0">不在线</el-tag>
-            <el-tag type="success" size="small" v-else-if="scope.row.status === 1">在线</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status === 0">禁用</el-tag>
+            <el-tag type="success" size="small" v-else-if="scope.row.status === 1">启用</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150" v-col="'handle'" align="center">

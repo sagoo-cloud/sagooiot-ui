@@ -58,7 +58,7 @@
           {{ ruleForm.decade }}
         </el-form-item>
 				<el-form-item label="状态" prop="status">
-          {{ ruleForm.decade === 1 ? '在线' : '不在线' }}
+          {{ ruleForm.status === 1 ? '启用' : '禁用' }}
 				</el-form-item>
         <el-form-item label="路线信息" prop="">
 					<div class="mb10" style="width: 100%">

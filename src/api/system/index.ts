@@ -83,7 +83,7 @@ export default {
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),
-    setAvatar: (id: number, avatar: string) => put('/system/user/editStatus', { id, avatar }),
+    setAvatar: (id: number, avatar: string) => put('/system/user/editAvatar', { id, avatar }),
   },
   config: {
     getList: (params: object) => get('/common/config/list', params),
