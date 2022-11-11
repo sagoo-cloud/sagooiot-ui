@@ -17,19 +17,19 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
+            <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="typeList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
+            <el-button v-auth="'add'" size="default" type="success" class="ml10" @click="onOpenAdd">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
