@@ -819,10 +819,10 @@ tr {
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 23.5%;
+	width: 23.2%;
 	font-size: 14px;
 	font-variant: tabular-nums;
-  border: 1px solid #eee;
+  border: 1px solid  var(--next-border-color-light);
 
 	line-height: 1.5;
 	list-style: none;
