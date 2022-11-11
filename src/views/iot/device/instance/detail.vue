@@ -842,6 +842,7 @@ tr {
 .statusname {
 	font-size: 30px;
 	margin-top: 10px;
+  margin-bottom: 15px;
 }
 .comtest {
 	margin-top: 20px;

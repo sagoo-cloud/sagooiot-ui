@@ -19,7 +19,7 @@ const props = defineProps({
 
 onMounted(() => {
 	const tinyArea = new TinyArea(props.antdid, {
-		height: 60,
+		height: 40,
 		autoFit: true,
 		data: props.json,
 		smooth: true,
