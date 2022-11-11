@@ -10,19 +10,19 @@
             <el-input v-model="tableData.param.code" placeholder="请输入城市编号" clearable size="default" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+            <el-button v-auth="'add'" size="default" type="success" class="ml10" @click="onOpenAddDic">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>

@@ -10,22 +10,26 @@
         prop="id"
         label="ID"
         width="80"
+        v-col="'id'"
       />
       <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
       <el-table-column
         align="center"
         prop="name"
         label="名称"
+        v-col="'name'"
       />
       <el-table-column
         align="center"
         prop="types"
         label="类型"
+        v-col="'types'"
       />
       <el-table-column
         align="center"
         prop="addr"
         label="地址"
+        v-col="'addr'"
       />
       <el-table-column
         show-overflow-tooltip
@@ -33,12 +37,14 @@
         prop="createdAt"
         label="创建时间"
         width="170"
+        v-col="'createdAt'"
       />
       <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
       <el-table-column
         align="center"
         prop="types"
         label="状态"
+        v-col="'status'"
       >
         <template #default="scope">
           <el-tag
@@ -57,6 +63,7 @@
         align="center"
         label="操作"
         width="200"
+        v-col="'auth'"
       >
         <template #default="scope">
 
