@@ -47,6 +47,7 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="sourceId" width="80" v-col="'sourceId'" />
+        <el-table-column label="数据源标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/>
         <el-table-column label="数据源名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
         <el-table-column prop="from" label="数据源类型" width="160" align="center" v-col="'from'">
           <template #default="scope">

@@ -40,7 +40,7 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="id" width="80" v-col="'id'" />
-        <!--				<el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" />-->
+       <el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/>
         <el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
         <el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" v-col="'desc'" />
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">

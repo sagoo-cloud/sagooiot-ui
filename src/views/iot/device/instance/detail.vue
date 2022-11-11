@@ -264,7 +264,7 @@
             </el-table-column>
           </el-table>
 
-          <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getList" />
+          <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
         </el-tab-pane>
       </el-tabs>
     </div>
