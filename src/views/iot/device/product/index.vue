@@ -48,13 +48,13 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>
+<!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
         <el-table-column label="标识" prop="key" :show-overflow-tooltip="true"  v-col="'key'"/>
         <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
         <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'"/>
         <!-- <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
         <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'"/>
-        <el-table-column label="传输协议" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'"/>
+        <el-table-column label="接入方式" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'"/>
         <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'"/>
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
