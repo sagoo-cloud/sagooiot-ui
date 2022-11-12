@@ -124,9 +124,19 @@
                 <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
                   <el-table-column label="属性标识" align="center" prop="key" />
                   <el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
-                  <el-table-column prop="valueType" label="数据类型" width="120" align="center">
+                  <el-table-column prop="valueType" label="数据类型" width="100" align="center">
                     <template #default="scope">
                       <span>{{ scope.row.valueType.type }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="decimals" label="精度" width="60" align="center">
+                    <template #default="scope">
+                      <span>{{ scope.row.valueType.decimals }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="unit" label="单位" width="60" align="center">
+                    <template #default="scope">
+                      <span>{{ scope.row.valueType.unit }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="accessMode" label="是否只读" width="120" align="center">
