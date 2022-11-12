@@ -4,7 +4,7 @@
 			<div class="cont_box">
 				<div class="title">产品：{{ detail.name }}</div>
 				<div class="pro-status" ><span :class="developer_status==1?'on':'off'"></span>{{developer_status==1?'已发布':'未发布'}}</div>
-			
+
 				<div class="pro-option"  @click="CkOption"> {{developer_status==1?'停用':'启用'}}</div>
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}</td>
-									
+
 								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">描述</th>
@@ -57,11 +57,21 @@
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
 									<el-table-column label="属性标识" align="center" prop="key" />
 									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
-									<el-table-column prop="valueType" label="数据类型" width="120" align="center">
+									<el-table-column prop="valueType" label="数据类型" width="100" align="center">
 										<template #default="scope">
 											<span>{{ scope.row.valueType.type }}</span>
 										</template>
 									</el-table-column>
+                  <el-table-column prop="decimals" label="精度" width="60" align="center">
+                    <template #default="scope">
+                      <span>{{ scope.row.valueType.decimals }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="unit" label="单位" width="60" align="center">
+                    <template #default="scope">
+                      <span>{{ scope.row.valueType.unit }}</span>
+                    </template>
+                  </el-table-column>
 									<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
 										<template #default="scope">
 											<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
@@ -246,7 +256,7 @@ export default defineComponent({
 			});
 		});
 
-	
+
 
 		//编辑属性
 		const onEditAttr=(row: TableDataRow)=>{
@@ -297,7 +307,7 @@ export default defineComponent({
 		// 删除产品
 		const onRowDel = (key,type) => {
 			let msg = `此操作将永久删除该数据吗？，是否继续?`;
-			
+
 			if (key.length === 0) {
 				ElMessage.error('请选择要删除的数据。');
 				return;
@@ -417,9 +427,9 @@ export default defineComponent({
 					state.developer_status=1;
 				});
 			}
-			
 
-			
+
+
 
 		}
 
