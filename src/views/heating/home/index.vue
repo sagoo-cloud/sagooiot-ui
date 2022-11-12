@@ -251,7 +251,10 @@ export default defineComponent({
 				},
 				legend: {
 					data: ['一网供水温度', '一网回水温度', '二网供回水温差', '二网供回水压差', '压力值'],
-					top: 35
+					top: 35,
+					textStyle: {
+						color: state.charts.color
+					},
 				},
 				grid: { top: 80, bottom: 30 },
 				// calculable: true,
@@ -391,29 +394,31 @@ export default defineComponent({
 					// right: '0%',
 					// left: '0',
 					top: 35,
+					color: state.charts.color,
 					// itemWidth: 14,
 					// itemHeight: 14,
 					// data: getname,
-					// textStyle: {
-					// 	rich: {
-					// 		name: {
-					// 			fontSize: 14,
-					// 			fontWeight: 400,
-					// 			width: 200,
-					// 			height: 35,
-					// 			padding: [0, 0, 0, 60],
-					// 			color: state.charts.color,
-					// 		},
-					// 		rate: {
-					// 			fontSize: 15,
-					// 			fontWeight: 500,
-					// 			height: 35,
-					// 			width: 40,
-					// 			padding: [0, 0, 0, 30],
-					// 			color: state.charts.color,
-					// 		},
-					// 	},
-					// },
+					textStyle: {
+						color: state.charts.color,
+						// rich: {
+						// 	name: {
+						// 		fontSize: 14,
+						// 		fontWeight: 400,
+						// 		width: 200,
+						// 		height: 35,
+						// 		padding: [0, 0, 0, 60],
+						// 		color: state.charts.color,
+						// 	},
+						// 	rate: {
+						// 		fontSize: 15,
+						// 		fontWeight: 500,
+						// 		height: 35,
+						// 		width: 40,
+						// 		padding: [0, 0, 0, 30],
+						// 		color: state.charts.color,
+						// 	},
+						// },
+					},
 				},
 				series: [
 					{
@@ -436,6 +441,7 @@ export default defineComponent({
 						},
 						label: {
 							show: true,
+							color: state.charts.color,
 							// position: 'center',
 							formatter: '{b} {d}%'
 						},
@@ -529,14 +535,14 @@ export default defineComponent({
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				tooltip: { trigger: 'axis' },
-				legend: { data: [state.lineName], top: 30 },
+				legend: { data: [state.lineName], top: 30, textStyle:{color: state.charts.color} },
 				grid: { top: 70, right: 40, bottom: 100, left: 40 },
 				xAxis: [
 					{
 						type: 'category',
 						data: state.xAxisData,
 						boundaryGap: true,
-						axisTick: { show: false },
+						axisTick: { show: false }
 					},
 				],
 				yAxis: [
