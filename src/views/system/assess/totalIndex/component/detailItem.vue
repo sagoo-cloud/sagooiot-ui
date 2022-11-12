@@ -15,7 +15,11 @@
           <div class="value">调用API的安全密码、请联系管理员获取</div>
         </div>
         <div class="table-item-wrap">
-          <div class="label">app.healthEvaluation.entrance-api</div>
+          <div class="label" style="display: flex;flex-direction: column;justify-content: center;">
+            <p>入口URL</p>
+            <p>请求方式</p>
+            <p>请求Body参数</p>
+          </div>
           <div class="value">
             <section>
               <div class="inner-label">入口URL</div>
@@ -42,7 +46,11 @@
           </div>
         </div>
         <div class="table-item-wrap">
-          <div class="label">app.healthEvaluation.export-api</div>
+          <div class="label" style="display: flex;flex-direction: column;justify-content: center;">
+            <p>出口URL</p>
+            <p>请求方式</p>
+            <p>请求Query参数</p>
+          </div>
           <div class="value">
             <section>
               <div class="inner-label">出口URL</div>
