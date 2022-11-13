@@ -13,7 +13,7 @@ export default {
     detail: (id: number) => get('/alarm/rule/detail', { id }),
     deploy: (data: object) => post('/alarm/rule/deploy', data),
     undeploy: (data: object) => post('/alarm/rule/undeploy', data),
-
-
+    level_edit: (data: object) => put('/alarm/level/edit', data),
+    level_all: (productKey: number) => get('/alarm/level/all', { productKey }),
     },
 }

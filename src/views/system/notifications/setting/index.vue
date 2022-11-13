@@ -53,7 +53,7 @@
 							</el-icon>
 							新增告警
 						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenAdd">
+						<el-button size="default" type="primary" class="ml10" @click="onOpenLevel">
 							<el-icon>
 								<ele-Setting />
 							</el-icon>
@@ -175,6 +175,7 @@
 		</el-card>
 
 		<EditDic ref="editDicRef" @dataList="dataList" />
+		<LevelDic ref="levelDicRef" @dataList="dataList" />
 	</div>
 </template>
 
@@ -182,6 +183,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
+import LevelDic from './component/level.vue';
 
 import alarm from '/@/api/alarm';
 
@@ -210,10 +212,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic },
+	components: { EditDic,LevelDic },
 
 	setup() {
 		const addDicRef = ref();
+    const levelDicRef=ref();
 		const editDicRef = ref();
 		const detailRef = ref();
 		const queryRef = ref();
@@ -248,6 +251,9 @@ export default defineComponent({
 		// 打开新增菜单弹窗
 		const onOpenAdd = (row?: TableDataRow) => {
 			editDicRef.value.openDialog();
+		};
+    const onOpenLevel = (row?: TableDataRow) => {
+			levelDicRef.value.openDialog();
 		};
 		// 打开修改模型弹窗
 		const onOpenEdit = (row: TableDataRow) => {
@@ -314,7 +320,9 @@ export default defineComponent({
 			editDicRef,
 			detailRef,
 			queryRef,
+      levelDicRef,
 			onOpenRecord,
+      onOpenLevel,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
