@@ -16,4 +16,9 @@ export default {
     level_edit: (data: object) => put('/alarm/level/edit', data),
     level_all: (productKey: number) => get('/alarm/level/all', { productKey }),
     },
+    log: {
+      getList: (params: object) => get('/alarm/log/list', params),
+      detail: (id: number) => get('/alarm/log/detail', { id }),
+      handle: (data: object) => post('/alarm/log/handle', data),
+      },
 }
