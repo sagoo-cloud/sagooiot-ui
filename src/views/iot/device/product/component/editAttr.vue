@@ -9,8 +9,8 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入属性定义名称" />
 				</el-form-item>
 
-				<el-form-item label="数据类型" prop="type" required>
-					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
+				<el-form-item label="数据类型" prop="type" >
+					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange" :disabled="ruleForm.id!== 0 ?true : false">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
 							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
 						</el-option-group>
