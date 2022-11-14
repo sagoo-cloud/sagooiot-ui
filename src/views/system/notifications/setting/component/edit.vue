@@ -14,7 +14,7 @@
 
 				<el-form-item label="选择产品"  prop="productKey">
 					<el-select v-model="ruleForm.productKey" filterable placeholder="请选择产品" @change="setType()">
-						<el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id">
+						<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
 						</el-option>
@@ -23,7 +23,7 @@
 
 				<el-form-item label="选择设备" prop="deviceKey">
 					<el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-						<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.id">
+						<el-option v-for="item in sourceData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
 						</el-option>
@@ -208,9 +208,7 @@ export default defineComponent({
 
 		//获取设备列表
 		const getDevData = () => {
-			api.common.getdevList({}).then((res: any) => {
-				state.sourceData = res.device;
-			});
+			
 
 			iotapi.product.getLists({ status: 1 }).then((res: any) => {
 				state.productData = res.product || [];
@@ -325,6 +323,19 @@ export default defineComponent({
 		};
 
 		const setType=()=>{
+
+			let product_id=0;
+			state.productData.forEach((item, index) => {
+				if(item.key==state.ruleForm.productKey){
+					product_id=item.id;
+				}
+			})
+
+
+
+			api.common.getdevList({productId:product_id}).then((res: any) => {
+				state.sourceData = res.device;
+			});
 	
 			alarm.common.trigger_type(state.ruleForm.productKey).then((res: any) => {
 				state.typeData = res.list || [];
