@@ -40,7 +40,7 @@
 				</el-form-item>
 
 				<el-form-item label="单元类型" prop="busiTypes">
-					<el-select v-model="ruleForm.busiTypes" placeholder="请选择单元类型" class="w100" >
+					<el-select v-model="ruleForm.busiTypes" multiple placeholder="请选择单元类型" class="w100" >
 						<el-option v-for="item in zidianData" :key="item.key" :label="item.value" :value="item.key" />
 					</el-select>
 				</el-form-item>
@@ -178,6 +178,7 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
+
 					if (state.ruleForm.id !== 0) {
 						//修改
 						api.template.edit(state.ruleForm).then(() => {

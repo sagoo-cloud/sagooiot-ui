@@ -33,20 +33,20 @@
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
 				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
-				<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true"  v-col="'type'">
+				<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
 					<template #default="scope">
 						<span v-if="scope.row.type == 1">规则告警</span>
 						<span v-else>设备自主告警</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true" v-col="'ruleName'"/>
+				<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true" v-col="'ruleName'" />
 				<el-table-column label="规则级别" prop="alarmLevel" :show-overflow-tooltip="true" v-col="'alarmLevel'">
 					<template #default="scope">
 						{{ scope.row.alarmLevel.name }}
 					</template>
 				</el-table-column>
-				<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true"  v-col="'productKey'"/>
-				<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true"  v-col="'deviceKey'"/>
+				<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true" v-col="'productKey'" />
+				<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true" v-col="'deviceKey'" />
 
 				<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
 					<template #default="scope">
