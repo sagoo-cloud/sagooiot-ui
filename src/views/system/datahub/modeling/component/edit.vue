@@ -188,7 +188,6 @@ export default defineComponent({
 						});
 					} else {
 						//添加
-
 						api.template.add(state.ruleForm).then(() => {
 							ElMessage.success('模型类型添加成功');
 							closeDialog(); // 关闭弹窗

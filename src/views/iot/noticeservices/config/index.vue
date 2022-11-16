@@ -508,13 +508,12 @@ export default defineComponent({
   list-style: none;
   font-feature-settings: "tnum", "tnum";
   position: relative;
-  background: #fff;
   border-radius: 2px;
   padding: 10px;
 }
 .ant-card-body {
   padding: 24px;
-  border: 1px solid #eee;
+  border: 1px solid var(--next-border-color-light);;
 }
 
 .ant-space {
@@ -545,7 +544,6 @@ export default defineComponent({
   border-radius: 2px;
   color: rgba(0, 0, 0, 0.85);
   border: 1px solid #d9d9d9;
-  background: #fff;
 }
 .ant-btn-link {
   color: #5b8fd9;
@@ -564,7 +562,6 @@ export default defineComponent({
   font-size: 24px;
 }
 .context .desc {
-  color: rgba(0, 0, 0, 0.65);
   font-size: 14px;
 }
 
@@ -581,8 +578,7 @@ export default defineComponent({
   justify-content: center;
   width: 100px;
   height: 100px;
-  background-color: #fff;
-  border: 2px solid #5b8fd9;
+  border: 1px solid #5b8fd9;
 }
 .content .right .action .btn {
   display: flex;
