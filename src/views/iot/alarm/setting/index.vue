@@ -93,7 +93,7 @@
 													</div>
 												</div>
 												<div>
-													<label>属性上报</label>
+													<label>{{item.triggerTypeName}}</label>
 													<div class="">
 														<div>{{ item.alarmLevel.name }}</div>
 													</div>
@@ -373,8 +373,8 @@ export default defineComponent({
 }
 .pro-table-card-item .card-item-body .card-item-header {
 	display: flex;
-	width: calc(100% - 86px);
 	margin-bottom: 12px;
+	margin-top: 10px;
 }
 .pro-table-card-item .card-item-body .card-item-content {
 	display: flex;
@@ -382,9 +382,7 @@ export default defineComponent({
 	font-weight: bolder;
 	line-height: 25px;
 }
-.pro-table-card-item .card-item-body .card-item-content > div {
-	width: 30%;
-}
+
 .ellipsis {
 	display: -webkit-box;
 	overflow: hidden;
