@@ -3,8 +3,8 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="任务名称" prop="configName">
-            <el-input v-model="tableData.param.configName" placeholder="请输入参数名称" clearable size="default" @keyup.enter="dataList" />
+          <el-form-item label="任务名称" prop="jobName">
+            <el-input v-model="tableData.param.jobName" placeholder="请输入参数名称" clearable size="default" @keyup.enter="dataList" />
           </el-form-item>
           <el-form-item label="任务组名" prop="jobGroup">
             <el-select v-model="tableData.param.jobGroup" size="mini" placeholder="请选择">
@@ -13,8 +13,8 @@
           </el-form-item>
           <el-form-item label="任务状态" prop="status" style="width: 200px">
             <el-select v-model="tableData.param.status" size="mini" placeholder="请选择">
-              <el-option label="正常" :value="1" />
-              <el-option label="暂停" :value="0" />
+              <el-option label="正常" :value="0" />
+              <el-option label="暂停" :value="1" />
             </el-select>
           </el-form-item>
 
