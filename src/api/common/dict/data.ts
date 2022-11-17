@@ -20,7 +20,7 @@ export function useDict(...args: string[]): ToRefs<any> {
   args.forEach((d: string) => {
     res.value[d] = [];
     getDicts(d).then(resp => {
-      res.value[d] = (resp.list || []).map((p: any) => ({ label: p.dictLabel, value: p.dictValue, isDefault: p.isDefault }))
+      res.value[d] = (resp.list || []).map((p: any) => ({ label: p.dictLabel, value: p.dictValue, isDefault: p.isDefault,status:p.status,remark:p.remark }))
     })
   })
   return toRefs(res.value);
