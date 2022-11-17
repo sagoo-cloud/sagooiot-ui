@@ -80,24 +80,22 @@
 										</div>
 										<div class="card-item-body">
 											<div class="card-item-header">
-												<div class="ellipsis-warp___1lAFU">
+												<div class="">
 													<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.name }}</div>
 													<div class="card-item-header-name" style="display: none"></div>
 												</div>
 											</div>
 											<div class="card-item-content">
 												<div>
-													<label>触发方式</label>
-													<div class="ellipsis-warp___1lAFU">
-														<div style="width: 100%">设备触发</div>
-														<div class="ellipsis-max___Lis-o" style="display: none"></div>
+													<label>触发：</label>
+													<div class="">
+														<div >级别：</div>
 													</div>
 												</div>
 												<div>
-													<label>级别</label>
-													<div class="ellipsis-warp___1lAFU">
-														<div style="width: 100%">{{ item.alarmLevel.name }}</div>
-														<div class="ellipsis-max___Lis-o"></div>
+													<label>属性上报</label>
+													<div class="">
+														<div>{{ item.alarmLevel.name }}</div>
 													</div>
 												</div>
 											</div>
@@ -381,9 +379,11 @@ export default defineComponent({
 .pro-table-card-item .card-item-body .card-item-content {
 	display: flex;
 	flex-wrap: wrap;
+	font-weight: bolder;
+	line-height: 25px;
 }
 .pro-table-card-item .card-item-body .card-item-content > div {
-	width: 50%;
+	width: 30%;
 }
 .ellipsis {
 	display: -webkit-box;
@@ -398,7 +398,7 @@ export default defineComponent({
 }
 .card-state {
 	position: absolute;
-	top: 30px;
+	top: 0px;
 	right: -12px;
 	display: flex;
 	justify-content: center;
