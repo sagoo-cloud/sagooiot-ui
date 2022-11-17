@@ -2,8 +2,8 @@
   <div class="system-user-container">
     <el-card shadow="hover">
       <div class="system-menu-search">
-        <el-form inline>
-          <el-form-item label="菜单名称">
+        <el-form :model="state.queryParams" :inline="true" ref="queryRef">
+          <el-form-item label="菜单名称" prop="title">
             <el-input v-model="state.queryParams.title" placeholder="请输入菜单名称" size="default" clearable class="w-50" />
           </el-form-item>
           <!-- <el-form-item label="组件路径">
@@ -15,6 +15,12 @@
                 <ele-Search />
               </el-icon>
               查询
+            </el-button>
+            <el-button size="default" @click="resetQuery()">
+              <el-icon>
+                <ele-Refresh />
+              </el-icon>
+              重置
             </el-button>
             <el-button type="success" class="ml10" @click="onOpenAddMenu(null)" v-auth="'add'">
               <el-icon>
@@ -84,6 +90,7 @@ import api from '/@/api/system';
 import ButtonAuthorizeListDrawer from './component/btn.vue';
 import ListAuthorizeListDrawer from './component/list.vue';
 const editMenuRef = ref();
+const queryRef = ref();
 const buttonAuthorizeList = ref();
 const listAuthorizeList = ref();
 const state = reactive({
@@ -140,6 +147,11 @@ onBeforeMount(() => {
 });
 const handleQuery = () => {
   menuList();
+};
+// 重置表单
+const resetQuery = () => {
+  queryRef.value.resetFields();
+  handleQuery();
 };
 const menuList = () => {
   state.loading = true;
