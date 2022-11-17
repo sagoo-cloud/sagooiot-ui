@@ -2,11 +2,11 @@
   <div class="page">
     <el-card shadow="hover">
       <div class="search">
-        <el-form :inline="true">
-          <el-form-item label="接口名称">
+        <el-form :model="params" :inline="true" ref="queryRef">
+          <el-form-item label="接口名称" prop="name">
             <el-input v-model="params.name" placeholder="请输入接口名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
           </el-form-item>
-          <el-form-item label="接口地址">
+          <el-form-item label="接口地址" prop="address">
             <el-input v-model="params.address" placeholder="请输入接口地址" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
           </el-form-item>
           <el-form-item label="状态" prop="status" style="width: 200px">
@@ -22,6 +22,12 @@
                 <ele-Search />
               </el-icon>
               查询
+            </el-button>
+            <el-button size="default" @click="resetQuery()">
+              <el-icon>
+                <ele-Refresh />
+              </el-icon>
+              重置
             </el-button>
             <el-button type="success" @click="addOrEdit()" v-auth="'add'">
               <el-icon>
@@ -64,6 +70,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
 
 const editFormRef = ref();
+const queryRef = ref();
 
 const { params, tableData, getList, loading } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '', types: -1 });
 
@@ -77,6 +84,12 @@ const addOrEdit = async (row?: ApiRow) => {
   } else {
     editFormRef.value.open();
   }
+};
+
+// 重置表单
+const resetQuery = () => {
+  queryRef.value.resetFields();
+  getList(1);
 };
 
 const onDel = (row: ApiRow) => {
