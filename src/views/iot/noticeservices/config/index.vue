@@ -4,8 +4,8 @@
       <div>
         <el-row>
           <el-col :span="12"   v-for="item in notice_send_gateway"  >
-            <div class="ant-card line" v-if="item.status==1">
-              <div class="ant-card-body">
+            <div class="ant-cards " v-if="item.status==1">
+              <div class="ant-card-body line">
                 <div class="content">
                   <div class="left">
                     <img
@@ -231,9 +231,10 @@ export default defineComponent({
 
 <style>
 .line{
+  border: 1px solid var(--next-border-color-light);;
 
 }
-.ant-card {
+.ant-cards {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -249,7 +250,6 @@ export default defineComponent({
 }
 .ant-card-body {
   padding: 24px;
-  border: 1px solid var(--next-border-color-light);;
 
 }
 
