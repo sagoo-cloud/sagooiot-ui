@@ -9,7 +9,7 @@
 					{{ ruleForm.code }}
 				</el-form-item>
 				<el-form-item label="所属换热站" prop="stationId">
-          {{ ruleForm.stationId }}
+          {{ ruleForm.stationInfo.name }}
 					<!-- <el-tree-select
 						v-model="ruleForm.stationId"
 						:data="treeData"

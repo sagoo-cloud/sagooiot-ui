@@ -10,7 +10,35 @@
 			<el-checkbox label="二网供水压力" />
 			<el-checkbox label="二网回水压力" />
 		</el-checkbox-group>
-		<div class="map flex1 mt-2" ref="mapRef"></div>
+		<div class="flex1 mt-2" style="position: relative;">
+			<div class="map" ref="mapRef" style="height: 100%"></div>
+
+			<!-- 显示弹层区域 -->
+			<div class="view">
+				<div class="view-div" v-for="(item, index) in viewList" :key="index">
+					<div class="view-div-item">
+						<div class="label">环路名称：</div>
+						<div class="text">{{ item.name }}</div>
+					</div>
+					<div class="view-div-item">
+						<div class="label">所属换热站：</div>
+						<div class="text">SJIWW786</div>
+					</div>
+					<div class="view-div-item">
+						<div class="label">环路编号：</div>
+						<div class="text">**换热站1</div>
+					</div>
+					<div class="view-div-item">
+						<div class="label">一网供水温度：</div>
+						<div class="text"></div>
+					</div>
+					<div class="view-div-item">
+						<div class="label">一网回水温度：</div>
+						<div class="text">24℃</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -24,13 +52,15 @@ import { useStore } from '/@/store/index';
 const mapRef = ref();
 const checkList = ref([]);
 const store = useStore();
+const heatList = ref([]);
+const viewList = ref([]);
 
 let BMapGL = (window as any).BMapGL;
 let map: any = null;
 let getThemeConfig: any = null
+let points: any = []
 
 onMounted(() => {
-
 	// 获取布局配置信息
 	getThemeConfig = store.state.themeConfig.themeConfig;
 	map = new BMapGL.Map(mapRef.value, {
@@ -40,7 +70,7 @@ onMounted(() => {
 	map.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件
 	map.addControl(new BMapGL.ZoomControl()); // 添加缩放控件
 
-	const testPt = new BMapGL.Point(104.5, 38);
+	const testPt = new BMapGL.Point(124.383044, 40.124296);
 	map.centerAndZoom(testPt, 5);
 	map.enableScrollWheelZoom();
 	if (getThemeConfig.isIsDark) {
@@ -51,12 +81,47 @@ onMounted(() => {
 
 	// 获取换热站列表
 	api.heatStation.getAll().then((res: any) => {
+		heatList.value = res
 		renderStation(res);
 	});
 	// 获取环路列表
 	api.loop.getList({ pageSize: 50, status: 1 }).then((res: any) => {
 		console.log(res);
 	});
+	// 地图缩放事件	
+	// map.addEventListener('zoomstart', (e: any) => {
+	// 	console.log('zoomstart', e)
+	// })
+	map.addEventListener('zoomend', (e: any) => {
+		// console.log('zoomend', e)
+		console.log('zoomend', map.getZoom())
+		let zoom = map.getZoom()
+		if (zoom > 20.5 && points.length) {
+			let arr: any = []
+			let viewArr: any = []
+			points.forEach((point: any) => {
+				if (map.getBounds().containsPoint(point)) {
+					arr.push(point)
+				}
+			})
+			console.log(arr)
+			arr.forEach((point: any) => {
+				let item = heatList.value.find((item: any) => (point.lat === item.lat && point.lng === item.lnt))
+				console.log(item)
+				viewArr.push(item)
+			})
+			viewList.value = viewArr
+		} else {
+			viewList.value = []
+		}
+	})
+	// 获取当前视图内的点
+	// map.getBounds().containsPoint({
+  //   "lng": 124.41798,
+  //   "lat": 40.149303
+	// })
+
+	// window._map = map
 });
 // 监听 vuex 中是否开启深色主题
 watch(
@@ -77,7 +142,11 @@ watch(
 	}
 );
 const renderStation = (list: any[]) => {
-	setMarker(list, map);
+	points = setMarker(list, map);
+	// 控制标点显示在最佳视野内
+	if (points && points.length) {
+		map.setViewport(points)
+	}
 };
 </script>
 
@@ -140,5 +209,29 @@ const renderStation = (list: any[]) => {
 }
 </style>
 <style scoped lang="scss">
-.page {}
+.view {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 999;
+	display: flex;
+	&-div {
+		width: 200px;
+		padding: 10px;
+		background-color: #fff;
+		&:not(:first-child) {
+			margin-left: 10px;
+		}
+		&-item {
+			display: flex;
+			align-items: center;
+			.label {
+				width: 100px;
+			}
+			.text {
+				flex: 1;
+			}
+		}
+	}
+}
 </style>

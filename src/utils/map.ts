@@ -2,17 +2,14 @@
 let BMapGL = (window as any).BMapGL;
 
 export function setMarker(markers: any[], map: any) {
+  const points: any = []
   markers.forEach((item) => {
     const { lat, lnt: lng } = item;
     const point = new BMapGL.Point(lng, lat);
+    points.push(point)
 
     const marker = new BMapGL.Marker(point);
-    // const marker = new BMapGL.Marker(point, {
-    //   icon: new BMapGL.Icon("/imgs/station.svg", new BMapGL.Size(24, 24), {
-    //     // anchor: new BMapGL.Size(10, 25),
-    //     // imageOffset: new BMapGL.Size(0, 0 - 25),
-    //   }),
-    // });
+
     map.addOverlay(marker);
 
     marker.addEventListener("click", function () {
@@ -47,4 +44,5 @@ export function setMarker(markers: any[], map: any) {
       map.openInfoWindow(infoWindow, point); //开启信息窗口
     });
   });
+  return points
 }

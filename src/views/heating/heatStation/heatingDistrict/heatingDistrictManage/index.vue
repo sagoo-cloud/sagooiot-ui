@@ -34,7 +34,7 @@
 		<el-card class="mt-3">
 			<div class="panel" :class="{ dark: isDark }">
 				<div class="left-panel">
-					<el-input v-model="filterText" size="default" placeholder="搜索区域" />
+					<!-- <el-input v-model="filterText" size="default" placeholder="搜索区域" /> -->
 					<el-tree :data="treeList" node-key="id" default-expand-all :props="{
 						children: 'children'
 					}" @node-click="onNodeClick" :expand-on-click-node="false">

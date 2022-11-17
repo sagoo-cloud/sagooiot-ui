@@ -4,22 +4,28 @@
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="" prop="">
-            <el-radio-group v-model="radioValue" size="default">
-              <el-radio-button label="换热站" v-auth="'heatStation'" />
-              <el-radio-button label="环路" v-auth="'loop'" />
+            <el-radio-group v-model="tableData.param.types" size="default">
+              <el-radio-button label="station" v-auth="'heatStation'">
+                换热站
+              </el-radio-button>
+              <el-radio-button label="loop" v-auth="'loop'">
+                环路
+              </el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="环路名称" prop="name">
-            <el-select v-model="tableData.param.name" placeholder="环路名称" clearable size="default" style="width: 240px">
+            <el-input v-model="tableData.param.name" placeholder="环路名称" size="default"></el-input>
+            <!-- <el-select v-model="tableData.param.name" placeholder="环路名称" clearable size="default" style="width: 240px">
               <el-option label="已发布" :value="1" />
               <el-option label="未发布" :value="0" />
-            </el-select>
+            </el-select> -->
           </el-form-item>
-          <el-form-item label="环路编号" prop="name">
-            <el-select v-model="tableData.param.name" placeholder="环路编号" clearable size="default" style="width: 240px">
+          <el-form-item label="环路编号" prop="code">
+            <el-input v-model="tableData.param.code" placeholder="环路编号" size="default"></el-input>
+            <!-- <el-select v-model="tableData.param.name" placeholder="环路编号" clearable size="default" style="width: 240px">
               <el-option label="已发布" :value="1" />
               <el-option label="未发布" :value="0" />
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" v-auth="'query'" @click="typeList">
@@ -77,7 +83,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 // import EditDic from './component/editPro.vue';
-import api from '/@/api/device';
+import api from '/@/api/loopSupervision';
 import { useRouter } from 'vue-router';
 
 // 定义接口来定义对象的类型
@@ -114,7 +120,6 @@ export default defineComponent({
     const queryRef = ref();
     const router = useRouter()
     const state = reactive({
-      radioValue: '换热站',
       ids: [],
       tableData: {
         data: [{ name: '换热站', key: '2022-10-25', value: 1 }],
@@ -123,8 +128,9 @@ export default defineComponent({
         param: {
           pageNum: 1,
           pageSize: 10,
-          status: '',
-          dateRange: [],
+          types: 'station', // 类型 station 换热站 loop环路
+          name: '',
+          code: '',
         },
       },
     });
@@ -134,7 +140,7 @@ export default defineComponent({
     };
     const typeList = () => {
       state.tableData.loading = true;
-      api.product.getList(state.tableData.param).then((res: any) => {
+      api.getLoopRegulation(state.tableData.param).then((res: any) => {
         state.tableData.data = res.product;
         state.tableData.total = res.total;
       }).finally(() => (state.tableData.loading = false));
@@ -176,7 +182,7 @@ export default defineComponent({
     };
     // 页面加载时
     onMounted(() => {
-      // initTableData();
+      initTableData();
     });
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {
