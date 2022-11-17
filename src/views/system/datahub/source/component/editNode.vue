@@ -16,7 +16,7 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="数据类型" prop="dataType" v-if="detail.from == 1">
+				<el-form-item label="数据类型" prop="dataType" v-if="detail.from == 1 || detail.from == 2">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
 						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>

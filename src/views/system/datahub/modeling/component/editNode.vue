@@ -46,11 +46,11 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="取值方式" prop="method" v-if="ruleForm.dataType=='int' || ruleForm.dataType=='bigint' || ruleForm.dataType=='float' || ruleForm.dataType=='double'">
+				<!-- <el-form-item label="取值方式" prop="method" v-if="ruleForm.dataType=='int' || ruleForm.dataType=='bigint' || ruleForm.dataType=='float' || ruleForm.dataType=='double'">
 					<el-select v-model="ruleForm.method"  placeholder="请选择数据类型">
 						<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
-				</el-form-item>
+				</el-form-item> -->
 
 
 				<el-form-item label="默认值" prop="default" v-if="ruleForm.from==1">

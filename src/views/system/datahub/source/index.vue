@@ -10,7 +10,7 @@
             <el-input v-model="tableData.param.name" placeholder="请输入数据源名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
 
-          <el-form-item label="数据源类型" prop="host">
+          <el-form-item label="数据源类型" prop="from">
             <el-select v-model="tableData.param.from" placeholder="请选择数据源类型" @keyup.enter.native="typeList">
               <el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
@@ -155,8 +155,8 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           name: '',
-          types: '',
-          status: '',
+          from: '',
+          key: '',
         },
       },
     });
@@ -235,6 +235,7 @@ export default defineComponent({
     const resetQuery = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
       formEl.resetFields();
+      state.tableData.param.from='-1'
       typeList();
     };
     // 多选框选中数据
