@@ -110,14 +110,9 @@ export default defineComponent({
       },
     });
 
-    api.user
-      .getList({
-        status: -1,
-        pageNum: 1,
-        pageSize: 50,
-      })
+    api.user.getAllList({})
       .then((res: any) => {
-        userList.value = res.list;
+        userList.value = res;
       })
 
     // 打开弹窗
