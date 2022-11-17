@@ -305,7 +305,7 @@ export default defineComponent({
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
-	width: 97%;
+	width: 98%;
 	font-size: 14px;
 	font-variant: tabular-nums;
 	border: 1px solid var(--next-border-color-light);
