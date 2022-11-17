@@ -4,7 +4,7 @@
       <div>
         <el-row>
           <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -26,6 +26,7 @@
                       style="gap: 8px;"
                     >
                       <div class="ant-space-item" style="">
+                        <router-link to="/noticeservices/config/template/1" class="link-type" >
                         <div class="action">
                           <button type="button" class="ant-btn ant-btn-link">
                             <div class="btn">
@@ -37,8 +38,10 @@
                             </div>
                           </button>
                         </div>
+                        </router-link>
                       </div>
                       <div class="ant-space-item">
+                        <router-link to="/noticeservices/config/setting/1" class="link-type" >
                         <div class="action">
                           <button type="button" class="ant-btn ant-btn-link">
                             <div class="btn">
@@ -50,6 +53,7 @@
                             </div>
                           </button>
                         </div>
+                        </router-link>
                       </div>
                     </div>
                   </div>
@@ -58,7 +62,7 @@
             </div>
           </el-col>
           <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -112,7 +116,7 @@
             </div>
           </el-col>
 		   <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -168,7 +172,7 @@
           </el-col>
 
 		   <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -224,7 +228,7 @@
           </el-col>
 
 		   <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -281,7 +285,7 @@
           </el-col>
 
 		   <el-col :span="12">
-            <div class="ant-card">
+            <div class="ant-card line">
               <div class="ant-card-body">
                 <div class="content">
                   <div class="left">
@@ -317,7 +321,7 @@
                       </div>
                       <div class="ant-space-item">
                         <div class="action">
-                          <button type="button" class="ant-btn ant-btn-link">
+                          <div  class="ant-btn ant-btn-link">
                             <div class="btn">
                               <img
                                 src="data:image/png;base64,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"
@@ -325,7 +329,7 @@
                               />
                               <div>通知配置</div>
                             </div>
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -497,6 +501,9 @@ export default defineComponent({
 </script>
 
 <style>
+.line{
+
+}
 .ant-card {
   box-sizing: border-box;
   margin: 0;
@@ -514,6 +521,7 @@ export default defineComponent({
 .ant-card-body {
   padding: 24px;
   border: 1px solid var(--next-border-color-light);;
+
 }
 
 .ant-space {
@@ -530,7 +538,6 @@ export default defineComponent({
   white-space: nowrap;
   text-align: center;
   background-image: none;
-  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   -webkit-user-select: none;
@@ -540,10 +547,9 @@ export default defineComponent({
   touch-action: manipulation;
   height: 32px;
   padding: 4px 15px;
-  font-size: 14px;
+  font-size: 14px;  
   border-radius: 2px;
-  color: rgba(0, 0, 0, 0.85);
-  border: 1px solid #d9d9d9;
+
 }
 .ant-btn-link {
   color: #5b8fd9;
