@@ -73,7 +73,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, nextTick } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
-import api from '/@/api/device';
+import api from '/@/api/loopSupervision';
 
 import ele from '/@/assets/img/ele.svg';
 import ele1 from '/@/assets/img/ele1.svg';
@@ -83,7 +83,7 @@ import map from '/@/assets/img/map.svg';
 import map1 from '/@/assets/img/map1.svg';
 import water from '/@/assets/img/water.svg';
 import water1 from '/@/assets/img/water1.svg';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 let global: any = {
 	homeCharThree: null,
@@ -98,6 +98,7 @@ export default defineComponent({
 		const queryRef = ref();
 		const homeLineRef = ref();
 		const router = useRouter()
+		const route = useRoute()
 		const state = reactive({
 			dataOne: [
 				{
@@ -157,6 +158,10 @@ export default defineComponent({
 				name: ''
 			}
 		});
+
+		const getData = () => {
+			api.getAllHeatStation({})
+		}
 
 		const goDetail = () => {
 			router.push('/heating/monitor/loopSupervision/list/heatStationHistory')
@@ -226,7 +231,7 @@ export default defineComponent({
 
 		// 页面加载时
 		onMounted(() => {
-
+			getData()
 			initLineChart();
 			initEchartsResize();
 		});

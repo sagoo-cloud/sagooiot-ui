@@ -4,7 +4,7 @@
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="" prop="">
-            <el-radio-group v-model="tableData.param.types" size="default">
+            <el-radio-group v-model="tableData.param.types" size="default" @change="initTableData">
               <el-radio-button label="station" v-auth="'heatStation'">
                 换热站
               </el-radio-button>
@@ -15,10 +15,6 @@
           </el-form-item>
           <el-form-item label="环路名称" prop="name">
             <el-input v-model="tableData.param.name" placeholder="环路名称" size="default"></el-input>
-            <!-- <el-select v-model="tableData.param.name" placeholder="环路名称" clearable size="default" style="width: 240px">
-              <el-option label="已发布" :value="1" />
-              <el-option label="未发布" :value="0" />
-            </el-select> -->
           </el-form-item>
           <el-form-item label="环路编号" prop="code">
             <el-input v-model="tableData.param.code" placeholder="环路编号" size="default"></el-input>
@@ -45,27 +41,30 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="index" width="55" label="序号" align="center" />
-        <el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column :label="radioValue === '换热站' ? '换热站' : '环路名称'" v-col="'name'" prop="name" :show-overflow-tooltip="true">
+        <!-- <el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" /> -->
+        <el-table-column :label="tableData.param.types === 'station' ? '换热站' : '环路名称'" v-col="'name'" prop="name" :show-overflow-tooltip="true">
           <template #default="{ row }">
             <el-button type="text" @click="goPage(row)">
-              {{ radioValue === '换热站' ? '换热站' : '环路名称' }}
+              {{ row.name }}
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column :label="radioValue === '换热站' ? '换热站编号' : '环路编号'" v-col="'number'" prop="number" min-width="120" :show-overflow-tooltip="true">
-          <template #default>
-            {{ radioValue === '换热站' ? '换热站编号' : '环路编号' }}
+        <el-table-column :label="tableData.param.types === 'station' ? '换热站编号' : '环路编号'" v-col="'number'" prop="code" min-width="120" :show-overflow-tooltip="true">
+          <template #default="{ row }">
+            {{ row.code }}
           </template>
         </el-table-column>
-        <el-table-column label="一网供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水温度" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水温度" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="1nPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水压力" prop="outPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水压力" prop="outPressure2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水温度" prop="outTemperature1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
 
         <!-- <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="scope">
@@ -136,13 +135,14 @@ export default defineComponent({
     });
     // 初始化表格数据
     const initTableData = () => {
+      state.tableData.param.pageNum = 1
       typeList();
     };
     const typeList = () => {
       state.tableData.loading = true;
       api.getLoopRegulation(state.tableData.param).then((res: any) => {
-        state.tableData.data = res.product;
-        state.tableData.total = res.total;
+        state.tableData.data = res.Data;
+        state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
     };
     // 打开新增产品弹窗
@@ -152,33 +152,6 @@ export default defineComponent({
     // 打开修改产品弹窗
     const onOpenEditDic = (row: TableDataRow) => {
       editDicRef.value.openDialog(row);
-    };
-    // 删除产品
-    const onRowDel = (row: TableDataRow) => {
-      let msg = '你确定要删除所选数据？';
-      let ids: number[] = [];
-      if (row) {
-        msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
-        ids = [row.id];
-      } else {
-        ids = state.ids;
-      }
-      if (ids.length === 0) {
-        ElMessage.error('请选择要删除的数据。');
-        return;
-      }
-      ElMessageBox.confirm(msg, '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          api.product.delete(ids).then(() => {
-            ElMessage.success('删除成功');
-            typeList();
-          });
-        })
-        .catch(() => { });
     };
     // 页面加载时
     onMounted(() => {
@@ -195,11 +168,21 @@ export default defineComponent({
       // state.ids = selection.map((item) => item.id);
     };
 
-    const goPage = (row: TableDataRow) => {
-      if (state.radioValue === '换热站') {
-        router.push('/heating/monitor/loopSupervision/list/heatStationDetail')
+    const goPage = (row: any) => {
+      if (state.tableData.param.types === 'station') {
+        router.push({
+          path: '/heating/monitor/loopSupervision/list/heatStationDetail',
+          query: {
+            code: row.code
+          }
+        })
       } else {
-        router.push('/heating/monitor/loopSupervision/list/loopDetail')
+        router.push({
+          path: '/heating/monitor/loopSupervision/list/loopDetail',
+          query: {
+            code: row.code
+          }
+        })
       }
     }
     return {
@@ -208,11 +191,11 @@ export default defineComponent({
       queryRef,
       onOpenAddDic,
       onOpenEditDic,
-      onRowDel,
       typeList,
       resetQuery,
       handleSelectionChange,
       ...toRefs(state),
+      initTableData,
       goPage
     };
   },
