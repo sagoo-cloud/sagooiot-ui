@@ -58,7 +58,9 @@ const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'd
 getList();
 
 function getTokenUrl(url: string) {
-  const tokenUrl = import.meta.env.VITE_TOPO_URL + '?token=' + encodeURIComponent(Session.get('token'))
+  localStorage.setItem('token', Session.get('token'));
+  const tokenUrl = import.meta.env.VITE_TOPO_URL
+  // const tokenUrl = import.meta.env.VITE_TOPO_URL + '?token=' + encodeURIComponent(Session.get('token'))
   return getOrigin(tokenUrl + url)
 };
 
