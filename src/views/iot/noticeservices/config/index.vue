@@ -9,7 +9,7 @@
                 <div class="content">
                   <div class="left">
                     <img
-                      :src="'/src/assets/'+item.value+'.png'"
+                      :src="'/imgs/notice/'+item.value+'.svg'"
                       alt="dingding"
                       style="height: 104px;"
                     />
@@ -61,7 +61,7 @@
               </div>
             </div>
           </el-col>
-          
+
         </el-row>
       </div>
     </el-card>
@@ -276,7 +276,7 @@ export default defineComponent({
   touch-action: manipulation;
   height: 32px;
   padding: 4px 15px;
-  font-size: 14px;  
+  font-size: 14px;
   border-radius: 2px;
 
 }
