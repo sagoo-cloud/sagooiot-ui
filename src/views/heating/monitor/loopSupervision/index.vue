@@ -81,35 +81,8 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-// import EditDic from './component/editPro.vue';
 import api from '/@/api/loopSupervision';
 import { useRouter } from 'vue-router';
-
-// 定义接口来定义对象的类型
-interface TableDataRow {
-  id: number;
-  name: string;
-  deviceType: string;
-  status: number;
-  desc: string;
-  createBy: string;
-}
-interface TableDataState {
-  ids: number[];
-  tableData: {
-    data: Array<TableDataRow>;
-    total: number;
-    loading: boolean;
-    param: {
-      pageNum: number;
-      pageSize: number;
-      name: string;
-      deviceType: string;
-      status: string;
-      dateRange: string[];
-    };
-  };
-}
 
 export default defineComponent({
   name: 'deviceproduct',
@@ -150,7 +123,7 @@ export default defineComponent({
       editDicRef.value.openDialog();
     };
     // 打开修改产品弹窗
-    const onOpenEditDic = (row: TableDataRow) => {
+    const onOpenEditDic = (row: any) => {
       editDicRef.value.openDialog(row);
     };
     // 页面加载时
@@ -164,7 +137,7 @@ export default defineComponent({
       typeList();
     };
     // 多选框选中数据
-    const handleSelectionChange = (selection: TableDataRow[]) => {
+    const handleSelectionChange = (selection: any) => {
       // state.ids = selection.map((item) => item.id);
     };
 

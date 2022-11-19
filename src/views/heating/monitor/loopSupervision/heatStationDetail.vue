@@ -1,32 +1,6 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="hover">
-			<div class="system-user-search">
-				<el-form :model="searchParams" ref="queryRef" :inline="true" label-width="100px">
-					<el-form-item label="换热站名称" prop="name">
-						<el-input v-model="searchParams.name" placeholder="换热站名称" clearable size="default"></el-input>
-					</el-form-item>
-					<el-form-item label="换热站编号" prop="name">
-						<el-input v-model="searchParams.name" placeholder="换热站编号" clearable size="default"></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-		</el-card>
-		<el-row :gutter="15" class="home-card-one mt15">
+	<div class="system-dic-container data-overview">
+		<el-row :gutter="15" class="home-card-one">
 			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in dataOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item">
 					<div class="item-header">
@@ -70,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, nextTick } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, nextTick, watch } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import api from '/@/api/loopSupervision';
@@ -84,6 +58,7 @@ import map1 from '/@/assets/img/map1.svg';
 import water from '/@/assets/img/water.svg';
 import water1 from '/@/assets/img/water1.svg';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from '/@/store/index';
 
 let global: any = {
 	homeCharThree: null,
@@ -99,6 +74,7 @@ export default defineComponent({
 		const homeLineRef = ref();
 		const router = useRouter()
 		const route = useRoute()
+		const store = useStore()
 		const state = reactive({
 			dataOne: [
 				{
@@ -106,10 +82,10 @@ export default defineComponent({
 					iconDark: map1,
 					title: '供热面积',
 					contentTitle1: '供热面积',
-					val1: '2112.12',
+					val1: '0',
 					unit1: '㎡',
 					contentTitle2: '总面积',
-					val2: '2312.12',
+					val2: '0',
 					unit2: '㎡',
 				},
 				{
@@ -117,10 +93,10 @@ export default defineComponent({
 					iconDark: fire1,
 					title: '热量',
 					contentTitle1: '总耗热',
-					val1: '4500',
+					val1: '0',
 					unit1: 'GJ',
 					contentTitle2: '总单耗',
-					val2: '0.34',
+					val2: '0',
 					unit2: 'GJ/㎡',
 				},
 				{
@@ -128,10 +104,10 @@ export default defineComponent({
 					iconDark: ele1,
 					title: '电量',
 					contentTitle1: '总耗电',
-					val1: '5200',
+					val1: '0',
 					unit1: 'KW.h',
 					contentTitle2: '总单耗',
-					val2: '0.22',
+					val2: '0',
 					unit2: 'KW.h/㎡',
 				},
 				{
@@ -139,12 +115,11 @@ export default defineComponent({
 					iconDark: water1,
 					title: '水量',
 					contentTitle1: '总耗水',
-					val1: '4500',
+					val1: '0',
 					unit1: 'T',
 					contentTitle2: '总单耗',
-					val2: '0.23',
+					val2: '0',
 					unit2: 'T/㎡',
-
 				},
 			],
 			lineName: '换热站监测',
@@ -156,15 +131,54 @@ export default defineComponent({
 			},
 			searchParams: {
 				name: ''
-			}
+			},
+			xAxisData: [],
+			inTemperatureEchart: [], // 供水温度
+			outTemperatureEchart: [], // 回水温度
+			isIsDark: false
 		});
 
-		const getData = () => {
-			api.getAllHeatStation({})
+		const getNumDetail = () => {
+			api.getLoopRegulationDetail({
+				QueryType: 'num',
+				types: 'station',
+				code: route.query.code
+			}).then((res: any) => {
+				let data = res
+				state.dataOne[0].val1 = data.heatingArea //供暖面积
+				state.dataOne[0].val2 = data.forRealArea //实供面积
+				state.dataOne[1].val1 = data.unitConsumption //总热耗
+				state.dataOne[1].val2 = data.unitConsumptionSingle //热单耗
+				state.dataOne[2].val1 = data.elctricConsumption //总电量
+				state.dataOne[2].val2 = data.elctricConsumptionSingle //电单耗
+				state.dataOne[3].val1 = data.flowLoss //总水量
+				state.dataOne[3].val2 = data.flowLossSingle //水量单耗
+			})
+		}
+
+		const getChartDetail = () => {
+			api.getLoopRegulationDetail({
+				QueryType: 'echart',
+				types: 'station',
+				code: route.query.code
+			}).then((res: any) => {
+				state.inTemperatureEchart = res.inTemperatureEchart.map((item: any) => item.value)
+				state.outTemperatureEchart = res.outTemperatureEchart.map((item: any) => item.value)
+				state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
+				
+				nextTick(() => {
+					initLineChart();
+				});
+			})
 		}
 
 		const goDetail = () => {
-			router.push('/heating/monitor/loopSupervision/list/heatStationHistory')
+			router.push({
+				path: '/heating/monitor/loopSupervision/list/heatStationHistory',
+				query: {
+					code: route.query.code
+				}
+			})
 		}
 
 		// 折线图
@@ -179,7 +193,7 @@ export default defineComponent({
 				xAxis: [
 					{
 						type: 'category',
-						data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
+						data: state.xAxisData,
 						boundaryGap: true,
 						axisTick: { show: false },
 					},
@@ -196,18 +210,18 @@ export default defineComponent({
 					{
 						name: '供水温度',
 						type: 'line',
-						data: [10, 11, 13, 11, 12, 12, 9]
+						data: state.inTemperatureEchart
 					},
 					{
 						name: '回水温度',
 						type: 'line',
-						data: [1, -2, 2, 5, 3, 2, 0]
+						data: state.outTemperatureEchart
 					},
-					{
-						name: '室外温度',
-						type: 'line',
-						data: [3, 0, 4, 7, 5, 7, 5]
-					}
+					// {
+					// 	name: '室外温度',
+					// 	type: 'line',
+					// 	data: [3, 0, 4, 7, 5, 7, 5]
+					// }
 				]
 			};
 			(<any>global.homeCharThree).setOption(option);
@@ -228,12 +242,35 @@ export default defineComponent({
 		const initEchartsResize = () => {
 			window.addEventListener('resize', initEchartsResizeFun);
 		};
+		
+		// 监听 vuex 中是否开启深色主题
+		watch(
+			() => store.state.themeConfig.themeConfig.isIsDark,
+			(isIsDark) => {
+				nextTick(() => {
+					state.isIsDark = store.state.themeConfig.themeConfig.isIsDark
+					state.charts.theme = isIsDark ? 'transparent' : '';
+					state.charts.bgColor = isIsDark ? 'transparent' : '';
+					state.charts.color = isIsDark ? '#dadada' : '#303133';
+					setTimeout(() => {
+						initLineChart();
+					}, 1000);
+				});
+			},
+			{
+				deep: true,
+				immediate: true,
+			}
+		);
 
 		// 页面加载时
 		onMounted(() => {
-			getData()
-			initLineChart();
+			getNumDetail()
+			getChartDetail()
+
 			initEchartsResize();
+			// 获取布局配置信息
+			state.isIsDark = store.state.themeConfig.themeConfig.isIsDark;
 		});
 
 

@@ -24,24 +24,19 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column type="index" label="序号" width="55" align="center" />
-        <el-table-column label="日期" prop="key" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="环路编号" prop="name" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水温度" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水温度" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水压力" prop="value" min-width="120" :show-overflow-tooltip="true" />
-
-        <!-- <el-table-column prop="status" label="状态" width="100" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
-            <el-tag type="info" size="small" v-else>未发布</el-tag>
-          </template>
-        </el-table-column> -->
+        <el-table-column label="环路编号" prop="code" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="1nPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水压力" prop="outPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水压力" prop="outPressure2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水温度" prop="outTemperature1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
@@ -51,64 +46,44 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-// import EditDic from './component/editPro.vue';
-import api from '/@/api/device';
-
-// 定义接口来定义对象的类型
-interface TableDataRow {
-	id: number;
-	name: string;
-	deviceType: string;
-	status: number;
-	desc: string;
-	createBy: string;
-}
-interface TableDataState {
-	ids: number[];
-	tableData: {
-		data: Array<TableDataRow>;
-		total: number;
-		loading: boolean;
-		param: {
-			pageNum: number;
-			pageSize: number;
-			name: string;
-			deviceType: string;
-			status: string;
-			dateRange: string[];
-		};
-	};
-}
+import api from '/@/api/loopSupervision';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
 	name: 'deviceproduct',
 	setup() {
-		const addDicRef = ref();
-		const editDicRef = ref();
 		const queryRef = ref();
+		const route = useRoute()
 		const state = reactive({
 			tableData: {
-				data: [{ name: '环路', key: '2022-10-25', value: 1 }],
+				data: [],
 				total: 0,
 				loading: false,
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					status: '',
+					types: 'loop',
+					code: '',
 					dateRange: [],
 				},
 			},
 		});
+    // 初始化表格数据
+    const initTableData = () => {
+      state.tableData.param.pageNum = 1
+      typeList();
+    };
 		const typeList = () => {
-			// state.tableData.loading = true;
-			// api.product.getList(state.tableData.param).then((res: any) => {
-			// 	state.tableData.data = res.product;
-			// 	state.tableData.total = res.total;
-			// }).finally(() => (state.tableData.loading = false));
+      state.tableData.loading = true;
+      api.getLoopRegulation(state.tableData.param).then((res: any) => {
+        state.tableData.data = res.Data;
+        state.tableData.total = res.Total;
+      }).finally(() => (state.tableData.loading = false));
 		};
 		// 页面加载时
 		onMounted(() => {
-			// initTableData();
+			state.tableData.param.code = route.query.code
+			initTableData();
 		});
 		/** 重置按钮操作 */
 		const resetQuery = (formEl: FormInstance | undefined) => {
@@ -117,8 +92,6 @@ export default defineComponent({
 			typeList();
 		};
 		return {
-			addDicRef,
-			editDicRef,
 			queryRef,
 			typeList,
 			resetQuery,
