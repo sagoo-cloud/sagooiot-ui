@@ -35,8 +35,8 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-radio v-model="ruleForm.status" :label="1">在线</el-radio>
-					<el-radio v-model="ruleForm.status" :label="0">不在线</el-radio>
+					<el-radio v-model="ruleForm.status" :label="1">启用</el-radio>
+					<el-radio v-model="ruleForm.status" :label="0">禁用</el-radio>
 				</el-form-item>
 				<!-- <el-form-item label="数据模型" prop="dataTemplateIds">
 					<el-select v-model="ruleForm.dataTemplateIds" multiple clearable style="width: 100%;" placeholder="请选择">
@@ -210,8 +210,8 @@ export default defineComponent({
 			let map = new BMapGL.Map("map-container");
 			// 获取布局配置信息
 			let getThemeConfig =  store.state.themeConfig.themeConfig;
-			// 116.404, 39.915
-			let point = new BMapGL.Point(state.ruleForm.lnt || 116.404, state.ruleForm.lat || 39.915);
+			// 124.383044, 40.124296
+			let point = new BMapGL.Point(state.ruleForm.lnt || 124.383044, state.ruleForm.lat || 40.124296);
 			let zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
 			let cityCtrl = new BMapGL.CityListControl()
 			if(getThemeConfig.isIsDark) {
@@ -236,11 +236,20 @@ export default defineComponent({
 			})
 
 			map.addEventListener('click', (e: any) => {
-				console.log('map--click', e)
+				// console.log('map--click', e)
 				let point = e.latlng
 				state.ruleForm.lnt = point.lng
 				state.ruleForm.lat = point.lat
-				state.ruleForm.position = e.currentTarget.infoWindow.contentDiv.innerText.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
+				// if (e.currentTarget.infoWindow) {
+				// 	state.ruleForm.position = e.currentTarget.infoWindow.contentDiv.innerText.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
+				// }
+				let myGeo = new BMapGL.Geocoder
+				myGeo.getLocation(new BMapGL.Point(point.lng, point.lat), (result: any) => {
+					if (result) {
+						// console.log(result);
+						state.ruleForm.position = result.address
+					}
+				})
 			})
 		}
 

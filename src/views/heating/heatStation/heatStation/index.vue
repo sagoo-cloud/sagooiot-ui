@@ -47,7 +47,7 @@
 	    	<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="80"/>
 	    	<el-table-column label="状态" prop="status" v-col="'status'" width="80">
           <template #default="scope">
-						{{ scope.row.status === 1 ? '在线' : '不在线' }}
+						{{ scope.row.status === 1 ? '启用' : '禁用' }}
           </template>
         </el-table-column>
 	    	<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />

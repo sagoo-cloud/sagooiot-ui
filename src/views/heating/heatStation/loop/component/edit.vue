@@ -95,7 +95,7 @@
 							<el-input-number v-model="item.sort" :controls="false" :disabled="!item.editFalg" placeholder="排序" clearable style="width: 100px; margin-right: 10px"></el-input-number>
 
 							<el-button type="primary" v-if="item.editFalg" @click="onSavePoint(item, index)">保存</el-button>
-							<el-button type="primary" v-else @click="item.editFalg = true">修改</el-button>
+							<el-button type="primary" v-else @click="onEditChange(item, index)">修改</el-button>
 							<el-button type="danger" @click="onRemovePoint(index)">删除</el-button>
 						</div>
 					</div>
@@ -291,6 +291,10 @@ export default defineComponent({
 		}
 		// 新增途经点
 		const onAddPoint = () => {
+			if (state.pointList.find((item: any) => item.editFalg)) {
+				ElMessage.warning('请先保存途经点')
+				return
+			}
 			state.pointList.push({
 				sort: undefined,
 				position: '',
@@ -298,6 +302,16 @@ export default defineComponent({
 				lat: '',
 				editFalg: true
 			})
+			state.pointIndex = state.pointList.length - 1
+		}
+		// 修改途经点
+		const onEditChange = (item: any, index: number) => {
+			if (state.pointList.find((point: any) => point.editFalg && point !== item)) {
+				ElMessage.warning('请先保存途经点')
+				return
+			}
+			state.pointIndex = index
+			item.editFalg = true
 		}
 		// 保存途经点
 		const onSavePoint = (item: any, index: number) => {
@@ -312,7 +326,7 @@ export default defineComponent({
 			let BMapGL = (window as any).BMapGL
 			let map = new BMapGL.Map("loop-map-container");
 			// 116.404, 39.915
-			let point = new BMapGL.Point(116.404, 39.915);
+			let point = new BMapGL.Point(124.383044, 40.124296);
 			let zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
 			let cityCtrl = new BMapGL.CityListControl()
 			map.centerAndZoom(point, 15); 
@@ -328,20 +342,25 @@ export default defineComponent({
 			state.mapLocal = new BMapGL.LocalSearch(map, {
 				renderOptions:{map: map}
 			})
-			console.log('map', map)
 			map.addEventListener('click', (e: any) => {
 				console.log('map--click', e)
+				if (!state.pointList.length) return
 				let point = e.latlng
-				if (state.pointIndex > -1) {
-					state.pointList[state.pointIndex].lnt = point.lng
-					state.pointList[state.pointIndex].lat = point.lat
-					let str = e.currentTarget.infoWindow.centerDiv.innerText
-					let address = str.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
-					state.pointList[state.pointIndex].position = address
-				}
-				// state.ruleForm.lnt = point.lng
-				// state.ruleForm.lat = point.lat
-				// .replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
+				// if (state.pointIndex > -1) {
+				let index = state.pointIndex
+				state.pointList[index].lnt = point.lng
+				state.pointList[index].lat = point.lat
+					// let str = e.currentTarget.infoWindow.centerDiv.innerText
+					// let address = str.replace(/[^\s]+[\s\t\n]+([^\s\t\n]+)[\s\t\n]+.*/g, '$1')
+					// state.pointList[index].position = address
+				// }
+				
+				let myGeo = new BMapGL.Geocoder
+				myGeo.getLocation(new BMapGL.Point(point.lng, point.lat), (result: any) => {
+					if (result) {
+						state.pointList[index].position = result.address
+					}
+				})
 			})
 		}
 
@@ -360,6 +379,7 @@ export default defineComponent({
 			onAddPoint,
 			onRemovePoint,
 			onSavePoint,
+			onEditChange,
 			...toRefs(state)
 		}
 	}

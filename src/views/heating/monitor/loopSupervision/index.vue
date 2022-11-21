@@ -3,7 +3,7 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="" prop="">
+          <!-- <el-form-item label="" prop="">
             <el-radio-group v-model="tableData.param.types" size="default" @change="initTableData">
               <el-radio-button label="station" v-auth="'heatStation'">
                 换热站
@@ -12,7 +12,7 @@
                 环路
               </el-radio-button>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="环路名称" prop="name">
             <el-input v-model="tableData.param.name" placeholder="环路名称" size="default"></el-input>
           </el-form-item>
@@ -100,7 +100,7 @@ export default defineComponent({
         param: {
           pageNum: 1,
           pageSize: 10,
-          types: 'station', // 类型 station 换热站 loop环路
+          types: 'loop', // 类型 station 换热站 loop环路
           name: '',
           code: '',
         },

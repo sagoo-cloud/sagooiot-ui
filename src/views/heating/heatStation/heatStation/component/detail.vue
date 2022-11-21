@@ -12,7 +12,7 @@
 					{{ ruleForm.principalInfo.userNickname }}
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					{{ ruleForm.status === 1 ? '在线' : '不在线' }}
+					{{ ruleForm.status === 1 ? '启用' : '禁用' }}
 				</el-form-item>
         <el-form-item label="地图展示" prop="">
 					<div>
