@@ -144,9 +144,11 @@ export default defineComponent({
 
 			if (row) {
 				state.ruleForm = row;
-				if(row.dataTemplateBusi.busiTypes!=0){
-					state.ruleForm.busiTypes=row.dataTemplateBusi.busiTypes.toString();
-					state.ruleForm.busiId=row.dataTemplateBusi.busiId;
+				if(row.dataTemplateBusi){
+					state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
+						return val.busiTypes
+						})
+
 				}
 			}
 			state.isShowDialog = true;
