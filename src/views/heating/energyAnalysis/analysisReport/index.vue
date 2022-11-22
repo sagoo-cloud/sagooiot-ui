@@ -1,6 +1,34 @@
 <template>
   <div class="page-container">
     <el-card shadow="hover">
+      <div class="panel">
+        <div class="left-panel">
+          <el-input v-model="filterText" placeholder="请输入" />
+          <div class="list">
+            <el-tree
+              ref="treeRef"
+              class="filter-tree"
+              :data="state.heatList"
+              :props="{
+                label: 'name',
+                children: 'loopInfo'
+              }"
+              default-expand-all
+              :filter-node-method="filterNode"
+              @node-click="onNodeClick"
+            >
+              <template #default="{ data }">
+                <span class="custom-tree-node" :class="{ active: data.code === curNode }">
+                  <span class="name" :title="data.name">{{ data.name }}</span>
+                </span>
+              </template>
+            </el-tree>
+          </div>
+        </div>
+        <div class="right-panel">
+          <div style="height: 600px" ref="lineChartRef"></div>
+        </div>
+      </div>
       <!-- <el-checkbox-group v-model="checkList">
 				<el-checkbox label="一网供水温度" />
 				<el-checkbox label="一网回水温度" />
@@ -12,7 +40,7 @@
 				<el-checkbox label="二网回水压力" />
 			</el-checkbox-group> -->
 
-      <div style="height: 600px" ref="lineChartRef"></div>
+      
       <!-- <ChartDom :height="400" :option="lineChartOptions"/> -->
     </el-card>
   </div>
@@ -24,6 +52,7 @@ import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 import heatApi from '/@/api/heatStation';
 import datahubApi from '/@/api/datahub';
+import energyApi from '/@/api/energyAnalysis';
 
 let global: any = {
   lineChart: null,
@@ -51,7 +80,16 @@ const state = reactive({
 })
 const lineChartRef = ref()
 const checkList = ref([])
-
+const treeRef = ref()
+const filterText = ref('')
+const curNode = ref('')
+watch(filterText, (val) => {
+  treeRef.value!.filter(val)
+})
+const filterNode = (value: string, data: any) => {
+  if (!value) return true
+  return data.label.includes(value)
+}
 
 // 获取供热监测数据
 const getStatisticsChartData = () => {
@@ -95,15 +133,51 @@ const getStatisticsChartData = () => {
   });
 };
 const queryTree = () => {
-  heatApi.heatStation.getList({
-    name: '',
-    code: '',
-    status: -1
-  })
+  heatApi.heatStation.getAllStaAndLoop({})
     .then((res: any) => {
       state.heatList = res || [];
+      if (state.heatList.length) {
+        curNode.value = state.heatList[0].code
+      }
+      getChartData()
     });
 };
+// 
+const getChartData = () => {
+  energyApi.getEnergyLoopdata({
+    loopCode: curNode.value
+  }).then((res: any) => {
+    const data = res.list || []
+    state.inPressure1 = []
+    state.inPressure2 = []
+    state.inTemperature1 = []
+    state.inTemperature2 = []
+    state.outPressure1 = []
+    state.outPressure2 = []
+    state.outTemperature1 = []
+    state.outTemperature2 = []
+
+    data.forEach((item: any) => {
+      state.lineChartXAxis.push(item.huanLuName);
+      state.inPressure1.push(item.inPressure1);
+      state.inPressure2.push(item.inPressure2);
+      state.inTemperature1.push(item.inTemperature1);
+      state.inTemperature2.push(item.inTemperature2);
+      state.outPressure1.push(item.outPressure1);
+      state.outPressure2.push(item.outPressure2);
+      state.outTemperature1.push(item.outTemperature1);
+      state.outTemperature2.push(item.outTemperature2);
+    });
+
+    nextTick(() => {
+      initLineChart();
+    });
+  })
+}
+const onNodeClick = (data: any) => {
+  curNode.value = data.code
+  getChartData()
+}
 
 // 初始化图标
 const initLineChart = () => {
@@ -155,8 +229,7 @@ const initEchartsResize = () => {
 };
 // 页面加载时
 onMounted(() => {
-  // queryTree()
-  getStatisticsChartData()
+  queryTree()
   initEchartsResize();
 });
 
@@ -181,4 +254,34 @@ watch(
 </script>
 
 <style scoped lang="scss">
+// .page-container {
+//   height: 100%;
+// }
+// .el-card {
+//   height: 100%;
+// }
+// .el-card__body {
+//   height: 100%;
+// }
+.panel {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  .left-panel {
+    .list {
+      max-height: 625px;
+      overflow-y: auto;
+    }
+  }
+}
+
+.custom-tree-node {
+	.name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	&.active {
+		color: var(--el-color-primary);
+		// background: var(--el-color-primary-light-9);
+	}
+}
 </style>
