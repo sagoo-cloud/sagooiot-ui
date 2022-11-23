@@ -8,4 +8,7 @@ export default {
 
   
   getEnergyLoopdata: (params?: object) => get('/energy/loopdata', params), // 环路分析
+  getEnergyWaterLossLineChart: (params?: object) => get('/energy/water/loss/line/chart', params), // 换热站失水分析
+  getEnergyPerformance: (params?: object) => get('/energy/performance', params), // 绩效考核
+  getEnergyTop: (params?: object) => get('/energy/top', params), // 能耗排行榜
 }

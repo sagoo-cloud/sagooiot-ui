@@ -1,82 +1,47 @@
 <template>
   <div class="system-dic-container">
     <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="state.param" ref="queryRef" :inline="true" label-width="120px">
-          <!-- <el-form-item label="环路名称" prop="plotId">
-            <el-select v-model="searchParams.plotId" placeholder="选择环路名称" filterable clearable size="default">
-							<el-option
-								v-for="item in []"
-								:key="item.id"
-								:label="item.name"
-								:value="item.id">
-							</el-option>
-						</el-select>
-          </el-form-item> -->
-					<el-form-item label="所属换热站" prop="stationId">
-						<el-tree-select
-							v-model="state.param.stationId"
-							:data="state.heatList"
-							:props="{
-								label: 'name',
-								children: 'children'
-							}"
-							node-key="id"
-							:clearable="true"
-							check-strictly
-							size="default"
-							style="width: 100%;"
-							placeholder="请选择"
-							:render-after-expand="true"
-						/>
-					</el-form-item>
-          <el-form-item label="负责人" prop="principal">
-            <el-select v-model="state.param.principal" placeholder="选择负责人" filterable clearable size="default">
-							<el-option
-								v-for="item in []"
-								:key="item.id"
-								:label="item.name"
-								:value="item.id">
-							</el-option>
-						</el-select>
-          </el-form-item>
-          <el-form-item label="时间间隔(秒)" prop="interval">
-            <el-input-number size="default" v-model="state.param.interval"></el-input-number>
-          </el-form-item>
-          <el-form-item label="流量限值" prop="flow">
-            <el-input-number size="default" v-model="state.param.flow"></el-input-number>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="initPage">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <!-- <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-			
-			<div class="title">供回水对比图</div>
-			<div style="height: 300px" ref="barChartRef"></div>
-			<div class="title mt-2">失水量曲线</div>
-			<div style="height: 300px" ref="lineChartRef"></div>
-			<div class="title mt-2">数据列表</div>
-			
-      <el-table :data="state.tableData.data" style="width: 100%" v-loading="state.tableData.loading">
-        <el-table-column type="index" width="55" label="序号" align="center" />
-        <el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="环路名称" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="供水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="回水流量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="失水量" prop="value" min-width="120" :show-overflow-tooltip="true" />
-      </el-table>
+      <div class="panel">
+        <div class="left-panel">
+          <el-input v-model="filterText" clearable placeholder="请输入" />
+          <div class="list">
+            <el-tree
+              ref="treeRef"
+              class="filter-tree"
+              :data="state.heatList"
+              :props="{
+                label: 'name',
+                children: 'loopInfo'
+              }"
+              default-expand-all
+              :filter-node-method="filterNode"
+              @node-click="onNodeClick"
+            >
+              <template #default="{ data }">
+                <span class="custom-tree-node" :class="{ active: data.code === curNode }">
+                  <span class="name" :title="data.name">{{ data.name }}</span>
+                </span>
+              </template>
+            </el-tree>
+          </div>
+				</div>
+				<div class="right-panel">
+					<div class="title">供回水对比图</div>
+					<div style="height: 300px" v-loading="state.tableData.loading" ref="barChartRef"></div>
+					<div class="title mt-2">失水量曲线</div>
+					<div style="height: 300px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
+					<div class="title mt-2">数据列表</div>
+					
+					<el-table :data="state.tableData.data" style="width: 100%" v-loading="state.tableData.loading">
+						<el-table-column type="index" width="55" label="序号" align="center" />
+						<el-table-column label="日期" v-col="'key'" prop="datetime" min-width="120" :show-overflow-tooltip="true" />
+						<el-table-column label="环路名称" prop="huanLuName" min-width="120" :show-overflow-tooltip="true" />
+						<el-table-column label="供水流量" prop="supplyWater" min-width="120" :show-overflow-tooltip="true" />
+						<el-table-column label="回水流量" prop="returnWater" min-width="120" :show-overflow-tooltip="true" />
+						<el-table-column label="失水量" prop="waterLoss" min-width="120" :show-overflow-tooltip="true" />
+					</el-table>
+				</div>
+			</div>
     </el-card>
   </div>
 </template>
@@ -120,77 +85,72 @@ const state = reactive({
 	lineChartXAixs: [],
 	lineChartSeries: [],
 	tableData: {
-		data: [{ value: '-' }, { value: '-' }],
+		data: [],
 		loading: false
 	}
 });
 
+const treeRef = ref()
+const filterText = ref('')
+const curNode = ref('')
+watch(filterText, (val) => {
+  treeRef.value!.filter(val)
+})
+const filterNode = (value: string, data: any) => {
+  if (!value) return true
+  return data.name.includes(value)
+}
+
+const onNodeClick = (data: any) => {
+  curNode.value = data.code
+  queryLineChart()
+}
+
 const queryTree = () => {
-	heatApi.heatStation.getList({
-		name: '',
-		code: '',
-		status: -1
-	})
-	.then((res: any) => {
-		state.heatList = res || [];
-	});
+  heatApi.heatStation.getAllStaAndLoop({})
+    .then((res: any) => {
+      state.heatList = res || [];
+      if (state.heatList.length) {
+        curNode.value = state.heatList[0].code
+      }
+      queryLineChart()
+    });
 };
 
 const queryLineChart = () => {
-	api.getEnergyHuanluWaterLossLineChart({ TableNo: 24, Interval: '' }).then((res: any) => {
-		console.log(res);
-		let data = res.list || []
-		
-		state.lineChartXAixs = []
-		state.lineChartSeries = []
-		
-		data.forEach((item: any) => {
-			state.lineChartXAixs.push(formatDate(new Date(item.time), 'HH:MM'));
-			state.lineChartSeries.push(item.waterLoss);
+	state.tableData.loading = true
+	api.getEnergyWaterLossLineChart({ loopCode: curNode.value })
+	// api.getEnergyWaterLossLineChart({ loopCode: 'D00107-1' })
+		.then((res: any) => {
+			console.log(res);
+			let data = res.list || []
+			
+			state.lineChartXAixs = []
+			state.lineChartSeries = []
+			state.barChartXAxis = []
+			state.barChartSeries1 = []
+			state.barChartSeries2 = []
+			
+			data.forEach((item: any) => {
+				state.lineChartXAixs.push(formatDate(new Date(item.datetime), 'HH:MM'));
+				state.lineChartSeries.push(item.waterLoss);
+				state.barChartXAxis.push(item.huanLuName);
+				state.barChartSeries1.push(item.supplyWater);
+				state.barChartSeries2.push(item.returnWater);
+			});
+			state.tableData.data = data
+			state.tableData.loading = false
+			
+			nextTick(() => {
+				initLineChart();
+				initBarChart();
+			});
 		});
-	});
-};
-const queryChart = () => {
-	api.getEnergyHuanluWaterFlowList({ tableNo: 24 }).then((res: any) => {
-		console.log(res);
-		let data = res.Info || []
-		
-		state.barChartXAxis = []
-		state.barChartSeries1 = []
-		state.barChartSeries2 = []
-		
-		data.forEach((item: any) => {
-			state.barChartXAxis.push(item.huanLuName);
-			state.barChartSeries1.push(item.supplyWaterFlow1);
-			state.barChartSeries2.push(item.returnWaterFlow1);
-		});
-
-		nextTick(() => {
-			initBarChart();
-		});
-	});
 };
 // 页面加载时
 onMounted(() => {
 	queryTree()
-	queryChart()
-	queryLineChart()
 });
-/** 重置按钮操作 */
-const resetQuery = (formEl: FormInstance | undefined) => {
-	if (!formEl) return;
-	formEl.resetFields();
-	// queryList();
-};
-const initPage = () => {
-	if (!state.param.stationId) {
-		ElMessage.warning('请选择换热站')
-		return
-	}
-	// queryChart()
-	// queryLineChart()
-}
-
 
 // 初始化图表
 const initBarChart = () => {
@@ -311,7 +271,7 @@ watch(
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
 			setTimeout(() => {
-				initBarChart();
+				// initBarChart();
 				initLineChart();
 			}, 500)
 		});
@@ -328,5 +288,30 @@ watch(
 .title {
 	font-size: 16px;
 	font-weight: bold;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  .left-panel {
+    .list {
+      max-height: 625px;
+      overflow-y: auto;
+    }
+  }
+  .right-panel {
+    padding: 16px;
+  }
+}
+
+.custom-tree-node {
+	.name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	&.active {
+		color: var(--el-color-primary);
+		// background: var(--el-color-primary-light-9);
+	}
 }
 </style>

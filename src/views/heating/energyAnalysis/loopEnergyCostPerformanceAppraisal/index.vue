@@ -2,26 +2,35 @@
   <div class="system-dic-container">
     <el-card shadow="hover">
       <div class="system-user-search mb15">
-        <el-form :model="searchParams" ref="queryRef" :inline="true" label-width="120px">
-          <el-form-item label="环路名称" prop="plotId">
-            <el-select v-model="searchParams.plotId" placeholder="选择环路名称" filterable clearable size="default">
-							<el-option
-								v-for="item in []"
-								:key="item.id"
-								:label="item.name"
-								:value="item.id">
-							</el-option>
+        <el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="90px">
+					<el-form-item label="时间范围" prop="dateRange">
+						<el-date-picker v-model="state.tableData.param.dateRange"
+							size="default"
+							style="width: 240px"
+							value-format="YYYY-MM-DD"
+							type="daterange"
+							range-separator="-"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期">
+						</el-date-picker>
+					</el-form-item>
+          <el-form-item label="排名" prop="sort">
+            <el-select v-model="state.tableData.param.sort" placeholder="按照选择进行排名" filterable clearable size="default">
+							<el-option label="总耗热" :value="1" />
+							<el-option label="热单耗" :value="2" />
+							<el-option label="总耗电" :value="3" />
+							<el-option label="电单耗" :value="4" />
+							<el-option label="总耗水" :value="5" />
+							<el-option label="水单耗" :value="6" />
 						</el-select>
           </el-form-item>
-          <el-form-item label="负责人" prop="plotId">
-            <el-select v-model="searchParams.plotId" placeholder="选择负责人" filterable clearable size="default">
-							<el-option
-								v-for="item in []"
-								:key="item.id"
-								:label="item.name"
-								:value="item.id">
-							</el-option>
-						</el-select>
+          <el-form-item label="换热站名称" prop="stationName">
+            <el-input v-model="state.tableData.param.stationName" placeholder="输入" clearable size="default">
+						</el-input>
+          </el-form-item>
+          <el-form-item label="环路名称" prop="loopName">
+            <el-input v-model="state.tableData.param.loopName" placeholder="输入" clearable size="default">
+						</el-input>
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
@@ -46,18 +55,25 @@
         </el-form>
       </div>
 			<div class="title">环路数据统计</div>
-      <el-table :data="[]" style="width: 100%" >
+      <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" >
         <el-table-column type="index" label="序号" align="center" width="60" />
-	    	<el-table-column label="环路名称" prop="name" />
-	    	<el-table-column label="区域负责人" prop="number" />
-	    	<el-table-column label="总热耗" prop="number" />
-	    	<el-table-column label="热单耗" prop="number" />
-	    	<el-table-column label="总耗电" prop="number" />
-	    	<el-table-column label="电单耗" prop="number" />
-	    	<el-table-column label="总耗水" prop="number" />
-	    	<el-table-column label="水单耗" prop="number" />
+	    	<el-table-column label="环路名称" prop="huanLuName" />
+	    	<el-table-column label="所属换热站" prop="stationName" />
+	    	<el-table-column label="总热耗" prop="unitConsumptionTotal" />
+	    	<el-table-column label="热单耗" prop="unitConsumption" />
+	    	<el-table-column label="总耗电" prop="elctricConsumptionTotal" />
+	    	<el-table-column label="电单耗" prop="elctricConsumption" />
+	    	<el-table-column label="总耗水" prop="flowLossTotal" />
+	    	<el-table-column label="水单耗" prop="flowLoss" />
       </el-table>
-			<div class="title mt20">能耗红榜</div>
+			
+      <pagination
+				v-show="state.tableData.total>0"
+				:total="state.tableData.total"
+				v-model:page="state.tableData.param.pageNum"
+				v-model:limit="state.tableData.param.pageSize"
+				@pagination="queryList" />
+			<!-- <div class="title mt20">能耗红榜</div>
 			<div class="chart-grid">
 				<div style="height: 250px" ref="redChartOneRef"></div>
 				<div style="height: 250px" ref="redChartTwoRef"></div>
@@ -68,7 +84,7 @@
 				<div style="height: 250px" ref="blackChartOneRef"></div>
 				<div style="height: 250px" ref="blackChartTwoRef"></div>
 				<div style="height: 250px" ref="blackChartThreeRef"></div>
-			</div>
+			</div> -->
     </el-card>
   </div>
 </template>
@@ -78,7 +94,7 @@ import { toRefs, reactive, onMounted, ref, watch, nextTick } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
-import api from '/@/api/heatingDistrict';
+import energyApi from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 
 let global: any = {
@@ -98,9 +114,7 @@ const redChartThreeRef = ref();
 const blackChartOneRef = ref();
 const blackChartTwoRef = ref();
 const blackChartThreeRef = ref();
-const searchParams = ref({
 
-})
 const store = useStore();
 const state = reactive({
 	myCharts: [],
@@ -109,8 +123,21 @@ const state = reactive({
 		bgColor: '',
 		color: '#303133',
 	},
-	
-	heatList: []
+	heatList: [],
+	tableData: {
+		data: [],
+		loading: false,
+		total: 0,
+		param: {
+			sort: 1,
+			isdesc: 2,
+			stationName: '',
+			loopName: '',
+			dateRange: [],
+			pageNum: 1,
+			pageSize: 10
+		}
+	}
 });
 
 const queryTree = () => {
@@ -123,15 +150,25 @@ const queryTree = () => {
 			state.heatList = res || [];
 		});
 };
+const queryList = () => {
+	state.tableData.loading = true
+	energyApi.getEnergyPerformance(state.tableData.param)
+		.then(res => {
+			state.tableData.data = res.list || []
+			state.tableData.total = res.Total
+			state.tableData.loading = false
+		})
+}
 // 页面加载时
 onMounted(() => {
 	// queryTree()
+	queryList()
 });
 /** 重置按钮操作 */
 const resetQuery = (formEl: FormInstance | undefined) => {
 	if (!formEl) return;
 	formEl.resetFields();
-	// queryList();
+	queryList();
 };
 
 let chartArr = [
@@ -221,7 +258,7 @@ watch(
 			state.charts.bgColor = isIsDark ? 'transparent' : '';
 			state.charts.color = isIsDark ? '#dadada' : '#303133';
 			setTimeout(() => {
-				initChart();
+				// initChart();
 			}, 500)
 		});
 	},

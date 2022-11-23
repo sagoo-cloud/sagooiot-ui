@@ -3,7 +3,7 @@
     <el-card shadow="hover">
       <div class="panel">
         <div class="left-panel">
-          <el-input v-model="filterText" placeholder="请输入" />
+          <el-input v-model="filterText" clearable placeholder="请输入" />
           <div class="list">
             <el-tree
               ref="treeRef"
@@ -26,22 +26,59 @@
           </div>
         </div>
         <div class="right-panel">
-          <div style="height: 600px" ref="lineChartRef"></div>
+          <el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="68px" >
+            <el-form-item label="时间范围" prop="dateRange">
+              <el-date-picker v-model="state.tableData.param.dateRange"
+                size="default"
+                style="width: 240px"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="default" type="primary" @click="getChartData">
+                <el-icon>
+                  <ele-Search />
+                </el-icon>
+                查询
+              </el-button>
+              <!-- <el-button size="default" @click="resetQuery(queryRef)">
+                <el-icon>
+                  <ele-Refresh />
+                </el-icon>
+                重置
+              </el-button> -->
+            </el-form-item>
+          </el-form>
+          <div style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
+
+          <div class="title">数据列表</div>
+              
+          <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+            <el-table-column label="ID" align="center" prop="id" width="60" />
+            <el-table-column label="环路编号" prop="huanLuNo" :show-overflow-tooltip="true" />
+            <el-table-column label="环路名称" prop="huanLuName" :show-overflow-tooltip="true" />
+            <el-table-column label="一网供水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
+            <el-table-column label="一网回水温度" prop="outTemperature1" :show-overflow-tooltip="true" />
+            <el-table-column label="二网供水温度" prop="inTemperature2" :show-overflow-tooltip="true" />
+            <el-table-column label="二网回水温度" prop="outTemperature2" :show-overflow-tooltip="true" />
+            <el-table-column label="一网供水压力" prop="inPressure1" :show-overflow-tooltip="true" />
+            <el-table-column label="一网回水压力" prop="outPressure1" :show-overflow-tooltip="true" />
+            <el-table-column label="二网供水压力" prop="inPressure2" :show-overflow-tooltip="true" />
+            <el-table-column label="二网回水压力" prop="outPressure2" :show-overflow-tooltip="true" />
+            <el-table-column label="一网供水流量" prop="supplyWaterFlow" :show-overflow-tooltip="true" />
+            <el-table-column label="一网回水流量" prop="returnWaterFlow" :show-overflow-tooltip="true" />
+            <el-table-column label="二网供水流量" prop="supplyWaterFlow2" :show-overflow-tooltip="true" />
+            <el-table-column label="二网回水流量" prop="returnWaterFlow2" :show-overflow-tooltip="true" />
+            <el-table-column label="阀门开度" prop="supplyValve" :show-overflow-tooltip="true" />
+            <!-- <el-table-column label="室内温度" prop="" :show-overflow-tooltip="true" />
+            <el-table-column label="室外温度" prop="" :show-overflow-tooltip="true" /> -->
+          </el-table>
         </div>
       </div>
-      <!-- <el-checkbox-group v-model="checkList">
-				<el-checkbox label="一网供水温度" />
-				<el-checkbox label="一网回水温度" />
-				<el-checkbox label="一网供水压力" />
-				<el-checkbox label="一网回水压力" />
-				<el-checkbox label="二网供水温度" />
-				<el-checkbox label="二网回水温度" />
-				<el-checkbox label="二网供水压力" />
-				<el-checkbox label="二网回水压力" />
-			</el-checkbox-group> -->
-
-      
-      <!-- <ChartDom :height="400" :option="lineChartOptions"/> -->
     </el-card>
   </div>
 </template>
@@ -53,6 +90,7 @@ import { useStore } from '/@/store/index';
 import heatApi from '/@/api/heatStation';
 import datahubApi from '/@/api/datahub';
 import energyApi from '/@/api/energyAnalysis';
+import { formatDate } from '/@/utils/formatTime'
 
 let global: any = {
   lineChart: null,
@@ -77,6 +115,16 @@ const state = reactive({
   outPressure2: [],
   outTemperature1: [],
   outTemperature2: [],
+  tableData: {
+    data: [],
+    loading: false,
+    param: {
+      dateRange: [
+        formatDate(new Date(), 'YYYY-mm-dd'),
+        formatDate(new Date(), 'YYYY-mm-dd')
+      ]
+    }
+  }
 })
 const lineChartRef = ref()
 const checkList = ref([])
@@ -88,50 +136,9 @@ watch(filterText, (val) => {
 })
 const filterNode = (value: string, data: any) => {
   if (!value) return true
-  return data.label.includes(value)
+  return data.name.includes(value)
 }
 
-// 获取供热监测数据
-const getStatisticsChartData = () => {
-  datahubApi.statistics.getStatisticsChartData({ tableNo: 17 }).then((res: any) => {
-    console.log(res)
-    const data = res.Info
-    // "huanLuNo": "D00140-4", //换热站编号
-    // "huanLuName": "8#楼高区", //换热站名称
-    // "inPressure1": 0, //一网供水压力
-    // "inPressure2": 0, //二网供水压力
-    // "inTemperature1": 0, //一网供水温度
-    // "inTemperature2": 0, //二网供水温度
-    // "outPressure1": 0, //一网回水压力
-    // "outPressure2": 0, //二网回水压力
-    // "outTemperature1": 0, //一网回水温度
-    // "outTemperature2": 0 //二网回水温度
-    state.inPressure1 = []
-    state.inPressure2 = []
-    state.inTemperature1 = []
-    state.inTemperature2 = []
-    state.outPressure1 = []
-    state.outPressure2 = []
-    state.outTemperature1 = []
-    state.outTemperature2 = []
-
-    data.forEach((item: any) => {
-      state.lineChartXAxis.push(item.huanLuName);
-      state.inPressure1.push(item.inPressure1);
-      state.inPressure2.push(item.inPressure2);
-      state.inTemperature1.push(item.inTemperature1);
-      state.inTemperature2.push(item.inTemperature2);
-      state.outPressure1.push(item.outPressure1);
-      state.outPressure2.push(item.outPressure2);
-      state.outTemperature1.push(item.outTemperature1);
-      state.outTemperature2.push(item.outTemperature2);
-    });
-
-    nextTick(() => {
-      initLineChart();
-    });
-  });
-};
 const queryTree = () => {
   heatApi.heatStation.getAllStaAndLoop({})
     .then((res: any) => {
@@ -144,10 +151,14 @@ const queryTree = () => {
 };
 // 
 const getChartData = () => {
+  state.tableData.loading = true
   energyApi.getEnergyLoopdata({
-    loopCode: curNode.value
+    loopCode: curNode.value,
+    dateRange: state.tableData.param.dateRange
   }).then((res: any) => {
     const data = res.list || []
+    state.tableData.data = data
+    
     state.inPressure1 = []
     state.inPressure2 = []
     state.inTemperature1 = []
@@ -168,7 +179,7 @@ const getChartData = () => {
       state.outTemperature1.push(item.outTemperature1);
       state.outTemperature2.push(item.outTemperature2);
     });
-
+    state.tableData.loading = false
     nextTick(() => {
       initLineChart();
     });
@@ -179,7 +190,7 @@ const onNodeClick = (data: any) => {
   getChartData()
 }
 
-// 初始化图标
+// 初始化图表
 const initLineChart = () => {
   if (!global.dispose.some((b: any) => b === global.lineChart)) global.lineChart.dispose();
   global.lineChart = <any>echarts.init(lineChartRef.value, state.charts.theme);
@@ -199,12 +210,12 @@ const initLineChart = () => {
       },
     ],
     series: [
-      { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
-      { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
+      // { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
+      // { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
       { name: '一网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature1 },
       { name: '二网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature2 },
-      { name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
-      { name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
+      // { name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
+      // { name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
       { name: '一网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature1 },
       { name: '二网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature2 }
     ]
@@ -241,9 +252,9 @@ watch(
       state.charts.theme = isIsDark ? 'dark' : '';
       state.charts.bgColor = isIsDark ? 'transparent' : '';
       state.charts.color = isIsDark ? '#dadada' : '#303133';
-      // setTimeout(() => {
-      // 	initLineChart();
-      // }, 500);
+      setTimeout(() => {
+      	initLineChart();
+      }, 500);
     });
   },
   {
@@ -254,15 +265,10 @@ watch(
 </script>
 
 <style scoped lang="scss">
-// .page-container {
-//   height: 100%;
-// }
-// .el-card {
-//   height: 100%;
-// }
-// .el-card__body {
-//   height: 100%;
-// }
+.title {
+	font-size: 16px;
+	font-weight: bold;
+}
 .panel {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -271,6 +277,9 @@ watch(
       max-height: 625px;
       overflow-y: auto;
     }
+  }
+  .right-panel {
+    padding: 16px;
   }
 }
 
@@ -283,5 +292,9 @@ watch(
 		color: var(--el-color-primary);
 		// background: var(--el-color-primary-light-9);
 	}
+}
+
+:deep(.el-form-item) {
+  // margin-bottom: 0;
 }
 </style>
