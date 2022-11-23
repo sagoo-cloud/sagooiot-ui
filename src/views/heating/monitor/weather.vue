@@ -154,19 +154,20 @@ export default defineComponent({
           Info.forEach((i: any) => {
             state.xAxisWind.push(i.time);
             state.temWind.push(i.value);
-            state.foreCastInfoWind.push('-');
+            // state.foreCastInfoWind.push('-');
           })
         }
         if (AvgInfo && AvgInfo.length) {
           AvgInfo.forEach((i: any) => {
             state.averageTemWind.push(i.value)
-            state.foreCastAvgInfoWind.push('-');
+            // state.foreCastAvgInfoWind.push('-');
           })
         }
         if([2, 3].indexOf(state.windpowerType) > -1) {
+          // 周数据、月数据
           ForeCastInfo.forEach((i: any) => {
-            state.xAxisWind.push(i.time);
-            state.temWind.push('-');
+            // state.xAxisWind.push(i.time);
+            // state.temWind.push('-');
             state.foreCastInfoWind.push(i.value);
           })
           ForeCastAvgInfo.forEach((i: any) => {
@@ -192,25 +193,28 @@ export default defineComponent({
           Info.forEach((i: any) => {
             state.xAxis.push(i.time);
             state.tem.push(i.value);
-            state.foreCastInfoTem.push('-');
+            // state.foreCastInfoTem.push('-');
           })
         }
         if (AvgInfo && AvgInfo.length) {
           AvgInfo.forEach((i: any) => {
             state.averageTem.push(i.value)
-            state.foreCastAvgInfoTem.push('-');
+            // state.foreCastAvgInfoTem.push('-');
           })
         }
+        
         if([2, 3].indexOf(state.temperatureType) > -1) {
+          // 周数据、月数据
           ForeCastInfo.forEach((i: any) => {
-            state.xAxis.push(i.time);
-            state.tem.push('-');
+            // state.xAxis.push(i.time);
+            // state.tem.push('-');
             state.foreCastInfoTem.push(i.value);
           })
           ForeCastAvgInfo.forEach((i: any) => {
             state.foreCastAvgInfoTem.push(i.value);
           })
         }
+        console.log(state.xAxis)
         nextTick(() => {
           initTemLineChart();
         });
