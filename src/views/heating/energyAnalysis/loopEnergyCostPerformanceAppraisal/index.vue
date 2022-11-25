@@ -14,7 +14,7 @@
 							end-placeholder="结束日期">
 						</el-date-picker>
 					</el-form-item>
-          <el-form-item label="排名" prop="sort">
+          <el-form-item label="排序" prop="sort">
             <el-select v-model="state.tableData.param.sort" placeholder="按照选择进行排名" filterable clearable size="default">
 							<el-option label="总耗热" :value="1" />
 							<el-option label="热单耗" :value="2" />
@@ -22,6 +22,12 @@
 							<el-option label="电单耗" :value="4" />
 							<el-option label="总耗水" :value="5" />
 							<el-option label="水单耗" :value="6" />
+						</el-select>
+          </el-form-item>
+          <el-form-item label="排序方式" prop="isdesc">
+            <el-select v-model="state.tableData.param.isdesc" placeholder="按照选择进行排名" filterable clearable size="default">
+							<el-option label="正序" :value="2" />
+							<el-option label="倒序" :value="1" />
 						</el-select>
           </el-form-item>
           <el-form-item label="换热站名称" prop="stationName">

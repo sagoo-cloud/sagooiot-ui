@@ -15,6 +15,7 @@
               }"
               default-expand-all
               :filter-node-method="filterNode"
+							:expand-on-click-node="false"
               @node-click="onNodeClick"
             >
               <template #default="{ data }">

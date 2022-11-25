@@ -14,6 +14,7 @@
                 children: 'loopInfo'
               }"
               default-expand-all
+							:expand-on-click-node="false"
               :filter-node-method="filterNode"
               @node-click="onNodeClick"
             >
@@ -157,12 +158,7 @@ const initBarChart = () => {
 	if (!global.dispose.some((b: any) => b === global.barChart)) global.barChart.dispose();
 	global.barChart = <any>echarts.init(barChartRef.value, state.charts.theme);
 	const option =  {
-		tooltip: {
-			trigger: 'axis',
-			axisPointer: {
-				type: 'shadow'
-			}
-		},
+		tooltip: { trigger: 'axis' },
 		legend: {},
 		grid: {
 			left: '3%',
@@ -184,19 +180,18 @@ const initBarChart = () => {
 		series: [
 			{
 				name: '供水流量',
-				type: 'bar',
-				emphasis: {
-					focus: 'series'
-				},
+				type: 'line',
+				symbolSize: 6,
+				symbol: 'circle',
+				smooth: true,
 				data: state.barChartSeries1
 			},
 			{
 				name: '回水流量',
-				type: 'bar',
-				stack: 'Ad',
-				emphasis: {
-					focus: 'series'
-				},
+				type: 'line',
+				symbolSize: 6,
+				symbol: 'circle',
+				smooth: true,
 				data: state.barChartSeries2
 			}
 		]

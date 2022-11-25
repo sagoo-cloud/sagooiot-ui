@@ -241,7 +241,7 @@ export default defineComponent({
 					state.ruleForm = {
 						...res
 					}
-					state.pointList = state.ruleForm.viaPoint.map((item: any) => ({
+					state.pointList = (state.ruleForm.viaPoint || []).map((item: any) => ({
 						...item,
 						editFlag: false
 					}))
