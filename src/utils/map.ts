@@ -19,19 +19,19 @@ export function setMarker(markers: any[], map: any) {
         <div class="map-hover-title">环路名称：${item.name}</div>
         <div class="map-hover-row-item">
           <div class="map-hover-label">环路编号：</div>
-          <div class="map-hover-value">SJIWW786</div>
+          <div class="map-hover-value">${item.code}</div>
         </div>
         <div class="map-hover-row-item">
           <div class="map-hover-label">所属换热站：</div>
-          <div class="map-hover-value">**换热站1</div>
+          <div class="map-hover-value">${item.stationInfo.name}</div>
         </div>
         <div class="map-hover-row-item">
           <div class="map-hover-label">一网供水温度：</div>
-          <div class="map-hover-value"></div>
+          <div class="map-hover-value">${item.outTemperature1}</div>
         </div>
         <div class="map-hover-row-item">
           <div class="map-hover-label">一网回水温度：</div>
-          <div class="map-hover-value">24℃</div>
+          <div class="map-hover-value">${item.inTemperature1}</div>
         </div>
       </div>
     `,
