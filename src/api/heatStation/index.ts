@@ -9,7 +9,8 @@ export default {
     detail: (id: number) => get('/region/loop/getInfoById', { id }),
   },
   heatStation: {
-    getAll: (params?: object) => get('/region/monitor/getAllHeatStation', params),
+    // getAll: (params?: object) => get('/region/monitor/getAllHeatStation', params),
+    getAll: (params?: object) => get('/region/monitor/loopMap', params),
     getList: (params: object) => get('/region/heatStation/tree', params),
     add: (data: object) => post('/region/heatStation/add', data),
     edit: (data: object) => put('/region/heatStation/edit', data),

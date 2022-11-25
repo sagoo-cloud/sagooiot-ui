@@ -1,40 +1,53 @@
 <template>
 	<div class="page page-full">
-		<el-checkbox-group v-model="checkList">
-			<el-checkbox label="一网供水温度" />
-			<el-checkbox label="一网回水温度" />
-			<el-checkbox label="一网供水压力" />
-			<el-checkbox label="一网回水压力" />
-			<el-checkbox label="二网供水温度" />
-			<el-checkbox label="二网回水温度" />
-			<el-checkbox label="二网供水压力" />
-			<el-checkbox label="二网回水压力" />
-		</el-checkbox-group>
-		<div class="flex1 mt-2" style="position: relative;">
+		<div style="position: relative; flex: 1;">
 			<div class="map" ref="mapRef" style="height: 100%"></div>
 
 			<!-- 显示弹层区域 -->
 			<div class="view">
 				<div class="view-div" v-for="(item, index) in viewList" :key="index">
-					<div class="view-div-item">
-						<div class="label">环路名称：</div>
-						<div class="text">{{ item.name }}</div>
+					<div class="view-div-head">
+						<div class="title">{{ item.name }}环路</div>
+						<div class="info">
+							<div class="">
+								环路编号：{{ item.code }}
+							</div>
+							<div class="ml-4">
+								所属换热站：{{ item.stationInfo.name }}
+							</div>
+						</div>
 					</div>
-					<div class="view-div-item">
-						<div class="label">所属换热站：</div>
-						<div class="text">SJIWW786</div>
-					</div>
-					<div class="view-div-item">
-						<div class="label">环路编号：</div>
-						<div class="text">**换热站1</div>
-					</div>
-					<div class="view-div-item">
-						<div class="label">一网供水温度：</div>
-						<div class="text"></div>
-					</div>
-					<div class="view-div-item">
-						<div class="label">一网回水温度：</div>
-						<div class="text">24℃</div>
+					<div class="view-div-content">
+						<div>路线信息</div>
+						<div class="mt-1 pl-4">
+							<p v-for="(point, index) in item.loopViaPointInfo" :key="index">
+								{{ point.position }}
+							</p>
+						</div>
+						<div class="mt-1">实时温度</div>
+						<el-table :data="[{
+							outTemperature1: item.outTemperature1,
+							inTemperature1: item.inTemperature1,
+							outTemperature2: item.outTemperature2,
+							inTemperature2: item.inTemperature2
+						}]" :border="true" class="mt-1">
+							<el-table-column label="一网供水温度" prop="outTemperature1" :show-overflow-tooltip="true" />
+							<el-table-column label="一网回水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
+							<el-table-column label="二网供水温度" prop="outTemperature2" :show-overflow-tooltip="true" />
+							<el-table-column label="二网回水温度" prop="inTemperature2" :show-overflow-tooltip="true" />
+						</el-table>
+						<div class="mt-1">实时压力(MPa)</div>
+						<el-table :data="[{
+							outPressure1: item.outPressure1,
+							inPressure1: item.inPressure1,
+							outPressure2: item.outPressure2,
+							inPressure2: item.inPressure2,
+						}]" :border="true" class="mt-1">
+							<el-table-column label="一网供水压力" prop="outPressure1" :show-overflow-tooltip="true" />
+							<el-table-column label="一网回水压力" prop="inPressure1" :show-overflow-tooltip="true" />
+							<el-table-column label="二网供水压力" prop="outPressure2" :show-overflow-tooltip="true" />
+							<el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
+						</el-table>
 					</div>
 				</div>
 			</div>
@@ -65,7 +78,6 @@ onMounted(() => {
 	getThemeConfig = store.state.themeConfig.themeConfig;
 	map = new BMapGL.Map(mapRef.value, {
 	});
-
 
 	map.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件
 	map.addControl(new BMapGL.ZoomControl()); // 添加缩放控件
@@ -106,7 +118,7 @@ onMounted(() => {
 			})
 			console.log(arr)
 			arr.forEach((point: any) => {
-				let item = heatList.value.find((item: any) => (point.lat === item.lat && point.lng === item.lnt))
+				let item = heatList.value.find((item: any) => (point.lat === item.stationInfo.lat && point.lng === item.stationInfo.lnt))
 				console.log(item)
 				viewArr.push(item)
 			})
@@ -214,24 +226,49 @@ const renderStation = (list: any[]) => {
 	top: 10px;
 	right: 10px;
 	z-index: 999;
-	display: flex;
+	// display: flex;
 	&-div {
-		width: 200px;
-		padding: 10px;
+		width: 350px;
+		color: #000;
 		background-color: #fff;
+		font-size: 12px;
 		&:not(:first-child) {
-			margin-left: 10px;
+			margin-top: 10px;
 		}
-		&-item {
-			display: flex;
-			align-items: center;
-			.label {
-				width: 100px;
+		&-head {
+			background-color: #f2f2f2;
+			padding: 5px 10px;
+			.title {
+				font-size: 13px;
+				font-weight: bold;
 			}
-			.text {
-				flex: 1;
+			.info {
+				display: flex;
+				align-items: center;
+				margin-top: 4px;
 			}
+		}
+		&-content {
+			padding: 10px;
 		}
 	}
+}
+
+:deep(.el-table) {
+	tr {
+		th {
+			background-color: #efefef;
+		}
+	}
+}
+:deep(.el-table__cell) {
+	padding: 2px 0;
+}
+:deep(.cell) {
+	padding: 0 2px;
+	line-height: 14px;
+	font-weight: 400;
+	font-size: 12px;
+	color: #000;
 }
 </style>

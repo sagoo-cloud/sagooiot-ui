@@ -4,7 +4,7 @@ let BMapGL = (window as any).BMapGL;
 export function setMarker(markers: any[], map: any) {
   const points: any = []
   markers.forEach((item) => {
-    const { lat, lnt: lng } = item;
+    const { lat, lnt: lng } = item.stationInfo;
     const point = new BMapGL.Point(lng, lat);
     points.push(point)
 
