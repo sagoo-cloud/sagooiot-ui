@@ -47,13 +47,13 @@
 							</el-icon>
 							重置
 						</el-button> -->
-						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+						<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
 							新增告警
 						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenLevel">
+						<el-button size="default" type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
 							<el-icon>
 								<ele-Setting />
 							</el-icon>
@@ -70,7 +70,7 @@
 							<div class="ant-card">
 								<div class="ant-card-body">
 									<div class="pro-table-card-item">
-										<div class="card-item-avatar">
+										<div class="card-item-avatar" v-col="'image'">
 											<img
 												width="88"
 												height="88"
@@ -80,12 +80,12 @@
 										</div>
 										<div class="card-item-body">
 											<div class="card-item-header">
-												<div class="">
+												<div class="" v-col="'name'">
 													<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.name }}</div>
 													<div class="card-item-header-name" style="display: none"></div>
 												</div>
 											</div>
-											<div class="card-item-content">
+											<div class="card-item-content" v-col="'alarm'">
 												<div>
 													<label>触发：</label>
 													<div class="">
@@ -102,7 +102,7 @@
 										</div>
 									</div>
 
-									<div class="card-state success" v-if="item.status == 1">
+									<div class="card-state success" v-if="item.status == 1" v-col="'liststatus'">
 										<div class="card-state-content">
 											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper">
 												<span class="ant-badge-status-dot ant-badge-status-success"></span>
@@ -110,7 +110,7 @@
 											</span>
 										</div>
 									</div>
-									<div class="card-state error" v-if="item.status == 0">
+									<div class="card-state error" v-if="item.status == 0"  v-col="'liststatus'">
 										<div class="card-state-content">
 											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper"
 												><span class="ant-badge-status-dot ant-badge-status-error"></span><span class="ant-badge-status-text">未启用</span></span
@@ -120,7 +120,7 @@
 								</div>
 							</div>
 							<div class="card-tools">
-								<div class="card-button" @click="onOpenEdit(item)">
+								<div class="card-button" @click="onOpenEdit(item)"  v-auth="'edit'">
 									<el-button size="default" type="primary" class="ml10" text bg>
 										<el-icon>
 											<ele-Edit />
@@ -130,7 +130,7 @@
 								</div>
 
 
-								<div class="card-button" v-if="item.status==0">
+								<div class="card-button" v-if="item.status==0" v-auth="'status'">
 									<el-button size="default" type="warning" text bg  @click="onActionStatus(item)">
 										<el-icon>
 											<ele-Check />
@@ -139,7 +139,7 @@
 									</el-button>
 								</div>
 
-                <div class="card-button" v-if="item.status==1">
+                <div class="card-button" v-if="item.status==1"  v-auth="'status'">
 									<el-button size="default" type="info" text bg  @click="onActionStatus(item)">
 										<el-icon>
 											<ele-Close />
@@ -150,7 +150,7 @@
 
 
 
-								<div class="card-button" @click="onRowDel(item)" >
+								<div class="card-button" @click="onRowDel(item)"  v-auth="'del'">
 									<el-button size="default" type="danger" text bg>
 										<el-icon>
 											<ele-Delete />

@@ -144,12 +144,11 @@ export default defineComponent({
 
 			if (row) {
 				state.ruleForm = row;
-				if(row.dataTemplateBusi){
-					state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
-						return val.busiTypes
-						})
-
-				}
+				// if(row.dataTemplateBusi){
+				// 	state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
+				// 		return val.busiTypes
+				// 	})
+				// }
 			}
 			state.isShowDialog = true;
 		};
