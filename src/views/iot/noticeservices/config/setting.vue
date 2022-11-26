@@ -5,7 +5,7 @@
 				<el-form :model="tableData.param" ref="queryRef" :inline="true">
 					<el-form-item label="配置名称" prop="name">
 						<el-input
-							v-model="tableData.param.name"
+							v-model="tableData.param.title"
 							placeholder="请输入配置名称"
 							clearable
 							size="default"
@@ -15,7 +15,7 @@
 					</el-form-item>
 					<el-form-item label="通知方式" prop="name">
 						<el-input
-							v-model="tableData.param.triggerType"
+							v-model="tableData.param.sendGateway"
 							placeholder="请输入通知方式"
 							clearable
 							size="default"
@@ -153,9 +153,9 @@ import { useRoute } from 'vue-router';
 // 定义接口来定义对象的类型
 interface TableDataRow {
 	id: number;
-	name: string;
-	key: string;
-	createBy: string;
+	title: string;
+	sendGateway: string;
+	type: string;
 }
 interface TableDataState {
 	ids: number[];
@@ -166,9 +166,9 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-			name: string;
-			level: number;
-			triggerType: number;
+			title: string;
+			sendGateway: string;
+			types: string;
 		};
 	};
 }
@@ -198,7 +198,7 @@ export default defineComponent({
 					pageSize: 20,
 					title: '',
 					sendGateway: '',
-					type: '',
+					types: '',
 				},
 			},
 		});
@@ -231,7 +231,7 @@ export default defineComponent({
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除模型：“${row.name}”，是否继续?`;
+				msg = `此操作将永久删除模型：“${row.title}”，是否继续?`;
 				ids = row.id;
 			} else {
 				ids = state.ids;

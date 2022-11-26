@@ -5,7 +5,7 @@
 				<el-form :model="tableData.param" ref="queryRef" :inline="true">
 					<el-form-item label="配置名称" prop="name">
 						<el-input
-							v-model="tableData.param.name"
+							v-model="tableData.param.title"
 							placeholder="请输入配置名称"
 							clearable
 							size="default"
@@ -13,16 +13,7 @@
 							@keyup.enter.native="dataList"
 						/>
 					</el-form-item>
-					<el-form-item label="通知方式" prop="name">
-						<el-input
-							v-model="tableData.param.triggerType"
-							placeholder="请输入通知方式"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item>
+					
 
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="dataList">
@@ -103,7 +94,7 @@
 										</el-icon>
 										调试
 									</el-button>
-								</div>
+								</div>-->
 
 								<div class="card-button" @click="onOpenEdit(item)">
 									<el-button size="default" type="info" text bg>
@@ -112,7 +103,7 @@
 										</el-icon>
 										通知记录
 									</el-button>
-								</div> -->
+								</div> 
 
 								<div class="card-button" @click="onRowDel(item)">
 									<el-button size="default" type="danger" text bg>
@@ -153,9 +144,9 @@ import { useRoute } from 'vue-router';
 // 定义接口来定义对象的类型
 interface TableDataRow {
 	id: number;
-	name: string;
-	key: string;
-	createBy: string;
+	title: string;
+	types: string;
+	sendGateway: string;
 }
 interface TableDataState {
 	ids: number[];
@@ -166,9 +157,9 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-			name: string;
-			level: number;
-			triggerType: number;
+			title: string;
+			sendGateway: string;
+			types: number;
 		};
 	};
 }
@@ -198,7 +189,7 @@ export default defineComponent({
 					pageSize: 20,
 					title: '',
 					sendGateway: '',
-					type: '',
+					types: '',
 				},
 			},
 		});

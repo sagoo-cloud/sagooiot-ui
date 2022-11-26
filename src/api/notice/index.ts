@@ -11,7 +11,7 @@ export default {
   template: {
     getList: (params: object) => get("/notice/template/list", params),
     add: (data: object) => post("/notice/template/add", data),
-    delete: (ids: number) => del("/notice/template/del", { ids }),
+    delete: (ids: number) => del("/notice/template/delete", { ids }),
     edit: (data: object) => put("/notice/template/edit", data),
     detail: (id: number) => get("/notice/template/get", { id }),
   },

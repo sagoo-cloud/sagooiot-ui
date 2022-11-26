@@ -6,15 +6,29 @@
 					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
 				</el-form-item>
 
-				<el-form-item label="配置类型" prop="types">
+				<el-form-item label="通知配置" prop="configId">
+       
+						<el-select v-model="ruleForm.configId" placeholder="请选择通知配置" class="w100">
+						<el-option
+						v-for="item in configData"
+						:key="item.id"
+						:label="item.title"
+						:value="item.id"
+						/>
+					</el-select>
+					</el-form-item> 
+
+				<!-- <el-form-item label="配置类型" prop="types">
 					<el-radio-group v-model="ruleForm.types">
 						<el-radio label="1"  value="1">即时发送</el-radio>
 						<el-radio label="2" value="2">预约发送</el-radio>
 					</el-radio-group>
-				</el-form-item>
+				</el-form-item> -->
 
 			
-
+				<el-form-item label="模板内容" prop="content">
+          <el-input v-model="ruleForm.content" type="textarea" placeholder="请输入内容"></el-input>
+        </el-form-item>
 				
 
 			</el-form>
@@ -38,9 +52,11 @@ import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right } from '@element-p
 
 interface RuleFormState {
 	id: number;
-	name: string;
-	type: string;
+	title: string;
+	types: string;
 	sendGateway:string;
+	content:string;
+	configId:string;
 	
 	
 }
@@ -48,6 +64,8 @@ interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
 	rules: {};
+	configData: {};
+	id: number;
 
 }
 
@@ -60,6 +78,7 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			id: 0,
+			configData:[],
 			isShowDialog: false,
 		
 			
@@ -68,11 +87,16 @@ export default defineComponent({
 				title: '',
 				types: "1",
 				sendGateway:'',
+				configId:'',
+				content:'',
+
 				
 			},
 			rules: {
 				title: [{ required: true, message: '配置名称不能为空', trigger: 'blur' }],
-				type: [{ required: true, message: '配置类型不能为空', trigger: 'blur' }],
+				configId: [{ required: true, message: '通知配置不能为空', trigger: 'blur' }],
+				types: [{ required: true, message: '配置类型不能为空', trigger: 'blur' }],
+				content: [{ required: true, message: '模板内容不能为空', trigger: 'blur' }],
 				
 			},
 		});
@@ -83,6 +107,13 @@ export default defineComponent({
 			if (row) {
 				state.ruleForm = row;
 			}
+
+			api.config.getList({ sendGateway: type }).then((res: any) => {
+			state.configData = res.Data || [];
+			});
+
+
+
 			state.ruleForm.sendGateway=type
 			state.isShowDialog = true;
 		};
@@ -96,6 +127,8 @@ export default defineComponent({
 				title: '',
 				types: "1",
 				sendGateway:'',
+				configId:'',
+				content:'',
 			
 			};
 		};
