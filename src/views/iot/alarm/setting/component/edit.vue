@@ -272,7 +272,6 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.ruleForm.triggerCondition = state.requestParams;
-					1
 					if (state.ruleForm.id !== 0) {
 						//修改
 						alarm.common.edit(state.ruleForm).then(() => {
