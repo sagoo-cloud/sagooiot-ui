@@ -40,7 +40,10 @@
 		<el-row :gutter="15" class="home-card-three">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 				<div class="home-card-item" style="height: auto;">
-					<div class="home-card-item-title">告警信息列表</div>
+					<div class="home-card-item-title">
+						<span>告警信息列表</span>
+						<el-button size="small" text type="primary" @click="toMore()">更多信息</el-button>
+					</div>
 					  <el-table :data="tableData.data" style="width: 100%" v-loading="loading">
 							<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
 							<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
@@ -72,7 +75,7 @@
 								</template>
 							</el-table-column>
 					</el-table>
-					<pagination v-if="tableData.total" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getAlarmList()" />
+					<!-- <pagination v-if="tableData.total" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getAlarmList()" /> -->
 				</div>
 			</el-col>
 		</el-row>
@@ -85,6 +88,7 @@
 <script lang="ts">
 import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated } from 'vue';
 import * as echarts from 'echarts';
+import { useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
 
 import api from '/@/api/datahub';
@@ -109,6 +113,7 @@ export default defineComponent({
 		const homePieRef = ref();
 		const homeBarRef = ref();
 		const store = useStore();
+		const router = useRouter();
 		const state = reactive({
 			loading: false,
 			tableData: {
@@ -427,6 +432,10 @@ export default defineComponent({
 		const onOpenEditDic = (row: any) => {
 			editDicRef.value.openDialog(row);
 		};
+		// 告警信息-更多信息
+		const toMore = () => {
+			router.push({ path: '/alarm/log'});
+		};
 		// 页面加载时
 		onMounted(() => {
 			initEchartsResize();
@@ -471,6 +480,7 @@ export default defineComponent({
 			homeBarRef,
 			detailRef,
 			editDicRef,
+			toMore,
 			onOpenEditDic,
 			getAlarmList,
 			onOpenDetailDic,
@@ -516,6 +526,15 @@ $homeNavLengh: 8;
 				font-weight: bold;
 				height: 30px;
 			}
+		}
+	}
+	.home-card-three {
+		.home-card-item-title {
+			display: flex;
+			justify-content: space-between;
+			// span:nth-child(2) {
+			// 	color: #409eff;
+			// }
 		}
 	}
 	.home-card-one {
