@@ -69,6 +69,7 @@ export default {
       getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),
       getStatisticsTotalData: (params: object) => get('/statistics/city/data', params),
       getStatisticsPieData: (params: object) => get('/statistics/tempering/ratio/data', params),
+      getStatisticsOverview: (params: object) => get('/statistics/overview', params),
    },
    iotManage:{
       getOverviewData: () => get('/statistics/thing/overview'),

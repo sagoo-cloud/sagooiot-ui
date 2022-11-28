@@ -99,8 +99,6 @@ let global: any = {
 	dispose: [null, '', undefined]
 };
 
-// api.log.getList
-
 export default defineComponent({
 	name: 'home',
 	components: { EditDic, DetailDic },
