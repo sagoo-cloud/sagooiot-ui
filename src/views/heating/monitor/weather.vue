@@ -151,6 +151,7 @@ export default defineComponent({
         state.averageTemWind = [];
         state.foreCastAvgInfoWind = [];
         if (Info && Info.length) {
+          state.xAxisWind = [];
           Info.forEach((i: any) => {
             state.xAxisWind.push(i.time);
             state.temWind.push(i.value);
@@ -165,10 +166,12 @@ export default defineComponent({
         }
         if([2, 3].indexOf(state.windpowerType) > -1) {
           // 周数据、月数据
+          state.xAxisWind = [];
           ForeCastInfo.forEach((i: any) => {
             // state.xAxisWind.push(i.time);
             // state.temWind.push('-');
             state.foreCastInfoWind.push(i.value);
+            state.xAxisWind.push(i.time);
           })
           ForeCastAvgInfo.forEach((i: any) => {
             state.foreCastAvgInfoWind.push(i.value);
@@ -190,6 +193,7 @@ export default defineComponent({
         state.averageTem = [];
         state.foreCastAvgInfoTem = [];
         if (Info && Info.length) {
+          state.xAxis = [];
           Info.forEach((i: any) => {
             state.xAxis.push(i.time);
             state.tem.push(i.value);
@@ -205,9 +209,11 @@ export default defineComponent({
         
         if([2, 3].indexOf(state.temperatureType) > -1) {
           // 周数据、月数据
-          ForeCastInfo.forEach((i: any) => {
+          state.xAxis = [];
+          ForeCastInfo.forEach((i:any) => {
             // state.xAxis.push(i.time);
             // state.tem.push('-');
+            state.xAxis.push(i.time);
             state.foreCastInfoTem.push(i.value);
           })
           ForeCastAvgInfo.forEach((i: any) => {

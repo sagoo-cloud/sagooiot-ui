@@ -69,5 +69,11 @@ export default {
       getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),
       getStatisticsTotalData: (params: object) => get('/statistics/city/data', params),
       getStatisticsPieData: (params: object) => get('/statistics/tempering/ratio/data', params),
+   },
+   iotManage:{
+      getOverviewData: () => get('/statistics/thing/overview'),
+      getAlarmList: (params: object) => get('/alarm/log/list', params),
+      getAlarmDetail: (id: number) => get('/alarm/log/detail', { id }),
+      getAlarmHandle: (data: object) => post('/alarm/log/handle', data),
    }
 }

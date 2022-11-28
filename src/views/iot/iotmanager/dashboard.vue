@@ -39,29 +39,46 @@
 		</el-row>
 		<el-row :gutter="15" class="home-card-three">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-				<div class="home-card-item">
+				<div class="home-card-item" style="height: auto;">
 					<div class="home-card-item-title">告警信息列表</div>
-					  <el-table :data="tableData" style="width: 100%" v-loading="loading">
-						<el-table-column prop="date" label="告警时间" align="center" />
-						<el-table-column prop="name" label="告警名称信息" align="center" />
-						<el-table-column prop="site" label="来源" align="center" />
-						<el-table-column prop="road" label="类型" align="center" />
-						<el-table-column prop="status" label="状态" align="center" width="100">
-							<template #default="scope">
-								<el-tag :type="scope.row.status ? 'success' : 'danger'" size="small" class="mr6">{{scope.row.status?'已处理':'未处理'}}</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column label="操作" align="center">
-							<template #default="scope">
-								<el-button size="small" type="primary" link>处理</el-button>
-								<el-button size="small" type="warning" link>查看详情</el-button>
-							</template>
-						</el-table-column>
+					  <el-table :data="tableData.data" style="width: 100%" v-loading="loading">
+							<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
+							<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
+								<template #default="scope">
+									<span v-if="scope.row.type == 1">规则告警</span>
+									<span v-else>设备自主告警</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true"  v-col="'ruleName'"/>
+							<el-table-column label="规则级别" prop="alarmLevel" :show-overflow-tooltip="true" v-col="'alarmLevel'">
+								<template #default="scope">
+									{{ scope.row.alarmLevel.name }}
+								</template>
+							</el-table-column>
+							<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true" v-col="'productKey'"/>
+							<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true" v-col="'deviceKey'" />
+
+							<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
+								<template #default="scope">
+									<el-tag type="success" size="small" v-if="scope.row.status">已处理</el-tag>
+									<el-tag type="info" size="small" v-else>未处理</el-tag>
+								</template>
+							</el-table-column>
+							<el-table-column prop="createdAt" label="告警时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
+							<el-table-column label="操作" width="150" align="center" fixed="right" v-col="'handle'">
+								<template #default="scope">
+									<el-button v-auth="'detail'" size="small" text type="primary" @click="onOpenDetailDic(scope.row)">详情</el-button>
+									<el-button v-auth="'edit'" size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-if="scope.row.status == 0">处理</el-button>
+								</template>
+							</el-table-column>
 					</el-table>
-					<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+					<pagination v-if="tableData.total" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getAlarmList()" />
 				</div>
 			</el-col>
 		</el-row>
+		
+		<EditDic ref="editDicRef" @dataList="getAlarmList" />
+		<DetailDic ref="detailRef" @dataList="getAlarmList" />
 	</div>
 </template>
 
@@ -70,66 +87,47 @@ import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onA
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 
+import api from '/@/api/datahub';
+
+import EditDic from '../alarm/log/component/edit.vue';
+import DetailDic from '../alarm/log/component/detail.vue';
+
 let global: any = {
 	homeChartOne: null,
 	homeChartTwo: null,
 	homeCharThree: null,
-	dispose: [null, '', undefined],
+	dispose: [null, '', undefined]
 };
 
+// api.log.getList
 
 export default defineComponent({
 	name: 'home',
+	components: { EditDic, DetailDic },
 	setup() {
+		const editDicRef = ref();
+		const detailRef = ref();
 		const homeLineRef = ref();
 		const homePieRef = ref();
 		const homeBarRef = ref();
 		const store = useStore();
 		const state = reactive({
 			loading: false,
-			params: {
-				total: 4,
-				pageNum: 1,
-				pageSize: 10
+			tableData: {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					pageSize: 10,
+					status: '',
+					dateRange: [],
+				},
 			},
-			tableData: [
-				{
-					date: '2016-05-03 12:00',
-					name: '设备PC31232上线告警',
-					site: 'xxxxxx设备制造有限公司',
-					road: '主二次',
-					status: 0,
-					address: 'No. 189, Grove St, Los Angeles',
-				},
-				{
-					date: '2016-05-02 09:30',
-					name: '设备PC31232上线告警',
-					site: 'xxxxxx设备制造有限公司',
-					road: 'PC31232回路',
-					status: 1,
-					address: 'No. 189, Grove St, Los Angeles',
-				},
-				{
-					date: '2016-05-04 06:56',
-					name: '设备PC31232上线告警',
-					site: 'xxxxxx设备制造有限公司',
-					road: '主二次',
-					status: 0,
-					address: 'No. 189, Grove St, Los Angeles',
-				},
-				{
-					date: '2016-05-01 15:56',
-					name: '设备PC31232上线告警',
-					site: 'xxxxxx设备制造有限公司',
-					road: '主二次',
-					status: 1,
-					address: 'No. 189, Grove St, Los Angeles',
-				},
-			],
 			homeOne: [
 				{
-					num1: '125,12',
-					num2: '+99',
+					num1: '0',
+					num2: '0',
 					num3: '产品数',
 					num4: 'icon-zidingyibuju',
 					color1: '#6690F9',
@@ -137,8 +135,8 @@ export default defineComponent({
 					color3: '--el-color-warning',
 				},
 				{
-					num1: '125,12',
-					num2: '离线 232',
+					num1: '0',
+					num2: '离线 0',
 					num3: '设备数',
 					num4: 'icon-putong',
 					color1: '#FF6462',
@@ -146,8 +144,8 @@ export default defineComponent({
 					color3: '--el-color-primary',
 				},
 				{
-					num1: '653,33',
-					num2: '+42.32',
+					num1: '0',
+					num2: '0',
 					num3: '今日设备消息量',
 					num4: 'icon-shidu',
 					color1: '#6690F9',
@@ -155,8 +153,8 @@ export default defineComponent({
 					color3: '--el-color-success',
 				},
 				{
-					num1: '125,65',
-					num2: ' -17.32',
+					num1: '0',
+					num2: '0',
 					num3: '设备报警量',
 					num4: 'icon-zaosheng',
 					color1: '#6690F9',
@@ -170,6 +168,11 @@ export default defineComponent({
 				bgColor: '',
 				color: '#303133',
 			},
+			lineChartXAxisDat: [],
+			lineChartMsgTotalData: [],
+			lineChartAlarmTotalData: [],
+			pieChartLegend: [],
+			pieChartData: []
 		});
 		// 折线图
 		const initLineChart = () => {
@@ -186,14 +189,28 @@ export default defineComponent({
 				tooltip: { trigger: 'axis' },
 				legend: { data: ['消息量', '预警量'], right: 0 },
 				xAxis: {
-					data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+					data: state.lineChartXAxisData
 				},
 				yAxis: [
 					{
 						type: 'value',
 						name: '条数',
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
+								axisLabel: {
+						margin: 2,
+						formatter: function (value, index) {
+							if (value >= 10000 && value < 10000000) {
+								value = value / 10000 + "W";
+							} else if (value >= 10000000) {
+								value = value / 10000000 + "KW";
+							}
+							return value;
+						}
+        			},
 					},
+			
+
+
 				],
 				series: [
 					{
@@ -202,7 +219,7 @@ export default defineComponent({
 						symbolSize: 6,
 						symbol: 'circle',
 						smooth: true,
-						data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
+						data: state.lineChartMsgTotalData,
 						lineStyle: { color: '#fe9a8b' },
 						itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
 						areaStyle: {
@@ -218,7 +235,7 @@ export default defineComponent({
 						symbolSize: 6,
 						symbol: 'circle',
 						smooth: true,
-						data: [0, 24.1, 7.2, 15.5, 42.4, 42.4, 42.4, 24.1, 7.2, 15.5, 42.4, 0],
+						data: state.lineChartAlarmTotalData,
 						lineStyle: { color: '#9E87FF' },
 						itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
 						areaStyle: {
@@ -257,8 +274,8 @@ export default defineComponent({
 		const initPieChart = () => {
 			if (!global.dispose.some((b: any) => b === global.homeChartTwo)) global.homeChartTwo.dispose();
 			global.homeChartTwo = <any>echarts.init(homePieRef.value, state.charts.theme);
-			var getname = ['提示', '建议', '警告', '严重警告', '故障'];
-			var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
+			var getname = state.pieChartLegend;
+			var getvalue = state.pieChartData;
 			var data = [];
 			for (var i = 0; i < getname.length; i++) {
 				data.push({ name: getname[i], value: getvalue[i] });
@@ -338,137 +355,6 @@ export default defineComponent({
 			(<any>global.homeChartTwo).setOption(option);
 			(<any>state.myCharts).push(global.homeChartTwo);
 		};
-		// 柱状图
-		const initBarChart = () => {
-			if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
-			global.homeCharThree = <any>echarts.init(homeBarRef.value, state.charts.theme);
-			const option = {
-				backgroundColor: state.charts.bgColor,
-				title: {
-					text: '供热监测',
-					x: 'left',
-					textStyle: { fontSize: '15', color: state.charts.color },
-				},
-				tooltip: { trigger: 'axis' },
-				legend: { data: ['供温', '回温', '压力值(Mpa)'], right: 0 },
-				grid: { top: 70, right: 80, bottom: 30, left: 80 },
-				xAxis: [
-					{
-						type: 'category',
-						data: ['1km', '2km', '3km', '4km', '5km', '6km'],
-						boundaryGap: true,
-						axisTick: { show: false },
-					},
-				],
-				yAxis: [
-					{
-						name: '供回温度(℃）',
-						nameLocation: 'middle',
-						nameTextStyle: { padding: [3, 4, 50, 6] },
-						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
-						axisLine: { show: false },
-						axisTick: { show: false },
-						axisLabel: { color: state.charts.color, formatter: '{value} ' },
-					},
-					{
-						name: '压力值(Mpa)',
-						nameLocation: 'middle',
-						nameTextStyle: { padding: [50, 4, 5, 6] },
-						splitLine: { show: false },
-						axisLine: { show: false },
-						axisTick: { show: false },
-						axisLabel: { color: state.charts.color, formatter: '{value} ' },
-					},
-				],
-				series: [
-					{
-						name: '供温',
-						type: 'line',
-						smooth: true,
-						showSymbol: true,
-						// 矢量画五角星
-						symbol: 'path://M150 0 L80 175 L250 75 L50 75 L220 175 Z',
-						symbolSize: 12,
-						yAxisIndex: 0,
-						areaStyle: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: 'rgba(250,180,101,0.3)' },
-								{ offset: 1, color: 'rgba(250,180,101,0)' },
-							]),
-							shadowColor: 'rgba(250,180,101,0.2)',
-							shadowBlur: 20,
-						},
-						itemStyle: { color: '#FF8000' },
-						// data中可以使用对象，value代表相应的值，另外可加入自定义的属性
-						data: [
-							{ value: 50, stationName: 's1' },
-							{ value: 50, stationName: 's2' },
-							{ value: 60, stationName: 's3' },
-							{ value: 50, stationName: 's4' },
-							{ value: 90, stationName: 's5' },
-							{ value: 35, stationName: 's6' },
-						],
-					},
-					{
-						name: '回温',
-						type: 'line',
-						smooth: true,
-						showSymbol: true,
-						symbol: 'emptyCircle',
-						symbolSize: 12,
-						yAxisIndex: 0,
-						areaStyle: {
-							color: new echarts.graphic.LinearGradient(
-								0,
-								0,
-								0,
-								1,
-								[
-									{ offset: 0, color: 'rgba(199, 237, 250,0.5)' },
-									{ offset: 1, color: 'rgba(199, 237, 250,0.2)' },
-								],
-								false
-							),
-						},
-						itemStyle: {
-							color: '#3bbc86',
-						},
-						data: [
-							{ value: 31, stationName: 's1' },
-							{ value: 36, stationName: 's2' },
-							{ value: 54, stationName: 's3' },
-							{ value: 24, stationName: 's4' },
-							{ value: 73, stationName: 's5' },
-							{ value: 22, stationName: 's6' },
-						],
-					},
-					{
-						name: '压力值(Mpa)',
-						type: 'bar',
-						barWidth: 30,
-						yAxisIndex: 1,
-						itemStyle: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-								{ offset: 0, color: 'rgba(108,80,243,0.3)' },
-								{ offset: 1, color: 'rgba(108,80,243,0)' },
-							]),
-							//柱状图圆角
-							borderRadius: [30, 30, 0, 0],
-						},
-						data: [
-							{ value: 11, stationName: 's1' },
-							{ value: 34, stationName: 's2' },
-							{ value: 54, stationName: 's3' },
-							{ value: 39, stationName: 's4' },
-							{ value: 63, stationName: 's5' },
-							{ value: 24, stationName: 's6' },
-						],
-					},
-				],
-			};
-			(<any>global.homeCharThree).setOption(option);
-			(<any>state.myCharts).push(global.homeCharThree);
-		};
 		// 批量设置 echarts resize
 		const initEchartsResizeFun = () => {
 			nextTick(() => {
@@ -483,9 +369,71 @@ export default defineComponent({
 		const initEchartsResize = () => {
 			window.addEventListener('resize', initEchartsResizeFun);
 		};
+		const getOverviewData = () => {
+			api.iotManage.getOverviewData().then((res:any) => {
+				console.log(res)
+				const { overview, device, alarmLevel } = res;
+				// overview
+					// "deviceTotal": 8, //设备总量
+					// "deviceOffline": 4, //离线设备数量
+					// "productTotal": 6, //产品总量
+					// "productAdded": 0, //今日产品增量
+					// "msgTotal": 107246, //设备消息总量
+					// "msgAdded": 7391, //今日设备消息增量
+					// "alarmTotal": 43, //设备报警总量
+					// "alarmAdded": 0 //今日设备报警增量
+				state.homeOne[0].num1 = overview.productTotal;
+				state.homeOne[0].num2 = `+${overview.productAdded}`;
+				state.homeOne[1].num1 = overview.deviceTotal;
+				state.homeOne[1].num2 = `离线 ${overview.deviceOffline}`;
+				state.homeOne[2].num1 = overview.msgTotal;
+				state.homeOne[2].num2 = `+${overview.msgAdded}`;
+				state.homeOne[3].num1 = overview.alarmTotal;
+				state.homeOne[3].num2 = `${overview.alarmAdded}`;
+
+				// device
+					// msgTotal 设备消息量月度统计
+					// alarmTotal 设备告警量月度统计
+				state.lineChartMsgTotalData = [];
+				state.lineChartAlarmTotalData = [];
+				state.lineChartXAxisData = Object.keys(device.msgTotal).map((item: any) => {
+					state.lineChartMsgTotalData.push(device.msgTotal[item]);
+					state.lineChartAlarmTotalData.push(device.alarmTotal[item]);
+					return `${item}月`
+				})
+
+				// alarmLevel
+					// "level": 4, //级别
+					// "name": "一般", //级别名称
+					// "num": 43, //该级别日志数量
+					// "ratio": 100 //该级别日志数量占比(百分比)
+				state.pieChartLegend = [];
+				alarmLevel.map((item: any) => {
+					state.pieChartLegend.push(item.name)
+					state.pieChartData.push(item.ratio)
+				})
+			})
+		};
+		const getAlarmList = () => {
+			api.iotManage.getAlarmList(state.tableData.param).then((res: any) => {
+				console.log(res)
+				state.tableData.data = res.list;
+				state.tableData.total = res.Total;
+			})
+		}
+		//打开详情页
+		const onOpenDetailDic = (row: any) => {
+			detailRef.value.openDialog(row);
+		};
+		// 打开修改产品弹窗
+		const onOpenEditDic = (row: any) => {
+			editDicRef.value.openDialog(row);
+		};
 		// 页面加载时
 		onMounted(() => {
 			initEchartsResize();
+			getOverviewData();
+			getAlarmList();
 		});
 		// 由于页面缓存原因，keep-alive
 		onActivated(() => {
@@ -512,9 +460,6 @@ export default defineComponent({
 					setTimeout(() => {
 						initPieChart();
 					}, 700);
-					setTimeout(() => {
-						initBarChart();
-					}, 1000);
 				});
 			},
 			{
@@ -526,6 +471,12 @@ export default defineComponent({
 			homeLineRef,
 			homePieRef,
 			homeBarRef,
+			detailRef,
+			editDicRef,
+			onOpenEditDic,
+			getAlarmList,
+			onOpenDetailDic,
+			getOverviewData,
 			...toRefs(state),
 		};
 	},
