@@ -50,6 +50,45 @@
             </el-table>
           </div>
         </div> -->
+        <div class="view-div" v-for="(item, index) in viewList" :key="index">
+          <div class="view-div-head">
+            <div class="title">{{ item.name }}换热站</div>
+            <div class="info">
+              <div class="">
+                换热站编号：{{ item.code }}
+              </div>
+            </div>
+          </div>
+          <div class="view-div-content">
+            <div>路线信息</div>
+            <div class="mt-1 pl-4">xxx
+            </div>
+            <div class="mt-1">实时温度</div>
+            <el-table :data="[{
+							outTemperature1: item.outTemperature1,
+							inTemperature1: item.inTemperature1,
+							outTemperature2: item.outTemperature2,
+							inTemperature2: item.inTemperature2
+						}]" :border="true" class="mt-1">
+              <el-table-column label="一网供水温度" prop="outTemperature1" :show-overflow-tooltip="true" />
+              <el-table-column label="一网回水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
+              <el-table-column label="二网供水温度" prop="outTemperature2" :show-overflow-tooltip="true" />
+              <el-table-column label="二网回水温度" prop="inTemperature2" :show-overflow-tooltip="true" />
+            </el-table>
+            <div class="mt-1">实时压力(MPa)</div>
+            <el-table :data="[{
+							outPressure1: item.outPressure1,
+							inPressure1: item.inPressure1,
+							outPressure2: item.outPressure2,
+							inPressure2: item.inPressure2,
+						}]" :border="true" class="mt-1">
+              <el-table-column label="一网供水压力" prop="outPressure1" :show-overflow-tooltip="true" />
+              <el-table-column label="一网回水压力" prop="inPressure1" :show-overflow-tooltip="true" />
+              <el-table-column label="二网供水压力" prop="outPressure2" :show-overflow-tooltip="true" />
+              <el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
+            </el-table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -91,22 +130,22 @@ onMounted(() => {
     });
   }
 
+  // 获取环路列表
+  api.loop.getList({
+    pageNum: 1,
+    pageSize: 50,
+    status: 1
+  }).then((res: any) => {
+    console.log(res.list)
+    // const list = res.filter((item: any) => item.loopViaPointInfo > 1)
+    // console.log(list)
+  });
   // 获取换热站列表
-  // api.heatStation.getAll().then((res: any) => {
-  //   console.log(res)
-  //   heatList.value = res
-  //   renderStation(res);
-  // });
   api.heatStation.getList({
     status: 1
   }).then((res: any) => {
-    console.log(res)
     heatList.value = res
     renderStation(res);
-  });
-  // 获取环路列表
-  api.loop.getList({ pageSize: 50, status: 1 }).then((res: any) => {
-    console.log(res);
   });
   // 地图缩放事件	
   // map.addEventListener('zoomstart', (e: any) => {
