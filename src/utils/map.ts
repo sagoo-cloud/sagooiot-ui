@@ -4,6 +4,44 @@ let BMapGL = (window as any).BMapGL;
 export function setMarker(markers: any[], map: any) {
   const points: any = []
   markers.forEach((item) => {
+    const { lat, lnt: lng } = item;
+    const point = new BMapGL.Point(lng, lat);
+    points.push(point)
+
+    const marker = new BMapGL.Marker(point);
+
+    map.addOverlay(marker);
+
+    marker.addEventListener("click", function () {
+      const infoWindow = new BMapGL.InfoWindow(
+        `
+      <div class="map-hover-box">
+        <div class="map-hover-title">换热站名称：${item.name}</div>
+        <div class="map-hover-row-item">
+          <div class="map-hover-label">换热站编号：</div>
+          <div class="map-hover-value">${item.code}</div>
+        </div>
+        <div class="map-hover-row-item">
+          <div class="map-hover-label">位置：</div>
+          <div class="map-hover-value">${item.position}</div>
+        </div>
+      </div>
+    `,
+        {
+          width: 200, // 信息窗口宽度
+          height: 100, // 信息窗口高度
+          title: item.stationName,
+        }
+      );
+      map.openInfoWindow(infoWindow, point); //开启信息窗口
+    });
+  });
+  return points
+}
+
+export function setMarker2(markers: any[], map: any) {
+  const points: any = []
+  markers.forEach((item) => {
     const { lat, lnt: lng } = item.stationInfo;
     const point = new BMapGL.Point(lng, lat);
     points.push(point)

@@ -5,7 +5,7 @@
 
       <!-- 显示弹层区域 -->
       <div class="view">
-        <div class="view-div" v-for="(item, index) in viewList" :key="index">
+        <!-- <div class="view-div" v-for="(item, index) in viewList" :key="index">
           <div class="view-div-head">
             <div class="title">{{ item.name }}环路</div>
             <div class="info">
@@ -49,7 +49,7 @@
               <el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
             </el-table>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -92,7 +92,15 @@ onMounted(() => {
   }
 
   // 获取换热站列表
-  api.heatStation.getAll().then((res: any) => {
+  // api.heatStation.getAll().then((res: any) => {
+  //   console.log(res)
+  //   heatList.value = res
+  //   renderStation(res);
+  // });
+  api.heatStation.getList({
+    status: 1
+  }).then((res: any) => {
+    console.log(res)
     heatList.value = res
     renderStation(res);
   });
@@ -118,7 +126,7 @@ onMounted(() => {
         }
       })
       arr.forEach((point: any) => {
-        let item = heatList.value.find((item: any) => (point.lat === item.stationInfo.lat && point.lng === item.stationInfo.lnt))
+        let item = heatList.value.find((item: any) => (point.lat === item.lat && point.lng === item.lnt))
         item && viewArr.push(item)
       })
       viewList.value = viewArr
@@ -168,7 +176,7 @@ const renderStation = (list: any[]) => {
 	border: none !important;
 	background: transparent !important;
 	color: #fff !important;
-	margin-top: 20px;
+	margin-top: 0;
 	margin-left: -20px;
 	// pointer-events: none;
 
@@ -177,10 +185,10 @@ const renderStation = (list: any[]) => {
 	}
 }
 
-.BMap_bubble_content,
-.BMap_bubble_center {
-	height: 150px !important;
-}
+// .BMap_bubble_content,
+// .BMap_bubble_center {
+// 	height: 150px !important;
+// }
 
 .BMap_bubble_content {
 	height: auto !important;
@@ -188,7 +196,10 @@ const renderStation = (list: any[]) => {
 	border-radius: 3px;
 }
 
-.BMap_bubble_top,
+// .BMap_bubble_top,
+// .BMap_bubble_bottom {
+// 	display: none !important;
+// }
 .BMap_bubble_bottom {
 	display: none !important;
 }
@@ -203,10 +214,13 @@ const renderStation = (list: any[]) => {
 		font-size: 14px;
 		font-weight: 500;
 	}
+	.map-hover-label {
+		white-space: nowrap;
+	}
 
 	.map-hover-row-item {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		margin-top: 4px;
 		line-height: 1.2;
 
