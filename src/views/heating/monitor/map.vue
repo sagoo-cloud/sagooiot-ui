@@ -131,14 +131,10 @@ onMounted(() => {
   }
 
   // 获取环路列表
-  api.loop.getList({
-    pageNum: 1,
-    pageSize: 50,
-    status: 1
-  }).then((res: any) => {
-    console.log(res.list)
-    // const list = res.filter((item: any) => item.loopViaPointInfo > 1)
-    // console.log(list)
+  api.heatStation.getAll().then((res: any) => {
+    const list = res.filter((item: any) => item.loopViaPointInfo > 1)
+    console.log(list)
+    //  setLine(list, map);
   });
   // 获取换热站列表
   api.heatStation.getList({
@@ -165,8 +161,7 @@ onMounted(() => {
         }
       })
       arr.forEach((point: any) => {
-        let item = heatList.value.find((item: any) => (point.lat === item.lat && point.lng === item.lnt))
-        item && viewArr.push(item)
+        viewArr.push(point.data)
       })
       viewList.value = viewArr
     } else {

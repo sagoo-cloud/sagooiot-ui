@@ -6,6 +6,7 @@ export function setMarker(markers: any[], map: any) {
   markers.forEach((item) => {
     const { lat, lnt: lng } = item;
     const point = new BMapGL.Point(lng, lat);
+    point.data = item
     points.push(point)
 
     const marker = new BMapGL.Marker(point);
