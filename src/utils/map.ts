@@ -40,18 +40,15 @@ export function setMarker(markers: any[], map: any) {
   return points
 }
 
-export function setMarker2(markers: any[], map: any) {
-  const points: any = []
-  markers.forEach((item) => {
-    const { lat, lnt: lng } = item.stationInfo;
-    const point = new BMapGL.Point(lng, lat);
-    points.push(point)
+export function setLine(lines: any[], map: any) {
+  lines.forEach((item) => {
+    const polyline = new BMapGL.Polyline(item.loopViaPointInfo.map((item: any) => {
+      return new BMapGL.Point(item.lnt, item.lat)
+    }), { strokeColor: "blue", strokeWeight: 10, strokeOpacity: 0.5 });   //创建折线
 
-    const marker = new BMapGL.Marker(point);
+    map.addOverlay(polyline);
 
-    map.addOverlay(marker);
-
-    marker.addEventListener("click", function () {
+    polyline.addEventListener("click", function (e: any) {
       const infoWindow = new BMapGL.InfoWindow(
         `
       <div class="map-hover-box">
@@ -77,11 +74,13 @@ export function setMarker2(markers: any[], map: any) {
         {
           width: 200, // 信息窗口宽度
           height: 100, // 信息窗口高度
-          title: item.stationName,
+          title: item.name,
         }
       );
-      map.openInfoWindow(infoWindow, point); //开启信息窗口
+      // map.closeInfoWindow()
+      setTimeout(() => {
+        map.openInfoWindow(infoWindow, e.latLng); //开启信息窗口
+      }, 100)
     });
   });
-  return points
 }

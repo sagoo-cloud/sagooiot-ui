@@ -98,7 +98,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch, nextTick } from 'vue';
 import api from '/@/api/heatStation';
-import { setMarker } from '/@/utils/map';
+import { setMarker, setLine } from '/@/utils/map';
 import { useStore } from '/@/store/index';
 
 const mapRef = ref();
@@ -132,9 +132,9 @@ onMounted(() => {
 
   // 获取环路列表
   api.heatStation.getAll().then((res: any) => {
-    const list = res.filter((item: any) => item.loopViaPointInfo > 1)
-    console.log(list)
-    //  setLine(list, map);
+    const list = res.filter((item: any) => item.loopViaPointInfo?.length > 1)
+    // console.log(list)
+    setLine(list, map);
   });
   // 获取换热站列表
   api.heatStation.getList({
