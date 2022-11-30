@@ -1,52 +1,51 @@
 <template>
-	<div class="system-dic-container data-overview">
-		<el-row :gutter="15" class="home-card-one">
-			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in dataOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
-				<div class="home-card-item">
-					<div class="item-header">
-						<img :src="isIsDark ? v.iconDark : v.icon" alt="">
-						<span>{{ v.title }}</span>
-					</div>
-					<div class="item-content w100" :class="` home-one-animation${k}`">
-						<p>
-							<span>{{ v.contentTitle1 }}</span>
-							<span>{{ v.val1 + v.unit1 }}</span>
-						</p>
-						<p>
-							<span>{{ v.contentTitle2 }}</span>
-							<span>{{ v.val2 + v.unit2 }}</span>
-						</p>
-					</div>
-				</div>
-			</el-col>
-		</el-row>
+  <div class="system-dic-container data-overview">
+    <el-row :gutter="15" class="home-card-one">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in dataOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
+        <div class="home-card-item">
+          <div class="item-header">
+            <img :src="isIsDark ? v.iconDark : v.icon" alt="">
+            <span>{{ v.title }}</span>
+          </div>
+          <div class="item-content w100" :class="` home-one-animation${k}`">
+            <p>
+              <span>{{ v.contentTitle1 }}</span>
+              <span>{{ v.val1 + v.unit1 }}</span>
+            </p>
+            <p>
+              <span>{{ v.contentTitle2 }}</span>
+              <span>{{ v.val2 + v.unit2 }}</span>
+            </p>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
 
-		<!-- 拓扑图 -->
-		
+    <!-- 拓扑图 -->
 
-		<el-row :gutter="15" class="home-card-one mt15">
-			<el-col :span="24">
-				<div class="home-card-item p20">
-					<div class="home-card-item-title">
-						<span>流程图</span>
-					</div>
-					<iframe src="https://zhgy.sagoo.cn/plugin/topo/?bgColor=ccc#/show/21" height="300" width="100%" frameborder="0" class="mt15"></iframe>
-				</div>
-			</el-col>
-		</el-row>
+    <el-row :gutter="15" class="home-card-one mt15">
+      <el-col :span="24">
+        <div class="home-card-item p20">
+          <div class="home-card-item-title">
+            <span>流程图</span>
+          </div>
+          <iframe src="https://zhgy.sagoo.cn/plugin/topo/?bgColor=000#/show/21" height="400" width="100%" frameborder="0" class="mt15"></iframe>
+        </div>
+      </el-col>
+    </el-row>
 
-		<el-row :gutter="15" class="home-card-one mt15">
-			<el-col :span="24">
-				<div class="home-card-item p20">
-					<div class="home-card-item-title" style="display: flex;justify-content:space-between;">
-						<span>环路监测</span>
-						<el-button type="text" @click="goDetail()">更多 &gt;</el-button>
-					</div>
-					<div style="height: 300px" ref="homeLineRef"></div>
-				</div>
-			</el-col>
-		</el-row>
-	</div>
+    <el-row :gutter="15" class="home-card-one mt15">
+      <el-col :span="24">
+        <div class="home-card-item p20">
+          <div class="home-card-item-title" style="display: flex;justify-content:space-between;">
+            <span>环路监测</span>
+            <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
+          </div>
+          <div style="height: 300px" ref="homeLineRef"></div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -67,236 +66,236 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
 
 let global: any = {
-	homeCharThree: null,
-	dispose: [null, '', undefined],
+  homeCharThree: null,
+  dispose: [null, '', undefined],
 };
 
 export default defineComponent({
-	name: 'deviceproduct',
-	setup() {
-		const addDicRef = ref();
-		const editDicRef = ref();
-		const queryRef = ref();
-		const homeLineRef = ref();
-		const router = useRouter()
-		const route = useRoute()
-		const store = useStore()
-		const state = reactive({
-			dataOne: [
-				{
-					icon: map,
-					iconDark: map1,
-					title: '供热面积',
-					contentTitle1: '供热面积',
-					val1: '0',
-					unit1: '㎡',
-					contentTitle2: '总面积',
-					val2: '0',
-					unit2: '㎡',
-				},
-				{
-					icon: fire,
-					iconDark: fire1,
-					title: '热量',
-					contentTitle1: '总耗热',
-					val1: '0',
-					unit1: 'GJ',
-					contentTitle2: '总单耗',
-					val2: '0',
-					unit2: 'GJ/㎡',
-				},
-				{
-					icon: ele,
-					iconDark: ele1,
-					title: '电量',
-					contentTitle1: '总耗电',
-					val1: '0',
-					unit1: 'KW.h',
-					contentTitle2: '总单耗',
-					val2: '0',
-					unit2: 'KW.h/㎡',
-				},
-				{
-					icon: water,
-					iconDark: water1,
-					title: '水量',
-					contentTitle1: '总耗水',
-					val1: '0',
-					unit1: 'T',
-					contentTitle2: '总单耗',
-					val2: '0',
-					unit2: 'T/㎡',
-				},
-			],
-			lineName: '环路监测',
-			myCharts: [],
-			charts: {
-				theme: '',
-				bgColor: '',
-				color: '#303133',
-			},
-			searchParams: {
-				name: ''
-			},
-			xAxisData: [],
-			inTemperatureEchart: [], // 供水温度
-			outTemperatureEchart: [], // 回水温度
-			isIsDark: false
-		});
+  name: 'deviceproduct',
+  setup() {
+    const addDicRef = ref();
+    const editDicRef = ref();
+    const queryRef = ref();
+    const homeLineRef = ref();
+    const router = useRouter()
+    const route = useRoute()
+    const store = useStore()
+    const state = reactive({
+      dataOne: [
+        {
+          icon: map,
+          iconDark: map1,
+          title: '供热面积',
+          contentTitle1: '供热面积',
+          val1: '0',
+          unit1: '㎡',
+          contentTitle2: '总面积',
+          val2: '0',
+          unit2: '㎡',
+        },
+        {
+          icon: fire,
+          iconDark: fire1,
+          title: '热量',
+          contentTitle1: '总耗热',
+          val1: '0',
+          unit1: 'GJ',
+          contentTitle2: '总单耗',
+          val2: '0',
+          unit2: 'GJ/㎡',
+        },
+        {
+          icon: ele,
+          iconDark: ele1,
+          title: '电量',
+          contentTitle1: '总耗电',
+          val1: '0',
+          unit1: 'KW.h',
+          contentTitle2: '总单耗',
+          val2: '0',
+          unit2: 'KW.h/㎡',
+        },
+        {
+          icon: water,
+          iconDark: water1,
+          title: '水量',
+          contentTitle1: '总耗水',
+          val1: '0',
+          unit1: 'T',
+          contentTitle2: '总单耗',
+          val2: '0',
+          unit2: 'T/㎡',
+        },
+      ],
+      lineName: '环路监测',
+      myCharts: [],
+      charts: {
+        theme: '',
+        bgColor: '',
+        color: '#303133',
+      },
+      searchParams: {
+        name: ''
+      },
+      xAxisData: [],
+      inTemperatureEchart: [], // 供水温度
+      outTemperatureEchart: [], // 回水温度
+      isIsDark: false
+    });
 
-		const getNumDetail = () => {
-			api.getLoopRegulationDetail({
-				QueryType: 'num',
-				types: 'loop',
-				code: route.query.code
-			}).then((res: any) => {
-				let data = res
-				state.dataOne[0].val1 = data.heatingArea //供暖面积
-				state.dataOne[0].val2 = data.forRealArea //实供面积
-				state.dataOne[1].val1 = data.unitConsumption //总热耗
-				state.dataOne[1].val2 = data.unitConsumptionSingle //热单耗
-				state.dataOne[2].val1 = data.elctricConsumption //总电量
-				state.dataOne[2].val2 = data.elctricConsumptionSingle //电单耗
-				state.dataOne[3].val1 = data.flowLoss //总水量
-				state.dataOne[3].val2 = data.flowLossSingle //水量单耗
-			})
-		}
+    const getNumDetail = () => {
+      api.getLoopRegulationDetail({
+        QueryType: 'num',
+        types: 'loop',
+        code: route.query.code
+      }).then((res: any) => {
+        let data = res
+        state.dataOne[0].val1 = data.heatingArea //供暖面积
+        state.dataOne[0].val2 = data.forRealArea //实供面积
+        state.dataOne[1].val1 = data.unitConsumption //总热耗
+        state.dataOne[1].val2 = data.unitConsumptionSingle //热单耗
+        state.dataOne[2].val1 = data.elctricConsumption //总电量
+        state.dataOne[2].val2 = data.elctricConsumptionSingle //电单耗
+        state.dataOne[3].val1 = data.flowLoss //总水量
+        state.dataOne[3].val2 = data.flowLossSingle //水量单耗
+      })
+    }
 
-		const getChartDetail = () => {
-			api.getLoopRegulationDetail({
-				QueryType: 'echart',
-				types: 'loop',
-				code: route.query.code
-			}).then((res: any) => {
-				state.inTemperatureEchart = res.inTemperatureEchart.map((item: any) => item.value)
-				state.outTemperatureEchart = res.outTemperatureEchart.map((item: any) => item.value)
-				state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
-				
-				nextTick(() => {
-					initLineChart();
-				});
-			})
-		}
+    const getChartDetail = () => {
+      api.getLoopRegulationDetail({
+        QueryType: 'echart',
+        types: 'loop',
+        code: route.query.code
+      }).then((res: any) => {
+        state.inTemperatureEchart = res.inTemperatureEchart.map((item: any) => item.value)
+        state.outTemperatureEchart = res.outTemperatureEchart.map((item: any) => item.value)
+        state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
 
-		const goDetail = () => {
-			router.push({
-				path: '/heating/monitor/loopSupervision/list/loopHistory',
-				query: {
-					code: route.query.code
-				}
-			})
-		}
+        nextTick(() => {
+          initLineChart();
+        });
+      })
+    }
 
-		// 折线图
-		const initLineChart = () => {
-			if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
-			global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
-			const option = {
-				backgroundColor: state.charts.bgColor,
-				tooltip: { trigger: 'axis' },
-				legend: {},
-				grid: { top: 40, right: 40, bottom: 40, left: 40 },
-				xAxis: [
-					{
-						type: 'category',
-						data: state.xAxisData,
-						boundaryGap: true,
-						axisTick: { show: false },
-					},
-				],
-				yAxis: [
-					{
-						type: 'value',
-						axisLabel: {
-							formatter: '{value} °C'
-						}
-					}
-				],
-				series: [
-					{
-						name: '供水温度',
-						type: 'line',
-						data: state.inTemperatureEchart
-					},
-					{
-						name: '回水温度',
-						type: 'line',
-						data: state.outTemperatureEchart
-					},
-					// {
-					// 	name: '室外温度',
-					// 	type: 'line',
-					// 	data: [3, 0, 4, 7, 5, 7, 5]
-					// }
-				]
-			};
-			(<any>global.homeCharThree).setOption(option);
-			(<any>state.myCharts).push(global.homeCharThree);
-		};
+    const goDetail = () => {
+      router.push({
+        path: '/heating/monitor/loopSupervision/list/loopHistory',
+        query: {
+          code: route.query.code
+        }
+      })
+    }
 
-		// 批量设置 echarts resize
-		const initEchartsResizeFun = () => {
-			nextTick(() => {
-				for (let i = 0; i < state.myCharts.length; i++) {
-					setTimeout(() => {
-						(<any>state.myCharts[i]).resize();
-					}, i * 1000);
-				}
-			});
-		};
-		// 批量设置 echarts resize
-		const initEchartsResize = () => {
-			window.addEventListener('resize', initEchartsResizeFun);
-		};
-		
-		// 监听 vuex 中是否开启深色主题
-		watch(
-			() => store.state.themeConfig.themeConfig.isIsDark,
-			(isIsDark) => {
-				nextTick(() => {
-					state.isIsDark = store.state.themeConfig.themeConfig.isIsDark
-					state.charts.theme = isIsDark ? 'transparent' : '';
-					state.charts.bgColor = isIsDark ? 'transparent' : '';
-					state.charts.color = isIsDark ? '#dadada' : '#303133';
-					setTimeout(() => {
-						initLineChart();
-					}, 1000);
-				});
-			},
-			{
-				deep: true,
-				immediate: true,
-			}
-		);
+    // 折线图
+    const initLineChart = () => {
+      if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
+      global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
+      const option = {
+        backgroundColor: state.charts.bgColor,
+        tooltip: { trigger: 'axis' },
+        legend: {},
+        grid: { top: 40, right: 40, bottom: 40, left: 40 },
+        xAxis: [
+          {
+            type: 'category',
+            data: state.xAxisData,
+            boundaryGap: true,
+            axisTick: { show: false },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value} °C'
+            }
+          }
+        ],
+        series: [
+          {
+            name: '供水温度',
+            type: 'line',
+            data: state.inTemperatureEchart
+          },
+          {
+            name: '回水温度',
+            type: 'line',
+            data: state.outTemperatureEchart
+          },
+          // {
+          // 	name: '室外温度',
+          // 	type: 'line',
+          // 	data: [3, 0, 4, 7, 5, 7, 5]
+          // }
+        ]
+      };
+      (<any>global.homeCharThree).setOption(option);
+      (<any>state.myCharts).push(global.homeCharThree);
+    };
 
-		// 页面加载时
-		onMounted(() => {
-			getNumDetail()
-			getChartDetail()
+    // 批量设置 echarts resize
+    const initEchartsResizeFun = () => {
+      nextTick(() => {
+        for (let i = 0; i < state.myCharts.length; i++) {
+          setTimeout(() => {
+            (<any>state.myCharts[i]).resize();
+          }, i * 1000);
+        }
+      });
+    };
+    // 批量设置 echarts resize
+    const initEchartsResize = () => {
+      window.addEventListener('resize', initEchartsResizeFun);
+    };
 
-			initEchartsResize();
-			// 获取布局配置信息
-			state.isIsDark = store.state.themeConfig.themeConfig.isIsDark;
-		});
+    // 监听 vuex 中是否开启深色主题
+    watch(
+      () => store.state.themeConfig.themeConfig.isIsDark,
+      (isIsDark) => {
+        nextTick(() => {
+          state.isIsDark = store.state.themeConfig.themeConfig.isIsDark
+          state.charts.theme = isIsDark ? 'transparent' : '';
+          state.charts.bgColor = isIsDark ? 'transparent' : '';
+          state.charts.color = isIsDark ? '#dadada' : '#303133';
+          setTimeout(() => {
+            initLineChart();
+          }, 1000);
+        });
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
+
+    // 页面加载时
+    onMounted(() => {
+      getNumDetail()
+      getChartDetail()
+
+      initEchartsResize();
+      // 获取布局配置信息
+      state.isIsDark = store.state.themeConfig.themeConfig.isIsDark;
+    });
 
 
-		/** 重置按钮操作 */
-		const resetQuery = (formEl: FormInstance | undefined) => {
-			if (!formEl) return;
-			formEl.resetFields();
-			// typeList();
-		};
+    /** 重置按钮操作 */
+    const resetQuery = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      // typeList();
+    };
 
-		return {
-			addDicRef,
-			editDicRef,
-			queryRef,
-			homeLineRef,
-			...toRefs(state),
-			resetQuery,
-			goDetail
-		};
-	},
+    return {
+      addDicRef,
+      editDicRef,
+      queryRef,
+      homeLineRef,
+      ...toRefs(state),
+      resetQuery,
+      goDetail
+    };
+  },
 });
 </script>
 
@@ -348,7 +347,6 @@ $homeNavLengh: 8;
 			margin-right: 32px;
 			width: 24px;
 			height: 24px;
-			;
 			margin-top: 3px;
 		}
 	}
@@ -364,7 +362,6 @@ $homeNavLengh: 8;
 			span:nth-child(1) {
 				// padding-top: 4px;
 				line-height: 33px;
-				;
 				font-size: 14px;
 			}
 

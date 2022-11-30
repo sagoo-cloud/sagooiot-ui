@@ -58,12 +58,14 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '/@/api/heatStation';
 import { setMarker, setLine } from '/@/utils/map';
 import { useStore } from '/@/store/index';
 
+const router = useRouter()
+
 const mapRef = ref();
-const checkList = ref([]);
 const store = useStore();
 const heatList = ref([]);
 const viewList = ref([]);
@@ -72,6 +74,11 @@ let BMapGL = (window as any).BMapGL;
 let map: any = null;
 let getThemeConfig: any = null
 let points: any = []
+
+// 地图弹窗点击去环路详情，进行跳转
+window.mapToDetail = (code: string) => {
+  router.push('/heating/monitor/loopSupervision/list/loopDetail?code=' + code)
+}
 
 onMounted(() => {
   // 获取布局配置信息
@@ -105,9 +112,6 @@ onMounted(() => {
     renderStation(res);
   });
   // 地图缩放事件	
-  // map.addEventListener('zoomstart', (e: any) => {
-  // 	console.log('zoomstart', e)
-  // })
   map.addEventListener('zoomend', (e: any) => {
     // console.log('zoomend', e)
     // console.log('zoomend', map.getZoom())
@@ -192,10 +196,7 @@ const renderStation = (list: any[]) => {
 	border-radius: 3px;
 }
 
-// .BMap_bubble_top,
-// .BMap_bubble_bottom {
-// 	display: none !important;
-// }
+.BMap_bubble_top,
 .BMap_bubble_bottom {
 	display: none !important;
 }
@@ -213,6 +214,13 @@ const renderStation = (list: any[]) => {
 	.map-hover-label {
 		white-space: nowrap;
 	}
+	.map-hover-btn {
+		white-space: nowrap;
+		background: #67c23a;
+		padding: 6px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+	}
 
 	.map-hover-row-item {
 		display: flex;
@@ -225,6 +233,7 @@ const renderStation = (list: any[]) => {
 			// font-size: 22px;
 			color: #ffd228;
 			font-weight: 500;
+			word-break: break-all;
 		}
 	}
 }
