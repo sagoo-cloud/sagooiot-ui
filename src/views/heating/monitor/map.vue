@@ -5,7 +5,7 @@
 
       <!-- 显示弹层区域 -->
       <div class="view">
-        <!-- <div class="view-div" v-for="(item, index) in viewList" :key="index">
+        <div class="view-div" v-for="(item, index) in viewList" :key="index">
           <div class="view-div-head">
             <div class="title">{{ item.name }}环路</div>
             <div class="info">
@@ -49,7 +49,7 @@
               <el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
             </el-table>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -68,12 +68,13 @@ const router = useRouter()
 const mapRef = ref();
 const store = useStore();
 const heatList = ref([]);
-const viewList = ref([]);
+const viewList = ref<any[]>([]);
 
 let BMapGL = (window as any).BMapGL;
 let map: any = null;
 let getThemeConfig: any = null
 let points: any = []
+let loops: any = []
 
 // 地图弹窗点击去环路详情，进行跳转
 window.mapToDetail = (code: string) => {
@@ -100,6 +101,7 @@ onMounted(() => {
 
   // 获取环路列表
   api.heatStation.getAll().then((res: any) => {
+    loops = res
     const list = res.filter((item: any) => item.loopViaPointInfo?.length > 1)
     // console.log(list)
     setLine(list, map);
@@ -118,7 +120,7 @@ onMounted(() => {
     let zoom = map.getZoom()
     if (zoom > 20.5 && points.length) {
       let arr: any = []
-      let viewArr: any = []
+      let viewArrCache: any = []
 
       points.forEach((point: any) => {
         if (map.getBounds().containsPoint(point)) {
@@ -126,10 +128,11 @@ onMounted(() => {
         }
       })
       arr.forEach((point: any) => {
-        viewArr.push(point.data)
-        console.log(point.data)
+        // 查询环路列表中属于该站点的环路列表，进行显示
+        const theLoops = loops.filter((item: any) => item.stationInfo.id === point.data.id)
+        viewArrCache = viewArrCache.concat(theLoops)
       })
-      viewList.value = viewArr
+      viewList.value = viewArrCache
     } else {
       viewList.value = []
     }
