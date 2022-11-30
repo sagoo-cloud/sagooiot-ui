@@ -359,7 +359,8 @@ export default defineComponent({
       })
     }
     function setLine(pointList: any[]) {
-      map.removeOverlay(polyline);
+      polyline && map.removeOverlay(polyline);
+      if (!pointList || !pointList.length) return
       polyline = new BMapGL.Polyline(pointList, { strokeColor: "blue", strokeWeight: 10, strokeOpacity: 0.5 });   //创建折线
       map.addOverlay(polyline);
     }
