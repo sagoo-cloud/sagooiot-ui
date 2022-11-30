@@ -9,7 +9,7 @@
 					<el-input v-model="ruleForm.code" placeholder="请输入环路编号" />
 				</el-form-item> -->
         <el-form-item label="所属换热站" prop="stationId">
-          <el-tree-select v-model="ruleForm.stationId" :data="treeData" :props="{
+          <el-tree-select v-model="ruleForm.stationId" :data="treeData" @change="stationChange" :props="{
 							label: 'name',
 							children: 'children'
 						}" node-key="id" :clearable="true" filterable check-strictly style="width: 100%;" :render-after-expand="true" />
@@ -106,6 +106,7 @@ import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/heatStation';
 import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
+import { number } from 'echarts';
 interface Point {
   sort?: number;
   lnt: number;
@@ -134,6 +135,7 @@ export default defineComponent({
     let BMapGL: any = null
     let polyline: any = null
     let startDraw = false
+    let stationInfo: any = null
 
     const formRef = ref<HTMLElement | null>(null);
     const state = reactive({
@@ -240,10 +242,26 @@ export default defineComponent({
             lng: item.lnt,
           }))
 
+          // 绘制换热站
+          stationInfo = res.stationInfo
+          setStationMarker()
+
           // 绘制点线
           state.pointList.forEach((point: any) => map.addOverlay(new BMapGL.Marker(point)))
           setLine(state.pointList)
+
         })
+    }
+
+    function setStationMarker() {
+      map.clearOverlays()
+      const { lnt: lng, lat } = stationInfo
+      map.centerAndZoom({ lng, lat }, 18);
+      map.addOverlay(new BMapGL.Marker({ lng, lat }, {
+        icon: new BMapGL.Icon("/imgs/flag.svg", new BMapGL.Size(40, 40), {
+          anchor: new BMapGL.Size(10, 40)   // 设置图片偏移  
+        }),
+      }));
     }
     // 新增
     const onSubmit = () => {
@@ -292,6 +310,7 @@ export default defineComponent({
       startDraw = true
       state.pointList = []
       map.clearOverlays();
+      setStationMarker()
 
       // if (state.pointList.find((item: any) => item.editFalg)) {
       //   ElMessage.warning('请先保存途经点')
@@ -370,7 +389,16 @@ export default defineComponent({
     //   state.pointIndex = index
     // }
 
+    function stationChange(id: number) {
+
+      api.heatStation.detail(id).then((res: any) => {
+        stationInfo = res
+        setStationMarker()
+      })
+    }
+
     return {
+      stationChange,
       openDialog,
       closeDialog,
       onCancel,
