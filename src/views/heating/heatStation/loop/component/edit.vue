@@ -131,6 +131,7 @@ export default defineComponent({
   name: 'headStationLoop',
   setup(prop, { emit }) {
     let map: any = null
+    let BMapGL: any = null
     let polyline: any = null
     let startDraw = false
 
@@ -235,9 +236,13 @@ export default defineComponent({
             ...res
           }
           state.pointList = (state.ruleForm.viaPoint || []).map((item: any) => ({
-            ...item,
-            editFlag: false
+            lat: item.lat,
+            lng: item.lnt,
           }))
+
+          // 绘制点线
+          state.pointList.forEach((point: any) => map.addOverlay(new BMapGL.Marker(point)))
+          setLine(state.pointList)
         })
     }
     // 新增
@@ -320,7 +325,7 @@ export default defineComponent({
     }
 
     const initMap = () => {
-      const BMapGL = (window as any).BMapGL
+      BMapGL = (window as any).BMapGL
       map = new BMapGL.Map("loop-map-container");
       // 116.404, 39.915
       const point = new BMapGL.Point(124.383044, 40.124296);
@@ -343,10 +348,7 @@ export default defineComponent({
         let marker = new BMapGL.Marker(latlng);
         // 在地图上添加点标记
         map.addOverlay(marker);
-
-        map.removeOverlay(polyline);
-        polyline = new BMapGL.Polyline(state.pointList, { strokeColor: "blue", strokeWeight: 10, strokeOpacity: 0.5 });   //创建折线
-        map.addOverlay(polyline);
+        setLine(state.pointList)
 
         // let myGeo = new BMapGL.Geocoder
         // myGeo.getLocation(new BMapGL.Point(point.lng, point.lat), (result: any) => {
@@ -355,6 +357,11 @@ export default defineComponent({
         //   }
         // })
       })
+    }
+    function setLine(pointList: any[]) {
+      map.removeOverlay(polyline);
+      polyline = new BMapGL.Polyline(pointList, { strokeColor: "blue", strokeWeight: 10, strokeOpacity: 0.5 });   //创建折线
+      map.addOverlay(polyline);
     }
 
     // const onLocalChange = (item: any, index: number) => {
