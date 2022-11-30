@@ -26,7 +26,17 @@
           <div class="home-card-item-title" style="display: flex;justify-content:space-between;">
             <span>热网总能耗</span>
           </div>
-          <div style="height: 100%" ref="homeLineRef"></div>
+          <el-tabs v-model="tabName" @tab-click="tabChange">
+            <el-tab-pane label="总热耗" name="homeLineRef1">
+              <div style="height: 380px" ref="homeLineRef1"></div>
+            </el-tab-pane>
+            <el-tab-pane label="总电耗" name="homeLineRef2">
+              <div style="height: 380px" ref="homeLineRef2"></div>
+            </el-tab-pane>
+            <el-tab-pane label="总失水量" name="homeLineRef3">
+              <div style="height: 380px" ref="homeLineRef3"></div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </el-col>
       <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
@@ -90,7 +100,10 @@ let global: any = {
 export default defineComponent({
   name: 'heating-home',
   setup() {
-    const homeLineRef = ref();
+    const tabName = ref('homeLineRef1');
+    const homeLineRef1 = ref();
+    const homeLineRef2 = ref();
+    const homeLineRef3 = ref();
     const homePieRef = ref();
     const homeBarRef = ref();
     const homeFourBarRef = ref();
@@ -428,7 +441,22 @@ export default defineComponent({
     // 折线图
     const initLineChart = () => {
       if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
-      global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
+
+      let dom: any
+      let data: any
+      if (tabName.value === 'homeLineRef1') {
+        dom = homeLineRef1.value
+        data = state.flowLossData
+      } else if (tabName.value === 'homeLineRef2') {
+        dom = homeLineRef2.value
+        data = state.elctricConsumptionData
+      } else {
+        dom = homeLineRef3.value
+        data = state.unitConsumptionData
+      }
+
+      global.homeCharThree = <any>echarts.init(dom, state.charts.theme);
+
       const common = {
         type: 'line',
         smooth: true,
@@ -448,8 +476,11 @@ export default defineComponent({
       const option = {
         backgroundColor: state.charts.bgColor,
         tooltip: { trigger: 'axis' },
-        legend: { data: ['总热耗', '总电耗', '总失水量'], top: 30, textStyle: { color: state.charts.color } },
-        grid: { top: 70, right: 40, bottom: 100, left: 40 },
+        // legend: {
+        //   data: ['总热耗', '总电耗', '总失水量'],
+        //   top: 30, textStyle: { color: state.charts.color }
+        // },
+        grid: { top: 30, right: 20, bottom: 20, left: 20, containLabel: true },
         xAxis: [
           {
             type: 'category',
@@ -465,24 +496,30 @@ export default defineComponent({
         ],
         series: [
           {
-            name: '总热耗',
             ...common,
-            data: state.flowLossData,
+            data,
           },
-          {
-            name: '总电耗',
-            ...common,
-            data: state.elctricConsumptionData,
-          },
-          {
-            name: '总失水量',
-            ...common,
-            data: state.unitConsumptionData,
-          }
+          // {
+          //   name: '总电耗',
+          //   ...common,
+          //   data: state.elctricConsumptionData,
+          // },
+          // {
+          //   name: '总失水量',
+          //   ...common,
+          //   data: state.unitConsumptionData,
+          // }
         ],
       };
       (<any>global.homeCharThree).setOption(option);
       (<any>state.myCharts).push(global.homeCharThree);
+    };
+
+    // 切换图形
+    const tabChange = (data: any) => {
+      setTimeout(() => {
+        initLineChart(data.paneName);
+      }, 100)
     };
     // 切换饼图类型
     const changePieType = (type: string, name: string) => {
@@ -554,7 +591,6 @@ export default defineComponent({
             initBarChart();
             initBarFourChart();
           }, 1000);
-
         });
       },
       {
@@ -563,7 +599,11 @@ export default defineComponent({
       }
     );
     return {
-      homeLineRef,
+      tabName,
+      homeLineRef1,
+      homeLineRef2,
+      homeLineRef3,
+      tabChange,
       homePieRef,
       homeBarRef,
       homeFourBarRef,
