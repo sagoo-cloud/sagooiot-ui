@@ -6,9 +6,11 @@ export default {
   getEnergyHuanluWaterLossLineChart: (params?: object) => get('/energy/huanlu/water/loss/line/chart', params), // 换热站失水分析折现图列表
   getEnergyWaterWarnList: (params?: object) => get('/energy/early/warn/list', params), // 换热站温度压力报警
 
-  
+
   getEnergyLoopdata: (params?: object) => get('/energy/loopdata', params), // 环路分析
+  getEnergyLoopdataPage: (params?: object) => get('/energy/loopdata/page_list', params), // 环路分析
   getEnergyWaterLossLineChart: (params?: object) => get('/energy/water/loss/line/chart', params), // 换热站失水分析
+  getEnergyHuanluWaterLossLineChartPage: (params?: object) => get('/energy/water/loss/page_list', params), // 换热站失水分析折现图列表
   getEnergyPerformance: (params?: object) => get('/energy/performance', params), // 绩效考核
   getEnergyTop: (params?: object) => get('/energy/top', params), // 能耗排行榜
 }

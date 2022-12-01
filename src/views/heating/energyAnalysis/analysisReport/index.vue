@@ -39,8 +39,8 @@
             </el-form-item>
           </el-form>
           <div class="chart" style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
-          <div class="title">数据列表</div>
-          <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+          <div class="title" style="margin-top:20px">数据列表</div>
+          <el-table :data="tableData" v-loading="loading" style="width: 100%">
             <el-table-column label="ID" align="center" prop="id" width="60" />
             <el-table-column label="环路编号" prop="huanLuNo" :show-overflow-tooltip="true" />
             <el-table-column label="环路名称" prop="huanLuName" :show-overflow-tooltip="true" />
@@ -60,6 +60,7 @@
             <!-- <el-table-column label="室内温度" prop="" :show-overflow-tooltip="true" />
             <el-table-column label="室外温度" prop="" :show-overflow-tooltip="true" /> -->
           </el-table>
+          <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
         </div>
       </div>
     </el-card>
@@ -71,9 +72,19 @@ import { ref, reactive, watch, nextTick, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 import heatApi from '/@/api/heatStation';
-import datahubApi from '/@/api/datahub';
 import energyApi from '/@/api/energyAnalysis';
 import { formatDate } from '/@/utils/formatTime'
+import { useSearch } from '/@/hooks/useCommon';
+import { stat } from 'fs';
+
+
+const { params, tableData, getList, loading } = useSearch<any[]>(energyApi.getEnergyLoopdataPage, 'list', {
+  loopCode: '',
+  dateRange: [
+    formatDate(new Date(), 'YYYY-mm-dd'),
+    formatDate(new Date(), 'YYYY-mm-dd')
+  ]
+})
 
 let global: any = {
   lineChart: null,
@@ -109,6 +120,9 @@ const state = reactive({
     }
   }
 })
+
+
+
 const lineChartRef = ref()
 const checkList = ref([])
 const treeRef = ref()
@@ -116,6 +130,9 @@ const filterText = ref('')
 const curNode = ref('')
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
+})
+watch(() => state.tableData.param.dateRange, (val) => {
+  params.dateRange = val
 })
 const filterNode = (value: string, data: any) => {
   if (!value) return true
@@ -128,12 +145,14 @@ const queryTree = () => {
       state.heatList = res || [];
       if (state.heatList.length) {
         curNode.value = state.heatList[0].code
+        params.loopCode = state.heatList[0].code
       }
       getChartData()
     });
 };
 // 
 const getChartData = () => {
+  getList();
   state.tableData.loading = true
   energyApi.getEnergyLoopdata({
     loopCode: curNode.value,
@@ -142,6 +161,7 @@ const getChartData = () => {
     const data = res.list || []
     state.tableData.data = data
 
+    state.lineChartXAxis = []
     state.inPressure1 = []
     state.inPressure2 = []
     state.inTemperature1 = []
@@ -170,6 +190,7 @@ const getChartData = () => {
 }
 const onNodeClick = (data: any) => {
   curNode.value = data.code
+  params.loopCode = data.code
   getChartData()
 }
 
