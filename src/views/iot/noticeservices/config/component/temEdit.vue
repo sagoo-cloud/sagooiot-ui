@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '设置') + '配置模板'" v-model="isShowDialog" width="50%">
+		<el-dialog title="设置配置模板" v-model="isShowDialog" width="50%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="名称" prop="title">
 					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
@@ -35,7 +35,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">设置</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -49,14 +49,13 @@ import api from '/@/api/notice';
 
 import { ElMessage } from 'element-plus';
 import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right } from '@element-plus/icons-vue';
+import { stat } from 'fs';
 
 interface RuleFormState {
-	id: number;
 	title: string;
-	types: string;
+	configId:string;
 	sendGateway:string;
 	content:string;
-	configId:string;
 	
 	
 }
@@ -66,6 +65,8 @@ interface DicState {
 	rules: {};
 	configData: {};
 	id: number;
+	configId:string;
+	sendGateway:string;
 
 }
 
@@ -80,15 +81,14 @@ export default defineComponent({
 			id: 0,
 			configData:[],
 			isShowDialog: false,
-		
+			configId:'',
+			sendGateway:'',
 			
 			ruleForm: {
-				id: 0,
 				title: '',
-				types: "1",
+				content:'',
 				sendGateway:'',
 				configId:'',
-				content:'',
 
 				
 			},
@@ -109,26 +109,26 @@ export default defineComponent({
 					state.ruleForm = res || [];
 				});
 			}
-			state.ruleForm.configId = id;
-			state.ruleForm.sendGateway = type;
+			state.configId = id;
+			state.sendGateway = type;
 			state.isShowDialog = true;
 		}
 
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null,type) => {
-			resetForm();
-			if (row) {
-				state.ruleForm = row;
-			}
+			// resetForm();
+			// if (row) {
+			// 	state.ruleForm = row;
+			// }
 
-			api.config.getList({ sendGateway: type }).then((res: any) => {
-				state.configData = res.Data || [];
-			});
+			// api.config.getList({ sendGateway: type }).then((res: any) => {
+			// 	state.configData = res.Data || [];
+			// });
 
 
 
-			state.ruleForm.sendGateway=type
-			state.isShowDialog = true;
+			// state.ruleForm.sendGateway=type
+			// state.isShowDialog = true;
 		};
 
 		
@@ -136,11 +136,7 @@ export default defineComponent({
 		const resetForm = () => {
 		
 			state.ruleForm = {
-				id: 0,
 				title: '',
-				types: "1",
-				sendGateway:'',
-				configId:'',
 				content:'',
 			
 			};
@@ -161,22 +157,14 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					
-					if (state.ruleForm.id !== 0) {
-						//修改
-						
-						api.template.edit(state.ruleForm).then(() => {
+					//修改
+					state.ruleForm.sendGateway=state.sendGateway;
+						state.ruleForm.configId=state.configId;
+						api.template.save(state.ruleForm).then(() => {
 							ElMessage.success('配置修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});
-					} else {
-						//添加
-						api.template.add(state.ruleForm).then(() => {
-							ElMessage.success('配置添加成功');
-							closeDialog(); // 关闭弹窗
-							emit('dataList');
-						});
-					}
 				}
 			});
 		};
