@@ -5,19 +5,10 @@
         <div class="left-panel">
           <el-input v-model="filterText" clearable placeholder="请输入" />
           <div class="list">
-            <el-tree
-              ref="treeRef"
-              class="filter-tree"
-              :data="state.heatList"
-              :props="{
+            <el-tree ref="treeRef" class="filter-tree" :data="state.heatList" :props="{
                 label: 'name',
                 children: 'loopInfo'
-              }"
-              default-expand-all
-              :filter-node-method="filterNode"
-							:expand-on-click-node="false"
-              @node-click="onNodeClick"
-            >
+              }" default-expand-all :filter-node-method="filterNode" :expand-on-click-node="false" @node-click="onNodeClick">
               <template #default="{ data }">
                 <span class="custom-tree-node" :class="{ active: data.code === curNode }">
                   <span class="name" :title="data.name">{{ data.name }}</span>
@@ -27,16 +18,9 @@
           </div>
         </div>
         <div class="right-panel">
-          <el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="68px" >
+          <el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="68px">
             <el-form-item label="时间范围" prop="dateRange">
-              <el-date-picker v-model="state.tableData.param.dateRange"
-                size="default"
-                style="width: 240px"
-                value-format="YYYY-MM-DD"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期">
+              <el-date-picker v-model="state.tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
               </el-date-picker>
             </el-form-item>
             <el-form-item>
@@ -54,10 +38,8 @@
               </el-button> -->
             </el-form-item>
           </el-form>
-          <div style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
-
+          <div class="chart" style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
           <div class="title">数据列表</div>
-              
           <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
             <el-table-column label="ID" align="center" prop="id" width="60" />
             <el-table-column label="环路编号" prop="huanLuNo" :show-overflow-tooltip="true" />
@@ -159,7 +141,7 @@ const getChartData = () => {
   }).then((res: any) => {
     const data = res.list || []
     state.tableData.data = data
-    
+
     state.inPressure1 = []
     state.inPressure2 = []
     state.inTemperature1 = []
@@ -170,7 +152,7 @@ const getChartData = () => {
     state.outTemperature2 = []
 
     data.forEach((item: any) => {
-      state.lineChartXAxis.push(item.huanLuName);
+      state.lineChartXAxis.push(item.datetime);
       state.inPressure1.push(item.inPressure1);
       state.inPressure2.push(item.inPressure2);
       state.inTemperature1.push(item.inTemperature1);
@@ -210,6 +192,17 @@ const initLineChart = () => {
         splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
       },
     ],
+    dataZoom: [
+      {
+        type: 'inside',
+        start: 0,
+        end: 30
+      },
+      {
+        start: 0,
+        end: 30
+      }
+    ],
     series: [
       // { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
       // { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
@@ -231,7 +224,7 @@ const initEchartsResizeFun = () => {
     for (let i = 0; i < state.myCharts.length; i++) {
       setTimeout(() => {
         (<any>state.myCharts[i]).resize();
-      }, i * 1000);
+      }, i * 100);
     }
   });
 };
@@ -254,7 +247,7 @@ watch(
       state.charts.bgColor = isIsDark ? 'transparent' : '';
       state.charts.color = isIsDark ? '#dadada' : '#303133';
       setTimeout(() => {
-      	initLineChart();
+        initLineChart();
       }, 500);
     });
   },
@@ -271,17 +264,24 @@ watch(
 	font-weight: bold;
 }
 .panel {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  .left-panel {
-    .list {
-      max-height: 625px;
-      overflow-y: auto;
-    }
-  }
-  .right-panel {
-    padding: 16px;
-  }
+	display: flex;
+	justify-content: space-between;
+	.left-panel {
+		width: 250px;
+		min-width: 250px;
+		.list {
+			max-height: 625px;
+			overflow-y: auto;
+		}
+	}
+	.right-panel {
+		flex: 1;
+		padding: 16px;
+		overflow-x: hidden;
+		.chart {
+			width: 100%;
+		}
+	}
 }
 
 .custom-tree-node {
@@ -296,6 +296,6 @@ watch(
 }
 
 :deep(.el-form-item) {
-  // margin-bottom: 0;
+	// margin-bottom: 0;
 }
 </style>
