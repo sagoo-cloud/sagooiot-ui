@@ -38,6 +38,14 @@
               </el-button> -->
             </el-form-item>
           </el-form>
+          <el-tabs v-model="tabName" @tab-change="initLineChart">
+            <el-tab-pane label="温度" :name="0"></el-tab-pane>
+            <el-tab-pane label="压力" :name="1"></el-tab-pane>
+            <el-tab-pane label="流量" :name="2"></el-tab-pane>
+            <el-tab-pane label="阀门开度" :name="3"></el-tab-pane>
+            <el-tab-pane label="室内/室外温度" :name="4"></el-tab-pane>
+          </el-tabs>
+
           <div class="chart" style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
           <div class="title" style="margin-top:20px">数据列表</div>
           <el-table :data="tableData" v-loading="loading" style="width: 100%">
@@ -75,8 +83,6 @@ import heatApi from '/@/api/heatStation';
 import energyApi from '/@/api/energyAnalysis';
 import { formatDate } from '/@/utils/formatTime'
 import { useSearch } from '/@/hooks/useCommon';
-import { stat } from 'fs';
-
 
 const { params, tableData, getList, loading } = useSearch<any[]>(energyApi.getEnergyLoopdataPage, 'list', {
   loopCode: '',
@@ -109,6 +115,11 @@ const state = reactive({
   outPressure2: [],
   outTemperature1: [],
   outTemperature2: [],
+  supplyWaterFlow: [],
+  supplyWaterFlow2: [],
+  returnWaterFlow: [],
+  returnWaterFlow2: [],
+  supplyValve: [],
   tableData: {
     data: [],
     loading: false,
@@ -121,13 +132,11 @@ const state = reactive({
   }
 })
 
-
-
 const lineChartRef = ref()
-const checkList = ref([])
 const treeRef = ref()
 const filterText = ref('')
 const curNode = ref('')
+const tabName = ref(0)
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
 })
@@ -170,6 +179,11 @@ const getChartData = () => {
     state.outPressure2 = []
     state.outTemperature1 = []
     state.outTemperature2 = []
+    state.supplyWaterFlow = []
+    state.supplyWaterFlow2 = []
+    state.returnWaterFlow = []
+    state.returnWaterFlow2 = []
+    state.supplyValve = []
 
     data.forEach((item: any) => {
       state.lineChartXAxis.push(item.datetime);
@@ -181,6 +195,11 @@ const getChartData = () => {
       state.outPressure2.push(item.outPressure2);
       state.outTemperature1.push(item.outTemperature1);
       state.outTemperature2.push(item.outTemperature2);
+      state.supplyWaterFlow.push(item.supplyWaterFlow);
+      state.supplyWaterFlow2.push(item.supplyWaterFlow2);
+      state.returnWaterFlow.push(item.returnWaterFlow);
+      state.returnWaterFlow2.push(item.returnWaterFlow2);
+      state.supplyValve.push(item.supplyValve);
     });
     state.tableData.loading = false
     nextTick(() => {
@@ -198,6 +217,26 @@ const onNodeClick = (data: any) => {
 const initLineChart = () => {
   if (!global.dispose.some((b: any) => b === global.lineChart)) global.lineChart.dispose();
   global.lineChart = <any>echarts.init(lineChartRef.value, state.charts.theme);
+
+  const seriesList = [[
+    { name: '一网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature1 },
+    { name: '二网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature2 },
+    { name: '一网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature1 },
+    { name: '二网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature2 }
+  ], [
+    { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
+    { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
+    { name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
+    { name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
+  ], [
+    { name: '一网供水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyWaterFlow },
+    { name: '二网供水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyWaterFlow2 },
+    { name: '一网回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow },
+    { name: '二网回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow2 },
+  ], [
+    { name: '阀门开度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyValve },
+  ]]
+
   const option = {
     backgroundColor: state.charts.bgColor,
     grid: { top: 70, right: 20, bottom: 30, left: 30 },
@@ -224,16 +263,7 @@ const initLineChart = () => {
         end: 30
       }
     ],
-    series: [
-      // { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
-      // { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },
-      { name: '一网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature1 },
-      { name: '二网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature2 },
-      // { name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
-      // { name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
-      { name: '一网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature1 },
-      { name: '二网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature2 }
-    ]
+    series: seriesList[tabName.value] || []
   };
   (<any>global.lineChart).setOption(option);
   (<any>state.myCharts).push(global.lineChart);

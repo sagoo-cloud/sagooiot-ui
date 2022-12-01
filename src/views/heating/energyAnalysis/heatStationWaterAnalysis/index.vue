@@ -120,7 +120,7 @@ const queryLineChart = () => {
   api.getEnergyWaterLossLineChart({ loopCode: curNode.value })
     // api.getEnergyWaterLossLineChart({ loopCode: 'D00107-1' })
     .then((res: any) => {
-      console.log(res);
+      // console.log(res);
       let data = res.list || []
 
       state.lineChartXAixs = []
