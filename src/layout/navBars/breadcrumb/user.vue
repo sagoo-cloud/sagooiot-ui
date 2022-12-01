@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="layout-navbars-breadcrumb-user"
-    :style="{ flex: layoutUserFlexNum }"
-  >
+  <div class="layout-navbars-breadcrumb-user" :style="{ flex: layoutUserFlexNum }">
     <!-- <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>
@@ -27,29 +24,16 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown> -->
-    <div
-      class="layout-navbars-breadcrumb-user-icon"
-      @click="onSearchClick"
-    >
+    <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
       <el-icon :title="$t('message.user.title2')">
         <ele-Search />
       </el-icon>
     </div>
-    <div
-      class="layout-navbars-breadcrumb-user-icon"
-      @click="onLayoutSetingClick"
-    >
-      <i
-        class="icon-skin iconfont"
-        :title="$t('message.user.title3')"
-      ></i>
+    <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
+      <i class="icon-skin iconfont" :title="$t('message.user.title3')"></i>
     </div>
     <div class="layout-navbars-breadcrumb-user-icon">
-      <el-popover
-        placement="bottom"
-        trigger="click"
-        :width="300"
-      >
+      <el-popover placement="bottom" trigger="click" :width="300" v-model:visible="popoverVisible">
         <template #reference>
           <el-badge :is-dot="true">
             <el-icon :title="$t('message.user.title4')">
@@ -57,29 +41,15 @@
             </el-icon>
           </el-badge>
         </template>
-        <UserNews />
+        <UserNews @closePopover="hidePopover" />
       </el-popover>
     </div>
-    <div
-      class="layout-navbars-breadcrumb-user-icon mr10"
-      @click="onScreenfullClick"
-    >
-      <i
-        class="iconfont"
-        :title="isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
-        :class="!isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
-      ></i>
+    <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
+      <i class="iconfont" :title="isScreenfull ? $t('message.user.title6') : $t('message.user.title5')" :class="!isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"></i>
     </div>
-    <el-dropdown
-      :show-timeout="70"
-      :hide-timeout="50"
-      @command="onHandleCommandClick"
-    >
+    <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
       <span class="layout-navbars-breadcrumb-user-link">
-        <img
-          :src="getUserInfos.avatar"
-          class="layout-navbars-breadcrumb-user-link-photo mr5"
-        />
+        <img :src="getUserInfos.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
         {{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
         <el-icon class="el-icon--right">
           <ele-ArrowDown />
@@ -89,10 +59,7 @@
         <el-dropdown-menu>
           <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
           <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
-          <el-dropdown-item
-            divided
-            command="logOut"
-          >{{ $t('message.user.dropdown5') }}</el-dropdown-item>
+          <el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -126,6 +93,7 @@ export default defineComponent({
       isScreenfull: false,
       disabledI18n: 'zh-cn',
       disabledSize: 'large',
+      popoverVisible: false
     });
     // 获取用户信息 vuex
     const getUserInfos = computed(() => {
@@ -159,6 +127,9 @@ export default defineComponent({
     // 布局配置 icon 点击时
     const onLayoutSetingClick = () => {
       proxy.mittBus.emit('openSetingsDrawer');
+    };
+    const hidePopover = () => {
+      state.popoverVisible = false;
     };
     // 下拉菜单点击时
     const onHandleCommandClick = (path: string) => {
@@ -267,6 +238,7 @@ export default defineComponent({
       }
     });
     return {
+      hidePopover,
       getUserInfos,
       onLayoutSetingClick,
       onHandleCommandClick,

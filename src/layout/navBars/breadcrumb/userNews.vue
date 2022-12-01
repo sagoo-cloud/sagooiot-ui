@@ -1,59 +1,52 @@
 <template>
-	<div class="layout-navbars-breadcrumb-user-news">
-		<div class="head-box">
-			<div class="head-box-title">{{ $t('message.user.newTitle') }}</div>
-			<div class="head-box-btn" v-if="newsList.length > 0" @click="onAllReadClick">{{ $t('message.user.newBtn') }}</div>
-		</div>
-		<div class="content-box">
-			<template v-if="newsList.length > 0">
-				<div class="content-box-item" v-for="(v, k) in newsList" :key="k">
-					<div>{{ v.label }}</div>
-					<div class="content-box-msg">
-						{{ v.value }}
-					</div>
-					<div class="content-box-time">{{ v.time }}</div>
-				</div>
-			</template>
-			<el-empty :description="$t('message.user.newDesc')" v-else></el-empty>
-		</div>
-		<div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
-	</div>
+  <div class="layout-navbars-breadcrumb-user-news">
+    <div class="head-box">
+      <div class="head-box-title">{{ $t('message.user.newTitle') }}</div>
+      <div class="head-box-btn" v-if="newsList.length > 0" @click="onAllReadClick">{{ $t('message.user.newBtn') }}</div>
+    </div>
+    <div class="content-box">
+      <template v-if="newsList.length > 0">
+        <div class="content-box-item" v-for="(v, k) in newsList" :key="k">
+          <div>{{ v.label }}</div>
+          <div class="content-box-msg">
+            {{ v.value }}
+          </div>
+          <div class="content-box-time">{{ v.time }}</div>
+        </div>
+      </template>
+      <el-empty :description="$t('message.user.newDesc')" v-else></el-empty>
+    </div>
+    <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
+  </div>
 </template>
 
-<script lang="ts">
-import { reactive, toRefs, defineComponent } from 'vue';
-export default defineComponent({
-	name: 'layoutBreadcrumbUserNews',
-	setup() {
-		const state = reactive({
-			newsList: [
-				{
-					label: '关于发布的通知',
-					value: '内容。。。',
-					time: '2022-08-07',
-				},
-				{
-					label: '关于系统升级的通知',
-					value: '欢迎升级使用！',
-					time: '2022-08-07',
-				},
-			],
-		});
-		// 全部已读点击
-		const onAllReadClick = () => {
-			state.newsList = [];
-		};
-		// 前往通知中心点击
-		const onGoToGiteeClick = () => {
-			window.open('https://sagoo.cn');
-		};
-		return {
-			onAllReadClick,
-			onGoToGiteeClick,
-			...toRefs(state),
-		};
-	},
-});
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const emit = defineEmits(['closePopover'])
+
+const newsList = ref([
+  {
+    label: '关于发布的通知',
+    value: '内容。。。',
+    time: '2022-08-07',
+  },
+  {
+    label: '关于系统升级的通知',
+    value: '欢迎升级使用！',
+    time: '2022-08-07',
+  },
+])
+// 全部已读点击
+const onAllReadClick = () => {
+  newsList.value = [];
+};
+// 前往通知中心点击
+const onGoToGiteeClick = () => {
+  router.push('/alarm/log')
+  emit('closePopover')
+};
 </script>
 
 <style scoped lang="scss">
