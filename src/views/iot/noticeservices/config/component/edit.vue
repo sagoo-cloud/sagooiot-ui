@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog title="设置配置信息" v-model="isShowDialog" width="50%">
+		<el-dialog title="设置配置信息" v-model="isShowDialog" width="65%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<div style="display: flex; justify-content: space-between">
 					<div style="width: 50%; padding: 10px">
