@@ -1,27 +1,21 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '配置'" v-model="isShowDialog" width="50%">
+		<el-dialog :title="(ruleForm.id !== 0 ? '设置' : '设置') + '配置插件'" v-model="isShowDialog" width="50%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="名称" prop="title">
-					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
-				</el-form-item>
-
-				<el-form-item label="通知类型" prop="types">
-					<el-radio-group v-model="ruleForm.types">
-						<el-radio label="1"  value="1">即时发送</el-radio>
-						<el-radio label="2" value="2">预约发送</el-radio>
-					</el-radio-group>
-				</el-form-item>
 
 			
-
+		<el-form-item label="配置内容" prop="content">
+          <el-input v-model="ruleForm.value" type="textarea" placeholder="配置内容，一行一条"></el-input>
+        </el-form-item>
 				
-
+		<el-form-item label="配置说明" prop="doc">
+          <el-input v-model="ruleForm.doc" type="textarea" placeholder="请输入配置说明"></el-input>
+        </el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '设 置' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -40,14 +34,17 @@ interface RuleFormState {
 	id: number;
 	name: string;
 	type: string;
-	sendGateway:string;
-	
+	value:string;
+	doc:string;
 	
 }
 interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
 	rules: {};
+	configData: {};
+	id: number;
+	type_name: string;
 
 }
 
@@ -60,30 +57,36 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			id: 0,
+			configData:[],
+			type_name:'',
 			isShowDialog: false,
-		
-			
 			ruleForm: {
 				id: 0,
-				title: '',
-				types: "1",
-				sendGateway:'',
-				
+				name: "",
+				type: "notice",
+				value:'',
+				doc:'',
 			},
 			rules: {
-				title: [{ required: true, message: '配置名称不能为空', trigger: 'blur' }],
-				type: [{ required: true, message: '配置类型不能为空', trigger: 'blur' }],
+				value: [{ required: true, message: '配置内容不能为空', trigger: 'blur' }],
 				
 			},
 		});
 
+
+
+
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null,type) => {
-			resetForm();
+		const openDialog = (row: RuleFormState | null) => {
+
 			if (row) {
-				state.ruleForm = row;
+				state.type_name = row.value;
+
+				api.config.getbyname({ name: row.value,type:'notice' }).then((res: any) => {
+					state.ruleForm = res || [];
+				});
 			}
-			state.ruleForm.sendGateway=type
+
 			state.isShowDialog = true;
 		};
 
@@ -93,10 +96,10 @@ export default defineComponent({
 		
 			state.ruleForm = {
 				id: 0,
-				title: '',
-				types: "1",
-				sendGateway:'',
-			
+				name: "",
+				type: "notice",
+				value:'',
+				doc:'',
 			};
 		};
 		// 关闭弹窗
@@ -114,23 +117,13 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					
-					if (state.ruleForm.id !== 0) {
-						//修改
-						
-						api.config.edit(state.ruleForm).then(() => {
-							ElMessage.success('配置修改成功');
-							closeDialog(); // 关闭弹窗
-							emit('typeList');
-						});
-					} else {
-						//添加
-						api.config.add(state.ruleForm).then(() => {
-							ElMessage.success('配置添加成功');
+					state.ruleForm.name=state.type_name;
+					state.ruleForm.type="notice";
+					api.config.save(state.ruleForm).then(() => {
+							ElMessage.success('插件设置成功');
 							closeDialog(); // 关闭弹窗
 							emit('dataList');
 						});
-					}
 				}
 			});
 		};

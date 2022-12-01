@@ -407,6 +407,7 @@ export default defineComponent({
 }
 .card-state.success {
 	background-color: #f6ffed;
+	color: #000;
 }
 .iot-card .card-warp .card-content .card-state.error {
     background-color: rgba(229,0,18,.1);
@@ -455,7 +456,6 @@ export default defineComponent({
 }
 .ant-badge-status-text {
 	margin-left: 8px;
-	color: rgba(0, 0, 0, 0.85);
 	font-size: 14px;
 }
 .ant-btn {
