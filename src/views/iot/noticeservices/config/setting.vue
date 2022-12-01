@@ -41,7 +41,7 @@
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
-							新增配置
+							新增通知
 						</el-button>
 					</el-form-item>
 				</el-form>
@@ -135,6 +135,7 @@
 					</el-col>
 				</el-row>
 			</div>
+			<div  style="text-align: center;padding: 28px;" v-if="(tableData.total==0)">暂无数据</div>
 			<pagination
 				v-show="tableData.total > 0"
 				:total="tableData.total"
@@ -430,7 +431,6 @@ export default defineComponent({
 }
 
 .ant-btn-link {
-	color: #1d39c4;
 	border-color: transparent;
 	background: transparent;
 	box-shadow: none;
@@ -459,7 +459,6 @@ export default defineComponent({
 	padding: 4px 15px;
 	font-size: 14px;
 	border-radius: 2px;
-	color: rgba(0, 0, 0, 0.85);
 
 }
 .ant-btn > .anticon {
