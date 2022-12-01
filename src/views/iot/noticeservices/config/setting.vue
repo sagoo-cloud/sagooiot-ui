@@ -13,7 +13,7 @@
 							@keyup.enter.native="dataList"
 						/>
 					</el-form-item>
-					<el-form-item label="通知方式" prop="name">
+					<!-- <el-form-item label="通知方式" prop="name">
 						<el-input
 							v-model="tableData.param.sendGateway"
 							placeholder="请输入通知方式"
@@ -22,7 +22,7 @@
 							style="width: 240px"
 							@keyup.enter.native="dataList"
 						/>
-					</el-form-item>
+					</el-form-item> -->
 
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="dataList">
@@ -96,7 +96,15 @@
 										修改
 									</el-button>
 								</div>
-								<!-- <div class="card-button" @click="onOpenEdit(item)">
+								<div class="card-button" @click="onOpenEditTem(item)">
+									<el-button size="default" type="primary" text bg>
+										<el-icon>
+											<ele-Wallet />
+										</el-icon>
+										模板配置
+									</el-button>
+								</div>
+								<!--<div class="card-button" @click="onOpenEdit(item)">
 									<el-button size="default" type="primary" text bg>
 										<el-icon>
 											<ele-View />
@@ -105,7 +113,7 @@
 									</el-button>
 								</div>
 
-								<div class="card-button" @click="onOpenEdit(item)">
+							 	<div class="card-button" @click="onOpenEdit(item)">
 									<el-button size="default" type="info" text bg>
 										<el-icon>
 											<ele-Document />
@@ -137,6 +145,7 @@
 		</el-card>
 
 		<EditDic ref="editDicRef" @dataList="dataList" />
+		<EditTemDic ref="temeditDicRef" @dataList="dataList" />
 	<!-- 	<LevelDic ref="levelDicRef" @dataList="dataList" /> -->
 	</div>
 </template>
@@ -145,7 +154,8 @@
 import { toRefs, reactive, onMounted, ref,getCurrentInstance,defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/setEdit.vue';
-// import LevelDic from './component/level.vue';
+import EditTemDic from './component/temEdit.vue';
+//import LevelDic from './component/level.vue';
 
 import api from '/@/api/notice';
 import { useRoute } from 'vue-router';
@@ -175,7 +185,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic },
+	components: { EditDic,EditTemDic },
 
 	setup() {
 		
@@ -183,6 +193,7 @@ export default defineComponent({
 		// const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
 		const addDicRef = ref();
 		const editDicRef = ref();
+		const temeditDicRef = ref();
 		const detailRef = ref();
 		const queryRef = ref();
 		const route = useRoute();
@@ -225,6 +236,10 @@ export default defineComponent({
 		// 打开修改模型弹窗
 		const onOpenEdit = (row: TableDataRow ) => {
 			editDicRef.value.openDialog({ ...row },state.tableData.param.sendGateway);
+		};
+
+		const onOpenEditTem = (row: TableDataRow ) => {
+			temeditDicRef.value.opentemDialog(row.id,state.tableData.param.sendGateway);
 		};
 
 		const onRowDel = (row?: TableDataRow) => {
@@ -278,6 +293,8 @@ export default defineComponent({
 
 		return {
 			onActionStatus,
+			onOpenEditTem,
+			temeditDicRef,
 			addDicRef,
 			editDicRef,
 			detailRef,

@@ -1,12 +1,12 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '配置'" v-model="isShowDialog" width="50%">
+		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '设置') + '配置模板'" v-model="isShowDialog" width="50%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="名称" prop="title">
 					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
 				</el-form-item>
 
-				<el-form-item label="通知配置" prop="configId">
+				<!-- <el-form-item label="通知配置" prop="configId">
        
 						<el-select v-model="ruleForm.configId" placeholder="请选择通知配置" class="w100">
 						<el-option
@@ -16,7 +16,7 @@
 						:value="item.id"
 						/>
 					</el-select>
-					</el-form-item> 
+				</el-form-item>  -->
 
 				<!-- <el-form-item label="配置类型" prop="types">
 					<el-radio-group v-model="ruleForm.types">
@@ -101,6 +101,19 @@ export default defineComponent({
 			},
 		});
 
+
+		const opentemDialog=(id,type)=>{
+			resetForm();
+			if(id){
+				api.template.configIddetail(id).then((res: any) => {
+					state.ruleForm = res || [];
+				});
+			}
+			state.ruleForm.configId = id;
+			state.ruleForm.sendGateway = type;
+			state.isShowDialog = true;
+		}
+
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null,type) => {
 			resetForm();
@@ -109,7 +122,7 @@ export default defineComponent({
 			}
 
 			api.config.getList({ sendGateway: type }).then((res: any) => {
-			state.configData = res.Data || [];
+				state.configData = res.Data || [];
 			});
 
 
@@ -174,6 +187,7 @@ export default defineComponent({
 		return {
 		
 			openDialog,
+			opentemDialog,
 			closeDialog,
 			onCancel,
 			onSubmit,

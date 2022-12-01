@@ -14,5 +14,6 @@ export default {
     delete: (ids: number) => del("/notice/template/delete", { ids }),
     edit: (data: object) => put("/notice/template/edit", data),
     detail: (id: number) => get("/notice/template/get", { id }),
+    configIddetail: (configId: number) => get("/notice/template/getbyconfig", { configId }),
   },
 };
