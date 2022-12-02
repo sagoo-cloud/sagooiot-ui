@@ -36,7 +36,7 @@
         <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
@@ -50,53 +50,53 @@ import api from '/@/api/loopSupervision';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
-	name: 'deviceproduct',
-	setup() {
-		const queryRef = ref();
-		const route = useRoute()
-		const state = reactive({
-			tableData: {
-				data: [],
-				total: 0,
-				loading: false,
-				param: {
-					pageNum: 1,
-					pageSize: 10,
-					types: 'loop',
-					code: '',
-					dateRange: [],
-				},
-			},
-		});
+  name: 'deviceproduct',
+  setup() {
+    const queryRef = ref();
+    const route = useRoute()
+    const state = reactive({
+      tableData: {
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          pageNum: 1,
+          pageSize: 10,
+          types: 'loop',
+          code: '',
+          dateRange: [],
+        },
+      },
+    });
     // 初始化表格数据
     const initTableData = () => {
       state.tableData.param.pageNum = 1
       typeList();
     };
-		const typeList = () => {
+    const typeList = () => {
       state.tableData.loading = true;
       api.getLoopRegulation(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
-		};
-		// 页面加载时
-		onMounted(() => {
-			state.tableData.param.code = route.query.code
-			initTableData();
-		});
-		/** 重置按钮操作 */
-		const resetQuery = (formEl: FormInstance | undefined) => {
-			if (!formEl) return;
-			formEl.resetFields();
-			typeList();
-		};
-		return {
-			queryRef,
-			typeList,
-			resetQuery,
-			...toRefs(state),
-		};
-	},
+    };
+    // 页面加载时
+    onMounted(() => {
+      state.tableData.param.code = route.query.code
+      initTableData();
+    });
+    /** 重置按钮操作 */
+    const resetQuery = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      typeList();
+    };
+    return {
+      queryRef,
+      typeList,
+      resetQuery,
+      ...toRefs(state),
+    };
+  },
 });
 </script>

@@ -64,7 +64,7 @@
         <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
 
         <!-- <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="scope">
