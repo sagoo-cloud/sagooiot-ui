@@ -23,13 +23,13 @@
 
     <!-- 拓扑图 -->
 
-    <el-row :gutter="15" class="home-card-one mt15">
+    <el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
       <el-col :span="24">
         <div class="home-card-item p20">
           <div class="home-card-item-title">
             <span>流程图</span>
           </div>
-          <iframe src="https://zhgy.sagoo.cn/plugin/topo/?bgColor=000#/show/21" height="400" width="100%" frameborder="0" class="mt15"></iframe>
+          <iframe :src="'https://zhgy.sagoo.cn/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
         </div>
       </el-col>
     </el-row>
