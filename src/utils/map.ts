@@ -62,14 +62,6 @@ export function setLine(lines: any[], map: any) {
           <div class="map-hover-value">${item.stationInfo.name}</div>
         </div>
         <div class="map-hover-row-item">
-          <div class="map-hover-label">一网供水温度：</div>
-          <div class="map-hover-value">${item.outTemperature1}</div>
-        </div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-label">一网回水温度：</div>
-          <div class="map-hover-value">${item.inTemperature1}</div>
-        </div>
-        <div class="map-hover-row-item">
           <div class="map-hover-btn" onclick="window.mapToDetail('${item.code}')">去详情页</div>
         </div>
       </div>

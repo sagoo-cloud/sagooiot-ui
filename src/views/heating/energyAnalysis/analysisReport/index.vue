@@ -43,7 +43,6 @@
             <el-tab-pane label="压力" :name="1"></el-tab-pane>
             <el-tab-pane label="流量" :name="2"></el-tab-pane>
             <el-tab-pane label="阀门开度" :name="3"></el-tab-pane>
-            <el-tab-pane label="室内/室外温度" :name="4"></el-tab-pane>
           </el-tabs>
 
           <div class="chart" style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
@@ -65,8 +64,6 @@
             <el-table-column label="二网供水流量" prop="supplyWaterFlow2" :show-overflow-tooltip="true" />
             <el-table-column label="二网回水流量" prop="returnWaterFlow2" :show-overflow-tooltip="true" />
             <el-table-column label="阀门开度" prop="supplyValve" :show-overflow-tooltip="true" />
-            <!-- <el-table-column label="室内温度" prop="" :show-overflow-tooltip="true" />
-            <el-table-column label="室外温度" prop="" :show-overflow-tooltip="true" /> -->
           </el-table>
           <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
         </div>
