@@ -41,6 +41,11 @@
             <span>环路监测</span>
             <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
           </div>
+          <el-tabs v-model="tabName" @tab-change="initLineChart">
+            <el-tab-pane label="温度" :name="0"></el-tab-pane>
+            <el-tab-pane label="压力" :name="1"></el-tab-pane>
+            <el-tab-pane label="流量" :name="2"></el-tab-pane>
+          </el-tabs>
           <div style="height: 300px" ref="homeLineRef"></div>
         </div>
       </el-col>
@@ -80,6 +85,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const tabName = ref(0)
     const state = reactive({
       dataOne: [
         {
@@ -194,7 +200,10 @@ export default defineComponent({
         backgroundColor: state.charts.bgColor,
         tooltip: { trigger: 'axis' },
         legend: {},
-        grid: { top: 40, right: 40, bottom: 40, left: 40 },
+        grid: {
+          top: 40, right: 20, bottom: 20, left: 20,
+          containLabel: true
+        },
         xAxis: [
           {
             type: 'category',
@@ -287,6 +296,8 @@ export default defineComponent({
     };
 
     return {
+      initLineChart,
+      tabName,
       addDicRef,
       editDicRef,
       queryRef,
