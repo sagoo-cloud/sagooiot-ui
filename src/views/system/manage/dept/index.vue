@@ -36,7 +36,7 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%" row-key="deptId" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
-        <el-table-column prop="deptName" label="部门名称" v-col="'handle'" show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="deptName" label="部门名称" v-col="'deptName'" show-overflow-tooltip> </el-table-column>
         <el-table-column prop="status" label="部门状态" v-col="'status'" align="center" min-width="120">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
