@@ -2,7 +2,13 @@
   <div class="page page-full">
     <div style="position: relative; flex: 1;">
       <div class="map" ref="mapRef" style="height: 100%"></div>
-
+      <div class="search-hover">
+        <el-input v-model="searchText" @keydown.enter.native="searchPoint" placeholder="地址搜索" style="width:250px">
+          <template #append>
+            <el-button :icon="Search" @click="searchPoint"></el-button>
+          </template>
+        </el-input>
+      </div>
       <!-- 显示弹层区域 -->
       <div class="view">
         <div class="view-div" v-for="(item, index) in viewList" :key="index">
@@ -58,6 +64,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch, nextTick } from 'vue';
+import { Search } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
 import api from '/@/api/heatStation';
 import { setMarker, setLine } from '/@/utils/map';
@@ -66,12 +73,14 @@ import { useStore } from '/@/store/index';
 const router = useRouter()
 
 const mapRef = ref();
+const searchText = ref('');
 const store = useStore();
 const heatList = ref([]);
 const viewList = ref<any[]>([]);
 
 let BMapGL = (window as any).BMapGL;
 let map: any = null;
+let local: any = null
 let getThemeConfig: any = null
 let points: any = []
 let loops: any = []
@@ -81,7 +90,19 @@ window.mapToDetail = (code: string) => {
   router.push('/heating/monitor/loopSupervision/list/loopDetail?code=' + code)
 }
 
+function searchPoint() {
+  if (local) {
+    local.search(searchText.value);
+  } else {
+    local = new BMapGL.LocalSearch(map, {
+      renderOptions: { map }
+    });
+    local.search(searchText.value);
+  }
+}
+
 onMounted(() => {
+
   // 获取布局配置信息
   getThemeConfig = store.state.themeConfig.themeConfig;
   map = new BMapGL.Map(mapRef.value, {
@@ -188,6 +209,9 @@ const renderStation = (list: any[]) => {
 	}
 }
 
+.BMap_bubble_content {
+	color: #fff !important;
+}
 // .BMap_bubble_content,
 // .BMap_bubble_center {
 // 	height: 150px !important;
@@ -291,5 +315,19 @@ const renderStation = (list: any[]) => {
 	font-weight: 400;
 	font-size: 12px;
 	color: #000;
+}
+.search-hover {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 999;
+	width: 350px;
+	color: #000;
+	font-size: 12px;
+	padding: 10px;
+}
+.suggestId {
+	height: 30px;
+	padding: 0 10px;
 }
 </style>
