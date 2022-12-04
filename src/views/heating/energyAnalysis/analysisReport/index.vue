@@ -59,10 +59,10 @@
             <el-table-column label="一网回水压力" prop="outPressure1" :show-overflow-tooltip="true" />
             <el-table-column label="二网供水压力" prop="inPressure2" :show-overflow-tooltip="true" />
             <el-table-column label="二网回水压力" prop="outPressure2" :show-overflow-tooltip="true" />
-            <el-table-column label="一网供水流量" prop="supplyWaterFlow" :show-overflow-tooltip="true" />
-            <el-table-column label="一网回水流量" prop="returnWaterFlow" :show-overflow-tooltip="true" />
+            <el-table-column label="供水流量" prop="supplyWaterFlow" :show-overflow-tooltip="true" />
+            <el-table-column label="回水流量" prop="returnWaterFlow" :show-overflow-tooltip="true" />
             <el-table-column label="二网供水流量" prop="supplyWaterFlow2" :show-overflow-tooltip="true" />
-            <el-table-column label="二网回水流量" prop="returnWaterFlow2" :show-overflow-tooltip="true" />
+            <!-- <el-table-column label="二网回水流量" prop="returnWaterFlow2" :show-overflow-tooltip="true" /> -->
             <el-table-column label="阀门开度" prop="supplyValve" :show-overflow-tooltip="true" />
           </el-table>
           <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
@@ -226,10 +226,10 @@ const initLineChart = () => {
     { name: '一网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure1 },
     { name: '二网回水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outPressure2 },
   ], [
-    { name: '一网供水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyWaterFlow },
+    { name: '供水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyWaterFlow },
     { name: '二网供水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyWaterFlow2 },
-    { name: '一网回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow },
-    { name: '二网回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow2 },
+    { name: '回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow },
+    // { name: '二网回水流量', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.returnWaterFlow2 },
   ], [
     { name: '阀门开度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.supplyValve },
   ]]
