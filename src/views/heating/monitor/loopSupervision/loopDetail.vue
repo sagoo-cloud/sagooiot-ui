@@ -144,8 +144,17 @@ export default defineComponent({
         name: ''
       },
       xAxisData: [],
-      inTemperatureEchart: [], // 供水温度
-      outTemperatureEchart: [], // 回水温度
+      inTemperature1Echart: [], // 供水温度
+      inTemperature2Echart: [],
+      outTemperature1Echart: [],
+      outTemperature2Echart: [],
+      inPressure1Echart: [],
+      inPressure2Echart: [],
+      outPressure1Echart: [],
+      outPressure2Echart: [],
+      supplyWaterFlowEchart: [],
+      secondWaterSupplyEchart: [],
+      returnWaterFlowEchart: [],
       isIsDark: false
     });
 
@@ -173,8 +182,17 @@ export default defineComponent({
         types: 'loop',
         code: route.query.code
       }).then((res: any) => {
-        state.inTemperatureEchart = res.inTemperatureEchart.map((item: any) => item.value)
-        state.outTemperatureEchart = res.outTemperatureEchart.map((item: any) => item.value)
+        state.inTemperature1Echart = res.inTemperature1Echart.map((item: any) => item.value)
+        state.inTemperature2Echart = res.inTemperature2Echart.map((item: any) => item.value)
+        state.outTemperature1Echart = res.outTemperature1Echart.map((item: any) => item.value)
+        state.outTemperature2Echart = res.outTemperature2Echart.map((item: any) => item.value)
+        state.inPressure1Echart = res.inPressure1Echart.map((item: any) => item.value)
+        state.inPressure2Echart = res.inPressure2Echart.map((item: any) => item.value)
+        state.outPressure1Echart = res.outPressure1Echart.map((item: any) => item.value)
+        state.outPressure2Echart = res.outPressure2Echart.map((item: any) => item.value)
+        state.supplyWaterFlowEchart = res.supplyWaterFlowEchart.map((item: any) => item.value)
+        state.secondWaterSupplyEchart = res.secondWaterSupplyEchart.map((item: any) => item.value)
+        state.returnWaterFlowEchart = res.returnWaterFlowEchart.map((item: any) => item.value)
         state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
 
         nextTick(() => {
@@ -196,6 +214,23 @@ export default defineComponent({
     const initLineChart = () => {
       if (!global.dispose.some((b: any) => b === global.homeCharThree)) global.homeCharThree.dispose();
       global.homeCharThree = <any>echarts.init(homeLineRef.value, state.charts.theme);
+
+      const seriesList = [[
+        { name: '一网供水温度', type: 'line', data: state.inTemperature1Echart },
+        { name: '二网供水温度', type: 'line', data: state.inTemperature2Echart },
+        { name: '一网回水温度', type: 'line', data: state.outTemperature1Echart },
+        { name: '二网回水温度', type: 'line', data: state.outTemperature2Echart },
+      ], [
+        { name: '一网供水压力', type: 'line', data: state.inPressure1Echart },
+        { name: '二网供水压力', type: 'line', data: state.inPressure2Echart },
+        { name: '一网回水压力', type: 'line', data: state.outPressure1Echart },
+        { name: '二网回水压力', type: 'line', data: state.outPressure2Echart },
+      ], [
+        { name: '供水流量', type: 'line', data: state.supplyWaterFlowEchart },
+        { name: '二网供水流量', type: 'line', data: state.secondWaterSupplyEchart },
+        { name: '回水流量', type: 'line', data: state.returnWaterFlowEchart },
+      ]]
+
       const option = {
         backgroundColor: state.charts.bgColor,
         tooltip: { trigger: 'axis' },
@@ -220,23 +255,7 @@ export default defineComponent({
             }
           }
         ],
-        series: [
-          {
-            name: '供水温度',
-            type: 'line',
-            data: state.inTemperatureEchart
-          },
-          {
-            name: '回水温度',
-            type: 'line',
-            data: state.outTemperatureEchart
-          },
-          // {
-          // 	name: '室外温度',
-          // 	type: 'line',
-          // 	data: [3, 0, 4, 7, 5, 7, 5]
-          // }
-        ]
+        series: seriesList[tabName.value] || []
       };
       (<any>global.homeCharThree).setOption(option);
       (<any>state.myCharts).push(global.homeCharThree);
