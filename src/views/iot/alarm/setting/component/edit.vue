@@ -12,7 +12,7 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="选择产品"  prop="productKey">
+				<el-form-item label="选择产品" prop="productKey">
 					<el-select v-model="ruleForm.productKey" filterable placeholder="请选择产品" @change="setType()">
 						<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
@@ -51,7 +51,15 @@
 							<el-icon><Bottom /></el-icon>
 						</div>
 
-						<div style="padding: 10px; border: 1px solid var(--next-border-color-light);background-color: var(--next-border-color-light); margin-bottom: 10px; position: relative">
+						<div
+							style="
+								padding: 10px;
+								border: 1px solid var(--next-border-color-light);
+								background-color: var(--next-border-color-light);
+								margin-bottom: 10px;
+								position: relative;
+							"
+						>
 							<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
 								<el-icon @click="delParams(index)"><CircleClose /></el-icon>
 							</div>
@@ -91,8 +99,46 @@
 						</div>
 					</div>
 				</div>
-
 				<el-button type="success" class="addbutton" @click="addParamss">增加分组</el-button>
+
+				<el-divider content-position="left">执行动作</el-divider>
+				<div class="box-content">
+					<div v-for="(item, index) in action" :key="index">
+						<div
+							style="
+								padding: 10px;
+								border: 1px solid var(--next-border-color-light);
+								background-color: var(--next-border-color-light);
+								margin-bottom: 10px;
+								position: relative;
+							"
+						>
+							<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
+								<el-icon @click="delAction(index)"><CircleClose /></el-icon>
+							</div>
+
+							<div style="display: flex">
+								<el-divider content-position="left">消息通知</el-divider>
+							</div>
+
+							<div class="content-f">
+								<el-select v-model="item.sendGateway" placeholder="请选择通知方式" style="width: 320px" @change="getNode(item.sendGateway, index)">
+									<el-option v-for="a in notice_send_gateway" :key="a.value" :label="a.label" :value="a.value" />
+								</el-select>
+								<el-select v-model="item.noticeConfig" placeholder="请选择通知配置" style="width: 320px" @change="getTem(item.noticeConfig, index)">
+									<el-option v-for="b in sendGatewayData[index]" :key="b.id" :label="b.title" :value="b.id" />
+								</el-select>
+								<el-select v-model="item.noticeTemplate" placeholder="请选择通知模板" style="width: 320px">
+									<el-option v-for="c in noticeConfigData[index]" :key="c.id" :label="c.title" :value="c.id" />
+								</el-select>
+							</div>
+							<div>
+								<el-input v-model="item.addressee" placeholder="请输入接收人信息" style="width: 320px" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<el-button type="success" class="addbutton" @click="addAction">增加执行</el-button>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -105,10 +151,11 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/datahub';
 import iotapi from '/@/api/device';
 import alarm from '/@/api/alarm';
+import notice from '/@/api/notice';
 
 import { ElMessage } from 'element-plus';
 import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right } from '@element-plus/icons-vue';
@@ -120,8 +167,7 @@ interface RuleFormState {
 	level: string;
 	productKey: string;
 	deviceKey: string;
-	triggerCondition:string;
-	
+	triggerCondition: string;
 }
 interface DicState {
 	isShowDialog: boolean;
@@ -130,10 +176,13 @@ interface DicState {
 	sourceData: [];
 	productData: [];
 	typeData: [];
-	triData:[];
-	operData:[];
+	triData: [];
+	operData: [];
 	levelData: [];
-	requestParams: [];
+	requestParams: {};
+	action: {};
+	sendGatewayData: {};
+	noticeConfigData: {};
 }
 
 export default defineComponent({
@@ -143,15 +192,29 @@ export default defineComponent({
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
 		const formRef = ref<HTMLElement | null>(null);
+		const { proxy } = getCurrentInstance() as any;
+
+		const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
 		const state = reactive<DicState>({
 			id: 0,
 			isShowDialog: false,
 			sourceData: [],
+			tempData:[],
 			productData: [],
 			typeData: [],
-			triData:[],
-			operData:[],
+			triData: [],
+			operData: [],
 			levelData: [],
+			sendGatewayData: [],
+			noticeConfigData: [],
+			action: [
+				{
+					sendGateway: '',
+					noticeConfig: '',
+					noticeTemplate: '',
+					addressee: '',
+				},
+			],
 			requestParams: [
 				{
 					andOr: '',
@@ -172,17 +235,27 @@ export default defineComponent({
 				level: '',
 				productKey: '',
 				deviceKey: '',
-				triggerCondition:[{
-					andOr: '',
-					filters: [
-						{
-							key: '',
-							operator: '',
-							value: '',
-							andOr: 0,
-						},
-					],
-				}]
+				action: [
+					{
+						sendGateway: '',
+						noticeConfig: '',
+						noticeTemplate: '',
+						addressee: '',
+					},
+				],
+				triggerCondition: [
+					{
+						andOr: '',
+						filters: [
+							{
+								key: '',
+								operator: '',
+								value: '',
+								andOr: 0,
+							},
+						],
+					},
+				],
 			},
 			rules: {
 				name: [{ required: true, message: '告警名称不能为空', trigger: 'blur' }],
@@ -199,6 +272,7 @@ export default defineComponent({
 			if (row) {
 				alarm.common.detail(row.id).then((res: any) => {
 					state.requestParams = res.data.condition.triggerCondition;
+					state.action=res.data.performAction.action;
 					state.ruleForm = res.data;
 					setType();
 				});
@@ -208,8 +282,6 @@ export default defineComponent({
 
 		//获取设备列表
 		const getDevData = () => {
-			
-
 			iotapi.product.getLists({ status: 1 }).then((res: any) => {
 				state.productData = res.product || [];
 			});
@@ -219,11 +291,10 @@ export default defineComponent({
 			alarm.common.operator('').then((res: any) => {
 				state.operData = res.list || [];
 			});
-			
 		};
 
 		const resetForm = () => {
-			state.requestParams= [
+			state.requestParams = [
 				{
 					andOr: '',
 					filters: [
@@ -235,7 +306,16 @@ export default defineComponent({
 						},
 					],
 				},
-			],
+			];
+			state.action = [
+				{
+					sendGateway: '',
+					noticeConfig: '',
+					noticeTemplate: '',
+					addressee: '',
+				},
+			];
+
 			state.ruleForm = {
 				id: 0,
 				name: '',
@@ -243,17 +323,27 @@ export default defineComponent({
 				level: '',
 				productKey: '',
 				deviceKey: '',
-				triggerCondition:[{
-					andOr: '',
-					filters: [
-						{
-							key: '',
-							operator: '',
-							value: '',
-							andOr: 0,
-						},
-					],
-				}]
+				action: [
+					{
+						sendGateway: '',
+						noticeConfig: '',
+						noticeTemplate: '',
+						addressee: '',
+					},
+				],
+				triggerCondition: [
+					{
+						andOr: '',
+						filters: [
+							{
+								key: '',
+								operator: '',
+								value: '',
+								andOr: 0,
+							},
+						],
+					},
+				],
 			};
 		};
 		// 关闭弹窗
@@ -272,6 +362,7 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.ruleForm.triggerCondition = state.requestParams;
+					state.ruleForm.action = state.action;
 					if (state.ruleForm.id !== 0) {
 						//修改
 						alarm.common.edit(state.ruleForm).then(() => {
@@ -289,6 +380,18 @@ export default defineComponent({
 					}
 				}
 			});
+		};
+
+		const addAction = () => {
+			state.action.push({
+				sendGateway: '',
+				noticeConfig: '',
+				noticeTemplate: '',
+				addressee: '',
+			});
+		};
+		const delAction = (index) => {
+			state.action.splice(index, 1);
 		};
 
 		const delParams = (index) => {
@@ -321,21 +424,18 @@ export default defineComponent({
 			});
 		};
 
-		const setType=()=>{
-
-			let product_id=0;
+		const setType = () => {
+			let product_id = 0;
 			state.productData.forEach((item, index) => {
-				if(item.key==state.ruleForm.productKey){
-					product_id=item.id;
+				if (item.key == state.ruleForm.productKey) {
+					product_id = item.id;
 				}
-			})
+			});
 
-
-
-			api.common.getdevList({productId:product_id}).then((res: any) => {
+			api.common.getdevList({ productId: product_id }).then((res: any) => {
 				state.sourceData = res.device;
 			});
-	
+
 			alarm.common.trigger_type(state.ruleForm.productKey).then((res: any) => {
 				state.typeData = res.list || [];
 			});
@@ -343,11 +443,29 @@ export default defineComponent({
 			alarm.common.trigger_param(state.ruleForm.productKey).then((res: any) => {
 				state.triData = res.list || [];
 			});
+		};
 
+		const getNode = (event, index) => {
+		
+			state.action[index].noticeConfig='';
+			notice.config.getList({ sendGateway: event }).then((res: any) => {
+				state.sendGatewayData[index] = res.Data;
+			});
+		};
 
-		}
+		const getTem = (event, index) => {
+			state.action[index].noticeTemplate='';
+			notice.template.configIddetail(event).then((res: any) => {
+				state.noticeConfigData[index] = [res];
+
+			});
+		};
 
 		return {
+			getTem,
+			getNode,
+			delAction,
+			addAction,
 			setType,
 			addParams,
 			addParamss,
@@ -359,6 +477,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
+			notice_send_gateway,
 			myRef,
 			...toRefs(state),
 		};
