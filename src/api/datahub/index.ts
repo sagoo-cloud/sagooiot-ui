@@ -46,6 +46,9 @@ export default {
       getDictData: (params: object) => get('/common/dict/data/getDictData',  params ),
       cityTree: (params: object) => get('/common/city/tree',  params ),
       copy: (params: object) => post('/source/template/copy', params),
+      relation_check: (id: number) => get('/source/template/relation_check', { id }),
+      source_list: (id: number) => get('/source/template/source_list', { id }),
+      relation: (data: object) => post('/source/template/relation', data),
       
    } ,
 

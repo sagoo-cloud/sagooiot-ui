@@ -83,6 +83,7 @@
       </div>
     </div>
     <EditDic ref="editDicRef" @typeList="typeList" />
+    <RelationDic ref="relationRef" @typeList="typeList" />
   </div>
 </template>
 <script lang="ts">
@@ -91,6 +92,7 @@ import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import { useRoute } from 'vue-router';
 import EditDic from './component/editNode.vue';
+import RelationDic from './component/relation.vue';
 import api from '/@/api/datahub';
 
 interface TableDataState {
@@ -111,10 +113,10 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'dataDetail',
-  components: { EditDic },
+  components: { EditDic,RelationDic },
   setup(prop, context) {
     const editDicRef = ref();
-
+    const relationRef=ref();
     const route = useRoute();
     const state = reactive<TableDataState>({
       config: {},
@@ -198,22 +200,38 @@ export default defineComponent({
     };
 
     const CkOption = () => {
-      if (state.developer_status == 1) {
-        api.tnode.undeploy({ id: route.params.id }).then((res: any) => {
-          ElMessage.success('操作成功');
-          state.developer_status = 0;
-        });
-      } else {
-        api.tnode.deploy({ id: route.params.id }).then((res: any) => {
-          ElMessage.success('操作成功');
-          state.developer_status = 1;
-        });
-      }
+      //检测是否需要设置关联
+      api.template.relation_check(route.params.id).then((res: any) => {
+          if(res.yes){
+            let ids={
+              id:route.params.id,
+            }
+            relationRef.value.openDialog(ids);
+          }else{
+            if (state.developer_status == 1) {
+                api.tnode.undeploy({ id: route.params.id }).then((res: any) => {
+                  ElMessage.success('操作成功');
+                  state.developer_status = 0;
+                });
+              } else {
+                api.tnode.deploy({ id: route.params.id }).then((res: any) => {
+                  ElMessage.success('操作成功');
+                  state.developer_status = 1;
+                });
+              }
+          }
+        
+       });
+
+   
+
+
     };
 
     return {
       Edit,
       CkOption,
+      relationRef,
       editDicRef,
       onOpenAdd,
       typeList,
