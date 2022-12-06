@@ -39,6 +39,8 @@ service.interceptors.response.use(
 					window.location.href = '/'; // 去登录页
 				})
 				.catch(() => { });
+		} else if (code === undefined && res.message === undefined) { // 可能是下载文件
+			return response
 		} else if (code !== 0) {
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
@@ -96,6 +98,7 @@ export function post(url: string, data?: any): any {
 		data
 	})
 }
+
 export function put(url: string, data?: any): any {
 	return service({
 		url,
@@ -109,4 +112,25 @@ export function del(url: string, data?: any): any {
 		method: "delete",
 		data
 	})
+}
+
+
+export function file(url: string, params?: any, method: 'get' | 'post' = 'get'): any {
+	if (method === 'get') {
+		return service({
+			url,
+			method,
+			params,
+			timeout: 30000,
+			responseType: 'arraybuffer',
+		});
+	} else {
+		return service({
+			url,
+			method,
+			timeout: 100000,
+			data: params,
+			responseType: 'blob',
+		});
+	}
 }

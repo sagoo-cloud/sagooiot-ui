@@ -1,4 +1,4 @@
-import { get, post, del, put } from '/@/utils/request';
+import { get, post, del, put, file } from '/@/utils/request';
 
 export default {
   sysinfo: () => get('/sysinfo'),
@@ -108,7 +108,7 @@ export default {
 
   log: {
     getList: (params: object) => get('/system/login/log/list', params),
-    export: (params: object) => get('/system/login/log/export', params),
+    export: (params: object) => file('/system/login/log/export', params),
     del: (infoIds: number[]) => del('/system/login/log/del', { infoIds }),
     detail: (infoId: number) => get('/system/login/log/detail', { infoId }),
     clearLog: () => post('/system/login/log/clear'),
