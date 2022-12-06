@@ -26,7 +26,7 @@
         <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column label="换热站" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="换热站编号" prop="code" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水压力" prop="1nPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />

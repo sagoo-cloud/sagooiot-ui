@@ -54,7 +54,7 @@
             {{ row.code }}
           </template>
         </el-table-column>
-        <el-table-column label="一网供水压力" prop="1nPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
