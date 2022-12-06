@@ -3,11 +3,15 @@
     <div style="position: relative; flex: 1;">
       <div class="map" ref="mapRef" style="height: 100%"></div>
       <div class="search-hover">
-        <el-input v-model="searchText" @keydown.enter.native="searchPoint" placeholder="地址搜索" style="width:250px">
+        <!-- <el-input v-model="searchText" @keydown.enter.native="searchPoint" placeholder="地址搜索" style="width:250px">
           <template #append>
             <el-button :icon="Search" @click="searchPoint"></el-button>
           </template>
-        </el-input>
+        </el-input> -->
+
+        <el-select v-model="searchText" filterable allow-create default-first-option :reserve-keyword="false" placeholder="地址搜索" style="width:250px" @change="searchPoint">
+          <el-option v-for="item in heatList" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
       </div>
       <!-- 显示弹层区域 -->
       <div class="view">
@@ -90,15 +94,30 @@ window.mapToDetail = (code: string) => {
   router.push('/heating/monitor/loopSupervision/list/loopDetail?code=' + code)
 }
 
-function searchPoint() {
-  if (local) {
-    local.search(searchText.value);
+function searchPoint(val: number | string) {
+  if (typeof val === 'number') {
+    map.setZoom(15);
+    const { lat, lnt: lng } = heatList.value.find((item: any) => item.id === val) as any
+
+    setTimeout(() => {
+      map.centerAndZoom({ lat, lng }, 20);
+    }, 500)
+
+    local && local.search('');
+
+    // 选择的换热站
   } else {
-    local = new BMapGL.LocalSearch(map, {
-      renderOptions: { map }
-    });
-    local.search(searchText.value);
+    // 自定义的地址搜索
+    if (local) {
+      local.search(searchText.value);
+    } else {
+      local = new BMapGL.LocalSearch(map, {
+        renderOptions: { map }
+      });
+      local.search(searchText.value);
+    }
   }
+  console.log(val)
 }
 
 onMounted(() => {
@@ -128,7 +147,7 @@ onMounted(() => {
     setLine(list, map);
   });
   // 获取换热站列表
-  api.heatStation.getList({
+  api.heatStation.getAllList({
     status: 1
   }).then((res: any) => {
     heatList.value = res
