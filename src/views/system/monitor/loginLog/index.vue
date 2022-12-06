@@ -200,7 +200,9 @@ export default defineComponent({
       api.log
         .export(state.tableData.param)
         .then((res: any) => {
-          const fileName = res.headers['content-disposition'] ? res.headers['content-disposition'].replace('attachment; filename="', '').replace('"', '') : '导出日志.xlsx';
+          // 用split是避免多次取值重复都好分割的情况，比如 
+          // attachment; filename="2022-12-06 21:34:35-SysLoginLog.xlsx", attachment; filename="2022-12-06 21:34:35-SysLoginLog.xlsx"
+          const fileName = res.headers['content-disposition'] ? res.headers['content-disposition'].split(',')[0].replaceAll('attachment; filename="', '').replaceAll('"', '') : '导出日志.xlsx';
           download(res.data, fileName, res.headers['content-type']);
         })
     };
