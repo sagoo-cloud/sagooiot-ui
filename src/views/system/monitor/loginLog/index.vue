@@ -88,7 +88,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/system';
-import download from 'downloadjs';
+import downloadFile from '/@/utils/download';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -197,14 +197,7 @@ export default defineComponent({
 
     // 导出日志
     const onRowExport = () => {
-      api.log
-        .export(state.tableData.param)
-        .then((res: any) => {
-          // 用split是避免多次取值重复都好分割的情况，比如 
-          // attachment; filename="2022-12-06 21:34:35-SysLoginLog.xlsx", attachment; filename="2022-12-06 21:34:35-SysLoginLog.xlsx"
-          const fileName = res.headers['content-disposition'] ? res.headers['content-disposition'].split(',')[0].replaceAll('attachment; filename="', '').replaceAll('"', '') : '导出日志.xlsx';
-          download(res.data, fileName, res.headers['content-type']);
-        })
+      api.log.export(state.tableData.param).then((res: any) => downloadFile(res))
     };
 
 
