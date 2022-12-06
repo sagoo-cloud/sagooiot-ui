@@ -46,9 +46,9 @@
           </el-tabs>
 
           <div class="chart" style="height: 400px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
-          <div class="title" style="margin-top:20px">数据列表</div>
+          <div class="title flex-row" style="margin-top:20px">数据列表 <el-button @click="exportExcel">数据导出</el-button>
+          </div>
           <el-table :data="tableData" v-loading="loading" style="width: 100%">
-            <el-table-column label="ID" align="center" prop="id" width="60" />
             <el-table-column label="环路编号" prop="huanLuNo" :show-overflow-tooltip="true" />
             <el-table-column label="环路名称" prop="huanLuName" :show-overflow-tooltip="true" />
             <el-table-column label="一网供水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
@@ -80,6 +80,7 @@ import heatApi from '/@/api/heatStation';
 import energyApi from '/@/api/energyAnalysis';
 import { formatDate } from '/@/utils/formatTime'
 import { useSearch } from '/@/hooks/useCommon';
+import { export_json_to_excel } from '/@/utils/xlsx';
 
 const { params, tableData, getList, loading } = useSearch<any[]>(energyApi.getEnergyLoopdataPage, 'list', {
   loopCode: '',
@@ -88,6 +89,8 @@ const { params, tableData, getList, loading } = useSearch<any[]>(energyApi.getEn
     formatDate(new Date(), 'YYYY-mm-dd')
   ]
 })
+
+let nodeName = ''
 
 let global: any = {
   lineChart: null,
@@ -145,6 +148,40 @@ const filterNode = (value: string, data: any) => {
   return data.name.includes(value)
 }
 
+const exportExcel = () => {
+
+  const header = {
+    huanLuNo: '环路编号',
+    inTemperature1: '一网供水温度',
+    outTemperature1: '一网回水温度',
+    inTemperature2: '二网供水温度',
+    outTemperature2: '二网回水温度',
+    inPressure1: '一网供水压力',
+    outPressure1: '一网回水压力',
+    inPressure2: '二网供水压力',
+    outPressure2: '二网回水压力',
+    supplyWaterFlow: '供水流量',
+    returnWaterFlow: '回水流量',
+    supplyWaterFlow2: '二网供水流量',
+    supplyValve: '阀门开度',
+  };
+
+  // 主体数据
+  const list = state.tableData.data.map((item: any) => {
+    const newItem: any = {}
+    Object.keys(header).forEach((key: string) => {
+      newItem[key] = item[key]
+    })
+    return newItem
+  });
+
+  export_json_to_excel({
+    header,
+    list,
+    fileName: nodeName + '-环路分析数据导出',
+  });
+}
+
 const queryTree = () => {
   heatApi.heatStation.getAllStaAndLoop({})
     .then((res: any) => {
@@ -152,6 +189,7 @@ const queryTree = () => {
       if (state.heatList.length) {
         curNode.value = state.heatList[0].code
         params.loopCode = state.heatList[0].code
+        nodeName = state.heatList[0].name
       }
       getChartData()
     });
@@ -205,6 +243,8 @@ const getChartData = () => {
   })
 }
 const onNodeClick = (data: any) => {
+  nodeName = data.name
+  // nodeName = data.code
   curNode.value = data.code
   params.loopCode = data.code
   getChartData()

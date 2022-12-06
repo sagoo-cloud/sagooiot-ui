@@ -22,7 +22,8 @@
           <div style="height: 300px" v-loading="state.tableData.loading" ref="barChartRef"></div>
           <div class="title mt-2">失水量曲线</div>
           <div style="height: 300px" v-loading="state.tableData.loading" ref="lineChartRef"></div>
-          <div class="title mt-2">数据列表</div>
+          <div class="title mt-2 flex-row" style="margin-top:20px">数据列表 <el-button @click="exportExcel">数据导出</el-button>
+          </div>
 
           <el-table :data="tableData" style="width: 100%" v-loading="loading">
             <el-table-column type="index" width="55" label="序号" align="center" />
@@ -47,8 +48,11 @@ import api from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 import { formatDate } from '/@/utils/formatTime';
 import { useSearch } from '/@/hooks/useCommon';
+import { export_json_to_excel } from '/@/utils/xlsx';
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getEnergyHuanluWaterLossLineChartPage, 'list', { loopCode: '' });
+
+let nodeName = ''
 
 let global: any = {
   barChart: null,
@@ -97,9 +101,31 @@ const filterNode = (value: string, data: any) => {
 }
 
 const onNodeClick = (data: any) => {
+  nodeName = data.name
   curNode.value = data.code
   params.loopCode = data.code
   queryLineChart()
+}
+
+
+const exportExcel = () => {
+
+  const header = {
+    datetime: '日期',
+    huanLuNo: '环路编码',
+    huanLuName: '环路名称',
+    supplyWater: '供水流量',
+    returnWater: '回水流量',
+    waterLoss: '失水量',
+  };
+
+  const list = state.tableData.data
+
+  export_json_to_excel({
+    header,
+    list,
+    fileName: nodeName + '-换热站失水分析数据导出',
+  });
 }
 
 const queryTree = () => {
@@ -109,6 +135,7 @@ const queryTree = () => {
       if (state.heatList.length) {
         curNode.value = state.heatList[0].code
         params.loopCode = state.heatList[0].code
+        nodeName = state.heatList[0].name
       }
       queryLineChart()
     });

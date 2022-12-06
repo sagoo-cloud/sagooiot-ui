@@ -48,7 +48,8 @@
     "vue3-cron": "^1.1.8",
     "vue3-json-viewer": "^2.2.2",
     "vuex": "^4.0.2",
-    "wangeditor": "^4.7.12"
+    "wangeditor": "^4.7.12",
+    "xlsx-with-styles": "^0.17.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.21",
