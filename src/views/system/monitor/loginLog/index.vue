@@ -45,7 +45,14 @@
 							</el-icon>
 							删除日志
 						</el-button>
-						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowClear()">
+
+            <el-button size="default" type="primary" class="ml10" @click="onRowExport()">
+              <el-icon>
+                <ele-Delete />
+              </el-icon>
+              导出日志
+            </el-button>
+						<!--<el-button size="default" type="danger" class="ml10" @click="onRowClear()">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -186,7 +193,23 @@ export default defineComponent({
 				},
 			}).catch(() => { });
 		};
-		// 清空日志
+
+    // 导出日志
+    const onRowExport = () => {
+      state.tableData.loading = true;
+      api.log
+          .export(state.tableData.param)
+          .then((res: any) => {
+            state.tableData.data = res.list;
+            state.tableData.total = res.total;
+          })
+          .finally(() => {
+            state.tableData.loading = false;
+          });
+    };
+
+
+    // 清空日志
 		const onRowClear = () => {
 			ElMessageBox.confirm('你确定要删除所选数据？', '提示', {
 				confirmButtonText: '确认',
@@ -218,6 +241,7 @@ export default defineComponent({
 		return {
 			queryRef,
 			onRowDel,
+      onRowExport,
 			dataList,
 			resetQuery,
 			handleSelectionChange,

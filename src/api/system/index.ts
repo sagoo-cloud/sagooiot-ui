@@ -108,7 +108,8 @@ export default {
 
   log: {
     getList: (params: object) => get('/system/login/log/list', params),
-    del: (infoIds: number) => del('/system/login/log/del', { infoIds }),
+    export: (params: object) => get('/system/login/log/export', params),
+    del: (infoIds: number[]) => del('/system/login/log/del', { infoIds }),
     detail: (infoId: number) => get('/system/login/log/detail', { infoId }),
     clearLog: () => post('/system/login/log/clear'),
   },
