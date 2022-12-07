@@ -133,7 +133,13 @@
 								</el-select>
 							</div>
 							<div>
-								<el-input v-model="item.addressee" placeholder="请输入接收人信息" style="width: 320px" />
+								<div style="display: flex; margin-bottom: 10px" v-for="(ph, phindex) in item.addressee" :key="phindex">
+									<el-input v-model="ph.phone" placeholder="请输入接收人信息" style="width: 320px" />
+									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex == 0" @click="AddPhone(index)"><CirclePlus /></el-icon>
+									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex > 0" @click="DelPhone(index, phindex)"
+										><Remove
+									/></el-icon>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -158,7 +164,7 @@ import alarm from '/@/api/alarm';
 import notice from '/@/api/notice';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right } from '@element-plus/icons-vue';
+import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right, CirclePlus, Remove } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	id: number;
@@ -180,15 +186,16 @@ interface DicState {
 	operData: [];
 	levelData: [];
 	requestParams: {};
+	triggerCondition: {};
 	action: {};
-	tempData:{};
+	tempData: {};
 	sendGatewayData: {};
 	noticeConfigData: {};
 }
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Plus, CircleClose, Minus, Right, Top, Bottom },
+	components: { Delete, Plus, CircleClose, Minus, Right, Top, Bottom, CirclePlus, Remove },
 
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
@@ -200,7 +207,7 @@ export default defineComponent({
 			id: 0,
 			isShowDialog: false,
 			sourceData: [],
-			tempData:[],
+			tempData: [],
 			productData: [],
 			typeData: [],
 			triData: [],
@@ -208,12 +215,17 @@ export default defineComponent({
 			levelData: [],
 			sendGatewayData: [],
 			noticeConfigData: [],
+
 			action: [
 				{
 					sendGateway: '',
 					noticeConfig: '',
 					noticeTemplate: '',
-					addressee: '',
+					addressee: [
+						{
+							phone: '',
+						},
+					],
 				},
 			],
 			requestParams: [
@@ -241,7 +253,7 @@ export default defineComponent({
 						sendGateway: '',
 						noticeConfig: '',
 						noticeTemplate: '',
-						addressee: '',
+						addressee: {},
 					},
 				],
 				triggerCondition: [
@@ -273,22 +285,23 @@ export default defineComponent({
 			if (row) {
 				alarm.common.detail(row.id).then((res: any) => {
 					state.requestParams = res.data.condition.triggerCondition;
-					
-				
+
 					res.data.performAction.action.forEach(function (value, index) {
 						notice.config.getList({ sendGateway: value.sendGateway }).then((res: any) => {
-								state.sendGatewayData[index] = res.Data;
-							});
+							state.sendGatewayData[index] = res.Data;
+						});
 
 						notice.template.configIddetail(value.noticeConfig).then((res: any) => {
 							state.noticeConfigData[index] = [res];
-
-						});	
+						});
 					});
 
-
-				
-					state.action=res.data.performAction.action;
+					state.action = res.data.performAction.action;
+					state.action.forEach(function (value, index) {
+						state.action[index].addressee = value.addressee.map((p) => {
+							return { phone: p };
+						});
+					});
 					state.ruleForm = res.data;
 					setType();
 				});
@@ -307,7 +320,6 @@ export default defineComponent({
 			alarm.common.operator('').then((res: any) => {
 				state.operData = res.list || [];
 			});
-
 		};
 
 		const resetForm = () => {
@@ -329,7 +341,11 @@ export default defineComponent({
 					sendGateway: '',
 					noticeConfig: '',
 					noticeTemplate: '',
-					addressee: '',
+					addressee: [
+						{
+							phone: '',
+						},
+					],
 				},
 			];
 
@@ -345,7 +361,7 @@ export default defineComponent({
 						sendGateway: '',
 						noticeConfig: '',
 						noticeTemplate: '',
-						addressee: '',
+						addressee: {},
 					},
 				],
 				triggerCondition: [
@@ -379,7 +395,15 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					state.ruleForm.triggerCondition = state.requestParams;
+
+					state.action.forEach(function (value, index) {
+						state.action[index].addressee = value.addressee.map((p) => {
+							return p.phone;
+						});
+					});
+
 					state.ruleForm.action = state.action;
+
 					if (state.ruleForm.id !== 0) {
 						//修改
 						alarm.common.edit(state.ruleForm).then(() => {
@@ -399,12 +423,27 @@ export default defineComponent({
 			});
 		};
 
+		const AddPhone = (index) => {
+			console.log();
+			state.action[index].addressee.push({
+				phone: '',
+			});
+		};
+
+		const DelPhone = (index, bbb) => {
+			state.action[index].addressee.splice(bbb, 1);
+		};
+
 		const addAction = () => {
 			state.action.push({
 				sendGateway: '',
 				noticeConfig: '',
 				noticeTemplate: '',
-				addressee: '',
+				addressee: [
+					{
+						phone: '',
+					},
+				],
 			});
 		};
 		const delAction = (index) => {
@@ -463,18 +502,16 @@ export default defineComponent({
 		};
 
 		const getNode = (event, index) => {
-		
-			state.action[index].noticeConfig='';
+			state.action[index].noticeConfig = '';
 			notice.config.getList({ sendGateway: event }).then((res: any) => {
 				state.sendGatewayData[index] = res.Data;
 			});
 		};
 
 		const getTem = (event, index) => {
-			state.action[index].noticeTemplate='';
+			state.action[index].noticeTemplate = '';
 			notice.template.configIddetail(event).then((res: any) => {
 				state.noticeConfigData[index] = [res];
-
 			});
 		};
 
@@ -483,6 +520,8 @@ export default defineComponent({
 			getNode,
 			delAction,
 			addAction,
+			AddPhone,
+			DelPhone,
 			setType,
 			addParams,
 			addParamss,
