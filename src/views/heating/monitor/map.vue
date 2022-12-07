@@ -28,12 +28,12 @@
             </div>
           </div>
           <div class="view-div-content">
-            <!-- <div>路线信息</div>
+            <div>路线信息</div>
             <div class="mt-1 pl-4">
               <p v-for="(point, index) in item.loopViaPointInfo" :key="index">
                 {{ point.position }}
               </p>
-            </div> -->
+            </div>
             <div class="mt-1">实时温度</div>
             <el-table :data="[{
 							outTemperature1: item.outTemperature1,
