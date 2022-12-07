@@ -181,6 +181,7 @@ interface DicState {
 	levelData: [];
 	requestParams: {};
 	action: {};
+	tempData:{};
 	sendGatewayData: {};
 	noticeConfigData: {};
 }
@@ -272,6 +273,21 @@ export default defineComponent({
 			if (row) {
 				alarm.common.detail(row.id).then((res: any) => {
 					state.requestParams = res.data.condition.triggerCondition;
+					
+				
+					res.data.performAction.action.forEach(function (value, index) {
+						notice.config.getList({ sendGateway: value.sendGateway }).then((res: any) => {
+								state.sendGatewayData[index] = res.Data;
+							});
+
+						notice.template.configIddetail(value.noticeConfig).then((res: any) => {
+							state.noticeConfigData[index] = [res];
+
+						});	
+					});
+
+
+				
 					state.action=res.data.performAction.action;
 					state.ruleForm = res.data;
 					setType();
@@ -291,6 +307,7 @@ export default defineComponent({
 			alarm.common.operator('').then((res: any) => {
 				state.operData = res.list || [];
 			});
+
 		};
 
 		const resetForm = () => {
