@@ -133,6 +133,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     let map: any = null
     let BMapGL: any = null
+    let myGeo: any = null
     let polyline: any = null
     let startDraw = false
     let stationInfo: any = null
@@ -285,7 +286,7 @@ export default defineComponent({
             sort: index + 1,
             lnt: item.lng,
             lat: item.lat,
-            // position: item.position
+            position: item.position
           }))
           if (params.id) {
             //修改
@@ -345,6 +346,7 @@ export default defineComponent({
 
     const initMap = () => {
       BMapGL = (window as any).BMapGL
+      myGeo = new BMapGL.Geocoder()
       map = new BMapGL.Map("loop-map-container");
       // 116.404, 39.915
       const point = new BMapGL.Point(124.383044, 40.124296);
@@ -355,26 +357,19 @@ export default defineComponent({
       map.addControl(zoomCtrl);
       map.addControl(cityCtrl);
 
-      // state.mapLocal = new BMapGL.LocalSearch(map, {
-      //   renderOptions: { map: map }
-      // })
-
       map.addEventListener('click', ({ latlng }: any) => {
         if (!startDraw) return
-
-        state.pointList.push(latlng)
-
-        let marker = new BMapGL.Marker(latlng);
-        // 在地图上添加点标记
-        map.addOverlay(marker);
-        setLine(state.pointList)
-
-        // let myGeo = new BMapGL.Geocoder
-        // myGeo.getLocation(new BMapGL.Point(point.lng, point.lat), (result: any) => {
-        //   if (result) {
-        //     state.pointList[index].position = result.address
-        //   }
-        // })
+        // 获取地址名称
+        myGeo.getLocation(latlng, (result: any) => {
+          if (result) {
+            // console.log(result.address)
+            state.pointList.push({ ...latlng, position: result.address })
+            let marker = new BMapGL.Marker(latlng);
+            // 在地图上添加点标记
+            map.addOverlay(marker);
+            setLine(state.pointList)
+          }
+        })
       })
     }
     function setLine(pointList: any[]) {
