@@ -281,13 +281,12 @@ export default defineComponent({
       () => store.state.themeConfig.themeConfig.isIsDark,
       (isIsDark) => {
         nextTick(() => {
-          state.isIsDark = store.state.themeConfig.themeConfig.isIsDark
-          state.charts.theme = isIsDark ? 'transparent' : '';
+          state.charts.theme = isIsDark ? 'dark' : '';
           state.charts.bgColor = isIsDark ? 'transparent' : '';
           state.charts.color = isIsDark ? '#dadada' : '#303133';
           setTimeout(() => {
             initLineChart();
-          }, 1000);
+          }, 500);
         });
       },
       {
