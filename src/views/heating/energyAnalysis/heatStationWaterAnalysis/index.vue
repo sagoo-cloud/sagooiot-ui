@@ -48,7 +48,8 @@ import api from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 import { formatDate } from '/@/utils/formatTime';
 import { useSearch } from '/@/hooks/useCommon';
-import { export_json_to_excel } from '/@/utils/xlsx';
+// import { export_json_to_excel } from '/@/utils/xlsx';
+import downloadFile from '/@/utils/download';
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getEnergyHuanluWaterLossLineChartPage, 'list', { loopCode: '' });
 
@@ -107,26 +108,34 @@ const onNodeClick = (data: any) => {
   queryLineChart()
 }
 
-
+// 后端导出
 const exportExcel = () => {
-
-  const header = {
-    datetime: '日期',
-    huanLuNo: '环路编码',
-    huanLuName: '环路名称',
-    supplyWater: '供水流量',
-    returnWater: '回水流量',
-    waterLoss: '失水量',
-  };
-
-  const list = state.tableData.data
-
-  export_json_to_excel({
-    header,
-    list,
-    fileName: nodeName + '-换热站失水分析数据导出',
-  });
+  api.lossWaterExport({
+    loopCode: curNode.value
+  }).then((res: any) => {
+    downloadFile(res, nodeName + '-换热站失水分析数据导出.xlsx')
+  })
 }
+
+// 前端导出
+// const exportExcel = () => {
+//   const header = {
+//     datetime: '日期',
+//     huanLuNo: '环路编码',
+//     huanLuName: '环路名称',
+//     supplyWater: '供水流量',
+//     returnWater: '回水流量',
+//     waterLoss: '失水量',
+//   };
+
+//   const list = state.tableData.data
+
+//   export_json_to_excel({
+//     header,
+//     list,
+//     fileName: nodeName + '-换热站失水分析数据导出',
+//   });
+// }
 
 const queryTree = () => {
   heatApi.heatStation.getAllStaAndLoop({})

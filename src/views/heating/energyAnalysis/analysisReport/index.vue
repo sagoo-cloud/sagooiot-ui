@@ -80,7 +80,8 @@ import heatApi from '/@/api/heatStation';
 import energyApi from '/@/api/energyAnalysis';
 import { formatDate } from '/@/utils/formatTime'
 import { useSearch } from '/@/hooks/useCommon';
-import { export_json_to_excel } from '/@/utils/xlsx';
+import downloadFile from '/@/utils/download';
+// import { export_json_to_excel } from '/@/utils/xlsx';
 
 const { params, tableData, getList, loading } = useSearch<any[]>(energyApi.getEnergyLoopdataPage, 'list', {
   loopCode: '',
@@ -148,39 +149,50 @@ const filterNode = (value: string, data: any) => {
   return data.name.includes(value)
 }
 
+// 后端导出
 const exportExcel = () => {
-
-  const header = {
-    huanLuNo: '环路编号',
-    inTemperature1: '一网供水温度',
-    outTemperature1: '一网回水温度',
-    inTemperature2: '二网供水温度',
-    outTemperature2: '二网回水温度',
-    inPressure1: '一网供水压力',
-    outPressure1: '一网回水压力',
-    inPressure2: '二网供水压力',
-    outPressure2: '二网回水压力',
-    supplyWaterFlow: '供水流量',
-    returnWaterFlow: '回水流量',
-    supplyWaterFlow2: '二网供水流量',
-    supplyValve: '阀门开度',
-  };
-
-  // 主体数据
-  const list = state.tableData.data.map((item: any) => {
-    const newItem: any = {}
-    Object.keys(header).forEach((key: string) => {
-      newItem[key] = item[key]
-    })
-    return newItem
-  });
-
-  export_json_to_excel({
-    header,
-    list,
-    fileName: nodeName + '-环路分析数据导出',
-  });
+  energyApi.loopdataExport({
+    loopCode: curNode.value,
+    dateRange: state.tableData.param.dateRange
+  }).then((res: any) => {
+    downloadFile(res, nodeName + '-环路分析数据导出.xlsx')
+  })
 }
+
+// 前端导出
+// const exportExcel = () => {
+
+//   const header = {
+//     huanLuNo: '环路编号',
+//     inTemperature1: '一网供水温度',
+//     outTemperature1: '一网回水温度',
+//     inTemperature2: '二网供水温度',
+//     outTemperature2: '二网回水温度',
+//     inPressure1: '一网供水压力',
+//     outPressure1: '一网回水压力',
+//     inPressure2: '二网供水压力',
+//     outPressure2: '二网回水压力',
+//     supplyWaterFlow: '供水流量',
+//     returnWaterFlow: '回水流量',
+//     supplyWaterFlow2: '二网供水流量',
+//     supplyValve: '阀门开度',
+//   };
+
+//   // 主体数据
+//   const list = state.tableData.data.map((item: any) => {
+//     const newItem: any = {}
+//     Object.keys(header).forEach((key: string) => {
+//       newItem[key] = item[key]
+//     })
+//     return newItem
+//   });
+
+//   export_json_to_excel({
+//     header,
+//     list,
+//     fileName: nodeName + '-环路分析数据导出',
+//   });
+// }
 
 const queryTree = () => {
   heatApi.heatStation.getAllStaAndLoop({})
