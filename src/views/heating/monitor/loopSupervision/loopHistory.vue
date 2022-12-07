@@ -26,7 +26,7 @@
         <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="环路编号" prop="code" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水压力" prop="1nPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
@@ -75,7 +75,7 @@ export default defineComponent({
     };
     const typeList = () => {
       state.tableData.loading = true;
-      api.getLoopRegulation(state.tableData.param).then((res: any) => {
+      api.getLoopHistoryData(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
