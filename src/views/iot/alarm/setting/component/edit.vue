@@ -580,3 +580,4 @@ export default defineComponent({
 	margin-left: 25px;
 }
 </style>
+ 
