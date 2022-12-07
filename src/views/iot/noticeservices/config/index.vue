@@ -12,20 +12,21 @@
                       :src="'/imgs/notice/'+item.value+'.svg'"
                       alt="dingding"
                       style="height: 104px;"
+                      v-col="'image'"
                     />
                     <div class="context">
-                      <div class="title">{{item.label}}</div>
-                      <div class="desc">
+                      <div class="title" v-col="'title'">{{item.label}}</div>
+                      <div class="desc" v-col="'desc'">
                         {{item.remark}}
                       </div>
                     </div>
                   </div>
-                   <div class="right">
+                   <div class="right"  v-col="'handle'">
                     <div
                       class="ant-space ant-space-horizontal ant-space-align-center"
                       style="gap: 8px;"
                     >
-                      <div class="ant-space-item" style="">
+                      <div class="ant-space-item" style="" v-auth="'setting'">
                         <router-link :to="'/noticeservices/config/setting/'+item.value" class="link-type" >
                         <div class="action">
                           <button type="button" class="ant-btn ant-btn-link">
@@ -40,7 +41,7 @@
                         </div>
                         </router-link>
                       </div>
-                      <div class="ant-space-item">
+                      <div class="ant-space-item" v-auth="'edit'">
                         <div class="action" @click="onOpenEdit(item)">
                           <button type="button" class="ant-btn ant-btn-link">
                             <div class="btn">
