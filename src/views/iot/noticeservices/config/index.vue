@@ -12,16 +12,16 @@
                       :src="'/imgs/notice/'+item.value+'.svg'"
                       alt="dingding"
                       style="height: 100px;width: 100px;"
-                      v-col="'image'"
+                     
                     />
                     <div class="context">
-                      <div class="title" v-col="'title'">{{item.label}}</div>
-                      <div class="desc" v-col="'desc'">
+                      <div class="title" >{{item.label}}</div>
+                      <div class="desc">
                         {{item.remark}}
                       </div>
                     </div>
                   </div>
-                   <div class="right"  v-col="'handle'">
+                   <div class="right"  >
                     <div
                       class="ant-space ant-space-horizontal ant-space-align-center"
                       style="gap: 8px;"
