@@ -11,7 +11,7 @@
                     <img
                       :src="'/imgs/notice/'+item.value+'.svg'"
                       alt="dingding"
-                      style="height: 104px;"
+                      style="height: 100px;width: 100px;"
                       v-col="'image'"
                     />
                     <div class="context">
