@@ -194,7 +194,7 @@ export default defineComponent({
         state.supplyWaterFlowEchart = res.supplyWaterFlowEchart.map((item: any) => item.value)
         state.secondWaterSupplyEchart = res.secondWaterSupplyEchart.map((item: any) => item.value)
         state.returnWaterFlowEchart = res.returnWaterFlowEchart.map((item: any) => item.value)
-        state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
+        state.xAxisData = res.inTemperature1Echart.map((item: any) => item.time)
 
         nextTick(() => {
           initLineChart();
@@ -237,7 +237,7 @@ export default defineComponent({
 
       const option = {
         backgroundColor: state.charts.bgColor,
-        tooltip: { trigger: 'axis' },
+        tooltip: {},
         legend: {},
         grid: {
           top: 40, right: 20, bottom: 20, left: 20,
