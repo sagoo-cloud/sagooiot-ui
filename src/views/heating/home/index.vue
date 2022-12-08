@@ -194,17 +194,17 @@ export default defineComponent({
           unitConsumption,
           unitConsumptionTotal
         } = res.data;
-        state.dataOne[0].val1 = heatingArea;
-        state.dataOne[0].val2 = forRealArea;
+        state.dataOne[0].val1 = forRealArea;
+        state.dataOne[0].val2 = heatingArea;
 
-        state.dataOne[1].val1 = unitConsumption;
-        state.dataOne[1].val2 = unitConsumptionTotal;
+        state.dataOne[1].val1 = unitConsumptionTotal;
+        state.dataOne[1].val2 = unitConsumption;
 
-        state.dataOne[2].val1 = elctricConsumption;
-        state.dataOne[2].val2 = elctricConsumptionTotal;
+        state.dataOne[2].val1 = elctricConsumptionTotal;
+        state.dataOne[2].val2 = elctricConsumption;
 
-        state.dataOne[3].val1 = flowLoss;
-        state.dataOne[3].val2 = flowLossTotal;
+        state.dataOne[3].val1 = flowLossTotal;
+        state.dataOne[3].val2 = flowLoss;
 
       });
     };
