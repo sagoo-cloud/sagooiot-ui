@@ -51,10 +51,10 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-<!--        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />-->
-	    <el-table-column label="标识" prop="key"  width="130" :show-overflow-tooltip="true" v-col="'key'"/>
-        <el-table-column label="设备名称"   prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
-        <el-table-column label="产品名称"  prop="productName" :show-overflow-tooltip="true" v-col="'productName'"/>
+        <!--        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />-->
+        <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
+        <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
+        <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
         <!-- <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
@@ -65,15 +65,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="registryTime" label="激活时间" align="center" width="150" v-col="'registryTime'"></el-table-column>
-<!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
-        <el-table-column prop="registryTime" label="说明"  v-col="'desc'"></el-table-column>
+        <!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
+        <el-table-column prop="registryTime" label="说明" v-col="'desc'"></el-table-column>
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
 
             <!-- <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button> -->
-            <router-link :to="'/device/instance/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
-    font-size: 12px;color: #409eff;" v-auth="'detail'">
+            <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>

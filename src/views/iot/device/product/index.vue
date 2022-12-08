@@ -48,14 +48,14 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-<!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
-        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true"  v-col="'key'"/>
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'"/>
-        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'"/>
+        <!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
+        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" />
+        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
+        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'" />
         <!-- <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
-        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'"/>
-        <el-table-column label="接入方式" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'"/>
-        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'"/>
+        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'" />
+        <el-table-column label="接入方式" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'" />
+        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
@@ -66,12 +66,11 @@
         <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
         <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
-		     <router-link :to="'/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;
-    font-size: 12px;color: #409eff;">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link>
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)"  v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)"  v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,126 +88,126 @@ import api from '/@/api/device';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
-	id: number;
-	name: string;
-	deviceType: string;
-	status: number;
-	desc: string;
-	createBy: string;
+  id: number;
+  name: string;
+  deviceType: string;
+  status: number;
+  desc: string;
+  createBy: string;
 }
 interface TableDataState {
-	ids: number[];
-	tableData: {
-		data: Array<TableDataRow>;
-		total: number;
-		loading: boolean;
-		param: {
-			pageNum: number;
-			pageSize: number;
-			name: string;
-			deviceType: string;
-			status: string;
-			dateRange: string[];
-		};
-	};
+  ids: number[];
+  tableData: {
+    data: Array<TableDataRow>;
+    total: number;
+    loading: boolean;
+    param: {
+      pageNum: number;
+      pageSize: number;
+      name: string;
+      deviceType: string;
+      status: string;
+      dateRange: string[];
+    };
+  };
 }
 
 export default defineComponent({
-	name: 'deviceproduct',
-	components: { EditDic },
-	setup() {
-		const addDicRef = ref();
-		const editDicRef = ref();
-		const queryRef = ref();
-		const state = reactive<TableDataState>({
-			ids: [],
-			tableData: {
-				data: [],
-				total: 0,
-				loading: false,
-				param: {
-					pageNum: 1,
-					pageSize: 10,
-					dictName: '',
-					dictType: '',
-					status: '',
-					dateRange: [],
-				},
-			},
-		});
-		// 初始化表格数据
-		const initTableData = () => {
-			typeList();
-		};
-		const typeList = () => {
-			state.tableData.loading = true;
-			api.product.getList(state.tableData.param).then((res: any) => {
-				console.log(res);
-				state.tableData.data = res.product;
-				state.tableData.total = res.total;
-			}).finally(() => (state.tableData.loading = false));
-		};
-		// 打开新增产品弹窗
-		const onOpenAddDic = () => {
-			editDicRef.value.openDialog();
-		};
-		// 打开修改产品弹窗
-		const onOpenEditDic = (row: TableDataRow) => {
-			editDicRef.value.openDialog(row);
-		};
-		// 删除产品
-		const onRowDel = (row: TableDataRow) => {
-			let msg = '你确定要删除所选数据？';
-			let ids: number[] = [];
-			if (row) {
-				msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
-				ids = [row.id];
-			} else {
-				ids = state.ids;
-			}
-			if (ids.length === 0) {
-				ElMessage.error('请选择要删除的数据。');
-				return;
-			}
-			ElMessageBox.confirm(msg, '提示', {
-				confirmButtonText: '确认',
-				cancelButtonText: '取消',
-				type: 'warning',
-			})
-				.then(() => {
-					api.product.delete(ids).then(() => {
-						ElMessage.success('删除成功');
-						typeList();
-					});
-				})
-				.catch(() => {});
-		};
-		// 页面加载时
-		onMounted(() => {
-			initTableData();
-		});
-		/** 重置按钮操作 */
-		const resetQuery = (formEl: FormInstance | undefined) => {
-			if (!formEl) return;
-			formEl.resetFields();
-			typeList();
-		};
-		// 多选框选中数据
-		const handleSelectionChange = (selection: TableDataRow[]) => {
-			state.ids = selection.map((item) => item.id);
-		};
-		return {
-			addDicRef,
-			editDicRef,
-			queryRef,
-			onOpenAddDic,
-			onOpenEditDic,
-			onRowDel,
-			typeList,
-			resetQuery,
-			handleSelectionChange,
-			...toRefs(state),
-		};
-	},
+  name: 'deviceproduct',
+  components: { EditDic },
+  setup() {
+    const addDicRef = ref();
+    const editDicRef = ref();
+    const queryRef = ref();
+    const state = reactive<TableDataState>({
+      ids: [],
+      tableData: {
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          pageNum: 1,
+          pageSize: 10,
+          dictName: '',
+          dictType: '',
+          status: '',
+          dateRange: [],
+        },
+      },
+    });
+    // 初始化表格数据
+    const initTableData = () => {
+      typeList();
+    };
+    const typeList = () => {
+      state.tableData.loading = true;
+      api.product.getList(state.tableData.param).then((res: any) => {
+        console.log(res);
+        state.tableData.data = res.product;
+        state.tableData.total = res.total;
+      }).finally(() => (state.tableData.loading = false));
+    };
+    // 打开新增产品弹窗
+    const onOpenAddDic = () => {
+      editDicRef.value.openDialog();
+    };
+    // 打开修改产品弹窗
+    const onOpenEditDic = (row: TableDataRow) => {
+      editDicRef.value.openDialog(row);
+    };
+    // 删除产品
+    const onRowDel = (row: TableDataRow) => {
+      let msg = '你确定要删除所选数据？';
+      let ids: number[] = [];
+      if (row) {
+        msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
+        ids = [row.id];
+      } else {
+        ids = state.ids;
+      }
+      if (ids.length === 0) {
+        ElMessage.error('请选择要删除的数据。');
+        return;
+      }
+      ElMessageBox.confirm(msg, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          api.product.delete(ids).then(() => {
+            ElMessage.success('删除成功');
+            typeList();
+          });
+        })
+        .catch(() => { });
+    };
+    // 页面加载时
+    onMounted(() => {
+      initTableData();
+    });
+    /** 重置按钮操作 */
+    const resetQuery = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      typeList();
+    };
+    // 多选框选中数据
+    const handleSelectionChange = (selection: TableDataRow[]) => {
+      state.ids = selection.map((item) => item.id);
+    };
+    return {
+      addDicRef,
+      editDicRef,
+      queryRef,
+      onOpenAddDic,
+      onOpenEditDic,
+      onRowDel,
+      typeList,
+      resetQuery,
+      handleSelectionChange,
+      ...toRefs(state),
+    };
+  },
 });
 </script>
