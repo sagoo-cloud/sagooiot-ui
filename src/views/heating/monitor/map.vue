@@ -14,7 +14,7 @@
         </el-select>
       </div>
       <!-- 显示弹层区域 -->
-      <div class="view">
+      <div class="view map-hover-station">
         <div class="view-div" v-for="(item, index) in viewList" :key="index">
           <div class="view-div-head">
             <div class="title">{{ item.name }}环路</div>
@@ -213,6 +213,14 @@ const renderStation = (list: any[]) => {
 </script>
 
 <style lang="scss">
+[data-theme='dark'] .map-hover-station {
+	.view-div-head,
+	.view-div {
+		color: #fff;
+		background: #222;
+	}
+}
+
 .BMap_bubble_pop {
 	width: 220px;
 	padding: 0 !important;
@@ -285,6 +293,10 @@ const renderStation = (list: any[]) => {
 }
 </style>
 <style scoped lang="scss">
+.map-hover-station {
+	max-height: 98%;
+	overflow-y: auto;
+}
 .view {
 	position: absolute;
 	top: 10px;
