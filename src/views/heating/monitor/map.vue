@@ -91,7 +91,7 @@ let loops: any = []
 
 // 地图弹窗点击去环路详情，进行跳转
 window.mapToDetail = (code: string) => {
-  router.push('/heating/monitor/loopSupervision/list/loopDetail?code=' + code)
+  router.push('/heating-monitor/loopSupervision/loopDetail?code=' + code)
 }
 
 function searchPoint(val: number | string) {

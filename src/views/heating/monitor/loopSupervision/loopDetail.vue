@@ -29,7 +29,12 @@
           <div class="home-card-item-title">
             <span>流程图</span>
           </div>
-          <iframe :src="'https://zhgy.sagoo.cn/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
+          <div class="iframe-wrapper">
+            <iframe :src="'/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
+            <div class="jump" @click="jump('/plugin/topo/?bgColor=000#/name/'+ $route.query.code)">
+              <img src="/@/assets/open.svg">
+            </div>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -203,11 +208,14 @@ export default defineComponent({
 
     const goDetail = () => {
       router.push({
-        path: '/heating/monitor/loopSupervision/list/loopHistory',
+        path: '/heating-monitor/loopSupervision/loopHistory',
         query: {
           code: route.query.code
         }
       })
+    }
+    const jump = (iframeUrl: string) => {
+      window.open(iframeUrl);
     }
 
     // 折线图
@@ -314,6 +322,7 @@ export default defineComponent({
     };
 
     return {
+      jump,
       initLineChart,
       tabName,
       addDicRef,
@@ -331,6 +340,22 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 $homeNavLengh: 8;
+
+.iframe-wrapper {
+	position: relative;
+	.jump {
+		position: absolute;
+		top: 24px;
+		right: 12px;
+		z-index: 10;
+		cursor: pointer;
+		img {
+			width: 40px;
+			height: 40px;
+			display: block;
+		}
+	}
+}
 
 .home-card-one {
 	@for $i from 0 through 3 {
