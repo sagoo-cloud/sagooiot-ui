@@ -52,7 +52,7 @@
         <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
         <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
           <template #default="scope">
-            <router-link :to="'/system/dict/data/list/' + scope.row.dictType" class="link-type">
+            <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
               <span>{{ scope.row.dictType }}</span>
             </router-link>
           </template>

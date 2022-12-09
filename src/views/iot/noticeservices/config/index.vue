@@ -27,7 +27,7 @@
                       style="gap: 8px;"
                     >
                       <div class="ant-space-item" style="" v-auth="'setting'">
-                        <router-link :to="'/noticeservices/config/setting/'+item.value" class="link-type" >
+                        <router-link :to="'/iotmanager/noticeservices/config/setting/'+item.value" class="link-type" >
                         <div class="action">
                             <div class="btn">
                               <img

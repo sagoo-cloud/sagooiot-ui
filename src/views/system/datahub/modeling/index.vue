@@ -53,7 +53,7 @@
 
         <el-table-column label="操作" width="280" align="center" fixed="right">
           <template #default="scope">
-            <router-link :to="'/datahub/modeling/detail/' + scope.row.id" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
+            <router-link :to="'/config/datahub/modeling/' + scope.row.id" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
               <span>字段管理</span>
             </router-link>
             <el-button size="small" text type="success" @click="onOpenRecord(scope.row)" v-if="scope.row.status==1" v-auth="'record'">数据记录</el-button>

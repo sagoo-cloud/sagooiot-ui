@@ -45,6 +45,6 @@ const searchData = () => {
     keyWord.value= key.value
 };
 const toPage = () => {
-    router.push('/network/server/create')
+    router.push('/iotmanager/network/server/create')
 };
 </script>
