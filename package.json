@@ -30,7 +30,7 @@
     "jsplumb": "^2.15.6",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
-    "pako": "^2.1.0",
+    "pako": "^1.0.11",
     "print-js": "^1.6.0",
     "qrcodejs2-fixes": "^0.0.2",
     "screenfull": "^6.0.1",
