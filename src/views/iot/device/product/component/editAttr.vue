@@ -156,11 +156,11 @@
 
 				<el-form-item label="是否只读" prop="accessMode">
 					<el-radio-group v-model="ruleForm.accessMode" >
-						<el-radio label="0">读写</el-radio>
-						<el-radio label="1">只读</el-radio>
+						<el-radio :label="0">读写</el-radio>
+						<el-radio :label="1">只读</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="属性定义描述	" prop="desc">
+				<el-form-item label="属性定义描述" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入属性定义描述"></el-input>
 				</el-form-item>
 			</el-form>
@@ -315,7 +315,7 @@ export default defineComponent({
 				name: '',
 				key: '',
 				transportProtocol: '',
-				accessMode: '0',
+				accessMode: 0,
 				status: 1,
 				valueType: {
 					type: '',
