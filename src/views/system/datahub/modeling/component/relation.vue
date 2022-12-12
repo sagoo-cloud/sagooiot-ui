@@ -12,6 +12,15 @@
 						</el-select>
 					</el-form-item>
 
+					<el-form-item label="数据源节点" prop="sourceNodeKey">
+						<el-select v-model="ruleForm.sourceNodeKey" filterable placeholder="请选择数据源" >
+							<el-option v-for="item in nodeData" :key="item.nodeId" :label="item.key" :value="item.key">
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; font-size: 13px">{{ item.name }}</span>
+							</el-option>
+						</el-select>
+					</el-form-item>
+
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -40,6 +49,7 @@ interface DicState {
 	ruleForm: RuleFormState;
 	rules: {};
 	data: {};
+	nodeData:{};
 }
 
 export default defineComponent({
@@ -49,6 +59,7 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			data:[],
+			nodeData:[],
 			ruleForm: {
 				id: 0,
 				mainSourceId: '',
@@ -56,6 +67,7 @@ export default defineComponent({
 			},
 			rules: {
 				mainSourceId: [{ required: true, message: '请选择数据源', trigger: 'blur' }],
+				sourceNodeKey: [{ required: true, message: '请选择数据源节点', trigger: 'blur' }],
 				
 			},
 		});
@@ -94,11 +106,12 @@ export default defineComponent({
 		};
 
 		const setNode = (event) => {
-			state.data.forEach((item, index) => {
-				if (item.sourceId == event) {
-					state.ruleForm.sourceNodeKey = item.key;
-				}
-			});
+			// state.data.forEach((item, index) => {
+			// 	if (item.sourceId == event) {
+			// 		state.ruleForm.sourceNodeKey = item.key;
+			// 	}
+			// });
+			getNodeList(event);
 		};
 		// 新增
 		const onSubmit = () => {
@@ -114,9 +127,21 @@ export default defineComponent({
 				}
 			});
 		};
+		const getNodeList = (event) => {
+			api.node
+				.getList({
+					pageNum: 1,
+					pageSize: 50,
+					sourceId: event,
+				})
+				.then((res: any) => {
+					state.nodeData = res.list;
+				});
+		};
 	
 
 		return {
+			getNodeList,
 			setNode,
 			openDialog,
 			closeDialog,
