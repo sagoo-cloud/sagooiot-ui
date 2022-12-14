@@ -92,7 +92,9 @@ export function backEndComponent(routes: any) {
 			isLink: item.isLink,
 			linkUrl: item.linkUrl,
 			title: item.title,
-			buttons: (item.button || []).map((item: any) => item.types),
+			// buttons 可能是树形结构，把这个结构展平
+			// buttons: (item.button || []).map((item: any) => item.types),
+			buttons: treeToArr(item.button).map((item: any) => item.types),
 			columns: (item.column || []).map((item: any) => item.code),
 		}
 		return item;
@@ -118,4 +120,18 @@ export function dynamicImport(dynamicViewsModules: Record<string, Function>, com
 	if (matchKeys?.length > 1) {
 		return false;
 	}
+}
+
+
+// buttons 可能是树形结构，把这个结构展平
+function treeToArr(tree: any) {
+	if (!tree) return []
+	let arr: any = [];
+	tree.forEach((item: any) => {
+		arr.push(item);
+		if (item.children) {
+			arr = arr.concat(treeToArr(item.children));
+		}
+	});
+	return arr;
 }
