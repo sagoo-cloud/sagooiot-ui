@@ -144,14 +144,14 @@ export default defineComponent({
     const goPage = (row: any) => {
       if (state.tableData.param.types === 'station') {
         router.push({
-          path: '/heating/monitor/loopSupervision/list/heatStationDetail',
+          path: '/heating-monitor/loopSupervision/heatStationDetail',
           query: {
             code: row.code
           }
         })
       } else {
         router.push({
-          path: '/heating/monitor/loopSupervision/list/loopDetail',
+          path: '/heating-monitor/loopSupervision/loopDetail',
           query: {
             code: row.code
           }

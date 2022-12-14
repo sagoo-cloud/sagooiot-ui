@@ -153,10 +153,10 @@ export default defineComponent({
 				.catch(() => {});
 		};
         const toDetail = (id: number) => {
-            router.push(`/network/tunnel/detail/${id}`)
+            router.push(`/iotmanager/network/tunnel/detail/${id}`)
         };
         const toEdit = (id: number) => {
-            router.push(`/network/tunnel/edit/${id}`)
+            router.push(`/iotmanager/network/tunnel/edit/${id}`)
         };
         // 监听双向绑定 keyWord 的变化
 		watch(

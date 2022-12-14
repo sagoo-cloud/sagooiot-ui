@@ -202,7 +202,7 @@ export default defineComponent({
     const CkOption = () => {
       //检测是否需要设置关联
       api.template.relation_check(route.params.id).then((res: any) => {
-          if(res.yes){
+          if(res.yes && state.developer_status==0){
             let ids={
               id:route.params.id,
             }

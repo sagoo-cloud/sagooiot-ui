@@ -66,7 +66,7 @@
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
-            <router-link :to="'/datahub/source/detail/' + scope.row.sourceId" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
+            <router-link :to="'/config/datahub/source/' + scope.row.sourceId" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="success" @click="onOpenList(scope.row)" v-if="scope.row.status==1" v-auth="'detail'">数据记录</el-button>

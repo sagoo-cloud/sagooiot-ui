@@ -256,10 +256,10 @@ export default defineComponent({
         .catch(() => { });
     };
     const toDetail = (id: number) => {
-      router.push(`/network/server/detail/${id}`)
+      router.push(`/iotmanager/network/server/detail/${id}`)
     };
     const toEdit = (id: number) => {
-      router.push(`/network/server/edit/${id}`)
+      router.push(`/iotmanager/network/server/edit/${id}`)
     };
     // 监听双向绑定 keyWord 的变化
     watch(

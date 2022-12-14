@@ -26,27 +26,28 @@
     <el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
       <el-col :span="24">
         <div class="home-card-item p20">
-          <div class="home-card-item-title">
-            <span>流程图</span>
-          </div>
-          <iframe :src="'https://zhgy.sagoo.cn/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
-        </div>
-      </el-col>
-    </el-row>
 
-    <el-row :gutter="15" class="home-card-one mt15">
-      <el-col :span="24">
-        <div class="home-card-item p20">
-          <div class="home-card-item-title" style="display: flex;justify-content:space-between;">
-            <span>环路监测</span>
-            <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
-          </div>
-          <el-tabs v-model="tabName" @tab-change="initLineChart">
-            <el-tab-pane label="温度" :name="0"></el-tab-pane>
-            <el-tab-pane label="压力" :name="1"></el-tab-pane>
-            <el-tab-pane label="流量" :name="2"></el-tab-pane>
+          <el-tabs>
+            <el-tab-pane label="环路监测">
+              <div class="flex-row">
+                <el-tabs v-model="tabName" @tab-change="initLineChart">
+                  <el-tab-pane label="温度" :name="0"></el-tab-pane>
+                  <el-tab-pane label="压力" :name="1"></el-tab-pane>
+                  <el-tab-pane label="流量" :name="2"></el-tab-pane>
+                </el-tabs>
+                <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
+              </div>
+              <div style="height: 300px" ref="homeLineRef"></div>
+            </el-tab-pane>
+            <el-tab-pane label="流程图">
+              <div class="iframe-wrapper">
+                <iframe :src="'/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
+                <div class="jump" @click="jump('/plugin/topo/?bgColor=000#/name/'+ $route.query.code)">
+                  <img src="/@/assets/open.svg">
+                </div>
+              </div>
+            </el-tab-pane>
           </el-tabs>
-          <div style="height: 300px" ref="homeLineRef"></div>
         </div>
       </el-col>
     </el-row>
@@ -193,7 +194,7 @@ export default defineComponent({
         state.supplyWaterFlowEchart = res.supplyWaterFlowEchart.map((item: any) => item.value)
         state.secondWaterSupplyEchart = res.secondWaterSupplyEchart.map((item: any) => item.value)
         state.returnWaterFlowEchart = res.returnWaterFlowEchart.map((item: any) => item.value)
-        state.xAxisData = res.inTemperatureEchart.map((item: any) => item.time)
+        state.xAxisData = res.inTemperature1Echart.map((item: any) => item.time)
 
         nextTick(() => {
           initLineChart();
@@ -203,11 +204,14 @@ export default defineComponent({
 
     const goDetail = () => {
       router.push({
-        path: '/heating/monitor/loopSupervision/list/loopHistory',
+        path: '/heating-monitor/loopSupervision/loopHistory',
         query: {
           code: route.query.code
         }
       })
+    }
+    const jump = (iframeUrl: string) => {
+      window.open(iframeUrl);
     }
 
     // 折线图
@@ -233,7 +237,7 @@ export default defineComponent({
 
       const option = {
         backgroundColor: state.charts.bgColor,
-        tooltip: { trigger: 'axis' },
+        tooltip: {},
         legend: {},
         grid: {
           top: 40, right: 20, bottom: 20, left: 20,
@@ -314,6 +318,7 @@ export default defineComponent({
     };
 
     return {
+      jump,
       initLineChart,
       tabName,
       addDicRef,
@@ -331,6 +336,22 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 $homeNavLengh: 8;
+
+.iframe-wrapper {
+	position: relative;
+	.jump {
+		position: absolute;
+		top: 24px;
+		right: 12px;
+		z-index: 10;
+		cursor: pointer;
+		img {
+			width: 40px;
+			height: 40px;
+			display: block;
+		}
+	}
+}
 
 .home-card-one {
 	@for $i from 0 through 3 {

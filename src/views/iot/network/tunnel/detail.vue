@@ -64,7 +64,7 @@ export default defineComponent({
 			ElMessage.success('刷新成功');
 		};
 		const toEdit = () => {
-            router.push(`/network/tunnel/edit/${route.params && route.params.id}`)
+            router.push(`/iotmanager/network/tunnel/edit/${route.params && route.params.id}`)
         };
 		onMounted(() => {
 			getDetail()

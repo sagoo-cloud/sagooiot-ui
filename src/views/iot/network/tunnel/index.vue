@@ -46,6 +46,6 @@ const searchData = () => {
 };
 // 去往新增页面
 const toPage = () => {
-    router.push('/network/tunnel/create')
+    router.push('/iotmanager/network/tunnel/create')
 };
 </script>
