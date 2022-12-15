@@ -33,7 +33,7 @@ export default defineComponent({
 		watch(
 			() => route.path,
 			() => {
-				proxy.$refs.layoutDefaultsScrollbarRef.wrap$.scrollTop = 0;
+				proxy.$refs.layoutDefaultsScrollbarRef.wrap$ && (proxy.$refs.layoutDefaultsScrollbarRef.wrap$.scrollTop = 0)
 			}
 		);
 		return {
