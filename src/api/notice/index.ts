@@ -20,5 +20,6 @@ export default {
   },
   log:{
     getList: (params: object) => get("/notice/log/search", params),
+    delete: (ids: number) => del("/notice/log/del", { ids }),
   }
 };

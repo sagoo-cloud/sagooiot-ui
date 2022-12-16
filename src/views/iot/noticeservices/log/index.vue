@@ -28,10 +28,18 @@
 							</el-icon>
 							重置
 						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除
+							</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+				<el-table-column type="selection" width="55" align="center" />
+
 				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
 			
 				<el-table-column label="标题" prop="title" :show-overflow-tooltip="true" v-col="'title'" />
@@ -66,7 +74,6 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/notice';
-import EditDic from './component/edit.vue';
 import DetailDic from './component/detail.vue';
 
 // 定义接口来定义对象的类型
@@ -95,7 +102,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'log',
-	components: { EditDic, DetailDic },
+	components: {  DetailDic },
 
 	setup() {
 		const addDicRef = ref();
@@ -157,7 +164,34 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		const onRowDel = (row: TableDataRow) => {
+			let msg = '你确定要删除所选数据？';
+			let ids: number[] = [];
+			if (row) {
+				msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
+				ids = [row.id];
+			} else {
+				ids = state.ids;
+			}
+			if (ids.length === 0) {
+				ElMessage.error('请选择要删除的数据。');
+				return;
+			}
+			ElMessageBox.confirm(msg, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+				api.log.delete(ids).then(() => {
+					ElMessage.success('删除成功');
+					typeList();
+				});
+				})
+				.catch(() => { });
+			};
 		return {
+			onRowDel,
 			addDicRef,
 			editDicRef,
 			queryRef,

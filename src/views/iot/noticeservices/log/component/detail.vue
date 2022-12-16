@@ -18,33 +18,25 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
-import api from '/@/api/alarm';
-import { ElMessage } from 'element-plus';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 
 
 
 interface DicState {
 	isShowDialog: boolean;
-	ruleForm: RuleFormState;
-	content: '';
-
+	content: string;
 }
 
 export default defineComponent({
 	name: 'Edit',
-
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			content: '',
-			
 		});
-
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
-		
 			state.content=row.content;
 			state.isShowDialog = true;
 		};
