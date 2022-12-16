@@ -374,7 +374,6 @@ export default defineComponent({
 		};
 		const getOverviewData = () => {
 			api.iotManage.getOverviewData().then((res:any) => {
-				console.log(res)
 				const { overview, device, alarmLevel } = res;
 				// overview
 					// "deviceTotal": 8, //设备总量
@@ -419,7 +418,6 @@ export default defineComponent({
 		};
 		const getAlarmList = () => {
 			api.iotManage.getAlarmList(state.tableData.param).then((res: any) => {
-				console.log(res)
 				state.tableData.data = res.list;
 				state.tableData.total = res.Total;
 			})

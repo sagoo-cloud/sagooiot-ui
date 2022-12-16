@@ -580,7 +580,6 @@ export default defineComponent({
       () => store.state.themeConfig.themeConfig.isIsDark,
       (isIsDark) => {
         nextTick(() => {
-          console.log(isIsDark)
           // if(!isIsDark) return
           state.charts.theme = isIsDark ? 'transparent' : '';
           state.charts.bgColor = isIsDark ? 'transparent' : '';
