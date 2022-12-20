@@ -68,7 +68,7 @@
 						<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>
 						<el-table-column prop="status" label="用户状态" width="120" v-col="'status'" align="center">
 							<template #default="scope">
-								<el-switch v-model="scope.row.status" :disabled="scope.row.id === 1" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+								<el-switch v-model="scope.row.status" :disabled="scope.row.id === 1" v-auth="'change-status'" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
 								</el-switch>
 							</template>
 						</el-table-column>

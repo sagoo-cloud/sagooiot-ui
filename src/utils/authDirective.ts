@@ -15,7 +15,10 @@ export function authDirective(app: App) {
 		mounted(el, binding) {
 			const buttons = <string[]>router.currentRoute.value.meta.buttons
 			if (buttons.includes(allPermissions)) return
-			if (!buttons.includes(binding.value)) el.parentNode.removeChild(el)
+			// 不显示该dom
+			// if (!buttons.includes(binding.value)) el.parentNode.removeChild(el)
+			// 设置为disabled
+			if (!buttons.includes(binding.value)) el.classList.add('v-disabled')
 		},
 	});
 	// 多个权限验证，满足一个则显示（v-auths="[xxx,xxx]"）
@@ -29,7 +32,8 @@ export function authDirective(app: App) {
 					if (val === v) flag = true;
 				});
 			});
-			if (!flag) el.parentNode.removeChild(el);
+			// if (!flag) el.parentNode.removeChild(el);
+			if (!flag) el.classList.add('v-disabled')
 		},
 	});
 	// 多个权限验证，全部满足则显示（v-auth-all="[xxx,xxx]"）
@@ -37,7 +41,8 @@ export function authDirective(app: App) {
 		mounted(el, binding) {
 			const buttons = <string[]>router.currentRoute.value.meta.buttons
 			if (buttons.includes(allPermissions)) return
-			!smallInBig(buttons, binding.value) && el.parentNode.removeChild(el)
+			// !smallInBig(buttons, binding.value) && el.parentNode.removeChild(el)
+			!smallInBig(buttons, binding.value) && el.classList.add('v-disabled')
 		},
 	});
 }
