@@ -26,7 +26,6 @@
     <el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
       <el-col :span="24">
         <div class="home-card-item p20">
-
           <el-tabs>
             <el-tab-pane label="环路监测">
               <div class="flex-row">
@@ -39,7 +38,7 @@
               </div>
               <div style="height: 300px" ref="homeLineRef"></div>
             </el-tab-pane>
-            <el-tab-pane label="流程图">
+            <el-tab-pane label="流程图" lazy>
               <div class="iframe-wrapper">
                 <iframe :src="'/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
                 <div class="jump" @click="jump('/plugin/topo/?bgColor=000#/name/'+ $route.query.code)">
