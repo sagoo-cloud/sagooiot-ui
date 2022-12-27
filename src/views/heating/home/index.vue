@@ -130,7 +130,7 @@ export default defineComponent({
           title: '热量',
           contentTitle1: '总耗热',
           val1: '',
-          unit1: '万GJ',
+          unit1: 'GJ',
           contentTitle2: '总单耗',
           val2: '',
           unit2: 'GJ/㎡',
