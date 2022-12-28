@@ -54,6 +54,8 @@
             {{ row.code }}
           </template>
         </el-table-column>
+        <el-table-column label="换热站" v-col="'stationName'" prop="stationName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="换热站编号" min-width="100" v-col="'stationCode'" prop="stationCode" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
