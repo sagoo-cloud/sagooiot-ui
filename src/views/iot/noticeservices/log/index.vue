@@ -43,13 +43,14 @@
 				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
 			
 				<el-table-column label="标题" prop="title" :show-overflow-tooltip="true" v-col="'title'" />
-				<el-table-column prop="status" label="发送状态" width="100" align="center" v-col="'status'">
+				<el-table-column label="发送方式" prop="gateway" :show-overflow-tooltip="true" v-col="'title'" />
+				<el-table-column prop="status" label="发送状态"  align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status">发送成功</el-tag>
 						<el-tag type="info" size="small" v-else>发送失败</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="sendTime" label="发送时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
+				<el-table-column prop="sendTime" label="发送时间" align="center" v-col="'createdAt'"></el-table-column>
 				<el-table-column label="操作" width="150" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="onOpenDetailDic(scope.row)" v-auth="'detail'">详情</el-button>
