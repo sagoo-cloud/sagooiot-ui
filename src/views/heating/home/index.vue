@@ -194,8 +194,8 @@ export default defineComponent({
           unitConsumption,
           unitConsumptionTotal
         } = res.data;
-        state.dataOne[0].val1 = forRealArea;
-        state.dataOne[0].val2 = heatingArea;
+        state.dataOne[0].val1 = heatingArea;
+        state.dataOne[0].val2 = forRealArea;
 
         state.dataOne[1].val1 = unitConsumptionTotal;
         state.dataOne[1].val2 = unitConsumption;
