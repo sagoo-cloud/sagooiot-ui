@@ -152,7 +152,7 @@ export default defineComponent({
           title: '水量',
           contentTitle1: '总耗水',
           val1: '',
-          unit1: '万T',
+          unit1: 'T',
           contentTitle2: '总单耗',
           val2: '',
           unit2: 'kg/㎡',
