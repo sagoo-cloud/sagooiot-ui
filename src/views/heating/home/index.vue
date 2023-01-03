@@ -155,7 +155,7 @@ export default defineComponent({
           unit1: 'T',
           contentTitle2: '总单耗',
           val2: '',
-          unit2: 'T/㎡',
+          unit2: 'kg/㎡',
 
         },
       ],

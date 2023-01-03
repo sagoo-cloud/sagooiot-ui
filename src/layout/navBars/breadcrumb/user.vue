@@ -159,11 +159,11 @@ export default defineComponent({
           },
         })
           .then(async () => {
-            Session.clear(); // 清除缓存/token等
+            api.login.logout();
             await resetRoute(); // 删除/重置路由
             ElMessage.success(t('message.user.logOutSuccess'));
-            api.login.logout();
             setTimeout(() => {
+              Session.clear(); // 清除缓存/token等
               window.location.href = ''; // 去登录页
             }, 500);
           })
