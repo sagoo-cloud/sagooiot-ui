@@ -10,11 +10,11 @@
           <div class="item-content w100" :class="` home-one-animation${k}`">
             <p>
               <span>{{ v.contentTitle1 }}</span>
-              <span>{{ v.val1 + v.unit1 }}</span>
+              <span>{{ v.val1 }} {{ unitMap[v.contentTitle1]}}</span>
             </p>
             <p>
               <span>{{ v.contentTitle2 }}</span>
-              <span>{{ v.val2 + v.unit2 }}</span>
+              <span>{{ v.val2 }} {{unitMap[v.title + '：' + v.contentTitle2]? unitMap[v.title + '：' + v.contentTitle2]: unitMap[v.contentTitle2]}}</span>
             </p>
           </div>
         </div>
@@ -73,6 +73,7 @@
 import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated } from 'vue';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
+import apiDatahub from '/@/api/datahub';
 
 import ele from '/@/assets/img/ele.svg';
 import ele1 from '/@/assets/img/ele1.svg';
@@ -107,7 +108,16 @@ export default defineComponent({
     const homePieRef = ref();
     const homeBarRef = ref();
     const homeFourBarRef = ref();
+    const unitMap = ref<any>({});
     const store = useStore();
+
+    // 统计信息的单位的字典
+    apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
+      res.values.forEach((v: any) => {
+        unitMap.value[v.value] = v.key;
+      });
+    });
+
     const state = reactive({
       checkList: ['一网供水温度'],
       rangeValue: 10,
@@ -598,6 +608,7 @@ export default defineComponent({
       }
     );
     return {
+      unitMap,
       tabName,
       homeLineRef1,
       homeLineRef2,
