@@ -23,6 +23,9 @@
               <el-option label="未发布" :value="0" />
             </el-select> -->
           </el-form-item>
+          <el-form-item label="换热站名称" prop="stationName" label-width="90">
+            <el-input v-model="tableData.param.stationName" placeholder="换热站名称" size="default"></el-input>
+          </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" v-auth="'query'" @click="typeList">
               <el-icon>
@@ -103,6 +106,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           types: 'loop', // 类型 station 换热站 loop环路
+          stationName: '',
           name: '',
           code: '',
         },
