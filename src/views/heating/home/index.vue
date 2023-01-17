@@ -21,25 +21,25 @@
       </el-col>
     </el-row>
     <el-row :gutter="15" class="home-card-two mb15">
-      <el-col :xs="24" :sm="10" :md="14" :lg="16" :xl="16">
+      <el-col :xs="24" :sm="10" :md="12" :lg="16" :xl="16">
         <div class="home-card-item">
           <div class="home-card-item-title" style="display: flex;justify-content:space-between;">
             <span>热网总能耗</span>
           </div>
           <el-tabs v-model="tabName" @tab-click="tabChange">
             <el-tab-pane label="总热耗" name="homeLineRef1">
-              <div style="height: 380px" ref="homeLineRef1"></div>
+              <div style="height: 200px" ref="homeLineRef1"></div>
             </el-tab-pane>
             <el-tab-pane label="总电耗" name="homeLineRef2">
-              <div style="height: 380px" ref="homeLineRef2"></div>
+              <div style="height: 200px" ref="homeLineRef2"></div>
             </el-tab-pane>
             <el-tab-pane label="总失水量" name="homeLineRef3">
-              <div style="height: 380px" ref="homeLineRef3"></div>
+              <div style="height: 200px" ref="homeLineRef3"></div>
             </el-tab-pane>
           </el-tabs>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
+      <el-col :xs="24" :sm="10" :md="12" :lg="8" :xl="8" class="home-media">
         <div class="home-card-item">
           <div class="bar-header">
             <p class='home-card-item-title'>环路回温/热用户室温占比</p>
@@ -638,10 +638,10 @@ $homeNavLengh: 8;
 		.home-card-item,
 		.home-card-top {
 			width: 100%;
-			height: 130px;
+			height: 100px;
 			border-radius: 4px;
 			transition: all ease 0.3s;
-			padding: 20px;
+			padding: 10px;
 			overflow: hidden;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
@@ -716,7 +716,7 @@ $homeNavLengh: 8;
 		}
 
 		.item-content {
-			padding: 26px;
+			padding: 16px;
 
 			p {
 				display: flex;
@@ -724,7 +724,7 @@ $homeNavLengh: 8;
 				align-content: center;
 
 				span:nth-child(1) {
-					line-height: 33px;
+					line-height: 30px;
 					font-size: 14px;
 					flex: 0 0 60px;
 				}
@@ -739,7 +739,7 @@ $homeNavLengh: 8;
 			}
 
 			p:nth-child(2) {
-				margin-top: 26px;
+				margin-top: 20px;
 			}
 		}
 	}
@@ -748,21 +748,21 @@ $homeNavLengh: 8;
 	.home-card-three,
 	.home-card-four {
 		.home-card-item {
-			height: 500px;
+			height: 300px;
 		}
 
 		.home-card-top {
-			height: 250px;
+			height: 200px;
 
 			.box-card {
-				padding: 15px 20px 20px 20px;
+				padding: 15px 20px 20px 10px;
 
 				p {
 					margin-bottom: 10px;
 				}
 
 				&-item {
-					margin-bottom: 20px;
+					margin-bottom: 10px;
 				}
 			}
 		}
