@@ -498,7 +498,7 @@ export default defineComponent({
 		
 		};
 
-		const getRadio=(event)=>{
+		const getRadio=()=>{
 			gettriData();
 		}
 		const gettriData=()=>{
