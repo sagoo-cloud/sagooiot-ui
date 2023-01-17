@@ -31,7 +31,7 @@
 				</el-form-item>
 
 				<el-form-item label="触发方式" prop="triggerType" v-if="ruleForm.productKey">
-					<el-radio-group v-model="ruleForm.triggerType">
+					<el-radio-group v-model="ruleForm.triggerType" @change="getRadio()">
 						<el-radio :label="item.type" v-for="item in typeData">{{ item.title }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
@@ -424,7 +424,6 @@ export default defineComponent({
 		};
 
 		const AddPhone = (index) => {
-			console.log();
 			state.action[index].addressee.push({
 				phone: '',
 			});
@@ -495,11 +494,18 @@ export default defineComponent({
 			alarm.common.trigger_type(state.ruleForm.productKey).then((res: any) => {
 				state.typeData = res.list || [];
 			});
+			gettriData();
+		
+		};
 
-			alarm.common.trigger_param(state.ruleForm.productKey).then((res: any) => {
+		const getRadio=(event)=>{
+			gettriData();
+		}
+		const gettriData=()=>{
+			alarm.common.trigger_params({productKey:state.ruleForm.productKey,triggerType:state.ruleForm.triggerType}).then((res: any) => {
 				state.triData = res.list || [];
 			});
-		};
+		}
 
 		const getNode = (event, index) => {
 			state.action[index].noticeConfig = '';
@@ -516,6 +522,8 @@ export default defineComponent({
 		};
 
 		return {
+			getRadio,
+			gettriData,
 			getTem,
 			getNode,
 			delAction,
