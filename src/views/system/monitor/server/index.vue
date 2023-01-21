@@ -318,6 +318,34 @@
         </el-card>
       </el-col>
     </div>
+    <div class="flex-row gap-3">
+      <el-col :xs="24" :sm="24" :md="24" class="marg-b-15">
+        <el-card class="box-card-height" style="height:auto">
+          <template #header>
+            <div class="card-header">
+              <span>GO运行信息</span>
+            </div>
+          </template>
+          <div class="flex-row">
+            <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
+              <el-form-item label="语言环境">{{goInfoData.goName}}</el-form-item>
+              <el-form-item label="运行时长">{{timeFormat(goInfoData.runTime)}}</el-form-item>
+              <el-form-item label="运行内存">{{goInfoData.goMem}}</el-form-item>
+            </el-form>
+            <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
+              <el-form-item label="语言号">{{goInfoData.goVersion}}</el-form-item>
+              <el-form-item label="运行路径">{{goInfoData.rootPath}}</el-form-item>
+              <el-form-item label="磁盘占用">{{goInfoData.goSize}}</el-form-item>
+            </el-form>
+            <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
+              <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
+              <el-form-item label="goroutine数量">{{goInfoData.goroutine}}</el-form-item>
+              <el-form-item label=" "> </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+      </el-col>
+    </div>
   </div>
 </template>
 
@@ -344,6 +372,15 @@ export default defineComponent({
     let myChart4: any;
     let myChart5: any;
     let myChart6: any;
+    const goInfoData = reactive({
+      "goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
+      "runTime": '', "startTime": "-"
+    });
+
+    function goInfo(event: { data: any; }) {
+      const data = JSON.parse(event.data);
+      Object.assign(goInfoData, data);
+    }
 
     const myChart4Data: any = {
       name: [],
@@ -659,6 +696,7 @@ export default defineComponent({
       es.addEventListener("cpu", displayCpu);
       es.addEventListener("sysLoad", displaySysLoad);
       es.addEventListener("disk", displayDisk);
+      es.addEventListener("go", goInfo);
     }
 
     startWs();
@@ -724,7 +762,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      // getSystemInfo,
+      goInfoData,
       setOptChart1,
       setOptChart2,
       setOptChart3,
@@ -773,6 +811,7 @@ export default defineComponent({
       return size.toFixed(2) + ' ' + rankchar;
     },
     timeFormat(second: any) {
+      if (!second) return '-'
       second = parseFloat(second);
       let rank = 0;
       let rankchar = '秒';
