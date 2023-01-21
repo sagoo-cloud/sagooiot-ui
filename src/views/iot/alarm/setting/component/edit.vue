@@ -291,9 +291,11 @@ export default defineComponent({
 							state.sendGatewayData[index] = res.Data;
 						});
 
-						notice.template.configIddetail(value.noticeConfig).then((res: any) => {
-							state.noticeConfigData[index] = [res];
-						});
+						if(value.noticeConfig){
+							notice.template.configIddetail(value.noticeConfig).then((res: any) => {
+								state.noticeConfigData[index] = [res];
+							});
+						}
 					});
 
 					state.action = res.data.performAction.action;
