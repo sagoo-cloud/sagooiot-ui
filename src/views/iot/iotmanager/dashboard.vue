@@ -79,7 +79,7 @@
 				</div>
 			</el-col>
 		</el-row>
-		
+
 		<EditDic ref="editDicRef" @dataList="getAlarmList" />
 		<DetailDic ref="detailRef" @dataList="getAlarmList" />
 	</div>
@@ -211,7 +211,7 @@ export default defineComponent({
 						}
         			},
 					},
-			
+
 
 
 				],
@@ -374,7 +374,6 @@ export default defineComponent({
 		};
 		const getOverviewData = () => {
 			api.iotManage.getOverviewData().then((res:any) => {
-				console.log(res)
 				const { overview, device, alarmLevel } = res;
 				// overview
 					// "deviceTotal": 8, //设备总量
@@ -419,7 +418,6 @@ export default defineComponent({
 		};
 		const getAlarmList = () => {
 			api.iotManage.getAlarmList(state.tableData.param).then((res: any) => {
-				console.log(res)
 				state.tableData.data = res.list;
 				state.tableData.total = res.Total;
 			})
@@ -551,14 +549,14 @@ $homeNavLengh: 8;
 	.home-card-two,
 	.home-card-three {
     .home-card-item{
-      height: 500px;
+      height: 300px;
     }
     .home-card-top{
       height: 250px;
       .box-card{
-        padding: 15px 20px 20px 20px;
+        padding: 15px 20px 20px 10px;
         p{margin-bottom: 10px;}
-        &-item{margin-bottom: 20px;}
+        &-item{margin-bottom: 10px;}
       }
     }
 		.home-card-item, .home-card-top{

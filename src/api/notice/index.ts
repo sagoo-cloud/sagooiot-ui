@@ -18,4 +18,8 @@ export default {
     detail: (id: number) => get("/notice/template/get", { id }),
     configIddetail: (configId: number) => get("/notice/template/getbyconfig", { configId }),
   },
+  log:{
+    getList: (params: object) => get("/notice/log/search", params),
+    delete: (ids: number) => del("/notice/log/del", { ids }),
+  }
 };

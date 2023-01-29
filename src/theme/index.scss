@@ -9,3 +9,8 @@
 @import './fast.scss';
 
 
+// 自定义指令 v-auth 增加 v-disabled 的类
+.v-disabled{
+  pointer-events: none;
+  opacity: 0.7;
+}

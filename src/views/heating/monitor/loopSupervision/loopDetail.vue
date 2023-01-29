@@ -10,11 +10,11 @@
           <div class="item-content w100" :class="` home-one-animation${k}`">
             <p>
               <span>{{ v.contentTitle1 }}</span>
-              <span>{{ v.val1 + v.unit1 }}</span>
+              <span>{{ v.val1 }} {{ unitMap[v.contentTitle1]}}</span>
             </p>
             <p>
               <span>{{ v.contentTitle2 }}</span>
-              <span>{{ v.val2 + v.unit2 }}</span>
+              <span>{{ v.val2 }} {{unitMap[v.title + '：' + v.contentTitle2]? unitMap[v.title + '：' + v.contentTitle2]: unitMap[v.contentTitle2]}}</span>
             </p>
           </div>
         </div>
@@ -26,7 +26,6 @@
     <el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
       <el-col :span="24">
         <div class="home-card-item p20">
-
           <el-tabs>
             <el-tab-pane label="环路监测">
               <div class="flex-row">
@@ -39,7 +38,7 @@
               </div>
               <div style="height: 300px" ref="homeLineRef"></div>
             </el-tab-pane>
-            <el-tab-pane label="流程图">
+            <el-tab-pane label="流程图" lazy>
               <div class="iframe-wrapper">
                 <iframe :src="'/plugin/topo/?bgColor=000#/name/'+ $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
                 <div class="jump" @click="jump('/plugin/topo/?bgColor=000#/name/'+ $route.query.code)">
@@ -59,6 +58,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent, nextTick, watch } fr
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import api from '/@/api/loopSupervision';
+import apiDatahub from '/@/api/datahub';
 
 import ele from '/@/assets/img/ele.svg';
 import ele1 from '/@/assets/img/ele1.svg';
@@ -87,6 +87,15 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore()
     const tabName = ref(0)
+    const unitMap = ref<any>({});
+
+    // 统计信息的单位的字典
+    apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
+      res.values.forEach((v: any) => {
+        unitMap.value[v.value] = v.key;
+      });
+    });
+
     const state = reactive({
       dataOne: [
         {
@@ -168,12 +177,12 @@ export default defineComponent({
         let data = res
         state.dataOne[0].val1 = data.heatingArea //供暖面积
         state.dataOne[0].val2 = data.forRealArea //实供面积
-        state.dataOne[1].val1 = data.unitConsumption //总热耗
-        state.dataOne[1].val2 = data.unitConsumptionSingle //热单耗
-        state.dataOne[2].val1 = data.elctricConsumption //总电量
-        state.dataOne[2].val2 = data.elctricConsumptionSingle //电单耗
-        state.dataOne[3].val1 = data.flowLoss //总水量
-        state.dataOne[3].val2 = data.flowLossSingle //水量单耗
+        state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
+        state.dataOne[1].val2 = data.unitConsumption //热单耗
+        state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量
+        state.dataOne[2].val2 = data.elctricConsumption //电单耗
+        state.dataOne[3].val1 = data.flowLossTotal //总水量
+        state.dataOne[3].val2 = data.flowLoss //水量单耗
       })
     }
 
@@ -318,6 +327,7 @@ export default defineComponent({
     };
 
     return {
+      unitMap,
       jump,
       initLineChart,
       tabName,

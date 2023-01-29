@@ -29,7 +29,7 @@
     "echarts": "^5.3.3",
     "echarts-gl": "^2.0.9",
     "echarts-wordcloud": "^2.0.0",
-    "element-plus": "^2.2.13",
+    "element-plus": "^2.2.28",
     "event-source-polyfill": "^1.0.31",
     "jsplumb": "^2.15.6",
     "mitt": "^3.0.0",

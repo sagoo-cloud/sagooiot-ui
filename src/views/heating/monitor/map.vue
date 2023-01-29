@@ -1,80 +1,96 @@
 <template>
-  <div class="page page-full">
-    <div style="position: relative; flex: 1;">
-      <div class="map" ref="mapRef" style="height: 100%"></div>
-      <div class="search-hover">
-        <!-- <el-input v-model="searchText" @keydown.enter.native="searchPoint" placeholder="地址搜索" style="width:250px">
+	<div class="page page-full">
+		<div style="position: relative; flex: 1">
+			<div class="map" ref="mapRef" style="height: 100%"></div>
+			<div class="search-hover">
+				<!-- <el-input v-model="searchText" @keydown.enter.native="searchPoint" placeholder="地址搜索" style="width:250px">
           <template #append>
             <el-button :icon="Search" @click="searchPoint"></el-button>
           </template>
         </el-input> -->
 
-        <el-select v-model="searchText" filterable allow-create default-first-option :reserve-keyword="false" placeholder="地址搜索" style="width:250px" @change="searchPoint">
-          <el-option v-for="item in heatList" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
-      </div>
-      <!-- 显示弹层区域 -->
-      <div class="view map-hover-station">
-        <div class="view-div" v-for="(item, index) in viewList" :key="index">
-          <div class="view-div-head">
-            <div class="title">{{ item.name }}环路</div>
-            <div class="info">
-              <div class="">
-                环路编号：{{ item.code }}
-              </div>
-              <div class="ml-4">
-                所属换热站：{{ item.stationInfo.name }}
-              </div>
-            </div>
-          </div>
-          <div class="view-div-content">
-            <div>路线信息</div>
-            <div class="mt-1 pl-4">
-              <p v-for="(point, index) in item.loopViaPointInfo" :key="index">
-                {{ point.position }}
-              </p>
-            </div>
-            <div class="mt-1">实时温度</div>
-            <el-table :data="[{
-							outTemperature1: item.outTemperature1,
-							inTemperature1: item.inTemperature1,
-							outTemperature2: item.outTemperature2,
-							inTemperature2: item.inTemperature2
-						}]" :border="true" class="mt-1">
-              <el-table-column label="一网供水温度" prop="outTemperature1" :show-overflow-tooltip="true" />
-              <el-table-column label="一网回水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
-              <el-table-column label="二网供水温度" prop="outTemperature2" :show-overflow-tooltip="true" />
-              <el-table-column label="二网回水温度" prop="inTemperature2" :show-overflow-tooltip="true" />
-            </el-table>
-            <div class="mt-1">实时压力(MPa)</div>
-            <el-table :data="[{
-							outPressure1: item.outPressure1,
-							inPressure1: item.inPressure1,
-							outPressure2: item.outPressure2,
-							inPressure2: item.inPressure2,
-						}]" :border="true" class="mt-1">
-              <el-table-column label="一网供水压力" prop="outPressure1" :show-overflow-tooltip="true" />
-              <el-table-column label="一网回水压力" prop="inPressure1" :show-overflow-tooltip="true" />
-              <el-table-column label="二网供水压力" prop="outPressure2" :show-overflow-tooltip="true" />
-              <el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
-            </el-table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+				<el-select
+					v-model="searchText"
+					filterable
+					allow-create
+					default-first-option
+					:reserve-keyword="false"
+					placeholder="地址搜索"
+					style="width: 250px"
+					@change="searchPoint"
+				>
+					<el-option v-for="item in heatList" :key="item.id" :label="item.name" :value="item.id" />
+				</el-select>
+			</div>
+			<!-- 显示弹层区域 -->
+			<div class="view map-hover-station">
+				<div class="view-div" v-for="(item, index) in viewList" :key="index">
+					<div class="view-div-head">
+						<div class="title">{{ item.name }}环路</div>
+						<div class="info">
+							<div class="">环路编号：{{ item.code }}</div>
+							<div class="ml-4">所属换热站：{{ item.stationInfo.name }}</div>
+						</div>
+					</div>
+					<div class="view-div-content">
+						<div>路线信息</div>
+						<div class="mt-1 pl-4">
+							<p v-for="(point, index) in item.loopViaPointInfo" :key="index">
+								{{ point.position }}
+							</p>
+						</div>
+						<div class="mt-1">实时温度</div>
+						<el-table
+							:data="[
+								{
+									outTemperature1: item.outTemperature1,
+									inTemperature1: item.inTemperature1,
+									outTemperature2: item.outTemperature2,
+									inTemperature2: item.inTemperature2,
+								},
+							]"
+							:border="true"
+							class="mt-1"
+						>
+							<el-table-column label="一网供水温度" prop="outTemperature1" :show-overflow-tooltip="true" />
+							<el-table-column label="一网回水温度" prop="inTemperature1" :show-overflow-tooltip="true" />
+							<el-table-column label="二网供水温度" prop="outTemperature2" :show-overflow-tooltip="true" />
+							<el-table-column label="二网回水温度" prop="inTemperature2" :show-overflow-tooltip="true" />
+						</el-table>
+						<div class="mt-1">实时压力(MPa)</div>
+						<el-table
+							:data="[
+								{
+									outPressure1: item.outPressure1,
+									inPressure1: item.inPressure1,
+									outPressure2: item.outPressure2,
+									inPressure2: item.inPressure2,
+								},
+							]"
+							:border="true"
+							class="mt-1"
+						>
+							<el-table-column label="一网供水压力" prop="outPressure1" :show-overflow-tooltip="true" />
+							<el-table-column label="一网回水压力" prop="inPressure1" :show-overflow-tooltip="true" />
+							<el-table-column label="二网供水压力" prop="outPressure2" :show-overflow-tooltip="true" />
+							<el-table-column label="二网回水压力" prop="inPressure2" :show-overflow-tooltip="true" />
+						</el-table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
-
 
 <script lang="ts" setup>
 import { onMounted, ref, watch, nextTick } from 'vue';
-import { Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import api from '/@/api/heatStation';
 import { setMarker, setLine } from '/@/utils/map';
 import { useStore } from '/@/store/index';
 
-const router = useRouter()
+const router = useRouter();
 
 const mapRef = ref();
 const searchText = ref('');
@@ -84,131 +100,145 @@ const viewList = ref<any[]>([]);
 
 let BMapGL = (window as any).BMapGL;
 let map: any = null;
-let local: any = null
-let getThemeConfig: any = null
-let points: any = []
-let loops: any = []
+let local: any = null;
+let getThemeConfig: any = null;
+let points: any = [];
+let loops: any = [];
 
 // 地图弹窗点击去环路详情，进行跳转
 window.mapToDetail = (code: string) => {
-  router.push('/heating-monitor/loopSupervision/loopDetail?code=' + code)
-}
+	router.push('/heating-monitor/loopSupervision/loopDetail?code=' + code);
+};
 
 function searchPoint(val: number | string) {
-  if (typeof val === 'number') {
-    map.setZoom(15);
-    const { lat, lnt: lng } = heatList.value.find((item: any) => item.id === val) as any
+	if (typeof val === 'number') {
+		map.setZoom(15);
+		const { lat, lnt: lng } = heatList.value.find((item: any) => item.id === val) as any;
 
-    setTimeout(() => {
-      map.centerAndZoom({ lat, lng }, 20);
-    }, 500)
+		setTimeout(() => {
+			map.centerAndZoom({ lat, lng }, 20);
+		}, 500);
 
-    local && local.search('');
+		local && local.search('');
 
-    // 选择的换热站
-  } else {
-    // 自定义的地址搜索
-    if (local) {
-      local.search(searchText.value);
-    } else {
-      local = new BMapGL.LocalSearch(map, {
-        renderOptions: { map }
-      });
-      local.search(searchText.value);
-    }
-  }
-  console.log(val)
+		// 选择的换热站
+	} else {
+		// 自定义的地址搜索
+		if (local) {
+			local.search(searchText.value);
+		} else {
+			local = new BMapGL.LocalSearch(map, {
+				renderOptions: { map },
+			});
+			local.search(searchText.value);
+		}
+	}
+	console.log(val);
 }
 
 onMounted(() => {
+	// 获取布局配置信息
+	getThemeConfig = store.state.themeConfig.themeConfig;
+	map = new BMapGL.Map(mapRef.value, {});
 
-  // 获取布局配置信息
-  getThemeConfig = store.state.themeConfig.themeConfig;
-  map = new BMapGL.Map(mapRef.value, {
-  });
+	map.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件
+	map.addControl(new BMapGL.ZoomControl()); // 添加缩放控件
 
-  map.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件
-  map.addControl(new BMapGL.ZoomControl()); // 添加缩放控件
+	const testPt = new BMapGL.Point(124.383044, 40.124296);
+	map.centerAndZoom(testPt, 5);
+	map.enableScrollWheelZoom();
+	if (getThemeConfig.isIsDark) {
+		map.setMapStyleV2({
+			styleId: 'b8d841ee37fd5bd41e742049b6fcd0f5',
+		});
+	}
 
-  const testPt = new BMapGL.Point(124.383044, 40.124296);
-  map.centerAndZoom(testPt, 5);
-  map.enableScrollWheelZoom();
-  if (getThemeConfig.isIsDark) {
-    map.setMapStyleV2({
-      styleId: 'b8d841ee37fd5bd41e742049b6fcd0f5'
+	// 获取环路列表
+	api.heatStation.getAll().then((res: any) => {
+		loops = res;
+		const list = res.filter((item: any) => item.loopViaPointInfo?.length > 1);
+		// console.log(list)
+		setLine(list, map);
+	});
+	// 获取换热站列表
+	api.heatStation
+		.getAllList({
+			status: 1,
+		})
+		.then((res: any) => {
+			heatList.value = res;
+			renderStation(res);
     });
-  }
-
-  // 获取环路列表
-  api.heatStation.getAll().then((res: any) => {
-    loops = res
-    const list = res.filter((item: any) => item.loopViaPointInfo?.length > 1)
-    // console.log(list)
-    setLine(list, map);
-  });
-  // 获取换热站列表
-  api.heatStation.getAllList({
-    status: 1
-  }).then((res: any) => {
-    heatList.value = res
-    renderStation(res);
-  });
-  // 地图缩放事件	
+    
+	// 地图缩放事件
   map.addEventListener('zoomend', (e: any) => {
-    // console.log('zoomend', e)
-    // console.log('zoomend', map.getZoom())
-    let zoom = map.getZoom()
-    if (zoom > 20.5 && points.length) {
-      let arr: any = []
-      let viewArrCache: any = []
+		// console.log('zoomend', map.getZoom())
+		let zoom = map.getZoom();
+		if (zoom > 18.4 && points.length) {
+			resetAreaPoints()
+		} else {
+			viewList.value = [];
+		}
+  });
+  
+	// 地图拖拽事件
+	map.addEventListener('dragend', (e: any) => {
+		let zoom = map.getZoom();
+		if (zoom > 18.4 && points.length) {
+			resetAreaPoints()
+		} else {
+			viewList.value = [];
+		}
+	});
+	// 获取当前视图内的点
+	// map.getBounds().containsPoint({
+	//   "lng": 124.41798,
+	//   "lat": 40.149303
+	// })
 
-      points.forEach((point: any) => {
-        if (map.getBounds().containsPoint(point)) {
-          arr.push(point)
-        }
-      })
-      arr.forEach((point: any) => {
-        // 查询环路列表中属于该站点的环路列表，进行显示
-        const theLoops = loops.filter((item: any) => item.stationInfo.id === point.data.id)
-        viewArrCache = viewArrCache.concat(theLoops)
-      })
-      viewList.value = viewArrCache
-    } else {
-      viewList.value = []
-    }
-  })
-  // 获取当前视图内的点
-  // map.getBounds().containsPoint({
-  //   "lng": 124.41798,
-  //   "lat": 40.149303
-  // })
-
-  // window._map = map
+	// window._map = map
 });
+
+function resetAreaPoints() {
+	let arr: any = [];
+	let viewArrCache: any = [];
+
+	points.forEach((point: any) => {
+		if (map.getBounds().containsPoint(point)) {
+			arr.push(point);
+		}
+	});
+	arr.forEach((point: any) => {
+		// 查询环路列表中属于该站点的环路列表，进行显示
+		const theLoops = loops.filter((item: any) => item.stationInfo.id === point.data.id);
+		viewArrCache = viewArrCache.concat(theLoops);
+	});
+	viewList.value = viewArrCache;
+}
+
 // 监听 vuex 中是否开启深色主题
 watch(
-  () => store.state.themeConfig.themeConfig.isIsDark,
-  (isIsDark) => {
-    nextTick(() => {
-      setTimeout(() => {
-        map.setMapStyleV2({
-          styleId: isIsDark ? 'b8d841ee37fd5bd41e742049b6fcd0f5' : '48b5759a53d0d6f607c049543d4c92e4'
-        });
-
-      }, 500);
-    });
-  },
-  {
-    deep: true,
-    immediate: true,
-  }
+	() => store.state.themeConfig.themeConfig.isIsDark,
+	(isIsDark) => {
+		nextTick(() => {
+			setTimeout(() => {
+				map.setMapStyleV2({
+					styleId: isIsDark ? 'b8d841ee37fd5bd41e742049b6fcd0f5' : '48b5759a53d0d6f607c049543d4c92e4',
+				});
+			}, 500);
+		});
+	},
+	{
+		deep: true,
+		immediate: true,
+	}
 );
 const renderStation = (list: any[]) => {
-  points = setMarker(list, map);
-  // 控制标点显示在最佳视野内
-  if (points && points.length) {
-    map.setViewport(points)
-  }
+	points = setMarker(list, map);
+	// 控制标点显示在最佳视野内
+	if (points && points.length) {
+		map.setViewport(points);
+	}
 };
 </script>
 

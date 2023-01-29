@@ -5,6 +5,7 @@ export default {
     levelall: (id: number) => get('/alarm/level/all', { id }),
     trigger_type: (productKey: number) => get('/alarm/rule/trigger_type', { productKey }),
     trigger_param: (productKey: number) => get('/alarm/rule/trigger_param', { productKey }),
+    trigger_params: (params: object) => get('/alarm/rule/trigger_param', params),
     operator: (productKey: number) => get('/alarm/rule/operator', { productKey }),
     getList: (params: object) => get('/alarm/rule/list', params),
     add: (data: object) => post('/alarm/rule/add', data),

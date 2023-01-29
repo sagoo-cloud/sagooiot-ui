@@ -28,37 +28,32 @@
 							</el-icon>
 							重置
 						</el-button>
+						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除
+							</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
-				<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
-					<template #default="scope">
-						<span v-if="scope.row.type == 1">规则告警</span>
-						<span v-else>设备自主告警</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true" v-col="'ruleName'" />
-				<el-table-column label="规则级别" prop="alarmLevel" :show-overflow-tooltip="true" v-col="'alarmLevel'">
-					<template #default="scope">
-						{{ scope.row.alarmLevel.name }}
-					</template>
-				</el-table-column>
-				<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true" v-col="'productKey'" />
-				<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true" v-col="'deviceKey'" />
+			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+				<el-table-column type="selection" width="55" align="center" />
 
-				<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
+				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
+			
+				<el-table-column label="标题" prop="title" :show-overflow-tooltip="true" v-col="'title'" />
+				<el-table-column label="发送方式" prop="gateway" :show-overflow-tooltip="true" v-col="'title'" />
+				<el-table-column prop="status" label="发送状态"  align="center" v-col="'status'">
 					<template #default="scope">
-						<el-tag type="success" size="small" v-if="scope.row.status">已处理</el-tag>
-						<el-tag type="info" size="small" v-else>未处理</el-tag>
+						<el-tag type="success" size="small" v-if="scope.row.status">发送成功</el-tag>
+						<el-tag type="info" size="small" v-else>发送失败</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="createdAt" label="告警时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
+				<el-table-column prop="sendTime" label="发送时间" align="center" v-col="'createdAt'"></el-table-column>
 				<el-table-column label="操作" width="150" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="onOpenDetailDic(scope.row)" v-auth="'detail'">详情</el-button>
-						<el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-if="scope.row.status == 0" v-auth="'edit'">处理</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -79,8 +74,7 @@
   <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import api from '/@/api/alarm';
-import EditDic from './component/edit.vue';
+import api from '/@/api/notice';
 import DetailDic from './component/detail.vue';
 
 // 定义接口来定义对象的类型
@@ -109,7 +103,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'log',
-	components: { EditDic, DetailDic },
+	components: {  DetailDic },
 
 	setup() {
 		const addDicRef = ref();
@@ -132,7 +126,7 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			//typeList();
+			typeList();
 		};
 		const typeList = () => {
 			state.tableData.loading = true;
@@ -171,7 +165,34 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		const onRowDel = (row: TableDataRow) => {
+			let msg = '你确定要删除所选数据？';
+			let ids: number[] = [];
+			if (row) {
+				msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
+				ids = [row.id];
+			} else {
+				ids = state.ids;
+			}
+			if (ids.length === 0) {
+				ElMessage.error('请选择要删除的数据。');
+				return;
+			}
+			ElMessageBox.confirm(msg, '提示', {
+				confirmButtonText: '确认',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+				api.log.delete(ids).then(() => {
+					ElMessage.success('删除成功');
+					typeList();
+				});
+				})
+				.catch(() => { });
+			};
 		return {
+			onRowDel,
 			addDicRef,
 			editDicRef,
 			queryRef,

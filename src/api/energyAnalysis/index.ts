@@ -14,4 +14,5 @@ export default {
   getEnergyTop: (params?: object) => get('/energy/top', params), // 能耗排行榜
   loopdataExport: (params: object) => file('/energy/loopdata/export', params), // 导出：环路分析
   lossWaterExport: (params: object) => file('/energy/water/loss/export', params), // 导出：环路分析
+  performanceExport: (params: object) => file('/energy/performanceExport', params), // 导出：绩效考核数据导出
 }

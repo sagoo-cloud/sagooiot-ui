@@ -121,7 +121,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:'',
+				busiTypes:[],
 				desc: '',
 			},
 			rules: {
@@ -143,12 +143,13 @@ export default defineComponent({
 			});
 
 			if (row) {
+				
 				state.ruleForm = row;
-				// if(row.dataTemplateBusi){
-				// 	state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
-				// 		return val.busiTypes
-				// 	})
-				// }
+				if(row.dataTemplateBusi){
+					state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
+						return val.busiTypes.toString();
+					})
+				}
 			}
 			state.isShowDialog = true;
 		};
@@ -157,7 +158,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:'',
+				busiTypes:[],
 				desc: '',
 			};
 		};
@@ -182,6 +183,7 @@ export default defineComponent({
 
 					if (state.ruleForm.id !== 0) {
 						//修改
+						
 						api.template.edit(state.ruleForm).then(() => {
 							ElMessage.success('模型类型修改成功');
 							closeDialog(); // 关闭弹窗

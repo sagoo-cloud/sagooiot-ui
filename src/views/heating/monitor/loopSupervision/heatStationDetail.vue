@@ -10,11 +10,11 @@
           <div class="item-content w100" :class="` home-one-animation${k}`">
             <p>
               <span>{{ v.contentTitle1 }}</span>
-              <span>{{ v.val1 + v.unit1 }}</span>
+              <span>{{ v.val1 }} {{ unitMap[v.contentTitle1]}}</span>
             </p>
             <p>
               <span>{{ v.contentTitle2 }}</span>
-              <span>{{ v.val2 + v.unit2 }}</span>
+              <span>{{ v.val2 }} {{unitMap[v.title + '：' + v.contentTitle2]? unitMap[v.title + '：' + v.contentTitle2]: unitMap[v.contentTitle2]}}</span>
             </p>
           </div>
         </div>
@@ -59,6 +59,7 @@ import water from '/@/assets/img/water.svg';
 import water1 from '/@/assets/img/water1.svg';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
+import apiDatahub from '/@/api/datahub';
 
 let global: any = {
   homeCharThree: null,
@@ -75,6 +76,14 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const unitMap = ref<any>({});
+
+    // 统计信息的单位的字典
+    apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
+      res.values.forEach((v: any) => {
+        unitMap.value[v.value] = v.key;
+      });
+    });
     const state = reactive({
       dataOne: [
         {
@@ -147,12 +156,12 @@ export default defineComponent({
         let data = res
         state.dataOne[0].val1 = data.heatingArea //供暖面积
         state.dataOne[0].val2 = data.forRealArea //实供面积
-        state.dataOne[1].val1 = data.unitConsumption //总热耗
-        state.dataOne[1].val2 = data.unitConsumptionSingle //热单耗
-        state.dataOne[2].val1 = data.elctricConsumption //总电量
-        state.dataOne[2].val2 = data.elctricConsumptionSingle //电单耗
-        state.dataOne[3].val1 = data.flowLoss //总水量
-        state.dataOne[3].val2 = data.flowLossSingle //水量单耗
+        state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
+        state.dataOne[1].val2 = data.unitConsumption //热单耗
+        state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量
+        state.dataOne[2].val2 = data.elctricConsumption //电单耗
+        state.dataOne[3].val1 = data.flowLossTotal //总水量
+        state.dataOne[3].val2 = data.flowLoss //水量单耗
       })
     }
 
@@ -282,6 +291,7 @@ export default defineComponent({
     };
 
     return {
+      unitMap,
       addDicRef,
       editDicRef,
       queryRef,

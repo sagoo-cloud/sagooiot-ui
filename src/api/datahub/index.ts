@@ -75,7 +75,7 @@ export default {
       getStatisticsOverview: (params: object) => get('/statistics/overview', params),
    },
    iotManage:{
-      getOverviewData: () => get('/statistics/thing/overview'),
+      getOverviewData: () => get('/thing/overview'),
       getAlarmList: (params: object) => get('/alarm/log/list', params),
       getAlarmDetail: (id: number) => get('/alarm/log/detail', { id }),
       getAlarmHandle: (data: object) => post('/alarm/log/handle', data),
