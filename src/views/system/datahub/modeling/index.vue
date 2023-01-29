@@ -3,11 +3,16 @@
     <el-card shadow="hover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true">
-          <el-form-item label="模型标识" prop="key">
+          <!-- <el-form-item label="模型标识" prop="key">
             <el-input v-model="tableData.param.key" placeholder="请输入模型标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="模型名称" prop="name">
             <el-input v-model="tableData.param.name" placeholder="请输入模型名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+          </el-form-item>
+          <el-form-item label="模型类型" prop="type">
+            <el-select v-model="tableData.param.type"  placeholder="请选择模型类型" class="w100" >
+						<el-option v-for="item in datahub_model_type" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
@@ -40,7 +45,7 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" prop="id" width="80" v-col="'id'" />
-       <el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/>
+       <!-- <el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/> -->
         <el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
         <el-table-column label="类型" prop="typeName" :show-overflow-tooltip="true" v-col="'typeName'" />
 
@@ -74,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent,getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
@@ -99,6 +104,7 @@ interface TableDataState {
       pageSize: number;
       name: string;
       key: string;
+      type: string;
     };
   };
 }
@@ -111,6 +117,9 @@ export default defineComponent({
     const editDicRef = ref();
     const detailRef = ref();
     const queryRef = ref();
+    const { proxy } = getCurrentInstance() as any;
+
+const { datahub_model_type } = proxy.useDict('datahub_model_type');
     const state = reactive<TableDataState>({
       tableData: {
         data: [],
@@ -121,6 +130,7 @@ export default defineComponent({
           pageSize: 10,
           name: '',
           key: '',
+          type: '',
         },
       },
     });
@@ -213,6 +223,7 @@ export default defineComponent({
       detailRef,
       queryRef,
       onOpenRecord,
+      datahub_model_type,
       onOpenAdd,
       onOpenEdit,
       onRowDel,
