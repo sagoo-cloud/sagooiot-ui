@@ -13,10 +13,10 @@
 		<div class="part left">
 			<div class="flex logo">
 				<img v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
-				<img v-else class="logoimg" src="/@/assets/logo.png" />
+				<img v-else class="logoimg" src="/imgs/logo.png" />
 				{{ sysinfo.systemName }}</div>
 			<img class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
-			<img class="img" v-else src="/@/assets/login-box-bg.svg" />
+			<img class="img" v-else src="/imgs/login-box-bg.svg" />
 			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
 			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
