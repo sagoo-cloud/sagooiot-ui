@@ -33,7 +33,7 @@
 import { toRefs, reactive, computed, defineComponent } from 'vue';
 import Account from '/@/views/login/component/account.vue';
 import { useStore } from '/@/store/index';
-import logoMini from '/@/assets/logo.png';
+import logoMini from '/imgs/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 
