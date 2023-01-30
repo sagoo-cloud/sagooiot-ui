@@ -11,8 +11,12 @@
 			style="--el-switch-on-color: #fff; --el-switch-off-color: #151515"
 		></el-switch>
 		<div class="part left">
-			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
-			<img class="img" src="/@/assets/login-box-bg.svg" />
+			<div class="flex logo">
+				<img v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
+				<img v-else class="logoimg" src="/@/assets/logo.png" />
+				{{ sysinfo.systemName }}</div>
+			<img class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
+			<img class="img" v-else src="/@/assets/login-box-bg.svg" />
 			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
 			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
@@ -56,6 +60,8 @@ export default defineComponent({
 				systemName: '',
 				buildTime: '',
 				systemCopyright: '',
+				systemLogo: '',
+				systemLoginPIC: '',
 			},
 			amisjson: {
 				type: 'page',
