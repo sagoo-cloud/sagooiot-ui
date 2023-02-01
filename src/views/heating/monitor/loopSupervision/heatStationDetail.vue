@@ -16,6 +16,11 @@
               <span>{{ v.contentTitle2 }}</span>
               <span>{{ v.val2 }} {{unitMap[v.title + '：' + v.contentTitle2]? unitMap[v.title + '：' + v.contentTitle2]: unitMap[v.contentTitle2]}}</span>
             </p>
+            <p v-if="v.contentTitle3">
+              <span>{{ v.contentTitle3 }}</span>
+              <span>{{ v.val3 }}
+                {{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span>
+            </p>
           </div>
         </div>
       </el-col>
@@ -107,6 +112,9 @@ export default defineComponent({
           contentTitle2: '总单耗',
           val2: '0',
           unit2: 'GJ/㎡',
+          contentTitle3: '供热功率',
+          val3: '-',
+          unit3: 'W',
         },
         {
           icon: ele,
@@ -377,8 +385,9 @@ $homeNavLengh: 8;
 			}
 		}
 
-		p:nth-child(2) {
-			margin-top: 26px;
+		p:nth-child(2),
+		p:nth-child(3) {
+			margin-top: 5px;
 		}
 	}
 
