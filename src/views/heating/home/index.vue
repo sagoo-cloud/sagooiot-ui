@@ -33,13 +33,13 @@
             <span>热网总能耗</span>
           </div>
           <el-tabs v-model="tabName" @tab-click="tabChange">
-            <el-tab-pane label="总热耗" name="homeLineRef1">
+            <el-tab-pane label="日热耗" name="homeLineRef1">
               <div style="height: 200px" ref="homeLineRef1"></div>
             </el-tab-pane>
-            <el-tab-pane label="总电耗" name="homeLineRef2">
+            <el-tab-pane label="日电耗" name="homeLineRef2">
               <div style="height: 200px" ref="homeLineRef2"></div>
             </el-tab-pane>
-            <el-tab-pane label="总失水量" name="homeLineRef3">
+            <el-tab-pane label="日失水量" name="homeLineRef3">
               <div style="height: 200px" ref="homeLineRef3"></div>
             </el-tab-pane>
           </el-tabs>
