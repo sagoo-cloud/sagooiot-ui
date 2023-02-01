@@ -167,7 +167,7 @@ export default defineComponent({
         let data = res
         state.dataOne[0].val1 = data.forRealArea
         state.dataOne[0].val2 = data.heatingArea
-        state.dataOne[0].val2 = data.heatRate
+        state.dataOne[0].val3 = data.heatRate
         state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
         state.dataOne[1].val2 = data.unitConsumption //热单耗
         state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量

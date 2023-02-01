@@ -38,6 +38,7 @@
                   <el-tab-pane label="温度" :name="0"></el-tab-pane>
                   <el-tab-pane label="压力" :name="1"></el-tab-pane>
                   <el-tab-pane label="流量" :name="2"></el-tab-pane>
+                  <el-tab-pane label="失水量" :name="3"></el-tab-pane>
                 </el-tabs>
                 <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
               </div>
@@ -188,7 +189,7 @@ export default defineComponent({
         let data = res
         state.dataOne[0].val1 = data.forRealArea
         state.dataOne[0].val2 = data.heatingArea
-        state.dataOne[0].val2 = data.heatRate
+        state.dataOne[0].val3 = data.heatRate
         state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
         state.dataOne[1].val2 = data.unitConsumption //热单耗
         state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量
