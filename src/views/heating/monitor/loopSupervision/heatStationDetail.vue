@@ -95,12 +95,15 @@ export default defineComponent({
           icon: map,
           iconDark: map1,
           title: '供热面积',
-          contentTitle1: '供热面积',
+          contentTitle1: '联网面积',
           val1: '0',
           unit1: '㎡',
-          contentTitle2: '总面积',
+          contentTitle2: '实供面积',
           val2: '0',
           unit2: '㎡',
+          contentTitle3: '供热率',
+          val3: '',
+          unit3: '',
         },
         {
           icon: fire,
@@ -162,8 +165,9 @@ export default defineComponent({
         code: route.query.code
       }).then((res: any) => {
         let data = res
-        state.dataOne[0].val1 = data.heatingArea //供暖面积
-        state.dataOne[0].val2 = data.forRealArea //实供面积
+        state.dataOne[0].val1 = data.forRealArea
+        state.dataOne[0].val2 = data.heatingArea
+        state.dataOne[0].val2 = data.heatRate
         state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
         state.dataOne[1].val2 = data.unitConsumption //热单耗
         state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量

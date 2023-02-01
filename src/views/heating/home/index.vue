@@ -132,12 +132,15 @@ export default defineComponent({
           icon: map,
           iconDark: map1,
           title: '供热面积',
-          contentTitle1: '供热面积',
+          contentTitle1: '联网面积',
           val1: '',
           unit1: '万㎡',
-          contentTitle2: '总面积',
+          contentTitle2: '实供面积',
           val2: '',
           unit2: '万㎡',
+          contentTitle3: '供热率',
+          val3: '',
+          unit3: '',
         },
         {
           icon: fire,
@@ -150,7 +153,7 @@ export default defineComponent({
           val2: '',
           unit2: 'GJ/㎡',
           contentTitle3: '供热功率',
-          val3: '-',
+          val3: '',
           unit3: 'W',
         },
         {
@@ -210,9 +213,11 @@ export default defineComponent({
           heatingArea,
           unitConsumption,
           unitConsumptionTotal,
+          heatRate,
         } = res.data;
-        state.dataOne[0].val1 = heatingArea;
-        state.dataOne[0].val2 = forRealArea;
+        state.dataOne[0].val1 = forRealArea;
+        state.dataOne[0].val2 = heatingArea;
+        state.dataOne[0].val3 = heatRate;
 
         state.dataOne[1].val1 = unitConsumptionTotal;
         state.dataOne[1].val2 = unitConsumption;
