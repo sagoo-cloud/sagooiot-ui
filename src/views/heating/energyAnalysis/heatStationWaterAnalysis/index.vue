@@ -18,6 +18,26 @@
           </div>
         </div>
         <div class="right-panel">
+          <el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="68px">
+            <el-form-item label="时间范围" prop="dateRange">
+              <el-date-picker v-model="state.tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="default" type="primary" @click="queryLineChart">
+                <el-icon>
+                  <ele-Search />
+                </el-icon>
+                查询
+              </el-button>
+              <!-- <el-button size="default" @click="resetQuery(queryRef)">
+                <el-icon>
+                  <ele-Refresh />
+                </el-icon>
+                重置
+              </el-button> -->
+            </el-form-item>
+          </el-form>
           <div class="title">供回水对比图</div>
           <div style="height: 300px" v-loading="state.tableData.loading" ref="barChartRef"></div>
           <div class="title mt-2">失水量曲线</div>
@@ -51,7 +71,13 @@ import { useSearch } from '/@/hooks/useCommon';
 // import { export_json_to_excel } from '/@/utils/xlsx';
 import downloadFile from '/@/utils/download';
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.getEnergyHuanluWaterLossLineChartPage, 'list', { loopCode: '' });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.getEnergyHuanluWaterLossLineChartPage, 'list', {
+  loopCode: '',
+  dateRange: [
+    formatDate(new Date(), 'YYYY-mm-dd'),
+    formatDate(new Date(), 'YYYY-mm-dd')
+  ]
+});
 
 let nodeName = ''
 
@@ -86,7 +112,13 @@ const state = reactive({
   lineChartSeries: [],
   tableData: {
     data: [],
-    loading: false
+    loading: false,
+    param: {
+      dateRange: [
+        formatDate(new Date(), 'YYYY-mm-dd'),
+        formatDate(new Date(), 'YYYY-mm-dd')
+      ]
+    }
   }
 });
 
@@ -95,6 +127,9 @@ const filterText = ref('')
 const curNode = ref('')
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
+})
+watch(() => state.tableData.param.dateRange, (val) => {
+  params.dateRange = val
 })
 const filterNode = (value: string, data: any) => {
   if (!value) return true
@@ -153,7 +188,7 @@ const queryTree = () => {
 const queryLineChart = () => {
   getList()
   state.tableData.loading = true
-  api.getEnergyWaterLossLineChart({ loopCode: curNode.value })
+  api.getEnergyWaterLossLineChart({ loopCode: curNode.value, dateRange: state.tableData.param.dateRange })
     // api.getEnergyWaterLossLineChart({ loopCode: 'D00107-1' })
     .then((res: any) => {
       // console.log(res);
@@ -166,8 +201,8 @@ const queryLineChart = () => {
       state.barChartSeries2 = []
 
       data.forEach((item: any) => {
-        state.lineChartXAixs.push(formatDate(new Date(item.datetime), 'HH:MM'));
-        state.barChartXAxis.push(formatDate(new Date(item.datetime), 'HH:MM'));
+        state.lineChartXAixs.push(formatDate(new Date(item.datetime), 'mm-dd HH:MM'));
+        state.barChartXAxis.push(formatDate(new Date(item.datetime), 'mm-dd HH:MM'));
         state.lineChartSeries.push(item.waterLoss);
         state.barChartSeries1.push(item.supplyWater);
         state.barChartSeries2.push(item.returnWater);
@@ -208,6 +243,17 @@ const initBarChart = () => {
     yAxis: [
       {
         type: 'value'
+      }
+    ],
+    dataZoom: [
+      {
+        type: 'inside',
+        start: 0,
+        end: 30
+      },
+      {
+        start: 0,
+        end: 30
       }
     ],
     series: [
@@ -255,6 +301,17 @@ const initLineChart = () => {
         name: '',
         splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
       },
+    ],
+    dataZoom: [
+      {
+        type: 'inside',
+        start: 0,
+        end: 30
+      },
+      {
+        start: 0,
+        end: 30
+      }
     ],
     series: [
       {

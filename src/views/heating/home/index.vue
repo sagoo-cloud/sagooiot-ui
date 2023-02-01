@@ -17,10 +17,12 @@
               <span>{{ v.val2 }}
                 {{ unitMap[v.title + '：' + v.contentTitle2] ? unitMap[v.title + '：' + v.contentTitle2] : unitMap[v.contentTitle2] }}</span>
             </p>
-            <p v-if="v.contentTitle3">
-              <span>{{ v.contentTitle3 }}</span>
-              <span>{{ v.val3 }}
-                {{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span>
+            <p style="height:30px">
+              <template v-if="v.contentTitle3">
+                <span>{{ v.contentTitle3  || ' '}}</span>
+                <span>{{ v.val3 || ' ' }}
+                  {{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span>
+              </template>
             </p>
           </div>
         </div>
