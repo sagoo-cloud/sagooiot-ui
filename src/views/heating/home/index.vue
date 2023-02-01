@@ -42,6 +42,9 @@
             <el-tab-pane label="日失水量" name="homeLineRef3">
               <div style="height: 200px" ref="homeLineRef3"></div>
             </el-tab-pane>
+            <el-tab-pane label="供热功率" name="homeLineRef4">
+              <div style="height: 200px" ref="homeLineRef4"></div>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-col>
@@ -110,6 +113,7 @@ export default defineComponent({
     const homeLineRef1 = ref();
     const homeLineRef2 = ref();
     const homeLineRef3 = ref();
+    const homeLineRef4 = ref();
     const homePieRef = ref();
     const homeBarRef = ref();
     const homeFourBarRef = ref();
@@ -466,14 +470,24 @@ export default defineComponent({
 
       let dom: any;
       let data: any;
+      let unit: any;
+      // 日热耗：GJ
+      // 日电耗：KW.h
+      // 日失水量：T
       if (tabName.value === 'homeLineRef1') {
         dom = homeLineRef1.value;
         data = state.flowLossData;
+        unit = 'GJ'
       } else if (tabName.value === 'homeLineRef2') {
         dom = homeLineRef2.value;
         data = state.elctricConsumptionData;
-      } else {
+        unit = 'KW.h'
+      } else if (tabName.value === 'homeLineRef3') {
         dom = homeLineRef3.value;
+        data = state.unitConsumptionData;
+        unit = 'T'
+      } else {
+        dom = homeLineRef4.value;
         data = state.unitConsumptionData;
       }
 
@@ -514,7 +528,19 @@ export default defineComponent({
         yAxis: [
           {
             type: 'value',
+            name: unit,
           },
+        ],
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 30
+          },
+          {
+            start: 0,
+            end: 30
+          }
         ],
         series: [
           {
