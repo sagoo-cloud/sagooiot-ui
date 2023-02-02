@@ -45,6 +45,7 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="index" width="55" label="序号" align="center" />
         <!-- <el-table-column label="日期" v-col="'key'" prop="key" min-width="120" :show-overflow-tooltip="true" /> -->
+        <el-table-column label="换热站" min-width="120" v-col="'stationName'" prop="stationName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column :label="tableData.param.types === 'station' ? '换热站' : '环路名称'" v-col="'name'" prop="name" :show-overflow-tooltip="true">
           <template #default="{ row }">
             <el-button type="text" @click="goPage(row)">
@@ -52,24 +53,17 @@
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column :label="tableData.param.types === 'station' ? '换热站编号' : '环路编号'" v-col="'number'" prop="code" min-width="120" :show-overflow-tooltip="true">
-          <template #default="{ row }">
-            {{ row.code }}
-          </template>
-        </el-table-column>
-        <el-table-column label="换热站" v-col="'stationName'" prop="stationName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="换热站编号" min-width="100" v-col="'stationCode'" prop="stationCode" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水压力" prop="outPressure1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水压力" prop="outPressure2" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水温度" prop="outTemperature1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
+        <!-- 
+4.默认30条数据每页 -->
+        <el-table-column label="一网供水温度" prop="inTemperature1" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水温度" prop="inTemperature2" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水温度" prop="outTemperature1" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="100" :show-overflow-tooltip="true" />
+        <el-table-column label="回水流量" prop="returnWaterFlow" min-width="100" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="inPressure1" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水压力" prop="inPressure2" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水压力" prop="outPressure1" min-width="110" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水压力" prop="outPressure2" min-width="110" :show-overflow-tooltip="true" />
 
         <!-- <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="scope">
@@ -104,7 +98,7 @@ export default defineComponent({
         loading: false,
         param: {
           pageNum: 1,
-          pageSize: 10,
+          pageSize: 30,
           types: 'loop', // 类型 station 换热站 loop环路
           stationName: '',
           name: '',
@@ -119,6 +113,7 @@ export default defineComponent({
     };
     const typeList = () => {
       state.tableData.loading = true;
+      state.tableData.data = [];
       api.getLoopRegulation(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;

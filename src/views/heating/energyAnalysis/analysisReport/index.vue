@@ -271,7 +271,6 @@ const initLineChart = () => {
     { name: '一网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature1 },
     { name: '二网供水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inTemperature2 },
     { name: '一网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature1 },
-    { name: '二网回水温度', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.outTemperature2 }
   ], [
     { name: '一网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure1 },
     { name: '二网供水压力', type: 'line', symbolSize: 6, symbol: 'circle', smooth: true, data: state.inPressure2 },

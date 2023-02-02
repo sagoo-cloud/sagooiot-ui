@@ -16,6 +16,13 @@
               <span>{{ v.contentTitle2 }}</span>
               <span>{{ v.val2 }} {{unitMap[v.title + '：' + v.contentTitle2]? unitMap[v.title + '：' + v.contentTitle2]: unitMap[v.contentTitle2]}}</span>
             </p>
+            <p style="height:30px">
+              <template v-if="v.contentTitle3">
+                <span>{{ v.contentTitle3  || ' '}}</span>
+                <span>{{ v.val3 || ' ' }}
+                  {{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span>
+              </template>
+            </p>
           </div>
         </div>
       </el-col>
@@ -33,6 +40,7 @@
                   <el-tab-pane label="温度" :name="0"></el-tab-pane>
                   <el-tab-pane label="压力" :name="1"></el-tab-pane>
                   <el-tab-pane label="流量" :name="2"></el-tab-pane>
+                  <el-tab-pane label="失水量" :name="3"></el-tab-pane>
                 </el-tabs>
                 <el-button type="text" @click="goDetail()">更多 &gt;</el-button>
               </div>
@@ -102,12 +110,15 @@ export default defineComponent({
           icon: map,
           iconDark: map1,
           title: '供热面积',
-          contentTitle1: '供热面积',
+          contentTitle1: '联网面积',
           val1: '0',
           unit1: '㎡',
-          contentTitle2: '总面积',
+          contentTitle2: '实供面积',
           val2: '0',
           unit2: '㎡',
+          contentTitle3: '供热率',
+          val3: '',
+          unit3: '',
         },
         {
           icon: fire,
@@ -119,6 +130,9 @@ export default defineComponent({
           contentTitle2: '总单耗',
           val2: '0',
           unit2: 'GJ/㎡',
+          contentTitle3: '供热功率',
+          val3: '-',
+          unit3: 'W',
         },
         {
           icon: ele,
@@ -175,8 +189,9 @@ export default defineComponent({
         code: route.query.code
       }).then((res: any) => {
         let data = res
-        state.dataOne[0].val1 = data.heatingArea //供暖面积
-        state.dataOne[0].val2 = data.forRealArea //实供面积
+        state.dataOne[0].val1 = data.forRealArea
+        state.dataOne[0].val2 = data.heatingArea
+        state.dataOne[0].val3 = data.heatRate
         state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
         state.dataOne[1].val2 = data.unitConsumption //热单耗
         state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量
@@ -431,9 +446,9 @@ $homeNavLengh: 8;
 				font-size: 22px;
 			}
 		}
-
-		p:nth-child(2) {
-			margin-top: 26px;
+		p:nth-child(2),
+		p:nth-child(3) {
+			margin-top: 5px;
 		}
 	}
 
