@@ -25,7 +25,7 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd">
+            <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
@@ -44,14 +44,15 @@
         <el-table-column type="selection" width="55" align="center" />
         <!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
         <!-- <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" /> -->
-        <el-table-column label="IP" prop="ip" />
+        <el-table-column label="IP" prop="ip" v-col="'ip'"/>
         <!-- <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" /> -->
-         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" />
+         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" v-col="'remark'"/>
         <!-- <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'" /> -->
         <el-table-column
           align="center"
           prop="status"
           label="状态"
+          v-col="'status'"
         >
         <template #default="scope">
           <el-tag
@@ -66,14 +67,14 @@
           >正常</el-tag>
         </template>
       </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
-        <el-table-column label="操作" width="150" align="center" fixed="right">
+        <el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
+        <el-table-column v-col="'handle'"  label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
             <!-- <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link> -->
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" >编辑</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" >删除</el-button>
+            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">编辑</el-button>
+            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-popover
               placement="bottom"
               :width="154"
@@ -85,7 +86,7 @@
                   type="text"
                   class="more-btn"
                   @click="isShowMore = !isShowMore"
-                  
+                  v-auth="'more'"
                 >更多
                   <i
                     style="margin-left: 2px;"
@@ -101,6 +102,7 @@
                   size="small"
                   key="success"
                   type="success"
+                  v-auth="'on'"
                 >设为启用</el-button>
                 <el-divider direction="vertical" />
                 <el-button
@@ -110,6 +112,7 @@
                   size="small"
                   key="warning"
                   type="warning"
+                  v-auth="'off'"
                 >设为禁用</el-button>
               </div>
             </el-popover>
@@ -243,6 +246,7 @@ export default defineComponent({
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
       state.ids = selection.map((item) => item.id);
+      console.log(state.ids)
     };
     return {
       addDicRef,

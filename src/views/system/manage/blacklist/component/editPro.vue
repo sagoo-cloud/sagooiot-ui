@@ -6,7 +6,7 @@
           <el-input type="textarea" v-model="ruleForm.ip" placeholder="请输入IP地址" />
           <div style="color: #a4a4a4;line-height: 20px;">
             <div>支持添加IP：如果添加多个IP请用“,”隔开</div>
-            <div>支持添加IP段，如192.168.0.0/24</div>
+            <div v-if="ruleForm.id == 0">支持添加IP段，如192.168.0.0/24</div>
             <div>支持添加IP范围，格式如：192.168.1.xx-192.168.1.xx</div>
           </div>
 
