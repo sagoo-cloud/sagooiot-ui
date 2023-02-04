@@ -117,7 +117,7 @@ export default defineComponent({
           contentTitle2: '总单耗',
           val2: '0',
           unit2: 'GJ/㎡',
-          contentTitle3: '供热功率',
+          contentTitle3: '供热负荷',
           val3: '-',
           unit3: 'W',
         },
