@@ -200,19 +200,19 @@
           </template>
           <div class="flex-row">
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="操作系统">{{goInfoData.os}}</el-form-item>
+              <el-form-item label="操作系统">{{goInfoData.goOs}}</el-form-item>
               <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
               <el-form-item label="运行时长">{{timeFormat(goInfoData.runTime)}}</el-form-item>
               <el-form-item label="运行内存">{{goInfoData.goMem}}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="系统架构">{{goInfoData.kernelArch}}</el-form-item>
+              <el-form-item label="系统架构">{{goInfoData.arch}}</el-form-item>
               <el-form-item label="语言环境">{{goInfoData.goName}}</el-form-item>
               <el-form-item label="磁盘占用">{{goInfoData.goSize}}</el-form-item>
               <el-form-item label="项目地址">{{goInfoData.pwd}}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="架构版本">{{goInfoData.kernelVersion}}</el-form-item>
+              <el-form-item label="架构版本">{{goInfoData.goVersion}}</el-form-item>
               <el-form-item label="GO 版本">{{goInfoData.goVersion}}</el-form-item>
               <el-form-item label="协程数量">{{goInfoData.goroutine}}</el-form-item>
               <el-form-item label="服务器IP">{{goInfoData.intranet_ip}}</el-form-item>
@@ -248,7 +248,7 @@ export default defineComponent({
     let myChart5: any;
     let myChart6: any;
     const goInfoData = reactive({
-      "os":"-","kernelArch":"-","kernelVersion":"-","goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
+      "goOs":"-","arch":"-","goVersion":"-","goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
       "runTime": '', "startTime": "-","intranet_ip":"-"
     });
 
