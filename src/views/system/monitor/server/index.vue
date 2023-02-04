@@ -158,134 +158,6 @@
         </el-card>
       </el-col>
     </div>
-    <!-- <div class="flex-row gap-3">
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>运行资源</span>
-            </div>
-          </template>
-          <div class="el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%">
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="cell">操作系统:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.sysOsName }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">系统架构:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.sysOsArch }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">服务器名称:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.sysComputerName }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">服务器IP:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.sysComputerIp }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">Go语言版本</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.goVersion }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">启动时间</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysInfo.goStartTime }}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="cell">运行时长:</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ timeFormat(sysInfo.goRunTime) }}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="12" class="marg-b-15">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>硬盘资源</span>
-            </div>
-          </template>
-          <div class="el-table--enable-row-hover el-table--medium" style="height: 280px; overflow: auto">
-            <table cellspacing="0" style="width: 100%">
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="cell">盘符路径</div>
-                  </td>
-                  <td>
-                    <div class="cell">文件系统</div>
-                  </td>
-                  <td>
-                    <div class="cell">总大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">可用大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">已用大小</div>
-                  </td>
-                  <td>
-                    <div class="cell">已用百分比</div>
-                  </td>
-                </tr>
-                <tr v-for="(sysFile, index) in sysInfo.diskList" :key="index">
-                  <td>
-                    <div class="cell">{{ sysFile.path }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysFile.fstype }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.total) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.free) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ memorySizeFormat(sysFile.used) }}</div>
-                  </td>
-                  <td>
-                    <div class="cell">{{ sysFile.usedPercent }}%</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </el-card>
-      </el-col>
-    </div> -->
     <div class="flex-row gap-3">
       <el-col :xs="24" :sm="12" :md="8" class="marg-b-15">
         <el-card class="box-card-height" style="height:auto">
@@ -323,24 +195,27 @@
         <el-card class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
-              <span>GO运行信息</span>
+              <span>运行环境信息</span>
             </div>
           </template>
           <div class="flex-row">
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="语言环境">{{goInfoData.goName}}</el-form-item>
+              <el-form-item label="操作系统">{{goInfoData.os}}</el-form-item>
+              <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
               <el-form-item label="运行时长">{{timeFormat(goInfoData.runTime)}}</el-form-item>
               <el-form-item label="运行内存">{{goInfoData.goMem}}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="语言号">{{goInfoData.goVersion}}</el-form-item>
-              <el-form-item label="运行路径">{{goInfoData.rootPath}}</el-form-item>
+              <el-form-item label="系统架构">{{goInfoData.kernelArch}}</el-form-item>
+              <el-form-item label="语言环境">{{goInfoData.goName}}</el-form-item>
               <el-form-item label="磁盘占用">{{goInfoData.goSize}}</el-form-item>
+              <el-form-item label="项目地址">{{goInfoData.pwd}}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
-              <el-form-item label="goroutine数量">{{goInfoData.goroutine}}</el-form-item>
-              <el-form-item label=" "> </el-form-item>
+              <el-form-item label="架构版本">{{goInfoData.kernelVersion}}</el-form-item>
+              <el-form-item label="GO 版本">{{goInfoData.goVersion}}</el-form-item>
+              <el-form-item label="协程数量">{{goInfoData.goroutine}}</el-form-item>
+              <el-form-item label="服务器IP">{{goInfoData.intranet_ip}}</el-form-item>
             </el-form>
           </div>
         </el-card>
@@ -373,8 +248,8 @@ export default defineComponent({
     let myChart5: any;
     let myChart6: any;
     const goInfoData = reactive({
-      "goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
-      "runTime": '', "startTime": "-"
+      "os":"-","kernelArch":"-","kernelVersion":"-","goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
+      "runTime": '', "startTime": "-","intranet_ip":"-"
     });
 
     function goInfo(event: { data: any; }) {
@@ -703,8 +578,8 @@ export default defineComponent({
 
     function displayHost(event: { data: any; }) {
       const data = JSON.parse(event.data);
-      state.sysInfo.sysOsName = data.os
-      state.sysInfo.sysOsArch = data.kernelArch
+      state.sysInfo.os = data.os
+      state.sysInfo.kernelArch = data.kernelArch
       state.sysInfo.sysComputerName = data.hostname
       state.sysInfo.goStartTime = data.bootTime
       state.sysInfo.goRunTime = data.uptime
