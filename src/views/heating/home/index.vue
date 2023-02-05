@@ -44,7 +44,7 @@
             <el-tab-pane label="日失水量" name="homeLineRef3">
               <div style="height: 200px" ref="homeLineRef3"></div>
             </el-tab-pane>
-            <el-tab-pane label="供热功率" name="homeLineRef4">
+            <el-tab-pane label="供热负荷" name="homeLineRef4">
               <div style="height: 200px" ref="homeLineRef4"></div>
             </el-tab-pane>
           </el-tabs>
@@ -158,7 +158,7 @@ export default defineComponent({
           contentTitle2: '总单耗',
           val2: '',
           unit2: 'GJ/㎡',
-          contentTitle3: '供热功率',
+          contentTitle3: '供热负荷',
           val3: '',
           unit3: 'W',
         },
