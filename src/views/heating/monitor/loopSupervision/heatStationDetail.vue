@@ -172,6 +172,7 @@ export default defineComponent({
         state.dataOne[0].val3 = data.heatRate
         state.dataOne[1].val1 = data.unitConsumptionTotal //总热耗
         state.dataOne[1].val2 = data.unitConsumption //热单耗
+        state.dataOne[1].val3 = data.heatDemand
         state.dataOne[2].val1 = data.elctricConsumptionTotal //总电量
         state.dataOne[2].val2 = data.elctricConsumption //电单耗
         state.dataOne[3].val1 = data.flowLossTotal //总水量
