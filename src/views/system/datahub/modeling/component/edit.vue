@@ -9,7 +9,11 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />
 				</el-form-item>
 
-
+				<el-form-item label="模型类型" prop="type">
+					<el-select v-model="ruleForm.type"  placeholder="请选择模型类型" class="w100" >
+						<el-option v-for="item in datahub_model_type" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
 
 				<!-- <el-form-item label="更新时间" prop="interval">
 					<el-input v-model="ruleForm.interval" placeholder="请输入更新时间" class="w-35" />
@@ -69,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref,getCurrentInstance } from 'vue';
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
@@ -80,6 +84,7 @@ interface RuleFormState {
 	interval: string;
 	key: string;
 	desc: string;
+	type: string;
 }
 interface DicState {
 	isShowDialog: boolean;
@@ -93,6 +98,9 @@ export default defineComponent({
 
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
+			const { proxy } = getCurrentInstance() as any;
+
+		const { datahub_model_type } = proxy.useDict('datahub_model_type');
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			zidianData:[],
@@ -121,12 +129,14 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:'',
+				busiTypes:[],
 				desc: '',
+				type: '',
 			},
 			rules: {
 				key: [{ required: true, message: '模型标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
+				type: [{ required: true, message: '模型类型不能为空', trigger: 'blur' }],
 				interval: [{ required: true, message: '请输入更新时间', trigger: 'blur' }],
 			},
 		});
@@ -143,12 +153,13 @@ export default defineComponent({
 			});
 
 			if (row) {
+				
 				state.ruleForm = row;
-				// if(row.dataTemplateBusi){
-				// 	state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
-				// 		return val.busiTypes
-				// 	})
-				// }
+				if(row.dataTemplateBusi){
+					state.ruleForm.busiTypes=row.dataTemplateBusi.map(val => {
+						return val.busiTypes.toString();
+					})
+				}
 			}
 			state.isShowDialog = true;
 		};
@@ -157,8 +168,9 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				key: '',
-				busiTypes:'',
+				busiTypes:[],
 				desc: '',
+				type: '',
 			};
 		};
 
@@ -182,6 +194,7 @@ export default defineComponent({
 
 					if (state.ruleForm.id !== 0) {
 						//修改
+						
 						api.template.edit(state.ruleForm).then(() => {
 							ElMessage.success('模型类型修改成功');
 							closeDialog(); // 关闭弹窗
@@ -219,6 +232,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
+			datahub_model_type,
 			...toRefs(state),
 		};
 	},

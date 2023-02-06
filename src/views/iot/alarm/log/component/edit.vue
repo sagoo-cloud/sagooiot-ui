@@ -77,7 +77,7 @@ export default defineComponent({
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
 					api.log.handle(state.ruleForm).then(() => {
-						ElMessage.success('告警出来成功');
+						ElMessage.success('告警处理成功');
 						closeDialog(); // 关闭弹窗
 						emit('dataList');
 					});
