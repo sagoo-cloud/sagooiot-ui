@@ -199,6 +199,7 @@ export default defineComponent({
       flowLossData: [],
       elctricConsumptionData: [],
       unitConsumptionData: [],
+      heatDemandData: [],
       pieData: [],
       pieType: '1',
       pressureXAxisData: [],
@@ -446,22 +447,13 @@ export default defineComponent({
     const getStatisticsLineChartData = () => {
       if (!state.rangeValue) return;
       api.statistics.getStatisticsOverview({ queryType: 'energy' }).then((res: any) => {
-        const { flowLoss, elctricConsumption, unitConsumption } = res.data;
-        // calorie：总热耗  electric：总电耗  water：总失水量
-        state.chartXAxisData = [];
-        state.flowLossData = [];
-        state.elctricConsumptionData = [];
-        state.unitConsumptionData = [];
-        flowLoss.forEach((i: any) => {
-          state.chartXAxisData.push(i.date);
-          state.flowLossData.push(i.total);
-        });
-        elctricConsumption.forEach((i: any) => {
-          state.elctricConsumptionData.push(i.total);
-        });
-        unitConsumption.forEach((i: any) => {
-          state.unitConsumptionData.push(i.total);
-        });
+        const { flowLoss, elctricConsumption, unitConsumption, heatDemand } = res.data;
+        // calorie：总热耗  electric：总电耗  water：总失水量 heatDemand: 供热负荷
+        state.chartXAxisData = flowLoss.map((item: any) => item.date);
+        state.flowLossData = flowLoss.map((item: any) => item.total);
+        state.elctricConsumptionData = elctricConsumption.map((item: any) => item.total);
+        state.unitConsumptionData = unitConsumption.map((item: any) => item.total);
+        state.heatDemandData = heatDemand.map((item: any) => item.total);
         if (state.rangeValue == 10) return;
         nextTick(() => {
           initLineChart();
@@ -478,6 +470,7 @@ export default defineComponent({
       // 日热耗：GJ
       // 日电耗：KW.h
       // 日失水量：T
+      // 供热功率：W
       if (tabName.value === 'homeLineRef1') {
         dom = homeLineRef1.value;
         data = state.flowLossData;
@@ -492,9 +485,11 @@ export default defineComponent({
         unit = 'T'
       } else {
         dom = homeLineRef4.value;
-        data = state.unitConsumptionData;
+        data = state.heatDemandData;
+        unit = 'W'
       }
 
+      console.log(dom)
       global.homeCharThree = <any>echarts.init(dom, state.charts.theme);
 
       const common = {
@@ -570,7 +565,7 @@ export default defineComponent({
     // 切换图形
     const tabChange = (data: any) => {
       setTimeout(() => {
-        initLineChart(data.paneName);
+        initLineChart();
       }, 100);
     };
     // 切换饼图类型
@@ -655,6 +650,7 @@ export default defineComponent({
       homeLineRef1,
       homeLineRef2,
       homeLineRef3,
+      homeLineRef4,
       tabChange,
       homePieRef,
       homeBarRef,
