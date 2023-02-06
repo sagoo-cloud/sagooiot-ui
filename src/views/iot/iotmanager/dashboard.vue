@@ -79,7 +79,7 @@
 				</div>
 			</el-col>
 		</el-row>
-		
+
 		<EditDic ref="editDicRef" @dataList="getAlarmList" />
 		<DetailDic ref="detailRef" @dataList="getAlarmList" />
 	</div>
@@ -211,7 +211,7 @@ export default defineComponent({
 						}
         			},
 					},
-			
+
 
 
 				],
@@ -549,14 +549,14 @@ $homeNavLengh: 8;
 	.home-card-two,
 	.home-card-three {
     .home-card-item{
-      height: 500px;
+      height: 300px;
     }
     .home-card-top{
       height: 250px;
       .box-card{
-        padding: 15px 20px 20px 20px;
+        padding: 15px 20px 20px 10px;
         p{margin-bottom: 10px;}
-        &-item{margin-bottom: 20px;}
+        &-item{margin-bottom: 10px;}
       }
     }
 		.home-card-item, .home-card-top{
