@@ -200,7 +200,7 @@
           </template>
           <div class="flex-row">
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="操作系统">{{goInfoData.goOs}}</el-form-item>
+              <el-form-item label="操作系统">{{hostData.os}}</el-form-item>
               <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
               <el-form-item label="运行时长">{{timeFormat(goInfoData.runTime)}}</el-form-item>
               <el-form-item label="运行内存">{{goInfoData.goMem}}</el-form-item>
@@ -212,10 +212,10 @@
               <el-form-item label="项目地址">{{goInfoData.pwd}}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="架构版本">{{goInfoData.goVersion}}</el-form-item>
+              <el-form-item label="架构版本">{{hostData.kernelArch}}</el-form-item>
               <el-form-item label="GO 版本">{{goInfoData.goVersion}}</el-form-item>
               <el-form-item label="协程数量">{{goInfoData.goroutine}}</el-form-item>
-              <el-form-item label="服务器IP">{{goInfoData.intranet_ip}}</el-form-item>
+              <el-form-item label="服务器IP">{{hostData.intranet_ip}} (内) &nbsp;&nbsp;&nbsp; {{hostData.public_ip}} (公) </el-form-item>
             </el-form>
           </div>
         </el-card>
@@ -247,14 +247,36 @@ export default defineComponent({
     let myChart4: any;
     let myChart5: any;
     let myChart6: any;
+    const hostData = reactive({
+      "bootTime": "2022-11-24T11:12:13+08:00",
+      "hostId": "8be74718-1a53-4208-be22-9c126d891ddd",
+      "hostname": "iZ2zee04uvnkmhvglw9oghZ",
+      "intranet_ip": "172.17.47.62",
+      "kernelArch": "x86_64",
+      "kernelVersion": "3.10.0-1127.19.1.el7.x86_64",
+      "os": "linux",
+      "platform": "centos",
+      "platformFamily": "rhel",
+      "platformVersion": "7.7.1908",
+      "procs": 138,
+      "public_ip": "101.200.198.249",
+      "uptime": 6393278,
+      "virtualizationRole": "guest",
+      "virtualizationSystem": ""
+    });
     const goInfoData = reactive({
-      "goOs":"-","arch":"-","goVersion":"-","goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
-      "runTime": '', "startTime": "-","intranet_ip":"-"
+      "goOs": "-", "arch": "-", "goVersion": "-", "goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
+      "runTime": '', "startTime": "-", "intranet_ip": "-"
     });
 
     function goInfo(event: { data: any; }) {
       const data = JSON.parse(event.data);
       Object.assign(goInfoData, data);
+    }
+
+    function hostInfo(event: { data: any; }) {
+      const data = JSON.parse(event.data);
+      Object.assign(hostData, data);
     }
 
     const myChart4Data: any = {
@@ -572,6 +594,7 @@ export default defineComponent({
       es.addEventListener("sysLoad", displaySysLoad);
       es.addEventListener("disk", displayDisk);
       es.addEventListener("go", goInfo);
+      es.addEventListener("host", hostInfo);
     }
 
     startWs();
@@ -638,6 +661,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       goInfoData,
+      hostData,
       setOptChart1,
       setOptChart2,
       setOptChart3,
