@@ -71,12 +71,12 @@
 				<el-table-column type="index" label="序号" align="center" width="60" />
 				<el-table-column label="环路名称" prop="huanLuName" />
 				<el-table-column label="所属换热站" prop="stationName" />
-				<el-table-column label="总热耗" prop="unitConsumptionTotal" />
-				<el-table-column label="热单耗" prop="unitConsumption" />
-				<el-table-column label="总耗电" prop="elctricConsumptionTotal" />
-				<el-table-column label="电单耗" prop="elctricConsumption" />
-				<el-table-column label="总耗水" prop="flowLossTotal" />
-				<el-table-column label="水单耗" prop="flowLoss" />
+				<el-table-column :label="`总热耗(${unitMap['单日总热耗单位']})`" prop="unitConsumptionTotal" />
+				<el-table-column :label="`热单耗(${unitMap['单日供热单耗']})`" prop="unitConsumption" />
+				<el-table-column :label="`总耗电(${unitMap['单日总电耗']})`" prop="elctricConsumptionTotal" />
+				<el-table-column :label="`电单耗(${unitMap['单日用电单耗']})`" prop="elctricConsumption" />
+				<el-table-column :label="`总耗水(${unitMap['日总水耗单位']})`" prop="flowLossTotal" />
+				<el-table-column :label="`水单耗(${unitMap['日失水单耗']})`" prop="flowLoss" />
 			</el-table>
 
 			<pagination
@@ -103,13 +103,14 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, reactive, onMounted, ref, watch, nextTick } from 'vue';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { reactive, onMounted, ref, watch, nextTick } from 'vue';
+import { FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import { useStore } from '/@/store/index';
 import energyApi from '/@/api/energyAnalysis';
 import heatApi from '/@/api/heatStation';
 import downloadFile from '/@/utils/download';
+import apiDatahub from '/@/api/datahub';
 
 let global: any = {
 	redChartOneRef: null,
@@ -120,6 +121,14 @@ let global: any = {
 	blackChartThreeRef: null,
 	dispose: [null, '', undefined],
 };
+
+const unitMap = ref<any>({});
+// 统计信息的单位的字典
+apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
+	res.values.forEach((v: any) => {
+		unitMap.value[v.value] = v.key;
+	});
+});
 
 const queryRef = ref();
 const redChartOneRef = ref();
@@ -168,8 +177,8 @@ const queryTree = () => {
 
 const exportData = () => {
 	energyApi.performanceExport(state.tableData.param).then((res: any) => {
-    downloadFile(res, '绩效考核数据.xlsx')
-  })
+		downloadFile(res, '绩效考核数据.xlsx');
+	});
 };
 
 const queryList = () => {
