@@ -25,18 +25,17 @@
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column label="时间" prop="dateTime"  min-width="180" />
         <el-table-column label="环路编号" prop="code" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="一网回水压力" prop="outPressure1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水压力" prop="outPressure2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网回水温度" prop="outTemperature1" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网回水温度" prop="outTemperature2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="供水流量" prop="supplyWaterFlow" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="回水流量" prop="returnWaterFlow" min-width="120" :show-overflow-tooltip="true" />
-        <el-table-column label="二网供水流量" prop="secondWaterSupply" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网供水压力" prop="inPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网供水压力" prop="inPressure2" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="一网回水压力" prop="outPressure1" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="二网回水压力" prop="outPressure2" min-width="120" :show-overflow-tooltip="true" />
       </el-table>
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
