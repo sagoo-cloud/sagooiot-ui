@@ -24,9 +24,9 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column type="index" label="序号" width="55" align="center" />
-        <el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="时间" prop="dateTime"  min-width="180" />
-        <el-table-column label="环路编号" prop="code" min-width="120" :show-overflow-tooltip="true" />
+        <el-table-column label="换热站" prop="stationName" :show-overflow-tooltip="true" />
+        <el-table-column label="环路名称" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="120" :show-overflow-tooltip="true" />
         <el-table-column label="一网回水温度" prop="outTemperature1" min-width="120" :show-overflow-tooltip="true" />
