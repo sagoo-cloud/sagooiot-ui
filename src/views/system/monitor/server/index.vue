@@ -601,6 +601,7 @@ export default defineComponent({
 
     function displayHost(event: { data: any; }) {
       const data = JSON.parse(event.data);
+      console.log(data)
       state.sysInfo.os = data.os
       state.sysInfo.kernelArch = data.kernelArch
       state.sysInfo.sysComputerName = data.hostname
