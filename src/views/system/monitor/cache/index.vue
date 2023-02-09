@@ -99,7 +99,7 @@
                                 <div class="cell-card">Redis主进程在内核态所占用的CPU时钟总和: </div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.cpu.used_cpu_sys }}</div>
+                                <div class="cell-card">{{lengthToFixed2(sysInfo.cpu.used_cpu_sys)}}</div>
                             </td>
                         </tr>
                         <tr>
@@ -107,7 +107,7 @@
                                 <div class="cell-card">Redis主进程在用户态所占用的CPU时钟总和: </div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.cpu.used_cpu_user }}</div>
+                                <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_user) }}</div>
                             </td>
                         </tr>
 
@@ -116,7 +116,7 @@
                                 <div class="cell-card">Redis子进程在内核态所占用的CPU时钟总和:</div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.cpu.used_cpu_sys_children }}</div>
+                                <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_sys_children) }}</div>
                             </td>
                         </tr>
                         <tr>
@@ -124,7 +124,7 @@
                                 <div class="cell-card">Redis子进程在用户态所占用的CPU时钟总和:</div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.cpu.used_cpu_user_children }}</div>
+                                <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_user_children) }}</div>
                             </td>
                         </tr>
                     </tbody>
@@ -313,15 +313,15 @@
             </el-form>
               
             <el-form v-if="sysInfo.stats" label-position="right" label-width="160px" class="flex1" style="max-width: 460px">
-                <el-form-item  label="输入总网络流量">{{sysInfo.stats.total_net_input_bytes}} Byte</el-form-item>
-                <el-form-item label="输出总网络流量">{{sysInfo.stats.total_net_output_bytes}} Byte</el-form-item>
+                <el-form-item  label="输入总网络流量">{{ memorySizeFormat(sysInfo.stats.total_net_input_bytes) }}</el-form-item>
+                <el-form-item label="输出总网络流量">{{memorySizeFormat(sysInfo.stats.total_net_output_bytes)}}</el-form-item>
                 <el-form-item label="每秒输入字节数">{{sysInfo.stats.instantaneous_input_kbps}}</el-form-item>
                 <el-form-item label="每秒输出字节数">{{sysInfo.stats.instantaneous_output_kbps}}</el-form-item>
                 <el-form-item label="最近fork消耗时间">{{sysInfo.stats.evicted_keys}} μs</el-form-item>
             </el-form>
 
             <el-form v-if="sysInfo.stats" label-position="right" label-width="160px" class="flex1" style="max-width: 460px">
-                <el-form-item label=" ">{{sysInfo.stats.sync_full}}</el-form-item>
+                <el-form-item label="主从完全同步成功次数">{{sysInfo.stats.sync_full}}</el-form-item>
                 <el-form-item label="主从部分同步成功次数">{{sysInfo.stats.sync_partial_ok}}</el-form-item>
                 <el-form-item label="主从部分同步失败次数">{{sysInfo.stats.sync_partial_err}}</el-form-item>
                 <el-form-item label="正migrate的Redis个数">{{sysInfo.stats.migrate_cached_sockets}} μs</el-form-item>
@@ -804,6 +804,10 @@ export default defineComponent({
         }
       }
       return size.toFixed(2) + ' ' + rankchar;
+    },
+    lengthToFixed2(size: any) {
+      size = parseFloat(size);
+      return size.toFixed(2);
     },
     timeFormat(second: any) {
       if (!second) return '-'
