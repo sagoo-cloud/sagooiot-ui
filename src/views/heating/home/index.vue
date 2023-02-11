@@ -299,7 +299,7 @@ export default defineComponent({
             color: state.charts.color,
           },
         },
-        grid: { top: 80, bottom: 30 },
+        grid: { top: 60, bottom: 20, left: 30, right: 30, containLabel: true },
         // calculable: true,
         xAxis: [{ data: state.statisticsChartXAxisData }],
         yAxis: [
