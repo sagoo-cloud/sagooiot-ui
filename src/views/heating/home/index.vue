@@ -489,7 +489,6 @@ export default defineComponent({
         unit = 'W'
       }
 
-      console.log(dom)
       global.homeCharThree = <any>echarts.init(dom, state.charts.theme);
 
       const common = {

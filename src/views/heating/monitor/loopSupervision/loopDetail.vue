@@ -289,6 +289,8 @@ export default defineComponent({
 				[{ name: '失水量', type: 'line', data: state.waterLossEchart }],
 			];
 
+			const units = ['°C', 'Mpa', 'T/h', 'T'];
+
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				tooltip: {},
@@ -313,7 +315,7 @@ export default defineComponent({
 						type: 'value',
 						scale: true,
 						axisLabel: {
-							formatter: '{value} °C',
+							formatter: '{value} ' + units[tabName.value],
 						},
 					},
 				],
