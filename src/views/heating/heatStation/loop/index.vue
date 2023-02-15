@@ -83,8 +83,8 @@
             <el-tag type="info" size="small" v-else-if="scope.row.heatingTypes === 2">暖气片</el-tag>
           </template>
         </el-table-column>
-	    	<el-table-column label="联网面积" prop="heatingArea" v-col="'heatingArea'" :show-overflow-tooltip="true" />
-	    	<el-table-column label="实供面积" prop="forRealArea" v-col="'forRealArea'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="联网面积" prop="forRealArea" v-col="'forRealArea'" :show-overflow-tooltip="true" />
+	    	<el-table-column label="实供面积" prop="heatingArea" v-col="'heatingArea'" :show-overflow-tooltip="true" />
 <!--	    	<el-table-column label="环路年代" prop="decade" :show-overflow-tooltip="true" />-->
         <el-table-column prop="status" label="状态" v-col="'status'" align="center">
           <template #default="scope">
