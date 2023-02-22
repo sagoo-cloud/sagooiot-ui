@@ -44,12 +44,12 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="联网面积" prop="heatingArea">
+            <el-form-item label="实供面积" prop="heatingArea">
               {{ ruleForm.heatingArea }}
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="实供面积" prop="forRealArea">
+            <el-form-item label="联网面积" prop="forRealArea">
               {{ ruleForm.forRealArea }}
             </el-form-item>
           </el-col>
