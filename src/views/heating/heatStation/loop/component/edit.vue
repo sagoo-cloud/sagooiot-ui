@@ -10,9 +10,9 @@
 				</el-form-item> -->
         <el-form-item label="所属换热站" prop="stationId">
           <el-tree-select v-model="ruleForm.stationId" :data="treeData" @change="stationChange" :props="{
-							label: 'name',
-							children: 'children'
-						}" node-key="id" :clearable="true" filterable check-strictly style="width: 100%;" :render-after-expand="true" />
+            label: 'name',
+            children: 'children'
+          }" node-key="id" :clearable="true" filterable check-strictly style="width: 100%;" :render-after-expand="true" />
         </el-form-item>
         <el-form-item label="环路类型" prop="loopTypes">
           <el-select v-model="ruleForm.loopTypes" placeholder="请选择环路类型" clearable size="default" style="width: 100%">
@@ -46,12 +46,12 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="联网面积" prop="heatingArea">
+            <el-form-item label="实供面积" prop="heatingArea">
               <el-input v-model="ruleForm.heatingArea" placeholder="请输入联网面积" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="实供面积" prop="forRealArea">
+            <el-form-item label="联网面积" prop="forRealArea">
               <el-input v-model="ruleForm.forRealArea" placeholder="请输入实供面积" />
             </el-form-item>
           </el-col>
