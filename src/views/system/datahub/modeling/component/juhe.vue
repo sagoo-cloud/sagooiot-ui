@@ -109,8 +109,10 @@ export default defineComponent({
 						state.sourceData = res.list;
 						state.ruleForm.GroupNodeKey = row.groupNodeKey;
 						state.ruleForm.TimeNodeKey = row.timeNodeKey;
-						state.ruleForm.Duration = row.duration;
-						state.ruleForm.TimeUnit = row.timeUnit;
+						if(row.duration>0){
+							state.ruleForm.Duration = row.duration;
+							state.ruleForm.TimeUnit = row.timeUnit;
+						}
 					});
 				});
 			}
