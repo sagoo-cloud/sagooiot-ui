@@ -64,6 +64,7 @@
               <span>字段管理</span>
             </router-link>
             <el-button size="small" text type="success" @click="onOpenRecord(scope.row)" v-if="scope.row.status==1" v-auth="'record'">数据记录</el-button>
+            <el-button size="small" text type="danger" @click="onOpenJuhe(scope.row)" v-auth="'record'">聚合设置</el-button>
             <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0" v-auth="'edit'">修改</el-button>
             <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0" v-auth="'del'">删除</el-button>
             <el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
@@ -75,6 +76,7 @@
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
     <Detail ref="detailRef" />
+    <Juhe ref="juheRef" />
   </div>
 </template>
 
@@ -83,6 +85,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent,getCurrentInstance } 
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
+import Juhe from './component/juhe.vue';
 import api from '/@/api/datahub';
 
 // 定义接口来定义对象的类型
@@ -111,10 +114,11 @@ interface TableDataState {
 
 export default defineComponent({
   name: 'sourcelist',
-  components: { EditDic, Detail },
+  components: { EditDic, Detail,Juhe },
   setup() {
     const addDicRef = ref();
     const editDicRef = ref();
+    const juheRef = ref();
     const detailRef = ref();
     const queryRef = ref();
     const { proxy } = getCurrentInstance() as any;
@@ -156,6 +160,10 @@ const { datahub_model_type } = proxy.useDict('datahub_model_type');
     //打开数据记录
     const onOpenRecord = (row: TableDataRow) => {
       detailRef.value.openDialog(row);
+    };
+    //聚合设置
+    const onOpenJuhe = (row: TableDataRow) => {
+      juheRef.value.openDialog(row);
     };
     const onRowDel = (row?: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
@@ -221,8 +229,10 @@ const { datahub_model_type } = proxy.useDict('datahub_model_type');
       addDicRef,
       editDicRef,
       detailRef,
+      juheRef,
       queryRef,
       onOpenRecord,
+      onOpenJuhe,
       datahub_model_type,
       onOpenAdd,
       onOpenEdit,
