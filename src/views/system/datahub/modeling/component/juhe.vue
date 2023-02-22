@@ -2,25 +2,22 @@
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置聚合" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-		
 				<el-form-item label="分组节点" prop="GroupNodeKey">
-						<el-select v-model="ruleForm.GroupNodeKey" filterable placeholder="请选择分组节点"  class="w100">
-							<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.key">
-								<span style="float: left">{{ item.name }}</span>
-								<span style="float: right; font-size: 13px">{{ item.key }}</span>
-							</el-option>
-						</el-select>
-					</el-form-item>
-
+					<el-select v-model="ruleForm.GroupNodeKey" filterable placeholder="请选择分组节点" class="w100">
+						<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.key">
+							<span style="float: left">{{ item.name }}</span>
+							<span style="float: right; font-size: 13px">{{ item.key }}</span>
+						</el-option>
+					</el-select>
+				</el-form-item>
 
 				<el-form-item label="时间窗口节点" prop="TimeNodeKey">
-			
-					<el-select v-model="ruleForm.TimeNodeKey" filterable placeholder="请选择时间窗口节点"  class="w100">
-							<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.key">
-								<span style="float: left">{{ item.name }}</span>
-								<span style="float: right; font-size: 13px">{{ item.key }}</span>
-							</el-option>
-						</el-select>
+					<el-select v-model="ruleForm.TimeNodeKey" filterable placeholder="请选择时间窗口节点" class="w100">
+						<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.key">
+							<span style="float: left">{{ item.name }}</span>
+							<span style="float: right; font-size: 13px">{{ item.key }}</span>
+						</el-option>
+					</el-select>
 				</el-form-item>
 
 				<el-form-item label="时间值" prop="Duration">
@@ -29,7 +26,6 @@
 						<el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
-				
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -38,7 +34,6 @@
 				</span>
 			</template>
 		</el-dialog>
-
 	</div>
 </template>
 
@@ -58,7 +53,7 @@ interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
 	rules: {};
-	unitData:[];
+	unitData: [];
 }
 
 export default defineComponent({
@@ -69,7 +64,7 @@ export default defineComponent({
 
 		const state = reactive<DicState>({
 			isShowDialog: false,
-			sourceData:[],
+			sourceData: [],
 			unitData: [
 				{
 					label: '秒',
@@ -106,19 +101,17 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
-			
-			
+
 			if (row) {
-				state.ruleForm.id=row.id;
+				state.ruleForm.id = row.id;
 				api.template.aggregate_from(row.id).then((res: any) => {
-					api.node.getList({sourceId:res.id}).then((res: any) => {
-						state.sourceData=res.list
-						state.ruleForm.GroupNodeKey=row.groupNodeKey;
-						state.ruleForm.TimeNodeKey=row.timeNodeKey;
-						state.ruleForm.Duration=row.duration;
-						state.ruleForm.TimeUnit=row.timeUnit;
-					})
-								
+					api.node.getList({ sourceId: res.id }).then((res: any) => {
+						state.sourceData = res.list;
+						state.ruleForm.GroupNodeKey = row.groupNodeKey;
+						state.ruleForm.TimeNodeKey = row.timeNodeKey;
+						state.ruleForm.Duration = row.duration;
+						state.ruleForm.TimeUnit = row.timeUnit;
+					});
 				});
 			}
 			state.isShowDialog = true;
@@ -132,9 +125,6 @@ export default defineComponent({
 				TimeUnit: '',
 			};
 		};
-
-
-
 
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -150,16 +140,15 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-
-						api.template.aggregate(state.ruleForm).then(() => {
-							ElMessage.success('设置成功');
-							closeDialog(); // 关闭弹窗
-							emit('typeList');
-						});
+					api.template.aggregate(state.ruleForm).then(() => {
+						ElMessage.success('设置成功');
+						closeDialog(); // 关闭弹窗
+						emit('typeList');
+					});
 				}
 			});
 		};
-	
+
 		return {
 			openDialog,
 			closeDialog,
