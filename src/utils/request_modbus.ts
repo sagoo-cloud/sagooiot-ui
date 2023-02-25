@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
+import getOrigin from '/@/utils/origin'
 
 // 配置新建一个 axios 实例
 const service = axios.create({
-	baseURL: import.meta.env.VITE_MODBUS_API,
+	baseURL: getOrigin(import.meta.env.VITE_MODBUS_API),
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json' },
 });
