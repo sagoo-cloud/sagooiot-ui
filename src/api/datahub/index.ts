@@ -48,8 +48,9 @@ export default {
       copy: (params: object) => post('/source/template/copy', params),
       relation_check: (id: number) => get('/source/template/relation_check', { id }),
       source_list: (id: number) => get('/source/template/source_list', { id }),
+      aggregate_from: (id: number) => get('/source/template/aggregate_from', { id }),
       relation: (data: object) => post('/source/template/relation', data),
-      
+      aggregate: (data: object) => post('/source/template/aggregate', data),
    } ,
 
    tnode:{

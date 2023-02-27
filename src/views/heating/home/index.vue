@@ -299,7 +299,7 @@ export default defineComponent({
             color: state.charts.color,
           },
         },
-        grid: { top: 80, bottom: 30 },
+        grid: { top: 60, bottom: 20, left: 30, right: 30, containLabel: true },
         // calculable: true,
         xAxis: [{ data: state.statisticsChartXAxisData }],
         yAxis: [
@@ -349,7 +349,7 @@ export default defineComponent({
             color: state.charts.color,
           },
         },
-        grid: { top: 80, bottom: 30 },
+        grid: { top: 60, bottom: 20, left: 30, right: 30, containLabel: true },
         xAxis: [{ data: state.pressureXAxisData }],
         yAxis: [
           {
@@ -489,7 +489,6 @@ export default defineComponent({
         unit = 'W'
       }
 
-      console.log(dom)
       global.homeCharThree = <any>echarts.init(dom, state.charts.theme);
 
       const common = {

@@ -31,7 +31,7 @@
                                 <div class="cell-card">平均存活时间: </div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.keyspace.db0.avg_ttl }}</div>
+                                <div class="cell-card">{{timeFormat(sysInfo.keyspace.db0.avg_ttl)}}</div>
                             </td>
                         </tr>
                     </tbody>
@@ -69,7 +69,7 @@
                                 <div class="cell-card">输入缓冲区中占用的最大容量:</div>
                             </td>
                             <td>
-                                <div class="cell-card">{{ sysInfo.clients.client_recent_max_input_buffer }}</div>
+                                <div class="cell-card">{{ memorySizeFormat(sysInfo.clients.client_recent_max_input_buffer) }}</div>
                             </td>
                         </tr>
                         <tr>
@@ -89,14 +89,14 @@
             <el-card class="box-card-height" style="height:auto">
                 <template #header>
                     <div class="card-header">
-                        <span>info CPU</span>
+                        <span>CPU 信息</span>
                     </div>
                 </template>
                 <table cellspacing="0" style="height: 230px;width: 100%">
                     <tbody v-if="sysInfo.cpu">
                         <tr>
                             <td>
-                                <div class="cell-card">Redis主进程在内核态所占用的CPU时钟总和: </div>
+                                <div class="cell-card" title="Redis主进程在内核态所占用的CPU时钟总和">主进程内核态占用CPU时钟: </div>
                             </td>
                             <td>
                                 <div class="cell-card">{{lengthToFixed2(sysInfo.cpu.used_cpu_sys)}}</div>
@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <div class="cell-card">Redis主进程在用户态所占用的CPU时钟总和: </div>
+                                <div class="cell-card" title="Redis主进程在用户态所占用的CPU时钟总和">主进程用户态占用CPU时钟: </div>
                             </td>
                             <td>
                                 <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_user) }}</div>
@@ -113,7 +113,7 @@
 
                         <tr>
                             <td>
-                                <div class="cell-card">Redis子进程在内核态所占用的CPU时钟总和:</div>
+                                <div class="cell-card" title="Redis子进程在内核态所占用的CPU时钟总和">子进程内核态占用CPU时钟:</div>
                             </td>
                             <td>
                                 <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_sys_children) }}</div>
@@ -121,7 +121,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <div class="cell-card">Redis子进程在用户态所占用的CPU时钟总和:</div>
+                                <div class="cell-card" title="Redis子进程在用户态所占用的CPU时钟总和">子进程用户态占用CPU时钟:</div>
                             </td>
                             <td>
                                 <div class="cell-card">{{ lengthToFixed2(sysInfo.cpu.used_cpu_user_children) }}</div>
@@ -138,7 +138,7 @@
         <el-card class="box-card-height" style="height:auto">
             <template #header>
                 <div class="card-header">
-                    <span>server信息</span>
+                    <span>服务信息</span>
                 </div>
             </template>
             <table cellspacing="0" style="height: 300px;width: 100%">
@@ -227,7 +227,11 @@
                             <div class="cell-card">Redis分配器分配的内存总量: </div>
                         </td>
                         <td>
-                            <div class="cell-card">{{ sysInfo.memory.used_memory }}</div>
+                            <div class="cell-card">
+                              {{ memorySizeFormat(sysInfo.memory.used_memory) }} -
+                              {{ lengthToFixed2(sysInfo.memory.used_memory/sysInfo.memory.maxmemory)}}%
+
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -235,7 +239,7 @@
                             <div class="cell-card">以可读的格式返回used_memory: </div>
                         </td>
                         <td>
-                            <div class="cell-card">{{ sysInfo.memory.used_memory_human }}</div>
+                            <div class="cell-card">{{ memorySizeFormat(sysInfo.memory.used_memory_human) }}</div>
                         </td>
                     </tr>
 
@@ -244,7 +248,7 @@
                             <div class="cell-card">从操作系统的角度，Redis进程占用的物理内存总量:</div>
                         </td>
                         <td>
-                            <div class="cell-card">{{ sysInfo.memory.used_memory_rss }}</div>
+                            <div class="cell-card">{{ memorySizeFormat(sysInfo.memory.used_memory_rss) }}</div>
                         </td>
                     </tr>
                     <tr>
@@ -252,7 +256,7 @@
                             <div class="cell-card">内存使用的最大值:</div>
                         </td>
                         <td>
-                        <div class="cell-card">{{ sysInfo.memory.used_memory_peak }}</div>
+                        <div class="cell-card">{{ memorySizeFormat(sysInfo.memory.used_memory_peak) }}</div>
                         </td>
                     </tr>
                     <tr>
@@ -260,7 +264,7 @@
                             <div class="cell-card">以可读的格式返回used_memory_peak:</div>
                         </td>
                         <td>
-                            <div class="cell-card">{{ sysInfo.memory.used_memory_peak_human }}</div>
+                            <div class="cell-card">{{ memorySizeFormat(sysInfo.memory.used_memory_peak_human) }}</div>
                         </td>
                     </tr>
                     <tr>
@@ -268,7 +272,7 @@
                             <div class="cell-card">Lua引擎所消耗的内存大小:</div>
                         </td>
                         <td>
-                            <div class="cell-card">{{ sysInfo.memory.used_memory_lua }}</div>
+                            <div class="cell-card">{{ memorySizeFormat(sysInfo.memory.used_memory_lua) }}</div>
                         </td>
                     </tr>
                     <tr>
@@ -287,7 +291,7 @@
                             <div class="cell-card">{{ sysInfo.memory.mem_allocator }}</div>
                         </td>
                     </tr>
-                
+
                 </tbody>
             </table>
           <!-- <div style="height: 250px" ref="chartsWarningRef6"></div> -->
@@ -311,12 +315,12 @@
                 <el-form-item label="key数量">{{sysInfo.stats.evicted_keys}}</el-form-item>
 
             </el-form>
-              
+
             <el-form v-if="sysInfo.stats" label-position="right" label-width="160px" class="flex1" style="max-width: 460px">
-                <el-form-item  label="输入总网络流量">{{ memorySizeFormat(sysInfo.stats.total_net_input_bytes) }}</el-form-item>
-                <el-form-item label="输出总网络流量">{{memorySizeFormat(sysInfo.stats.total_net_output_bytes)}}</el-form-item>
-                <el-form-item label="每秒输入字节数">{{sysInfo.stats.instantaneous_input_kbps}}</el-form-item>
-                <el-form-item label="每秒输出字节数">{{sysInfo.stats.instantaneous_output_kbps}}</el-form-item>
+                <el-form-item  label="网络总入流量">{{ memorySizeFormat(sysInfo.stats.total_net_input_bytes) }}</el-form-item>
+                <el-form-item label="网络总出流量">{{memorySizeFormat(sysInfo.stats.total_net_output_bytes)}}</el-form-item>
+                <el-form-item label="每秒输入量">{{sysInfo.stats.instantaneous_input_kbps}} kb/s</el-form-item>
+                <el-form-item label="每秒输出量">{{sysInfo.stats.instantaneous_output_kbps}} kb/s</el-form-item>
                 <el-form-item label="最近fork消耗时间">{{sysInfo.stats.evicted_keys}} μs</el-form-item>
             </el-form>
 
@@ -406,7 +410,7 @@ export default defineComponent({
     //   "runTime": '', "startTime": "-", "intranet_ip": "-"
     // });
 
-    // 
+    //
     // const stats = reactive({
     //   "total_connections_received": "-",
     //   "arch": "-",
@@ -422,7 +426,7 @@ export default defineComponent({
     //   "startTime": "-",
     //   "intranet_ip": "-"
     // });
-    // 
+    //
 
     // function goInfo(event: { data: any; }) {
     //   const data = JSON.parse(event.data);
@@ -776,7 +780,7 @@ export default defineComponent({
         const data = JSON.parse(event.data);
         state.sysInfo.cpu = data
     }
-    
+
 
     function statsInfoMsg(event: { data: any; }) {
         const data = JSON.parse(event.data);

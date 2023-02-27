@@ -10,9 +10,9 @@
 				</el-form-item> -->
         <el-form-item label="所属换热站" prop="stationId">
           <el-tree-select v-model="ruleForm.stationId" :data="treeData" @change="stationChange" :props="{
-							label: 'name',
-							children: 'children'
-						}" node-key="id" :clearable="true" filterable check-strictly style="width: 100%;" :render-after-expand="true" />
+            label: 'name',
+            children: 'children'
+          }" node-key="id" :clearable="true" filterable check-strictly style="width: 100%;" :render-after-expand="true" />
         </el-form-item>
         <el-form-item label="环路类型" prop="loopTypes">
           <el-select v-model="ruleForm.loopTypes" placeholder="请选择环路类型" clearable size="default" style="width: 100%">
@@ -46,13 +46,13 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="供暖面积" prop="heatingArea">
-              <el-input v-model="ruleForm.heatingArea" placeholder="请输入供暖面积" />
+            <el-form-item label="实供面积" prop="heatingArea">
+              <el-input v-model="ruleForm.heatingArea" placeholder="请输入联网面积" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="实际面积" prop="forRealArea">
-              <el-input v-model="ruleForm.forRealArea" placeholder="请输入实际面积" />
+            <el-form-item label="联网面积" prop="forRealArea">
+              <el-input v-model="ruleForm.forRealArea" placeholder="请输入实供面积" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -164,8 +164,8 @@ export default defineComponent({
         energyTypes: [{ required: true, message: '节能类型不能为空', trigger: ['blur', 'change'] }],
         heatingObject: [{ required: true, message: '供暖对象不能为空', trigger: ['blur', 'change'] }],
         heatingTypes: [{ required: true, message: '供暖类型不能为空', trigger: ['blur', 'change'] }],
-        heatingArea: [{ required: true, message: '供暖面积不能为空', trigger: ['blur', 'change'] }],
-        forRealArea: [{ required: true, message: '实际面积不能为空', trigger: ['blur', 'change'] }],
+        heatingArea: [{ required: true, message: '联网面积不能为空', trigger: ['blur', 'change'] }],
+        forRealArea: [{ required: true, message: '实供面积不能为空', trigger: ['blur', 'change'] }],
         decade: [{ required: true, message: '年代不能为空', trigger: ['blur', 'change'] }],
         status: [{ required: true, message: '状态不能为空', trigger: ['blur', 'change'] }]
       },
