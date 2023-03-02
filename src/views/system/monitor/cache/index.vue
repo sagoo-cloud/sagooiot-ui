@@ -1,7 +1,7 @@
 <template>
   <div class="system-cache-container">
     <div class="flex-row gap-3">
-        <el-col :span="8" class="marg-b-15">
+        <!-- <el-col :span="8" class="marg-b-15">
             <el-card class="box-card-height" style="height:auto">
                 <template #header>
                     <div class="card-header">
@@ -37,8 +37,8 @@
                     </tbody>
                 </table>
             </el-card>
-        </el-col>
-        <el-col :span="8" class="marg-b-15">
+        </el-col> -->
+        <el-col :span="12" class="marg-b-15">
             <el-card class="box-card-height" style="height:auto">
                 <template #header>
                     <div class="card-header">
@@ -85,7 +85,7 @@
                 <!-- <div style="height: 250px" ref="chartsWarningRef4"></div> -->
             </el-card>
         </el-col>
-        <el-col :span="8" class="marg-b-15">
+        <el-col :span="12" class="marg-b-15">
             <el-card class="box-card-height" style="height:auto">
                 <template #header>
                     <div class="card-header">
@@ -338,6 +338,25 @@
                 <el-form-item label="当前使用中的模式数量">{{sysInfo.stats.pubsub_patterns}}</el-form-item>
                 <el-form-item label="不命中次数">{{sysInfo.stats.keyspace_misses}}</el-form-item>
                 <el-form-item label="命中次数">{{sysInfo.stats.keyspace_hits}}</el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+      </el-col>
+    </div>
+        <div class="flex-row gap-3">
+      <el-col :xs="24" :sm="24" :md="24" class="marg-b-15">
+        <el-card class="box-card-height" style="height:auto">
+          <template #header>
+            <div class="card-header">
+              <span>info Keyspace统计信息</span>
+            </div>
+          </template>
+          <div style="" class="flex-column" v-if="sysInfo.keyspaceList && sysInfo.keyspace">
+            <el-form style="display: flex;width: 100%;" v-for="(item, index) in sysInfo.keyspaceList" :key="index"  label-position="right" label-width="160px">
+                <el-form-item class="flex1" label="key名称">{{item}}</el-form-item>
+                <el-form-item class="flex1" label="当前数据库key总数">{{sysInfo.keyspace[item].keys}}</el-form-item>
+                <el-form-item class="flex1" label="带有过期时间的key总数">{{sysInfo.keyspace[item].expires}}</el-form-item>
+                <el-form-item class="flex1" label="平均存活时间">{{sysInfo.keyspace[item].avg_ttl}}</el-form-item>
             </el-form>
           </div>
         </el-card>
@@ -740,7 +759,11 @@ export default defineComponent({
 
     function keyspaceInfoMsg(event: { data: any; }) {
         const data = JSON.parse(event.data);
+        console.log(Object.keys(data))
+        state.sysInfo.keyspaceList = Object.keys(data);
         state.sysInfo.keyspace = data
+        console.log(data)
+        
     }
 
     function memoryInfoMsg(event: { data: any; }) {
