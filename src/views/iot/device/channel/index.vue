@@ -22,7 +22,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="success" @click="addOrEdit()" v-auth="'add'">
+						<el-button type="success" @click="addOrEdit()">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -38,14 +38,14 @@
 				<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)" v-auth="'edit'">详情</el-button>
-						<el-button size="small" text type="danger" @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">详情</el-button>
+						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</div>
 </template>
 
@@ -81,7 +81,7 @@ const onDel = (row: any) => {
 	}).then(async () => {
 		await api.channel.deleteDevice({ number: row.number });
 		ElMessage.success('删除成功');
-		getList();
+		getList(1);
 	});
 };
 </script>
