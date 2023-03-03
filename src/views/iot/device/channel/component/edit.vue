@@ -26,7 +26,6 @@
 	</el-dialog>
 </template>
 <script lang="ts">
-import { Ref } from 'vue';
 import api from '/@/api/device/modbus';
 import { ElMessage } from 'element-plus';
 export default {

@@ -1,11 +1,17 @@
 import { get, post } from '/@/utils/request_modbus';
 
 export default {
+  getDict: (params: object) => get('/dict', params),
   channel: {
     getList: (params: object) => get('/device', params),
     addDevice: (data: object) => post('/device/add', data),
     deleteDevice: (data: object) => post('/device/delete', data),
     editDevice: (data: object) => post('/device/edit', data),
+    downloadLog: (number: string) => get('/debug/export_message', { number }),
+  },
+  task: {
+    getList: (params: object) => get('/device_job', params),
+    deleteDeviceJob: (data: object) => post('/device_job/delete', data),
   },
   template: {
     getList: (params: object) => get('/template', params),

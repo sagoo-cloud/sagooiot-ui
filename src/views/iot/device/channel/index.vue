@@ -38,7 +38,7 @@
 				<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">详情</el-button>
+						<el-button size="small" text type="primary" @click="viewDetail(scope.row)">详情</el-button>
 						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -46,17 +46,20 @@
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
 		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
+		<detailForm ref="detailFormRef" @getList="getList()"></detailForm>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import EditForm from './component/edit.vue';
+import detailForm from './component/detail.vue';
 import api from '/@/api/device/modbus';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonModbus';
 
 const editFormRef = ref();
+const detailFormRef = ref();
 const queryRef = ref();
 
 const { params, tableData, getList, loading } = useSearch(api.channel.getList, 'list', { title: '', number: '' });
@@ -65,6 +68,9 @@ getList();
 
 const addOrEdit = async (row?: any) => {
 	editFormRef.value.open(row);
+};
+const viewDetail = async (row: any) => {
+	detailFormRef.value.open(row);
 };
 
 // 重置表单
