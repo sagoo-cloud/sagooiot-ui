@@ -56,8 +56,8 @@ export default {
 			this.dialogVisible = true;
 		},
 		clsoeDialog() {
+			(this.$refs.dataForm as any).resetFields();
 			this.dialogVisible = false;
-			// this.$refs.dataForm.resetFields();
 		},
 		// 获取模板数据
 		getList() {

@@ -11,6 +11,8 @@ export default {
   },
   task: {
     getList: (params: object) => get('/device_job', params),
+    addDeviceJob: (data: object) => post('/device_job/add', data),
+    editDeviceJob: (data: object) => post('/device_job/edit', data),
     deleteDeviceJob: (data: object) => post('/device_job/delete', data),
   },
   template: {

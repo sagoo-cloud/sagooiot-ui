@@ -46,15 +46,7 @@
 					</el-table-column>
 				</el-table>
 
-				<pagination
-					v-show="total > 0"
-					:total="total"
-					:page.sync="listQuery.page"
-					:limit.sync="listQuery.size"
-					@pagination="getList"
-					style="padding: 10px 20px 20px !important"
-				/>
-
+				<pagination v-if="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" />
 				<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList" />
 			</el-tab-pane>
 			<el-tab-pane label="通道码流" name="3">
@@ -79,11 +71,10 @@
 import { ElMessage } from 'element-plus';
 import api from '/@/api/device/modbus';
 import getOrigin from '/@/utils/origin';
-// import Pagination from '@/components/Pagination'; // secondary package based on el-pagination
-// import TaskDialog from './taskDialog';
+import TaskDialog from './taskDialog.vue';
 
 export default {
-	// components: { Pagination, TaskDialog },
+	components: { TaskDialog },
 	data() {
 		return {
 			temp: {
@@ -107,7 +98,7 @@ export default {
 			tableKey: 0,
 			listQuery: {
 				page: 1,
-				size: 20,
+				size: 10,
 			},
 			evsrc: null as any,
 			count: 0,
@@ -147,7 +138,7 @@ export default {
 				if (valid) {
 					const tempData = Object.assign({}, this.temp);
 					api.channel.editDevice(tempData).then(() => {
-						this.$emit('finish');
+						this.$emit('getList');
 						this.clsoeDialog();
 						ElMessage.success('操作成功！');
 					});
@@ -181,7 +172,6 @@ export default {
 			api.task
 				.getList(this.listQuery)
 				.then((res: any) => {
-					console.log(res.list[0]);
 					this.taskList = res.list || [];
 					this.total = res.Total;
 				})
@@ -205,13 +195,13 @@ export default {
 				.catch(function () {});
 		},
 		handleCreate() {
-			this.$refs.taskDialog.openDialog({
+			(this.$refs.taskDialog as any).openDialog({
 				dialogStatus: 'create',
 				deviceNumber: this.temp.number,
 			});
 		},
-		handleUpdate(row) {
-			this.$refs.taskDialog.openDialog({
+		handleUpdate(row: any) {
+			(this.$refs.taskDialog as any).openDialog({
 				dialogStatus: 'update',
 				row,
 				deviceNumber: this.temp.number,
