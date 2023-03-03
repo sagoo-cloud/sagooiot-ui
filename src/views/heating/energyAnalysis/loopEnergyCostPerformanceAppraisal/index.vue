@@ -79,7 +79,7 @@
 				<el-table-column :label="`水单耗(${unitMap['日失水单耗']})`" prop="flowLoss" />
 				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="unitConsumptionDemand" />
 				<el-table-column :label="`供电负荷(${unitMap['供电负荷']})`" min-width="100" prop="elctricConsumptionDemand" />
-				<!-- <el-table-column :label="`失水量(${unitMap['失水量']})`" prop="flowLoss" /> -->
+				<el-table-column :label="`失水量(${unitMap['失水量']})`" prop="flowLossDemand" />
 			</el-table>
 
 			<pagination
