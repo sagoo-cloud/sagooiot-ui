@@ -1,190 +1,147 @@
 <template>
-	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'设备'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-       <el-form-item label="设备标识" prop="key">
-          <el-input v-model="ruleForm.key" placeholder="请输入设备标识" :disabled="ruleForm.id" />
-        </el-form-item>
-        <el-form-item label="设备名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
-        </el-form-item>
-
-        
-
-           <el-form-item label="所属产品" prop="productId">
-       
-                <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
-              <el-option
-                v-for="item in productData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
-            </el-form-item> 
-
-         <el-form-item label="所属部门" prop="deptId">
-              <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
-                <template #default="{ node, data }">
-                  <span>{{ data.deptName }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item> 
-
-           
-        
-        <el-form-item label="设备证书" prop="certificate">
-          <el-input v-model="ruleForm.certificate" placeholder="请输入设备证书" />
-        </el-form-item>
-
-        <el-form-item label="设备秘钥" prop="secureKey">
-          <el-input v-model="ruleForm.secureKey" placeholder="请输入设备秘钥" />
-        </el-form-item>
-
-         <el-form-item label="固件版本号" prop="version">
-          <el-input v-model="ruleForm.version" placeholder="请输入固件版本号" />
-        </el-form-item>
-      
-  
-        <el-form-item label="备注" prop="desc">
-          <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
-        </el-form-item>
+	<el-dialog
+		:title="textMap[dialogStatus]"
+		v-model="dialogVisible"
+		:width="dialogWidth"
+		:before-close="clsoeDialog"
+		:close-on-click-modal="false"
+	>
+		<div class="wrapper">
+			<el-form class="form" ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px">
+				<el-form-item label="模板名称" prop="title">
+					<el-input v-model="temp.title" placeholder="请输入模板名称" />
+				</el-form-item>
+				<el-form-item label="读取模式" prop="mode">
+					<el-select v-model="temp.mode" placeholder="请选择模式" class="filter-item" style="width: 100%" @change="handleModeChange">
+						<!-- <el-option label="顺序读取" :value="0" /> -->
+						<el-option label="批量读取" :value="1" />
+					</el-select>
+				</el-form-item>
+				<el-form-item label="备注" prop="remarks">
+					<el-input v-model="temp.remarks" placeholder="请输入备注" />
+				</el-form-item>
 			</el-form>
-			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
-				</span>
-			</template>
-		</el-dialog>
-	</div>
+			<el-tabs v-model="activeName" v-if="dialogStatus === 'update'" :key="tabsKey">
+				<el-tab-pane label="数据区" name="1" v-if="temp.mode !== 0">
+					<DataAreaDialog :templateNumber="temp.number" ref="dataAreaDialog" v-if="activeName === '1'" />
+				</el-tab-pane>
+				<el-tab-pane label="变量列表" name="2">
+					<DeviceTemplateDialog :templateNumber="temp.number" :mode="temp.mode" ref="deviceTemplateDialog" v-if="activeName === '2'" />
+				</el-tab-pane>
+			</el-tabs>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="clsoeDialog"> 取 消 </el-button>
+				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
+			</div>
+		</div>
+	</el-dialog>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
-import api from '/@/api/device';
-import {ElMessage} from "element-plus";
-interface RuleFormState {
-  id:number;
-  name:string;
-  certificate:string;
-  secureKey:string;
-  version:string;
-  productId:number;
-  deptId:number;
-  desc:string;
-}
-interface DicState {
-	isShowDialog: boolean;
-	ruleForm: RuleFormState;
-  rules:{}
-}
+import api from '/@/api/device/modbus';
+import DataAreaDialog from './dataAreaDialog.vue';
+import DeviceTemplateDialog from './deviceTemplateDialog.vue';
+import { ElMessage } from 'element-plus';
 
-export default defineComponent({
-	name: 'deviceEditPro',
-	setup(prop,{emit}) {
-    const formRef = ref<HTMLElement | null>(null);
-		const state = reactive<DicState>({
-			isShowDialog: false,
-      productData: [], // 分类数据
-      deptData: [], // 
-			ruleForm: {
-        id:0,
-        name:'',
-        productId:'',
-        deptId:0,
-        certificate:'',
-        secureKey:'',
-        version:'',
-        desc:''
-			},
-      rules: {
-        name: [
-          { required: true, message: "设备名称不能为空", trigger: "blur" }
-        ],
-        key: [
-          { required: true, message: "设备标识不能为空", trigger: "blur" }
-        ],
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
-       
-      }
-		});
-		// 打开弹窗
-		const openDialog = (row: RuleFormState|null) => {
-      resetForm();
-
-        api.product.getLists({ status: 1 }).then((res: any) => {
-          state.productData = res.product || [];
-        });
-        api.dept.getList({ status: -1 }).then((res: any) => {
-          state.deptData = res || [];
-        });
-
-
-      if (row){
-        // api.dict.getType(row.id).then((res:any)=>{
-        //   state.ruleForm = res.data.dictType
-        // })
-        state.ruleForm = row;
-      }
-			state.isShowDialog = true;
-		};
-    const resetForm = ()=>{
-      state.ruleForm = {
-        id:0,
-        name:'',
-        productId:'',
-        deptId:0,
-        certificate:'',
-        secureKey:'',
-        version:'',
-        desc:''
-      }
-    };
-		// 关闭弹窗
-		const closeDialog = () => {
-			state.isShowDialog = false;
-		};
-		// 取消
-		const onCancel = () => {
-			closeDialog();
-		};
-		// 新增
-		const onSubmit = () => {
-      const formWrap = unref(formRef) as any;
-      if (!formWrap) return;
-      formWrap.validate((valid: boolean) => {
-        if (valid) {
-          if(state.ruleForm.id!==0){
-            //修改
-            api.instance.edit(state.ruleForm).then(()=>{
-              ElMessage.success('设备类型修改成功');
-              closeDialog(); // 关闭弹窗
-              emit('typeList')
-            })
-          }else{
-            //添加
-            api.instance.add(state.ruleForm).then(()=>{
-              ElMessage.success('设备类型添加成功');
-              closeDialog(); // 关闭弹窗
-              emit('typeList')
-            })
-          }
-        }
-      });
-		};
-
-
+export default {
+	components: {
+		DataAreaDialog,
+		DeviceTemplateDialog,
+	},
+	data() {
 		return {
-			openDialog,
-			closeDialog,
-			onCancel,
-			onSubmit,
-      formRef,
-			...toRefs(state),
+			temp: {
+				title: '',
+				mode: 1,
+				remarks: '',
+				number: '',
+			},
+			rules: {
+				title: [{ required: true, message: '请输入模板名称', trigger: 'blur' }],
+				mode: [{ required: true, message: '请选择模式', trigger: 'change' }],
+			},
+			dialogVisible: false,
+			dialogStatus: '',
+			textMap: {
+				update: '模板详情',
+				create: '添加模板',
+			},
+			activeName: '1',
+			tabsKey: Date.now(),
 		};
 	},
-});
+
+	computed: {
+		dialogWidth() {
+			return this.dialogStatus === 'create' ? '500px' : '80%';
+		},
+	},
+
+	methods: {
+		open(dialogStatus: string, row: any) {
+			this.dialogStatus = dialogStatus;
+			this.tabsKey = Date.now();
+			this.dialogVisible = true;
+			if (row) {
+				this.temp = { ...row };
+				if (this.temp.mode === 0) {
+					this.activeName = '2';
+				}
+			} else {
+				this.getDataId();
+			}
+		},
+		clsoeDialog() {
+			this.dialogVisible = false;
+			this.activeName = '1';
+			this.temp = {
+				title: '',
+				mode: 1,
+				remarks: '',
+				number: '',
+			};
+			// this.$refs.dataForm.resetFields()
+		},
+		// 获取模板id 自动生成
+		getDataId() {
+			api.getDataId().then((res: any) => {
+				this.temp.number = res.data_id;
+			});
+		},
+		createData() {
+			(this.$refs['dataForm'] as any).validate((valid: boolean) => {
+				if (valid) {
+					api.template.addTemplate(this.temp).then(() => {
+						this.$emit('getList');
+						this.clsoeDialog();
+						ElMessage.success('操作成功！');
+					});
+				}
+			});
+		},
+		updateData() {
+			(this.$refs['dataForm'] as any).validate((valid: boolean) => {
+				if (valid) {
+					api.template.editTemplate(this.temp).then(() => {
+						this.$emit('finish');
+						this.clsoeDialog();
+						ElMessage.success('操作成功！');
+					});
+				}
+			});
+		},
+		handleModeChange(value: number) {
+			if (value === 0) {
+				this.activeName = '2';
+			}
+		},
+	},
+};
 </script>
+
+<style lang="scss" scoped>
+.wrapper {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+</style>
