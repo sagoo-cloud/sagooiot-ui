@@ -92,7 +92,6 @@ export default {
 			}
 		},
 		clsoeDialog() {
-			this.dialogVisible = false;
 			this.activeName = '1';
 			this.temp = {
 				title: '',
@@ -100,7 +99,8 @@ export default {
 				remarks: '',
 				number: '',
 			};
-			// this.$refs.dataForm.resetFields()
+			(this.$refs.dataForm as any).resetFields()
+			this.dialogVisible = false;
 		},
 		// 获取模板id 自动生成
 		getDataId() {

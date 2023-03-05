@@ -5,22 +5,22 @@
 		</div>
 		<el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
 			<el-table-column label="名称" prop="name" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<el-input v-model="row.name" placeholder="请输入" />
 				</template>
 			</el-table-column>
 			<el-table-column label="起始地址" prop="address" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<el-input-number v-model="row.address" controls-position="right" :min="0" style="width: 100%" />
 				</template>
 			</el-table-column>
 			<el-table-column label="长度" prop="length" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<el-input-number v-model="row.length" controls-position="right" :min="0" style="width: 100%" />
 				</template>
 			</el-table-column>
 			<el-table-column label="寄存器区" prop="regArea" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<el-select v-model="row.regArea">
 						<el-option label="HOLDING" value="holding" />
 						<el-option label="INPUT" value="input" />
@@ -30,18 +30,18 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="读取属性" prop="" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<span v-if="row.regArea === 'input' || row.regArea === 'discrete'">只读</span>
 					<span v-else-if="row.regArea === 'holding' || row.regArea === 'coil'">读写</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="备注" prop="remarks" align="center">
-				<template slot-scope="{ row }">
+				<template #default="{ row }">
 					<el-input v-model="row.remarks" placeholder="请输入" />
 				</template>
 			</el-table-column>
 			<el-table-column label="操作" align="center" width="150px">
-				<template slot-scope="{ row, $index }">
+				<template #default="{ row, $index }">
 					<el-button type="primary" size="mini" @click="handleSubmit(row, $index)"> 保存 </el-button>
 					<el-button type="danger" size="mini" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
@@ -78,7 +78,7 @@ export default {
 	methods: {
 		getList() {
 			this.listLoading = true;
-			api.template
+			api.area
 				.getList({ template_number: this.templateNumber })
 				.then((res: any) => {
 					this.list = res.list || [];

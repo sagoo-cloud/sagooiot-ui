@@ -4,7 +4,7 @@
 			<el-button class="filter-item" type="primary" icon="el-icon-circle-plus-outline" @click="openDialog('create')"> 添加变量列表 </el-button>
 		</div>
 		<el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-			<el-table-column label="序号" type="index" width="50" />
+			<el-table-column label="序号" type="index" width="60" />
 			<!-- <el-table-column label="监控设备" prop="templateNumber" align="center" /> -->
 			<el-table-column label="变量名" prop="title" align="center" />
 			<el-table-column label="变量编码" prop="dataAttribName" align="center" />
@@ -12,7 +12,7 @@
 			<el-table-column label="系数" prop="dataCoef" align="center" />
 			<el-table-column label="存盘周期" prop="saveCycle" align="center" />
 			<el-table-column label="操作" align="center" width="200">
-				<template slot-scope="{ row, $index }">
+				<template #default="{ row, $index }">
 					<el-button type="primary" size="mini" @click="handleUpdate(row)"> 修改 </el-button>
 					<el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
@@ -117,7 +117,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer" class="dialog-footer" style="margin-top:20px">
 				<el-button @click="clsoeDialog"> 取 消 </el-button>
 				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 			</div>
@@ -131,18 +131,19 @@ import api from '/@/api/device/modbus';
 
 export default {
 	props: {
-		templateNumber: '',
-		mode: '',
+		templateNumber: String,
+		mode: String,
 	},
 	data() {
 		return {
 			tableKey: 0,
-			list: null,
+			list: [],
 			total: 0,
 			listLoading: false,
 			listQuery: {
 				page: 1,
-				size: 20,
+        size: 20,
+        template_number: ''
 			},
 			temp: {
 				title: '',
@@ -193,25 +194,25 @@ export default {
 	methods: {
 		// 获取字典数据
 		getDict() {
-			api.getDict({ code: 'dataType' }).then((res) => {
-				this.dataTypeOptions = res.data.list || [];
+			api.getDict({ code: 'dataType' }).then((res: any) => {
+				this.dataTypeOptions = res.list || [];
 			});
 		},
 		getList() {
 			this.listLoading = true;
-			api.template.getList(this.listQuery)
-				.then((response) => {
-					this.list = response.data.list || [];
-					this.total = response.data.Total;
+			api.data.getList(this.listQuery)
+				.then((res: any) => {
+					this.list = res.list || [];
+					this.total = res.Total;
 				})
 				.finally(() => {
 					this.listLoading = false;
 				});
 		},
 		getDataAreaList() {
-			getDataAreaList({ template_number: this.templateNumber })
-				.then((response) => {
-					this.dataAreaOptions = response.data.list || [];
+			api.area.getList({ template_number: this.templateNumber })
+				.then((res: any) => {
+					this.dataAreaOptions = res.list || [];
 				})
 				.finally(() => {});
 		},
@@ -226,7 +227,7 @@ export default {
 				type: 'warning',
 			})
 				.then(function () {
-					return deleteDeviceTemplate({ dt_id: row.dtId });
+					return api.data.deleteDeviceTemplate({ dt_id: row.dtId });
 				})
 				.then(() => {
 					this.getList();
