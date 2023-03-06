@@ -356,7 +356,7 @@
                 <el-form-item class="flex1" label="key名称">{{item}}</el-form-item>
                 <el-form-item class="flex1" label="当前数据库key总数">{{sysInfo.keyspace[item].keys}}</el-form-item>
                 <el-form-item class="flex1" label="带有过期时间的key总数">{{sysInfo.keyspace[item].expires}}</el-form-item>
-                <el-form-item class="flex1" label="平均存活时间">{{sysInfo.keyspace[item].avg_ttl}}</el-form-item>
+                <el-form-item class="flex1" label="平均存活时间">{{timeFormat(sysInfo.keyspace[item].avg_ttl/1000)}}</el-form-item>
             </el-form>
           </div>
         </el-card>
@@ -763,7 +763,7 @@ export default defineComponent({
         state.sysInfo.keyspaceList = Object.keys(data);
         state.sysInfo.keyspace = data
         console.log(data)
-        
+
     }
 
     function memoryInfoMsg(event: { data: any; }) {
