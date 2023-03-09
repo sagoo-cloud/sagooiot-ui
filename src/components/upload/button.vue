@@ -34,16 +34,19 @@ const props = defineProps({
 	},
 	url: {
 		type: String,
-		default: '/api/v1/region/loop/import',
+		default: '/region/loop/import',
 	},
 });
 
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + props.url);
 
 
-const updateImg = (m1, m2) => {
-	console.log(m1)
-	console.log(m2)
+const updateImg = (res: any) => {
+	if (res.code === 0) {
+		ElMessage.success('文件上传成功');
+	} else {
+		ElMessage.error(res.message);
+	}
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
