@@ -1,69 +1,84 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
-          <el-form-item label="换热站名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入换热站名称" clearable size="default" @keyup.enter="queryList" />
-          </el-form-item>
-		  		<el-form-item label="换热站编号" prop="code">
-            <el-input v-model="tableData.param.code" placeholder="请输入换热站编号" clearable size="default" @keyup.enter="queryList" />
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" v-auth="'add'" class="ml10" @click="onOpenAddDic">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增
-            </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+	<div class="system-dic-container">
+		<el-card shadow="hover">
+			<div class="system-user-search mb15">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
+					<el-form-item label="换热站名称" prop="name">
+						<el-input v-model="tableData.param.name" placeholder="请输入换热站名称" clearable size="default" @keyup.enter="queryList" />
+					</el-form-item>
+					<el-form-item label="换热站编号" prop="code">
+						<el-input v-model="tableData.param.code" placeholder="请输入换热站编号" clearable size="default" @keyup.enter="queryList" />
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default" v-auth="'reset'" @click="resetQuery(queryRef)">
+							<el-icon>
+								<ele-Refresh />
+							</el-icon>
+							重置
+						</el-button>
+						<el-button size="default" type="success" v-auth="'add'" class="ml10" @click="onOpenAddDic">
+							<el-icon>
+								<ele-FolderAdd />
+							</el-icon>
+							新增
+						</el-button>
+						<el-button @click="exportExcel">数据导出</el-button>
+						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               删除
             </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-			
-      <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%"  row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <!-- <el-table-column label="ID" align="center" prop="id" width="60" /> -->
-	    	<el-table-column label="换热站" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
-	    	<el-table-column label="换热站编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
-	    	<el-table-column label="位置" prop="position" v-col="'position'" :show-overflow-tooltip="true" />
-	    	<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="80"/>
-	    	<el-table-column label="状态" prop="status" v-col="'status'" width="80">
-          <template #default="scope">
+					</el-form-item>
+				</el-form>
+			</div>
+
+			<el-table
+				:data="tableData.data"
+				v-loading="tableData.loading"
+				style="width: 100%"
+				row-key="id"
+				default-expand-all
+				:indent="16"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+			>
+				<!-- <el-table-column type="selection" width="55" align="center" /> -->
+				<!-- <el-table-column label="ID" align="center" prop="id" width="60" /> -->
+				<el-table-column label="换热站" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
+				<el-table-column label="换热站编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
+				<el-table-column label="位置" prop="position" v-col="'position'" :show-overflow-tooltip="true" />
+				<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="80" />
+				<el-table-column label="状态" prop="status" v-col="'status'" width="80">
+					<template #default="scope">
 						{{ scope.row.status === 1 ? '启用' : '禁用' }}
-          </template>
-        </el-table-column>
-	    	<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />
-        <el-table-column label="操作" width="200" v-col="'handle'" align="center">
-          <template #default="scope">
-			 			<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
-    </el-card>
-    <EditDic ref="editDicRef" :treeData="tableData.data" @queryList="queryList" />
-    <Detail ref="detailRef"  />
-  </div>
+					</template>
+				</el-table-column>
+				<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />
+				<el-table-column label="操作" width="200" v-col="'handle'" align="center">
+					<template #default="scope">
+						<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)">修改</el-button>
+						<el-button size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination
+				v-show="tableData.total > 0"
+				:total="tableData.total"
+				v-model:page="tableData.param.pageNum"
+				v-model:limit="tableData.param.pageSize"
+				@pagination="queryList"
+			/>
+		</el-card>
+		<EditDic ref="editDicRef" :treeData="tableData.data" @queryList="queryList" />
+		<Detail ref="detailRef" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -72,6 +87,7 @@ import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
 import api from '/@/api/heatStation';
+import downloadFile from '/@/utils/download';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -103,7 +119,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'heatStation',
-	components: { EditDic,Detail },
+	components: { EditDic, Detail },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
@@ -117,7 +133,7 @@ export default defineComponent({
 				param: {
 					name: '',
 					code: '',
-					status: -1
+					status: -1,
 				},
 			},
 		});
@@ -126,18 +142,17 @@ export default defineComponent({
 			queryList();
 		};
 		const queryList = () => {
-			state.tableData.loading = true
-			api.heatStation.getList(state.tableData.param)
-				.then((res: any) => {
-					state.tableData.data = res || [];
-					state.tableData.loading = false
-				});
+			state.tableData.loading = true;
+			api.heatStation.getList(state.tableData.param).then((res: any) => {
+				state.tableData.data = res || [];
+				state.tableData.loading = false;
+			});
 		};
 
 		//查看详情
-		const onOpenDetail=(row: TableDataRow)=>{
+		const onOpenDetail = (row: TableDataRow) => {
 			detailRef.value.openDialog(row);
-		}
+		};
 		// 打开新增产品弹窗
 		const onOpenAddDic = () => {
 			editDicRef.value.openDialog(null, state.tableData.data);
@@ -152,7 +167,7 @@ export default defineComponent({
 			// let ids: number[] = [];
 			// if (row) {
 			msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
-				// ids = [row.id];
+			// ids = [row.id];
 			// } else {
 			// 	ids = state.ids;
 			// }
@@ -187,6 +202,14 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		// 后端导出
+		const exportExcel = () => {
+			api.heatStation
+				.heatStationExport(state.tableData.param)
+				.then((res: any) => {
+					downloadFile(res, '换热站列表数据导出.xlsx');
+				});
+		};
 		return {
 			addDicRef,
 			editDicRef,
@@ -198,6 +221,7 @@ export default defineComponent({
 			onRowDel,
 			queryList,
 			resetQuery,
+			exportExcel,
 			handleSelectionChange,
 			...toRefs(state),
 		};
