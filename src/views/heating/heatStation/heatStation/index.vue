@@ -32,6 +32,7 @@
 							<el-icon> <ele-Download /> </el-icon>
 							数据导出
 						</el-button>
+						<uploadBtn></uploadBtn>
 						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
@@ -89,6 +90,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
+import uploadBtn from '/@/components/upload/button.vue';
 import api from '/@/api/heatStation';
 import downloadFile from '/@/utils/download';
 
@@ -122,7 +124,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'heatStation',
-	components: { EditDic, Detail },
+	components: { EditDic, Detail, uploadBtn },
 	setup() {
 		const addDicRef = ref();
 		const editDicRef = ref();
