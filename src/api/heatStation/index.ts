@@ -4,6 +4,7 @@ export default {
   loop: {
     getList: (params: object) => get('/region/loop/list', params),
     add: (data: object) => post('/region/loop/add', data),
+    export: (params: object) => file('/region/loop/export', params), // 环路列表导出
     edit: (data: object) => put('/region/loop/edit', data),
     del: (id: number) => del('/region/loop/del', { id }),
     detail: (id: number) => get('/region/loop/getInfoById', { id }),

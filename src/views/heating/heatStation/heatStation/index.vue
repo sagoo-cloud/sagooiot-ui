@@ -28,7 +28,10 @@
 							</el-icon>
 							新增
 						</el-button>
-						<el-button @click="exportExcel">数据导出</el-button>
+						<el-button @click="exportExcel">
+							<el-icon> <ele-Download /> </el-icon>
+							数据导出
+						</el-button>
 						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
@@ -204,11 +207,9 @@ export default defineComponent({
 		};
 		// 后端导出
 		const exportExcel = () => {
-			api.heatStation
-				.heatStationExport(state.tableData.param)
-				.then((res: any) => {
-					downloadFile(res, '换热站列表数据导出.xlsx');
-				});
+			api.heatStation.heatStationExport(state.tableData.param).then((res: any) => {
+				downloadFile(res, '换热站列表数据导出.xlsx');
+			});
 		};
 		return {
 			addDicRef,

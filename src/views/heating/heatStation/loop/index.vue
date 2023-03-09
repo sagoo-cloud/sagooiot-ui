@@ -40,6 +40,10 @@
               </el-icon>
               新增
             </el-button>
+						<el-button @click="exportExcel">
+							<el-icon> <ele-Download /> </el-icon>
+							数据导出
+						</el-button>
             <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
@@ -113,6 +117,7 @@ import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
 import api from '/@/api/heatStation';
+import downloadFile from '/@/utils/download';
 
 // 定义接口来定义对象的类型
 interface Point {
@@ -245,6 +250,12 @@ export default defineComponent({
 		const handleSelectionChange = (selection: TableDataRow[]) => {
 			state.ids = selection.map((item) => item.id);
 		};
+		// 后端导出
+		const exportExcel = () => {
+			api.loop.export(state.tableData.param).then((res: any) => {
+				downloadFile(res, '环路列表数据导出.xlsx');
+			});
+		};
 		return {
 			addDicRef,
 			editDicRef,
@@ -257,6 +268,7 @@ export default defineComponent({
 			queryList,
 			resetQuery,
 			handleSelectionChange,
+			exportExcel,
 			...toRefs(state),
 		};
 	},
