@@ -32,7 +32,7 @@
 							<el-icon> <ele-Download /> </el-icon>
 							数据导出
 						</el-button>
-						<uploadBtn></uploadBtn>
+						<uploadBtn @update="queryList" url="/region/heatStation/import"></uploadBtn>
 						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />

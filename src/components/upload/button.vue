@@ -1,13 +1,15 @@
 <template>
 	<el-upload
 		:accept="accept"
+		:show-file-list="false"
+		v-model:file-list="fileList"
 		:limit="1"
 		:headers="headers"
 		:before-upload="beforeAvatarUpload"
 		:action="uploadUrl"
 		:on-success="updateImg"
 	>
-		<el-button>
+		<el-button style="margin-left: 12px;">
 			<el-icon> <ele-Upload /> </el-icon>
 			数据导入
 		</el-button>
@@ -20,12 +22,11 @@ import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin';
 
-
 const headers = {
 	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
 };
 
-const emit = defineEmits(['setImg', 'setImgs']);
+const emit = defineEmits(['update']);
 
 const props = defineProps({
 	accept: {
@@ -34,12 +35,18 @@ const props = defineProps({
 	},
 	url: {
 		type: String,
-		default: '/region/loop/import',
+		default: '/region/heatStation/import',
 	},
 });
 
-const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + props.url);
+const fileList = ref<any[]>([
+	// {
+	// 	name: '',
+	// 	url: '',
+	// },
+]);
 
+const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + props.url);
 
 const updateImg = (res: any) => {
 	if (res.code === 0) {
@@ -47,6 +54,8 @@ const updateImg = (res: any) => {
 	} else {
 		ElMessage.error(res.message);
 	}
+	fileList.value = []
+	emit('update')
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
