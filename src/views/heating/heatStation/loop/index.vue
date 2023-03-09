@@ -54,11 +54,11 @@
 							</el-icon>
 							新增
 						</el-button>
-						<el-button @click="exportExcel">
+						<el-button @click="exportExcel" v-auth="'dwonload'">
 							<el-icon> <ele-Download /> </el-icon>
 							数据导出
 						</el-button>
-						<uploadBtn @update="queryList" url="/region/loop/import"></uploadBtn>
+						<uploadBtn @update="queryList" url="/region/loop/import" v-auth="'upload'"></uploadBtn>
 						<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
