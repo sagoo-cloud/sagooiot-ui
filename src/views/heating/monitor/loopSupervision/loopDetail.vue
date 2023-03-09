@@ -47,8 +47,8 @@
 		<el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
 			<el-col :span="24">
 				<div class="home-card-item p20" v-loading="loading">
-					<el-tabs>
-						<el-tab-pane label="环路监测">
+					<!-- <el-tabs>
+						<el-tab-pane label="环路监测"> -->
 							<div class="flex-row">
 								<el-tabs v-model="tabName" @tab-change="initLineChart">
 									<el-tab-pane label="温度" :name="0"></el-tab-pane>
@@ -59,7 +59,7 @@
 								<el-button type="text" @click="goDetail()">更多 &gt;</el-button>
 							</div>
 							<div style="height: 300px" ref="homeLineRef"></div>
-						</el-tab-pane>
+						<!-- </el-tab-pane>
 						<el-tab-pane label="流程图" lazy>
 							<div class="iframe-wrapper">
 								<iframe :src="'/plugin/topo/?bgColor=000#/name/' + $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
@@ -68,7 +68,7 @@
 								</div>
 							</div>
 						</el-tab-pane>
-					</el-tabs>
+					</el-tabs> -->
 				</div>
 			</el-col>
 		</el-row>
@@ -152,11 +152,11 @@ export default defineComponent({
 				{
 					icon: ele,
 					iconDark: ele1,
-					title: '电量',
-					contentTitle1: '总耗电',
+					title: '负荷',
+					contentTitle1: '供热负荷',
 					val1: '0',
 					unit1: 'KW.h',
-					contentTitle2: '总单耗',
+					contentTitle2: '平均供热负荷',
 					val2: '0',
 					unit2: 'KW.h/㎡',
 				},
