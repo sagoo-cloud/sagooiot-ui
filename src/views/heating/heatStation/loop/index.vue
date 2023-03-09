@@ -71,11 +71,10 @@
 			<el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column label="ID" align="center" prop="id" width="60" />
 				<el-table-column label="编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
-				<el-table-column label="名称" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
-				<el-table-column label="换热站" prop="stationInfo.name" v-col="'stationId'" :show-overflow-tooltip="true">
-					<!-- <template #default="scope">
-            {{ scope.row.stationInfo.name }}
-          </template> -->
+				<el-table-column label="名称" prop="name" v-col="'name'" :show-overflow-tooltip="true">
+					<template #default="{ row }">
+					{{ row.stationInfo.name }} {{ row.name }}
+					</template>
 				</el-table-column>
 				<!-- stationInfo -->
 				<el-table-column label="类型" prop="loopTypes" v-col="'loopTypes'">
