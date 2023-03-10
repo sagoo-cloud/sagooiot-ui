@@ -59,28 +59,6 @@
 				<div style="height: 200px" ref="homeLineRef4"></div>
 			</div>
 		</el-row>
-		<!-- <el-col :xs="24" :sm="10" :md="12" :lg="8" :xl="8" class="home-media">
-				<div class="home-card-item">
-					<div class="bar-header">
-						<p class="home-card-item-title">环路回温/热用户室温占比</p>
-					</div>
-					<div style="height: 256px" ref="homePieRef"></div>
-				</div>
-			</el-col> -->
-		<!-- <el-row :gutter="15" class="home-card-three mb15">
-			<el-col>
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeBarRef"></div>
-				</div>
-			</el-col>
-		</el-row>
-		<el-row :gutter="15" class="home-card-four">
-			<el-col>
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeFourBarRef"></div>
-				</div>
-			</el-col>
-		</el-row> -->
 	</div>
 </template>
 
