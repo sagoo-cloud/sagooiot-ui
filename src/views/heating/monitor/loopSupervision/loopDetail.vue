@@ -18,11 +18,11 @@
 					</div>
 					<div class="item-content w100" :class="` home-one-animation${k}`">
 						<p>
-							<span>{{ v.contentTitle1 }}</span>
+							<span class="text-no-wrap">{{ v.contentTitle1 }}</span>
 							<span>{{ v.val1 }} {{ unitMap[v.contentTitle1] }}</span>
 						</p>
 						<p>
-							<span>{{ v.contentTitle2 }}</span>
+							<span class="text-no-wrap">{{ v.contentTitle2 }}</span>
 							<span
 								>{{ v.val2 }}
 								{{ unitMap[v.title + '：' + v.contentTitle2] ? unitMap[v.title + '：' + v.contentTitle2] : unitMap[v.contentTitle2] }}</span
@@ -30,7 +30,7 @@
 						</p>
 						<p style="height: 30px">
 							<template v-if="v.contentTitle3">
-								<span>{{ v.contentTitle3 || ' ' }}</span>
+								<span class="text-no-wrap">{{ v.contentTitle3 || ' ' }}</span>
 								<span
 									>{{ v.val3 || ' ' }}
 									{{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span
@@ -49,17 +49,17 @@
 				<div class="home-card-item p20" v-loading="loading">
 					<!-- <el-tabs>
 						<el-tab-pane label="环路监测"> -->
-							<div class="flex-row">
-								<el-tabs v-model="tabName" @tab-change="initLineChart">
-									<el-tab-pane label="温度" :name="0"></el-tab-pane>
-									<el-tab-pane label="压力" :name="1"></el-tab-pane>
-									<el-tab-pane label="流量" :name="2"></el-tab-pane>
-									<el-tab-pane label="失水量" :name="3"></el-tab-pane>
-								</el-tabs>
-								<el-button type="text" @click="goDetail()">更多 &gt;</el-button>
-							</div>
-							<div style="height: 300px" ref="homeLineRef"></div>
-						<!-- </el-tab-pane>
+					<div class="flex-row">
+						<el-tabs v-model="tabName" @tab-change="initLineChart">
+							<el-tab-pane label="温度" :name="0"></el-tab-pane>
+							<el-tab-pane label="压力" :name="1"></el-tab-pane>
+							<el-tab-pane label="流量" :name="2"></el-tab-pane>
+							<el-tab-pane label="失水量" :name="3"></el-tab-pane>
+						</el-tabs>
+						<el-button type="text" @click="goDetail()">更多 &gt;</el-button>
+					</div>
+					<div style="height: 300px" ref="homeLineRef"></div>
+					<!-- </el-tab-pane>
 						<el-tab-pane label="流程图" lazy>
 							<div class="iframe-wrapper">
 								<iframe :src="'/plugin/topo/?bgColor=000#/name/' + $route.query.code" height="400" width="100%" frameborder="0" class="mt15"></iframe>
@@ -127,13 +127,10 @@ export default defineComponent({
 					title: '供热面积',
 					contentTitle1: '联网面积',
 					val1: '0',
-					unit1: '㎡',
 					contentTitle2: '实供面积',
 					val2: '0',
-					unit2: '㎡',
 					contentTitle3: '供热率',
 					val3: '',
-					unit3: '',
 				},
 				{
 					icon: fire,
@@ -141,13 +138,8 @@ export default defineComponent({
 					title: '热量',
 					contentTitle1: '总耗热',
 					val1: '0',
-					unit1: 'GJ',
 					contentTitle2: '总单耗',
 					val2: '0',
-					unit2: 'GJ/㎡',
-					contentTitle3: '供热负荷',
-					val3: '-',
-					unit3: 'W',
 				},
 				{
 					icon: ele,
@@ -155,10 +147,8 @@ export default defineComponent({
 					title: '负荷',
 					contentTitle1: '供热负荷',
 					val1: '0',
-					unit1: 'KW.h',
 					contentTitle2: '平均供热负荷',
-					val2: '0',
-					unit2: 'KW.h/㎡',
+					val2: '-',
 				},
 				{
 					icon: water,
@@ -166,10 +156,8 @@ export default defineComponent({
 					title: '水量',
 					contentTitle1: '总耗水',
 					val1: '0',
-					unit1: 'T',
 					contentTitle2: '总单耗',
 					val2: '0',
-					unit2: 'T/㎡',
 				},
 			],
 			lineName: '环路监测',
@@ -206,17 +194,20 @@ export default defineComponent({
 					code: route.query.code,
 				})
 				.then((res: any) => {
-					let data = res;
-					state.dataOne[0].val1 = data.forRealArea;
-					state.dataOne[0].val2 = data.heatingArea;
-					state.dataOne[0].val3 = data.heatRate;
-					state.dataOne[1].val1 = data.unitConsumptionTotal; //总热耗
-					state.dataOne[1].val2 = data.unitConsumption; //热单耗
-					state.dataOne[1].val3 = data.heatDemand;
-					state.dataOne[2].val1 = data.elctricConsumptionTotal; //总电量
-					state.dataOne[2].val2 = data.elctricConsumption; //电单耗
-					state.dataOne[3].val1 = data.flowLossTotal; //总水量
-					state.dataOne[3].val2 = data.flowLoss; //水量单耗
+					const { flowLoss, flowLossTotal, forRealArea, heatingArea, unitConsumption, unitConsumptionTotal, heatRate, heatDemandAvg, heatDemand } =
+						res;
+					state.dataOne[0].val1 = forRealArea;
+					state.dataOne[0].val2 = heatingArea;
+					state.dataOne[0].val3 = heatRate;
+
+					state.dataOne[1].val1 = unitConsumptionTotal;
+					state.dataOne[1].val2 = unitConsumption;
+
+					state.dataOne[2].val1 = heatDemand;
+					state.dataOne[2].val2 = heatDemandAvg || '-';
+
+					state.dataOne[3].val1 = flowLossTotal;
+					state.dataOne[3].val2 = flowLoss;
 				});
 		};
 

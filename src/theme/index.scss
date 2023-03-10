@@ -14,3 +14,12 @@
   pointer-events: none;
   opacity: 0.7;
 }
+
+.no-wrap {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.text-no-wrap {
+	white-space: nowrap;
+}
