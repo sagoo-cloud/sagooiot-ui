@@ -142,7 +142,7 @@ export default defineComponent({
 					title: '水量',
 					contentTitle1: '总耗水',
 					val1: '0',
-					contentTitle2: '总单耗',
+					contentTitle2: '小时补水量',
 					val2: '0',
 				},
 			],
