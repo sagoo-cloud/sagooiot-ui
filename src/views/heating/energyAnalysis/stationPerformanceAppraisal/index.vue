@@ -33,9 +33,6 @@
 					<el-form-item label="换热站名称" prop="stationName">
 						<el-input v-model="state.tableData.param.stationName" placeholder="输入" clearable size="default"> </el-input>
 					</el-form-item>
-					<el-form-item label="环路名称" prop="loopName">
-						<el-input v-model="state.tableData.param.loopName" placeholder="输入" clearable size="default"> </el-input>
-					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
 							<el-icon>
@@ -65,18 +62,12 @@
 				</el-form>
 			</div>
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
-				<el-table-column type="index" label="序号" align="center" width="60" />
-				<el-table-column label="环路名称" prop="huanLuName" />
-				<el-table-column label="所属换热站" prop="stationName" />
-				<el-table-column :label="`总热耗(${unitMap['单日总热耗单位']})`" prop="unitConsumptionTotal" />
-				<el-table-column :label="`热单耗(${unitMap['单日供热单耗']})`" prop="unitConsumption" />
-				<el-table-column :label="`总耗电(${unitMap['单日总电耗']})`" prop="elctricConsumptionTotal" />
-				<el-table-column :label="`电单耗(${unitMap['单日用电单耗']})`" prop="elctricConsumption" />
-				<el-table-column :label="`总耗水(${unitMap['日总水耗单位']})`" prop="flowLossTotal" />
-				<el-table-column :label="`水单耗(${unitMap['日失水单耗']})`" prop="flowLoss" />
-				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="unitConsumptionDemand" />
-				<el-table-column :label="`供电负荷(${unitMap['供电负荷']})`" min-width="100" prop="elctricConsumptionDemand" />
+				<el-table-column type="index" label="序号" align="center" width="80" />
+				<el-table-column label="换热站名称" prop="stationName" />
+				<el-table-column :label="`供热量(${unitMap['供热量']})`" prop="unitConsumptionTotal" />
 				<el-table-column :label="`失水量(${unitMap['失水量']})`" prop="flowLossDemand" />
+				<el-table-column :label="`供热负荷(${unitMap['供热负荷'] || ' '})`" prop="flowLossDemand" />
+				<el-table-column :label="`平均温度(${unitMap['平均温度'] || ' '})`" prop="flowLossDemand" />
 			</el-table>
 
 			<pagination
@@ -176,14 +167,14 @@ const queryTree = () => {
 };
 
 const exportData = () => {
-	energyApi.performanceExport(state.tableData.param).then((res: any) => {
-		downloadFile(res, '环路绩效考核数据.xlsx');
+	energyApi.performanceExportStation(state.tableData.param).then((res: any) => {
+		downloadFile(res, '换热站绩效考核数据.xlsx');
 	});
 };
 
 const queryList = () => {
 	state.tableData.loading = true;
-	energyApi.getEnergyPerformance(state.tableData.param).then((res: any) => {
+	energyApi.getEnergyPerformanceStation(state.tableData.param).then((res) => {
 		state.tableData.data = res.list || [];
 		state.tableData.total = res.Total;
 		state.tableData.loading = false;

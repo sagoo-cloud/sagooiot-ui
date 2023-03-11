@@ -10,9 +10,11 @@ export default {
   getEnergyLoopdataPage: (params?: object) => get('/energy/loopdata/page_list', params), // 环路分析
   getEnergyWaterLossLineChart: (params?: object) => get('/energy/water/loss/line/chart', params), // 换热站失水分析
   getEnergyHuanluWaterLossLineChartPage: (params?: object) => get('/energy/water/loss/page_list', params), // 换热站失水分析折现图列表
-  getEnergyPerformance: (params?: object) => get('/energy/performance', params), // 绩效考核
   getEnergyTop: (params?: object) => get('/energy/top', params), // 能耗排行榜
   loopdataExport: (params: object) => file('/energy/loopdata/export', params), // 导出：环路分析
   lossWaterExport: (params: object) => file('/energy/water/loss/export', params), // 导出：环路分析
-  performanceExport: (params: object) => file('/energy/performanceExport', params), // 导出：绩效考核数据导出
+  getEnergyPerformance: (params?: object) => get('/energy/performance', params), // 环路绩效考核
+  performanceExport: (params: object) => file('/energy/performanceExport', params), // 导出：环路绩效考核数据导出
+  getEnergyPerformanceStation: (params?: object) => get('/energy/performance/station', params), // 换热站绩效考核
+  performanceExportStation: (params: object) => file('/energy/performance/station/export', params), // 导出：换热站绩效考核数据导出
 }
