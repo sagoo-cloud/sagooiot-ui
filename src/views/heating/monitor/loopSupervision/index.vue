@@ -53,8 +53,6 @@
             </el-button>
           </template>
         </el-table-column>
-        <!-- 
-4.默认30条数据每页 -->
         <el-table-column label="一网供水温度" prop="inTemperature1" min-width="110" :show-overflow-tooltip="true" />
         <el-table-column label="二网供水温度" prop="inTemperature2" min-width="110" :show-overflow-tooltip="true" />
         <el-table-column label="一网回水温度" prop="outTemperature1" min-width="110" :show-overflow-tooltip="true" />
@@ -147,14 +145,16 @@ export default defineComponent({
         router.push({
           path: '/heating-monitor/loopSupervision/heatStationDetail',
           query: {
-            code: row.code
+            code: row.code,
+            name: row.stationName + '_' +  row.name
           }
         })
       } else {
         router.push({
           path: '/heating-monitor/loopSupervision/loopDetail',
           query: {
-            code: row.code
+            code: row.code,
+            name: row.stationName + '_' +  row.name
           }
         })
       }

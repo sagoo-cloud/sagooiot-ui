@@ -1,5 +1,6 @@
 <template>
 	<div class="system-dic-container data-overview">
+		<div v-if="$route.query.name" style="text-align: center;font-size: 20px;font-weight: bold;margin-bottom: 10px;">{{$route.query.name}}</div>
 		<el-row :gutter="15" class="home-card-one">
 			<el-col
 				:xs="24"
