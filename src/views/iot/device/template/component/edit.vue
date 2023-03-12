@@ -29,7 +29,7 @@
 					<DeviceTemplateDialog :templateNumber="temp.number" :mode="temp.mode" ref="deviceTemplateDialog" v-if="activeName === '2'" />
 				</el-tab-pane>
 			</el-tabs>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer" class="dialog-footer mt-4">
 				<el-button @click="clsoeDialog"> 取 消 </el-button>
 				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 			</div>

@@ -40,7 +40,7 @@
 					<el-input v-model="row.remarks" placeholder="请输入" />
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" align="center" width="150px">
+			<el-table-column label="操作" align="center" width="180px">
 				<template #default="{ row, $index }">
 					<el-button type="primary" size="mini" @click="handleSubmit(row, $index)"> 保存 </el-button>
 					<el-button type="danger" size="mini" @click="handleDelete(row, $index)"> 删除 </el-button>

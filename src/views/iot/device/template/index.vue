@@ -40,7 +40,7 @@
 				<el-table-column label="操作" width="160" align="center">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="handleImport(scope.row)">导入</el-button>
-						<el-button size="small" text type="primary">导出</el-button>
+						<el-button size="small" text type="primary" @click="handleExport(scope.row)">导出</el-button>
 						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">详情</el-button>
 						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 					</template>
@@ -60,6 +60,7 @@ import ImportFile from './component/importFile.vue';
 import api from '/@/api/device/modbus';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonModbus';
+import getOrigin from '/@/utils/origin'
 
 const importFile = ref();
 const editFormRef = ref();
@@ -76,6 +77,10 @@ const addOrEdit = async (row?: any) => {
 const handleImport = async (row: any) => {
 	importFile.value.templateNumber = row.number;
 	importFile.value.openDialog();
+};
+
+const handleExport = async (row: any) => {
+	window.open(getOrigin(import.meta.env.VITE_MODBUS_API + '/data_area/export?number=' + row.number))
 };
 
 // 重置表单

@@ -1,43 +1,41 @@
 <template>
 	<div class="component-container">
 		<div class="filter-container">
-			<el-button class="filter-item" type="primary" icon="el-icon-circle-plus-outline" @click="openDialog('create')"> 添加变量列表 </el-button>
+			<el-button type="primary" icon="el-icon-circle-plus-outline" @click="openDialog('create')"> 添加变量列表 </el-button>
 		</div>
 		<el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-			<el-table-column label="序号" type="index" width="60" />
-			<!-- <el-table-column label="监控设备" prop="templateNumber" align="center" /> -->
-			<el-table-column label="变量名" prop="title" align="center" />
+			<el-table-column label="序号" type="index" width="60" align="center" />
+			<el-table-column label="变量名" prop="title" align="center" show-overflow-tooltip min-width="180" />
 			<el-table-column label="变量编码" prop="dataAttribName" align="center" />
 			<el-table-column label="数据地址" prop="dataAddressTitle" align="center" />
 			<el-table-column label="系数" prop="dataCoef" align="center" />
 			<el-table-column label="存盘周期" prop="saveCycle" align="center" />
-			<el-table-column label="操作" align="center" width="200">
+			<el-table-column label="操作" align="center" width="180">
 				<template #default="{ row, $index }">
 					<el-button type="primary" size="mini" @click="handleUpdate(row)"> 修改 </el-button>
 					<el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-
 		<pagination
 			v-show="total > 0"
 			:total="total"
-			:page.sync="listQuery.page"
-			:limit.sync="listQuery.size"
+			v-model:page="listQuery.page"
+			v-model:limit="listQuery.size"
 			@pagination="getList"
-			style="padding: 10px 20px 20px !important"
+			style="padding: 20px 0 0 !important"
 		/>
 
 		<el-dialog
 			:title="textMap[dialogStatus]"
-			:visible.sync="dialogVisible"
+			v-model="dialogVisible"
 			width="850px"
 			:before-close="clsoeDialog"
 			close="var-dialog"
 			append-to-body
 			:close-on-click-modal="false"
 		>
-			<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px">
+			<el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="95px">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="变量名称" prop="title">
@@ -59,7 +57,7 @@
 				<el-row>
 					<el-col :span="8" v-if="mode === 1">
 						<el-form-item label="数据区" prop="area">
-							<el-select v-model="temp.area" placeholder="请选择数据区" filterable class="filter-item" @change="handleAreaChange" style="width: 100%">
+							<el-select v-model="temp.area" placeholder="请选择数据区" filterable @change="handleAreaChange" style="width: 100%">
 								<el-option v-for="(item, index) in dataAreaOptions" :key="index" :label="item.name" :value="item.name" />
 							</el-select>
 						</el-form-item>
@@ -85,7 +83,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="数据类型" prop="dataType">
-							<el-select v-model="temp.dataType" placeholder="请选择数据类型" filterable class="filter-item" style="width: 100%">
+							<el-select v-model="temp.dataType" placeholder="请选择数据类型" filterable style="width: 100%">
 								<el-option v-for="(item, index) in dataTypeOptions" :key="index" :label="item.title" :value="item.value" />
 							</el-select>
 						</el-form-item>
@@ -117,7 +115,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<div slot="footer" class="dialog-footer" style="margin-top:20px">
+			<div slot="footer" class="dialog-footer" style="margin-top: 20px">
 				<el-button @click="clsoeDialog"> 取 消 </el-button>
 				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 			</div>
@@ -142,8 +140,8 @@ export default {
 			listLoading: false,
 			listQuery: {
 				page: 1,
-        size: 20,
-        template_number: ''
+				size: 20,
+				template_number: '',
 			},
 			temp: {
 				title: '',
@@ -200,7 +198,8 @@ export default {
 		},
 		getList() {
 			this.listLoading = true;
-			api.data.getList(this.listQuery)
+			api.data
+				.getList(this.listQuery)
 				.then((res: any) => {
 					this.list = res.list || [];
 					this.total = res.Total;
@@ -210,7 +209,8 @@ export default {
 				});
 		},
 		getDataAreaList() {
-			api.area.getList({ template_number: this.templateNumber })
+			api.area
+				.getList({ template_number: this.templateNumber })
 				.then((res: any) => {
 					this.dataAreaOptions = res.list || [];
 				})
@@ -321,10 +321,6 @@ export default {
 <style lang="scss" scoped>
 .filter-container {
 	margin-bottom: 10px;
-}
-
-.filter-item {
-	margin-right: 10px;
 }
 
 .label {
