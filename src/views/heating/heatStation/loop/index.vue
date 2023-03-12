@@ -73,7 +73,7 @@
 				<el-table-column label="编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
 				<el-table-column label="名称" prop="name" v-col="'name'" :show-overflow-tooltip="true">
 					<template #default="{ row }">
-					{{ row.stationInfo.name }} {{ row.name }}
+					{{ row.stationInfo.name }}-{{ row.name }}
 					</template>
 				</el-table-column>
 				<!-- stationInfo -->

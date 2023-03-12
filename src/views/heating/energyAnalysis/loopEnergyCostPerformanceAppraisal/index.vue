@@ -66,8 +66,11 @@
 			</div>
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" align="center" width="60" />
-				<el-table-column label="环路名称" prop="huanLuName" />
-				<el-table-column label="所属换热站" prop="stationName" />
+				<el-table-column label="换热站环路名称" prop="huanLuName" min-width="100">
+					<template #default="{row}">
+						{{ row.stationName }}-{{ row.huanLuName }}
+					</template>
+				</el-table-column>
 				<el-table-column :label="`总热耗(${unitMap['单日总热耗单位']})`" prop="unitConsumptionTotal" />
 				<el-table-column :label="`热单耗(${unitMap['单日供热单耗']})`" prop="unitConsumption" />
 				<el-table-column :label="`总耗电(${unitMap['单日总电耗']})`" prop="elctricConsumptionTotal" />
