@@ -54,7 +54,7 @@
 							</el-icon>
 							新增
 						</el-button>
-						<el-button @click="exportExcel" v-auth="'dwonload'">
+						<el-button @click="exportExcel" v-auth="'download'">
 							<el-icon> <ele-Download /> </el-icon>
 							数据导出
 						</el-button>

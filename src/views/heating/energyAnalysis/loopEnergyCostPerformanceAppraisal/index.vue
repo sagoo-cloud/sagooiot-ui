@@ -49,7 +49,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" v-auth="'reset'" @click="exportData()">
+						<el-button size="default" v-auth="'download'" @click="exportData()">
 							<el-icon>
 								<ele-Download />
 							</el-icon>

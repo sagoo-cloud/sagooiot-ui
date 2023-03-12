@@ -46,7 +46,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" v-auth="'reset'" @click="exportData()">
+						<el-button size="default" v-auth="'download'" @click="exportData()">
 							<el-icon>
 								<ele-Download />
 							</el-icon>
@@ -64,10 +64,12 @@
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" align="center" width="80" />
 				<el-table-column label="换热站名称" prop="stationName" />
-				<el-table-column :label="`供热量(${unitMap['供热量']})`" prop="unitConsumptionTotal" />
+				<el-table-column :label="`总热耗(${unitMap['单日总热耗单位']})`" prop="unitConsumptionTotal" />
+				<el-table-column :label="`热单耗(${unitMap['单日供热单耗']})`" prop="unitConsumption" />
+				<el-table-column :label="`总耗水(${unitMap['日总水耗单位']})`" prop="flowLossTotal" />
+				<el-table-column :label="`水单耗(${unitMap['日失水单耗']})`" prop="flowLoss" />
+				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="unitConsumptionDemand" />
 				<el-table-column :label="`失水量(${unitMap['失水量']})`" prop="flowLossDemand" />
-				<el-table-column :label="`供热负荷(${unitMap['供热负荷'] || ' '})`" prop="flowLossDemand" />
-				<el-table-column :label="`平均温度(${unitMap['平均温度'] || ' '})`" prop="flowLossDemand" />
 			</el-table>
 
 			<pagination

@@ -21,7 +21,7 @@
             <el-dropdown-item command="detail-详情">详情</el-dropdown-item>
             <el-dropdown-item command="del-删除">删除</el-dropdown-item>
             <el-dropdown-item command="upload-导入">导入</el-dropdown-item>
-            <el-dropdown-item command="dwonload-导出">导出</el-dropdown-item>
+            <el-dropdown-item command="download-导出">导出</el-dropdown-item>
             <el-dropdown-item command="reset-重置">重置</el-dropdown-item>
             <el-dropdown-item command="more-更多">更多</el-dropdown-item>
           </el-dropdown-menu>
