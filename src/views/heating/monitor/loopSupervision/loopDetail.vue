@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container data-overview">
-		<div v-if="$route.query.name" style="text-align: center;font-size: 20px;font-weight: bold;margin-bottom: 10px;">{{$route.query.name}}</div>
+		<div v-if="$route.query.name" style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 10px">{{ $route.query.name }}</div>
 		<el-row :gutter="15" class="home-card-one">
 			<el-col
 				:xs="24"
@@ -43,7 +43,81 @@
 			</el-col>
 		</el-row>
 
-		<!-- 拓扑图 -->
+		<el-card shadow="hover" class="mt-4">
+			<div class="search">
+				<el-form :model="params" :inline="true" ref="queryRef">
+					<el-form-item label="" prop="dataTypes">
+						<el-radio-group v-model="params.dataTypes" size="default">
+							<el-radio-button label="hour">时</el-radio-button>
+							<el-radio-button label="day">日</el-radio-button>
+							<el-radio-button label="month">月</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="" prop="date">
+						<el-date-picker
+							v-if="params.dataTypes === 'hour'"
+							v-model="date"
+							type="datetimerange"
+							format="YYYY-MM-DD HH:mm:ss"
+							value-format="YYYY-MM-DD HH:mm:ss"
+							range-separator="-"
+							start-placeholder="开始时间"
+							end-placeholder="结束时间"
+							:clearable="false"
+						/>
+						<el-date-picker
+							v-else-if="params.dataTypes === 'day'"
+							v-model="date"
+							type="daterange"
+							format="YYYY-MM-DD"
+							value-format="YYYY-MM-DD"
+							range-separator="-"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							:clearable="false"
+						/>
+						<el-date-picker
+							v-else-if="params.dataTypes === 'month'"
+							v-model="date"
+							type="monthrange"
+							format="YYYY-MM-DD"
+							value-format="YYYY-MM-01"
+							range-separator="-"
+							start-placeholder="开始月份"
+							end-placeholder="结束月份"
+							:clearable="false"
+						/>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+							<el-icon>
+								<ele-Search />
+							</el-icon>
+							查询
+						</el-button>
+						<el-button size="default">
+							<el-icon>
+								<ele-Download />
+							</el-icon>
+							导出
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<el-table
+				:data="tableData"
+				style="width: 100%"
+				v-loading="loadingTable"
+				row-key="id"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+			>
+				<el-table-column type="index" label="序号" width="70" align="center" />
+				<el-table-column prop="time" label="时间" align="center"></el-table-column>
+				<el-table-column :label="`供热量(${unitMap['单日供热单耗']})`" prop="unitConsumption" align="center" />
+				<el-table-column :label="`平均供热负荷(${unitMap['供热负荷']})`" prop="heatDemand" align="center" />
+				<el-table-column :label="`失水量(${unitMap['日失水单耗']})`" prop="flowLoss" align="center" />
+			</el-table>
+		</el-card>
 
 		<el-row :gutter="15" class="home-card-one mt15" v-if="$route.query.code">
 			<el-col :span="24">
@@ -82,6 +156,7 @@ import { FormInstance } from 'element-plus';
 import * as echarts from 'echarts';
 import api from '/@/api/loopSupervision';
 import apiDatahub from '/@/api/datahub';
+import dayjs from 'dayjs';
 
 import ele from '/@/assets/img/ele.svg';
 import ele1 from '/@/assets/img/ele1.svg';
@@ -93,6 +168,7 @@ import water from '/@/assets/img/water.svg';
 import water1 from '/@/assets/img/water1.svg';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
+import { useSearch } from '/@/hooks/useCommon';
 
 let global: any = {
 	homeCharThree: null,
@@ -112,6 +188,46 @@ export default defineComponent({
 		const store = useStore();
 		const tabName = ref(0);
 		const unitMap = ref<any>({});
+
+		const date = ref([dayjs().format('YYYY-MM-DD 00:00:00'), dayjs().format('YYYY-MM-DD HH:mm:ss')]);
+
+		const {
+			params,
+			tableData,
+			getList,
+			loading: loadingTable,
+		} = useSearch(api.getLoopRegulationDetail, 'Report', {
+			queryType: 'report',
+			dataTypes: 'hour',
+			beginTime: date.value[0],
+			endTime: date.value[1],
+			code: route.query.code,
+		});
+
+		watch(date, (date) => {
+			console.log(date);
+			params.beginTime = date[0];
+			params.endTime = date[1];
+		});
+
+		watch(
+			() => params.dataTypes,
+			(dataTypes) => {
+				switch (dataTypes) {
+					case 'hour':
+						date.value = [dayjs().format('YYYY-MM-DD 00:00:00'), dayjs().format('YYYY-MM-DD HH:mm:ss')];
+						break;
+					case 'day':
+						date.value = [dayjs().subtract(7, 'days').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
+						break;
+					case 'month':
+						date.value = [dayjs().subtract(7, 'months').format('YYYY-MM-01'), dayjs().format('YYYY-MM-01')];
+						break;
+				}
+			}
+		);
+
+		getList();
 
 		// 统计信息的单位的字典
 		apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
@@ -381,6 +497,11 @@ export default defineComponent({
 			...toRefs(state),
 			resetQuery,
 			goDetail,
+			params,
+			tableData,
+			getList,
+			loadingTable,
+			date,
 		};
 	},
 });

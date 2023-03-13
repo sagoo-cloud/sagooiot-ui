@@ -63,6 +63,10 @@ service.interceptors.response.use(
 			if (res.data?.Data === undefined) {
 				return res.data
 			}
+			// 兼容环路监测页面的Report字段
+			if (res.data?.Report !== undefined) {
+				return res.data
+			}
 			return res.data.Data
 		}
 	},
