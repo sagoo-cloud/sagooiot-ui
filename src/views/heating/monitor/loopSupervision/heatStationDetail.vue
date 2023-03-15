@@ -172,7 +172,7 @@ export default defineComponent({
 				})
 				.then((res: any) => {
 					const { flowLoss, flowLossTotal, forRealArea, heatingArea, unitConsumption, unitConsumptionTotal, heatRate, heatDemandAvg, heatDemand } =
-						res;
+						res.Data;
 
 					state.dataOne[0].val1 = forRealArea;
 					state.dataOne[0].val2 = heatingArea;
