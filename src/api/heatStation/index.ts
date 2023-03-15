@@ -21,5 +21,6 @@ export default {
     del: (id: number) => del('/region/heatStation/del', { id }),
     detail: (id: number) => get('/region/heatStation/getInfoById', { id }),
     getAllStaAndLoop: (params?: object) => get('/region/heatStation/getAllStaAndLoop', params),
+    stationDetail: (params?: object) => get('/energy/performance/station/detail', params),
   }
 }
