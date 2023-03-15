@@ -95,7 +95,7 @@
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default">
+						<el-button size="default" @click="exportData">
 							<el-icon>
 								<ele-Download />
 							</el-icon>
@@ -157,6 +157,7 @@ import * as echarts from 'echarts';
 import api from '/@/api/loopSupervision';
 import apiDatahub from '/@/api/datahub';
 import dayjs from 'dayjs';
+import downloadFile from '/@/utils/download';
 
 import ele from '/@/assets/img/ele.svg';
 import ele1 from '/@/assets/img/ele1.svg';
@@ -203,6 +204,12 @@ export default defineComponent({
 			endTime: date.value[1],
 			code: route.query.code,
 		});
+
+		function exportData() {
+			api.loopReportExport(params).then((res: any) => {
+				downloadFile(res, route.query.name + '环路报表数据导出.xlsx');
+			});
+		}
 
 		watch(date, (date) => {
 			console.log(date);
@@ -487,6 +494,7 @@ export default defineComponent({
 		return {
 			unitMap,
 			jump,
+			exportData,
 			loading,
 			initLineChart,
 			tabName,
