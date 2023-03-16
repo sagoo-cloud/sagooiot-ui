@@ -56,14 +56,14 @@
 				<!-- <el-table-column label="ID" align="center" prop="id" width="60" /> -->
 				<el-table-column label="换热站" prop="name" v-col="'name'" :show-overflow-tooltip="true" />
 				<el-table-column label="换热站编号" prop="code" v-col="'code'" :show-overflow-tooltip="true" />
-				<el-table-column label="位置" prop="position" v-col="'position'" :show-overflow-tooltip="true" />
-				<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="80" />
-				<el-table-column label="状态" prop="status" v-col="'status'" width="80">
+				<el-table-column label="位置" prop="position" v-col="'position'" min-width="120" :show-overflow-tooltip="true" />
+				<el-table-column label="负责人" prop="principalInfo.userNickname" v-col="'principalInfo.userNickname'" width="100" />
+				<el-table-column label="状态" prop="status" v-col="'status'" width="100">
 					<template #default="scope">
 						{{ scope.row.status === 1 ? '启用' : '禁用' }}
 					</template>
 				</el-table-column>
-				<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />
+				<el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true"  width="180"/>
 				<el-table-column label="操作" width="200" v-col="'handle'" align="center">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button>
