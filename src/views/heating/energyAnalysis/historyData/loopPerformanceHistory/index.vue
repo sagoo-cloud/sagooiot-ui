@@ -4,7 +4,7 @@
 			<div class="system-user-search mb15">
 				<el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="90px">
 					<el-form-item label="年份" prop="year">
-						<el-select v-model="state.tableData.param.year" placeholder="按照选择进行排名" filterable clearable size="default">
+						<el-select v-model="state.tableData.param.year" placeholder="按照选择进行排名" filterable size="default">
 							<el-option v-for="year in years" :label="year" :value="year" :key="year" />
 						</el-select>
 					</el-form-item>
@@ -154,8 +154,9 @@ const queryList = () => {
 	energyApi.history.getEnergyPerformance(state.tableData.param).then((res: any) => {
 		state.tableData.data = res.list || [];
 		state.tableData.total = res.Total;
+	}).finally(() => {
 		state.tableData.loading = false;
-	});
+	})
 };
 /** 重置按钮操作 */
 const resetQuery = (formEl: FormInstance | undefined) => {
