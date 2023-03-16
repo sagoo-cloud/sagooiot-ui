@@ -5,7 +5,6 @@ export default {
   getEnergyHuanluWaterFlowList: (params?: object) => get('/energy/huanlu/water/flow/list', params), // 换热站失水分析条形图列表
   getEnergyHuanluWaterLossLineChart: (params?: object) => get('/energy/huanlu/water/loss/line/chart', params), // 换热站失水分析折现图列表
   getEnergyWaterWarnList: (params?: object) => get('/energy/early/warn/list', params), // 换热站温度压力报警
-
   getEnergyLoopdata: (params?: object) => get('/energy/loopdata', params), // 环路分析
   getEnergyLoopdataPage: (params?: object) => get('/energy/loopdata/page_list', params), // 环路分析
   getEnergyWaterLossLineChart: (params?: object) => get('/energy/water/loss/line/chart', params), // 换热站失水分析
@@ -17,4 +16,11 @@ export default {
   performanceExport: (params: object) => file('/energy/performanceExport', params), // 导出：环路绩效考核数据导出
   getEnergyPerformanceStation: (params?: object) => get('/energy/performance/station', params), // 换热站绩效考核
   performanceExportStation: (params: object) => file('/energy/performance/station/export', params), // 导出：换热站绩效考核数据导出
+  history: {
+    historyYear: () => get('/energy/history/list'), // 历史年份
+    getEnergyPerformance: (params?: object) => get('/energy/history/performance', params), // 环路绩效考核
+    performanceExport: (params: object) => file('/energy/history/performanceExport', params), // 导出：环路绩效考核数据导出
+    getEnergyPerformanceStation: (params?: object) => get('/energy/history/performance/station', params), // 换热站绩效考核
+    performanceExportStation: (params: object) => file('/energy/history/performance/station/export', params), // 导出：换热站绩效考核数据导出
+  },
 }
