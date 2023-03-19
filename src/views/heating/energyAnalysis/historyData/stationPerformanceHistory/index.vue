@@ -64,7 +64,7 @@
 				<el-table-column type="index" label="序号" align="center" width="80" />
 				<el-table-column label="换热站名称" prop="stationName">
 					<template #default="{ row }">
-            <el-button text type="primary" @click="showDialog(row.id)">{{row.stationName}}</el-button>
+            <el-button text type="primary" @click="showDialog(row.stationId)">{{row.stationName}}</el-button>
           </template>
 				</el-table-column>
 				<el-table-column :label="`总耗热(${unitMap['总耗热']})`" prop="unitConsumptionTotal" />

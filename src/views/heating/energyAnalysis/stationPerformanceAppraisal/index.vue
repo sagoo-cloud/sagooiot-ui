@@ -34,7 +34,7 @@
 						<el-input v-model="state.tableData.param.stationName" placeholder="输入" clearable size="default"> </el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" v-auth="'query'" class="ml10" @click="queryList">
+						<el-button size="default" type="primary" class="ml10" @click="queryList">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
