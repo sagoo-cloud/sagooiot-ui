@@ -62,7 +62,11 @@
 			</div>
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" align="center" width="80" />
-				<el-table-column label="换热站名称" prop="stationName" />
+				<el-table-column label="换热站名称" prop="stationName">
+					<template #default="{ row }">
+            <el-button text type="primary" @click="showDialog(row.id)">{{row.stationName}}</el-button>
+          </template>
+				</el-table-column>
 				<el-table-column :label="`总耗热(${unitMap['总耗热']})`" prop="unitConsumptionTotal" />
 				<el-table-column :label="`热单耗(${unitMap['总单耗']})`" prop="unitConsumption" />
 				<el-table-column :label="`总耗水(${unitMap['总耗水']})`" prop="flowLossTotal" />
@@ -79,6 +83,7 @@
 				@pagination="queryList"
 			/>
 		</el-card>
+		<detailDialog ref="detailDialogRef"></detailDialog>
 	</div>
 </template>
 
@@ -88,6 +93,7 @@ import { FormInstance } from 'element-plus';
 import energyApi from '/@/api/energyAnalysis';
 import downloadFile from '/@/utils/download';
 import apiDatahub from '/@/api/datahub';
+import detailDialog from './detail.vue';
 
 const unitMap = ref<any>({});
 // 统计信息的单位的字典
@@ -98,6 +104,7 @@ apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) =
 });
 
 const queryRef = ref();
+const detailDialogRef = ref();
 const years = ref([]);
 
 const state = reactive({
@@ -133,6 +140,9 @@ energyApi.history.historyYear().then((res: any) => {
 	}
 });
 
+const showDialog = (id: string) => {
+	detailDialogRef.value.openDialog(id, state.tableData.param.year)
+};
 
 const exportData = () => {
 	energyApi.history.performanceExportStation(state.tableData.param).then((res: any) => {

@@ -22,5 +22,6 @@ export default {
     detail: (id: number) => get('/region/heatStation/getInfoById', { id }),
     getAllStaAndLoop: (params?: object) => get('/region/heatStation/getAllStaAndLoop', params),
     stationDetail: (params?: object) => get('/energy/performance/station/detail', params),
+    stationDetailHistory: (params?: object) => get('/energy/history/performance/station/detail', params),
   }
 }
