@@ -9,11 +9,11 @@
     "build": "vite build",
     "deploy": "npm run build && npm run deploy:rm && npm run deploy:scp && npm run deploy:auth",
     "deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
-    "deploy:scp": "scp -r ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
+    "deploy:scp": "scp -r -O ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
     "deploy:auth": "ssh iot 'chown -R www /www/wwwroot/zhgy.sagoo.cn/'",
     "deploy:heating": "npm run build && npm run deploy:heating:rm && npm run deploy:heating:scp && npm run deploy:heating:auth",
     "deploy:heating:rm": "ssh heating 'rm -rf /www/wwwroot/huanbao.lngxny.com-copy/* && rm -rf /www/wwwroot/huanbao.lngxny.com-pre/*'",
-    "deploy:heating:scp": "scp -r ./dist/* heating:/www/wwwroot/huanbao.lngxny.com-pre/ && ssh heating 'cd /www/wwwroot/huanbao.lngxny.com/ && mv `ls | grep -v plugin` ../huanbao.lngxny.com-copy && mv ../huanbao.lngxny.com-pre/* ./'",
+    "deploy:heating:scp": "scp -r -O ./dist/* heating:/www/wwwroot/huanbao.lngxny.com-pre/ && ssh heating 'cd /www/wwwroot/huanbao.lngxny.com/ && mv `ls | grep -v plugin` ../huanbao.lngxny.com-copy && mv ../huanbao.lngxny.com-pre/* ./'",
     "deploy:heating:auth": "ssh heating 'chown -R www /www/wwwroot/huanbao.lngxny.com/'",
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
   },
