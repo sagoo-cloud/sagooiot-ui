@@ -114,7 +114,7 @@
 				<el-table-column type="index" label="序号" width="70" align="center" />
 				<el-table-column prop="time" label="时间" align="center"></el-table-column>
 				<el-table-column :label="`供热量(${unitMap['单日供热单耗']})`" prop="unitConsumption" align="center" />
-				<el-table-column :label="`平均供热负荷(${unitMap['供热负荷']})`" prop="heatDemand" align="center" />
+				<el-table-column :label="`平均供热负荷(${unitMap['平均供热负荷']})`" prop="heatDemandAvg" align="center" />
 				<el-table-column :label="`失水量(${unitMap['日失水单耗']})`" prop="flowLoss" align="center" />
 			</el-table>
 		</el-card>
@@ -320,8 +320,8 @@ export default defineComponent({
 				.then((res: any) => {
 					const { flowLoss, flowLossTotal, forRealArea, heatingArea, unitConsumption, unitConsumptionTotal, heatRate, heatDemandAvg, heatDemand } =
 						res.Data;
-					state.dataOne[0].val1 = forRealArea;
-					state.dataOne[0].val2 = heatingArea;
+					state.dataOne[0].val1 = heatingArea;
+					state.dataOne[0].val2 = forRealArea;
 					state.dataOne[0].val3 = heatRate;
 
 					state.dataOne[1].val1 = unitConsumptionTotal;

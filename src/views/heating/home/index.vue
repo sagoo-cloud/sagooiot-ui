@@ -182,8 +182,8 @@ export default defineComponent({
 			api.statistics.getStatisticsOverview({ queryType: 'num' }).then((res: any) => {
 				const { flowLoss, flowLossTotal, forRealArea, heatingArea, unitConsumption, unitConsumptionTotal, heatRate, heatDemandAvg, heatDemand } =
 					res.data;
-				state.dataOne[0].val1 = forRealArea;
-				state.dataOne[0].val2 = heatingArea;
+				state.dataOne[0].val1 = heatingArea;
+				state.dataOne[0].val2 = forRealArea;
 				state.dataOne[0].val3 = heatRate;
 
 				state.dataOne[1].val1 = unitConsumptionTotal;
