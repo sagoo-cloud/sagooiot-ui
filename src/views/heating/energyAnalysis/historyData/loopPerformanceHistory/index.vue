@@ -125,7 +125,7 @@ const state = reactive({
 		total: 0,
 		param: {
 			sort: 1,
-			isdesc: 2,
+			isdesc: 1,
 			year: '',
 			stationName: '',
 			loopName: '',
