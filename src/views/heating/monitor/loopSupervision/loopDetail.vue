@@ -344,6 +344,7 @@ export default defineComponent({
 					code: route.query.code,
 				})
 				.then((res: any) => {
+					res = res.Data
 					state.inTemperature1Echart = res.inTemperature1Echart.map((item: any) => item.value);
 					state.inTemperature2Echart = res.inTemperature2Echart.map((item: any) => item.value);
 					state.outTemperature1Echart = res.outTemperature1Echart.map((item: any) => item.value);

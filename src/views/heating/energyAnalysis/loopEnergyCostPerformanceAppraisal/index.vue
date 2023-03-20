@@ -21,7 +21,8 @@
 							<el-option label="总耗热" :value="1" />
 							<el-option label="热单耗" :value="2" />
 							<el-option label="总耗水" :value="5" />
-							<el-option label="水单耗" :value="6" />
+							<el-option label="小时补水量" :value="6" />
+							<el-option label="供热负荷" :value="7" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="排序方式" prop="isdesc">
