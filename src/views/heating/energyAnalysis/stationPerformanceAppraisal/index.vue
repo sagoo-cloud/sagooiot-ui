@@ -67,10 +67,10 @@
 				<el-table-column label="换热站名称" prop="stationName" />
 				<el-table-column :label="`总耗热(${unitMap['总耗热']})`" prop="unitConsumptionTotal" />
 				<el-table-column :label="`热单耗(${unitMap['总单耗']})`" prop="unitConsumption" />
-				<el-table-column :label="`总耗水(${unitMap['总耗水']})`" prop="flowLossTotal" />
-				<el-table-column :label="`小时补水量(${unitMap['小时补水量']})`" prop="flowLoss" />
 				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="unitConsumptionDemand" />
-				<!-- <el-table-column :label="`失水量(${unitMap['失水量']})`" prop="flowLossDemand" /> -->
+				<el-table-column :label="`平均供热负荷(${unitMap['平均供热负荷']})`" prop="heatDemandAvg" />
+				<el-table-column :label="`总失水量(${unitMap['总耗水']})`" prop="flowLossTotal" />
+				<el-table-column :label="`小时失水量(${unitMap['小时补水量']})`" prop="flowLoss" />
 			</el-table>
 
 			<pagination
