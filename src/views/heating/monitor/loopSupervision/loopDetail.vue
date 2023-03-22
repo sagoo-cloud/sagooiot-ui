@@ -80,8 +80,8 @@
 							v-else-if="params.dataTypes === 'month'"
 							v-model="date"
 							type="monthrange"
-							format="YYYY-MM-DD"
-							value-format="YYYY-MM-01"
+							format="YYYY-MM"
+							value-format="YYYY-MM"
 							range-separator="-"
 							start-placeholder="开始月份"
 							end-placeholder="结束月份"
@@ -89,7 +89,7 @@
 						/>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						<el-button size="default" type="primary" class="ml10" @click="search(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
@@ -104,19 +104,13 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table
-				:data="tableData"
-				style="width: 100%"
-				v-loading="loadingTable"
-				row-key="id"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
+			<el-table :data="tableData" style="width: 100%" v-loading="loadingTable">
 				<el-table-column type="index" label="序号" width="70" align="center" />
 				<el-table-column prop="time" label="时间" align="center"></el-table-column>
 				<el-table-column :label="`供热量(${unitMap['单日供热单耗']})`" prop="unitConsumption" align="center" />
 				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="heatDemand" align="center" />
 				<el-table-column :label="`平均供热负荷(${unitMap['平均供热负荷']})`" prop="heatDemandAvg" align="center" />
-				<el-table-column :label="`失水量(${unitMap['日失水单耗']})`" prop="flowLoss" align="center" />
+				<el-table-column :label="`失水量(${currentUnit})`" prop="flowLoss" align="center" />
 			</el-table>
 		</el-card>
 
@@ -191,6 +185,8 @@ export default defineComponent({
 		const tabName = ref(0);
 		const unitMap = ref<any>({});
 
+		const currentUnit = ref('t/h');
+
 		const date = ref([dayjs().format('YYYY-MM-DD 00:00:00'), dayjs().format('YYYY-MM-DD HH:mm:ss')]);
 
 		const {
@@ -229,13 +225,16 @@ export default defineComponent({
 						date.value = [dayjs().subtract(7, 'days').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
 						break;
 					case 'month':
-						date.value = [dayjs().subtract(7, 'months').format('YYYY-MM-01'), dayjs().format('YYYY-MM-01')];
+						date.value = [dayjs().subtract(7, 'months').format('YYYY-MM'), dayjs().format('YYYY-MM')];
 						break;
 				}
 			}
 		);
 
-		getList();
+		function search(page: number | undefined) {
+			currentUnit.value = params.dataTypes === 'hour' ? 't/h' : 't/天';
+			getList(page);
+		}
 
 		// 统计信息的单位的字典
 		apiDatahub.template.getDictData({ DictType: 'overview_unit' }).then((res: any) => {
@@ -345,7 +344,7 @@ export default defineComponent({
 					code: route.query.code,
 				})
 				.then((res: any) => {
-					res = res.Data
+					res = res.Data;
 					state.inTemperature1Echart = res.inTemperature1Echart.map((item: any) => item.value);
 					state.inTemperature2Echart = res.inTemperature2Echart.map((item: any) => item.value);
 					state.outTemperature1Echart = res.outTemperature1Echart.map((item: any) => item.value);
@@ -510,6 +509,8 @@ export default defineComponent({
 			params,
 			tableData,
 			getList,
+			search,
+			currentUnit,
 			loadingTable,
 			date,
 		};
