@@ -14,38 +14,35 @@
             </el-select>
           </el-form-item> -->
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						<!-- <el-button size="default" type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							查询
-						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						</el-button> -->
+						<!-- <el-button size="default" type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							清空
-						</el-button>
-						<!-- <el-button size="default" @click="resetQuery()">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
 						</el-button> -->
 					</el-form-item>
 				</el-form>
 			</div>
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column type="index" label="序号" width="60" align="center" />
-				<el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="状态" min-width="100" align="center">
+				<el-table-column prop="MessageInfo.title" label="标题" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="MessageInfo.content" label="内容" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="MessageInfo.createdAt" label="发生事件" width="160"></el-table-column>
+				<el-table-column prop="" label="状态" min-width="100" align="center">
 					<template #default="scope">
-						<el-tag type="success" size="small" v-if="scope.row.status">已读</el-tag>
+						<el-tag type="success" size="small" v-if="scope.row.isRead">已读</el-tag>
 						<el-tag type="info" size="small" v-else>未读</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="100" align="center">
+				<el-table-column label="操作" width="150" align="center">
 					<template #default="scope">
+						<el-button size="small" text type="primary" v-if="!scope.row.isRead">设为已读</el-button>
 						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
