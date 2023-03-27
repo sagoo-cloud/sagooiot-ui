@@ -25,11 +25,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import getOrigin from '/@/utils/origin';
 import api from '/@/api/message';
-import { ElNotification } from 'element-plus'
+import { ElNotification } from 'element-plus';
 
 const router = useRouter();
 const emit = defineEmits(['closePopover']);
-
 
 const newsList = ref<any[]>([
 	// {
@@ -39,21 +38,26 @@ const newsList = ref<any[]>([
 	// },
 ]);
 
-api.allUnRead().then((res: any) => {
-	// console.log(res.Info)
-	newsList.value = res.Info.map((item: any) => item.MessageInfo).slice(0, 5)
-  // ElNotification({
-  //   title: '测试消息',
-  //   message: '测试消息',
-  //   type: 'error',
-  // })
-})
+// api.allUnRead().then((res: any) => {
+// 	// console.log(res.Info)
+// 	newsList.value = res.Info.map((item: any) => item.MessageInfo).slice(0, 5);
+// });
 
 // 监听系统消息的SSE
-const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + '/subscribe/sysMessage'));
+const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + '/subscribe/sysMessage?userId=' + localStorage.userId));
 es.addEventListener('lastUnRead', ({ data }) => {
 	if (!data || data === 'null') return;
-	console.log(data);
+	const list = JSON.parse(data);
+	newsList.value = list.concat(newsList.value).slice(0,5)
+	list.forEach((item: any) => {
+		setTimeout(() => {
+			ElNotification({
+				title: item.MessageInfo.title,
+				message: item.MessageInfo.content,
+				type: 'error',
+			});
+		}, 100);
+	});
 });
 
 // 全部已读点击
