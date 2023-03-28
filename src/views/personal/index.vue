@@ -105,8 +105,14 @@ import uploadVue from '/@/components/upload-wrapper/index.vue';
 const info = ref<any>({})
 const isEditStatus = ref<Boolean>(true);
 
-api.login.currentUser().then((res: any) => {
-  info.value = res.Info
+// api.login.currentUser().then((res: any) => {
+//   info.value = res.Info
+//   			// api.user.detail(localStorage.userId).then((user: any) => {
+// 			// 		state.ruleForm = user;
+// 			// 	});
+// });
+api.user.detail(localStorage.userId).then((user: any) => {
+	info.value = user;
 });
 
 // 当前时间提示语
