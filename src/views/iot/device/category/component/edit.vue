@@ -14,11 +14,16 @@
               </el-cascader>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" >
             <el-form-item label="分类名称" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
             </el-form-item>
           </el-col>
+		  <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+			<el-form-item label="排序">
+			  <el-input-number v-model="ruleForm.sort" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
+			</el-form-item>
+		  </el-col>
            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
             <el-form-item label="分类标识" prop="key">
               <el-input v-model="ruleForm.key" placeholder="请输入分类名称" clearable></el-input>
@@ -53,6 +58,7 @@ interface RuleFormState {
 	name: string;
 	key: string;
 	desc: string;
+	sort: number;
 	children?: RuleFormState[];
 }
 interface DeptSate {
@@ -68,6 +74,7 @@ const baseForm: RuleFormState = {
 	name: '', // 分类名称
 	key: '',
 	desc: '',
+	sort: 0
 };
 
 export default defineComponent({
