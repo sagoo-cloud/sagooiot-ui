@@ -131,6 +131,7 @@ export default defineComponent({
     // 获取登录用户信息
     const currentUser = async () => {
       api.login.currentUser().then(async (res: any) => {
+        localStorage.setItem('userId', res.Info.id)
         // 设置用户菜单
         Session.set('userMenu', res.Data || []);
         store.dispatch('requestOldRoutes/setBackEndControlRoutes', res || []);

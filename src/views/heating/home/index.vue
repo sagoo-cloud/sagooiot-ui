@@ -227,11 +227,11 @@ export default defineComponent({
 			// 平均供热负荷： W/m²
 			if (ref === 'homeLineRef1') {
 				dom = homeLineRef1.value;
-				data = state.flowLossData;
+				data = state.unitConsumptionData;
 				unit = 'GJ';
 			} else if (ref === 'homeLineRef3') {
 				dom = homeLineRef3.value;
-				data = state.unitConsumptionData;
+				data = state.flowLossData;
 				unit = 'T';
 			} else {
 				dom = homeLineRef4.value;
