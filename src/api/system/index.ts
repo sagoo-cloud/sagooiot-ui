@@ -85,6 +85,7 @@ export default {
     resetPassword: (id: number, userPassword: string) => post('/system/user/resetPassword', { id, userPassword }),
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
+    editUserInfo: (data: object) => put('/system/user/editUserInfo', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),
     setAvatar: (id: number, avatar: string) => put('/system/user/editAvatar', { id, avatar }),
   },
