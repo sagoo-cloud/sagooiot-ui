@@ -2,16 +2,7 @@
 	<div class="system-dic-container data-overview">
 		<div v-if="$route.query.name" style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 10px">{{ $route.query.name }}</div>
 		<el-row :gutter="15" class="home-card-one">
-			<el-col
-				:xs="24"
-				:sm="12"
-				:md="12"
-				:lg="6"
-				:xl="6"
-				v-for="(v, k) in dataOne"
-				:key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
-			>
+			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in dataOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item">
 					<div class="item-header">
 						<img :src="isIsDark ? v.iconDark : v.icon" alt="" />
@@ -24,18 +15,14 @@
 						</p>
 						<p>
 							<span class="text-no-wrap">{{ v.contentTitle2 }}</span>
-							<span
-								>{{ v.val2 }}
-								{{ unitMap[v.title + '：' + v.contentTitle2] ? unitMap[v.title + '：' + v.contentTitle2] : unitMap[v.contentTitle2] }}</span
-							>
+							<span>{{ v.val2 }}
+								{{ unitMap[v.title + '：' + v.contentTitle2] ? unitMap[v.title + '：' + v.contentTitle2] : unitMap[v.contentTitle2] }}</span>
 						</p>
 						<p style="height: 30px">
 							<template v-if="v.contentTitle3">
 								<span class="text-no-wrap">{{ v.contentTitle3 || ' ' }}</span>
-								<span
-									>{{ v.val3 || ' ' }}
-									{{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span
-								>
+								<span>{{ v.val3 || ' ' }}
+									{{ unitMap[v.title + '：' + v.contentTitle3] ? unitMap[v.title + '：' + v.contentTitle3] : unitMap[v.contentTitle3] }}</span>
 							</template>
 						</p>
 					</div>
@@ -54,39 +41,9 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="" prop="date">
-						<el-date-picker
-							v-if="params.dataTypes === 'hour'"
-							v-model="date"
-							type="datetimerange"
-							format="YYYY-MM-DD HH:mm:ss"
-							value-format="YYYY-MM-DD HH:mm:ss"
-							range-separator="-"
-							start-placeholder="开始时间"
-							end-placeholder="结束时间"
-							:clearable="false"
-						/>
-						<el-date-picker
-							v-else-if="params.dataTypes === 'day'"
-							v-model="date"
-							type="daterange"
-							format="YYYY-MM-DD"
-							value-format="YYYY-MM-DD"
-							range-separator="-"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							:clearable="false"
-						/>
-						<el-date-picker
-							v-else-if="params.dataTypes === 'month'"
-							v-model="date"
-							type="monthrange"
-							format="YYYY-MM"
-							value-format="YYYY-MM"
-							range-separator="-"
-							start-placeholder="开始月份"
-							end-placeholder="结束月份"
-							:clearable="false"
-						/>
+						<el-date-picker v-if="params.dataTypes === 'hour'" v-model="date" type="datetimerange" format="YYYY-MM-DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" :clearable="false" />
+						<el-date-picker v-else-if="params.dataTypes === 'day'" v-model="date" type="daterange" format="YYYY-MM-DD" value-format="YYYY-MM-DD" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :clearable="false" />
+						<el-date-picker v-else-if="params.dataTypes === 'month'" v-model="date" type="monthrange" format="YYYY-MM" value-format="YYYY-MM" range-separator="-" start-placeholder="开始月份" end-placeholder="结束月份" :clearable="false" />
 					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="search(1)">
@@ -111,8 +68,8 @@
 				<el-table-column :label="`热单耗(${unitMap['总单耗']})`" prop="unitConsumption" />
 				<el-table-column :label="`供热负荷(${unitMap['供热负荷']})`" prop="heatDemand" />
 				<el-table-column :label="`平均供热负荷(${unitMap['平均供热负荷']})`" prop="heatDemandAvg" />
-				<el-table-column :label="`总失水量(${unitMap['总耗水']})`" prop="flowLossTotal" />
-				<el-table-column :label="`小时失水量(${currentUnit})`" prop="flowLoss" />
+				<el-table-column :label="`总失水量(${currentUnit})`" prop="flowLossTotal" />
+				<el-table-column :label="`小时失水量(${unitMap['小时补水量']})`" prop="flowLoss" />
 			</el-table>
 		</el-card>
 
@@ -234,7 +191,7 @@ export default defineComponent({
 		);
 
 		function search(page: number | undefined) {
-			currentUnit.value = params.dataTypes === 'hour' ? 't/h' : 't/天';
+			currentUnit.value = ({ hour: 't/h', day: 't/天', month: 't/月' } as any)[params.dataTypes]
 			getList(page);
 		}
 
@@ -525,12 +482,14 @@ $homeNavLengh: 8;
 
 .iframe-wrapper {
 	position: relative;
+
 	.jump {
 		position: absolute;
 		top: 24px;
 		right: 12px;
 		z-index: 10;
 		cursor: pointer;
+
 		img {
 			width: 40px;
 			height: 40px;
@@ -607,6 +566,7 @@ $homeNavLengh: 8;
 				font-size: 22px;
 			}
 		}
+
 		p:nth-child(2),
 		p:nth-child(3) {
 			margin-top: 5px;
