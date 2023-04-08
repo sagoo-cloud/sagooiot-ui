@@ -68,7 +68,7 @@ interface RuleFormState {
 	name: string;
 	dictType: string;
 	inputs: Object;
-	output: Object;
+	outputs: Object [];
 	status: number;
 	desc: string;
 }
@@ -109,8 +109,7 @@ export default defineComponent({
 				productId: 0,
 				name: '',
 				key: '',
-				inputs: [],
-				output: [],
+				outputs: [],
 				desc: '',
 			},
 			rules: {
@@ -141,10 +140,10 @@ export default defineComponent({
 
 			// console.log(row);
 			state.ruleForm = row;
-			if (row.inputs) {
+			if (row.outputs) {
 				state.ruleForm = row;
 				state.productId = productId;
-				state.outputsdata = row.output;
+				state.outputsdata = row.outputs;
 			}
 			state.isShowDialog = true;
 		};
@@ -211,7 +210,7 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					state.ruleForm.output = state.outputsdata;
+					state.ruleForm.outputs = state.outputsdata;
 
 					const theApi = state.ruleForm.id !== 0 ? api.model.eventedit : api.model.eventadd;
 
