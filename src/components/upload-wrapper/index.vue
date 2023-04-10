@@ -29,12 +29,16 @@ const props = defineProps({
     type: String,
     default: '.jpg,.png,.jpeg,.gif',
   },
+  name: {
+    type: String,
+    default: '',
+  }
 });
 
 const updateImg = (res: any) => {
   const url = getOrigin(import.meta.env.VITE_SERVER_URL + '/' + res.data?.path)
-
-  emit('setImg', url);
+  console.log(url)
+  emit('setImg', url, props.name);
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

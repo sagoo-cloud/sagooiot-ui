@@ -155,5 +155,9 @@ export default {
     edit: (data: object) => put('/system/blacklist/edit', data),
     detail: (params: object) => get('/system/blacklist/get', params),
     changeStatus: (data: object) => post('/system/blacklist/status', data),
+  },
+  basicConfig: {
+    getDetails: () => get('/getBaseSetting'),
+    setDetails: (data: object) => put('/editBaseSetting', data),
   }
 }
