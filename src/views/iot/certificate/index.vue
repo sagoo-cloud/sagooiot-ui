@@ -7,19 +7,19 @@
             <el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable size="default" @keyup.enter="queryList" />
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="queryList">
+            <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="queryList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-			<el-button size="default" type="success" class="ml10" @click="operate('add')">
+			<el-button v-auth="'add'" size="default" type="success" class="ml10" @click="operate('add')">
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
@@ -31,20 +31,20 @@
 			<!--  -->
       <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column label="ID" align="center" prop="id" width="60" />
-	    	<el-table-column label="证书名称" prop="name" min-width="120" :show-overflow-tooltip="true" />
-	    	<el-table-column label="证书标准" prop="standard" min-width="120" :show-overflow-tooltip="true">
+        <el-table-column v-col="'id'" label="ID" align="center" prop="id" width="60" />
+	    	<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" :show-overflow-tooltip="true" />
+	    	<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" :show-overflow-tooltip="true">
 				<template #default="scope">
 					{{filterStandard(scope.row.standard)}}
                 <!-- <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button> -->
                 <!-- <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button> -->
             	</template>
             </el-table-column>
-			<el-table-column label="说明" prop="description" min-width="120" :show-overflow-tooltip="true" />
-			<el-table-column label="操作" width="280" align="center" fixed="right">
+			<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" :show-overflow-tooltip="true" />
+			<el-table-column v-col="'handle'"  label="操作" width="280" align="center" fixed="right">
             <template #default="scope">
-                <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
-                <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button>
+                <el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
+                <el-button size="small" v-auth="'del'" text type="danger" @click="operate('delete', scope.row)">删除</el-button>
             </template>
             </el-table-column>
       </el-table>
