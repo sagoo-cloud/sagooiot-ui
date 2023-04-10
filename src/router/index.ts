@@ -167,6 +167,11 @@ export async function setAddRoute() {
 		const routeName: any = route.name;
 		if (!router.hasRoute(routeName)) router.addRoute(route);
 	});
+
+	// 修改首页重定向的地址，从后台配置中获取首页的地址并在登录之后和刷新页面时进行修改
+	const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
+	const homePage = router.getRoutes().find((item) => item.path === '/');
+	homePage && sysinfo.systemHomePageRoute && (homePage.redirect = sysinfo.systemHomePageRoute);
 }
 
 /**
@@ -230,7 +235,7 @@ router.beforeEach(async (to, from, next) => {
 			resetRoute();
 			NProgress.done();
 		} else if (token && to.path === '/login') {
-			next('/home');
+			next('/');
 			NProgress.done();
 		} else {
 			if (store.state.routesList.routesList.length === 0) {

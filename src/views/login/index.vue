@@ -86,7 +86,7 @@ export default defineComponent({
 			},
 		};
 	},
-	created() {
+	mounted() {
 		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 	},
 	setup() {
