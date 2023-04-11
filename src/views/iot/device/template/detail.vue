@@ -603,12 +603,12 @@ export default defineComponent({
 		const getrunData = () => {
 			api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
 				state.areaData = res;
-				let properties = state.areaData.properties;
+				let properties = state.areaData.properties || [];
 
 				var temp = new Array();
 
 				properties.forEach(function (item, index) {
-					let datalist = item.list;
+					let datalist = item.list || [];
 					temp[index] = [];
 					var temps = new Array();
 					datalist.forEach(function (a, b) {

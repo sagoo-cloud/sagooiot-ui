@@ -55,15 +55,8 @@
 								</div>
 							</div>
 						</div>
-
-
-
 					</div>
 				</el-tab-pane>
-
-
-
-
 				<el-tab-pane label="设备信息" name="1">
 					<div class="pro-box">
 						<div class="protitle">设备信息</div>
@@ -239,8 +232,9 @@
             <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
           </div>
         </el-tab-pane>
-
-
+        <el-tab-pane label="设备功能" name="5">
+          <functionCom :fun-key="prodetail.key" v-if="prodetail.key"></functionCom>
+        </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
             <el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
@@ -306,6 +300,7 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import functionCom from './component/function.vue';
 
 import 'vue3-json-viewer/dist/index.css';
 
@@ -353,7 +348,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic },
+  components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
 
 	setup(prop, context) {
 		const route = useRoute();
@@ -411,7 +406,7 @@ export default defineComponent({
 				getrunData();
 				api.product.detail(res.data.product.id).then((res: any) => {
 					state.prodetail = res.data;
-					console.log(res.data);
+					// console.log(res.data);
 				});
 
 				//第一次加载
@@ -600,12 +595,12 @@ export default defineComponent({
     const getrunData = () => {
       api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
           state.areaData = res
-          let properties=state.areaData.properties;
+          let properties=state.areaData.properties || [];
 
           var temp = new Array();
 
           properties.forEach(function (item, index) {
-              let datalist=item.list;
+              let datalist=item.list || [];
               temp[index] = [];
               var temps = new Array();
               datalist.forEach(function (a, b) {

@@ -40,6 +40,9 @@ export default {
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),
   },
+  tabDeviceFucntion: {
+    getList: (params: object) => get('/product/tsl/function/all', params),
+  },
 
   model: {
     property: (params: object) => get('/product/tsl/property/list', params),
