@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import { store } from '/@/store/index.ts';
+import { store } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { staticRoutes, dynamicRoutes } from '/@/router/route';
@@ -219,7 +219,7 @@ router.beforeEach(async (to, from, next) => {
 
 
 	// 正常流程
-	const token = Session.get('token');
+	const token = localStorage.token;
 	if (to.path === '/login' && !token) {
 		next();
 		NProgress.done();

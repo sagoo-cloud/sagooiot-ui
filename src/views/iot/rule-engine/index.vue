@@ -49,7 +49,6 @@ import { ref } from 'vue';
 import api from '/@/api/rule';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
-import { Session } from '/@/utils/storage';
 import EditForm from './edit.vue';
 import axios from 'axios';
 
@@ -104,8 +103,7 @@ const setStatus = async (row: any, status: number) => {
 };
 
 const edit = async (row: any) => {
-	localStorage.setItem('auth-tokens', `{"access_token":"${Session.get('token')}"}`);
-	// const url = window.location.protocol + '//' + window.location.hostname + ':1880/rule-engine?access_token=' + Session.get('token') + '#flow/' + row.flowId;
+	localStorage.setItem('auth-tokens', `{"access_token":"${localStorage.token}"}`);
 	const url = '/rule-engine/#flow/' + row.flowId;
 	window.open(url);
 };

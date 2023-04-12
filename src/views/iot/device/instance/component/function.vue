@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus';
 import api from '/@/api/device'
 
 const props = defineProps({
@@ -43,13 +44,13 @@ interface IListItem {
 const list = ref<IListItem[]>([])
 
 api.tabDeviceFucntion.getList({ key: props.funKey }).then((res: IListItem[]) => {
-	console.log(res)
-	console.log(res[0])
 	res.forEach((item) => (item.result = ''))
 	list.value = res
 })
 
 function run(row: IListItem) {
+  const notValid = row.inputs.some(item => !item.value)
+  if(notValid) return ElMessage.info('请输入完整参数')
   row.result = JSON.stringify(row, null, 2)
  }
 

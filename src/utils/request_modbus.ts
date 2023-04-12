@@ -14,8 +14,8 @@ const service = axios.create({
 service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
-		if (Session.get('token')) {
-			(<any>config.headers).common['Authorization'] = `Bearer ${Session.get('token')}`;
+		if (localStorage.token) {
+			(<any>config.headers).common['Authorization'] = `Bearer ${localStorage.token}`;
 		}
 		return config;
 	},

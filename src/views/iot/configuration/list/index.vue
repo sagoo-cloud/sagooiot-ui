@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import api from '/@/api/configuration';
-import { Session } from '/@/utils/storage';
 import { useSearch } from '/@/hooks/useCommon';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import getOrigin from '/@/utils/origin'
@@ -58,15 +57,12 @@ const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'd
 getList();
 
 function getTokenUrl(url: string) {
-  localStorage.setItem('token', Session.get('token'));
   const tokenUrl = import.meta.env.VITE_TOPO_URL
-  // const tokenUrl = import.meta.env.VITE_TOPO_URL + '?token=' + encodeURIComponent(Session.get('token'))
   return getOrigin(tokenUrl + url)
 };
 
 const view = (row: any) => {
   const url = getTokenUrl('#/show/' + row.id);
-  // const url = import.meta.env.VITE_TOPO_URL + '?token=' + encodeURIComponent(Session.get('token')) + `&bgColor=FF9900` + '#/show/' + row.id;
   window.open(url);
 };
 

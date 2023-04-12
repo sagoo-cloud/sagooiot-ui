@@ -44,7 +44,6 @@ import { ref } from 'vue';
 import api from '/@/api/screen';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommon';
-import { Session } from '/@/utils/storage';
 import EditForm from './edit.vue';
 
 const editFormRef = ref();
@@ -91,16 +90,12 @@ const add = async () => {
 };
 
 const edit = async (row: any) => {
-  localStorage.setItem('token', Session.get('token'));
   const url = import.meta.env.VITE_SCREEN_URL + '#/chart/home/' + row.id;
-  // const url = import.meta.env.VITE_SCREEN_URL + '?token=' + encodeURIComponent(Session.get('token')) + '#/chart/home/' + row.id;
   window.open(url);
 };
 
 const preview = async (row: any) => {
-  localStorage.setItem('token', Session.get('token'));
   const url = import.meta.env.VITE_SCREEN_URL + '#/chart/preview/' + row.id;
-  // const url = import.meta.env.VITE_SCREEN_URL + '?token=' + encodeURIComponent(Session.get('token')) + '#/chart/preview/' + row.id;
   window.open(url);
 };
 

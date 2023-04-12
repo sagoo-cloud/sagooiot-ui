@@ -130,7 +130,6 @@ export default defineComponent({
 								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
-								Session.set('token', res.token);
 								localStorage.setItem('token', res.token);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);

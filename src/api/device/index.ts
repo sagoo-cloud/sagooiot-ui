@@ -42,6 +42,7 @@ export default {
   },
   tabDeviceFucntion: {
     getList: (params: object) => get('/product/tsl/function/all', params),
+    do: (data: object) => post('/product/function/do', data),
   },
 
   model: {
