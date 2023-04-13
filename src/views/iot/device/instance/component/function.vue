@@ -17,7 +17,7 @@
 					<el-input type="textarea" :value="item.result" class="result"> </el-input>
 				</div>
 				<div class="btn">
-					<el-button type="primary" @click="run(item)">执行</el-button>
+					<el-button type="primary" :loading="item.loading" @click="run(item)">执行</el-button>
 					<el-button @click="clear(item)">清空</el-button>
 				</div>
 			</el-tab-pane>
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
 import api from '/@/api/device'
 
 const props = defineProps({
@@ -39,6 +39,7 @@ interface IListItem {
 	name: string
 	inputs: any[]
 	result: string
+	loading: boolean
 }
 
 const list = ref<IListItem[]>([])
@@ -49,15 +50,30 @@ api.tabDeviceFucntion.getList({ key: props.funKey }).then((res: IListItem[]) => 
 })
 
 function run(row: IListItem) {
-  const notValid = row.inputs.some(item => !item.value)
-  if(notValid) return ElMessage.info('请输入完整参数')
-  row.result = JSON.stringify(row, null, 2)
- }
+	row.result = ''
 
-function clear(row: IListItem) {
-  row.result = ''
+	const notValid = row.inputs.some((item) => !item.value)
+	if (notValid) return ElMessage.info('请输入完整参数')
+
+	row.loading = true
+	const params: any = {}
+	row.inputs.forEach(({ key, value }) => (params[key] = value))
+	api.tabDeviceFucntion
+		.do({
+			deviceKey: props.funKey,
+			funcKey: row.key,
+			params,
+		})
+		.then((res: any) => {
+			// console.log(res)
+			row.result = JSON.stringify(res, null, 2)
+		})
+		.finally(() => (row.loading = false))
 }
 
+function clear(row: IListItem) {
+	row.result = ''
+}
 </script>
 
 <style scoped lang="scss">

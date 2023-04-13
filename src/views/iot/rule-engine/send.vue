@@ -57,7 +57,7 @@ const editFormRef = ref();
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { types: 1 });
 
 const headers = {
-  Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+  Authorization: 'Bearer ' + localStorage.token,
 };
 const flowsUrl = window.location.origin + '/rule-engine/flows';
 

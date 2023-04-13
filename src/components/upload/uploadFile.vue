@@ -23,7 +23,7 @@ import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin';
 
 const headers = {
-	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+	Authorization: 'Bearer ' + localStorage.token,
 };
 
 const emit = defineEmits(['update']);

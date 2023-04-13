@@ -27,7 +27,7 @@ import { ElMessage } from 'element-plus';
 const emit = defineEmits(['getList']);
 
 const headers = {
-	Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+	Authorization: 'Bearer ' + localStorage.token,
 };
 const flowsUrl = window.location.origin + '/rule-engine/flow';
 // const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flow';

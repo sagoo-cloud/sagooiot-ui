@@ -36,6 +36,12 @@
 					</el-radio-group>
 				</el-form-item>
 
+				<el-form-item label="选择事件" prop="triggerType" v-if="ruleForm.productKey">
+					<el-radio-group v-model="ruleForm.triggerType" @change="getRadio()">
+						<el-radio :label="item.type" v-for="item in typeData">{{ item.title }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+
 				<el-divider content-position="left">触发条件</el-divider>
 				<div class="box-content">
 					<div v-for="(item, index) in requestParams" :key="index">
