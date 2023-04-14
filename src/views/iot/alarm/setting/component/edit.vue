@@ -403,11 +403,12 @@ export default defineComponent({
 		};
 
 		watch(() => state.ruleForm.productKey, (key) => {
+			if (!key) return
 			// 切换产品时候重新获取事件列表，清空之前选中的事件
 			state.ruleForm.eventKey = ''
 
 			iotapi.product.event({key}).then((res: any) => {
-				console.log(res)
+				// console.log(res)
 				state.eventList = res || []
 			// state.eventList = [{name: '事件1',  key: 1}]
 			})
