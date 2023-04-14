@@ -163,7 +163,7 @@ export default defineComponent({
             await resetRoute(); // 删除/重置路由
             ElMessage.success(t('message.user.logOutSuccess'));
             setTimeout(() => {
-              Session.clear(); // 清除缓存/token等
+              localStorage.clear(); // 清除缓存/token等
               window.location.href = ''; // 去登录页
             }, 500);
           })

@@ -1,4 +1,4 @@
-import { get, post, del, put } from '/@/utils/request';
+import { get, post, del, put, file } from '/@/utils/request';
 
 export default {
 
@@ -67,6 +67,8 @@ export default {
       getWhichCityWeather: (params: object) => get('/envirotronics/weather/getInfoById', params),
       getTemperatureEchartById: (params: object) => get('/envirotronics/weather/getTemperatureEchartById', params),
       getWindpowerEchartById: (params: object) => get('/envirotronics/weather/getWindpowerEchartById', params),
+      getCityWeatherHistory: (params: object) => get('/envirotronics/weather/GetCityWeatherHistory', params),
+      getCityWeatherHistoryExport: (params: object) => file('/envirotronics/weather/GetCityWeatherHistoryExport', params),
    },
    statistics:{
       getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),

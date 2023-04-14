@@ -19,11 +19,14 @@
       <el-row :gutter="15" class="home-card-two mb15">
         <el-col>
           <div class="weather-info">
-            <section v-if="oneCityInfo.weather">
-              <span class="temperature">{{ oneCityInfo.Temperature }}℃</span>
-              <img :src="`/imgs/weather/${oneCityInfo.weather}.svg`" alt="">
-              <span class="weather">{{ oneCityInfo.weather }}</span>
-              <span>{{ oneCityInfo.reporttime }}更新</span>
+            <section v-if="oneCityInfo.weather" style="display: flex;justify-content: space-between;">
+              <div>
+                <span class="temperature">{{ oneCityInfo.Temperature }}℃</span>
+                <img :src="`/imgs/weather/${oneCityInfo.weather}.svg`" alt="">
+                <span class="weather">{{ oneCityInfo.weather }}</span>
+                <span>{{ oneCityInfo.reporttime }}更新</span>
+              </div>
+              <div class="history" @click="$router.push('/heating-monitor/weather-history/' + oneCityInfo.id)">历史数据 &gt;</div>
             </section>
             <section>
               <span style="margin-right: 20px;">地点：{{ currentcityName }}</span>
@@ -82,7 +85,7 @@ let global: any = {
 };
 
 export default defineComponent({
-  name: 'home',
+  name: 'weather',
   setup() {
     const homeTemLineRef = ref();
     const homeWindLineRef = ref();
@@ -91,7 +94,7 @@ export default defineComponent({
     const state = reactive({
       city: '',
       cityList: [],
-      oneCityInfo: {},
+      oneCityInfo: {} as any,
       temperatureType: 1,
       windpowerType: 1,
       ranges: [
@@ -580,7 +583,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 $homeNavLengh: 8;
-
+.history{
+  font-weight: bold;
+  cursor: pointer;
+}
 .monitor-weather {
 	overflow: hidden;
 	display: flex;

@@ -1,7 +1,7 @@
 import { get, post, del, put, file } from '/@/utils/request';
 import getOrigin from '/@/utils/origin';
 const baseUrl = getOrigin(import.meta.env.VITE_SERVER_URL);
-console.log(baseUrl)
+
 
 export default {
   sysinfo: () => get('/sysinfo'),
