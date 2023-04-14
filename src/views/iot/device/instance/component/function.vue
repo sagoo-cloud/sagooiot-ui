@@ -31,7 +31,8 @@ import { ElMessage } from 'element-plus'
 import api from '/@/api/device'
 
 const props = defineProps({
-	funKey: String,
+	productKey: String,
+	deviceKey: String,
 })
 
 interface IListItem {
@@ -44,7 +45,7 @@ interface IListItem {
 
 const list = ref<IListItem[]>([])
 
-api.tabDeviceFucntion.getList({ key: props.funKey }).then((res: IListItem[]) => {
+api.tabDeviceFucntion.getList({ key: props.productKey }).then((res: IListItem[]) => {
 	res.forEach((item) => (item.result = ''))
 	list.value = res
 })
@@ -60,7 +61,7 @@ function run(row: IListItem) {
 	row.inputs.forEach(({ key, value }) => (params[key] = value))
 	api.tabDeviceFucntion
 		.do({
-			deviceKey: props.funKey,
+			deviceKey: props.deviceKey,
 			funcKey: row.key,
 			params,
 		})

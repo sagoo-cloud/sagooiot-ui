@@ -233,7 +233,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="设备功能" name="5">
-          <functionCom :fun-key="prodetail.key" v-if="prodetail.key"></functionCom>
+          <functionCom :device-key="detail.key" :product-key="prodetail.key"  v-if="detail.key && prodetail.key"></functionCom>
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
@@ -398,7 +398,8 @@ export default defineComponent({
 
 		onMounted(() => {
 			const ids = route.params && route.params.id;
-			api.instance.detail(ids).then((res: any) => {
+      api.instance.detail(ids).then((res: any) => {
+        console.log(res)
 				state.detail = res.data;
 				state.developer_status = res.data.status;
 				state.tableData.param.productId = res.data.product.id;
