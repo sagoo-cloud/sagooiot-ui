@@ -33,7 +33,6 @@
 				<el-form-item label="触发方式" prop="triggerType" v-if="ruleForm.productKey">
 					<el-radio-group v-model="ruleForm.triggerType" @change="getRadio()">
 						<el-radio :label="item.type" v-for="item in typeData">{{ item.title }}</el-radio>
-						<el-radio :label="4">事件上报</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -400,7 +399,7 @@ export default defineComponent({
 		};
 
 		const eventTypeChange = () => {
-			setTriData()
+			gettriData()
 		};
 
 		watch(() => state.ruleForm.productKey, (key) => {
@@ -409,8 +408,9 @@ export default defineComponent({
 
 			iotapi.product.event({key}).then((res: any) => {
 				console.log(res)
+				state.eventList = res || []
+			// state.eventList = [{name: '事件1',  key: 1}]
 			})
-			state.eventList = [{name: '事件1',  key: 1}]
 		})
 
 		// 新增
@@ -505,6 +505,7 @@ export default defineComponent({
 		};
 
 		const setType = () => {
+			state.ruleForm.deviceKey = ''
 			let product_id = 0;
 			state.productData.forEach((item, index) => {
 				if (item.key == state.ruleForm.productKey) {

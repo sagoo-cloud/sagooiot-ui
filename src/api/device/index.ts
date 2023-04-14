@@ -16,7 +16,7 @@ export default {
     getDataType: (params: object) => get('/product/tsl/data_type', params),
     deploy: (data: object) => post('/product/deploy', data),
     undeploy: (data: object) => post('/product/undeploy', data),
-    event: (data: object) => post('/product/tsl/event/all', data),
+    event: (data: object) => get('/product/tsl/event/all', data),
   },
   category:{
     getList: (params: object) => get('/product/category/list', params),
