@@ -70,6 +70,7 @@
 				<el-table-column :label="`平均供热负荷(${unitMap['平均供热负荷']})`" prop="heatDemandAvg" />
 				<el-table-column :label="`总失水量(${currentUnit})`" prop="flowLossTotal" />
 				<el-table-column :label="`小时失水量(${unitMap['小时补水量']})`" prop="flowLoss" />
+				<el-table-column :label="`${currentDateTypePrefix}平均温度(℃/${currentDateType})`" prop="avgTemperature" />
 			</el-table>
 		</el-card>
 
@@ -145,6 +146,8 @@ export default defineComponent({
 		const unitMap = ref<any>({});
 
 		const currentUnit = ref('t/h');
+		const currentDateType = ref('h');
+		const currentDateTypePrefix = ref('小时');
 
 		const date = ref([dayjs().format('YYYY-MM-DD 00:00:00'), dayjs().format('YYYY-MM-DD HH:mm:ss')]);
 
@@ -192,6 +195,8 @@ export default defineComponent({
 
 		function search(page: number | undefined) {
 			currentUnit.value = ({ hour: 't/h', day: 't/天', month: 't/月' } as any)[params.dataTypes]
+			currentDateType.value = ({ hour: 'h', day: '天', month: '月' } as any)[params.dataTypes]
+			currentDateTypePrefix.value = ({ hour: '小时', day: '日', month: '月' } as any)[params.dataTypes]
 			getList(page);
 		}
 
@@ -456,6 +461,8 @@ export default defineComponent({
 			jump,
 			exportData,
 			loading,
+			currentDateTypePrefix,
+			currentDateType,
 			initLineChart,
 			tabName,
 			addDicRef,
