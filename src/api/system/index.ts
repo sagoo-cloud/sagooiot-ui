@@ -146,7 +146,8 @@ export default {
   },
   plugin: {
     getList: (params: object) => get('/system/plugins/list', params),
-    changeStatus: (params: object) => post('/system/plugins/set', params),
+    del: (ids: object) => del('/system/plugins/set', {ids}),
+    changeStatus: (data: object) => post('/system/plugins/set', data),
   },
   blackList: {
     getList: (params: object) => get('/system/blacklist/list', params),
