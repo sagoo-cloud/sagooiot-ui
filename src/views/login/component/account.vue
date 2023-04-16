@@ -174,7 +174,7 @@ export default defineComponent({
 			// 修改首页重定向的地址，从后台配置中获取首页的地址并在登录之后和刷新页面时进行修改
 			const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 			const homePage = router.getRoutes().find((item) => item.path === '/');
-			homePage && (homePage.redirect = sysinfo.systemHomePageRoute);
+			homePage && (homePage.redirect = sysinfo.systemHomePageRoute || '/home');
 			// 初始化登录成功时间问候语
 			let currentTimeInfo = currentTime.value;
 			// 登录成功，跳到转首页

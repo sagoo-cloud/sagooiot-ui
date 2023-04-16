@@ -171,7 +171,7 @@ export async function setAddRoute() {
 	// 修改首页重定向的地址，从后台配置中获取首页的地址并在登录之后和刷新页面时进行修改
 	const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 	const homePage = router.getRoutes().find((item) => item.path === '/');
-	homePage && sysinfo.systemHomePageRoute && (homePage.redirect = sysinfo.systemHomePageRoute);
+	homePage && sysinfo.systemHomePageRoute && (homePage.redirect = sysinfo.systemHomePageRoute) || '/home';
 }
 
 /**
