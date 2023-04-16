@@ -23,7 +23,7 @@
 							<el-icon>
 								<ele-Plus />
 							</el-icon>
-							新增
+							上传插件ZIP
 						</el-button>
 					</el-form-item>
 				</el-form>
@@ -35,7 +35,7 @@
 				<el-table-column label="名称" v-col="'name'" align="center" prop="name" />
 				<el-table-column label="通信方式" v-col="'types'" align="center" prop="types" />
 				<el-table-column label="功能类型" v-col="'handleType'" align="center" prop="handleType" />
-				<el-table-column label="说明" v-col="'description'" align="center" prop="description" />
+				<el-table-column label="说明" v-col="'description'" show-overflow-tooltip align="left" prop="description" />
 				<el-table-column label="作者" v-col="'author'" align="center" prop="author" />
 				<el-table-column label="状态" v-col="'status'" align="center" prop="status" width="80">
 					<template #default="scope">
@@ -45,37 +45,23 @@
 						<el-tag type="info" size="small" v-else>-</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="200" align="center" fixed="right" v-col="'handle'">
+				<el-table-column label="操作" width="240" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
-						<el-button
-							:disabled="scope.row.status == 0"
-							type="warning"
-							text="warning"
-							size="small"
-							link
-							@click="changeStatus(scope.row, 0)"
-							v-auth="'stop'"
+						<el-button size="small" type="primary" link v-auth="'detail'">详情</el-button>
+						<el-button :disabled="scope.row.status == 0" type="warning" size="small" link @click="changeStatus(scope.row, 0)" v-auth="'stop'"
 							>停用</el-button
 						>
-						<el-button
-							:disabled="scope.row.status == 1"
-							size="small"
-							type="success"
-							text="success"
-							link
-							@click="changeStatus(scope.row, 1)"
-							v-auth="'start'"
+						<el-button :disabled="scope.row.status == 1" size="small" type="success" link @click="changeStatus(scope.row, 1)" v-auth="'start'"
 							>启用</el-button
 						>
-						<el-button :disabled="scope.row.status == 1" size="small" type="danger" text="danger" link @click="onDel(scope.row)" v-auth="'del'"
-							>删除</el-button
-						>
-						<el-button size="small" type="primary" text="primary" link v-auth="'detail'">详情</el-button>
+						<el-button :disabled="scope.row.status == 1" size="small" type="danger" link @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
+						<el-button size="small" type="plain" link @click="addOrEdit(scope.row)">编辑</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList" />
 		</el-card>
+		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
 	</div>
 </template>
 
@@ -84,8 +70,10 @@ import { ref, h } from 'vue'
 import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 import api from '/@/api/system'
 import { useSearch } from '/@/hooks/useCommon'
+import EditForm from './edit.vue'
 
 const queryRef = ref()
+const editFormRef = ref()
 
 let uploadFile: File | null = null
 
@@ -101,6 +89,7 @@ getList()
 const addOrEdit = (row?: any) => {
 	// edit
 	if (row) {
+		editFormRef.value.open(row)
 	} else {
 		// add
 		ElMessageBox({
@@ -119,10 +108,13 @@ const addOrEdit = (row?: any) => {
 			beforeClose: (action, instance, done) => {
 				if (action === 'confirm') {
 					if (!uploadFile) return ElMessage('请先上传插件！')
+
 					instance.confirmButtonLoading = true
 					instance.confirmButtonText = '上传中...'
+
 					const formData = new FormData()
 					formData.append('file', uploadFile)
+
 					api.plugin
 						.addPluginFile(formData)
 						.then(() => {
