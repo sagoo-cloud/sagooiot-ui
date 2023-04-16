@@ -19,12 +19,18 @@
 							</el-icon>
 							重置
 						</el-button>
+						<el-button size="default" type="success" @click="addOrEdit()">
+							<el-icon>
+								<ele-Plus />
+							</el-icon>
+							新增
+						</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
-				<el-table-column label="序号" align="center">
-					<template #default="{ $index }">{{params.pageSize * (params.pageNum - 1) +  ($index + 1) }} </template>
+				<el-table-column label="序号" align="center" width="80">
+					<template #default="{ $index }">{{ params.pageSize * (params.pageNum - 1) + ($index + 1) }} </template>
 				</el-table-column>
 				<el-table-column label="名称" v-col="'name'" align="center" prop="name" />
 				<el-table-column label="通信方式" v-col="'types'" align="center" prop="types" />
@@ -61,24 +67,10 @@
 							v-auth="'start'"
 							>启用</el-button
 						>
-						<el-button
-							:disabled="scope.row.status == 1"
-							size="small"
-							type="danger"
-							text="danger"
-							link
-							@click="onDel(scope.row)"
-							v-auth="'del'"
+						<el-button :disabled="scope.row.status == 1" size="small" type="danger" text="danger" link @click="onDel(scope.row)" v-auth="'del'"
 							>删除</el-button
 						>
-						<el-button
-							size="small"
-							type="primary"
-							text="primary"
-							link
-							v-auth="'detail'"
-							>详情</el-button
-						>
+						<el-button size="small" type="primary" text="primary" link v-auth="'detail'">详情</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -88,16 +80,67 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref, h } from 'vue'
+import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 import api from '/@/api/system'
 import { useSearch } from '/@/hooks/useCommon'
 
 const queryRef = ref()
 
+let uploadFile: File | null = null
+
 const { params, tableData, getList, loading } = useSearch(api.plugin.getList, 'list', { keyWord: '' })
 
 getList()
+
+// 添加插件主要是上传编译好插件包，进行上传。
+// 在添加窗口中显示：
+// 插件名称、插件类型、上传插件包、说明
+// 注：按统一的文件目录格式，进行插件文件压缩。并上传到平台后，自动解压的指定的插件目录。
+
+const addOrEdit = (row?: any) => {
+	// edit
+	if (row) {
+	} else {
+		// add
+		ElMessageBox({
+			title: '上传插件',
+			message: h('input', {
+				type: 'file',
+				accept: '.zip',
+				onchange: (file: any) => {
+					uploadFile = file.target.files[0]
+					// console.log(uploadFile)
+				},
+			}),
+			showCancelButton: true,
+			confirmButtonText: '上传',
+			cancelButtonText: '取消',
+			beforeClose: (action, instance, done) => {
+				if (action === 'confirm') {
+					if (!uploadFile) return ElMessage('请先上传插件！')
+					instance.confirmButtonLoading = true
+					instance.confirmButtonText = '上传中...'
+					const formData = new FormData()
+					formData.append('file', uploadFile)
+					api.plugin
+						.addPluginFile(formData)
+						.then(() => {
+							ElMessage.success('上传成功')
+							getList(1)
+							done()
+						})
+						.finally(() => {
+							instance.confirmButtonLoading = false
+						})
+				} else {
+					done()
+				}
+				uploadFile = null
+			},
+		})
+	}
+}
 
 const changeStatus = (row: any, status: number) => {
 	api.plugin.changeStatus({ id: row.id, status: status }).then((res: any) => {

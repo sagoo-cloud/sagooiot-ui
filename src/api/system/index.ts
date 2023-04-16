@@ -1,7 +1,4 @@
 import { get, post, del, put, file } from '/@/utils/request';
-import getOrigin from '/@/utils/origin';
-const baseUrl = getOrigin(import.meta.env.VITE_SERVER_URL);
-
 
 export default {
   sysinfo: () => get('/sysinfo'),
@@ -148,6 +145,7 @@ export default {
     getList: (params: object) => get('/system/plugins/list', params),
     del: (ids: object) => del('/system/plugins/set', {ids}),
     changeStatus: (data: object) => post('/system/plugins/set', data),
+    addPluginFile: (formatDate: FormData) => post('/system/plugins/add', formatDate),
   },
   blackList: {
     getList: (params: object) => get('/system/blacklist/list', params),
