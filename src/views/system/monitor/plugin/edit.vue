@@ -4,13 +4,13 @@
 			<el-form-item label="通信方式" prop="types">
 				<el-input v-model="formData.types" placeholder="输入接口名称" />
 			</el-form-item>
-			<el-form-item label="功能类型" prop="handleType" required>
+			<el-form-item label="功能类型" prop="handleType">
 				<el-input v-model="formData.handleType" placeholder="输入功能类型" />
 			</el-form-item>
-			<el-form-item label="名称" prop="name" required>
+			<el-form-item label="名称" prop="name">
 				<el-input v-model="formData.name" placeholder="输入名称" />
 			</el-form-item>
-			<el-form-item label="标题" prop="title" required>
+			<el-form-item label="标题" prop="title">
 				<el-input v-model="formData.title" placeholder="输入标题" />
 			</el-form-item>
 			<el-form-item label="说明" prop="description">
@@ -23,7 +23,8 @@
 				<el-input v-model="formData.author" placeholder="输入作者" />
 			</el-form-item>
 			<el-form-item label="插件图标" prop="icon">
-				<el-input v-model="formData.icon" placeholder="输入插件图标" />
+				<!-- <el-input v-model="formData.icon" placeholder="输入插件图标" /> -->
+				<uploadVue :width-host="false" :img="formData.icon" @set-img="formData.icon = $event"></uploadVue>
 			</el-form-item>
 			<el-form-item label="插件网址" prop="link">
 				<el-input v-model="formData.link" placeholder="输入插件网址" />
@@ -58,6 +59,7 @@ import { ref, reactive, nextTick } from 'vue'
 import api from '/@/api/system'
 import { ruleRequired } from '/@/utils/validator'
 import { ElMessage } from 'element-plus'
+import uploadVue from '/@/components/upload/index.vue'
 
 const emit = defineEmits(['getList'])
 
@@ -88,7 +90,14 @@ const formData = reactive({
 
 const ruleForm = {
 	types: [ruleRequired('通信方式不能为空')],
-	menuIds: [ruleRequired('关联页面不能为空', 'change')],
+	handleType: [ruleRequired('功能类型不能为空')],
+	name: [ruleRequired('名称不能为空')],
+	title: [ruleRequired('标题不能为空')],
+	version: [ruleRequired('版本不能为空')],
+	author: [ruleRequired('作者不能为空')],
+	icon: [ruleRequired('插件图标不能为空')],
+	command: [ruleRequired('运行指令不能为空')],
+	args: [ruleRequired('指令参数不能为空')],
 }
 
 const onSubmit = async () => {

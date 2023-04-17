@@ -143,7 +143,7 @@ export default {
   },
   plugin: {
     getList: (params: object) => get('/system/plugins/list', params),
-    del: (ids: object) => del('/system/plugins/set', {ids}),
+    del: (ids: object) => del('/system/plugins/del', {ids}),
     changeStatus: (data: object) => post('/system/plugins/set', data),
     edit: (data: any) => put('/system/plugins/edit', data),
     addPluginFile: (formatDate: FormData) => post('/system/plugins/add', formatDate),

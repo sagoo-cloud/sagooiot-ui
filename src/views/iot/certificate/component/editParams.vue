@@ -1,54 +1,38 @@
 <template>
-	<el-dialog @close="state.ruleForm= {}" :title="state.ruleForm.id ? '编辑证书' : '新增证书'" v-model="state.dialogVisible" width="60%">
+	<el-dialog @close="state.ruleForm = {}" :title="state.ruleForm.id ? '编辑证书' : '新增证书'" v-model="state.dialogVisible" width="60%">
 		<!-- <el-tabs v-model="state.activeName" @tab-click="onTabClick"> -->
-			<!-- <el-tab-pane label="基本信息" name="1"> -->
-				<el-form :rules="state.rules" ref="ruleForm" :model="state.ruleForm" label-width="120px">
-					<el-form-item label="证书标准" prop="standard">
-						<el-select v-model="state.ruleForm.standard" placeholder="请选择证书标准">
-							<el-option
-								v-for="dict in network_certificate"
-								:key="dict.value"
-								:label="dict.label"
-								:value="dict.value">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="证书名称" prop="name">
-						<el-input size="default" v-model="state.ruleForm.name"></el-input>
-					</el-form-item>
-					<el-form-item label="证书文件" prop="fileContent">
-						<el-input disabled v-if="state.ruleForm.fileContent" size="default" v-model="state.ruleForm.fileContent"></el-input>
-						<uploadFile @update="updateFile" url="/common/singleFile"></uploadFile>
-					</el-form-item>
-					<el-form-item label="证书公钥" prop="publicKeyContent">
-						<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.publicKeyContent"></el-input>
-						<el-upload  
-							class="upload-demo"
-							action=""              
-							accept=".txt"
-							:on-change="beforePublicUpload"
-							:auto-upload="false">
-							<el-button size="small" type="primary">上传</el-button>             
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="证书私钥" prop="privateKeyContent">
-						<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.privateKeyContent"></el-input>
-						<el-upload  
-							class="upload-demo"
-							action=""              
-							accept=".txt"
-							:on-change="beforePrivateUpload"
-							:auto-upload="false">
-							<el-button size="small" type="primary">上传</el-button>             
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="说明">
-						<el-input size="default" type="textarea" :rows="6" v-model="state.ruleForm.description"></el-input>
-					</el-form-item>
-					
-				</el-form>
-			<!-- </el-tab-pane> -->
-			<!-- <el-tab-pane label="字段信息" name="2">
+		<!-- <el-tab-pane label="基本信息" name="1"> -->
+		<el-form :rules="state.rules" ref="ruleForm" :model="state.ruleForm" label-width="120px">
+			<el-form-item label="证书标准" prop="standard">
+				<el-select v-model="state.ruleForm.standard" placeholder="请选择证书标准">
+					<el-option v-for="dict in network_certificate" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="证书名称" prop="name">
+				<el-input size="default" v-model="state.ruleForm.name"></el-input>
+			</el-form-item>
+			<el-form-item label="证书文件" prop="fileContent">
+				<el-input disabled v-if="state.ruleForm.fileContent" size="default" v-model="state.ruleForm.fileContent"></el-input>
+				<uploadFile @update="updateFile" url="/common/singleFile"></uploadFile>
+			</el-form-item>
+			<el-form-item label="证书公钥" prop="publicKeyContent">
+				<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.publicKeyContent"></el-input>
+				<el-upload class="upload-demo" action="" accept=".txt" :on-change="beforePublicUpload" :auto-upload="false">
+					<el-button size="small" type="primary">上传</el-button>
+				</el-upload>
+			</el-form-item>
+			<el-form-item label="证书私钥" prop="privateKeyContent">
+				<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.privateKeyContent"></el-input>
+				<el-upload class="upload-demo" action="" accept=".txt" :on-change="beforePrivateUpload" :auto-upload="false">
+					<el-button size="small" type="primary">上传</el-button>
+				</el-upload>
+			</el-form-item>
+			<el-form-item label="说明">
+				<el-input size="default" type="textarea" :rows="6" v-model="state.ruleForm.description"></el-input>
+			</el-form-item>
+		</el-form>
+		<!-- </el-tab-pane> -->
+		<!-- <el-tab-pane label="字段信息" name="2">
 				<el-table :data="state.columns" style="width: 100%">
 					<el-table-column label="字段描述" align="center" width="150" fixed="left">
 						<template #default="{ row }">
@@ -190,15 +174,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, unref, getCurrentInstance } from 'vue';
+import { reactive, ref, unref, getCurrentInstance } from 'vue'
 import { genFileId, FormRules, FormInstance } from 'element-plus'
-import uploadFile from '/@/components/upload/uploadFile.vue';
+import uploadFile from '/@/components/upload/uploadFile.vue'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
-import api from '/@/api/certificateManagement';
-import { ElMessage } from 'element-plus';
+import api from '/@/api/certificateManagement'
+import { ElMessage } from 'element-plus'
 
-const emit = defineEmits(['update']);
+const emit = defineEmits(['update'])
 
 const ruleForm = ref<FormInstance>()
 
@@ -213,7 +197,7 @@ const state = reactive({
 		standard: [{ required: true, message: '证书标准不能为空', trigger: 'blur' }],
 		fileContent: [{ required: true, message: '证书文件不能为空', trigger: 'blur' }],
 		publicKeyContent: [{ required: true, message: '证书公钥不能为空', trigger: 'blur' }],
-		privateKeyContent: [{ required: true, message: '证书私钥不能为空', trigger: 'blur' }]
+		privateKeyContent: [{ required: true, message: '证书私钥不能为空', trigger: 'blur' }],
 	},
 	columns: [
 		{
@@ -420,77 +404,76 @@ const state = reactive({
 			linkLabelName: '',
 		},
 	],
-});
-const { proxy } = getCurrentInstance() as any;
-const { network_certificate } = proxy.useDict('network_certificate');
+})
+const { proxy } = getCurrentInstance() as any
+const { network_certificate } = proxy.useDict('network_certificate')
 console.log(network_certificate)
 // 打开弹窗
 const openDialog = (row: any) => {
 	if (row) {
-		state.ruleForm = row;
+		state.ruleForm = row
 	}
-	state.dialogVisible = true;
-};
+	state.dialogVisible = true
+}
 
 // 关闭弹窗
 const closeDialog = () => {
-	state.dialogVisible = false;
-};
+	state.dialogVisible = false
+}
 // 取消
 const onCancel = () => {
-	closeDialog();
-};
+	closeDialog()
+}
 
-const submitData =  async (formEl: any | undefined) => {
+const submitData = async (formEl: any | undefined) => {
 	if (!formEl) return
-		await formEl.validate((valid: any, fields: any) => {
+	await formEl.validate((valid: any, fields: any) => {
 		if (valid) {
 			console.log('submit!')
-			if(state.ruleForm.id) {
+			if (state.ruleForm.id) {
 				// 编辑
 				api.certificateManagement.edit(state.ruleForm).then((res: any) => {
-					ElMessage.success('证书编辑成功');
+					ElMessage.success('证书编辑成功')
 					console.log(res)
 					state.dialogVisible = false
 					emit('update')
 					state.ruleForm = {}
-				});
-			}else {
+				})
+			} else {
 				// 新增
 				api.certificateManagement.add(state.ruleForm).then((res: any) => {
-					ElMessage.success('证书添加成功');
+					ElMessage.success('证书添加成功')
 					console.log(res)
 					state.dialogVisible = false
 					emit('update')
 					state.ruleForm = {}
-				});
+				})
 			}
-
 		} else {
 			console.log('error submit!', fields)
 		}
 	})
 }
 
-const beforePublicUpload = (response:any, file:any, fileList:any) => {
-	let reader=new FileReader();
-	reader.readAsText(file[file.length-1].raw,'UTF-8')//读取，转换字符编码
-	reader.onload=function(e:any){
-		let val = e.target.result;//获取数据
-		let rtulist = val.split("\r\n")
-		console.log('rtulist:>> ', rtulist);
-		state.ruleForm.publicKeyContent = rtulist[0];
+const beforePublicUpload = (response: any, file: any, fileList: any) => {
+	let reader = new FileReader()
+	reader.readAsText(file[file.length - 1].raw, 'UTF-8') //读取，转换字符编码
+	reader.onload = function (e: any) {
+		let val = e.target.result //获取数据
+		let rtulist = val.split('\r\n')
+		console.log('rtulist:>> ', rtulist)
+		state.ruleForm.publicKeyContent = rtulist[0]
 	}
 }
 
-const beforePrivateUpload = (response:any, file:any, fileList:any) => {
-	let reader=new FileReader();
-	reader.readAsText(file[file.length-1].raw,'UTF-8')//读取，转换字符编码
-	reader.onload=function(e:any){
-		let val = e.target.result;//获取数据
-		let rtulist = val.split("\r\n")
-		console.log('rtulist:>> ', rtulist);
-		state.ruleForm.privateKeyContent = rtulist[0];
+const beforePrivateUpload = (response: any, file: any, fileList: any) => {
+	let reader = new FileReader()
+	reader.readAsText(file[file.length - 1].raw, 'UTF-8') //读取，转换字符编码
+	reader.onload = function (e: any) {
+		let val = e.target.result //获取数据
+		let rtulist = val.split('\r\n')
+		console.log('rtulist:>> ', rtulist)
+		state.ruleForm.privateKeyContent = rtulist[0]
 	}
 }
 const updateFile = (url: string) => {
@@ -498,7 +481,7 @@ const updateFile = (url: string) => {
 	state.ruleForm.fileContent = url
 }
 
-defineExpose({ openDialog });
+defineExpose({ openDialog })
 </script>
 
 <style scoped lang="scss">
