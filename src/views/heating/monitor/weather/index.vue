@@ -189,7 +189,7 @@ export default defineComponent({
     // 根据ID获取指定城市的温度图表
     const getTemperatureEchartById = (id: number) => {
       api.weather.getTemperatureEchartById({ id: id, types: state.temperatureType }).then((res: any) => {
-        const { AvgInfo, Info, ForeCastInfo, ForeCastAvgInfo } = res;
+        const { AvgInfo, Info, ForeCastLowInfo, ForeCastHighInfo } = res;
         state.xAxis = [];
         state.tem = [];
         state.foreCastInfoTem = [];
@@ -213,13 +213,13 @@ export default defineComponent({
         if([2, 3].indexOf(state.temperatureType) > -1) {
           // 周数据、月数据
           state.xAxis = [];
-          ForeCastInfo.forEach((i:any) => {
+          ForeCastLowInfo.forEach((i:any) => {
             // state.xAxis.push(i.time);
             // state.tem.push('-');
             state.xAxis.push(i.time);
             state.foreCastInfoTem.push(i.value);
           })
-          ForeCastAvgInfo.forEach((i: any) => {
+          ForeCastHighInfo.forEach((i: any) => {
             state.foreCastAvgInfoTem.push(i.value);
           })
         }
@@ -246,7 +246,7 @@ export default defineComponent({
         backgroundColor: state.charts.bgColor,
         grid: { top: 70, right: 40, bottom: 50, left: 40 },
         tooltip: { trigger: 'axis' },
-        legend: { data: [2, 3].indexOf(state.temperatureType) > -1 ? ['气温（℃）', '平均气温（℃）', '预测气温（℃）', '预测平均气温（℃）'] : ['气温（℃）', '平均气温（℃）'], left: '0' },
+        legend: { data: [2, 3].indexOf(state.temperatureType) > -1 ? ['平均气温（℃）', '最低温度（℃）', '最高温度（℃）'] : ['气温（℃）', '平均气温（℃）'], left: '0' },
         xAxis: {
           data: state.xAxis
         },
@@ -259,8 +259,78 @@ export default defineComponent({
             splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
           },
         ],
-        series: [
+        series:  [2, 3].indexOf(state.temperatureType) > -1 ? [
           {
+            name: '平均气温（℃）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            // data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
+            data: state.averageTem,
+            lineStyle: { color: '#fe9a8b' },
+            itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#fe9a8bb3' },
+                { offset: 1, color: '#fe9a8b03' },
+              ]),
+            },
+          },
+          {
+            name: '最低温度（℃）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            // data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
+            data: state.foreCastInfoTem,
+            lineStyle: { color: '#2b79ff' },
+            itemStyle: { color: '#2b79ff', borderColor: '#2b79ff' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#2b79ff' },
+                { offset: 1, color: '#c5e3ed' },
+              ]),
+            },
+          },
+          {
+            name: '最高温度（℃）',
+            type: 'line',
+            symbolSize: 6,
+            symbol: 'circle',
+            smooth: true,
+            data: state.foreCastAvgInfoTem,
+            lineStyle: { color: '#41b883' },
+            itemStyle: { color: '#41b883', borderColor: '#41b883' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#41b883' },
+                { offset: 1, color: '#ddf2eaab' },
+              ]),
+            },
+            emphasis: {
+              itemStyle: {
+                color: {
+                  type: 'radial',
+                  x: 0.5,
+                  y: 0.5,
+                  r: 0.5,
+                  colorStops: [
+                    { offset: 0, color: '#9E87FF' },
+                    { offset: 0.4, color: '#9E87FF' },
+                    { offset: 0.5, color: '#fff' },
+                    { offset: 0.7, color: '#fff' },
+                    { offset: 0.8, color: '#fff' },
+                    { offset: 1, color: '#fff' },
+                  ],
+                },
+                borderColor: '#9E87FF',
+                borderWidth: 2,
+              },
+            },
+          },
+        ]: [{
             name: '气温（℃）',
             type: 'line',
             symbolSize: 6,
@@ -274,23 +344,6 @@ export default defineComponent({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 { offset: 0, color: '#fe9a8bb3' },
                 { offset: 1, color: '#fe9a8b03' },
-              ]),
-            },
-          },
-          {
-            name: '预测气温（℃）',
-            type: 'line',
-            symbolSize: 6,
-            symbol: 'circle',
-            smooth: true,
-            // data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
-            data: state.foreCastInfoTem,
-            lineStyle: { color: '#2b79ff' },
-            itemStyle: { color: '#2b79ff', borderColor: '#2b79ff' },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: '#2b79ff' },
-                { offset: 1, color: '#c5e3ed' },
               ]),
             },
           },
@@ -329,44 +382,7 @@ export default defineComponent({
                 borderWidth: 2,
               },
             },
-          },
-          {
-            name: '预测平均气温（℃）',
-            type: 'line',
-            symbolSize: 6,
-            symbol: 'circle',
-            smooth: true,
-            data: state.foreCastAvgInfoTem,
-            lineStyle: { color: '#41b883' },
-            itemStyle: { color: '#41b883', borderColor: '#41b883' },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: '#41b883' },
-                { offset: 1, color: '#ddf2eaab' },
-              ]),
-            },
-            emphasis: {
-              itemStyle: {
-                color: {
-                  type: 'radial',
-                  x: 0.5,
-                  y: 0.5,
-                  r: 0.5,
-                  colorStops: [
-                    { offset: 0, color: '#9E87FF' },
-                    { offset: 0.4, color: '#9E87FF' },
-                    { offset: 0.5, color: '#fff' },
-                    { offset: 0.7, color: '#fff' },
-                    { offset: 0.8, color: '#fff' },
-                    { offset: 1, color: '#fff' },
-                  ],
-                },
-                borderColor: '#9E87FF',
-                borderWidth: 2,
-              },
-            },
-          },
-        ],
+          },],
       };
       (<any>global.homeChartOne).setOption(option);
       (<any>state.myCharts).push(global.homeChartOne);
