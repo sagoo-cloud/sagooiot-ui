@@ -31,13 +31,16 @@ service.interceptors.response.use(
 		const res = response.data;
 		const code = response.data.code
 		if (code === 401) {
+			if (Date.now() - sessionStorage.comeTime < 1000) {
+				localStorage.clear(); // 清除浏览器全部临时缓存
+				window.location.href = '/'; // 去登录页
+			}
 			ElMessageBox.alert('登录状态已过期，请重新登录', '提示',
 				{ confirmButtonText: '确定', showCancelButton: false, closeOnHashChange: false, closeOnPressEscape: false, closeOnClickModal: false, showClose: false })
 				.then(() => {
 					localStorage.clear(); // 清除浏览器全部临时缓存
 					window.location.href = '/'; // 去登录页
 				})
-				.catch(() => { });
 		} else if (code === undefined && res.message === undefined) { // 可能是下载文件
 			return response
 		} else if (code !== 0) {
