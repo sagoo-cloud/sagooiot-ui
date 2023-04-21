@@ -13,7 +13,7 @@
 					<div v-for="(item, index) in inputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
 							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }}</div>
+							<div style="width: 60%">{{ item.name }} ({{ item.key }})</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
@@ -23,7 +23,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson('fun')">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -33,7 +35,7 @@
 					<div v-for="(item, index) in outputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
 							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }}</div>
+							<div style="width: 60%">{{ item.name }} ({{ item.key }})</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
 								<el-link type="primary" @click="deljsonOut(index, 'fun')">删除</el-link>
@@ -43,7 +45,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJsonOut('fun')">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -157,7 +161,7 @@ export default defineComponent({
 			state.inputsdata = row.inputs || [];
 			state.outputsdata = row.outputs || [];
 			state.isShowDialog = true;
-			
+
 		};
 		const resetForm = () => {
 			state.ruleForm = {
@@ -309,35 +313,41 @@ export default defineComponent({
 	justify-content: space-between;
 	margin-top: 10px;
 }
+
 .input-option {
 	line-height: 30px;
 	padding-top: 5px;
 	width: 140px;
 }
+
 .input-option i {
 	margin: 0px 5px;
 	border: 1px solid #c3c3c3;
 	font-size: 16px;
 }
+
 .input-options {
 	display: flex;
 	align-items: center;
 	color: #409eff;
 	cursor: pointer;
 }
+
 .jslist {
 	width: 100%;
 	border: 1px solid #e8e8e8;
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
 .jsonlist {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.jsonoption {
-}
+
+.jsonoption {}
+
 .jsonoption a {
 	margin: 0px 10px;
 }

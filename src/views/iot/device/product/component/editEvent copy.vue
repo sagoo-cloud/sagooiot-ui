@@ -31,7 +31,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson('fun')">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -77,13 +79,17 @@
 
 				<el-form-item label="枚举项" prop="maxLength" v-if="type == 'enum'">
 					<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-						<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-							><el-icon><Right /></el-icon
-						></span>
-						<el-input v-model="item.value" placeholder="请输入枚举文本" />
+						<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
+								<Right />
+							</el-icon></span>
+						<el-input v-model="item.value" placeholder="请输入枚举值" />
 						<div class="input-option">
-							<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-							<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+							<el-icon @click="addEnum" v-if="index == 0">
+								<Plus />
+							</el-icon>
+							<el-icon @click="delEnum(index)" v-if="index != 0">
+								<Minus />
+							</el-icon>
 						</div>
 					</div>
 				</el-form-item>
@@ -102,7 +108,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -147,13 +155,17 @@
 
 					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
 						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-								><el-icon><Right /></el-icon
-							></span>
+							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
+									<Right />
+								</el-icon></span>
 							<el-input v-model="item.value" placeholder="请输入枚举文本" />
 							<div class="input-option">
-								<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-								<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+								<el-icon @click="addEnum" v-if="index == 0">
+									<Plus />
+								</el-icon>
+								<el-icon @click="delEnum(index)" v-if="index != 0">
+									<Minus />
+								</el-icon>
 							</div>
 						</div>
 					</el-form-item>
@@ -173,7 +185,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -504,36 +518,41 @@ export default defineComponent({
 	justify-content: space-between;
 	margin-top: 10px;
 }
+
 .input-option {
 	line-height: 30px;
 	padding-top: 5px;
 	width: 140px;
 }
+
 .input-option i {
 	margin: 0px 5px;
 	border: 1px solid #c3c3c3;
 	font-size: 16px;
 }
+
 .input-options {
 	display: flex;
 	align-items: center;
 	color: #409eff;
 	cursor: pointer;
 }
+
 .jslist {
 	width: 100%;
 	border: 1px solid #e8e8e8;
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
 .jsonlist {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.jsonoption {
-}
+
+.jsonoption {}
+
 .jsonoption a {
 	margin: 0px 10px;
-}
-</style>
+}</style>

@@ -8,7 +8,10 @@
 						<el-table-column prop="valueType.type" label="输入类型" />
 						<el-table-column prop="name" label="值" min-width="200">
 							<template #default="{ row }">
-								<el-input v-model="row.value" clearable>
+								<el-select v-model="row.value" clearable v-if="row.valueType.type === 'enum'" style="wdith: 100% !important;">
+									<el-option v-for="item in row.valueType.elements" :key="item.value" :value="item.value" :label="item.text"></el-option>
+								</el-select>
+								<el-input v-model="row.value" clearable v-else>
 									<template v-if="row.valueType.unit" #append>{{ row.valueType.unit }}</template>
 								</el-input>
 							</template>
@@ -85,14 +88,21 @@ function clear(row: IListItem) {
 	align-items: stretch;
 	justify-content: space-between;
 	gap: 20px;
+
 	.el-table {
 		flex: 3;
 	}
+
 	.result {
 		flex: 2;
 	}
+
 	::v-deep(.el-textarea__inner) {
 		height: 100%;
+	}
+
+	::v-deep(.el-select) {
+		width: 100%;
 	}
 }
 </style>
