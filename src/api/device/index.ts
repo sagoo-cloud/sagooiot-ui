@@ -17,6 +17,8 @@ export default {
     deploy: (data: object) => post('/product/deploy', data),
     undeploy: (data: object) => post('/product/undeploy', data),
     event: (data: object) => get('/product/tsl/event/all', data),
+    // 获取插件通信方式类型
+    getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
   },
   category:{
     getList: (params: object) => get('/product/category/list', params),

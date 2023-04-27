@@ -38,8 +38,10 @@
         </el-form-item> -->
 
 				<el-form-item label="消息协议" prop="messageProtocol">
-					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
-						<el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议" @change="changeMessageProtocol">
+						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.types"> </el-option>
+						<!-- 增加系统默认的mqtt选项 -->
+						<el-option label="mqtt" value="mqtt"> </el-option>
 					</el-select>
 				</el-form-item>
 
@@ -102,13 +104,14 @@ export default defineComponent({
 		const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
 
 		const { proxy } = getCurrentInstance() as any
-		const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols')
+		const { network_server_type } = proxy.useDict('network_server_type')
 
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			cateData: [], // 分类数据
 			deptData: [], //
 			messageData: [], //
+			network_protocols: [], // 消息协议
 			tranData: [], //
 			imageUrl: '', //
 			singleImg: baseURL + '/product/icon/upload',
@@ -136,7 +139,7 @@ export default defineComponent({
 		})
 
 		const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
-			console.log(response)
+			// console.log(response)
 
 			state.imageUrl = response
 			state.ruleForm.icon = response
@@ -151,9 +154,10 @@ export default defineComponent({
 			api.dept.getList({ status: -1 }).then((res: any) => {
 				state.deptData = res || []
 			})
-			// api.product.message_protocol_list({ status: -1 }).then((res: any) => {
-			//   state.messageData = res.data || [];
-			// });
+			api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
+				console.log(res)
+			  state.messageData = res || [];
+			});
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
 			// });
@@ -185,6 +189,10 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog()
+		}
+		// 消息协议切换的时候，获取新的传输协议列表
+		const changeMessageProtocol = (handleType) => {
+			console.log(handleType)
 		}
 		// 新增
 		const onSubmit = () => {
@@ -218,8 +226,8 @@ export default defineComponent({
 			closeDialog,
 			onCancel,
 			onSubmit,
+			changeMessageProtocol,
 			network_server_type,
-			network_protocols,
 			formRef,
 			...toRefs(state),
 		}
