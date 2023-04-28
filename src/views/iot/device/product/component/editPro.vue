@@ -13,14 +13,7 @@
 				</el-form-item>
 
 				<el-form-item label="产品分类" prop="categoryId">
-					<el-cascader
-						:options="cateData"
-						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }"
-						placeholder="请选择分类"
-						clearable
-						class="w100"
-						v-model="ruleForm.categoryId"
-					>
+					<el-cascader :options="cateData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.categoryId">
 						<template #default="{ node, data }">
 							<span>{{ data.name }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -41,7 +34,7 @@
 					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议" @change="changeMessageProtocol">
 						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.types"> </el-option>
 						<!-- 增加系统默认的mqtt选项 -->
-						<el-option label="mqtt" value="mqtt"> </el-option>
+						<el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
 					</el-select>
 				</el-form-item>
 
@@ -156,7 +149,7 @@ export default defineComponent({
 			})
 			api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
 				console.log(res)
-			  state.messageData = res || [];
+				state.messageData = res || [];
 			});
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
