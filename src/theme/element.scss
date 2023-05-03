@@ -65,7 +65,8 @@
 }
 .el-menu-item,
 .el-sub-menu__title {
-	color: var(--next-bg-menuBarColor);
+	// color: var(--next-bg-menuBarColor);
+	color: var(--next-bg-menuBar-black);
 }
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;

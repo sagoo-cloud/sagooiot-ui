@@ -63,8 +63,8 @@ export default defineComponent({
 	align-items: center;
 	justify-content: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
-	// color: var(--el-color-primary);
-	color: #ffff;
+	color: var(--next-bg-menuBar-black);
+	background: var(--next-bg-menuBar-light);
 	font-size: 20px;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
