@@ -210,7 +210,7 @@ function resetAreaPoints() {
 	});
 	arr.forEach((point: any) => {
 		// 查询环路列表中属于该站点的环路列表，进行显示
-		const theLoops = loops.filter((item: any) => item.stationInfo.id === point.data.id);
+		const theLoops = loops.filter((item: any) => item.stationInfo?.id === point.data.id);
 		viewArrCache = viewArrCache.concat(theLoops);
 	});
 	viewList.value = viewArrCache;
