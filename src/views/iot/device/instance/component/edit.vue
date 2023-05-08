@@ -8,32 +8,27 @@
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
-
-        
-
-           <el-form-item label="所属产品" prop="productId">
-       
-                <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
-              <el-option
-                v-for="item in productData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
-            </el-form-item> 
-
+          <el-form-item label="所属产品" prop="productId">
+          <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
+            <el-option
+              v-for="item in productData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item> 
          <el-form-item label="所属部门" prop="deptId">
-              <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
-                <template #default="{ node, data }">
-                  <span>{{ data.deptName }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item> 
-
-           
-        
+          <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
+            <template #default="{ node, data }">
+              <span>{{ data.deptName }}</span>
+              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+            </template>
+          </el-cascader>
+        </el-form-item> 
+        <el-form-item label="设备坐标" prop="lng">
+          <el-input :value="ruleForm.lng + ' , ' + ruleForm.lat" placeholder="选择设备坐标" @click="selectPosition" read-only />
+        </el-form-item>
         <el-form-item label="设备证书" prop="certificate">
           <el-input v-model="ruleForm.certificate" placeholder="请输入设备证书" />
         </el-form-item>
@@ -58,11 +53,14 @@
 				</span>
 			</template>
 		</el-dialog>
+    <el-dialog title="地图选点（点击地图即可）"  v-model="mapVisible" width="1000px" append-to-body>
+      <div class="map" id="map-container-conpany" style="height: 65vh"></div>
+    </el-dialog>
 	</div>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent,ref, unref, nextTick } from 'vue';
 import api from '/@/api/device';
 import {ElMessage} from "element-plus";
 interface RuleFormState {
@@ -73,6 +71,8 @@ interface RuleFormState {
   version:string;
   productId:number;
   deptId:number;
+  lng: string;
+  lat: string;
   desc:string;
 }
 interface DicState {
@@ -85,6 +85,7 @@ export default defineComponent({
 	name: 'deviceEditPro',
 	setup(prop,{emit}) {
     const formRef = ref<HTMLElement | null>(null);
+    const mapVisible = ref(false);
 		const state = reactive<DicState>({
 			isShowDialog: false,
       productData: [], // 分类数据
@@ -95,6 +96,8 @@ export default defineComponent({
         productId:'',
         deptId:0,
         certificate:'',
+        lng: '',
+        lat: '',
         secureKey:'',
         version:'',
         desc:''
@@ -136,6 +139,8 @@ export default defineComponent({
         id:0,
         name:'',
         productId:'',
+        lng: '',
+        lat: '',
         deptId:0,
         certificate:'',
         secureKey:'',
@@ -175,9 +180,25 @@ export default defineComponent({
         }
       });
 		};
+    function selectPosition() {
+      mapVisible.value = true;
+      nextTick(() => {
+        var map = new BMapGL.Map("map-container-conpany");
+        map.centerAndZoom("沈阳市", 8);
+        map.enableScrollWheelZoom(true);
+        map.addEventListener("click", (e) => {
+          console.log("点击位置经纬度：" + e.latlng.lng + "," + e.latlng.lat);
+          state.ruleForm.lng = e.latlng.lng.toFixed(5);
+          state.ruleForm.lat = e.latlng.lat.toFixed(5);
+          mapVisible.value = false;
+        });
+      });
+    }
 
 
 		return {
+			mapVisible,
+			selectPosition,
 			openDialog,
 			closeDialog,
 			onCancel,
