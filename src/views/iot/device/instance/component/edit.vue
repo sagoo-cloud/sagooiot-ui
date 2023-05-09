@@ -18,14 +18,6 @@
             />
           </el-select>
         </el-form-item> 
-         <el-form-item label="所属部门" prop="deptId">
-          <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
-            <template #default="{ node, data }">
-              <span>{{ data.deptName }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-            </template>
-          </el-cascader>
-        </el-form-item> 
         <el-form-item label="设备坐标" prop="lng">
           <el-input :value="ruleForm.lng + ' , ' + ruleForm.lat" placeholder="选择设备坐标" @click="selectPosition" read-only />
         </el-form-item>
@@ -70,7 +62,6 @@ interface RuleFormState {
   secureKey:string;
   version:string;
   productId:number;
-  deptId:number;
   lng: string;
   lat: string;
   desc:string;
@@ -89,12 +80,10 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
       productData: [], // 分类数据
-      deptData: [], // 
 			ruleForm: {
         id:0,
         name:'',
         productId:'',
-        deptId:0,
         certificate:'',
         lng: '',
         lat: '',
@@ -110,8 +99,6 @@ export default defineComponent({
           { required: true, message: "设备标识不能为空", trigger: "blur" }
         ],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
-       
       }
 		});
 		// 打开弹窗
@@ -120,9 +107,6 @@ export default defineComponent({
 
         api.product.getLists({ status: 1 }).then((res: any) => {
           state.productData = res.product || [];
-        });
-        api.dept.getList({ status: -1 }).then((res: any) => {
-          state.deptData = res || [];
         });
 
 
@@ -141,7 +125,6 @@ export default defineComponent({
         productId:'',
         lng: '',
         lat: '',
-        deptId:0,
         certificate:'',
         secureKey:'',
         version:'',
