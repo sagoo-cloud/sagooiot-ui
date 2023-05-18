@@ -9,7 +9,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
           <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
+          <el-select v-model="ruleForm.productId" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
             <el-option
               v-for="item in productData"
               :key="item.id"
