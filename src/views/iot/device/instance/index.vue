@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column prop="registryTime" label="激活时间" align="center" width="150" v-col="'registryTime'"></el-table-column>
         <!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
-        <el-table-column prop="registryTime" label="说明" v-col="'desc'"></el-table-column>
+        <el-table-column prop="desc" label="说明" v-col="'desc'"></el-table-column>
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">

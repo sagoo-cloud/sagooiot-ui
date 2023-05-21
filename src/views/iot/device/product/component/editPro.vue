@@ -47,8 +47,9 @@
 				<el-form-item label="设备类型" prop="deviceType">
 					<el-radio-group v-model="ruleForm.deviceType">
 						<el-radio label="设备">设备</el-radio>
-
 						<el-radio label="网关">网关</el-radio>
+						<el-radio label="子设备">子设备</el-radio>
+
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="产品描述	" prop="desc">
@@ -86,7 +87,8 @@ interface DicState {
 	deptData: RuleFormState[]
 	messageData: RuleFormState[]
 	tranData: RuleFormState[]
-	rules: {}
+	rules: {},
+	imageUrl: string
 }
 
 export default defineComponent({
@@ -158,10 +160,11 @@ export default defineComponent({
 				// api.dict.getType(row.dictId).then((res:any)=>{
 				//   state.ruleForm = res.data.dictType
 				// }
-
 				state.imageUrl = row.icon
 
 				state.ruleForm = row
+			}else {
+				state.imageUrl = ""
 			}
 			state.isShowDialog = true
 		}

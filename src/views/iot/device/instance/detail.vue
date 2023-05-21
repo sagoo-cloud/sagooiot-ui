@@ -277,6 +277,42 @@
 
           <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
         </el-tab-pane>
+        <el-tab-pane v-if="prodetail.deviceType == '网关'" label="子设备" name="6">
+          <div class="wu-box">
+            <div class="wu-title">
+              <div class="title">子设备列表</div>
+              <div>
+                <el-button v-auth="'mutipleBind'" type="primary" @click="mutipleBind()">批量绑定</el-button>
+                <el-button :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
+              </div>
+            </div>
+
+          <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" />
+            <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
+            <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
+
+            <el-table-column prop="status" label="状态" width="100" align="center">
+              <template #default="scope">
+                <el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
+                <el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
+                <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
+            <el-table-column prop="desc" label="说明"></el-table-column>
+
+            <el-table-column label="操作" width="80" align="center" fixed="right">
+              <template #default="scope">
+                <el-button size="small" text type="warning" v-auth="'detail'" @click="onOpenDetail(scope.row)">详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="deviceTableData.total>0" :total="deviceTableData.total" v-model:page="deviceTableData.param.pageNum" v-model:limit="deviceTableData.param.pageSize" @pagination="getDeviceTableData" />
+          </div>
+
+        </el-tab-pane>
       </el-tabs>
     </div>
     <EditDic ref="editDicRef" @typeList="typeList" />
@@ -285,6 +321,7 @@
     <EditEvent ref="editEventRef" @typeList="getevent" />
     <EditTab ref="editTabRef" @typeList="gettab" />
     <ListDic ref="listDicRef" />
+    <SubDevice ref="subDeviceRef" />
 
     <el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
       <JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
@@ -311,14 +348,29 @@ import EditEvent from '../product/component/editEvent.vue';
 import EditTab from '../product/component/editTab.vue';
 import devantd from '/@/components/devantd/index.vue';
 import ListDic from './component/list.vue';
+import SubDevice from './component/subDevice.vue';
 
 
 import { useRoute } from 'vue-router';
 
 import api from '/@/api/device';
+import { AnyAaaaRecord } from 'dns';
 
 interface TableDataState {
   ids: number[];
+  deviceKeyList: string[];
+  deviceTableData: {
+    data: [];
+    total: number;
+    loading: boolean;
+    param: {
+      pageNum: number;
+      pageSize: number;
+      gatewayKey: string;
+      // status: string;
+      dateRange: string[];
+    };
+  };
   tableData: {
     data: [];
     total: number;
@@ -348,7 +400,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
+  components: { SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
 
 	setup(prop, context) {
 		const route = useRoute();
@@ -358,7 +410,9 @@ export default defineComponent({
 		const listDicRef=ref();
 		const editEventRef = ref();
 		const editTabRef = ref();
+    const subDeviceRef = ref();
 		const state = reactive<TableDataState>({
+      deviceKeyList: [],
 			areaData:[],
 			isShowDialog: false,
 			dialogVisible: false,
@@ -370,6 +424,17 @@ export default defineComponent({
 			prodetail: [],
 			product_id: 0,
 			developer_status: 0,
+      deviceTableData: {
+				data: [],
+				total: 0,
+				loading: false,
+				param: {
+					pageNum: 1,
+					gatewayKey: '',
+					pageSize: 10,
+					dateRange: [],
+				},
+			},
 			tableData: {
 				data: [],
 				total: 0,
@@ -415,16 +480,102 @@ export default defineComponent({
 					state.tableData.data = res.Data;
 					state.tableData.total = res.Total;
 				});
+        getDeviceTableData()
 			});
 
 		});
 
+    const mutipleBind = () => {
+      let msg = '是否进行批量绑定？';
+      if (state.deviceKeyList.length === 0) {
+        ElMessage.error('请选择要批量绑定的数据。');
+        return;
+      }
+      console.log(state.deviceKeyList)
+      console.log(state.deviceKeyList.length)
+        // return
+      ElMessageBox.confirm(msg, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          api.device.mutipleBind({
+            "gatewayKey":state.deviceTableData.param.gatewayKey,
+            "subKeys": state.deviceKeyList
+          }).then(() => {
+            ElMessage.success('绑定成功');
+            // typeList();
+            getDeviceTableData();
+          });
+        })
+        .catch(() => { });
+    }
+
+    const mutipleUnbind = () => {
+      let msg = '是否进行批量解绑？';
+      if (state.deviceKeyList.length === 0) {
+        ElMessage.error('请选择要批量解绑的数据。');
+        return;
+      }
+      console.log(state.deviceKeyList)
+      console.log(state.deviceKeyList.length)
+        // return
+      ElMessageBox.confirm(msg, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          api.device.mutipleUnbind({
+            "gatewayKey":state.deviceTableData.param.gatewayKey,
+            "subKeys": state.deviceKeyList
+          }).then(() => {
+            ElMessage.success('解绑成功');
+            // typeList();
+            getDeviceTableData();
+          });
+        })
+        .catch(() => { });
+    }
+
+    
+
+    const getDeviceTableData = () => {
+      state.deviceTableData.param.gatewayKey = state.detail.key;
+      api.device.getList(state.deviceTableData.param).then((res: any) => {
+        state.deviceTableData.data = res.list;
+        state.deviceTableData.total = res.Total;
+        console.log(res)
+        console.log(state.deviceTableData.data)
+      });
+    };
+
+    // 多选框选中数据
+    const handleSelectionChange = (selection: any[]) => {
+      console.log(selection)
+      console.log(typeof selection)
+      // selection.forEach((item:any) => {
+      //   console.log(item)
+      //   state.deviceKeyList.push(item.key)
+      // })
+      state.deviceKeyList = selection.map((item) => item.key);
+      console.log(state.deviceKeyList)
+      console.log(typeof state.deviceKeyList)
+    };
+        
+    // 打开修改产品弹窗
+    const onOpenDetail = (row: any) => {
+      subDeviceRef.value.openDialog(row)
+    };
 
     const onLogDetail = (row: TableDataRow) => {
       state.jsonData = JSON.parse(row.content);
       console.log(JSON.parse(row.content));
       state.dialogVisible = true;
     };
+
+    
 
     //编辑属性
     const onEditAttr = (row: TableDataRow) => {
@@ -673,6 +824,7 @@ export default defineComponent({
       editFunRef,
       editEventRef,
       editTabRef,
+      subDeviceRef,
       onOpenListDetail,
       getrunData,
       getlog,
@@ -686,6 +838,8 @@ export default defineComponent({
       onEditAttr,
       getList,
       getproperty,
+      getDeviceTableData,
+      handleSelectionChange,
       getfunction,
       getevent,
       gettab,
@@ -695,7 +849,10 @@ export default defineComponent({
       onOpenEditAttr,
       onOpenEditFun,
       onOpenEditDic,
+      onOpenDetail,
       handleClick,
+      mutipleBind,
+      mutipleUnbind,
       ...toRefs(state),
     };
   },

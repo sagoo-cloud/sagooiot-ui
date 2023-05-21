@@ -71,6 +71,11 @@ export default {
     tagedit: (data: object) => put('/product/tsl/tag/edit', data),
     tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
   },
+  device: {
+    getList: (params: object) => get('/product/device/bind_list', params),
+    mutipleBind: (data: object) => post('/product/device/bind_sub', data),
+    mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
+  }
   
   
 }
