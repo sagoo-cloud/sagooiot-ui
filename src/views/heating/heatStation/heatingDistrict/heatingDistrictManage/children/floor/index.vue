@@ -62,7 +62,6 @@ import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import Detail from './component/detail.vue';
 import api from '/@/api/heatingDistrict';
-import { emit } from 'process';
 
 export default defineComponent({
 	name: 'loop',
