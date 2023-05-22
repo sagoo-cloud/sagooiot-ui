@@ -19,6 +19,8 @@ export default {
     event: (data: object) => get('/product/tsl/event/all', data),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
+    // 脚本更新
+    script: (data: object) => put('/product/script/update', data),
   },
   category:{
     getList: (params: object) => get('/product/category/list', params),
