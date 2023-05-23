@@ -1,6 +1,6 @@
 <template>
 	<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px" @keyup.enter="onSubmit">
-		<el-form-item label="上级分类" prop="parentId">
+		<!-- <el-form-item label="上级分类" prop="parentId">
 			<el-cascader :options="typeData" :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
 		</el-form-item>
 		<el-form-item label="关联页面" prop="menuIds">
@@ -11,7 +11,7 @@
 		</el-form-item>
 		<el-form-item label="接口地址" prop="address">
 			<el-input v-model="formData.address" placeholder="接口地址" />
-		</el-form-item>
+		</el-form-item> -->
 	</el-form>
 </template>
 
@@ -22,6 +22,8 @@ import { ApiRow } from '/@/api/model/system/menu';
 import { ruleRequired } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
 import apiDatahub from '/@/api/datahub';
+
+// TODO 这个页面还没开始开发
 
 const emit = defineEmits(['getList']);
 
