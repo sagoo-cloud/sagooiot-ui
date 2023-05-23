@@ -61,35 +61,14 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import {  reactive, onMounted, ref, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import EditDic from './component/edit.vue';
-import Detail from './component/detail.vue';
 import api from '/@/api/certificateManagement';
 import EditParams from './component/editParams.vue';
 
-// 定义接口来定义对象的类型
-interface TableDataRow {
-	id: number;
-	name: string;
-	code: string;
-	stationId: string;
-	loopTypes: number;
-	energyTypes: number;
-	heatingObject: number;
-	heatingTypes: number;
-	heatingArea: string;
-	forRealArea: string;
-	decade: string;
-	status: number;
-}
 const { proxy } = getCurrentInstance() as any;
 const { network_certificate } = proxy.useDict('network_certificate');
-console.log(network_certificate)
 
-const addDicRef = ref();
-const editDicRef = ref();
-const detailRef = ref();
 const previewRef = ref();
 const editParamsRef = ref();
 const buildConfigRef = ref();
@@ -115,7 +94,6 @@ const initTableData = () => {
 const queryList = () => {
 	state.tableData.loading = true
 	api.certificateManagement.getList(state.tableData.param).then((res: any) => {
-		console.log(res)
 		state.tableData.data = res.Info || [];
 		state.tableData.loading = false
 		state.tableData.total = res.total
@@ -123,20 +101,10 @@ const queryList = () => {
 };
 
 const filterStandard = (type: any) => {
-	console.log(network_certificate.value)
-	let data  = network_certificate.value;
 	let opt = network_certificate.value.filter((ele: any) => {
 		return ele.value == type
 	})
-	return opt[0].label
-	console.log(opt)
-	// network_certificate.value.forEach((element: object) => {
-	// 	console.log(element)
-	// 	if(type == element.value) {
-	// 		console.log(type)
-	// 		return element.label
-	// 	}
-	// });
+	return opt[0]?.label
 }
 
 // 页面加载时
