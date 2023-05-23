@@ -199,13 +199,8 @@ export default defineComponent({
 			});
 
 			// 证书列表
-			certApi.certificateManagement.getList({
-				pageNum: 1,
-				PageSize: 50,
-				status: -1,
-			}).then((res: any) => {
+			certApi.certificateManagement.getAll().then((res: any) => {
 				certList.value = res.Info || []
-				console.log(res.Info[0])
 			});
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
