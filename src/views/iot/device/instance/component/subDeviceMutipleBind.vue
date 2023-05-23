@@ -74,12 +74,9 @@ interface TableDataState {
 }
 export default defineComponent({
 	name: 'MutipleBindDialog',
-	// components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
 
 	setup(prop, { emit }) {
-		console.log(prop)
 		const route = useRoute()
-		// const editDicRef = ref()
 		const state = reactive<TableDataState>({
 			gatewayKey: '',
 			deviceKeyList: [],
@@ -105,11 +102,6 @@ export default defineComponent({
 			}
 		})
 
-		onMounted(() => {
-			console.log('第一次加载')
-			// getProductList()
-		})
-
 		const getDeviceList = () => {
 			if(!state.ruleForm.productId) {
 				state.tableData.data = [];
@@ -123,7 +115,6 @@ export default defineComponent({
 				"pageSize": state.tableData.param.pageSize,
 				"pageNum": state.tableData.param.pageNum
 			}).then((res: any) => {
-				console.log(res)
 				state.tableData.data = res.device;
 				state.tableData.total = res.Total;
 			}).finally(() => (state.tableData.loading = false));
@@ -132,7 +123,7 @@ export default defineComponent({
 
 		const getProductList = () => {
 			api.product.getSubList().then((res: any) => {
-				let productDataList = [{id: "", name: "全部"}].concat(res.product)
+				let productDataList = res.product
 				state.productData = productDataList;
 				state.ruleForm.productId = state.productData[0].id
 				getDeviceList()
@@ -141,23 +132,13 @@ export default defineComponent({
 		};
 
 		const openDialog = (gatewayKey: any) => {
-			console.log('第二次加载')
 			state.gatewayKey = gatewayKey;
 			getProductList()
-			// state.isShowDialog = true;
 		};
 
 		    // 多选框选中数据
 		const handleSelectionChange = (selection: any[]) => {
-			console.log(selection)
-			console.log(typeof selection)
-			// selection.forEach((item:any) => {
-			//   console.log(item)
-			//   state.deviceKeyList.push(item.key)
-			// })
 			state.deviceKeyList = selection.map((item) => item.key);
-			console.log(state.deviceKeyList)
-			console.log(typeof state.deviceKeyList)
 		};
 
 		const confirmBind = () => {
@@ -166,7 +147,6 @@ export default defineComponent({
 				ElMessage.error('请选择要批量绑定的数据。');
 				return;
 			}
-				// return
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
@@ -202,12 +182,5 @@ export default defineComponent({
 	},
 })
 </script>
-
-<style lang="scss" scoped>
-.mutiple-bind-dialog-wrap {
-	background: pink;
-}
-
-</style>
 
 

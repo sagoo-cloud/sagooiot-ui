@@ -370,7 +370,6 @@ interface TableDataState {
       pageNum: number;
       pageSize: number;
       gatewayKey: string;
-      // status: string;
       dateRange: string[];
     };
   };
@@ -468,7 +467,6 @@ export default defineComponent({
 		onMounted(() => {
 			const ids = route.params && route.params.id;
       api.instance.detail(ids).then((res: any) => {
-        console.log(res)
 				state.detail = res.data;
 				state.developer_status = res.data.status;
 				state.tableData.param.productId = res.data.product.id;
@@ -476,7 +474,6 @@ export default defineComponent({
 				getrunData();
 				api.product.detail(res.data.product.id).then((res: any) => {
 					state.prodetail = res.data;
-					// console.log(res.data);
 				});
 
 				//第一次加载
@@ -495,9 +492,6 @@ export default defineComponent({
         ElMessage.error('请选择要批量解绑的数据。');
         return;
       }
-      console.log(state.deviceKeyList)
-      console.log(state.deviceKeyList.length)
-        // return
       ElMessageBox.confirm(msg, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
@@ -523,22 +517,12 @@ export default defineComponent({
       api.device.getList(state.deviceTableData.param).then((res: any) => {
         state.deviceTableData.data = res.list;
         state.deviceTableData.total = res.Total;
-        console.log(res)
-        console.log(state.deviceTableData.data)
       });
     };
 
     // 多选框选中数据
     const handleSelectionChange = (selection: any[]) => {
-      console.log(selection)
-      console.log(typeof selection)
-      // selection.forEach((item:any) => {
-      //   console.log(item)
-      //   state.deviceKeyList.push(item.key)
-      // })
       state.deviceKeyList = selection.map((item) => item.key);
-      console.log(state.deviceKeyList)
-      console.log(typeof state.deviceKeyList)
     };
         
     // 打开修改产品弹窗
@@ -548,7 +532,6 @@ export default defineComponent({
 
     const onLogDetail = (row: TableDataRow) => {
       state.jsonData = JSON.parse(row.content);
-      console.log(JSON.parse(row.content));
       state.dialogVisible = true;
     };
 
@@ -712,7 +695,6 @@ export default defineComponent({
     };
 
     const handleClick = (tab: TabsPaneContext, event: Event) => {
-      console.log(tab, event);
       if (tab.props.name == 4) {
         //获取日志
         getlog();
@@ -763,7 +745,6 @@ export default defineComponent({
     const getlog = () => {
       state.logtableData.param.deviceKey = state.detail.key;
       api.instance.getLogList(state.logtableData.param).then((res: any) => {
-        console.log(res, '22222222');
         state.logtableData.data = res.list;
         state.logtableData.total = res.Total;
       });

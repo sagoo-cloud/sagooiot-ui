@@ -383,7 +383,6 @@ export default defineComponent({
 	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
 
 	setup(prop, context) {
-		console.log(prop)
 		const route = useRoute()
 		const editDicRef = ref()
 		const editAttrRef = ref()
@@ -442,34 +441,11 @@ export default defineComponent({
 			},
 		})
 
-		onMounted(() => {
-			// const ids = route.params && route.params.id;
-			// api.instance.detail(ids).then((res: any) => {
-			//     console.log(res)
-			// 	state.detail = res.data;
-			// 	state.developer_status = res.data.status;
-			// 	state.tableData.param.productId = res.data.product.id;
-			// 	state.product_id = res.data.product.id;
-			// 	getrunData();
-			// 	api.product.detail(res.data.product.id).then((res: any) => {
-			// 		state.prodetail = res.data;
-			// 		// console.log(res.data);
-			// 	});
-			// 	//第一次加载
-			// 	api.model.property(state.tableData.param).then((res: any) => {
-			// 		state.tableData.data = res.Data;
-			// 		state.tableData.total = res.Total;
-			// 	});
-			//     getDeviceTableData()
-			// });
-		})
-
 		const getDeviceTableData = () => {
 			state.deviceTableData.param.gatewayKey = state.detail.key
 			api.device.getList(state.deviceTableData.param).then((res: any) => {
 				state.deviceTableData.data = res.list
 				state.deviceTableData.total = res.Total
-				console.log(res)
 			})
 		}
 
@@ -480,11 +456,8 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: any | null) => {
 			if (row) {
-				// state.ruleForm = row;
-                console.log(row)
                 const ids = row.id;
                 api.instance.detail(ids).then((res: any) => {
-                    console.log(res)
                     state.detail = res.data;
                     state.developer_status = res.data.status;
                     state.tableData.param.productId = res.data.product.id;
@@ -492,7 +465,6 @@ export default defineComponent({
                     getrunData();
                     api.product.detail(res.data.product.id).then((productRes: any) => {
                         state.prodetail = productRes.data;
-                        console.log(productRes.data);
                     });
                     //第一次加载
                     api.model.property(state.tableData.param).then((modelRes: any) => {
@@ -507,7 +479,6 @@ export default defineComponent({
 
 		const onLogDetail = (row: TableDataRow) => {
 			state.jsonData = JSON.parse(row.content)
-			console.log(JSON.parse(row.content))
 			state.dialogVisible = true
 		}
 
@@ -666,7 +637,6 @@ export default defineComponent({
 		}
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event)
 			if (tab.props.name == 4) {
 				//获取日志
 				getlog()
@@ -715,7 +685,6 @@ export default defineComponent({
 		const getlog = () => {
 			state.logtableData.param.deviceKey = state.detail.key
 			api.instance.getLogList(state.logtableData.param).then((res: any) => {
-				console.log(res, '22222222')
 				state.logtableData.data = res.list
 				state.logtableData.total = res.Total
 			})
