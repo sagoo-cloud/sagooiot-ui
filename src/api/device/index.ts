@@ -17,6 +17,7 @@ export default {
     deploy: (data: object) => post('/product/deploy', data),
     undeploy: (data: object) => post('/product/undeploy', data),
     event: (data: object) => get('/product/tsl/event/all', data),
+    getSubList: () => get('/product/sub_list'),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
   },
@@ -73,6 +74,7 @@ export default {
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),
+    getSubList: (params: object) => get('/product/device/sub_list', params),
     mutipleBind: (data: object) => post('/product/device/bind_sub', data),
     mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
   }

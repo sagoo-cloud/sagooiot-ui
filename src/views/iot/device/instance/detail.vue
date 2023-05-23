@@ -282,7 +282,7 @@
             <div class="wu-title">
               <div class="title">子设备列表</div>
               <div>
-                <el-button v-auth="'mutipleBind'" type="primary" @click="mutipleBind()">批量绑定</el-button>
+                <el-button v-auth="'mutipleBind'" type="primary" @click="onOpenMutipleBind()">批量绑定</el-button>
                 <el-button :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
               </div>
             </div>
@@ -322,6 +322,8 @@
     <EditTab ref="editTabRef" @typeList="gettab" />
     <ListDic ref="listDicRef" />
     <SubDevice ref="subDeviceRef" />
+    <!-- 子设备-批量绑定弹窗 -->
+    <SubDeviceMutipleBind ref="mutipleBindRef" @bindSuccess="getDeviceTableData" />
 
     <el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
       <JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
@@ -349,6 +351,7 @@ import EditTab from '../product/component/editTab.vue';
 import devantd from '/@/components/devantd/index.vue';
 import ListDic from './component/list.vue';
 import SubDevice from './component/subDevice.vue';
+import SubDeviceMutipleBind from './component/subDeviceMutipleBind.vue';
 
 
 import { useRoute } from 'vue-router';
@@ -400,7 +403,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
+  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
 
 	setup(prop, context) {
 		const route = useRoute();
@@ -411,6 +414,7 @@ export default defineComponent({
 		const editEventRef = ref();
 		const editTabRef = ref();
     const subDeviceRef = ref();
+    const mutipleBindRef = ref();
 		const state = reactive<TableDataState>({
       deviceKeyList: [],
 			areaData:[],
@@ -485,33 +489,6 @@ export default defineComponent({
 
 		});
 
-    const mutipleBind = () => {
-      let msg = '是否进行批量绑定？';
-      if (state.deviceKeyList.length === 0) {
-        ElMessage.error('请选择要批量绑定的数据。');
-        return;
-      }
-      console.log(state.deviceKeyList)
-      console.log(state.deviceKeyList.length)
-        // return
-      ElMessageBox.confirm(msg, '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          api.device.mutipleBind({
-            "gatewayKey":state.deviceTableData.param.gatewayKey,
-            "subKeys": state.deviceKeyList
-          }).then(() => {
-            ElMessage.success('绑定成功');
-            // typeList();
-            getDeviceTableData();
-          });
-        })
-        .catch(() => { });
-    }
-
     const mutipleUnbind = () => {
       let msg = '是否进行批量解绑？';
       if (state.deviceKeyList.length === 0) {
@@ -575,6 +552,9 @@ export default defineComponent({
       state.dialogVisible = true;
     };
 
+    const onOpenMutipleBind = () => {
+      mutipleBindRef.value.openDialog(state.deviceTableData.param.gatewayKey);
+    };
     
 
     //编辑属性
@@ -825,6 +805,7 @@ export default defineComponent({
       editEventRef,
       editTabRef,
       subDeviceRef,
+      mutipleBindRef,
       onOpenListDetail,
       getrunData,
       getlog,
@@ -851,7 +832,7 @@ export default defineComponent({
       onOpenEditDic,
       onOpenDetail,
       handleClick,
-      mutipleBind,
+      onOpenMutipleBind,
       mutipleUnbind,
       ...toRefs(state),
     };
