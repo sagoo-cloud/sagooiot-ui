@@ -30,7 +30,7 @@
 				</el-form-item>
 
 				<el-form-item label="传输协议" prop="transportProtocol">
-					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议" @change="transportProtocolChange">
 						<el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 					</el-select>
 				</el-form-item>
@@ -43,15 +43,17 @@
 	选择这个方式的时候：页面出现 Aceess Token的输入框
 	2，TCP及其它协议认证
 	这些配合【网络组件】功能中涉及到的设备通讯协议认证的处理。如果涉及到证书的，需要调用【证书管理】功能维护的证书列表。 -->
+				<!-- 设备认证、网络组件服务增加认证方式authType（1=Basic，2=AccessToken，3=证书）
+				涉及接口：产品添加、编辑、扩展信息更新；设备添加、编辑；网络组件服务添加、编辑 -->
 				<!-- 设备认证 -->
-				<template v-if="ruleForm.transportProtocol === 'mqtt_server'">
+				<template v-if="ruleForm.authType === 1 || ruleForm.authType === 2">
 					<el-form-item label="认证方式" prop="">
-						<el-radio-group v-model="authType">
-							<el-radio label="Basic">Basic</el-radio>
-							<el-radio label="AccessToken">AccessToken</el-radio>
+						<el-radio-group v-model="ruleForm.authType">
+							<el-radio :label="1">Basic</el-radio>
+							<el-radio :label="2">AccessToken</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<template v-if="authType === 'Basic'">
+					<template v-if="ruleForm.authType === 1">
 						<el-form-item label="用户名" prop="authUser">
 							<el-input v-model="ruleForm.authUser" placeholder="请输入用户名" />
 						</el-form-item>
@@ -65,7 +67,7 @@
 						</el-form-item>
 					</template>
 				</template>
-				<template v-else>
+				<template v-else-if="ruleForm.authType === 3">
 					<el-form-item label="认证证书" prop="certificateId">
 						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">
 							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
@@ -109,6 +111,7 @@ interface RuleFormState {
 	transportProtocol: string
 	deviceType: string
 	name: string
+	authType: string
 	status: number
 	desc: string
 	authUser: string
@@ -136,6 +139,7 @@ const form = {
 	deviceType: '设备',
 	status: 1,
 	desc: '',
+	authType: '',
 	authUser: '',
 	authPasswd: '',
 	accessToken: '',
@@ -212,6 +216,9 @@ export default defineComponent({
 				state.imageUrl = row.icon
 
 				state.ruleForm = row
+				if (row.authType === 0) {
+					transportProtocolChange(row.transportProtocol)
+				}
 			} else {
 				state.imageUrl = ""
 			}
@@ -229,6 +236,13 @@ export default defineComponent({
 		// 取消
 		const onCancel = () => {
 			closeDialog()
+		}
+		const transportProtocolChange = (type: string) => {
+			if (type === 'mqtt_server') {
+				state.ruleForm.authType = 1
+			} else {
+				state.ruleForm.authType = 3
+			}
 		}
 		// 新增
 		const onSubmit = () => {
@@ -257,11 +271,10 @@ export default defineComponent({
 			})
 		}
 
-		const authType = ref('Basic')
 		return {
+			transportProtocolChange,
 			submitLoading,
 			certList,
-			authType,
 			openDialog,
 			handleAvatarSuccess,
 			closeDialog,
