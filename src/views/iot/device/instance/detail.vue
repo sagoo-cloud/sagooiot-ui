@@ -97,12 +97,18 @@
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
                   <td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
                 </tr>
-
-
               </tbody>
-								</table>
-								</div>
-								</el-tab-pane>
+            </table>
+          </div>
+          <div class="flex" style="margin-top: 20px;" >
+          <el-input type="number" style="width: 380px;margin-right: 20px;" v-model.number="detail.onlineTimeout">
+            <template #prepend>设备超时时间</template>
+            <template #append>秒</template>
+          </el-input>
+          <el-button type="primary" @click="onlineTimeoutUpdate">
+            <el-icon style="font-size: 18px;"><ele-Refresh /></el-icon>更新</el-button>
+          </div>
+        </el-tab-pane>
         <el-tab-pane label="物模型" name="2">
           <div class="wu-box">
             <el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
@@ -340,9 +346,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import functionCom from './component/function.vue';
-
 import 'vue3-json-viewer/dist/index.css';
-
 import EditDic from '../product/component/editPro.vue';
 import EditAttr from '../product/component/editAttr.vue';
 import EditFun from '../product/component/editFun.vue';
@@ -352,15 +356,13 @@ import devantd from '/@/components/devantd/index.vue';
 import ListDic from './component/list.vue';
 import SubDevice from './component/subDevice.vue';
 import SubDeviceMutipleBind from './component/subDeviceMutipleBind.vue';
-
+import api from '/@/api/device';
 
 import { useRoute } from 'vue-router';
 
-import api from '/@/api/device';
-import { AnyAaaaRecord } from 'dns';
-
 interface TableDataState {
   ids: number[];
+  detail: any;
   deviceKeyList: string[];
   deviceTableData: {
     data: [];
@@ -423,7 +425,7 @@ export default defineComponent({
 			jsonData: '',
 			activeName: '3', // 分类数据
 			activetab: 'attr', // 分类数据
-			detail: [],
+			detail: {},
 			prodetail: [],
 			product_id: 0,
 			developer_status: 0,
@@ -509,8 +511,6 @@ export default defineComponent({
         })
         .catch(() => { });
     }
-
-    
 
     const getDeviceTableData = () => {
       state.deviceTableData.param.gatewayKey = state.detail.key;
@@ -730,10 +730,8 @@ export default defineComponent({
               temp[index]['list']=temps
 
           });
-
           state.areaData.properties=temp;
       });
-
     };
 
     const getlogtype = () => {
@@ -777,7 +775,14 @@ export default defineComponent({
       });
       tinyArea.render();
     }
+    const onlineTimeoutUpdate = () => {
+      if(!state.detail.onlineTimeout) return ElMessage('请先输入设备超时时间')
+      api.device.updateOnlineTimeout({ id: state.detail.id, onlineTimeout: state.detail.onlineTimeout }).then(() => {
+        ElMessage.success('设置成功')
+      })
+    }
     return {
+      onlineTimeoutUpdate,
       tinyAreas,
       editDicRef,
       editAttrRef,

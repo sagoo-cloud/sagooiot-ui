@@ -79,6 +79,7 @@ export default {
     getSubList: (params: object) => get('/product/device/sub_list', params),
     mutipleBind: (data: object) => post('/product/device/bind_sub', data),
     mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
+    updateOnlineTimeout: (data: object) => put('/product/device/extend/update', data),
   }
   
   
