@@ -71,6 +71,11 @@ export default {
     tagedit: (data: object) => put('/product/tsl/tag/edit', data),
     tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
   },
-  
-  
+  tree: {
+    getList: (params: object) => get('/product/device_tree/list', params),
+    add: (params: object) => post('/product/device_tree/info/add', params),
+    edit: (params: object) => post('/product/device_tree/info/edit', params),
+    detail: (params: object) => get('/product/device_tree/info/detail', params),
+    delete: (params: object) => del('/product/device_tree/info/del', params),
+  }
 }
