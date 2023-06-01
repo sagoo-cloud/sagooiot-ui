@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '产品'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="100px">
 				<el-form-item label="产品标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入产品标识" :disabled="ruleForm.id" />
 				</el-form-item>
@@ -21,17 +21,8 @@
 					</el-cascader>
 				</el-form-item>
 
-				<!-- <el-form-item label="所属部门" prop="deptId">
-          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
-            <template #default="{ node, data }">
-              <span>{{ data.deptName }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-            </template>
-          </el-cascader>
-        </el-form-item> -->
-
 				<el-form-item label="消息协议" prop="messageProtocol">
-					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议" @change="changeMessageProtocol">
+					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
 						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.types"> </el-option>
 						<!-- 增加系统默认的mqtt选项 -->
 						<el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
@@ -39,16 +30,56 @@
 				</el-form-item>
 
 				<el-form-item label="传输协议" prop="transportProtocol">
-					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议" @change="transportProtocolChange">
 						<el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 					</el-select>
 				</el-form-item>
+				<!-- 1，mqtt协议设备的认证
+	在添加设备的页面，增加MQTT服务协议设备的认证方式的处理。
+	当传输协议选择为：MQTT服务的时候，下面出现 认证方式的下拉列，分别为Basic、AccessToken接入两个下拉选项。
+	Basic方式：
+	选择这个方式的时候：页面出现，用户名及密码输入框。
+	AccessToken接入方式：
+	选择这个方式的时候：页面出现 Aceess Token的输入框
+	2，TCP及其它协议认证
+	这些配合【网络组件】功能中涉及到的设备通讯协议认证的处理。如果涉及到证书的，需要调用【证书管理】功能维护的证书列表。 -->
+				<!-- 设备认证、网络组件服务增加认证方式authType（1=Basic，2=AccessToken，3=证书）
+				涉及接口：产品添加、编辑、扩展信息更新；设备添加、编辑；网络组件服务添加、编辑 -->
+				<!-- 设备认证 -->
+				<template v-if="ruleForm.authType === 1 || ruleForm.authType === 2">
+					<el-form-item label="认证方式" prop="">
+						<el-radio-group v-model="ruleForm.authType">
+							<el-radio :label="1">Basic</el-radio>
+							<el-radio :label="2">AccessToken</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<template v-if="ruleForm.authType === 1">
+						<el-form-item label="用户名" prop="authUser">
+							<el-input v-model="ruleForm.authUser" placeholder="请输入用户名" />
+						</el-form-item>
+						<el-form-item label="密码" prop="authPasswd">
+							<el-input v-model="ruleForm.authPasswd" placeholder="请输入密码" />
+						</el-form-item>
+					</template>
+					<template v-else>
+						<el-form-item label="Aceess Token" prop="accessToken">
+							<el-input v-model="ruleForm.accessToken" placeholder="请输入Aceess Token" />
+						</el-form-item>
+					</template>
+				</template>
+				<template v-else-if="ruleForm.authType === 3">
+					<el-form-item label="认证证书" prop="certificateId">
+						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">
+							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
+						</el-select>
+					</el-form-item>
+				</template>
 
 				<el-form-item label="设备类型" prop="deviceType">
 					<el-radio-group v-model="ruleForm.deviceType">
 						<el-radio label="设备">设备</el-radio>
-
 						<el-radio label="网关">网关</el-radio>
+						<el-radio label="子设备">子设备</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="产品描述	" prop="desc">
@@ -58,7 +89,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" :loading="submitLoading" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -68,16 +99,25 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue'
 import api from '/@/api/device'
+import certApi from '/@/api/certificateManagement';
 import uploadVue from '/@/components/upload/index.vue'
 import { ElMessage, UploadProps } from 'element-plus'
 import getOrigin from '/@/utils/origin'
 
 interface RuleFormState {
 	id: number
+	categoryId: number | string
+	messageProtocol: string
+	transportProtocol: string
+	deviceType: string
 	name: string
-	dictType: string
+	authType: string
 	status: number
 	desc: string
+	authUser: string
+	authPasswd: string
+	accessToken: string
+	certificateId: string
 }
 interface DicState {
 	isShowDialog: boolean
@@ -86,7 +126,25 @@ interface DicState {
 	deptData: RuleFormState[]
 	messageData: RuleFormState[]
 	tranData: RuleFormState[]
-	rules: {}
+	rules: {},
+	imageUrl: string
+}
+
+const form = {
+	id: 0,
+	name: '',
+	categoryId: '',
+	messageProtocol: '',
+	transportProtocol: '',
+	deviceType: '设备',
+	status: 1,
+	desc: '',
+	authType: '',
+	authUser: '',
+	authPasswd: '',
+	accessToken: '',
+	certificateId: '',
+
 }
 
 export default defineComponent({
@@ -99,7 +157,10 @@ export default defineComponent({
 		const { proxy } = getCurrentInstance() as any
 		const { network_server_type } = proxy.useDict('network_server_type')
 
-		const state = reactive<DicState>({
+		const certList = ref([])
+		const submitLoading = ref(false)
+
+		const state = reactive<DicState | any>({
 			isShowDialog: false,
 			cateData: [], // 分类数据
 			deptData: [], //
@@ -108,23 +169,13 @@ export default defineComponent({
 			tranData: [], //
 			imageUrl: '', //
 			singleImg: baseURL + '/product/icon/upload',
-
 			ruleForm: {
-				id: 0,
-				name: '',
-				categoryId: '',
-				// deptId: '',
-				messageProtocol: '',
-				transportProtocol: '',
-				deviceType: '设备',
-				status: 1,
-				desc: '',
+				...form
 			},
 			rules: {
 				name: [{ required: true, message: '产品名称不能为空', trigger: 'blur' }],
 				key: [{ required: true, message: '产品标识不能为空', trigger: 'blur' }],
 				parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-				// deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
 				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
 				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
@@ -148,8 +199,12 @@ export default defineComponent({
 				state.deptData = res || []
 			})
 			api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
-				console.log(res)
 				state.messageData = res || [];
+			});
+
+			// 证书列表
+			certApi.certificateManagement.getAll().then((res: any) => {
+				certList.value = res.Info || []
 			});
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
@@ -158,21 +213,20 @@ export default defineComponent({
 				// api.dict.getType(row.dictId).then((res:any)=>{
 				//   state.ruleForm = res.data.dictType
 				// }
-
 				state.imageUrl = row.icon
 
 				state.ruleForm = row
+				if (row.authType === 0) {
+					transportProtocolChange(row.transportProtocol)
+				}
+			} else {
+				state.imageUrl = ""
 			}
 			state.isShowDialog = true
 		}
 		const resetForm = () => {
 			state.ruleForm = {
-				id: 0,
-				name: '',
-				dictType: '',
-				deviceType: '设备',
-				status: 1,
-				desc: '',
+				...form
 			}
 		}
 		// 关闭弹窗
@@ -183,9 +237,12 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog()
 		}
-		// 消息协议切换的时候，获取新的传输协议列表
-		const changeMessageProtocol = (handleType) => {
-			console.log(handleType)
+		const transportProtocolChange = (type: string) => {
+			if (type === 'mqtt_server') {
+				state.ruleForm.authType = 1
+			} else {
+				state.ruleForm.authType = 3
+			}
 		}
 		// 新增
 		const onSubmit = () => {
@@ -193,33 +250,36 @@ export default defineComponent({
 			if (!formWrap) return
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
+					submitLoading.value = true
 					if (state.ruleForm.id !== 0) {
 						//修改
 						api.product.edit(state.ruleForm).then(() => {
 							ElMessage.success('产品类型修改成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
-						})
+						}).finally(() => submitLoading.value = false)
 					} else {
 						//添加
-						console.log(state.ruleForm)
+						// console.log(state.ruleForm)
 						api.product.add(state.ruleForm).then(() => {
 							ElMessage.success('产品类型添加成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
-						})
+						}).finally(() => submitLoading.value = false)
 					}
 				}
 			})
 		}
 
 		return {
+			transportProtocolChange,
+			submitLoading,
+			certList,
 			openDialog,
 			handleAvatarSuccess,
 			closeDialog,
 			onCancel,
 			onSubmit,
-			changeMessageProtocol,
 			network_server_type,
 			formRef,
 			...toRefs(state),

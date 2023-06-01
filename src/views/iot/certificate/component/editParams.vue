@@ -407,7 +407,6 @@ const state = reactive({
 })
 const { proxy } = getCurrentInstance() as any
 const { network_certificate } = proxy.useDict('network_certificate')
-console.log(network_certificate)
 // 打开弹窗
 const openDialog = (row: any) => {
 	if (row) {

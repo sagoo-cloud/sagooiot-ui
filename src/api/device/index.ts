@@ -17,8 +17,11 @@ export default {
     deploy: (data: object) => post('/product/deploy', data),
     undeploy: (data: object) => post('/product/undeploy', data),
     event: (data: object) => get('/product/tsl/event/all', data),
+    getSubList: () => get('/product/sub_list'),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
+    // 脚本更新
+    script: (data: object) => put('/product/script/update', data),
   },
   category:{
     getList: (params: object) => get('/product/category/list', params),
@@ -77,5 +80,14 @@ export default {
     edit: (params: object) => post('/product/device_tree/info/edit', params),
     detail: (params: object) => get('/product/device_tree/info/detail', params),
     delete: (params: object) => del('/product/device_tree/info/del', params),
+  },
+  device: {
+    getList: (params: object) => get('/product/device/bind_list', params),
+    getSubList: (params: object) => get('/product/device/sub_list', params),
+    mutipleBind: (data: object) => post('/product/device/bind_sub', data),
+    mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
+    updateOnlineTimeout: (data: object) => put('/product/device/extend/update', data),
   }
+  
+  
 }

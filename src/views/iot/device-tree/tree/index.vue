@@ -104,88 +104,53 @@
                 </tbody>
               </table>
             </el-tab-pane>
-            <el-tab-pane label="时间周期" name="2">Config</el-tab-pane>
-            <el-tab-pane label="绑定实际设备" name="3">Role</el-tab-pane>
+            <el-tab-pane label="时间周期" name="2">
+			        <el-form :model="ruleForm" ref="formRef" size="default" label-width="110px">
+                <el-form-item label="时间窗口" prop="duration">
+                  <div class="flex">
+                    <el-input v-model="ruleForm.duration" placeholder="请输入" class="w-35" />
+                    <el-select v-model="ruleForm.timeUnit" placeholder="请选择单位">
+                      <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </div>
+                </el-form-item>
+                <el-form-item label="类型" prop="template">
+                  <el-select v-model="ruleForm.template" filterable placeholder="请选择类型" class="w-35">
+                    <el-option v-for="item in []" :key="item.id" :label="item.name" :value="item.key">
+                      <span style="float: left">{{ item.name }}</span>
+                      <span style="float: right; font-size: 13px">{{ item.key }}</span>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="分类" prop="category">
+                  <el-select v-model="ruleForm.category" filterable placeholder="请选择分类" class="w-35">
+                    <el-option v-for="item in []" :key="item.id" :label="item.name" :value="item.key">
+                      <span style="float: left">{{ item.name }}</span>
+                      <span style="float: right; font-size: 13px">{{ item.key }}</span>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label=" " prop="category">
+                  <el-button type="primary">保存</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="绑定实际设备" name="3">
+              <el-form-item label="选择设备" prop="deviceKey">
+                <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
+                  <el-option v-for="item in []" :key="item.key" :label="item.name" :value="item.key">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; font-size: 13px">{{ item.key }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-tab-pane>
           </el-tabs>
         </template>
       </LrLayout>
 
       <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList"/>
     </el-card>
-    <!-- <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="产品名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="设备类型" prop="deviceType">
-            <el-input v-model="tableData.param.deviceType" placeholder="请输入设备类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
-          <el-form-item label="发布状态" prop="status" style="width: 200px;">
-            <el-select v-model="tableData.param.status" placeholder="发布状态" clearable size="default" style="width: 240px">
-              <el-option label="已发布" :value="1" />
-              <el-option label="未发布" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增产品
-            </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" />
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'" />
-        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'" />
-        <el-table-column label="接入方式" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'" />
-        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
-
-        <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
-            <el-tag type="info" size="small" v-else>未发布</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150" align="center" fixed="right">
-          <template #default="scope">
-            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
-              <span>详情</span>
-            </router-link>
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
-    </el-card>
-    <EditDic ref="editDicRef" @typeList="typeList" /> -->
   </div>
 </template>
 
@@ -224,6 +189,8 @@ interface TableDataState {
   tabName: string
   searchVal: string
   treeDetail: any
+  unitData: any
+  ruleForm: any
 }
 
 export default defineComponent({
@@ -249,7 +216,19 @@ export default defineComponent({
       treeLoading: false,
       tabName: '1',
       searchVal: '',
-      treeDetail: {}
+      treeDetail: {},
+			unitData: [
+				{ label: '秒', value: 1 },
+				{ label: '分', value: 2 },
+				{ label: '时', value: 3 },
+				{ label: '天', value: 4 },
+			],
+      ruleForm: {
+        duration: '',
+        timeUnit: '',
+        template: 'default',
+        category: 'default'
+      }
     });
     // 初始化表格数据
     const initTableData = () => {
