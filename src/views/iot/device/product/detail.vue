@@ -412,7 +412,7 @@ export default defineComponent({
 		};
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event);
+			// console.log(tab, event);
 		};
 
 		const updateScript = (scriptInfo: string) => {
@@ -469,7 +469,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .content {
 	background: #fff;
 	width: 100%;

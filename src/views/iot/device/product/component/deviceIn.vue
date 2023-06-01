@@ -1,107 +1,76 @@
 <template>
-	<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px" @keyup.enter="onSubmit">
-		<!-- <el-form-item label="上级分类" prop="parentId">
-			<el-cascader :options="typeData" :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
+	<div class="title">接入方式</div>
+	<div class="text">{{ data.name }}</div>
+	<div class="title">消息协议</div>
+	<div class="text">{{ data.protocol }}</div>
+	<div class="title">认证说明</div>
+	<div class="text">{{ data.description }}</div>
+	<div class="title">链接信息</div>
+	<div class="text">{{ data.link }}</div>
+	<div class="title">认证配置</div>
+
+	<template v-if="data.authType === 1 || data.authType === 2">
+		<el-form-item label="认证方式" prop="">
+			<el-radio-group v-model="data.authType">
+				<el-radio :label="1">Basic</el-radio>
+				<el-radio :label="2">AccessToken</el-radio>
+			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="关联页面" prop="menuIds">
-			<el-cascader :options="menuData" :props="{ checkStrictly: false, multiple: true, emitPath: false, value: 'id', label: 'title' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.menuIds"></el-cascader>
+		<template v-if="data.authType === 1">
+			<el-form-item label="用户名" prop="authUser" label-width="80px">
+				<el-input v-model="data.authUser" readonly  style="width: 300px;" />
+			</el-form-item>
+			<el-form-item label="密码" prop="authPasswd" label-width="80px">
+				<el-input v-model="data.authPasswd" readonly style="width: 300px;" />
+			</el-form-item>
+		</template>
+		<template v-else>
+			<el-form-item label="Aceess Token" prop="accessToken">
+				<el-input v-model="data.accessToken" readonly/>
+			</el-form-item>
+		</template>
+	</template>
+	<template v-else-if="data.authType === 3">
+		<el-form-item label="认证证书" prop="certificateId">
+			<el-select v-model="data.certificateId" disabled>
+				<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
+			</el-select>
 		</el-form-item>
-		<el-form-item label="接口名称" prop="name">
-			<el-input v-model="formData.name" placeholder="输入接口名称" />
-		</el-form-item>
-		<el-form-item label="接口地址" prop="address">
-			<el-input v-model="formData.address" placeholder="接口地址" />
-		</el-form-item> -->
-	</el-form>
+	</template>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, nextTick, watch } from 'vue';
-import api from '/@/api/system';
-import { ApiRow } from '/@/api/model/system/menu';
-import { ruleRequired } from '/@/utils/validator';
-import { ElMessage } from 'element-plus';
-import apiDatahub from '/@/api/datahub';
+import api from '/@/api/device';
+import { useRoute } from 'vue-router';
 
-// TODO 这个页面还没开始开发
+const route = useRoute();
 
-const emit = defineEmits(['getList']);
+const certList = ref([])
+const data = reactive({
+	"name": "",
+	"protocol": "",
+	"description": "",
+	"link": "",
+	"authType": 0,
+	"authUser": "",
+	"authPasswd": "",
+	"accessToken": "",
+	"certificateId": 0
+})
 
-const showDialog = ref(false);
-const formRef = ref();
-const menuData = ref<any[]>([]);
-const typeData = ref<any[]>([]);
-const methodOptions = ref<any[]>([]);
+api.product.connect_intro(route.params.id as string).then((res: any) => {
+	console.log(res.data)
+	Object.assign(data, res.data)
+})
 
-const baseForm: ApiRow = {
-	menuIds: [],
-	id: undefined,
-	parentId: undefined,
-	name: '',
-	types: 2,
-	address: '',
-	method: '',
-	remark: '',
-	status: 1,
-};
-
-const formData = reactive<ApiRow>({
-	...baseForm,
-});
-
-// 切换分类时清空上级分类的选择。因为接口里不能选择跟分类节点
-watch(
-	() => formData.types,
-	() => {
-		formData.parentId = undefined;
-	}
-);
-
-const ruleForm = {
-	parentId: [ruleRequired('上级分类不能为空', 'change')],
-	menuIds: [ruleRequired('关联页面不能为空', 'change')],
-	method: [ruleRequired('请求方式不能为空', 'change')],
-	name: [ruleRequired('接口名称不能为空')],
-	address: [ruleRequired('接口地址不能为空')],
-};
-
-apiDatahub.template.getDictData({ DictType: 'api_methods' }).then((res: any) => {
-	methodOptions.value = res.values;
-});
-
-// 加载菜单列表
-api.menu.getList({ status: -1 }).then((res: any[]) => {
-	menuData.value = res;
-});
-
-const onSubmit = async () => {
-	await formRef.value.validate();
-
-	const theApi = formData.id ? api.api.edit : api.api.add;
-
-	await theApi(formData);
-
-	ElMessage.success('操作成功');
-	resetForm();
-	showDialog.value = false;
-	emit('getList');
-};
-
-const resetForm = async () => {
-	Object.assign(formData, { ...baseForm });
-	formRef.value && formRef.value.resetFields();
-};
-
-const open = async (row: any) => {
-	resetForm();
-	showDialog.value = true;
-	api.api.getList({ types: 1, status: -1 }).then((res: any) => {
-		typeData.value = res.Info;
-	});
-	nextTick(() => {
-		Object.assign(formData, { method: methodOptions.value.length ? methodOptions.value[0].value : '', ...row });
-	});
-};
-
-defineExpose({ open });
 </script>
+<style lang="scss" scoped>
+.title {
+	font-weight: bold;
+	line-height: 1.2;
+	border-left: 4px solid #409eff;
+	padding-left: 8px;
+	margin: 20px 0 14px;
+}
+</style>
