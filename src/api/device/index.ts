@@ -5,6 +5,8 @@ export default {
     singleImg: (data: object) => post('/common/singleImg', data),
   },
   product: {
+    // 获取设备接入信息 /product/?id=35
+    connect_intro: (id: string) => get('/product/connect_intro', {id}),
     getList: (params: object) => get('/product/page_list', params),
     getLists: (params: object) => get('/product/list', params),
     add: (data: object) => post('/product/add', data),
