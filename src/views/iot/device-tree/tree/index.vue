@@ -105,33 +105,27 @@
               </table>
             </el-tab-pane>
             <el-tab-pane label="时间周期" name="2">
-			        <el-form :model="ruleForm" ref="formRef" size="default" label-width="110px">
-                <el-form-item label="时间窗口" prop="duration">
+			        <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
+                <!-- <el-form-item label="时间窗口" prop="duration">
                   <div class="flex">
                     <el-input v-model="ruleForm.duration" placeholder="请输入" class="w-35" />
                     <el-select v-model="ruleForm.timeUnit" placeholder="请选择单位">
                       <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </div>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="类型" prop="template">
-                  <el-select v-model="ruleForm.template" filterable placeholder="请选择类型" class="w-35">
-                    <el-option v-for="item in []" :key="item.id" :label="item.name" :value="item.key">
-                      <span style="float: left">{{ item.name }}</span>
-                      <span style="float: right; font-size: 13px">{{ item.key }}</span>
-                    </el-option>
+                  <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
+                    <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="分类" prop="category">
-                  <el-select v-model="ruleForm.category" filterable placeholder="请选择分类" class="w-35">
-                    <el-option v-for="item in []" :key="item.id" :label="item.name" :value="item.key">
-                      <span style="float: left">{{ item.name }}</span>
-                      <span style="float: right; font-size: 13px">{{ item.key }}</span>
-                    </el-option>
+                  <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" class="w-35">
+                    <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label=" " prop="category">
-                  <el-button type="primary">保存</el-button>
+                  <el-button type="primary" @click="onSaveTime">保存</el-button>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -155,7 +149,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';
@@ -197,6 +191,7 @@ export default defineComponent({
   name: 'deviceTree',
   components: { AddOrUpdate, LrLayout, Fold, Expand, More, Plus, Edit, Delete, Search },
   setup() {
+    const { proxy } = getCurrentInstance() as any;
     const addOrUpdateRef = ref();
     const queryRef = ref();
     const state = reactive<TableDataState>({
@@ -230,6 +225,8 @@ export default defineComponent({
         category: 'default'
       }
     });
+    
+    const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
     // 初始化表格数据
     const initTableData = () => {
       getTreeList();
@@ -262,6 +259,20 @@ export default defineComponent({
         .then((res: any) => {
           state.treeDetail = res.data || {}
         })
+    }
+    const onSaveTime = () => {
+      if (!state.treeDetail.id) {
+        ElMessage.warning('请选择节点树')
+        return
+      }
+      //修改
+      api.tree.edit({
+        ...state.treeDetail,
+        template: state.ruleForm.template,
+        category: state.ruleForm.category
+      }).then(() => {
+        ElMessage.success('修改成功');
+      });
     }
 
     const operateCmd = (type: string, data: any) => {
@@ -297,7 +308,10 @@ export default defineComponent({
       operateCmd,
       getTreeList,
       nodeClick,
+      tree_types,
+      tree_category,
       ...toRefs(state),
+      onSaveTime
     };
   },
 });
