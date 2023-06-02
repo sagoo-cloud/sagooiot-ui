@@ -10,11 +10,11 @@
 	<div class="title">认证配置</div>
 
 	<template v-if="data.authType === 1 || data.authType === 2">
-		<el-form-item label="认证方式" prop="authType" label-width="80px">
+		<el-form-item label="认证方式" prop="authType" label-width="80px" style="margin-bottom: 0;">
 			{{ data.authType === 1 ? 'Basic' : 'AccessToken' }}
 		</el-form-item>
 		<template v-if="data.authType === 1">
-			<el-form-item label="用户名" prop="authUser" label-width="80px">
+			<el-form-item label="用户名" prop="authUser" label-width="80px" style="margin-bottom: 0;">
 				{{ data.authUser }}
 			</el-form-item>
 			<el-form-item label="密码" prop="authPasswd" label-width="80px">
