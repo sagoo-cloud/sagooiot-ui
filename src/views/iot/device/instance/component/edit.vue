@@ -9,7 +9,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
         <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
+          <el-select v-model="ruleForm.productId" @change="productIdChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
             <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -20,26 +20,44 @@
           <div class="tags-wrapper">
             <el-button type="primary" size="small" @click="toAddTag">添加标签</el-button>
             <div class="tags">
-              <div class="tag flex" v-for="tag,i in ruleForm.tags">
+              <div class="tag flex" v-for="tag, i in ruleForm.tags">
                 <el-tag>{{ tag.key }} : {{ tag.name }} : {{ tag.value }}</el-tag>
                 <el-button type="danger" size="small" @click="delTagRow(i)">删除</el-button>
               </div>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="设备证书" prop="certificate">
-          <el-input v-model="ruleForm.certificate" placeholder="请输入设备证书" />
-        </el-form-item>
-
-        <el-form-item label="设备秘钥" prop="secureKey">
-          <el-input v-model="ruleForm.secureKey" placeholder="请输入设备秘钥" />
-        </el-form-item>
-
+        <template v-if="ruleForm.authType === 1 || ruleForm.authType === 2">
+          <el-form-item label="认证方式" prop="">
+            <el-radio-group v-model="ruleForm.authType">
+              <el-radio :label="1">Basic</el-radio>
+              <el-radio :label="2">AccessToken</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <template v-if="ruleForm.authType === 1">
+            <el-form-item label="用户名" prop="authUser">
+              <el-input v-model="ruleForm.authUser" placeholder="请输入用户名" />
+            </el-form-item>
+            <el-form-item label="密码" prop="authPasswd">
+              <el-input v-model="ruleForm.authPasswd" placeholder="请输入密码" />
+            </el-form-item>
+          </template>
+          <template v-else>
+            <el-form-item label="Aceess Token" prop="accessToken">
+              <el-input v-model="ruleForm.accessToken" placeholder="请输入Aceess Token" />
+            </el-form-item>
+          </template>
+        </template>
+        <template v-else-if="ruleForm.authType === 3">
+          <el-form-item label="认证证书" prop="certificateId">
+            <el-select v-model="ruleForm.certificateId" placeholder="请选择证书">
+              <el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
+            </el-select>
+          </el-form-item>
+        </template>
         <el-form-item label="固件版本号" prop="version">
           <el-input v-model="ruleForm.version" placeholder="请输入固件版本号" />
         </el-form-item>
-
-
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
@@ -63,22 +81,45 @@ import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/device';
 import { ElMessage } from "element-plus";
 import tagVue from './tag.vue'
+import certApi from '/@/api/certificateManagement';
 
 interface RuleFormState {
   id: number;
   key: string;
   name: string;
-  certificate: string;
-  secureKey: string;
   version: string;
   productId: number | string;
   tags: Tag[];
   lng: string;
   lat: string;
   desc: string;
+  authType: number;
+  authUser: string;
+  authPasswd: string;
+  accessToken: string;
+  certificateId: string;
 }
+
+const form: RuleFormState = {
+  id: 0,
+  key: '',
+  name: '',
+  productId: '',
+  tags: [],
+  lng: '',
+  lat: '',
+  version: '',
+  authType: 0,
+  authUser: '',
+  authPasswd: '',
+  accessToken: '',
+  certificateId: '',
+  desc: ''
+}
+
 interface DicState {
   productData: any[];
+  product: any;
   isShowDialog: boolean;
   ruleForm: RuleFormState;
   rules: {}
@@ -98,25 +139,13 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
     const mapVisible = ref(false);
+    const certList = ref([])
     const state = reactive<DicState>({
       isShowDialog: false,
+      product: {},
       productData: [], // 分类数据
       ruleForm: {
-        id: 0,
-        key: '',
-        name: '',
-        productId: '',
-        certificate: '',
-        tags: [{
-          key: 'key',
-          name: 'name',
-          value: 'value'
-        }],
-        lng: '',
-        lat: '',
-        secureKey: '',
-        version: '',
-        desc: ''
+        ...form
       },
       rules: {
         name: [
@@ -132,6 +161,11 @@ export default defineComponent({
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
 
+      // 证书列表
+      certApi.certificateManagement.getAll().then((res: any) => {
+        certList.value = res.Info || []
+      });
+
       api.product.getLists({ status: 1 }).then((res: any) => {
         state.productData = res.product || [];
       });
@@ -142,23 +176,14 @@ export default defineComponent({
         //   state.ruleForm = res.data.dictType
         // })
         state.ruleForm = row;
-        state.ruleForm.tags = row.tags|| []
+        state.ruleForm.tags = row.tags || []
+        productIdChange(row.productId as number)
       }
       state.isShowDialog = true;
     };
     const resetForm = () => {
       state.ruleForm = {
-        id: 0,
-        key: '',
-        name: '',
-        productId: '',
-        tags: [],
-        lng: '',
-        lat: '',
-        certificate: '',
-        secureKey: '',
-        version: '',
-        desc: ''
+        ...form
       }
     };
     // 关闭弹窗
@@ -218,8 +243,26 @@ export default defineComponent({
         });
       });
     }
+    // 通过设备所属产品的传输协议来确定认证方式
+    const transportProtocolChange = (type: string) => {
+      if (type === 'mqtt_server') {
+        state.ruleForm.authType = 1
+      } else {
+        state.ruleForm.authType = 3
+      }
+    }
+    // 所属产品变化的时候，更新产品详情
+    const productIdChange = (productId: number) => {
+      api.product.detail(productId).then((res: any) => {
+        // console.log(res.data)
+        state.product = res.data
+        transportProtocolChange(res.data.transportProtocol)
+      })
+    }
 
     return {
+      certList,
+      productIdChange,
       tagRef,
       delTagRow,
       toAddTag,

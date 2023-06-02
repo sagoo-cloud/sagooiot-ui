@@ -5,6 +5,8 @@ export default {
     singleImg: (data: object) => post('/common/singleImg', data),
   },
   product: {
+    // 获取设备接入信息 /product/?id=35
+    connect_intro: (id: string) => get('/product/connect_intro', {id}),
     getList: (params: object) => get('/product/page_list', params),
     getLists: (params: object) => get('/product/list', params),
     add: (data: object) => post('/product/add', data),
@@ -73,6 +75,13 @@ export default {
     tagadd: (data: object) => post('/product/tsl/tag/add', data),
     tagedit: (data: object) => put('/product/tsl/tag/edit', data),
     tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
+  },
+  tree: {
+    getList: (params: object) => get('/product/device_tree/list', params),
+    add: (params: object) => post('/product/device_tree/info/add', params),
+    edit: (params: object) => post('/product/device_tree/info/edit', params),
+    detail: (params: object) => get('/product/device_tree/info/detail', params),
+    delete: (params: object) => del('/product/device_tree/info/del', params),
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),

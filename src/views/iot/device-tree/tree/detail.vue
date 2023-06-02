@@ -169,7 +169,7 @@
 					<deviceIn></deviceIn>
 				</el-tab-pane>
 				<el-tab-pane label="数据解析" name="4" lazy>
-					<dataParse v-if="activeName === '4'" :script="detail.scriptInfo" @updateScript="updateScript"></dataParse>
+					<dataParse></dataParse>
 				</el-tab-pane>
 			</el-tabs>
 		</div>
@@ -199,7 +199,6 @@ import api from '/@/api/device';
 
 interface TableDataState {
 	ids: number[];
-	detail: any;
 	tableData: {
 		data: [];
 		total: number;
@@ -227,9 +226,9 @@ export default defineComponent({
 		const editTabRef = ref();
 		const state = reactive<TableDataState>({
 			isShowDialog: false,
-			activeName: '1', // 分类数据
+			activeName: '3', // 分类数据
 			activetab: 'attr', // 分类数据
-			detail: {},
+			detail: [],
 			developer_status: 0,
 			tableData: {
 				data: [],
@@ -258,6 +257,8 @@ export default defineComponent({
 				state.tableData.total = res.Total;
 			});
 		});
+
+
 
 		//编辑属性
 		const onEditAttr = (row: TableDataRow) => {
@@ -412,11 +413,7 @@ export default defineComponent({
 		};
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			// console.log(tab, event);
-		};
-
-		const updateScript = (scriptInfo: string) => {
-			state.detail.scriptInfo  = scriptInfo
+			console.log(tab, event);
 		};
 
 		const CkOption = () => {
@@ -440,7 +437,6 @@ export default defineComponent({
 
 		return {
 			Edit,
-			updateScript,
 			editDicRef,
 			editAttrRef,
 			editFunRef,
@@ -469,7 +465,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
+<style>
 .content {
 	background: #fff;
 	width: 100%;
