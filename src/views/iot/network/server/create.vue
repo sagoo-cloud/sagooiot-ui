@@ -22,6 +22,22 @@
                                 <el-form-item label="地址">
                                     <el-input v-model="form.addr" placeholder="端口号" />
                                 </el-form-item>
+                                <el-form-item label="开启TLS">
+                                       <el-radio-group v-model="form.isTls" class="ml-4">
+                                            <el-radio :label="1">是</el-radio>
+                                            <el-radio :label="0">否</el-radio>
+                                        </el-radio-group>
+                                </el-form-item>
+                                <el-form-item v-if="form.isTls == 1" label="选择证书">
+                                    <el-select v-model="form.certificateId" placeholder="请选择证书">
+                                        <el-option
+                                            v-for="item in certificateList"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
                                 <el-form-item label="启用">
                                     <el-switch v-model="form.status" />
                                 </el-form-item>
@@ -86,7 +102,7 @@
 	</el-card>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus'
@@ -97,6 +113,7 @@ import serverDetail from './component/serverDetail.vue'
 import { useRoute, useRouter } from 'vue-router';
 
 import api from '/@/api/network';
+import api2 from '/@/api/system';
 
 interface TableDataState {
 	// ids: number[];
@@ -108,7 +125,8 @@ interface TableDataState {
 		// content: object,
 	},
 	detail: object,
-    form: object
+    form: object,
+    certificateList: object[];
 }
 export default defineComponent({
 	name: 'serverCreate',
@@ -133,9 +151,13 @@ export default defineComponent({
 			},
 			detail:{},
             activeViewName: ['1','2','3'],
+            certificateList: [],
             form:{
                 id: "",
-
+                // 是否开启TLS
+                isTls: 0,
+                // 证书id
+                certificateId: "",
                 // 名称
                 name: '新建服务器',
                 // 类型
@@ -202,7 +224,33 @@ export default defineComponent({
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			console.log(tab, event)
 		}
+        const getCertificateList = () => {
+            api2.certificate.getList().then((res: any) => {
+				console.log(res)
+                state.certificateList = res.Info;
+			})
+		}
+		watch(
+			() => state.form.types,
+			(value) => {
+				console.log(value)
+                if(value == 'http') {
+                    getCertificateList()
+                }
+                // api.certificate.getList();
+			}
+		);
 
+        watch(
+			() => state.form.isTls,
+			(value) => {
+				console.log(value)
+                if(value == '2') {
+                    state.form.certificate = ''
+                }
+                // api.certificate.getList();
+			}
+		);
 		return {
 			Edit,
             mirrorRef,
@@ -216,6 +264,7 @@ export default defineComponent({
 			// editFunRef,
 			// editEventRef,
 			// editTabRef,
+            getCertificateList,
             submit,
 			...toRefs(props),
 			...toRefs(state),

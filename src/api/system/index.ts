@@ -159,5 +159,8 @@ export default {
   basicConfig: {
     getDetails: () => get('/getBaseSetting'),
     setDetails: (data: object) => put('/editBaseSetting', data),
-  }
+  },
+  certificate: {
+    getList: () => get('/system/certificate/getAll')
+  },
 }
