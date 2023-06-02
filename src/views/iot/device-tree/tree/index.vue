@@ -99,7 +99,15 @@
                   </tr>
                   <tr class="ant-descriptions-row">
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
-                    <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.deviceKey }}</td>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
+                    <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -132,11 +140,14 @@
             <el-tab-pane label="绑定实际设备" name="3">
               <el-form-item label="选择设备" prop="deviceKey">
                 <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-                  <el-option v-for="item in []" :key="item.key" :label="item.name" :value="item.key">
+                  <el-option v-for="item in deviceList" :key="item.id" :label="item.name" :value="item.id">
                     <span style="float: left">{{ item.name }}</span>
-                    <span style="float: right; font-size: 13px">{{ item.key }}</span>
+                    <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
                   </el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label=" " prop="category">
+                <el-button type="primary" @click="onSaveTime">保存</el-button>
               </el-form-item>
             </el-tab-pane>
           </el-tabs>
@@ -179,6 +190,7 @@ interface TableDataState {
     };
   };
   treeData: any[]
+  deviceList: any[]
   treeLoading: boolean
   tabName: string
   searchVal: string
@@ -212,6 +224,7 @@ export default defineComponent({
       tabName: '1',
       searchVal: '',
       treeDetail: {},
+      deviceList: [],
 			unitData: [
 				{ label: '秒', value: 1 },
 				{ label: '分', value: 2 },
@@ -230,12 +243,19 @@ export default defineComponent({
     // 初始化表格数据
     const initTableData = () => {
       getTreeList();
+      getDeviceList()
     };
     const getTreeList = () => {
       state.treeLoading = true;
       api.tree.getList({}).then((res: any) => {
         state.treeData = res.list;
       }).finally(() => (state.treeLoading = false));
+    }
+    const getDeviceList = () => {
+      api.device.allList({}).then((res: any) => {
+        state.deviceList = res.device || [];
+        console.log('res')
+      })
     }
     const typeList = () => {
 
@@ -269,7 +289,8 @@ export default defineComponent({
       api.tree.edit({
         ...state.treeDetail,
         template: state.ruleForm.template,
-        category: state.ruleForm.category
+        category: state.ruleForm.category,
+        deviceKey: state.ruleForm.deviceKey,
       }).then(() => {
         ElMessage.success('修改成功');
       });

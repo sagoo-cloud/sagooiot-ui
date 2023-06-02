@@ -85,6 +85,7 @@ export default {
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),
+    allList: (params: object) => get('/product/device/list', params),
     getSubList: (params: object) => get('/product/device/sub_list', params),
     mutipleBind: (data: object) => post('/product/device/bind_sub', data),
     mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
