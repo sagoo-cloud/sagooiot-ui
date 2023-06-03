@@ -79,9 +79,11 @@ export default {
   tree: {
     getList: (params: object) => get('/product/device_tree/list', params),
     add: (params: object) => post('/product/device_tree/info/add', params),
-    edit: (params: object) => post('/product/device_tree/info/edit', params),
+    edit: (params: object) => put('/product/device_tree/info/edit', params),
     detail: (params: object) => get('/product/device_tree/info/detail', params),
     delete: (params: object) => del('/product/device_tree/info/del', params),
+    statistic: (params: object) => get('/envirotronics/device_tree/statistic', params),
+    record: (params: object) => get('/envirotronics/device_tree/record', params),
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),
