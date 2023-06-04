@@ -84,6 +84,7 @@ export default {
     delete: (params: object) => del('/product/device_tree/info/del', params),
     statistic: (params: object) => get('/envirotronics/device_tree/statistic', params),
     record: (params: object) => get('/envirotronics/device_tree/record', params),
+    param: (params: object) => get('/envirotronics/device_tree/param', params),
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),
