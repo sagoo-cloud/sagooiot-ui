@@ -239,7 +239,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="设备功能" name="5">
-          <functionCom :device-key="detail.key" :product-key="prodetail.key"  v-if="detail.key && prodetail.key"></functionCom>
+          <functionCom :device-key="detail.key" :product-key="prodetail.key"  v-if="detail.key && prodetail.key && activeName==='5'"></functionCom>
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
