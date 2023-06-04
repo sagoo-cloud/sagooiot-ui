@@ -58,7 +58,7 @@
 							<el-input v-model="ruleForm.authUser" placeholder="请输入用户名" />
 						</el-form-item>
 						<el-form-item label="密码" prop="authPasswd">
-							<el-input v-model="ruleForm.authPasswd" placeholder="请输入密码" />
+							<el-input type="password" v-model="ruleForm.authPasswd" placeholder="请输入密码" />
 						</el-form-item>
 					</template>
 					<template v-else>

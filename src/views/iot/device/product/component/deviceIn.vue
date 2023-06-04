@@ -9,7 +9,8 @@
 	<div class="text">{{ data.link }}</div>
 	<div class="title">认证配置</div>
 
-	<template v-if="data.authType === 1 || data.authType === 2">
+	<template v-if="!isAdmin">请联系管理员</template>
+	<template v-else-if="data.authType === 1 || data.authType === 2">
 		<el-form-item label="认证方式" prop="authType" label-width="80px" style="margin-bottom: 0;">
 			{{ data.authType === 1 ? 'Basic' : 'AccessToken' }}
 		</el-form-item>
@@ -41,7 +42,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const certList = ref([])
+const isAdmin = localStorage.userId == '1'
 const data = reactive({
 	"name": "",
 	"protocol": "",
