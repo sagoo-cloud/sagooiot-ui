@@ -5,14 +5,17 @@
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="区域" prop="area" style="width: 200px;">
             <el-select v-model="tableData.param.area" placeholder="区域" clearable size="default" style="width: 200px">
+              <el-option v-for="item in areaOptions" :key="item" :label="item" :value="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="管道序号" prop="name" style="width: 200px;">
             <el-select v-model="tableData.param.name" placeholder="管道序号" clearable size="default" style="width: 200px">
+              <el-option v-for="item in nameOptions" :key="item" :label="item" :value="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="输送单位" prop="company" style="width: 200px;">
             <el-select v-model="tableData.param.company" placeholder="输送单位" clearable size="default" style="width: 200px">
+              <el-option v-for="item in companyOptions" :key="item" :label="item" :value="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="创建时间" prop="dateRange">
@@ -82,6 +85,9 @@ interface TableDataState {
       dateRange: string[];
     };
   };
+  nameOptions: string[];
+  areaOptions: string[];
+  companyOptions: string[];
 }
 
 export default defineComponent({
@@ -105,16 +111,25 @@ export default defineComponent({
           dateRange: [],
         },
       },
+      nameOptions: [],
+      areaOptions: [],
+      companyOptions: []
     });
     const { tree_types_2 } = proxy.useDict('tree_types_2');
     // 初始化表格数据
     const initTableData = () => {
       typeList();
     };
+    const initParam = () => {
+      api.tree.param(state.tableData.param).then((res: any) => {
+        state.nameOptions = res.name || []
+        state.areaOptions = res.area || []
+        state.companyOptions = res.company || []
+      })
+    }
     const typeList = () => {
       state.tableData.loading = true;
       api.tree.record(state.tableData.param).then((res: any) => {
-        console.log(res);
         state.tableData.data = res.list;
         state.tableData.total = res.total;
       }).finally(() => (state.tableData.loading = false));
@@ -123,6 +138,7 @@ export default defineComponent({
     // 页面加载时
     onMounted(() => {
       initTableData();
+      initParam()
     });
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {
