@@ -32,7 +32,7 @@
                   <span class="tree-label">
                     <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
                   </span>
-                  <span class="tree-options" >
+                  <span class="tree-options" @click.stop>
                     <slot name="operate" :data="data">
                       <el-dropdown @command="command => operateCmd(command, data)">
                         <el-icon>
