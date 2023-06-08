@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
+    "zipAndUpload": "rm -rf iotDist.zip && zip -r -q iotDist.zip dist/ && ssh iot 'rm -rf /www/wwwroot/iotDist-old.zip' | ssh iot 'mv /www/wwwroot/iotDist.zip /www/wwwroot/iotDist-old.zip' | scp -r -O iotDist.zip iot:/www/wwwroot/",
+    "unzip": "ssh iot 'cd /www/wwwroot/ && unzip -q -o -d zhgy.sagoo.cn iotDist.zip'",
     "deploy": "npm run build && npm run deploy:rm && npm run deploy:scp && npm run deploy:auth",
     "deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
     "deploy:scp": "scp -r -O ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
