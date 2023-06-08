@@ -39,7 +39,7 @@
               <el-input v-model="ruleForm.authUser" placeholder="请输入用户名" />
             </el-form-item>
             <el-form-item label="密码" prop="authPasswd">
-              <el-input v-model="ruleForm.authPasswd" placeholder="请输入密码" />
+              <el-input type="password" v-model="ruleForm.authPasswd" placeholder="请输入密码" />
             </el-form-item>
           </template>
           <template v-else>
@@ -243,20 +243,17 @@ export default defineComponent({
         });
       });
     }
-    // 通过设备所属产品的传输协议来确定认证方式
-    const transportProtocolChange = (type: string) => {
-      if (type === 'mqtt_server') {
-        state.ruleForm.authType = 1
-      } else {
-        state.ruleForm.authType = 3
-      }
-    }
     // 所属产品变化的时候，更新产品详情
     const productIdChange = (productId: number) => {
       api.product.detail(productId).then((res: any) => {
         // console.log(res.data)
+        const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
-        transportProtocolChange(res.data.transportProtocol)
+        state.ruleForm.authType = authType
+        state.ruleForm.authUser = authUser
+        state.ruleForm.authPasswd = authPasswd
+        state.ruleForm.accessToken = accessToken
+        state.ruleForm.certificateId = certificateId
       })
     }
 

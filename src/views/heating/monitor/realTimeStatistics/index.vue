@@ -32,7 +32,7 @@
                   <span class="tree-label">
                     <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
                   </span>
-                  <span class="tree-options" @click.stop>
+                  <!-- <span class="tree-options" >
                     <slot name="operate" :data="data">
                       <el-dropdown @command="command => operateCmd(command, data)">
                         <el-icon>
@@ -59,7 +59,7 @@
                         </template>
                       </el-dropdown>
                     </slot>
-                  </span>
+                  </span> -->
                 </div>
               </template>
             </el-tree>
@@ -67,100 +67,22 @@
         </div>
       </template>
       <template #right>
-        <!--  @tab-click="handleClick" -->
-        <el-tabs v-model="tabName">
-          <el-tab-pane label="设备树信息" name="1">
-            <table>
-              <tbody>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">名称</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.name }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">地址</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.address }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">经度</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lng }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">纬度</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lat }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系人</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
-                </tr> 
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.image }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
-                  <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </el-tab-pane>
-          <el-tab-pane label="时间周期" name="2">
-            <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
-              <!-- <el-form-item label="时间窗口" prop="duration">
-                <div class="flex">
-                  <el-input v-model="ruleForm.duration" placeholder="请输入" class="w-35" />
-                  <el-select v-model="ruleForm.timeUnit" placeholder="请选择单位">
-                    <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </div>
-              </el-form-item> -->
-              <el-form-item label="类型" prop="template">
-                <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
-                  <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="分类" prop="category">
-                <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" class="w-35">
-                  <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label=" " prop="category">
-                <el-button type="primary" @click="onSaveTime">保存</el-button>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="绑定实际设备" name="3">
-            <el-form-item label="选择设备" prop="deviceKey">
-              <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-                <el-option v-for="item in deviceList" :key="item.id" :label="item.name" :value="item.id">
-                  <span style="float: left">{{ item.name }}</span>
-                  <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label=" " prop="category">
-              <el-button type="primary" @click="onSaveTime">保存</el-button>
-            </el-form-item>
-          </el-tab-pane>
-        </el-tabs>
+        <!-- max-height="30vh" -->
+        <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%; padding: 12px" >
+          <el-table-column :label="item.name + `${item.unit ? `(${item.unit})` : ''}`" :prop="item.key" v-for="(item, index) in tableData
+          .columns" :key="index" :show-overflow-tooltip="true" />
+        </el-table>
+
+        <div  style="text-align: center;padding: 28px;" v-if="(tableData.data.length)">暂无数据</div>
       </template>
     </LrLayout>
 
-    <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList"/>
   </div>
 </template>
 
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';
 import LrLayout from '/@/components/lrLayout/index.vue'
 import { Fold, Expand, More, Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
@@ -178,6 +100,7 @@ interface TableDataState {
   ids: number[];
   tableData: {
     data: Array<TableDataRow>;
+      columns: Array<any>;
     total: number;
     loading: boolean;
     param: {
@@ -198,8 +121,8 @@ interface TableDataState {
 }
 
 export default defineComponent({
-  name: 'deviceTree',
-  components: { AddOrUpdate, LrLayout, Fold, Expand, More, Plus, Edit, Delete, Search },
+  name: 'realTimeStatistics',
+  components: { LrLayout, Fold, Expand, More, Plus, Edit, Delete, Search },
   setup() {
     const { proxy } = getCurrentInstance() as any;
     const addOrUpdateRef = ref();
@@ -208,6 +131,7 @@ export default defineComponent({
       ids: [],
       tableData: {
         data: [],
+        columns: [],
         total: 0,
         loading: false,
         param: {
@@ -237,11 +161,12 @@ export default defineComponent({
       }
     });
     
-    const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
+    // const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
     // 初始化表格数据
     const initTableData = () => {
       getTreeList();
-      getDeviceList()
+
+      nodeClick({ infoId:  1 })
     };
     const getTreeList = () => {
       state.treeLoading = true;
@@ -249,15 +174,6 @@ export default defineComponent({
         state.treeData = res.list;
       }).finally(() => (state.treeLoading = false));
     }
-    const getDeviceList = () => {
-      api.device.allList({}).then((res: any) => {
-        state.deviceList = res.device || [];
-        console.log('res')
-      })
-    }
-    const typeList = () => {
-
-    };
     // 页面加载时
     onMounted(() => {
       initTableData();
@@ -266,16 +182,29 @@ export default defineComponent({
     const resetQuery = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
       formEl.resetFields();
-      typeList();
     };
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
       state.ids = selection.map((item) => item.id);
     };
     const nodeClick = (data: any) => {
-      api.tree.detail({ infoId: data.infoId })
+      api.tree.statistic({ infoId: data.infoId })
         .then((res: any) => {
-          state.treeDetail = res.data || {}
+          state.tableData.columns = []
+          state.tableData.data = []
+          if (res.name) {
+            let header = res.header || []
+            let list = res.list || []
+            state.tableData.columns = header
+            state.tableData.data = list.map((item: any) => {
+              return {
+                time: item.time,
+                ...item.data
+              }
+            })
+            state.tableData.columns.unshift({ name: '时间', key: 'time' })
+          }
+          // state.treeDetail = res.data || {}
         })
     }
     const onSaveTime = () => {
@@ -321,14 +250,11 @@ export default defineComponent({
     return {
       addOrUpdateRef,
       queryRef,
-      typeList,
       resetQuery,
       handleSelectionChange,
       operateCmd,
       getTreeList,
       nodeClick,
-      tree_types,
-      tree_category,
       ...toRefs(state),
       onSaveTime
     };

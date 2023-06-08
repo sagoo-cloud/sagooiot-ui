@@ -1,5 +1,6 @@
 <template>
 	<div class="device-function">
+		<el-empty description="暂无功能列表，请先在物模型的功能定义中添加" v-if="!loading && !list.length"></el-empty>
 		<el-tabs tab-position="left">
 			<el-tab-pane :label="item.name" v-for="item in list" :key="item.key">
 				<div class="table-wrapper">
@@ -47,11 +48,19 @@ interface IListItem {
 }
 
 const list = ref<IListItem[]>([])
+const loading = ref(true)
 
-api.tabDeviceFucntion.getList({ key: props.productKey }).then((res: IListItem[]) => {
-	res.forEach((item) => (item.result = ''))
-	list.value = res
-})
+getData()
+
+function getData() {
+	loading.value = true
+	api.tabDeviceFucntion.getList({ key: props.productKey }).then((res: IListItem[]) => {
+		if (!res) return
+		res.forEach((item) => (item.result = ''))
+		list.value = res
+	}).finally(() => loading.value = false)
+}
+
 
 function run(row: IListItem) {
 	row.result = ''

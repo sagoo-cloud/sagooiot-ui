@@ -58,6 +58,24 @@
 							<el-input v-model="ruleForm.deviceKey" placeholder="请输入设备标识" clearable></el-input>
 						</el-form-item>
 					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="设备所属区域" prop="area">
+							<el-input v-model="ruleForm.area" placeholder="请输入设备所属区域" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="所属公司" prop="company">
+							<el-input v-model="ruleForm.company" placeholder="请输入所属公司" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="类型" prop="types">
+							<el-select v-model="ruleForm.types" filterable clearable placeholder="请选择类型" class="w-35">
+								<el-option v-for="dict in tree_types_2" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+							</el-select>
+							<!-- <el-input v-model="ruleForm.types" placeholder="请输入所属公司" clearable></el-input> -->
+						</el-form-item>
+					</el-col>
 				</el-row>
 			</el-form>
 			<template #footer>
@@ -71,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/device';
 import { phoneValidate } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
@@ -85,6 +103,9 @@ interface RuleFormState {
 	contact: string;
 	phone: string;
 	deviceKey: string;
+	area: string;
+	company: string;
+	types: string;
 	parentId: string;
 	startDate: string;
 	endDate: string;
@@ -98,6 +119,9 @@ const baseForm: RuleFormState = {
 	contact: '',
 	phone: '',
 	deviceKey: '',
+	area: '',
+	company: '',
+	types: '',
 	parentId: '',
 	startDate: '',
 	endDate: '',
@@ -106,6 +130,7 @@ const baseForm: RuleFormState = {
 export default defineComponent({
 	name: 'deviceEditCate',
 	setup(prop, { emit }) {
+    const { proxy } = getCurrentInstance() as any;
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive({
 			isShowDialog: false,
@@ -117,6 +142,8 @@ export default defineComponent({
 				address: [{ required: true, message: '地址不能为空', trigger: 'blur' }],
 			},
 		});
+
+    const { tree_types_2 } = proxy.useDict('tree_types_2');
 
 		// 打开弹窗
 		const openDialog = (type: string, row?: any) => {
@@ -178,6 +205,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
+			tree_types_2,
 			...toRefs(state),
 		};
 	},

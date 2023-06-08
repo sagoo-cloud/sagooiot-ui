@@ -9,32 +9,28 @@
 	<div class="text">{{ data.link }}</div>
 	<div class="title">认证配置</div>
 
-	<template v-if="data.authType === 1 || data.authType === 2">
-		<el-form-item label="认证方式" prop="">
-			<el-radio-group v-model="data.authType">
-				<el-radio :label="1">Basic</el-radio>
-				<el-radio :label="2">AccessToken</el-radio>
-			</el-radio-group>
+	<template v-if="!isAdmin">请联系管理员</template>
+	<template v-else-if="data.authType === 1 || data.authType === 2">
+		<el-form-item label="认证方式" prop="authType" label-width="80px" style="margin-bottom: 0;">
+			{{ data.authType === 1 ? 'Basic' : 'AccessToken' }}
 		</el-form-item>
 		<template v-if="data.authType === 1">
-			<el-form-item label="用户名" prop="authUser" label-width="80px">
-				<el-input v-model="data.authUser" readonly  style="width: 300px;" />
+			<el-form-item label="用户名" prop="authUser" label-width="80px" style="margin-bottom: 0;">
+				{{ data.authUser }}
 			</el-form-item>
 			<el-form-item label="密码" prop="authPasswd" label-width="80px">
-				<el-input v-model="data.authPasswd" readonly style="width: 300px;" />
+				{{ data.authPasswd }}
 			</el-form-item>
 		</template>
 		<template v-else>
 			<el-form-item label="Aceess Token" prop="accessToken">
-				<el-input v-model="data.accessToken" readonly/>
+				{{ data.accessToken }}
 			</el-form-item>
 		</template>
 	</template>
 	<template v-else-if="data.authType === 3">
-		<el-form-item label="认证证书" prop="certificateId">
-			<el-select v-model="data.certificateId" disabled>
-				<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
-			</el-select>
+		<el-form-item label="认证证书" prop="certificateName">
+			{{ data.certificateName }}
 		</el-form-item>
 	</template>
 </template>
@@ -46,7 +42,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const certList = ref([])
+const isAdmin = localStorage.userId == '1'
 const data = reactive({
 	"name": "",
 	"protocol": "",
@@ -56,6 +52,7 @@ const data = reactive({
 	"authUser": "",
 	"authPasswd": "",
 	"accessToken": "",
+	"certificateName": "",
 	"certificateId": 0
 })
 
