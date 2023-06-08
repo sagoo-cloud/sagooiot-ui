@@ -28,6 +28,7 @@
     "codemirror": "^5.65.9",
     "countup.js": "^2.1.0",
     "cropperjs": "^1.5.12",
+    "dayjs": "^1.11.8",
     "downloadjs": "^1.4.7",
     "echarts": "^5.3.3",
     "echarts-gl": "^2.0.9",

@@ -113,15 +113,25 @@
           </el-tab-pane>
           <el-tab-pane label="时间周期" name="2">
             <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
-              <!-- <el-form-item label="时间窗口" prop="duration">
-                <div class="flex">
-                  <el-input v-model="ruleForm.duration" placeholder="请输入" class="w-35" />
-                  <el-select v-model="ruleForm.timeUnit" placeholder="请选择单位">
-                    <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </div>
-              </el-form-item> -->
-              <el-form-item label="类型" prop="template">
+              <el-form-item label="开始日期" prop="startDate">
+                <el-date-picker
+                  v-model="ruleForm.startDate"
+                  type="date"
+                  placeholder="选择开始日期"
+                  class="w-35"
+                  :size="'default'"
+                />
+              </el-form-item>
+              <el-form-item label="结束日期" prop="endDate">
+                <el-date-picker
+                  v-model="ruleForm.endDate"
+                  type="date"
+                  placeholder="选择结束日期"
+                  class="w-35"
+                  :size="'default'"
+                />
+              </el-form-item>
+              <!-- <el-form-item label="类型" prop="template">
                 <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
                   <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
                 </el-select>
@@ -130,7 +140,7 @@
                 <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" class="w-35">
                   <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label=" " prop="category">
                 <el-button type="primary" @click="onSaveTime">保存</el-button>
               </el-form-item>
@@ -194,7 +204,6 @@ interface TableDataState {
   searchVal: string
   treeDetail: any
   unitData: any
-  ruleForm: any
 }
 
 export default defineComponent({
@@ -229,15 +238,14 @@ export default defineComponent({
 				{ label: '时', value: 3 },
 				{ label: '天', value: 4 },
 			],
-      ruleForm: {
-        duration: '',
-        timeUnit: '',
-        template: 'default',
-        category: 'default'
-      }
     });
+
+    let ruleForm = ref({
+      startDate: '',
+      endDate: '',
+      deviceKey: ''
+    })
     
-    const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
     // 初始化表格数据
     const initTableData = () => {
       getTreeList();
@@ -276,6 +284,9 @@ export default defineComponent({
       api.tree.detail({ infoId: data.infoId })
         .then((res: any) => {
           state.treeDetail = res.data || {}
+          ruleForm.value.startDate = state.treeDetail.startDate
+          ruleForm.value.endDate = state.treeDetail.endDate
+          ruleForm.value.deviceKey = state.treeDetail.deviceKey ? Number(state.treeDetail.deviceKey) : ''
         })
     }
     const onSaveTime = () => {
@@ -286,9 +297,9 @@ export default defineComponent({
       //修改
       api.tree.edit({
         ...state.treeDetail,
-        template: state.ruleForm.template,
-        category: state.ruleForm.category,
-        deviceKey: state.ruleForm.deviceKey,
+        endDate: ruleForm.value.endDate,
+        startDate: ruleForm.value.startDate,
+        deviceKey: ruleForm.value.deviceKey,
       }).then(() => {
         ElMessage.success('修改成功');
       });
@@ -327,9 +338,8 @@ export default defineComponent({
       operateCmd,
       getTreeList,
       nodeClick,
-      tree_types,
-      tree_category,
       ...toRefs(state),
+      ruleForm,
       onSaveTime
     };
   },
