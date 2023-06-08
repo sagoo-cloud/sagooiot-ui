@@ -118,7 +118,7 @@
                   v-model="ruleForm.startDate"
                   type="date"
                   placeholder="选择开始日期"
-                  style="width: 100%"
+                  class="w-35"
                   :size="'default'"
                 />
               </el-form-item>
@@ -127,7 +127,7 @@
                   v-model="ruleForm.endDate"
                   type="date"
                   placeholder="选择结束日期"
-                  style="width: 100%"
+                  class="w-35"
                   :size="'default'"
                 />
               </el-form-item>
