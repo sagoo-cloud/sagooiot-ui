@@ -35,7 +35,7 @@
     <div class="layout-navbars-breadcrumb-user-icon">
       <el-popover placement="bottom" trigger="click" :width="300" v-model:visible="popoverVisible">
         <template #reference>
-          <el-badge :is-dot="true">
+          <el-badge :is-dot="false">
             <el-icon :title="$t('message.user.title4')">
               <ele-Bell />
             </el-icon>
