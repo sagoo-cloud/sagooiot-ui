@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
-    "build2": "vite build",
     "deploy:zip": "npm run build && npm run zipAndUpload && npm run unzip",
     "zipAndUpload": "cd dist && rm -rf zhgy.sagoo.cn.zip && zip -r -q zhgy.sagoo.cn.zip ./ && ssh iot 'sudo rm /www/wwwroot/zhgy.sagoo.cn-old.zip' | ssh iot 'sudo mv /www/wwwroot/zhgy.sagoo.cn.zip /www/wwwroot/zhgy.sagoo.cn-old.zip' | scp -r -O zhgy.sagoo.cn.zip iot:/www/wwwroot",
     "unzip": "ssh iot 'cd /www/wwwroot/ && sudo unzip -q -o -d ./zhgy.sagoo.cn zhgy.sagoo.cn.zip'",
