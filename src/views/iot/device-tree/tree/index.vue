@@ -1,167 +1,169 @@
 <template>
-  <div class="system-dic-container" style="background: #fff">
-    <LrLayout width="260px">
-      <template #left>
-        <div class="zl-tree-search">
-          <div class="flex zl-tree-search__filter">
-            <el-input v-model.trim="searchVal" placeholder="搜索">
-              <template #prefix>
-                <el-icon><Search /></el-icon>
-                <!-- <i class="iconfont icon-search" /> -->
-              </template>
-            </el-input>
+  <div class="system-dic-container">
+    <el-card shadow="hover">
+      <LrLayout width="260px">
+        <template #left>
+          <div class="zl-tree-search">
+            <div class="flex zl-tree-search__filter">
+              <el-input v-model.trim="searchVal" placeholder="搜索">
+                <template #prefix>
+                  <el-icon><Search /></el-icon>
+                  <!-- <i class="iconfont icon-search" /> -->
+                </template>
+              </el-input>
+            </div>
           </div>
-        </div>
-        <div class="zl-tree-search-scroll">
-          <el-scrollbar ref="zlTreeSearchScroll" height="100%" v-loading="treeLoading">
-            <el-tree
-              ref="zlTreeSearchRef"
-              v-if="!treeLoading"
-              :data="treeData"
-              :props="{
-                children: 'children',
-                label: 'name'
-              }"
-              :filter-node-method="filterNode"
-              :default-expand-all="true"
-              :node-key="'id'"
-              highlight-current
-              @node-click="nodeClick">
-              <template #default="{ node, data }">
-                <div class="custom-tree-node">
-                  <span class="tree-label">
-                    <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
-                  </span>
-                  <span class="tree-options" @click.stop>
-                    <slot name="operate" :data="data">
-                      <el-dropdown @command="command => operateCmd(command, data)">
-                        <el-icon>
-                          <More></More>
-                        </el-icon>
-                        <template #dropdown>
-                          <el-dropdown-menu>
-                            <el-dropdown-item command="add">
-                              <el-icon>
-                                <Plus></Plus>
-                              </el-icon>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="edit">
-                              <el-icon>
-                                <Edit></Edit>
-                              </el-icon>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="delete">
-                              <el-icon>
-                                <Delete></Delete>
-                              </el-icon>
-                            </el-dropdown-item>
-                          </el-dropdown-menu>
-                        </template>
-                      </el-dropdown>
-                    </slot>
-                  </span>
-                </div>
-              </template>
-            </el-tree>
-          </el-scrollbar>
-        </div>
-      </template>
-      <template #right>
-        <!--  @tab-click="handleClick" -->
-        <el-tabs v-model="tabName">
-          <el-tab-pane label="设备树信息" name="1">
-            <table>
-              <tbody>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">名称</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.name }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">地址</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.address }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">经度</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lng }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">纬度</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lat }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系人</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
-                </tr> 
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.image }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
-                </tr>
-                <tr class="ant-descriptions-row">
-                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
-                  <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </el-tab-pane>
-          <el-tab-pane label="时间周期" name="2">
-            <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
-              <el-form-item label="开始日期" prop="startDate">
-                <el-date-picker
-                  v-model="ruleForm.startDate"
-                  type="date"
-                  placeholder="选择开始日期"
-                  class="w-35"
-                  :size="'default'"
-                />
-              </el-form-item>
-              <el-form-item label="结束日期" prop="endDate">
-                <el-date-picker
-                  v-model="ruleForm.endDate"
-                  type="date"
-                  placeholder="选择结束日期"
-                  class="w-35"
-                  :size="'default'"
-                />
-              </el-form-item>
-              <!-- <el-form-item label="类型" prop="template">
-                <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
-                  <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+          <div class="zl-tree-search-scroll">
+            <el-scrollbar ref="zlTreeSearchScroll" height="100%" v-loading="treeLoading">
+              <el-tree
+                ref="zlTreeSearchRef"
+                v-if="!treeLoading"
+                :data="treeData"
+                :props="{
+                  children: 'children',
+                  label: 'name'
+                }"
+                :filter-node-method="filterNode"
+                :default-expand-all="true"
+                :node-key="'id'"
+                highlight-current
+                @node-click="nodeClick">
+                <template #default="{ node, data }">
+                  <div class="custom-tree-node">
+                    <span class="tree-label">
+                      <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
+                    </span>
+                    <span class="tree-options" @click.stop>
+                      <slot name="operate" :data="data">
+                        <el-dropdown @command="command => operateCmd(command, data)">
+                          <el-icon>
+                            <More></More>
+                          </el-icon>
+                          <template #dropdown>
+                            <el-dropdown-menu>
+                              <el-dropdown-item command="add">
+                                <el-icon>
+                                  <Plus></Plus>
+                                </el-icon>
+                              </el-dropdown-item>
+                              <el-dropdown-item command="edit">
+                                <el-icon>
+                                  <Edit></Edit>
+                                </el-icon>
+                              </el-dropdown-item>
+                              <el-dropdown-item command="delete">
+                                <el-icon>
+                                  <Delete></Delete>
+                                </el-icon>
+                              </el-dropdown-item>
+                            </el-dropdown-menu>
+                          </template>
+                        </el-dropdown>
+                      </slot>
+                    </span>
+                  </div>
+                </template>
+              </el-tree>
+            </el-scrollbar>
+          </div>
+        </template>
+        <template #right>
+          <!--  @tab-click="handleClick" -->
+          <el-tabs v-model="tabName">
+            <el-tab-pane label="设备树信息" name="1">
+              <table>
+                <tbody>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">名称</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.name }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">地址</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.address }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">经度</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lng }}</td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">纬度</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lat }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系人</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
+                  </tr> 
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.image }}</td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
+                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
+                    <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </el-tab-pane>
+            <el-tab-pane label="时间周期" name="2">
+              <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
+                <el-form-item label="开始日期" prop="startDate">
+                  <el-date-picker
+                    v-model="ruleForm.startDate"
+                    type="date"
+                    placeholder="选择开始日期"
+                    class="w-35"
+                    :size="'default'"
+                  />
+                </el-form-item>
+                <el-form-item label="结束日期" prop="endDate">
+                  <el-date-picker
+                    v-model="ruleForm.endDate"
+                    type="date"
+                    placeholder="选择结束日期"
+                    class="w-35"
+                    :size="'default'"
+                  />
+                </el-form-item>
+                <!-- <el-form-item label="类型" prop="template">
+                  <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
+                    <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="分类" prop="category">
+                  <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" class="w-35">
+                    <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+                  </el-select>
+                </el-form-item> -->
+                <el-form-item label=" " prop="category">
+                  <el-button type="primary" @click="onSaveTime">保存</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="绑定实际设备" name="3">
+              <el-form-item label="选择设备" prop="deviceKey">
+                <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
+                  <el-option v-for="item in deviceList" :key="item.id" :label="item.name" :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
+                  </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="分类" prop="category">
-                <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" class="w-35">
-                  <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-                </el-select>
-              </el-form-item> -->
               <el-form-item label=" " prop="category">
                 <el-button type="primary" @click="onSaveTime">保存</el-button>
               </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="绑定实际设备" name="3">
-            <el-form-item label="选择设备" prop="deviceKey">
-              <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-                <el-option v-for="item in deviceList" :key="item.id" :label="item.name" :value="item.id">
-                  <span style="float: left">{{ item.name }}</span>
-                  <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label=" " prop="category">
-              <el-button type="primary" @click="onSaveTime">保存</el-button>
-            </el-form-item>
-          </el-tab-pane>
-        </el-tabs>
-      </template>
-    </LrLayout>
+            </el-tab-pane>
+          </el-tabs>
+        </template>
+      </LrLayout>
+    </el-card>
 
     <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList"/>
   </div>
@@ -347,9 +349,12 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+
+:deep(.el-card__body) {
+  padding: 0;
+}
 .zl-tree-search {
   margin: 0 12px 0 0;
-  background-color: #fff;
   border-radius: 4px;
   &__filter {
     padding: 4px 10px;
