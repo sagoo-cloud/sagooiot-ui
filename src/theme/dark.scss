@@ -10,7 +10,7 @@
 	--next-border-color          : #424242;
 	--next-border-black          : #333333;
 	--next-border-columns        : #2a2a2a;
-	--next-color-seting          : #505050;
+	--next-color-seting          : #110d0d;
 	--next-text-color-regular    : #9b9da1;
 	--next-text-color-placeholder: #7a7a7a;
 	--next-color-hover           : #3c3c3c;
@@ -31,7 +31,8 @@
 	--next-color-dark-hover      : var(--next-color-hover) !important;
 	--next-color-menu-hover      : var(--next-color-hover-rgba) !important;
 	--next-color-menu-hover-blue : var(--next-color-hover-rgba) !important;
-	--next-color-menu-text-blue  : var(--next-color-hover-rgba) !important;
+	--next-color-menu-text-blue: #1967D2;
+	// --next-color-menu-text-blue  : var(--next-color-hover-rgba) !important;
 	--next-color-user-hover      : var(--next-color-hover-rgba) !important;
 	--next-color-seting-main     : var(--next-color-seting) !important;
 	--next-color-seting-aside    : var(--next-color-hover) !important;
@@ -65,6 +66,10 @@
 		}
 	}
 
+	// 高亮时
+	.el-menu-item.is-active {
+		color: var(--next-color-menu-text-blue) !important;
+	}
 	.el-button--primary,
 	.el-button--info,
 	.el-button--danger,
