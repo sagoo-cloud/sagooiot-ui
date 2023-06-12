@@ -7,10 +7,11 @@
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
-    "deploy:zip": "npm run build && npm run zipAndUpload && npm run unzip",
+    "deploy:zip": "npm run build && npm run zipAndUpload && npm run unzip && npm run success",
     "zipAndUpload": "cd dist && rm -rf zhgy.sagoo.cn.zip && zip -r -q zhgy.sagoo.cn.zip ./ && ssh iot 'sudo rm /www/wwwroot/zhgy.sagoo.cn-old.zip' | ssh iot 'sudo mv /www/wwwroot/zhgy.sagoo.cn.zip /www/wwwroot/zhgy.sagoo.cn-old.zip' | scp -r -O zhgy.sagoo.cn.zip iot:/www/wwwroot",
     "unzip": "ssh iot 'cd /www/wwwroot/ && sudo unzip -q -o -d ./zhgy.sagoo.cn zhgy.sagoo.cn.zip'",
-    "deploy": "npm run build && npm run deploy:rm && npm run deploy:scp && npm run deploy:auth",
+    "success": "echo '\\033[31m 部署完成 \\033[0m'",
+    "deploy": "npm run build && npm run deploy:rm && npm run deploy:scp && npm run deploy:auth | npm run success",
     "deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
     "deploy:scp": "scp -r -O ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
     "deploy:auth": "ssh iot 'chown -R www /www/wwwroot/zhgy.sagoo.cn/'",
