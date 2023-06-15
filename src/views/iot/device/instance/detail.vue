@@ -9,90 +9,90 @@
       </div>
     </div>
 
-		<div class="content-box">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <div class="content-box">
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 
-				<el-tab-pane label="运行状态" name="3">
-					<div style=" display: flex; padding: 10px;flex-wrap: wrap;" >
-						<div class="ant-card">
-							<div class="ant-card-body">
-								<div class="cardflex">
-									<div>设备状态</div>
-									<div @click="getrunData()" style="cursor: pointer;">
-										<el-icon style="font-size: 18px;">
-											<ele-Refresh />
-										</el-icon>
-									</div>
-								</div>
+        <el-tab-pane label="运行状态" name="3">
+          <div style=" display: flex; padding: 10px;flex-wrap: wrap;">
+            <div class="ant-card">
+              <div class="ant-card-body">
+                <div class="cardflex">
+                  <div>设备状态</div>
+                  <div @click="getrunData()" style="cursor: pointer;">
+                    <el-icon style="font-size: 18px;">
+                      <ele-Refresh />
+                    </el-icon>
+                  </div>
+                </div>
 
-								<div class="statusname" v-if="areaData.status==0">未启用</div>
-								<div class="statusname" v-if="areaData.status==1">离线</div>
-								<div class="statusname" v-if="areaData.status==2">在线</div>
-								<div class="cardflex comtest">
-									<div> 数据时间</div>
-									<div>{{areaData.lastOnlineTime || '未启用'}}</div>
-								</div>
-							</div>
-						</div>
+                <div class="statusname" v-if="areaData.status == 0">未启用</div>
+                <div class="statusname" v-if="areaData.status == 1">离线</div>
+                <div class="statusname" v-if="areaData.status == 2">在线</div>
+                <div class="cardflex comtest">
+                  <div> 数据时间</div>
+                  <div>{{ areaData.lastOnlineTime || '未启用' }}</div>
+                </div>
+              </div>
+            </div>
 
-						<div class="ant-card" v-for="(item, index) in areaData.properties" :key="index">
-							<div class="ant-card-body">
-								<div class="cardflex">
-									<div>{{item.name}}</div>
-									<div style="cursor: pointer;">
-										<el-icon  style="font-size: 18px;"  @click="getrunData()">
-											<ele-Refresh />
-										</el-icon>
-										<el-icon  style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
-											<ele-Expand />
-										</el-icon>
-									</div>
-								</div>
+            <div class="ant-card" v-for="(item, index) in areaData.properties" :key="index">
+              <div class="ant-card-body">
+                <div class="cardflex">
+                  <div>{{ item.name }}</div>
+                  <div style="cursor: pointer;">
+                    <el-icon style="font-size: 18px;" @click="getrunData()">
+                      <ele-Refresh />
+                    </el-icon>
+                    <el-icon style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
+                      <ele-Expand />
+                    </el-icon>
+                  </div>
+                </div>
 
-								<div class="statusname">{{item.value}}{{item.unit}}</div>
-								<div class="">
-									<devantd :json="item.list" :antdid="item.key" v-if="item.type=='int' || item.type=='float'"/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</el-tab-pane>
-				<el-tab-pane label="设备信息" name="1">
-					<div class="pro-box">
-						<div class="protitle">设备信息</div>
+                <div class="statusname">{{ item.value }}{{ item.unit }}</div>
+                <div class="">
+                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float'" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="设备信息" name="1">
+          <div class="pro-box">
+            <div class="protitle">设备信息</div>
             <div>
               <el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
             </div>
           </div>
 
-					<div class="ant-descriptions-view">
-						<table>
-							<tbody>
-								<tr class="ant-descriptions-row">
+          <div class="ant-descriptions-view">
+            <table>
+              <tbody>
+                <tr class="ant-descriptions-row">
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
                   <td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备名称</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属产品</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.productName }}</td>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备名称</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属产品</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.productName }}</td>
 
-								</tr>
-								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.messageProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.transportProtocol }}</td>
+                </tr>
+                <tr class="ant-descriptions-row">
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.messageProtocol }}</td>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.transportProtocol }}</td>
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
                   <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.deviceType }}</td>
-								</tr>
-								<tr class="ant-descriptions-row">
+                </tr>
+                <tr class="ant-descriptions-row">
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">固件版本</th>
                   <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.version }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
-								</tr>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
+                </tr>
                 <tr class="ant-descriptions-row">
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
                   <td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
@@ -100,13 +100,13 @@
               </tbody>
             </table>
           </div>
-          <div class="flex" style="margin-top: 20px;" >
-          <el-input type="number" style="width: 380px;margin-right: 20px;" v-model.number="detail.onlineTimeout">
-            <template #prepend>设备超时时间</template>
-            <template #append>秒</template>
-          </el-input>
-          <el-button type="primary" @click="onlineTimeoutUpdate">
-            <el-icon style="font-size: 18px;"><ele-Refresh /></el-icon>更新</el-button>
+          <div class="flex" style="margin-top: 20px;">
+            <el-input type="number" style="width: 380px;margin-right: 20px;" v-model.number="detail.onlineTimeout">
+              <template #prepend>设备超时时间</template>
+              <template #append>秒</template>
+            </el-input>
+            <el-button type="primary" @click="onlineTimeoutUpdate">
+              <el-icon style="font-size: 18px;"><ele-Refresh /></el-icon>更新</el-button>
           </div>
         </el-tab-pane>
         <el-tab-pane label="物模型" name="2">
@@ -149,6 +149,7 @@
                     <template #default="scope">
                       <el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
                       <el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+                      <el-button size="small" text type="primary" @click="setAttr(scope.row)">设置属性</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -239,7 +240,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="设备功能" name="5">
-          <functionCom :device-key="detail.key" :product-key="prodetail.key"  v-if="detail.key && prodetail.key && activeName==='5'"></functionCom>
+          <functionCom :device-key="detail.key" :product-key="prodetail.key" v-if="detail.key && prodetail.key && activeName === '5'"></functionCom>
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
@@ -293,29 +294,29 @@
               </div>
             </div>
 
-          <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
-            <el-table-column type="selection" width="55" align="center" />
-            <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" />
-            <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
-            <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
+            <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
+              <el-table-column type="selection" width="55" align="center" />
+              <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" />
+              <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
+              <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" />
 
-            <el-table-column prop="status" label="状态" width="100" align="center">
-              <template #default="scope">
-                <el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
-                <el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
-                <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
-            <el-table-column prop="desc" label="说明"></el-table-column>
+              <el-table-column prop="status" label="状态" width="100" align="center">
+                <template #default="scope">
+                  <el-tag type="info" size="small" v-if="scope.row.status == 1">离线</el-tag>
+                  <el-tag type="success" size="small" v-if="scope.row.status == 2">在线</el-tag>
+                  <el-tag type="info" size="small" v-if="scope.row.status == 0">未启用</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
+              <el-table-column prop="desc" label="说明"></el-table-column>
 
-            <el-table-column label="操作" width="80" align="center" fixed="right">
-              <template #default="scope">
-                <el-button size="small" text type="warning" v-auth="'detail'" @click="onOpenDetail(scope.row)">详情</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <pagination v-show="deviceTableData.total>0" :total="deviceTableData.total" v-model:page="deviceTableData.param.pageNum" v-model:limit="deviceTableData.param.pageSize" @pagination="getDeviceTableData" />
+              <el-table-column label="操作" width="80" align="center" fixed="right">
+                <template #default="scope">
+                  <el-button size="small" text type="warning" v-auth="'detail'" @click="onOpenDetail(scope.row)">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <pagination v-show="deviceTableData.total > 0" :total="deviceTableData.total" v-model:page="deviceTableData.param.pageNum" v-model:limit="deviceTableData.param.pageSize" @pagination="getDeviceTableData" />
           </div>
 
         </el-tab-pane>
@@ -328,6 +329,7 @@
     <EditTab ref="editTabRef" @typeList="gettab" />
     <ListDic ref="listDicRef" />
     <SubDevice ref="subDeviceRef" />
+    <setAttr ref="setAttrRef" />
     <!-- 子设备-批量绑定弹窗 -->
     <SubDeviceMutipleBind ref="mutipleBindRef" @bindSuccess="getDeviceTableData" />
 
@@ -356,6 +358,7 @@ import EditTab from '../product/component/editTab.vue';
 import devantd from '/@/components/devantd/index.vue';
 import ListDic from './component/list.vue';
 import SubDevice from './component/subDevice.vue';
+import setAttr from './component/setAttr.vue';
 import SubDeviceMutipleBind from './component/subDeviceMutipleBind.vue';
 import api from '/@/api/device';
 
@@ -405,89 +408,90 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom },
+  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
-	setup(prop, context) {
-		const route = useRoute();
-		const editDicRef = ref();
-		const editAttrRef = ref();
-		const editFunRef = ref();
-		const listDicRef=ref();
-		const editEventRef = ref();
-		const editTabRef = ref();
+  setup(prop, context) {
+    const route = useRoute();
+    const editDicRef = ref();
+    const setAttrRef = ref();
+    const editAttrRef = ref();
+    const editFunRef = ref();
+    const listDicRef = ref();
+    const editEventRef = ref();
+    const editTabRef = ref();
     const subDeviceRef = ref();
     const mutipleBindRef = ref();
-		const state = reactive<TableDataState>({
+    const state = reactive<TableDataState>({
       deviceKeyList: [],
-			areaData:[],
-			isShowDialog: false,
-			dialogVisible: false,
-			logTypeData: [],
-			jsonData: '',
-			activeName: '3', // 分类数据
-			activetab: 'attr', // 分类数据
-			detail: {},
-			prodetail: [],
-			product_id: 0,
-			developer_status: 0,
+      areaData: [],
+      isShowDialog: false,
+      dialogVisible: false,
+      logTypeData: [],
+      jsonData: '',
+      activeName: '3', // 分类数据
+      activetab: 'attr', // 分类数据
+      detail: {},
+      prodetail: [],
+      product_id: 0,
+      developer_status: 0,
       deviceTableData: {
-				data: [],
-				total: 0,
-				loading: false,
-				param: {
-					pageNum: 1,
-					gatewayKey: '',
-					pageSize: 10,
-					dateRange: [],
-				},
-			},
-			tableData: {
-				data: [],
-				total: 0,
-				loading: false,
-				param: {
-					pageNum: 1,
-					productId: 0,
-					pageSize: 10,
-					status: '',
-					dateRange: [],
-				},
-			},
-			logtableData: {
-				data: [],
-				total: 0,
-				loading: false,
-				param: {
-					pageNum: 1,
-					productId: 0,
-					pageSize: 10,
-					status: '',
-					dateRange: [],
-				},
-			},
-		});
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          pageNum: 1,
+          gatewayKey: '',
+          pageSize: 10,
+          dateRange: [],
+        },
+      },
+      tableData: {
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          pageNum: 1,
+          productId: 0,
+          pageSize: 10,
+          status: '',
+          dateRange: [],
+        },
+      },
+      logtableData: {
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          pageNum: 1,
+          productId: 0,
+          pageSize: 10,
+          status: '',
+          dateRange: [],
+        },
+      },
+    });
 
-		onMounted(() => {
-			const ids = route.params && route.params.id;
+    onMounted(() => {
+      const ids = route.params && route.params.id;
       api.instance.detail(ids).then((res: any) => {
-				state.detail = res.data;
-				state.developer_status = res.data.status;
-				state.tableData.param.productId = res.data.product.id;
-				state.product_id = res.data.product.id;
-				getrunData();
-				api.product.detail(res.data.product.id).then((res: any) => {
-					state.prodetail = res.data;
-				});
+        state.detail = res.data;
+        state.developer_status = res.data.status;
+        state.tableData.param.productId = res.data.product.id;
+        state.product_id = res.data.product.id;
+        getrunData();
+        api.product.detail(res.data.product.id).then((res: any) => {
+          state.prodetail = res.data;
+        });
 
-				//第一次加载
-				api.model.property(state.tableData.param).then((res: any) => {
-					state.tableData.data = res.Data;
-					state.tableData.total = res.Total;
-				});
+        //第一次加载
+        api.model.property(state.tableData.param).then((res: any) => {
+          state.tableData.data = res.Data;
+          state.tableData.total = res.Total;
+        });
         getDeviceTableData()
-			});
+      });
 
-		});
+    });
 
     const mutipleUnbind = () => {
       let msg = '是否进行批量解绑？';
@@ -502,7 +506,7 @@ export default defineComponent({
       })
         .then(() => {
           api.device.mutipleUnbind({
-            "gatewayKey":state.deviceTableData.param.gatewayKey,
+            "gatewayKey": state.deviceTableData.param.gatewayKey,
             "subKeys": state.deviceKeyList
           }).then(() => {
             ElMessage.success('解绑成功');
@@ -525,7 +529,7 @@ export default defineComponent({
     const handleSelectionChange = (selection: any[]) => {
       state.deviceKeyList = selection.map((item) => item.key);
     };
-        
+
     // 打开修改产品弹窗
     const onOpenDetail = (row: any) => {
       subDeviceRef.value.openDialog(row)
@@ -539,7 +543,7 @@ export default defineComponent({
     const onOpenMutipleBind = () => {
       mutipleBindRef.value.openDialog(state.deviceTableData.param.gatewayKey);
     };
-    
+
 
     //编辑属性
     const onEditAttr = (row: TableDataRow) => {
@@ -709,29 +713,29 @@ export default defineComponent({
 
     const getrunData = () => {
       api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
-          state.areaData = res
-          let properties=state.areaData.properties || [];
+        state.areaData = res
+        let properties = state.areaData.properties || [];
 
-          var temp = new Array();
+        var temp = new Array();
 
-          properties.forEach(function (item, index) {
-              let datalist=item.list || [];
-              temp[index] = [];
-              var temps = new Array();
-              datalist.forEach(function (a, b) {
-                 if(b<15){
-                  temps.push(a);
-                 }
-              });
-              temp[index]['name']=item.name
-              temp[index]['key']=item.key
-              temp[index]['type']=item.type
-              temp[index]['unit']=item.unit
-              temp[index]['value']=item.value
-              temp[index]['list']=temps
-
+        properties.forEach(function (item, index) {
+          let datalist = item.list || [];
+          temp[index] = [];
+          var temps = new Array();
+          datalist.forEach(function (a, b) {
+            if (b < 15) {
+              temps.push(a);
+            }
           });
-          state.areaData.properties=temp;
+          temp[index]['name'] = item.name
+          temp[index]['key'] = item.key
+          temp[index]['type'] = item.type
+          temp[index]['unit'] = item.unit
+          temp[index]['value'] = item.value
+          temp[index]['list'] = temps
+
+        });
+        state.areaData.properties = temp;
       });
     };
 
@@ -777,14 +781,19 @@ export default defineComponent({
       tinyArea.render();
     }
     const onlineTimeoutUpdate = () => {
-      if(!state.detail.onlineTimeout) return ElMessage('请先输入设备超时时间')
+      if (!state.detail.onlineTimeout) return ElMessage('请先输入设备超时时间')
       api.device.updateOnlineTimeout({ id: state.detail.id, onlineTimeout: state.detail.onlineTimeout }).then(() => {
         ElMessage.success('设置成功')
       })
     }
+    const setAttr = (row: any) => {
+      setAttrRef.value.show(row)
+    }
     return {
       onlineTimeoutUpdate,
+      setAttr,
       tinyAreas,
+      setAttrRef,
       editDicRef,
       editAttrRef,
       listDicRef,
@@ -826,168 +835,198 @@ export default defineComponent({
   },
 });
 </script>
-  <style>
+<style>
 .content {
-	background: #fff;
-	width: 100%;
-	padding: 20px;
+  background: #fff;
+  width: 100%;
+  padding: 20px;
 }
+
 .content-box {
-	background: #fff;
-	width: 100%;
-	padding: 20px;
-	margin-top: 20px;
+  background: #fff;
+  width: 100%;
+  padding: 20px;
+  margin-top: 20px;
 }
+
 .cont_box {
-	display: flex;
+  display: flex;
 }
+
 .cont_box .title {
-	font-size: 24px;
+  font-size: 24px;
 }
+
 .cont_box .pro-status {
-	line-height: 40px;
-	margin-left: 30px;
+  line-height: 40px;
+  margin-left: 30px;
 }
+
 .cont_box .pro-status .on {
-	background: #52c41a;
+  background: #52c41a;
 }
+
 .cont_box .pro-status .off {
-	background: #c41a1a;
+  background: #c41a1a;
 }
+
 .cont_box .pro-status span {
-	position: relative;
-	top: -1px;
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	vertical-align: middle;
-	border-radius: 50%;
-	margin-right: 5px;
+  position: relative;
+  top: -1px;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin-right: 5px;
 }
+
 .cont_box .pro-option {
-	line-height: 40px;
-	margin-left: 10px;
-	color: #1890ff;
-	cursor: pointer;
+  line-height: 40px;
+  margin-left: 10px;
+  color: #1890ff;
+  cursor: pointer;
 }
+
 .content-box .pro-box {
-	display: flex;
-	padding: 10px;
+  display: flex;
+  padding: 10px;
   justify-content: space-between;
 
 }
+
 .content-box .pro-box .protitle {
-	font-size: 18px;
-	font-weight: bold;
-	line-height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 35px;
 }
+
 .content-box .pro-box .buttonedit {
-	border: 0px;
-	color: #1890ff;
+  border: 0px;
+  color: #1890ff;
 }
+
 table {
-	border-collapse: collapse;
-	text-indent: initial;
-	border-spacing: 2px;
+  border-collapse: collapse;
+  text-indent: initial;
+  border-spacing: 2px;
 }
+
 tbody {
-	box-sizing: border-box;
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
+  box-sizing: border-box;
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
 }
 
 tr {
-	display: table-row;
-	vertical-align: inherit;
-	border-color: inherit;
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
 }
-.ant-descriptions-view {
-	width: 100%;
-	overflow: hidden;
-	border-radius: 4px;
-}
-.ant-descriptions-view {
-	border: 1px solid #e8e8e8;
-}
-.ant-descriptions-view table {
-	width: 100%;
-	table-layout: fixed;
-}
-.ant-descriptions-view > table {
-	table-layout: auto;
-}
-.ant-descriptions-row {
-	border-bottom: 1px solid #e8e8e8;
-}
-.ant-descriptions-item-label {
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 1.5;
-}
-.ant-descriptions-item-label {
-	padding: 16px 24px;
-	border-right: 1px solid #e8e8e8;
-}
-.ant-descriptions-item-label {
-	background-color: #fafafa;
-}
-.ant-descriptions-item-content {
-	padding: 16px 24px;
-	border-right: 1px solid #e8e8e8;
-	display: table-cell;
-	color: rgba(0, 0, 0, 0.65);
-	font-size: 14px;
-	line-height: 1.5;
-}
-.wu-box {
-	border: #e8e8e8 solid 1px;
-	padding: 20px;
-	width: 100%;
-}
-.wu-box .wu-title {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 20px;
-	border-bottom: #e8e8e8 1px solid;
-}
-.wu-box .wu-title .title {
-	font-size: 18px;
-}
-.ant-card {
-	box-sizing: border-box;
-	margin: 10px;
-	width: 23.2%;
-	font-size: 14px;
-	font-variant: tabular-nums;
-  border: 1px solid  var(--next-border-color-light);
 
-	line-height: 1.5;
-	list-style: none;
-	font-feature-settings: 'tnum';
-	position: relative;
-	border-radius: 2px;
-	transition: all 0.3s;
+.ant-descriptions-view {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
 }
+
+.ant-descriptions-view {
+  border: 1px solid #e8e8e8;
+}
+
+.ant-descriptions-view table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.ant-descriptions-view>table {
+  table-layout: auto;
+}
+
+.ant-descriptions-row {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.ant-descriptions-item-label {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ant-descriptions-item-label {
+  padding: 16px 24px;
+  border-right: 1px solid #e8e8e8;
+}
+
+.ant-descriptions-item-label {
+  background-color: #fafafa;
+}
+
+.ant-descriptions-item-content {
+  padding: 16px 24px;
+  border-right: 1px solid #e8e8e8;
+  display: table-cell;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.wu-box {
+  border: #e8e8e8 solid 1px;
+  padding: 20px;
+  width: 100%;
+}
+
+.wu-box .wu-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: #e8e8e8 1px solid;
+}
+
+.wu-box .wu-title .title {
+  font-size: 18px;
+}
+
+.ant-card {
+  box-sizing: border-box;
+  margin: 10px;
+  width: 23.2%;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  border: 1px solid var(--next-border-color-light);
+
+  line-height: 1.5;
+  list-style: none;
+  font-feature-settings: 'tnum';
+  position: relative;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
 .ant-card-body {
-	padding: 24px;
-	zoom: 1;
+  padding: 24px;
+  zoom: 1;
 }
+
 .cardflex {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
+
 .statusname {
-	font-size: 30px;
-	margin-top: 10px;
+  font-size: 30px;
+  margin-top: 10px;
   margin-bottom: 15px;
 }
+
 .comtest {
-	margin-top: 20px;
-	height: 30px;
-	line-height: 30px;
+  margin-top: 20px;
+  height: 30px;
+  line-height: 30px;
 }
 </style>
 
