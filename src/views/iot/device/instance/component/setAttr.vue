@@ -14,19 +14,19 @@
           </el-option-group>
         </el-select>
       </el-form-item>
-      <el-form-item label="属性值" prop="desc">
+      <el-form-item label="属性值" prop="value">
         <template v-if="['int', 'long', 'float', 'double', 'date'].includes(data.valueType.type)">
-          <el-input type="number" v-model.number="data.desc" placeholder="请输入属性值" clearable>
+          <el-input type="number" v-model.number="data.value" placeholder="请输入属性值" clearable>
             <template v-if="data.valueType.unit" #append>{{ data.valueType.unit }}</template>
           </el-input>
         </template>
         <template v-else-if="['enum'].includes(data.valueType.type)">
-          <el-select v-model="data.desc" clearable style="wdith: 100% !important;">
+          <el-select v-model="data.value" clearable style="wdith: 100% !important;">
             <el-option v-for="item in data.valueType.elements" :key="item.value" :value="item.value" :label="item.text"></el-option>
           </el-select>
         </template>
         <template v-else>
-          <el-input v-model="data.desc" placeholder="请输入属性值" clearable>
+          <el-input v-model="data.value" placeholder="请输入属性值" clearable>
             <template v-if="data.valueType.unit" #append>{{ data.valueType.unit }}</template>
           </el-input>
         </template>
@@ -35,7 +35,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visiable = false" size="default">取 消</el-button>
-        <el-button type="primary" @click="onSubmit" size="default">设 置</el-button>
+        <el-button type="primary" @click="onSubmit" size="default" :loading="loading">设 置</el-button>
       </span>
     </template>
   </el-dialog>
@@ -45,20 +45,28 @@
 import { reactive, ref } from 'vue';
 import api from '/@/api/device';
 import { ElMessage } from 'element-plus';
-
+const props = defineProps({
+  deviceKey: String,
+})
 const visiable = ref(false)
+const loading = ref(false)
 const typeData = ref<any[]>([])
 
-const data = reactive({
-  "key": "a",
-  "name": "s",
+const form = {
+
+  "key": "",
+  "name": "",
   "accessMode": 0,
   "valueType": {
-    "type": "int",
+    "type": "",
     "unit": "",
     "elements": [],
   },
-  "desc": ""
+  "value": ""
+}
+
+const data = reactive({
+  ...form
 })
 
 api.product.getDataType({ status: -1 }).then((res: any) => {
@@ -81,10 +89,18 @@ function show(row: any) {
 }
 
 function onSubmit() {
-  return
-  api.product.propertySet(data).then(() => {
+  if (!data.value) return ElMessage('请先输入属性值！')
+  loading.value = true
+  api.product.propertySet({
+    deviceKey: props.deviceKey,
+    params: {
+      [data.key]: data.value
+    }
+  }).then(() => {
+    Object.assign(data, { ...form })
+    visiable.value = false
     ElMessage.success('操作成功')
-  })
+  }).finally(() => loading.value = false)
 }
 
 defineExpose({ show })

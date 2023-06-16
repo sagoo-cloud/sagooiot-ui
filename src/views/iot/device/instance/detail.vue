@@ -329,7 +329,7 @@
     <EditTab ref="editTabRef" @typeList="gettab" />
     <ListDic ref="listDicRef" />
     <SubDevice ref="subDeviceRef" />
-    <setAttr ref="setAttrRef" />
+    <setAttr :device-key="detail.key" ref="setAttrRef" />
     <!-- 子设备-批量绑定弹窗 -->
     <SubDeviceMutipleBind ref="mutipleBindRef" @bindSuccess="getDeviceTableData" />
 
