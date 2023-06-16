@@ -18,7 +18,7 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<el-input type="textarea" :value="item.result" class="result" read-only placeholder="执行结果"> </el-input>
+					<el-input type="textarea" :value="item.result" class="result" read-only placeholder="执行结果："> </el-input>
 				</div>
 				<div class="btn">
 					<el-button type="primary" :loading="item.loading" @click="run(item)">执行</el-button>
