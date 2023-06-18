@@ -51,3 +51,8 @@ function toSave(data: string) {
 
 }
 </script>
+<style lang="scss" scoped>
+::v-deep(.CodeMirror){
+	height: calc(100vh - 360px);
+}
+</style>
