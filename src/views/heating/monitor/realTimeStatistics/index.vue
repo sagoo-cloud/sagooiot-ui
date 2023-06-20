@@ -1,20 +1,11 @@
 <template>
-  <div class="system-dic-container" style="background: #fff">
-    <LrLayout width="260px">
-      <template #left>
-        <div class="zl-tree-search">
-          <div class="flex zl-tree-search__filter">
-            <el-input v-model.trim="searchVal" placeholder="搜索">
-              <template #prefix>
-                <el-icon><Search /></el-icon>
-                <!-- <i class="iconfont icon-search" /> -->
-              </template>
-            </el-input>
-          </div>
-        </div>
-        <div class="zl-tree-search-scroll">
-          <el-scrollbar ref="zlTreeSearchScroll" height="100%" v-loading="treeLoading">
-            <el-tree
+  <div class="system-dic-container">
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<el-card shadow="hover">
+					<el-scrollbar v-loading="treeLoading">
+						<el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+						<el-tree
               ref="zlTreeSearchRef"
               v-if="!treeLoading"
               :data="treeData"
@@ -27,61 +18,33 @@
               :node-key="'id'"
               highlight-current
               @node-click="nodeClick">
-              <template #default="{ node, data }">
+              <template #default="{ node }">
                 <div class="custom-tree-node">
                   <span class="tree-label">
                     <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
                   </span>
-                  <!-- <span class="tree-options" >
-                    <slot name="operate" :data="data">
-                      <el-dropdown @command="command => operateCmd(command, data)">
-                        <el-icon>
-                          <More></More>
-                        </el-icon>
-                        <template #dropdown>
-                          <el-dropdown-menu>
-                            <el-dropdown-item command="add">
-                              <el-icon>
-                                <Plus></Plus>
-                              </el-icon>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="edit">
-                              <el-icon>
-                                <Edit></Edit>
-                              </el-icon>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="delete">
-                              <el-icon>
-                                <Delete></Delete>
-                              </el-icon>
-                            </el-dropdown-item>
-                          </el-dropdown-menu>
-                        </template>
-                      </el-dropdown>
-                    </slot>
-                  </span> -->
                 </div>
               </template>
             </el-tree>
           </el-scrollbar>
-        </div>
-      </template>
-      <template #right>
-        <!-- max-height="30vh" -->
-        <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%; padding: 12px" >
-          <el-table-column :label="item.name + `${item.unit ? `(${item.unit})` : ''}`" :prop="item.key" v-for="(item, index) in tableData
-          .columns" :key="index" :show-overflow-tooltip="true" />
-        </el-table>
+        </el-card>
+      </el-col>
+      <el-col :span="19">
+				<el-card shadow="hover">
+          <el-table :data="tableData.data" v-loading="tableData.loading">
+            <el-table-column :label="item.name + `${item.unit ? `(${item.unit})` : ''}`" :prop="item.key" v-for="(item, index) in tableData
+            .columns" :key="index" :show-overflow-tooltip="true" />
+          </el-table>
 
-        <div  style="text-align: center;padding: 28px;" v-if="(tableData.data.length)">暂无数据</div>
-      </template>
-    </LrLayout>
-
+          <!-- <div  style="text-align: center;padding: 28px;" v-if="(!tableData.data.length)">暂无数据</div> -->
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/device';
 import LrLayout from '/@/components/lrLayout/index.vue'
@@ -160,6 +123,15 @@ export default defineComponent({
         category: 'default'
       }
     });
+    let zlTreeSearchRef = ref()
+    watch(() => state.searchVal, (val) => {
+			zlTreeSearchRef.value!.filter(val);
+		});
+
+		const filterNode = (value: string, data: any) => {
+			if (!value) return true;
+			return data.name.includes(value);
+		};
     
     // const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
     // 初始化表格数据
@@ -250,13 +222,15 @@ export default defineComponent({
     return {
       addOrUpdateRef,
       queryRef,
+      zlTreeSearchRef,
       resetQuery,
       handleSelectionChange,
       operateCmd,
       getTreeList,
       nodeClick,
       ...toRefs(state),
-      onSaveTime
+      onSaveTime,
+      filterNode
     };
   },
 });
@@ -288,71 +262,5 @@ export default defineComponent({
       display: block;
     }
   }
-}
-:deep(.column-right) {
-  padding: 0;
-  background-color: transparent;
-}
-.icon-wjj {
-  font-size: 12px;
-  color: #C4C6CF;
-}
-
-table {
-  width: 100%;
-	border-collapse: collapse;
-	text-indent: initial;
-	border-spacing: 2px;
-}
-tbody {
-	box-sizing: border-box;
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
-}
-
-tr {
-	display: table-row;
-	vertical-align: inherit;
-	border-color: inherit;
-}
-.ant-descriptions-view {
-	width: 100%;
-	overflow: hidden;
-	border-radius: 4px;
-}
-.ant-descriptions-view {
-	border: 1px solid #e8e8e8;
-}
-.ant-descriptions-view table {
-	width: 100%;
-	table-layout: fixed;
-}
-.ant-descriptions-view > table {
-	table-layout: auto;
-}
-.ant-descriptions-row {
-	border-bottom: 1px solid #e8e8e8;
-}
-.ant-descriptions-item-label {
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 1.5;
-}
-.ant-descriptions-item-label {
-	padding: 16px;
-	border-right: 1px solid #e8e8e8;
-}
-.ant-descriptions-item-label {
-	background-color: #fafafa;
-}
-.ant-descriptions-item-content {
-	padding: 16px;
-	border-right: 1px solid #e8e8e8;
-	display: table-cell;
-	color: rgba(0, 0, 0, 0.65);
-	font-size: 14px;
-	line-height: 1.5;
 }
 </style>

@@ -1,74 +1,64 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
-      <LrLayout width="260px">
-        <template #left>
-          <div class="zl-tree-search">
-            <div class="flex zl-tree-search__filter">
-              <el-input v-model.trim="searchVal" placeholder="搜索">
-                <template #prefix>
-                  <el-icon><Search /></el-icon>
-                  <!-- <i class="iconfont icon-search" /> -->
-                </template>
-              </el-input>
-            </div>
-          </div>
-          <div class="zl-tree-search-scroll">
-            <el-scrollbar ref="zlTreeSearchScroll" height="100%" v-loading="treeLoading">
-              <el-tree
-                ref="zlTreeSearchRef"
-                v-if="!treeLoading"
-                :data="treeData"
-                :props="{
-                  children: 'children',
-                  label: 'name'
-                }"
-                :filter-node-method="filterNode"
-                :default-expand-all="true"
-                :node-key="'id'"
-                highlight-current
-                @node-click="nodeClick">
-                <template #default="{ node, data }">
-                  <div class="custom-tree-node">
-                    <span class="tree-label">
-                      <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
-                    </span>
-                    <span class="tree-options" @click.stop>
-                      <slot name="operate" :data="data">
-                        <el-dropdown @command="command => operateCmd(command, data)">
-                          <el-icon>
-                            <More></More>
-                          </el-icon>
-                          <template #dropdown>
-                            <el-dropdown-menu>
-                              <el-dropdown-item command="add">
-                                <el-icon>
-                                  <Plus></Plus>
-                                </el-icon>
-                              </el-dropdown-item>
-                              <el-dropdown-item command="edit">
-                                <el-icon>
-                                  <Edit></Edit>
-                                </el-icon>
-                              </el-dropdown-item>
-                              <el-dropdown-item command="delete">
-                                <el-icon>
-                                  <Delete></Delete>
-                                </el-icon>
-                              </el-dropdown-item>
-                            </el-dropdown-menu>
-                          </template>
-                        </el-dropdown>
-                      </slot>
-                    </span>
-                  </div>
-                </template>
-              </el-tree>
-            </el-scrollbar>
-          </div>
-        </template>
-        <template #right>
-          <!--  @tab-click="handleClick" -->
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<el-card shadow="hover">
+					<el-scrollbar v-loading="treeLoading">
+						<el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+						<el-tree
+              ref="zlTreeSearchRef"
+              v-if="!treeLoading"
+              :data="treeData"
+              :props="{
+                children: 'children',
+                label: 'name'
+              }"
+              :filter-node-method="filterNode"
+              :default-expand-all="true"
+              :node-key="'id'"
+              highlight-current
+              @node-click="nodeClick">
+              <template #default="{ node, data }">
+                <div class="custom-tree-node">
+                  <span class="tree-label">
+                    <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
+                  </span>
+                  <span class="tree-options" @click.stop>
+                    <slot name="operate" :data="data">
+                      <el-dropdown @command="command => operateCmd(command, data)">
+                        <el-icon>
+                          <More></More>
+                        </el-icon>
+                        <template #dropdown>
+                          <el-dropdown-menu>
+                            <el-dropdown-item command="add">
+                              <el-icon>
+                                <Plus></Plus>
+                              </el-icon>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="edit">
+                              <el-icon>
+                                <Edit></Edit>
+                              </el-icon>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="delete">
+                              <el-icon>
+                                <Delete></Delete>
+                              </el-icon>
+                            </el-dropdown-item>
+                          </el-dropdown-menu>
+                        </template>
+                      </el-dropdown>
+                    </slot>
+                  </span>
+                </div>
+              </template>
+            </el-tree>
+          </el-scrollbar>
+        </el-card>
+      </el-col>
+      <el-col :span="19">
+				<el-card shadow="hover">
           <el-tabs v-model="tabName">
             <el-tab-pane label="设备树信息" name="1">
               <table>
@@ -161,16 +151,16 @@
               </el-form-item>
             </el-tab-pane>
           </el-tabs>
-        </template>
-      </LrLayout>
-    </el-card>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList"/>
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';
@@ -247,6 +237,16 @@ export default defineComponent({
       endDate: '',
       deviceKey: ''
     })
+    let zlTreeSearchRef = ref()
+
+    watch(() => state.searchVal, (val) => {
+			zlTreeSearchRef.value!.filter(val);
+		});
+
+		const filterNode = (value: string, data: any) => {
+			if (!value) return true;
+			return data.name.includes(value);
+		};
     
     // 初始化表格数据
     const initTableData = () => {
@@ -334,6 +334,7 @@ export default defineComponent({
     return {
       addOrUpdateRef,
       queryRef,
+      zlTreeSearchRef,
       typeList,
       resetQuery,
       handleSelectionChange,
@@ -342,7 +343,8 @@ export default defineComponent({
       nodeClick,
       ...toRefs(state),
       ruleForm,
-      onSaveTime
+      onSaveTime,
+      filterNode
     };
   },
 });
@@ -350,9 +352,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 
-:deep(.el-card__body) {
-  padding: 0;
-}
+// :deep(.el-card__body) {
+//   padding: 0;
+// }
 .zl-tree-search {
   margin: 0 12px 0 0;
   border-radius: 4px;
