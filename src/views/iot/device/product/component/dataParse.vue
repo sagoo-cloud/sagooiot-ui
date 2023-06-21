@@ -72,10 +72,10 @@ function mock() {
 		const fun = eval("(" + funStr + ")")
 		try {
 			const res = fun(JSON.parse(inputData.value))
-			outputData.value = JSON.stringify(res, null, 2)
+			outputData.value = typeof res === 'object' ? JSON.stringify(res, null, 2) : res
 		} catch {
 			const res = fun(inputData.value)
-			outputData.value = JSON.stringify(res, null, 2)
+			outputData.value = typeof res === 'object' ? JSON.stringify(res, null, 2) : res
 		}
 	} catch (error) {
 		ElMessage.error('数据解析脚本语法校验未通过或参数类型有误')
