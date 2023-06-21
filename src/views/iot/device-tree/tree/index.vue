@@ -5,6 +5,8 @@
 				<el-card shadow="hover">
 					<el-scrollbar v-loading="treeLoading">
 						<el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+
+            <el-button v-if="!treeLoading && !treeData.length" type="primary" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
 						<el-tree
               ref="zlTreeSearchRef"
               v-if="!treeLoading"
