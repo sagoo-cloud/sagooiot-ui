@@ -5,6 +5,8 @@
 				<el-card shadow="hover">
 					<el-scrollbar v-loading="treeLoading">
 						<el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+
+            <el-button v-if="!treeLoading && !treeData.length" type="primary" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
 						<el-tree
               ref="zlTreeSearchRef"
               v-if="!treeLoading"
@@ -140,7 +142,7 @@
             <el-tab-pane label="绑定实际设备" name="3">
               <el-form-item label="选择设备" prop="deviceKey">
                 <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-                  <el-option v-for="item in deviceList" :key="item.id" :label="item.name" :value="item.id">
+                  <el-option v-for="item in deviceList" :key="item.key" :label="item.name" :value="item.key">
                     <span style="float: left">{{ item.name }}</span>
                     <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
                   </el-option>
@@ -288,7 +290,7 @@ export default defineComponent({
           state.treeDetail = res.data || {}
           ruleForm.value.startDate = state.treeDetail.startDate
           ruleForm.value.endDate = state.treeDetail.endDate
-          ruleForm.value.deviceKey = state.treeDetail.deviceKey ? Number(state.treeDetail.deviceKey) : ''
+          ruleForm.value.deviceKey = state.treeDetail.deviceKey
         })
     }
     const onSaveTime = () => {
