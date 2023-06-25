@@ -313,7 +313,7 @@ export default defineComponent({
 						});
 					});
 					state.ruleForm = res.data;
-					setType();
+					setType(true);
 				});
 			}
 			state.isShowDialog = true;
@@ -505,8 +505,8 @@ export default defineComponent({
 			});
 		};
 
-		const setType = () => {
-			state.ruleForm.deviceKey = ''
+		const setType = (notResetDeviceKey: boolean) => {
+			!notResetDeviceKey && (state.ruleForm.deviceKey = '')
 			let product_id = 0;
 			state.productData.forEach((item, index) => {
 				if (item.key == state.ruleForm.productKey) {
