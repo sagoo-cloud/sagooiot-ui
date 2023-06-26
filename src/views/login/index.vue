@@ -37,8 +37,6 @@ import logoMini from '/imgs/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 
-const store = useStore();
-
 // 定义接口来定义对象的类型
 interface LoginState {
 	tabsActiveName: string;

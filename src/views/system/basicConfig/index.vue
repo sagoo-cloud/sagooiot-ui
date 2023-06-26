@@ -101,7 +101,7 @@ const initBasicConfigInfo = () => {
 const queryBasicConfigInfo = () => {
 	state.tableData.loading = true
 	api.basicConfig.getDetails().then((res: any) => {
-		console.log(res)
+		// console.log(res)
 		state.data = res.data;
 		res.data.forEach((element: object) => {
 			if(element.configName == '系统名称') {
@@ -120,7 +120,7 @@ const queryBasicConfigInfo = () => {
 				state.info.pic = element.configValue
 			}
 		});
-		console.log(state.info)
+		// console.log(state.info)
 	});
 };
 
@@ -170,8 +170,8 @@ const setDetails = () => {
 			element.configValue = state.info.pic
 		}
 	})
-	console.log(state.data)
-	api.basicConfig.setDetails(state.data).then((res: any) => {
+	// console.log(state.data)
+	api.basicConfig.setDetails({ ConfigInfo: state.data}).then((res: any) => {
 		console.log(res)
 		ElMessage.success('设置成功');
 		
