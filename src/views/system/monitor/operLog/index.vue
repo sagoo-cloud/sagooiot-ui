@@ -81,8 +81,8 @@
         <el-table-column label="操作时间" v-col="'operTime'" show-overflow-tooltip align="center" prop="operTime" />
         <el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="80">
           <template #default="scope">
-            <el-tag type="info" size="small" v-if="scope.row.status === 1">停用</el-tag>
-            <el-tag type="success" size="small" v-else-if="scope.row.status === 0">正常</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status === 1">正常</el-tag>
+            <el-tag type="success" size="small" v-else-if="scope.row.status === 0">停用</el-tag>
             <el-tag type="info" size="small" v-else-if="scope.row.status === -1">全部</el-tag>
             <el-tag type="info" size="small" v-else>-</el-tag>
           </template>
