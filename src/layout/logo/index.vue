@@ -62,7 +62,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
+	// box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
 	color: var(--next-bg-menuBar-black);
 	background: var(--next-bg-menuBar-light);
 	font-size: 20px;
