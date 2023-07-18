@@ -117,25 +117,22 @@ const onDel = (row: any) => {
 
     const flowIndex = flows.findIndex((item: any) => item.id === row.flowId);
 
-    if (flowIndex === -1) {
-      ElMessage.error('规则不存在');
-      return;
+    if (flowIndex >= 0) {
+      // 删除指定规则
+      flows.splice(flowIndex, 1);
+
+      // 删除当前规则下的各个节点信息
+      const newFlows = flows.filter((item: any) => {
+        if (item.z === row.flowId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      // 设置规则状态
+      await axios.post(flowsUrl, newFlows, { headers });
     }
-
-    // 删除指定规则
-    flows.splice(flowIndex, 1);
-
-    // 删除当前规则下的各个节点信息
-    const newFlows = flows.filter((item: any) => {
-      if (item.z === row.flowId) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-
-    // 设置规则状态
-    await axios.post(flowsUrl, newFlows, { headers });
 
     await api.del([row.id as string]);
     ElMessage.success('删除成功');
