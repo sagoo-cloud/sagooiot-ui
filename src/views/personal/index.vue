@@ -101,6 +101,10 @@ import { formatAxis } from '/@/utils/formatTime'
 import { ElMessage } from 'element-plus'
 import api from '/@/api/system'
 import uploadVue from '/@/components/upload-wrapper/index.vue'
+import { useStore } from '/@/store/index';
+import { Session } from '/@/utils/storage';
+
+const store = useStore();
 
 const info = ref<any>({})
 const isEditStatus = ref<Boolean>(true)
@@ -124,6 +128,15 @@ const setImg = (img: string) => {
 	api.user.setAvatar(info.value.id, img).then((res: any) => {
 		ElMessage.success('更新成功')
 		info.value.avatar = img
+		
+		const userInfos = {
+			userNickname: info.value?.userNickname,
+			avatar: img,
+		}
+
+		// 存储用户信息到浏览器缓存
+		Session.set('userInfo', userInfos);
+		store.dispatch('userInfos/setUserInfos', userInfos);
 	})
 }
 
