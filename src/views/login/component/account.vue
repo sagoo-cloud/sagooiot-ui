@@ -10,39 +10,21 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop="password">
-			<el-input
-				:type="isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('message.account.accountPlaceholder2')"
-				v-model="ruleForm.password"
-				autocomplete="off"
-				@keyup.enter="onSignIn"
-			>
+			<el-input :type="isShowPassword ? 'text' : 'password'" :placeholder="$t('message.account.accountPlaceholder2')" v-model="ruleForm.password" autocomplete="off" @keyup.enter="onSignIn">
 				<template #prefix>
 					<el-icon class="el-input__icon">
 						<ele-Unlock />
 					</el-icon>
 				</template>
 				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
-						:class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="isShowPassword = !isShowPassword"
-					>
+					<i class="iconfont el-input__icon login-content-password" :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'" @click="isShowPassword = !isShowPassword">
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation3" prop="captcha">
 			<el-col :span="15">
-				<el-input
-					type="text"
-					maxlength="4"
-					:placeholder="$t('message.account.accountPlaceholder3')"
-					v-model="ruleForm.captcha"
-					clearable
-					autocomplete="off"
-					@keyup.enter="onSignIn"
-				>
+				<el-input type="text" maxlength="4" :placeholder="$t('message.account.accountPlaceholder3')" v-model="ruleForm.captcha" clearable autocomplete="off" @keyup.enter="onSignIn">
 					<template #prefix>
 						<el-icon class="el-input__icon">
 							<ele-Position />
@@ -76,6 +58,10 @@ import { useStore } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import api from '/@/api/system';
+
+// 是否是开源版本
+const ISOPEN = import.meta.env.VITE_ISOPEN
+
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
@@ -87,8 +73,8 @@ export default defineComponent({
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
-				userName: 'demo',
-				password: 'demo123456',
+				userName: ISOPEN ? 'demo' : '',
+				password: ISOPEN ? 'demo123456' : '',
 				captcha: '',
 				VerifyKey: '',
 			},
@@ -143,7 +129,7 @@ export default defineComponent({
 							});
 					}
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 获取登录用户信息
 		const currentUser = async () => {
