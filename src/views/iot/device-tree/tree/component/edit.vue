@@ -5,17 +5,8 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备树" prop="parentId">
-              <el-tree-select
-                v-model="ruleForm.parentId"
-                :data="treeData"
-                check-strictly
-                style="width: 100%;"
-                :props="{
-                  label: 'name'
-                }"
-                node-key="infoId"
-                :render-after-expand="true"
-              />
+							<el-cascader :options="treeData" :props="{ checkStrictly: true, emitPath: false, value: 'infoId', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.parentId">
+							</el-cascader>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -49,11 +40,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item label="类型" prop="template">
-              <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" style="width: 100%;">
-                <el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-              </el-select>
-            </el-form-item>
+						<el-form-item label="类型" prop="template">
+							<el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" style="width: 100%;">
+								<el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备标识" prop="deviceKey">
@@ -61,11 +52,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item label="分类" prop="category">
-              <el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" style="width: 100%;">
-                <el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-              </el-select>
-            </el-form-item>
+						<el-form-item label="分类" prop="category">
+							<el-select v-model="ruleForm.category" filterable clearable placeholder="请选择分类" style="width: 100%;">
+								<el-option v-for="dict in tree_category" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备所属区域" prop="area">
@@ -108,12 +99,30 @@
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/device';
 import apiSystem from '/@/api/system';
-import { phoneValidate } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
+
+// 树形结构，根据传来的id进行判断，如果有，那么当前节点和他的所有子节点都不能选择，因为自己不能挂到自己和自己的子节点上
+function setDisabledById(objArray: any, id: number, parentDisabled = false) {
+	for (let i = 0; i < objArray.length; i++) {
+		const obj = objArray[i];
+		let isAllDisAbled = false || parentDisabled
+
+		if (isAllDisAbled || obj.infoId === id) {
+			obj.disabled = true;
+			isAllDisAbled = true;
+		} else {
+			isAllDisAbled = false;
+		}
+
+		if (obj.children && Array.isArray(obj.children)) {
+			setDisabledById(obj.children, id, isAllDisAbled);
+		}
+	}
+}
 
 interface RuleFormState {
 	id?: number;
-	parentId: string|number;
+	parentId: string | number;
 	name: string;
 	address: string;
 	lat: string;
@@ -124,7 +133,6 @@ interface RuleFormState {
 	area: string;
 	company: string;
 	types: string;
-	parentId: string;
 	startDate: string;
 	endDate: string;
 }
@@ -141,7 +149,6 @@ const baseForm: RuleFormState = {
 	area: '',
 	company: '',
 	types: '',
-	parentId: '',
 	startDate: '',
 	endDate: '',
 };
@@ -149,7 +156,7 @@ const baseForm: RuleFormState = {
 export default defineComponent({
 	name: 'deviceEditCate',
 	setup(prop, { emit }) {
-    const { proxy } = getCurrentInstance() as any;
+		const { proxy } = getCurrentInstance() as any;
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive({
 			isShowDialog: false,
@@ -160,13 +167,13 @@ export default defineComponent({
 				name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
 				address: [{ required: true, message: '地址不能为空', trigger: 'blur' }],
 			},
-      orgData: [],
-      treeData: []
+			orgData: [],
+			treeData: [] as any[]
 		});
 
-    // const { tree_types_2 } = proxy.useDict('tree_types_2');
+		// const { tree_types_2 } = proxy.useDict('tree_types_2');
 
-    const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
+		const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
 
 		// 打开弹窗
 		const openDialog = (type: string, row?: any) => {
@@ -181,9 +188,14 @@ export default defineComponent({
 			apiSystem.org.getList({ status: 1 }).then((res: any) => {
 				state.orgData = res || [];
 			});
-      api.tree.getList({}).then((res: any) => {
-        state.treeData = res.list;
-      })
+			api.tree.getList({}).then((res: any) => {
+				setDisabledById(res.list, row.infoId)
+				state.treeData = [{
+					name: '根节点',
+					infoId: 0,
+					children: res.list
+				}]
+			})
 			state.isShowDialog = true;
 		};
 		// 关闭弹窗
@@ -236,8 +248,8 @@ export default defineComponent({
 			onSubmit,
 			formRef,
 			// tree_types_2,
-      tree_types,
-      tree_category,
+			tree_types,
+			tree_category,
 			...toRefs(state),
 		};
 	},

@@ -1,29 +1,21 @@
 <template>
   <div class="system-dic-container">
-		<el-row :gutter="10">
-			<el-col :span="5">
-				<el-card shadow="hover">
-					<el-scrollbar v-loading="treeLoading">
-						<el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+    <el-row :gutter="10">
+      <el-col :span="5">
+        <el-card shadow="hover">
+          <el-scrollbar v-loading="treeLoading">
+            <el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
 
             <el-button v-if="!treeLoading && !treeData.length" type="primary" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
-						<el-tree
-              ref="zlTreeSearchRef"
-              v-if="!treeLoading"
-              :data="treeData"
-              :props="{
-                children: 'children',
-                label: 'name'
-              }"
-              :filter-node-method="filterNode"
-              :default-expand-all="true"
-              :node-key="'id'"
-              highlight-current
-              @node-click="nodeClick">
+            <el-tree ref="zlTreeSearchRef" v-if="!treeLoading" :data="treeData" :props="{
+              children: 'children',
+              label: 'name'
+            }" :filter-node-method="filterNode" :default-expand-all="true" :node-key="'id'" highlight-current @node-click="nodeClick">
               <template #default="{ node, data }">
                 <div class="custom-tree-node">
                   <span class="tree-label">
-                    <i class="iconfont icon-wenjianjia icon-wjj mr8" />{{ node.label }}
+                    <!-- <i class="iconfont icon-wenjianjia icon-wjj mr8" /> -->
+                    {{ node.label }}
                   </span>
                   <span class="tree-options" @click.stop>
                     <slot name="operate" :data="data">
@@ -60,7 +52,7 @@
         </el-card>
       </el-col>
       <el-col :span="19">
-				<el-card shadow="hover">
+        <el-card shadow="hover">
           <el-tabs v-model="tabName">
             <el-tab-pane label="设备树信息" name="1">
               <table>
@@ -80,7 +72,7 @@
                     <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
                     <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
-                  </tr> 
+                  </tr>
                   <tr class="ant-descriptions-row">
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
                     <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
@@ -107,22 +99,10 @@
             <el-tab-pane label="时间周期" name="2">
               <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
                 <el-form-item label="开始日期" prop="startDate">
-                  <el-date-picker
-                    v-model="ruleForm.startDate"
-                    type="date"
-                    placeholder="选择开始日期"
-                    class="w-35"
-                    :size="'default'"
-                  />
+                  <el-date-picker v-model="ruleForm.startDate" type="date" placeholder="选择开始日期" class="w-35" :size="'default'" />
                 </el-form-item>
                 <el-form-item label="结束日期" prop="endDate">
-                  <el-date-picker
-                    v-model="ruleForm.endDate"
-                    type="date"
-                    placeholder="选择结束日期"
-                    class="w-35"
-                    :size="'default'"
-                  />
+                  <el-date-picker v-model="ruleForm.endDate" type="date" placeholder="选择结束日期" class="w-35" :size="'default'" />
                 </el-form-item>
                 <!-- <el-form-item label="类型" prop="template">
                   <el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" class="w-35">
@@ -157,7 +137,7 @@
       </el-col>
     </el-row>
 
-    <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList"/>
+    <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList" />
   </div>
 </template>
 
@@ -226,12 +206,12 @@ export default defineComponent({
       searchVal: '',
       treeDetail: {},
       deviceList: [],
-			unitData: [
-				{ label: '秒', value: 1 },
-				{ label: '分', value: 2 },
-				{ label: '时', value: 3 },
-				{ label: '天', value: 4 },
-			],
+      unitData: [
+        { label: '秒', value: 1 },
+        { label: '分', value: 2 },
+        { label: '时', value: 3 },
+        { label: '天', value: 4 },
+      ],
     });
 
     let ruleForm = ref({
@@ -242,14 +222,14 @@ export default defineComponent({
     let zlTreeSearchRef = ref()
 
     watch(() => state.searchVal, (val) => {
-			zlTreeSearchRef.value!.filter(val);
-		});
+      zlTreeSearchRef.value!.filter(val);
+    });
 
-		const filterNode = (value: string, data: any) => {
-			if (!value) return true;
-			return data.name.includes(value);
-		};
-    
+    const filterNode = (value: string, data: any) => {
+      if (!value) return true;
+      return data.name.includes(value);
+    };
+
     // 初始化表格数据
     const initTableData = () => {
       getTreeList();
@@ -264,7 +244,6 @@ export default defineComponent({
     const getDeviceList = () => {
       api.device.allList({}).then((res: any) => {
         state.deviceList = res.device || [];
-        console.log('res')
       })
     }
     const typeList = () => {
@@ -310,7 +289,7 @@ export default defineComponent({
     }
 
     const operateCmd = (type: string, data: any) => {
-      switch(type) {
+      switch (type) {
         case 'add':
           addOrUpdateRef.value.openDialog(type, data)
           break
@@ -353,6 +332,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.el-tree ::v-deep(.el-tree-node__label) {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+}
 
 // :deep(.el-card__body) {
 //   padding: 0;
@@ -360,11 +344,13 @@ export default defineComponent({
 .zl-tree-search {
   margin: 0 12px 0 0;
   border-radius: 4px;
+
   &__filter {
     padding: 4px 10px;
     border-bottom: 1px solid #EAEAEA;
   }
 }
+
 .zl-tree-search__filter :deep .el-input__wrapper {
   box-shadow: none;
 }
@@ -376,16 +362,28 @@ export default defineComponent({
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+  overflow: hidden;
+
+  .tree-label {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
   &:hover {
     .tree-options {
       display: block;
     }
   }
 }
+
 :deep(.column-right) {
   padding: 0;
   background-color: transparent;
 }
+
 .icon-wjj {
   font-size: 12px;
   color: #C4C6CF;
@@ -393,59 +391,69 @@ export default defineComponent({
 
 table {
   width: 100%;
-	border-collapse: collapse;
-	text-indent: initial;
-	border-spacing: 2px;
+  border-collapse: collapse;
+  text-indent: initial;
+  border-spacing: 2px;
 }
+
 tbody {
-	box-sizing: border-box;
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
+  box-sizing: border-box;
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
 }
 
 tr {
-	display: table-row;
-	vertical-align: inherit;
-	border-color: inherit;
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
 }
+
 .ant-descriptions-view {
-	width: 100%;
-	overflow: hidden;
-	border-radius: 4px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
 }
+
 .ant-descriptions-view {
-	border: 1px solid #e8e8e8;
+  border: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-view table {
-	width: 100%;
-	table-layout: fixed;
+  width: 100%;
+  table-layout: fixed;
 }
-.ant-descriptions-view > table {
-	table-layout: auto;
+
+.ant-descriptions-view>table {
+  table-layout: auto;
 }
+
 .ant-descriptions-row {
-	border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 1.5;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
 }
+
 .ant-descriptions-item-label {
-	padding: 16px;
-	border-right: 1px solid #e8e8e8;
+  padding: 16px;
+  border-right: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
-	background-color: #fafafa;
+  background-color: #fafafa;
 }
+
 .ant-descriptions-item-content {
-	padding: 16px;
-	border-right: 1px solid #e8e8e8;
-	display: table-cell;
-	color: rgba(0, 0, 0, 0.65);
-	font-size: 14px;
-	line-height: 1.5;
+  padding: 16px;
+  border-right: 1px solid #e8e8e8;
+  display: table-cell;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  line-height: 1.5;
 }
 </style>
