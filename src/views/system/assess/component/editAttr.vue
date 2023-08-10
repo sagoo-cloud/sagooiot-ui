@@ -17,39 +17,29 @@
 					</el-select>
 				</el-form-item>
 
-        <!--根据数据类型输出不同表单-->
+				<!--根据数据类型输出不同表单-->
 
-             <el-form-item label="精度" prop="maxLength1" v-if="type=='float' || type=='double'">
-                <el-input v-model="valueType.maxLength1" placeholder="请输入精度" />
-              </el-form-item>
+				<el-form-item label="精度" prop="maxLength1" v-if="type == 'float' || type == 'double'">
+					<el-input v-model="valueType.maxLength1" placeholder="请输入精度" />
+				</el-form-item>
 
-            	<el-form-item label="单位" prop="maxLength" v-if="type=='int' || type=='long' || type=='float'  || type=='double'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入单位" />
-              </el-form-item>
+				<el-form-item label="单位" prop="maxLength" v-if="type == 'int' || type == 'long' || type == 'float' || type == 'double'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入单位" />
+				</el-form-item>
 
-              <el-form-item label="最大长度" prop="maxLength" v-if="type=='string'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
-              </el-form-item>
+				<el-form-item label="最大长度" prop="maxLength" v-if="type == 'string'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
+				</el-form-item>
 
-               <el-form-item label="时间格式" prop="maxLength" v-if="type=='date'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
-              </el-form-item>
-             
+				<el-form-item label="时间格式" prop="maxLength" v-if="type == 'date'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
+				</el-form-item>
 
-        <!--根据数据类型输出不同表单-->
-
-
-
-
-
-
-
-
+				<!--根据数据类型输出不同表单-->
 				<el-form-item label="是否只读" prop="accessMode">
 					<el-radio-group v-model="ruleForm.accessMode" model-value="0">
-						<el-radio label="0">读写</el-radio>
-
 						<el-radio label="1">只读</el-radio>
+						<el-radio label="0">读写</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="属性定义描述	" prop="desc">
@@ -95,32 +85,32 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			typeData: [], //
-      type: '',
-       valueType: {
-          type:'',
-          maxLength:'',
+			type: '',
+			valueType: {
+				type: '',
+				maxLength: '',
 
-        },
+			},
 
 			ruleForm: {
 				name: '',
 				key: '',
 				transportProtocol: '',
-				accessMode: '0',
+				accessMode: '1',
 				status: 1,
-        valueType: {
-          type:'',
-          maxLength:'',
+				valueType: {
+					type: '',
+					maxLength: '',
 
-        },
-				
+				},
+
 				desc: '',
 			},
 			rules: {
 				name: [{ required: true, message: '属性定义名称不能为空', trigger: 'blur' }],
 				key: [{ required: true, message: '属性定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
-		
+
 			},
 		});
 
@@ -162,10 +152,10 @@ export default defineComponent({
 			};
 		};
 
-    const seletChange=(val)=>{
-      state.type=val;
-      console.log(val);
-    };
+		const seletChange = (val) => {
+			state.type = val;
+			console.log(val);
+		};
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -189,10 +179,10 @@ export default defineComponent({
 						});
 					} else {
 						//添加
-         
-            console.log(state.valueType);
-            state.ruleForm.valueType=state.valueType;
-           console.log(state.ruleForm);
+
+						console.log(state.valueType);
+						state.ruleForm.valueType = state.valueType;
+						console.log(state.ruleForm);
 						api.model.propertyadd(state.ruleForm).then(() => {
 							ElMessage.success('属性定义类型添加成功');
 							closeDialog(); // 关闭弹窗
@@ -205,7 +195,7 @@ export default defineComponent({
 
 		return {
 			openDialog,
-      seletChange,
+			seletChange,
 			closeDialog,
 			onCancel,
 			onSubmit,

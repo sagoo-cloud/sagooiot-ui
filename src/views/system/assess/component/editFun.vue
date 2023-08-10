@@ -31,14 +31,10 @@
           </el-select>
         </el-form-item>
 
-
-
-
         <el-form-item label="是否只读" prop="accessMode">
           <el-radio-group v-model="ruleForm.accessMode" model-value="0">
-            <el-radio label="0">读写</el-radio>
-
             <el-radio label="1">只读</el-radio>
+            <el-radio label="0">读写</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="功能定义描述	" prop="desc">
@@ -91,7 +87,7 @@ export default defineComponent({
         name: '',
         key: '',
         transportProtocol: '',
-        accessMode: '0',
+        accessMode: '1',
         status: 1,
         desc: ''
       },
