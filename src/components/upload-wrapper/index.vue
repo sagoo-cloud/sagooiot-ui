@@ -15,7 +15,7 @@ import getOrigin from '/@/utils/origin'
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/singleImg');
 
 const headers = {
-  Authorization: 'Bearer ' + JSON.parse(sessionStorage.token),
+  Authorization: 'Bearer ' + localStorage.token,
 };
 
 const emit = defineEmits(['setImg', 'setImgs']);
@@ -29,12 +29,16 @@ const props = defineProps({
     type: String,
     default: '.jpg,.png,.jpeg,.gif',
   },
+  name: {
+    type: String,
+    default: '',
+  }
 });
 
 const updateImg = (res: any) => {
   const url = getOrigin(import.meta.env.VITE_SERVER_URL + '/' + res.data?.path)
-
-  emit('setImg', url);
+  console.log(url)
+  emit('setImg', url, props.name);
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

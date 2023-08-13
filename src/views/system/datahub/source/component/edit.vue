@@ -311,10 +311,10 @@ export default defineComponent({
 					label: 'POST',
 					value: 'post',
 				},
-				{
-					label: 'PUT',
-					value: 'put',
-				},
+				// {
+				// 	label: 'PUT',
+				// 	value: 'put',
+				// },
 			],
 
 			unitData: [

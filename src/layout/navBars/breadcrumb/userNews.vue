@@ -1,51 +1,73 @@
 <template>
-  <div class="layout-navbars-breadcrumb-user-news">
-    <div class="head-box">
-      <div class="head-box-title">{{ $t('message.user.newTitle') }}</div>
-      <div class="head-box-btn" v-if="newsList.length > 0" @click="onAllReadClick">{{ $t('message.user.newBtn') }}</div>
-    </div>
-    <div class="content-box">
-      <template v-if="newsList.length > 0">
-        <div class="content-box-item" v-for="(v, k) in newsList" :key="k">
-          <div>{{ v.label }}</div>
-          <div class="content-box-msg">
-            {{ v.value }}
-          </div>
-          <div class="content-box-time">{{ v.time }}</div>
-        </div>
-      </template>
-      <el-empty :description="$t('message.user.newDesc')" v-else></el-empty>
-    </div>
-    <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
-  </div>
+	<div class="layout-navbars-breadcrumb-user-news">
+		<div class="head-box">
+			<div class="head-box-title">{{ $t('message.user.newTitle') }}</div>
+			<!-- <div class="head-box-btn" v-if="newsList.length > 0" @click="onAllReadClick">{{ $t('message.user.newBtn') }}</div> -->
+		</div>
+		<div class="content-box">
+			<template v-if="newsList.length > 0">
+				<div class="content-box-item" v-for="(v, k) in newsList" :key="k">
+					<div>{{ v.title }}</div>
+					<div class="content-box-msg">
+						{{ v.content }}
+					</div>
+					<div class="content-box-time">{{ v.createdAt }}</div>
+				</div>
+			</template>
+			<el-empty :description="$t('message.user.newDesc')" v-else></el-empty>
+		</div>
+		<div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-const router = useRouter()
-const emit = defineEmits(['closePopover'])
+import getOrigin from '/@/utils/origin';
+import api from '/@/api/message';
+import { ElNotification } from 'element-plus';
 
-const newsList = ref([
-  {
-    label: '关于发布的通知',
-    value: '内容。。。',
-    time: '2022-08-07',
-  },
-  {
-    label: '关于系统升级的通知',
-    value: '欢迎升级使用！',
-    time: '2022-08-07',
-  },
-])
+const router = useRouter();
+const emit = defineEmits(['closePopover']);
+
+const newsList = ref<any[]>([
+	// {
+	// 	title: '关于发布的通知',
+	// 	content: '内容。。。',
+	// 	createdAt: '2022-08-07',
+	// },
+]);
+
+// api.allUnRead().then((res: any) => {
+// 	// console.log(res.Info)
+// 	newsList.value = res.Info.map((item: any) => item.MessageInfo).slice(0, 5);
+// });
+
+// 监听系统消息的SSE
+const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + '/subscribe/sysMessage?userId=' + localStorage.userId));
+es.addEventListener('lastUnRead', ({ data }) => {
+	if (!data || data === 'null') return;
+	const list = JSON.parse(data);
+	newsList.value = list.concat(newsList.value).slice(0,5)
+	list.forEach((item: any) => {
+		setTimeout(() => {
+			ElNotification({
+				title: item.MessageInfo.title,
+				message: item.MessageInfo.content,
+				type: 'error',
+			});
+		}, 100);
+	});
+});
+
 // 全部已读点击
 const onAllReadClick = () => {
-  newsList.value = [];
+	newsList.value = [];
 };
 // 前往通知中心点击
 const onGoToGiteeClick = () => {
-  router.push('/alarm/log')
-  emit('closePopover')
+	router.push('/monitor/notice');
+	emit('closePopover');
 };
 </script>
 

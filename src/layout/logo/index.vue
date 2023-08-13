@@ -1,10 +1,10 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
-		<img :src="logoMini" class="layout-logo-medium-img" />
+		<img :src="sysinfo.systemLogo" class="logo" />
 		<span>{{ sysinfo.systemName }}</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
-		<img :src="logoMini" class="layout-logo-size-img" />
+		<img :src="sysinfo.systemLogoMini" class="logo-mini" />
 	</div>
 </template>
 
@@ -19,10 +19,9 @@ export default defineComponent({
 	data() {
 		return {
 			sysinfo: {
-				buildVersion: '',
 				systemName: '',
-				buildTime: '',
-				systemCopyright: '',
+				systemLogo: '',
+				systemLogoMini: '',
 			},
 		};
 	},
@@ -62,32 +61,40 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
-	// color: var(--el-color-primary);
-	color: #ffff;
+	// box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
+	color: var(--next-bg-menuBar-black);
+	background: var(--next-bg-menuBar-light);
 	font-size: 20px;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
+
 	&:hover {
 		span {
 			color: var(--color-primary-light-2);
 		}
 	}
-	&-medium-img {
-		width: 35px;
+
+	.logo {
+		height: 32px;
+		width: auto;
 		padding-right: 5px;
 	}
 }
+
 .layout-logo-size {
 	width: 100%;
 	height: 50px;
 	display: flex;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
-	&-img {
-		width: 20px;
-		margin: auto;
+	align-items: center;
+
+	.logo-mini {
+		height: 32px;
+		width: auto;
+		margin: 0 auto;
 	}
+
 	&:hover {
 		img {
 			animation: logoAnimation 0.3s ease-in-out;

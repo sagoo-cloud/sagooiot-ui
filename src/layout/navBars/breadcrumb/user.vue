@@ -35,7 +35,7 @@
     <div class="layout-navbars-breadcrumb-user-icon">
       <el-popover placement="bottom" trigger="click" :width="300" v-model:visible="popoverVisible">
         <template #reference>
-          <el-badge :is-dot="true">
+          <el-badge :is-dot="false">
             <el-icon :title="$t('message.user.title4')">
               <ele-Bell />
             </el-icon>
@@ -57,7 +57,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
+          <!-- <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item> -->
           <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
           <el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
         </el-dropdown-menu>
@@ -163,7 +163,7 @@ export default defineComponent({
             await resetRoute(); // 删除/重置路由
             ElMessage.success(t('message.user.logOutSuccess'));
             setTimeout(() => {
-              Session.clear(); // 清除缓存/token等
+              localStorage.clear(); // 清除缓存/token等
               window.location.href = ''; // 去登录页
             }, 500);
           })

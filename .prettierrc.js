@@ -6,7 +6,7 @@ module.exports = {
 	// 使用制表符而不是空格缩进行
 	useTabs: true,
 	// 在语句末尾打印分号
-	semi: true,
+	semi: false,
 	// 使用单引号而不是双引号
 	singleQuote: true,
 	// 更改引用对象属性的时间 可选值"<as-needed|consistent|preserve>"

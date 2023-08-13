@@ -36,6 +36,12 @@
 					</el-radio-group>
 				</el-form-item>
 
+				<el-form-item label="选择事件" prop="eventKey" v-if="ruleForm.triggerType===4">
+					<el-select v-model="ruleForm.eventKey" filterable placeholder="请选择事件" @change="eventTypeChange">
+						<el-option v-for="item in eventList" :key="item.key" :label="item.name" :value="item.key"></el-option>
+					</el-select>
+				</el-form-item>
+
 				<el-divider content-position="left">触发条件</el-divider>
 				<div class="box-content">
 					<div v-for="(item, index) in requestParams" :key="index">
@@ -81,7 +87,7 @@
 									<el-icon><Bottom /></el-icon>
 								</div>
 								<div class="content-f">
-									<el-select v-model="aaa.key" placeholder="选择参数" style="width: 320px">
+									<el-select v-model="aaa.key" :placeholder="ruleForm.triggerType  ===  4 && !ruleForm.eventKey ? '请先选择事件' : '选择参数'" style="width: 320px">
 										<el-option v-for="a in triData" :key="a.paramKey" :label="a.title" :value="a.paramKey" />
 									</el-select>
 									<el-select v-model="aaa.operator" placeholder="选择操作符" style="width: 320px">
@@ -157,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance, watch } from 'vue';
 import api from '/@/api/datahub';
 import iotapi from '/@/api/device';
 import alarm from '/@/api/alarm';
@@ -171,6 +177,7 @@ interface RuleFormState {
 	name: string;
 	triggerType: number;
 	level: string;
+	eventKey: string;
 	productKey: string;
 	deviceKey: string;
 	triggerCondition: string;
@@ -215,7 +222,7 @@ export default defineComponent({
 			levelData: [],
 			sendGatewayData: [],
 			noticeConfigData: [],
-
+			eventList: [],
 			action: [
 				{
 					sendGateway: '',
@@ -245,6 +252,7 @@ export default defineComponent({
 				id: 0,
 				name: '',
 				triggerType: 1,
+				eventKey: '',
 				level: '',
 				productKey: '',
 				deviceKey: '',
@@ -305,7 +313,7 @@ export default defineComponent({
 						});
 					});
 					state.ruleForm = res.data;
-					setType();
+					setType(true);
 				});
 			}
 			state.isShowDialog = true;
@@ -389,6 +397,22 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog();
 		};
+
+		const eventTypeChange = () => {
+			gettriData()
+		};
+
+		watch(() => state.ruleForm.productKey, (key) => {
+			if (!key) return
+			// 切换产品时候重新获取事件列表，清空之前选中的事件
+			state.ruleForm.eventKey = ''
+
+			iotapi.product.event({key}).then((res: any) => {
+				// console.log(res)
+				state.eventList = res || []
+			// state.eventList = [{name: '事件1',  key: 1}]
+			})
+		})
 
 		// 新增
 		const onSubmit = () => {
@@ -481,7 +505,8 @@ export default defineComponent({
 			});
 		};
 
-		const setType = () => {
+		const setType = (notResetDeviceKey: boolean) => {
+			!notResetDeviceKey && (state.ruleForm.deviceKey = '')
 			let product_id = 0;
 			state.productData.forEach((item, index) => {
 				if (item.key == state.ruleForm.productKey) {
@@ -503,8 +528,39 @@ export default defineComponent({
 		const getRadio=()=>{
 			gettriData();
 		}
-		const gettriData=()=>{
-			alarm.common.trigger_params({productKey:state.ruleForm.productKey,triggerType:state.ruleForm.triggerType}).then((res: any) => {
+		const gettriData = () => {
+			// 清空之前设置的参数设置
+			state.requestParams = [{
+				andOr: '',
+				filters: [
+					{
+						key: '',
+						operator: '',
+						value: '',
+						andOr: 0,
+					},
+				],
+			}]
+			setTriData()
+		}
+
+		function setTriData() {
+			// 重置参数列表
+			state.triData = [];
+
+			const triggerType = state.ruleForm.triggerType
+			const form = {
+				productKey: state.ruleForm.productKey,
+				triggerType
+			}
+
+			// 如果是事件上报，需要传eventKey参数
+			if (triggerType === 4) {
+				form.eventKey = state.ruleForm.eventKey
+				if(!form.eventKey) return
+			}
+
+			alarm.common.trigger_params(form).then((res: any) => {
 				state.triData = res.list || [];
 			});
 		}
@@ -530,6 +586,7 @@ export default defineComponent({
 			getNode,
 			delAction,
 			addAction,
+			eventTypeChange,
 			AddPhone,
 			DelPhone,
 			setType,
