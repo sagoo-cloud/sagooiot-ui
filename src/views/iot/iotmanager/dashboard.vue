@@ -410,7 +410,7 @@ export default defineComponent({
 					// "num": 43, //该级别日志数量
 					// "ratio": 100 //该级别日志数量占比(百分比)
 				state.pieChartLegend = [];
-				alarmLevel.map((item: any) => {
+				alarmLevel && alarmLevel.map((item: any) => {
 					state.pieChartLegend.push(item.name)
 					state.pieChartData.push(item.ratio)
 				})
@@ -432,7 +432,7 @@ export default defineComponent({
 		};
 		// 告警信息-更多信息
 		const toMore = () => {
-			router.push({ path: '/alarm/log'});
+			router.push({ path: '/monitor/notice'});
 		};
 		// 页面加载时
 		onMounted(() => {

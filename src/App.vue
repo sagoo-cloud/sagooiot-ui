@@ -18,6 +18,9 @@ import LockScreen from '/@/layout/lockScreen/index.vue';
 import Setings from '/@/layout/navBars/breadcrumb/setings.vue';
 import CloseFull from '/@/layout/navBars/breadcrumb/closeFull.vue';
 import api from '/@/api/system';
+// 进入系统的时间
+sessionStorage.setItem('comeTime', Date.now().toString())
+
 export default defineComponent({
 	name: 'app',
 	components: { LockScreen, Setings, CloseFull },

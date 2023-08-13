@@ -171,7 +171,7 @@ export default defineComponent({
 						//添加
 						api.role.addRole(state.formData)
 							.then(() => {
-								ElMessage.success('角色添加成功');
+								ElMessage.success('添加成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
 								emit('getList');
@@ -183,7 +183,7 @@ export default defineComponent({
 						//修改
 						api.role.editRole(state.formData)
 							.then(() => {
-								ElMessage.success('角色修改成功');
+								ElMessage.success('修改成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
 								emit('getList');

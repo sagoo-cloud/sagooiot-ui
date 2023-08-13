@@ -82,6 +82,7 @@ export default {
     resetPassword: (id: number, userPassword: string) => post('/system/user/resetPassword', { id, userPassword }),
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
+    editUserInfo: (data: object) => put('/system/user/editUserInfo', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),
     setAvatar: (id: number, avatar: string) => put('/system/user/editAvatar', { id, avatar }),
   },
@@ -142,6 +143,24 @@ export default {
   },
   plugin: {
     getList: (params: object) => get('/system/plugins/list', params),
-    changeStatus: (params: object) => post('/system/plugins/set', params),
-  }
+    del: (ids: object) => del('/system/plugins/del', {ids}),
+    changeStatus: (data: object) => post('/system/plugins/set', data),
+    edit: (data: any) => put('/system/plugins/edit', data),
+    addPluginFile: (formatDate: FormData) => post('/system/plugins/add', formatDate),
+  },
+  blackList: {
+    getList: (params: object) => get('/system/blacklist/list', params),
+    add: (data: object) => post('/system/blacklist/add', data),
+    delete: (ids: number) => del('/system/blacklist/delete', { ids }),
+    edit: (data: object) => put('/system/blacklist/edit', data),
+    detail: (params: object) => get('/system/blacklist/get', params),
+    changeStatus: (data: object) => post('/system/blacklist/status', data),
+  },
+  basicConfig: {
+    getDetails: () => get('/getBaseSetting'),
+    setDetails: (data: object) => put('/editBaseSetting', data),
+  },
+  certificate: {
+    getList: () => get('/system/certificate/getAll')
+  },
 }

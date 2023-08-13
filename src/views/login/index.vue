@@ -37,8 +37,6 @@ import logoMini from '/imgs/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 
-const store = useStore();
-
 // 定义接口来定义对象的类型
 interface LoginState {
 	tabsActiveName: string;
@@ -86,7 +84,7 @@ export default defineComponent({
 			},
 		};
 	},
-	created() {
+	mounted() {
 		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 	},
 	setup() {
@@ -103,8 +101,13 @@ export default defineComponent({
 		// 4、界面显示 --> 深色模式
 		const onAddDarkChange = () => {
 			const body = document.documentElement as HTMLElement;
-			if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
-			else body.setAttribute('data-theme', '');
+			if (getThemeConfig.value.isIsDark) {
+				body.setAttribute('data-theme', 'dark');
+				document.querySelector('html')!.className = 'dark'
+			} else {
+				body.setAttribute('data-theme', '');
+				document.querySelector('html')!.className = ''
+			}
 		};
 
 		return {

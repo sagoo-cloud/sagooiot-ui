@@ -1,4 +1,4 @@
-import { get, post, del, put } from '/@/utils/request';
+import { get, post, del, put, file } from '/@/utils/request';
 
 export default {
 
@@ -48,8 +48,9 @@ export default {
       copy: (params: object) => post('/source/template/copy', params),
       relation_check: (id: number) => get('/source/template/relation_check', { id }),
       source_list: (id: number) => get('/source/template/source_list', { id }),
+      aggregate_from: (id: number) => get('/source/template/aggregate_from', { id }),
       relation: (data: object) => post('/source/template/relation', data),
-      
+      aggregate: (data: object) => post('/source/template/aggregate', data),
    } ,
 
    tnode:{
@@ -66,6 +67,8 @@ export default {
       getWhichCityWeather: (params: object) => get('/envirotronics/weather/getInfoById', params),
       getTemperatureEchartById: (params: object) => get('/envirotronics/weather/getTemperatureEchartById', params),
       getWindpowerEchartById: (params: object) => get('/envirotronics/weather/getWindpowerEchartById', params),
+      getCityWeatherHistory: (params: object) => get('/envirotronics/weather/GetCityWeatherHistory', params),
+      getCityWeatherHistoryExport: (params: object) => file('/envirotronics/weather/GetCityWeatherHistoryExport', params),
    },
    statistics:{
       getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),

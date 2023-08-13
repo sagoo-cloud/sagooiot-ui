@@ -32,7 +32,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			// 是否开启顶栏背景颜色渐变
 			isTopBarColorGradual: false,
 			// 默认菜单导航背景颜色
-			menuBar: '#354E67',
+			menuBar: '#ffffff',
 			// 默认菜单导航字体颜色
 			menuBarColor: '#eaeaea',
 			// 是否开启菜单背景颜色渐变

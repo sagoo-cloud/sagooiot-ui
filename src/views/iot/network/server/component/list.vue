@@ -84,7 +84,7 @@
 
           <el-popover
             placement="bottom"
-            :width="160"
+            :width="170"
             trigger="click"
           >
             <template #reference>

@@ -24,7 +24,7 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
         <el-table-column prop="name" label="分类名称" v-col="'name'" show-overflow-tooltip> </el-table-column>
-
+        <el-table-column prop="sort" v-col="'sort'" label="排序" width="60" align="center"></el-table-column>
         <el-table-column prop="desc" label="描述" align="center" min-width="180" v-col="'desc'"></el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template #default="scope">

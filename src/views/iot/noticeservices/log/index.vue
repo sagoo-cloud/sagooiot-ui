@@ -95,7 +95,7 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-
+			status: number;
 			dateRange: string[];
 		};
 	};
@@ -119,7 +119,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					status: '',
+					status: -1,
 					dateRange: [],
 				},
 			},

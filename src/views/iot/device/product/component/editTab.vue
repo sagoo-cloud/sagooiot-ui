@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '标签定义'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
 				<el-form-item label="标签定义标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入标签定义标识" :disabled="ruleForm.id!== 0 ?true : false" />
+					<el-input v-model="ruleForm.key" placeholder="请输入标签定义标识" :disabled="ruleForm.id !== 0 ? true : false" />
 				</el-form-item>
 				<el-form-item label="标签定义名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入标签定义名称" />
@@ -49,13 +49,17 @@
 
 				<el-form-item label="枚举项" prop="maxLength" v-if="type == 'enum'">
 					<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-						<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-							><el-icon><Right /></el-icon
-						></span>
-						<el-input v-model="item.value" placeholder="请输入枚举文本" />
+						<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
+								<Right />
+							</el-icon></span>
+						<el-input v-model="item.value" placeholder="请输入枚举值" />
 						<div class="input-option">
-							<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-							<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+							<el-icon @click="addEnum" v-if="index == 0">
+								<Plus />
+							</el-icon>
+							<el-icon @click="delEnum(index)" v-if="index != 0">
+								<Minus />
+							</el-icon>
 						</div>
 					</div>
 				</el-form-item>
@@ -74,7 +78,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -119,13 +125,17 @@
 
 					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
 						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-								><el-icon><Right /></el-icon
-							></span>
+							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
+									<Right />
+								</el-icon></span>
 							<el-input v-model="item.value" placeholder="请输入枚举文本" />
 							<div class="input-option">
-								<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-								<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+								<el-icon @click="addEnum" v-if="index == 0">
+									<Plus />
+								</el-icon>
+								<el-icon @click="delEnum(index)" v-if="index != 0">
+									<Minus />
+								</el-icon>
 							</div>
 						</div>
 					</el-form-item>
@@ -145,7 +155,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -155,9 +167,8 @@
 
 				<el-form-item label="是否只读" prop="accessMode">
 					<el-radio-group v-model="ruleForm.accessMode">
-						<el-radio :label="0">读写</el-radio>
-
 						<el-radio :label="1">只读</el-radio>
+						<el-radio :label="0">读写</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="标签定义描述	" prop="desc">
@@ -240,7 +251,7 @@ export default defineComponent({
 				name: '',
 				key: '',
 				transportProtocol: '',
-				accessMode: 0,
+				accessMode: 1,
 				status: 1,
 				valueType: {
 					type: '',
@@ -299,11 +310,11 @@ export default defineComponent({
 					state.jsondata = row.valueType.properties;
 				}
 
-				if(row.type == 'array' && state.types=='enum'){
-					state.enumdata=row.valueType.elementType.elements
+				if (row.type == 'array' && state.types == 'enum') {
+					state.enumdata = row.valueType.elementType.elements
 				}
-				if(row.type == 'array' && state.types=='object'){
-					state.jsondata=row.valueType.elementType.properties
+				if (row.type == 'array' && state.types == 'object') {
+					state.jsondata = row.valueType.elementType.properties
 				}
 			}
 
@@ -315,7 +326,7 @@ export default defineComponent({
 				name: '',
 				key: '',
 				transportProtocol: '',
-				accessMode: 0,
+				accessMode: 1,
 				status: 1,
 				valueType: {
 					type: '',
@@ -330,9 +341,9 @@ export default defineComponent({
 			state.elementType = {};
 			state.jsondata = [];
 			state.enumdata = [{
-					text: '',
-					value: '',
-				},];
+				text: '',
+				value: '',
+			},];
 		};
 
 		const seletChange = (val) => {
@@ -396,14 +407,14 @@ export default defineComponent({
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 							//如果是选中数组，并选择了枚举
-							if(state.types=='enum'){
+							if (state.types == 'enum') {
 								state.valueType.elementType = {
 									elements: state.enumdata,
 									type: 'enum'
 								}
 							}
 							//如果是选中数组，并选择了object
-							if(state.types=='object'){
+							if (state.types == 'object') {
 								state.valueType.elementType = {
 									properties: state.jsondata,
 									type: 'object'
@@ -432,13 +443,13 @@ export default defineComponent({
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 							//如果是选中数组，并选择了枚举
-							if(state.types=='enum'){
+							if (state.types == 'enum') {
 								state.valueType.elementType = {
 									elements: state.enumdata
 								}
 							}
 							//如果是选中数组，并选择了object
-							if(state.types=='object'){
+							if (state.types == 'object') {
 								state.valueType.elementType = {
 									properties: state.jsondata,
 									type: 'object'
@@ -483,35 +494,41 @@ export default defineComponent({
 	justify-content: space-between;
 	margin-top: 10px;
 }
+
 .input-option {
 	line-height: 30px;
 	padding-top: 5px;
 	width: 140px;
 }
+
 .input-option i {
 	margin: 0px 5px;
 	border: 1px solid #c3c3c3;
 	font-size: 16px;
 }
+
 .input-options {
 	display: flex;
 	align-items: center;
 	color: #409eff;
 	cursor: pointer;
 }
+
 .jslist {
 	width: 100%;
 	border: 1px solid #e8e8e8;
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
 .jsonlist {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.jsonoption {
-}
+
+.jsonoption {}
+
 .jsonoption a {
 	margin: 0px 10px;
 }

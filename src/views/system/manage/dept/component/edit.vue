@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.deptId ? '修改' : '添加') + '部门'" v-model="isShowDialog" width="769px">
 			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
 				<el-row :gutter="35">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+					<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="所属区域" prop="organizationId">
 							<el-cascader :options="orgData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择区域" clearable class="w100" v-model="ruleForm.organizationId">
 								<template #default="{ node, data }">
@@ -12,7 +12,7 @@
 								</template>
 							</el-cascader>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="上级部门">
 							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.parentId">
@@ -94,7 +94,7 @@ interface DeptSate {
 const baseForm: RuleFormState = {
 	parentId: -1, // 上级部门
 	deptName: '', // 部门名称
-	organizationId: null, // 组织名称
+	organizationId: 1, // 组织名称
 	orderNum: 0,
 	leader: '',
 	phone: '',
@@ -163,14 +163,14 @@ export default defineComponent({
 					if (!state.ruleForm.deptId) {
 						//添加
 						api.dept.add(state.ruleForm).then(() => {
-							ElMessage.success('角色添加成功');
+							ElMessage.success('添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('deptList');
 						});
 					} else {
 						//修改
 						api.dept.edit(state.ruleForm).then(() => {
-							ElMessage.success('角色修改成功');
+							ElMessage.success('修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('deptList');
 						});

@@ -148,14 +148,14 @@ export default defineComponent({
           if (!state.ruleForm.id) {
             //添加
             api.org.add(state.ruleForm).then(() => {
-              ElMessage.success('角色添加成功');
+              ElMessage.success('添加成功');
               closeDialog(); // 关闭弹窗
               emit('deptList');
             });
           } else {
             //修改
             api.org.edit(state.ruleForm).then(() => {
-              ElMessage.success('角色修改成功');
+              ElMessage.success('修改成功');
               closeDialog(); // 关闭弹窗
               emit('deptList');
             });
