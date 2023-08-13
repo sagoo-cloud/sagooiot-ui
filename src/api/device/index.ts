@@ -22,6 +22,7 @@ export default {
     undeploy: (data: object) => post('/product/undeploy', data),
     event: (data: object) => get('/product/tsl/event/all', data),
     getSubList: () => get('/product/sub_list'),
+    deleteSubDevice: (id: number) => del('/product/device/del_sub', { id }),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
     // 脚本更新

@@ -290,7 +290,7 @@
               <div class="title">子设备列表</div>
               <div>
                 <el-button v-auth="'mutipleBind'" type="primary" @click="onOpenMutipleBind()">批量绑定</el-button>
-                <el-button :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
+                <el-button v-auth="'cancleMutipleBind'" :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
               </div>
             </div>
 
@@ -310,8 +310,9 @@
               <el-table-column prop="registryTime" label="激活时间" align="center" width="150"></el-table-column>
               <el-table-column prop="desc" label="说明"></el-table-column>
 
-              <el-table-column label="操作" width="80" align="center" fixed="right">
+              <el-table-column label="操作" width="160" align="center" fixed="right">
                 <template #default="scope">
+                  <el-button size="small" text type="danger" v-auth="'del'" @click="deleteSubDevice(scope.row)">删除</el-button>
                   <el-button size="small" text type="warning" v-auth="'detail'" @click="onOpenDetail(scope.row)">详情</el-button>
                 </template>
               </el-table-column>
@@ -533,6 +534,23 @@ export default defineComponent({
     // 打开修改产品弹窗
     const onOpenDetail = (row: any) => {
       subDeviceRef.value.openDialog(row)
+    };
+
+
+    // 删除子设备
+    const deleteSubDevice = (row: any) => {
+      console.log(row)
+      ElMessageBox.confirm(`此操作将永久删除分类：${row.name}, 是否继续?`, '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        api.product.deleteSubDevice(row.id).then(() => {
+          ElMessage.success('删除成功');
+          getDeviceTableData();
+        });
+      });
+
     };
 
     const onLogDetail = (row: TableDataRow) => {
@@ -827,6 +845,7 @@ export default defineComponent({
       onOpenEditFun,
       onOpenEditDic,
       onOpenDetail,
+      deleteSubDevice,
       handleClick,
       onOpenMutipleBind,
       mutipleUnbind,
