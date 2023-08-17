@@ -95,9 +95,9 @@ const ruleForm = {
 	title: [ruleRequired('标题不能为空')],
 	version: [ruleRequired('版本不能为空')],
 	author: [ruleRequired('作者不能为空')],
-	icon: [ruleRequired('插件图标不能为空')],
-	command: [ruleRequired('运行指令不能为空')],
-	args: [ruleRequired('指令参数不能为空')],
+	// icon: [ruleRequired('插件图标不能为空')],
+	// command: [ruleRequired('运行指令不能为空')],
+	// args: [ruleRequired('指令参数不能为空')],
 }
 
 const onSubmit = async () => {

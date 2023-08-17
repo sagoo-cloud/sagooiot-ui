@@ -45,9 +45,8 @@
 						<el-tag type="info" size="small" v-else>-</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="240" align="center" fixed="right" v-col="'handle'">
+				<el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
-						<el-button size="small" type="primary" link v-auth="'detail'">详情</el-button>
 						<el-button :disabled="scope.row.status == 0" type="warning" size="small" link @click="changeStatus(scope.row, 0)" v-auth="'stop'"
 							>停用</el-button
 						>
