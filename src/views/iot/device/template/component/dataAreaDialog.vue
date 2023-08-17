@@ -115,7 +115,7 @@ export default {
 				}
 			});
 		},
-		handleSubmit(row: any, index: number) {
+		handleSubmit(row: any) {
 			if (row.taId) {
 				api.area.editDataArea(row).then(() => {
 					this.getList();

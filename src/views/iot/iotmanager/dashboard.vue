@@ -1,21 +1,12 @@
 <template>
 	<div class="home-container">
 		<el-row :gutter="15" class="home-card-one mb15">
-			<el-col
-				:xs="24"
-				:sm="12"
-				:md="12"
-				:lg="6"
-				:xl="6"
-				v-for="(v, k) in homeOne"
-				:key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
-			>
+			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in homeOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item flex">
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
 							<span class="font30">{{ v.num1 }}</span>
-							<span class="ml5 font16" :style="{ color: v.color1 }">  {{ v.num2 }}</span>
+							<span class="ml5 font16" :style="{ color: v.color1 }"> {{ v.num2 }}</span>
 							<div class="mt10">{{ v.num3 }}</div>
 						</div>
 						<div class="home-card-item-icon flex" :style="{ background: `var(${v.color2})` }">
@@ -44,38 +35,37 @@
 						<span>告警信息列表</span>
 						<el-button size="small" text type="primary" @click="toMore()">更多信息</el-button>
 					</div>
-					  <el-table :data="tableData.data" style="width: 100%" v-loading="loading">
-							<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
-							<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
-								<template #default="scope">
-									<span v-if="scope.row.type == 1">规则告警</span>
-									<span v-else>设备自主告警</span>
-								</template>
-							</el-table-column>
-							<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true"  v-col="'ruleName'"/>
-							<el-table-column label="规则级别" prop="alarmLevel" :show-overflow-tooltip="true" v-col="'alarmLevel'">
-								<template #default="scope">
-									{{ scope.row.alarmLevel.name }}
-								</template>
-							</el-table-column>
-							<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true" v-col="'productKey'"/>
-							<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true" v-col="'deviceKey'" />
+					<el-table :data="tableData.data" style="width: 100%" v-loading="loading">
+						<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
+						<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
+							<template #default="scope">
+								<span v-if="scope.row.type == 1">规则告警</span>
+								<span v-else>设备自主告警</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="规则名称" prop="ruleName" :show-overflow-tooltip="true" v-col="'ruleName'" />
+						<el-table-column label="规则级别" prop="alarmLevel" :show-overflow-tooltip="true" v-col="'alarmLevel'">
+							<template #default="scope">
+								{{ scope.row.alarmLevel.name }}
+							</template>
+						</el-table-column>
+						<el-table-column label="产品标识" prop="productKey" :show-overflow-tooltip="true" v-col="'productKey'" />
+						<el-table-column label="设备标识" prop="deviceKey" :show-overflow-tooltip="true" v-col="'deviceKey'" />
 
-							<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
-								<template #default="scope">
-									<el-tag type="success" size="small" v-if="scope.row.status">已处理</el-tag>
-									<el-tag type="info" size="small" v-else>未处理</el-tag>
-								</template>
-							</el-table-column>
-							<el-table-column prop="createdAt" label="告警时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
-							<el-table-column label="操作" width="150" align="center" fixed="right" v-col="'handle'">
-								<template #default="scope">
-									<el-button v-auth="'detail'" size="small" text type="primary" @click="onOpenDetailDic(scope.row)">详情</el-button>
-									<el-button v-auth="'edit'" size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-if="scope.row.status == 0">处理</el-button>
-								</template>
-							</el-table-column>
+						<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
+							<template #default="scope">
+								<el-tag type="success" size="small" v-if="scope.row.status">已处理</el-tag>
+								<el-tag type="info" size="small" v-else>未处理</el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column prop="createdAt" label="告警时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
+						<el-table-column label="操作" width="150" align="center" fixed="right" v-col="'handle'">
+							<template #default="scope">
+								<el-button v-auth="'detail'" size="small" text type="primary" @click="onOpenDetailDic(scope.row)">详情</el-button>
+								<el-button v-auth="'edit'" size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-if="scope.row.status == 0">处理</el-button>
+							</template>
+						</el-table-column>
 					</el-table>
-					<!-- <pagination v-if="tableData.total" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getAlarmList()" /> -->
 				</div>
 			</el-col>
 		</el-row>
@@ -199,21 +189,18 @@ export default defineComponent({
 						type: 'value',
 						name: '条数',
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
-								axisLabel: {
-						margin: 2,
-						formatter: function (value, index) {
-							if (value >= 10000 && value < 10000000) {
-								value = value / 10000 + "W";
-							} else if (value >= 10000000) {
-								value = value / 10000000 + "KW";
+						axisLabel: {
+							margin: 2,
+							formatter: function (value, index) {
+								if (value >= 10000 && value < 10000000) {
+									value = value / 10000 + "W";
+								} else if (value >= 10000000) {
+									value = value / 10000000 + "KW";
+								}
+								return value;
 							}
-							return value;
-						}
-        			},
+						},
 					},
-
-
-
 				],
 				series: [
 					{
@@ -373,17 +360,17 @@ export default defineComponent({
 			window.addEventListener('resize', initEchartsResizeFun);
 		};
 		const getOverviewData = () => {
-			api.iotManage.getOverviewData().then((res:any) => {
+			api.iotManage.getOverviewData().then((res: any) => {
 				const { overview, device, alarmLevel } = res;
 				// overview
-					// "deviceTotal": 8, //设备总量
-					// "deviceOffline": 4, //离线设备数量
-					// "productTotal": 6, //产品总量
-					// "productAdded": 0, //今日产品增量
-					// "msgTotal": 107246, //设备消息总量
-					// "msgAdded": 7391, //今日设备消息增量
-					// "alarmTotal": 43, //设备报警总量
-					// "alarmAdded": 0 //今日设备报警增量
+				// "deviceTotal": 8, //设备总量
+				// "deviceOffline": 4, //离线设备数量
+				// "productTotal": 6, //产品总量
+				// "productAdded": 0, //今日产品增量
+				// "msgTotal": 107246, //设备消息总量
+				// "msgAdded": 7391, //今日设备消息增量
+				// "alarmTotal": 43, //设备报警总量
+				// "alarmAdded": 0 //今日设备报警增量
 				state.homeOne[0].num1 = overview.productTotal;
 				state.homeOne[0].num2 = `+${overview.productAdded}`;
 				state.homeOne[1].num1 = overview.deviceTotal;
@@ -394,8 +381,8 @@ export default defineComponent({
 				state.homeOne[3].num2 = `${overview.alarmAdded}`;
 
 				// device
-					// msgTotal 设备消息量月度统计
-					// alarmTotal 设备告警量月度统计
+				// msgTotal 设备消息量月度统计
+				// alarmTotal 设备告警量月度统计
 				state.lineChartMsgTotalData = [];
 				state.lineChartAlarmTotalData = [];
 				state.lineChartXAxisData = Object.keys(device.msgTotal).map((item: any) => {
@@ -405,10 +392,10 @@ export default defineComponent({
 				})
 
 				// alarmLevel
-					// "level": 4, //级别
-					// "name": "一般", //级别名称
-					// "num": 43, //该级别日志数量
-					// "ratio": 100 //该级别日志数量占比(百分比)
+				// "level": 4, //级别
+				// "name": "一般", //级别名称
+				// "num": 43, //该级别日志数量
+				// "ratio": 100 //该级别日志数量占比(百分比)
 				state.pieChartLegend = [];
 				alarmLevel && alarmLevel.map((item: any) => {
 					state.pieChartLegend.push(item.name)
@@ -432,7 +419,7 @@ export default defineComponent({
 		};
 		// 告警信息-更多信息
 		const toMore = () => {
-			router.push({ path: '/monitor/notice'});
+			router.push({ path: '/monitor/notice' });
 		};
 		// 页面加载时
 		onMounted(() => {
@@ -491,12 +478,16 @@ export default defineComponent({
 
 <style scoped lang="scss">
 $homeNavLengh: 8;
+
 .home-container {
 	overflow: hidden;
+
 	.home-card-one,
 	.home-card-two,
 	.home-card-three {
-		.home-card-item,.home-card-top {
+
+		.home-card-item,
+		.home-card-top {
 			width: 100%;
 			height: 130px;
 			border-radius: 4px;
@@ -506,19 +497,23 @@ $homeNavLengh: 8;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
 			border: 1px solid var(--next-border-color-light);
+
 			&:hover {
 				box-shadow: 0 2px 12px var(--next-color-dark-hover);
 				transition: all ease 0.3s;
 			}
+
 			&-icon {
 				width: 70px;
 				height: 70px;
 				border-radius: 100%;
 				flex-shrink: 1;
+
 				i {
 					color: var(--el-text-color-placeholder);
 				}
 			}
+
 			&-title {
 				font-size: 15px;
 				font-weight: bold;
@@ -526,6 +521,7 @@ $homeNavLengh: 8;
 			}
 		}
 	}
+
 	.home-card-three {
 		.home-card-item-title {
 			display: flex;
@@ -535,6 +531,7 @@ $homeNavLengh: 8;
 			// }
 		}
 	}
+
 	.home-card-one {
 		@for $i from 0 through 3 {
 			.home-one-animation#{$i} {
@@ -546,28 +543,42 @@ $homeNavLengh: 8;
 			}
 		}
 	}
+
 	.home-card-two,
 	.home-card-three {
-    .home-card-item{
-      height: 300px;
-    }
-    .home-card-top{
-      height: 250px;
-      .box-card{
-        padding: 15px 20px 20px 10px;
-        p{margin-bottom: 10px;}
-        &-item{margin-bottom: 10px;}
-      }
-    }
-		.home-card-item, .home-card-top{
+		.home-card-item {
+			height: 300px;
+		}
+
+		.home-card-top {
+			height: 250px;
+
+			.box-card {
+				padding: 15px 20px 20px 10px;
+
+				p {
+					margin-bottom: 10px;
+				}
+
+				&-item {
+					margin-bottom: 10px;
+				}
+			}
+		}
+
+		.home-card-item,
+		.home-card-top {
 			width: 100%;
 			overflow: hidden;
+
 			.home-monitor {
 				height: 100%;
+
 				.flex-warp-item {
 					width: 25%;
 					height: 111px;
 					display: flex;
+
 					.flex-warp-item-box {
 						margin: auto;
 						text-align: center;
@@ -577,11 +588,13 @@ $homeNavLengh: 8;
 						background: var(--next-bg-color);
 						cursor: pointer;
 						transition: all 0.3s ease;
+
 						&:hover {
 							background: var(--el-color-primary-light-9);
 							transition: all 0.3s ease;
 						}
 					}
+
 					@for $i from 0 through $homeNavLengh {
 						.home-animation#{$i} {
 							opacity: 0;
@@ -595,27 +608,46 @@ $homeNavLengh: 8;
 			}
 		}
 	}
-  .text-info{color: #23c6c8;}
-  .text-danger{color:#ed5565;}
 
-  .git-res{
-    margin-top: 20px;
-  }
-  .git-res .el-link{
-    margin-right: 30px;
-  }
-  ul,li{ padding:0;margin:0;list-style:none}
-  .product{
-    margin-top: 50px;
-    h3{margin-bottom: 15px;}
-  }
-  .product li{
-    margin-bottom: 20px;
-    float: left;
-    width: 150px;
-  }
-  .box-card.xx{
-    margin-top: 20px;
-  }
+	.text-info {
+		color: #23c6c8;
+	}
+
+	.text-danger {
+		color: #ed5565;
+	}
+
+	.git-res {
+		margin-top: 20px;
+	}
+
+	.git-res .el-link {
+		margin-right: 30px;
+	}
+
+	ul,
+	li {
+		padding: 0;
+		margin: 0;
+		list-style: none
+	}
+
+	.product {
+		margin-top: 50px;
+
+		h3 {
+			margin-bottom: 15px;
+		}
+	}
+
+	.product li {
+		margin-bottom: 20px;
+		float: left;
+		width: 150px;
+	}
+
+	.box-card.xx {
+		margin-top: 20px;
+	}
 }
 </style>

@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, nextTick, watch } from 'vue';
+import { reactive } from 'vue';
 import api from '/@/api/device';
 import { useRoute } from 'vue-router';
 

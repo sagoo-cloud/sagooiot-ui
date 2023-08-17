@@ -34,7 +34,6 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/system';
-import uploadVue from '/@/components/upload/index.vue';
 import { ElMessage } from "element-plus";
 import getOrigin from '/@/utils/origin'
 

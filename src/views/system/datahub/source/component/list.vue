@@ -16,7 +16,7 @@
 			</template>
 
 			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column v-for="(item, index) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center" style="min-width:200px">
+				<el-table-column v-for="(item) in jData" :key="item" :label="item" :prop="item" show-overflow-tooltip align="center" style="min-width:200px">
 					<template #header>
 						<div>
 							{{ item }}
@@ -41,15 +41,6 @@ import api from '/@/api/datahub';
 
 interface DicState {
 	isShowDialog: boolean;
-}
-
-// 定义接口来定义对象的类型
-interface TableDataRow {
-	id: number;
-	name: string;
-	key: string;
-
-	createBy: string;
 }
 
 export default defineComponent({

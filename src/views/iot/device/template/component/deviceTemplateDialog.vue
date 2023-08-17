@@ -17,24 +17,9 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<pagination
-			v-show="total > 0"
-			:total="total"
-			v-model:page="listQuery.page"
-			v-model:limit="listQuery.size"
-			@pagination="getList"
-			style="padding: 20px 0 0 !important"
-		/>
+		<pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList" style="padding: 20px 0 0 !important" />
 
-		<el-dialog
-			:title="textMap[dialogStatus]"
-			v-model="dialogVisible"
-			width="850px"
-			:before-close="clsoeDialog"
-			close="var-dialog"
-			append-to-body
-			:close-on-click-modal="false"
-		>
+		<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="850px" :before-close="clsoeDialog" close="var-dialog" append-to-body :close-on-click-modal="false">
 			<el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="95px">
 				<el-row>
 					<el-col :span="8">
@@ -64,14 +49,7 @@
 					</el-col>
 					<el-col :span="8" v-if="mode === 1">
 						<el-form-item label="数据地址" prop="dataAddress">
-							<el-select
-								v-model="temp.dataAddress"
-								placeholder="请选择数据地址"
-								filterable
-								class="filter-item"
-								@change="handleSelectChange"
-								style="width: 100%"
-							>
+							<el-select v-model="temp.dataAddress" placeholder="请选择数据地址" filterable class="filter-item" @change="handleSelectChange" style="width: 100%">
 								<el-option v-for="(item, index) in dataAddressOptions" :key="index" :label="item.title" :value="item.value" />
 							</el-select>
 						</el-form-item>
@@ -214,13 +192,13 @@ export default {
 				.then((res: any) => {
 					this.dataAreaOptions = res.list || [];
 				})
-				.finally(() => {});
+				.finally(() => { });
 		},
 		handleFilter() {
 			// this.listQuery.page = 1
 			this.getList();
 		},
-		handleDelete(row, index) {
+		handleDelete(row) {
 			this.$confirm('是否确认删除变量名称为"' + row.title + '"的数据项?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -233,7 +211,6 @@ export default {
 					this.getList();
 					this.msgSuccess('删除成功');
 				})
-				.catch(function () {});
 		},
 		openDialog(dialogStatus, row) {
 			this.dialogStatus = dialogStatus;

@@ -9,7 +9,6 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入事件定义名称" />
 				</el-form-item>
 
-        
 				<el-form-item label="事件级别" prop="level">
 					<el-radio-group v-model="ruleForm.level" model-value="0">
 						<el-radio label="0">普通</el-radio>
@@ -27,34 +26,25 @@
 					</el-select>
 				</el-form-item>
 
-        <!--根据数据类型输出不同表单-->
+				<!--根据数据类型输出不同表单-->
 
-             <el-form-item label="精度" prop="maxLength1" v-if="type=='float' || type=='double'">
-                <el-input v-model="valueType.maxLength1" placeholder="请输入精度" />
-              </el-form-item>
+				<el-form-item label="精度" prop="maxLength1" v-if="type == 'float' || type == 'double'">
+					<el-input v-model="valueType.maxLength1" placeholder="请输入精度" />
+				</el-form-item>
 
-            	<el-form-item label="单位" prop="maxLength" v-if="type=='int' || type=='long' || type=='float'  || type=='double'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入单位" />
-              </el-form-item>
+				<el-form-item label="单位" prop="maxLength" v-if="type == 'int' || type == 'long' || type == 'float' || type == 'double'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入单位" />
+				</el-form-item>
 
-              <el-form-item label="最大长度" prop="maxLength" v-if="type=='string'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
-              </el-form-item>
+				<el-form-item label="最大长度" prop="maxLength" v-if="type == 'string'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
+				</el-form-item>
 
-               <el-form-item label="时间格式" prop="maxLength" v-if="type=='date'">
-                <el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
-              </el-form-item>
-             
+				<el-form-item label="时间格式" prop="maxLength" v-if="type == 'date'">
+					<el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
+				</el-form-item>
 
-        <!--根据数据类型输出不同表单-->
-
-
-
-
-
-
-
-
+				<!--根据数据类型输出不同表单-->
 				<el-form-item label="事件定义描述	" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入事件定义描述"></el-input>
 				</el-form-item>
@@ -72,8 +62,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
@@ -91,19 +80,18 @@ interface DicState {
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			typeData: [], //
-      type: '',
-       valueType: {
-          type:'',
-          maxLength:'',
+			type: '',
+			valueType: {
+				type: '',
+				maxLength: '',
 
-        },
+			},
 
 			ruleForm: {
 				name: '',
@@ -111,19 +99,19 @@ export default defineComponent({
 				transportProtocol: '',
 				accessMode: '0',
 				status: 1,
-        valueType: {
-          type:'',
-          maxLength:'',
+				valueType: {
+					type: '',
+					maxLength: '',
 
-        },
-				
+				},
+
 				desc: '',
 			},
 			rules: {
 				name: [{ required: true, message: '事件定义名称不能为空', trigger: 'blur' }],
 				key: [{ required: true, message: '事件定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
-		
+
 			},
 		});
 
@@ -163,9 +151,9 @@ export default defineComponent({
 			};
 		};
 
-    const seletChange=(val)=>{
-      state.type=val;
-    };
+		const seletChange = (val) => {
+			state.type = val;
+		};
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -189,8 +177,8 @@ export default defineComponent({
 						});
 					} else {
 						//添加
-         
-            state.ruleForm.valueType=state.valueType;
+
+						state.ruleForm.valueType = state.valueType;
 						api.model.eventadd(state.ruleForm).then(() => {
 							ElMessage.success('事件定义类型添加成功');
 							closeDialog(); // 关闭弹窗
@@ -203,7 +191,7 @@ export default defineComponent({
 
 		return {
 			openDialog,
-      seletChange,
+			seletChange,
 			closeDialog,
 			onCancel,
 			onSubmit,

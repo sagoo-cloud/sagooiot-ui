@@ -519,7 +519,7 @@ export default defineComponent({
 		const setType = (notResetDeviceKey: boolean) => {
 			!notResetDeviceKey && (state.ruleForm.deviceKey = '')
 			let product_id = 0;
-			state.productData.forEach((item, index) => {
+			state.productData.forEach((item) => {
 				if (item.key == state.ruleForm.productKey) {
 					product_id = item.id;
 				}

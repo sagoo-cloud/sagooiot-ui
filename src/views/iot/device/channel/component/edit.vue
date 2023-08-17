@@ -10,14 +10,6 @@
 			<el-form-item label="设备地址" prop="slaveId">
 				<el-input v-model.number="temp.slaveId" placeholder="请输入设备地址" />
 			</el-form-item>
-			<!-- <el-form-item label="设备模板" prop="templateNumber">
-				<el-select v-model="temp.templateNumber" filterable placeholder="请选择设备模板" style="width: 100%">
-					<el-option v-for="item in templateOptions" :key="item.number" :label="item.title" :value="item.number"> </el-option>
-				</el-select>
-			</el-form-item> -->
-			<!-- <el-form-item label="调度周期(秒)" prop="interval">
-				<el-input v-model="temp.interval" placeholder="请输入调度周期" />
-			</el-form-item> -->
 		</el-form>
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="clsoeDialog()"> 取 消 </el-button>
@@ -42,7 +34,6 @@ export default {
 				title: [{ required: true, message: '请输入通道名称', trigger: 'blur' }],
 				number: [{ required: true, message: '请输入注册码', trigger: 'blur' }],
 				slaveId: [{ required: true, message: '请输入设备地址', trigger: 'blur' }],
-				// templateNumber: [{ required: true, message: '请输入设备模板', trigger: 'change' }],
 			},
 			dialogVisible: false,
 			listLoading: false,

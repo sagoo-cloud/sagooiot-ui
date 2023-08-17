@@ -37,7 +37,6 @@
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
-import { stat } from 'fs';
 
 interface RuleFormState {
 	id?: number;

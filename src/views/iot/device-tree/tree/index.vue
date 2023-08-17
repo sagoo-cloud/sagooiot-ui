@@ -142,7 +142,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, watch } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';

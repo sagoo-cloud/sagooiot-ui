@@ -59,8 +59,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
@@ -78,7 +77,6 @@ interface DicState {
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 
@@ -89,9 +87,7 @@ export default defineComponent({
 			valueType: {
 				type: '',
 				maxLength: '',
-
 			},
-
 			ruleForm: {
 				name: '',
 				key: '',
@@ -101,9 +97,7 @@ export default defineComponent({
 				valueType: {
 					type: '',
 					maxLength: '',
-
 				},
-
 				desc: '',
 			},
 			rules: {

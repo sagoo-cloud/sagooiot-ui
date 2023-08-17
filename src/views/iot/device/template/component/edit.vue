@@ -1,11 +1,5 @@
 <template>
-	<el-dialog
-		:title="textMap[dialogStatus]"
-		v-model="dialogVisible"
-		:width="dialogWidth"
-		:before-close="clsoeDialog"
-		:close-on-click-modal="false"
-	>
+	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" :width="dialogWidth" :before-close="clsoeDialog" :close-on-click-modal="false">
 		<div class="wrapper">
 			<el-form class="form" ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px">
 				<el-form-item label="模板名称" prop="title">

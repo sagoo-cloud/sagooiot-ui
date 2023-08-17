@@ -38,14 +38,6 @@ import api from '/@/api/system';
 import datahubApi from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
 import { useStore } from '/@/store/index';
-interface RuleFormState {
-	id: number;
-	parentId: number | string;
-	name: string;
-	code: string;
-	sort: string;
-	status: number;
-}
 
 export default defineComponent({
 	name: 'headStationLoop',

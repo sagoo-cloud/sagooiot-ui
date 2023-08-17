@@ -292,7 +292,7 @@ const openDialog = (row: any) => {
 
 const submitData = async (formEl: any | undefined) => {
 	if (!formEl) return
-	await formEl.validate((valid: any, fields: any) => {
+	await formEl.validate((valid: any) => {
 		if (valid) {
 			if (state.ruleForm.id) {
 				// 编辑

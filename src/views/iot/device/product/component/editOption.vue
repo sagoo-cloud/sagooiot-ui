@@ -128,13 +128,9 @@
 							</div>
 						</div>
 					</el-form-item>
-
-
-
 				</div>
 
 				<!--根据数据类型输出不同表单-->
-
 
 				<el-form-item label="参数描述	" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入参数描述"></el-input>
@@ -153,10 +149,8 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
-
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;

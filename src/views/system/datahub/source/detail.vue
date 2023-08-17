@@ -111,7 +111,7 @@
 
 								<div class="content-f" v-for="(item, index) in requestParams" :key="index" style="    border: 1px solid #d9d9d9; padding: 10px;margin-bottom: 10px;">
 
-									<div v-for="(aa) in item" :key="inbbdex" :key="aa.type">
+									<div v-for="(aa) in item" :key="aa.type">
 										<el-form-item label="参数类型:">
 											{{ aa.type }}
 										</el-form-item>

@@ -146,7 +146,7 @@ export default defineComponent({
 		// 保存数据
 		const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (!formEl) return
-			await formEl.validate((valid, fields) => {
+			await formEl.validate((valid) => {
 				if (valid) {
 					if(state.ruleForm.ranges.length) {
 						let item = state.ruleForm.ranges[state.ruleForm.ranges.length-1]

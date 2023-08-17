@@ -1,12 +1,10 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="日志详情" v-model="isShowDialog" width="769px">
-			<el-form  ref="formRef"  size="default" label-width="110px">
+			<el-form ref="formRef" size="default" label-width="110px">
 				<el-form-item label="内容">
 					<div v-html="content"></div>
-
 				</el-form-item>
-				
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -20,8 +18,6 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref } from 'vue';
 
-
-
 interface DicState {
 	isShowDialog: boolean;
 	content: string;
@@ -29,18 +25,17 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	setup(prop, { emit }) {
+	setup() {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			content: '',
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null) => {
-			state.content=row.content;
+		const openDialog = (row: any) => {
+			state.content = row.content;
 			state.isShowDialog = true;
 		};
-	
 
 		// 关闭弹窗
 		const closeDialog = () => {

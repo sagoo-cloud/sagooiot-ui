@@ -20,7 +20,7 @@
           <div class="tags-wrapper">
             <el-button type="primary" size="small" @click="toAddTag">添加标签</el-button>
             <div class="tags">
-              <div class="tag flex" v-for="tag, i in ruleForm.tags">
+              <div class="tag flex" v-for="tag, i in ruleForm.tags" :key="tag.key">
                 <el-tag>{{ tag.key }} : {{ tag.name }} : {{ tag.value }}</el-tag>
                 <el-button type="danger" size="small" @click="delTagRow(i)">删除</el-button>
               </div>

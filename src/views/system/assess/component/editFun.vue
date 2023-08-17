@@ -8,22 +8,7 @@
         <el-form-item label="功能定义名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入功能定义名称" />
         </el-form-item>
-
-
-
-
-
         <el-form-item label="数据类型" prop="valueType">
-
-          <!--    <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型">
-              <el-option
-                v-for="item in typeData"
-                :key="item.key"
-                :label="item.name"
-                :value="item.key"
-              />
-            </el-select> -->
-
           <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型">
             <el-option-group v-for="group in typeData" :key="group" :label="group">
               <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
@@ -54,8 +39,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from "element-plus";
+import { ElMessage } from "element-plus";
 
 interface RuleFormState {
   id: number;
@@ -73,14 +57,12 @@ interface DicState {
 
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { uploadVue },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
 
     const state = reactive<DicState>({
       isShowDialog: false,
       typeData: [], // 
-
 
       ruleForm: {
         id: 0,
@@ -109,22 +91,10 @@ export default defineComponent({
       resetForm();
 
       api.product.getDataType({ status: -1 }).then((res: any) => {
-
-
-        // const  datat=Object.values(res.dataType);
-        // datat.forEach((item, index) => {
-
-        // });
-
         state.typeData = res.dataType || [];
-
-
       });
 
       if (row) {
-        // api.dict.getType(row.dictId).then((res:any)=>{
-        //   state.ruleForm = res.data.dictType
-        // }
         state.ruleForm = row;
       }
       state.isShowDialog = true;

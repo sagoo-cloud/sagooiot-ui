@@ -36,15 +36,7 @@
 								<el-col :xs="24" :sm="24" class="personal-item mb6">
 									<div class="personal-item-label">生日：</div>
 									<div v-if="isEditStatus" class="personal-item-value">{{ info.birthday }}</div>
-									<el-date-picker
-										v-else
-										@change="dateChange"
-										v-model="info.birthday"
-										type="date"
-										placeholder="请选择出生日期"
-										format="YYYY/MM/DD"
-										value-format="YYYY-MM-DD"
-									/>
+									<el-date-picker v-else @change="dateChange" v-model="info.birthday" type="date" placeholder="请选择出生日期" format="YYYY/MM/DD" value-format="YYYY-MM-DD" />
 								</el-col>
 								<!-- 登录密码 -->
 								<el-col v-if="!isEditStatus" :xs="24" :sm="24" class="personal-item mb6">
@@ -109,12 +101,6 @@ const store = useStore();
 const info = ref<any>({})
 const isEditStatus = ref<Boolean>(true)
 
-// api.login.currentUser().then((res: any) => {
-//   info.value = res.Info
-//   			// api.user.detail(localStorage.userId).then((user: any) => {
-// 			// 		state.ruleForm = user;
-// 			// 	});
-// });
 api.user.detail(localStorage.userId).then((user: any) => {
 	info.value = user
 })
@@ -125,10 +111,10 @@ const currentTime = computed(() => {
 })
 
 const setImg = (img: string) => {
-	api.user.setAvatar(info.value.id, img).then((res: any) => {
+	api.user.setAvatar(info.value.id, img).then(() => {
 		ElMessage.success('更新成功')
 		info.value.avatar = img
-		
+
 		const userInfos = {
 			userNickname: info.value?.userNickname,
 			avatar: img,
@@ -171,7 +157,7 @@ const submitData = () => {
 		address,
 		describe,
 	}
-	api.user.editUserInfo(params).then((res: any) => {
+	api.user.editUserInfo(params).then(() => {
 		ElMessage.success('更新成功')
 		isEditStatus.value = true
 	})
@@ -187,15 +173,18 @@ const dateChange = (e: any) => {
 
 <style scoped lang="scss">
 @import '../../theme/mixins/index.scss';
+
 .personal {
 	.personal-user {
 		display: flex;
 		align-items: center;
+
 		.personal-user-left {
 			::v-deep(.el-upload) {
 				height: 100%;
 				display: flex;
 				flex-direction: column;
+
 				.tips {
 					font-size: 12px;
 					color: #ccc;
@@ -208,6 +197,7 @@ const dateChange = (e: any) => {
 					height: 100%;
 					border-radius: 3px;
 				}
+
 				&:hover {
 					img {
 						animation: logoAnimation 0.3s ease-in-out;
@@ -215,28 +205,35 @@ const dateChange = (e: any) => {
 				}
 			}
 		}
+
 		.personal-user-right {
 			flex: 1;
 			padding: 0 15px;
+
 			.personal-title {
 				font-size: 18px;
 				@include text-ellipsis(1);
 			}
+
 			.personal-item {
 				display: flex;
 				align-items: center;
 				font-size: 13px;
+
 				.personal-item-label {
 					color: var(--el-text-color-secondary);
 					@include text-ellipsis(1);
 					width: 70px;
 					text-align: right;
 				}
+
 				.personal-item-value {
 					@include text-ellipsis(1);
 				}
+
 				.personal-item-value-edit {
 					width: 220px;
+
 					::v-deep(.el-input__wrapper) {
 						width: 100%;
 					}
@@ -244,33 +241,41 @@ const dateChange = (e: any) => {
 			}
 		}
 	}
+
 	.edit-btn {
 		padding: 30px 0 0 222px;
 	}
+
 	.personal-info {
 		.personal-info-more {
 			float: right;
 			color: var(--el-text-color-secondary);
 			font-size: 13px;
+
 			&:hover {
 				color: var(--color-primary);
 				cursor: pointer;
 			}
 		}
+
 		.personal-info-box {
 			height: 130px;
 			overflow: hidden;
+
 			.personal-info-ul {
 				list-style: none;
+
 				.personal-info-li {
 					font-size: 13px;
 					padding-bottom: 10px;
+
 					.personal-info-li-title {
 						display: inline-block;
 						@include text-ellipsis(1);
 						color: var(--el-text-color-secondary);
 						text-decoration: none;
 					}
+
 					& a:hover {
 						color: var(--color-primary);
 						cursor: pointer;
@@ -279,6 +284,7 @@ const dateChange = (e: any) => {
 			}
 		}
 	}
+
 	.personal-recommend-row {
 		.personal-recommend-col {
 			.personal-recommend {
@@ -288,6 +294,7 @@ const dateChange = (e: any) => {
 				border-radius: 3px;
 				overflow: hidden;
 				cursor: pointer;
+
 				&:hover {
 					i {
 						right: 0px !important;
@@ -295,6 +302,7 @@ const dateChange = (e: any) => {
 						transition: all ease 0.3s;
 					}
 				}
+
 				i {
 					position: absolute;
 					right: -10px;
@@ -303,11 +311,13 @@ const dateChange = (e: any) => {
 					transform: rotate(-30deg);
 					transition: all ease 0.3s;
 				}
+
 				.personal-recommend-auto {
 					padding: 15px;
 					position: absolute;
 					left: 0;
 					top: 5%;
+
 					.personal-recommend-msg {
 						font-size: 12px;
 						margin-top: 10px;
@@ -316,11 +326,13 @@ const dateChange = (e: any) => {
 			}
 		}
 	}
+
 	.personal-edit {
 		.personal-edit-title {
 			position: relative;
 			padding-left: 10px;
 			color: var(--el-text-color-regular);
+
 			&::after {
 				content: '';
 				width: 2px;
@@ -332,21 +344,26 @@ const dateChange = (e: any) => {
 				background: var(--color-primary);
 			}
 		}
+
 		.personal-edit-safe-box {
 			border-bottom: 1px solid var(--el-border-color-light, #ebeef5);
 			padding: 15px 0;
+
 			.personal-edit-safe-item {
 				width: 100%;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+
 				.personal-edit-safe-item-left {
 					flex: 1;
 					overflow: hidden;
+
 					.personal-edit-safe-item-left-label {
 						color: var(--el-text-color-regular);
 						margin-bottom: 5px;
 					}
+
 					.personal-edit-safe-item-left-value {
 						color: var(--el-text-color-secondary);
 						@include text-ellipsis(1);
@@ -354,11 +371,11 @@ const dateChange = (e: any) => {
 					}
 				}
 			}
+
 			&:last-of-type {
 				padding-bottom: 0;
 				border-bottom: none;
 			}
 		}
 	}
-}
-</style>
+}</style>

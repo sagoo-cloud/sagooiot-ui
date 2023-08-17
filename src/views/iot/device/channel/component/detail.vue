@@ -59,11 +59,6 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<!-- <div slot="footer" class="dialog-footer">
-      <el-button @click="clsoeDialog">
-        关 闭
-      </el-button>
-    </div> -->
 	</el-dialog>
 </template>
 
@@ -218,10 +213,10 @@ export default {
 					// console.log('error', e);
 				}
 			};
-			this.evsrc.onerror = function (_ev: any) {
+			// this.evsrc.onerror = function (_ev: any) {
 				// @ts-ignore
 				// console.log('readyState = ' + ev.currentTarget.readyState);
-			};
+			// };
 		},
 		openEv() {
 			(this.$refs.logContainer as any).insertAdjacentHTML('beforeEnd', `<li style="color: #000;">开始...</li>`);
