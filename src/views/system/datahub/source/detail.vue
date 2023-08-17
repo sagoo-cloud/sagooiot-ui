@@ -111,7 +111,7 @@
 
 								<div class="content-f" v-for="(item, index) in requestParams" :key="index" style="    border: 1px solid #d9d9d9; padding: 10px;margin-bottom: 10px;">
 
-									<div v-for="(aa, bb) in item" :key="inbbdex">
+									<div v-for="(aa) in item" :key="inbbdex" :key="aa.type">
 										<el-form-item label="参数类型:">
 											{{ aa.type }}
 										</el-form-item>
@@ -280,7 +280,7 @@ export default defineComponent({
 				});
 			}
 		};
-		const handleClick = (tab: TabsPaneContext) => {
+		const handleClick = (tab: any) => {
 			if (tab.props.name == 3) {
 				if (state.detail.from == 1) {
 					api.common.api(state.detail.sourceId).then((res: any) => {
@@ -298,7 +298,7 @@ export default defineComponent({
 			}
 		};
 
-		const onRowDel = (row: TableDataRow) => {
+		const onRowDel = (row: any) => {
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
@@ -328,7 +328,7 @@ export default defineComponent({
 		const onOpenEdit = () => {
 			editDicRef.value.openDialog({ sourceId: route.params.sourceId, nodeId: 0, isPk: 0 });
 		};
-		const onOpenEdit1 = (row: TableDataRow) => {
+		const onOpenEdit1 = (row: any) => {
 			editDicRef.value.openDialog(row);
 		};
 

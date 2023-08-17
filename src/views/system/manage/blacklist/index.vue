@@ -192,7 +192,7 @@ export default defineComponent({
     };
     // 改变状态
     const onChangeStatus = (id: number, status: number) => {
-      api.blackList.changeStatus({ id: id, status: status }).then((res: any) => {
+      api.blackList.changeStatus({ id: id, status: status }).then(() => {
         ElMessage.success(status == 1 ? '已开启' : '已关闭');
         typeList();
       })

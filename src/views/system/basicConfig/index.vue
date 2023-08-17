@@ -158,7 +158,7 @@ const setDetails = () => {
 			element.configValue = state.info.pic
 		}
 	})
-	api.basicConfig.setDetails({ ConfigInfo: state.data }).then((res: any) => {
+	api.basicConfig.setDetails({ ConfigInfo: state.data }).then(() => {
 		ElMessage.success('设置成功');
 
 	});

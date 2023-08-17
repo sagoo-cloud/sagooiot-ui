@@ -138,7 +138,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.deleteItem({ itemcode: row.item_code }).then((res: any) => {
+          api.deleteItem({ itemcode: row.item_code }).then(() => {
             fetchList()
             ElMessage.success('删除成功');
           });

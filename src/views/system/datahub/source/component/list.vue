@@ -51,19 +51,6 @@ interface TableDataRow {
 
 	createBy: string;
 }
-interface TableDataState {
-	ids: number[];
-	tableData: {
-		data: Array<TableDataRow>;
-		total: number;
-		loading: boolean;
-		param: {
-			pageNum: number;
-			pageSize: number;
-			id: number;
-		};
-	};
-}
 
 export default defineComponent({
 	name: 'deviceEditPro',
@@ -87,7 +74,7 @@ export default defineComponent({
 			},
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null) => {
+		const openDialog = (row: any | null) => {
 			resetForm();
 			if (row) {
 				state.tableData.param.sourceId = row.sourceId;
@@ -111,7 +98,7 @@ export default defineComponent({
 			}).finally(() => (state.tableData.loading = false));
 
 			api.node.getList(state.tableData.param).then((res: any) => {
-				res.list.forEach((item, index) => {
+				res.list.forEach((item) => {
 					state.titleData[item.key] = item.name;
 				});
 			});

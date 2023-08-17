@@ -21,7 +21,7 @@
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item class="inline-row" label="取值周期:" prop="get_time">
 							<el-input v-model="ruleForm.get_time" placeholder="请输入取值周期" clearable></el-input>
-							<div class="tip"  @click="isShow=!isShow" >
+							<div class="tip" @click="isShow = !isShow">
 								<span v-if="!isShow" class="ico_down"></span>
 								<span v-else class="ico_up"></span>
 								帮助
@@ -119,7 +119,7 @@
 							</div>
 						</div>
 					</div>
-													
+
 
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="是否启用:">
@@ -127,12 +127,12 @@
 								<el-radio size="large" :label="1">启用</el-radio>
 								<el-radio size="large" :label="2">禁用</el-radio>
 							</el-radio-group>
-							<el-button v-if="ruleForm.uri&&ruleForm.object" @click="test" style="margin-left: 20px" size="small" type="primary">检测</el-button>
+							<el-button v-if="ruleForm.uri && ruleForm.object" @click="test" style="margin-left: 20px" size="small" type="primary">检测</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="testRes || testRes.toString()" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="测试结果:">
-							<span>数据源返回数据值:{{testRes}}</span>
+							<span>数据源返回数据值:{{ testRes }}</span>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -161,7 +161,7 @@ interface RuleFormRow {
 	state: number;
 	object: string;
 	get_time: string;
-	
+
 }
 interface ItemState {
 	isShowDialog: boolean;
@@ -198,7 +198,7 @@ export default defineComponent({
 		});
 		const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (!formEl) return;
-			await formEl.validate((valid, fields) => {
+			await formEl.validate((valid) => {
 				if (valid) {
 					if (state.status === 1) {
 						// 编辑
@@ -216,7 +216,7 @@ export default defineComponent({
 		};
 		// 新增数据
 		const addDataSourceInfo = (params: any) => {
-			api.addDataSourceInfo(params).then((res: any) => {
+			api.addDataSourceInfo(params).then(() => {
 				ElMessage.success('数据提交成功');
 				closeDialog();
 				state.isShow = false
@@ -281,7 +281,7 @@ export default defineComponent({
 			closeDialog();
 		};
 		// 初始化部门数据
-		const initTableData = () => {};
+		const initTableData = () => { };
 		// 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -308,9 +308,11 @@ export default defineComponent({
 .inline-row {
 	::v-deep .el-form-item__content {
 		display: flex;
+
 		.el-input {
 			width: calc(100% - 100px);
 		}
+
 		.tip {
 			width: 100px;
 			// background-color: pink;
@@ -320,6 +322,7 @@ export default defineComponent({
 			color: var(--el-color-primary);
 			font-size: 12px;
 			cursor: pointer;
+
 			.ico_up {
 				width: 0;
 				height: 0;
@@ -328,39 +331,46 @@ export default defineComponent({
 				margin-right: 8px;
 				margin-top: -7px;
 			}
-			.ico_down{
-				width:0;
-				height:0;
-				border:5px solid transparent ;
-				border-top-color:var(--el-color-primary);
+
+			.ico_down {
+				width: 0;
+				height: 0;
+				border: 5px solid transparent;
+				border-top-color: var(--el-color-primary);
 				margin-right: 8px;
 				margin-top: 7px;
 			}
 		}
 	}
 }
+
 .help-wrap {
 	width: 540px;
 	margin: 0 auto;
+
 	// background-color: pink;
 	.help-item:nth-child(1) {
 		border-top: 1px var(--el-border-color) var(--el-border-style);
 	}
+
 	.help-item {
 		display: flex;
-		
+
 		border-bottom: 1px var(--el-border-color) var(--el-border-style);
 		border-left: 1px var(--el-border-color) var(--el-border-style);
 		border-right: 1px var(--el-border-color) var(--el-border-style);
+
 		.help-item-label,
 		.help-item-content {
 			padding: 12px;
-			
+
 		}
+
 		.help-item-label {
 			background-color: #f3f3f3;
 			width: 110px;
 		}
+
 		.help-item-content {
 			width: 430px;
 			font-size: 12px;
@@ -368,21 +378,24 @@ export default defineComponent({
 			.ant-row {
 				display: flex;
 				width: 100%;
+
 				// justify-content: space-between;
 				.ant-col-6 {
 					width: 33%;
 				}
+
 				.ant-col-6:not(:nth-child(1)) {
 					text-align: center;
 				}
+
 				.ant-col-8 {
 					width: 40%;
 				}
+
 				.ant-col-16 {
 					width: 60%;
 				}
 			}
 		}
 	}
-}
-</style>
+}</style>

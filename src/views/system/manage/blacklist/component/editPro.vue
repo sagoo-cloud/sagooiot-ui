@@ -35,13 +35,11 @@
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/system';
 import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from "element-plus";
+import { ElMessage } from "element-plus";
 import getOrigin from '/@/utils/origin'
 
 interface RuleFormState {
   id: number;
-  // name: string;
-  // dictType: string;
   status: string;
   remark: string;
 }
@@ -57,7 +55,6 @@ interface DicState {
 
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { uploadVue },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
@@ -76,12 +73,6 @@ export default defineComponent({
 
       ruleForm: {
         id: 0,
-        // name: '',
-        // categoryId: '',
-        // deptId: '',
-        // messageProtocol: '',
-        // transportProtocol: '',
-        // deviceType: '设备',
         status: '1',
         remark: ''
       },
@@ -150,10 +141,8 @@ export default defineComponent({
       });
     };
 
-
     return {
       openDialog,
-      // handleAvatarSuccess,
       closeDialog,
       onCancel,
       onSubmit,

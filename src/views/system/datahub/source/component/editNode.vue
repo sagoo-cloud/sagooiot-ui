@@ -96,7 +96,7 @@ import 'vue3-json-viewer/dist/index.css';
 import jsontree from '/@/components/jsontree/index.vue';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Minus, Right } from '@element-plus/icons-vue';
+import { Delete, } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	nodeId: number;
@@ -117,10 +117,9 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Minus, Right, jsontree },
+	components: { Delete, jsontree },
 
 	setup(prop, { emit }) {
-		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -495,4 +494,5 @@ export default defineComponent({
 .jv-key {
 	cursor: pointer;
 	color: #0034f1;
-}</style>
+}
+</style>

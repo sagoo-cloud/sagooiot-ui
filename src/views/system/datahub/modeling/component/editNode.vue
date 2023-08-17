@@ -13,7 +13,7 @@
 					<el-form-item label="数据源" prop="sourceId">
 						<el-select v-model="ruleForm.sourceId" filterable placeholder="请选择数据源" @change="getNodeList">
 							<el-option v-for="item in sourceData" :key="item.sourceId" :label="item.key" :value="item.sourceId">
-								<span style="float: left">{{ item.name}}</span>
+								<span style="float: left">{{ item.name }}</span>
 								<span style="float: right; font-size: 13px">{{ item.key }}</span>
 							</el-option>
 						</el-select>
@@ -30,7 +30,7 @@
 				</div>
 
 				<el-form-item label="字段节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称"  />
+					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称" />
 				</el-form-item>
 				<el-form-item label="字段节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
@@ -53,19 +53,19 @@
 				</el-form-item> -->
 
 
-				<el-form-item label="默认值" prop="default" v-if="ruleForm.from==1">
+				<el-form-item label="默认值" prop="default" v-if="ruleForm.from == 1">
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
 				<el-form-item label="是否主键" prop="isPk">
-					<el-radio-group v-model="ruleForm.isPk" >
+					<el-radio-group v-model="ruleForm.isPk">
 						<el-radio :label="0">否</el-radio>
 						<el-radio :label="1">是</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
 				<el-form-item label="是否排序" prop="isSorting">
-					<el-radio-group v-model="ruleForm.isSorting" >
+					<el-radio-group v-model="ruleForm.isSorting">
 						<el-radio :label="0">否</el-radio>
 						<el-radio :label="1">是</el-radio>
 					</el-radio-group>
@@ -73,7 +73,7 @@
 
 
 				<el-form-item label="排序方式" prop="isDesc">
-					<el-radio-group v-model="ruleForm.isDesc" >
+					<el-radio-group v-model="ruleForm.isDesc">
 						<el-radio :label="0">倒序</el-radio>
 						<el-radio :label="1">正序</el-radio>
 					</el-radio-group>
@@ -129,14 +129,14 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
-			methodData:[
+			methodData: [
 				{
 					label: 'max',
 					value: 'max',
-				},{
+				}, {
 					label: 'min',
 					value: 'min',
-				},{
+				}, {
 					label: 'avg',
 					value: 'avg',
 				}
@@ -214,14 +214,12 @@ export default defineComponent({
 			state.isShowDialog = true;
 
 			getSouData();
-		
-
 		};
 
 		const getSouData = () => {
 			api.common
 				.getLists({
-					
+
 				})
 				.then((res: any) => {
 					state.sourceData = res.list;

@@ -181,7 +181,7 @@ import 'vue3-json-viewer/dist/index.css';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Plus, CircleClose, Minus, Right } from '@element-plus/icons-vue';
+import { Delete, CircleClose, } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	sourceId: number;
@@ -201,7 +201,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Plus, CircleClose, Minus, Right, vue3cron },
+	components: { Delete, CircleClose, vue3cron },
 
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
@@ -382,11 +382,11 @@ export default defineComponent({
 			}
 			state.isShowDialog = true;
 		};
-		const onKeyclick = (e) => {
-			if (e.target.innerText && e.target.className == 'jv-key') {
-				let str = e.target.innerText;
-				str = str.substr(0, str.length - 1);
-			}
+		const onKeyclick = () => {
+			// if (e.target.innerText && e.target.className == 'jv-key') {
+			// 	let str = e.target.innerText;
+			// 	str = str.substr(0, str.length - 1);
+			// }
 		};
 		const resetForm = () => {
 			state.devconfig = {};
@@ -423,7 +423,7 @@ export default defineComponent({
 		};
 
 		const setNode = (event) => {
-			state.sourceData.forEach((item, index) => {
+			state.sourceData.forEach((item) => {
 				if (item.id == event) {
 					state.devconfig.productKey = item.product.key;
 					state.devconfig.deviceKey = item.key;

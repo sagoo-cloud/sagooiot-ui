@@ -35,7 +35,7 @@
                 </el-icon>
                 重置
               </el-button>
-              <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'" v-if="developer_status==0">
+              <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'" v-if="developer_status == 0">
                 <el-icon>
                   <ele-FolderAdd />
                 </el-icon>
@@ -59,7 +59,7 @@
 
           <el-table-column label="数据源名称" align="center" v-col="'from'">
             <template #default="scope">
-              <span v-if="scope.row.from==2">{{scope.row.source.name}}</span>
+              <span v-if="scope.row.from == 2">{{ scope.row.source.name }}</span>
             </template>
           </el-table-column>
           <el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" v-col="'default'" />
@@ -68,8 +68,8 @@
 
           <el-table-column label="操作" width="100" align="center" fixed="right">
             <template #default="scope">
-              <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status==0" v-auth="'edit'">修改</el-button>
-              <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status==0" v-auth="'del'">删除</el-button>
+              <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="developer_status == 0" v-auth="'edit'">修改</el-button>
+              <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status == 0" v-auth="'del'">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -88,8 +88,8 @@
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { Edit } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import { useRoute } from 'vue-router';
 import EditDic from './component/editNode.vue';
 import RelationDic from './component/relation.vue';
@@ -113,10 +113,10 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'dataDetail',
-  components: { EditDic,RelationDic },
+  components: { EditDic, RelationDic },
   setup(prop, context) {
     const editDicRef = ref();
-    const relationRef=ref();
+    const relationRef = ref();
     const route = useRoute();
     const state = reactive<TableDataState>({
       config: {},
@@ -148,8 +148,6 @@ export default defineComponent({
 
       typeList();
     });
-
-
 
     const typeList = () => {
       state.tableData.loading = true;
@@ -201,30 +199,25 @@ export default defineComponent({
     const CkOption = () => {
       //检测是否需要设置关联
       api.template.relation_check(route.params.id).then((res: any) => {
-          if(res.yes && state.developer_status==0){
-            let ids={
-              id:route.params.id,
-            }
-            relationRef.value.openDialog(ids);
-          }else{
-            if (state.developer_status == 1) {
-                api.tnode.undeploy({ id: route.params.id }).then((res: any) => {
-                  ElMessage.success('操作成功');
-                  state.developer_status = 0;
-                });
-              } else {
-                api.tnode.deploy({ id: route.params.id }).then((res: any) => {
-                  ElMessage.success('操作成功');
-                  state.developer_status = 1;
-                });
-              }
+        if (res.yes && state.developer_status == 0) {
+          let ids = {
+            id: route.params.id,
           }
-        
-       });
-
-   
-
-
+          relationRef.value.openDialog(ids);
+        } else {
+          if (state.developer_status == 1) {
+            api.tnode.undeploy({ id: route.params.id }).then((res: any) => {
+              ElMessage.success('操作成功');
+              state.developer_status = 0;
+            });
+          } else {
+            api.tnode.deploy({ id: route.params.id }).then((res: any) => {
+              ElMessage.success('操作成功');
+              state.developer_status = 1;
+            });
+          }
+        }
+      });
     };
 
     return {
@@ -244,59 +237,69 @@ export default defineComponent({
 </script>
 <style>
 .content {
-	background: #fff;
-	width: 100%;
-	padding: 20px;
+  background: #fff;
+  width: 100%;
+  padding: 20px;
 }
+
 .content-box {
-	background: #fff;
-	width: 100%;
-	padding: 20px;
-	margin-top: 20px;
+  background: #fff;
+  width: 100%;
+  padding: 20px;
+  margin-top: 20px;
 }
+
 .cont_box {
-	display: flex;
+  display: flex;
 }
+
 .cont_box .title {
-	font-size: 18px;
+  font-size: 18px;
 }
+
 .cont_box .pro-status {
-	line-height: 30px;
-	margin-left: 30px;
+  line-height: 30px;
+  margin-left: 30px;
 }
+
 .cont_box .pro-status .on {
-	background: #52c41a;
+  background: #52c41a;
 }
+
 .cont_box .pro-status .off {
-	background: #c41a1a;
+  background: #c41a1a;
 }
+
 .cont_box .pro-status span {
-	position: relative;
-	top: -1px;
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	vertical-align: middle;
-	border-radius: 50%;
-	margin-right: 5px;
+  position: relative;
+  top: -1px;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin-right: 5px;
 }
+
 .cont_box .pro-option {
-	line-height: 30px;
-	margin-left: 10px;
-	color: #1890ff;
-	cursor: pointer;
+  line-height: 30px;
+  margin-left: 10px;
+  color: #1890ff;
+  cursor: pointer;
 }
+
 .content-box .pro-box {
-	display: flex;
-	padding: 10px;
+  display: flex;
+  padding: 10px;
 }
+
 .content-box .pro-box .protitle {
-	font-size: 18px;
-	font-weight: bold;
-	line-height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 35px;
 }
+
 .content-box .pro-box .buttonedit {
-	border: 0px;
-	color: #1890ff;
-}
-</style>
+  border: 0px;
+  color: #1890ff;
+}</style>

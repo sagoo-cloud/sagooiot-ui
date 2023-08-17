@@ -3,14 +3,6 @@
 		<el-card shadow="hover">
 			<div class="system-user-search mb15" v-if="false">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-					<!-- <el-form-item label="登录IP" prop="ipaddr">
-            <el-input v-model="tableData.param.ipaddr" placeholder="请输入登录地址" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
-
-          <el-form-item label="用户名称" prop="loginLocation">
-            <el-input v-model="tableData.param.loginLocation" placeholder="请输入登录地点" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
-          </el-form-item> -->
-
 					<el-form-item label="登录时间" prop="dateRange">
 						<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 					</el-form-item>
@@ -52,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/system';
 
