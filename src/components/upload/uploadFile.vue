@@ -50,7 +50,6 @@ const fileList = ref<any[]>([
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + props.url);
 
 const updateImg = (res: any) => {
-	console.log(res)
 	if (res.code === 0) {
 		ElMessage.success('文件上传成功');
 	} else {

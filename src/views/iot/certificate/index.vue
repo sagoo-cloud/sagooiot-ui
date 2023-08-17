@@ -138,11 +138,9 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 const operate = (type: string, row: any) => {
 	switch (type) {
 		case 'preview':
-			console.log(previewRef.value)
 			previewRef.value.openDialog(row)
 			break
 		case 'add':
-			// console.log(previewRef.value)
 			editParamsRef.value.openDialog()
 			break
 		case 'editParams':

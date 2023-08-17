@@ -158,7 +158,6 @@ export default defineComponent({
 						})
 					} else {
 						//添加
-						console.log(params)
 						api.city.add(params).then(() => {
 							ElMessage.success('城市添加成功')
 							emit('queryList')
@@ -199,7 +198,6 @@ export default defineComponent({
 			})
 
 			map.addEventListener('click', (e: any) => {
-				console.log('map--click', e)
 				let point = e.latlng
 				state.ruleForm.lnt = point.lng
 				state.ruleForm.lat = point.lat

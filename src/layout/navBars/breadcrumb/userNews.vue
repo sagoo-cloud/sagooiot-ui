@@ -24,7 +24,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import getOrigin from '/@/utils/origin';
-import api from '/@/api/message';
 import { ElNotification } from 'element-plus';
 
 const router = useRouter();
@@ -61,9 +60,9 @@ es.addEventListener('lastUnRead', ({ data }) => {
 });
 
 // 全部已读点击
-const onAllReadClick = () => {
-	newsList.value = [];
-};
+// const onAllReadClick = () => {
+// 	newsList.value = [];
+// };
 // 前往通知中心点击
 const onGoToGiteeClick = () => {
 	router.push('/monitor/notice');

@@ -155,7 +155,6 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null, productId: number | null) => {
 			resetForm();
-			// console.log(row);
 			state.ruleForm = row;
 			state.productId = productId;
 			state.inputsdata = row.inputs || [];
@@ -187,12 +186,9 @@ export default defineComponent({
 			state.type = val;
 			state.ruleForm.type = val;
 
-			console.log(val);
 		};
 		const seletChanges = (val) => {
-			console.log(val);
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {
@@ -236,8 +232,6 @@ export default defineComponent({
 				state.jsondata.push(data);
 			}
 
-			// console.log(state.jsondata);
-			// console.log(type_data);
 		};
 		const getOptionDataOut = (data, type_data) => {
 			if (type_data == 'fun') {
@@ -245,9 +239,6 @@ export default defineComponent({
 			} else {
 				state.outputsdata.push(data);
 			}
-
-			// console.log(state.jsondata);
-			// console.log(type_data);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {

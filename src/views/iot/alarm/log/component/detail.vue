@@ -37,12 +37,9 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import api from '/@/api/alarm';
-import { ElMessage } from 'element-plus';
 import 'vue3-json-viewer/dist/index.css';
-
-import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 
 interface RuleFormState {
   id?: number;
@@ -62,9 +59,8 @@ interface DicState {
 
 export default defineComponent({
   name: 'Edit',
-  components: { vue3cron },
 
-  setup(prop, { emit }) {
+  setup() {
     const formRef = ref<HTMLElement | null>(null);
     const state = reactive<DicState>({
       isShowDialog: false,
@@ -88,9 +84,9 @@ export default defineComponent({
 
       state.isShowDialog = true;
     };
-    const resetForm = () => {
-      state.ruleForm = {};
-    };
+    // const resetForm = () => {
+    //   state.ruleForm = {};
+    // };
 
     // 关闭弹窗
     const closeDialog = () => {

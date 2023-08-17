@@ -125,7 +125,6 @@ export default defineComponent({
         // api.dict.getType(row.dictId).then((res:any)=>{
         //   state.ruleForm = res.data.dictType
         // }
-        console.log(row);
         state.ruleForm = row;
       }
       state.isShowDialog = true;
@@ -162,7 +161,6 @@ export default defineComponent({
             })
           } else {
             //添加
-            console.log(state.ruleForm);
             api.product.add(state.ruleForm).then(() => {
               ElMessage.success('功能定义类型添加成功');
               closeDialog(); // 关闭弹窗

@@ -616,7 +616,6 @@ export default defineComponent({
       state.sysInfo.memFree = data.free
       state.sysInfo.goUsed = data.goUsed
       state.sysInfo.memUsage = data.usedPercent.toFixed(2)
-      // console.log(state.sysInfo.memUsage)
       setOptChart(myChart5, myChart5Data, state.sysInfo.memUsage);
 
     }
@@ -628,14 +627,14 @@ export default defineComponent({
       state.sysInfo.cpuUsed = data.UsedPercent[0].toFixed(2)
       setOptChart1(data.UsedPercent[0].toFixed(2));
       setOptChart(myChart4, myChart4Data, state.sysInfo.cpuUsed);
-    };
+    }
 
     function displaySysLoad(event: { data: any; }) {
       const data = JSON.parse(event.data)
       state.sysInfo.cpuAvg5 = data.load5.toFixed(2)
       state.sysInfo.cpuAvg15 = data.load15.toFixed(2)
 
-    };
+    }
 
     function displayDisk(event: { data: any; }) {
       const data = JSON.parse(event.data)
@@ -645,7 +644,7 @@ export default defineComponent({
       setOptChart3(data.usedPercent.toFixed(2));
       setOptChart(myChart6, myChart6Data, state.sysInfo.diskUsedPercent);
 
-    };
+    }
 
 
     // function getSystemInfo() {

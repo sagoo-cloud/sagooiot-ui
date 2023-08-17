@@ -205,7 +205,6 @@ export default defineComponent({
 
 			if (row?.id) {
 				state.ruleForm = row;
-				console.log(state.ruleForm);
 			}
 
 			if (row.sourceId) {

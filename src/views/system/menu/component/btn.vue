@@ -70,7 +70,6 @@ const getList = async () => {
 };
 
 const open = async (row: any) => {
-  // console.log(row);
   title.value = '按钮权限 - ' + row.title;
   drawer.value = true;
   menuRow.value = row;

@@ -296,22 +296,18 @@ export default defineComponent({
 			}
 		};
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab.props.name, event);
 			if(tab.props.name==3){
 				if(state.detail.from==1){
 					api.common.api(state.detail.sourceId).then((res: any) => {
 						state.jsonData=JSON.parse(res.data);
-						console.log(res);
 					})
 				}else if(state.detail.from==4){
 					api.common.devapi(state.detail.sourceId).then((res: any) => {
 						state.jsonData=JSON.parse(res.data);
-							console.log(res);
 					})
 				}else if(state.detail.from==2){
 					api.common.devdb(state.detail.sourceId).then((res: any) => {
 						state.jsonData=JSON.parse(res.data);
-							console.log(res);
 					})
 				}
 			}

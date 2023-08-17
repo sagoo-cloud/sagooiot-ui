@@ -83,7 +83,6 @@ nextTick(() => {
     },
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "breakpoints"]
   });
-  console.log(props)
   coder.setValue(props.content);
 });
 
@@ -91,7 +90,6 @@ nextTick(() => {
  * 对外提供赋值
  */
 const setValue = (val: string) => {
-  console.log(val)
   coder.setValue(val);
 };
 
@@ -99,7 +97,6 @@ const setValue = (val: string) => {
  * 设置模式
  */
 const setMode = (mode: string) => {
-  console.info(mode)
   coder.setOption("mode", mode);
 }
 

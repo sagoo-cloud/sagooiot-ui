@@ -759,10 +759,8 @@ export default defineComponent({
 
     function keyspaceInfoMsg(event: { data: any; }) {
         const data = JSON.parse(event.data);
-        console.log(Object.keys(data))
         state.sysInfo.keyspaceList = Object.keys(data);
         state.sysInfo.keyspace = data
-        console.log(data)
 
     }
 

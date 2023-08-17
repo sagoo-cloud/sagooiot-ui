@@ -98,19 +98,6 @@ export default defineComponent({
       }
     });
 
-
-
-
-    // const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    //   response) => {
-
-    //   console.log(response);
-
-    //   state.imageUrl = response
-    //   state.ruleForm.icon = response
-    // }
-
-
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
@@ -153,7 +140,6 @@ export default defineComponent({
           } else {
             //添加
             delete state.ruleForm.id;
-            console.log(state.ruleForm);
             api.blackList.add(state.ruleForm).then(() => {
               ElMessage.success('黑名单添加成功');
               closeDialog(); // 关闭弹窗

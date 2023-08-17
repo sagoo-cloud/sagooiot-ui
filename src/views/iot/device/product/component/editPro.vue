@@ -183,8 +183,6 @@ export default defineComponent({
 		})
 
 		const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
-			// console.log(response)
-
 			state.imageUrl = response
 			state.ruleForm.icon = response
 		}
@@ -260,7 +258,6 @@ export default defineComponent({
 						}).finally(() => submitLoading.value = false)
 					} else {
 						//添加
-						// console.log(state.ruleForm)
 						api.product.add(state.ruleForm).then(() => {
 							ElMessage.success('产品类型添加成功')
 							closeDialog() // 关闭弹窗

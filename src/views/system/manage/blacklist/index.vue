@@ -186,7 +186,6 @@ export default defineComponent({
     const typeList = () => {
       state.tableData.loading = true;
       api.blackList.getList(state.tableData.param).then((res: any) => {
-        console.log(res);
         state.tableData.data = res.list;
         state.tableData.total = res.total;
       }).finally(() => (state.tableData.loading = false));
@@ -246,7 +245,6 @@ export default defineComponent({
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
       state.ids = selection.map((item) => item.id);
-      console.log(state.ids)
     };
     return {
       addDicRef,

@@ -78,7 +78,6 @@ function run(row: IListItem) {
 			params,
 		})
 		.then((res: any) => {
-			// console.log(res)
 			row.result = JSON.stringify(res, null, 2)
 		})
 		.finally(() => (row.loading = false))

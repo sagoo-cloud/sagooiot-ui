@@ -59,7 +59,7 @@ getList();
 function getTokenUrl(url: string) {
   const tokenUrl = import.meta.env.VITE_TOPO_URL
   return getOrigin(tokenUrl + url)
-};
+}
 
 const view = (row: any) => {
   const url = getTokenUrl('#/show/' + row.id);

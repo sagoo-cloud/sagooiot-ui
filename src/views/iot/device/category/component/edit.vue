@@ -119,17 +119,13 @@ export default defineComponent({
 		};
 		// 新增
 		const onSubmit = () => {
-			console.log(state.ruleForm.parentId);
 			const formWrap = unref(formRef) as any;
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					console.log(state.ruleForm);
-					console.log(state.ruleForm.parentId);
 					if (!state.ruleForm.parentId) {
 						state.ruleForm.parentId = 0;
 					}
-					console.log(state.ruleForm.parentId);
 					if (!state.ruleForm.id) {
 						//添加
 						api.category.add(state.ruleForm).then(() => {

@@ -134,11 +134,9 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				// console.log(datat);
 				state.typeData = datat || [];
 			});
 
-			// console.log(row);
 			state.ruleForm = row;
 			if (row.outputs) {
 				state.ruleForm = row;
@@ -217,8 +215,6 @@ export default defineComponent({
 					if (state.ruleForm.id !== 0) {
 						state.ruleForm.productId = state.productId;
 					}
-
-					console.log(JSON.parse(JSON.stringify(state.ruleForm)));
 
 					theApi(state.ruleForm).then(() => {
 						ElMessage.success('事件定义类型操作成功');

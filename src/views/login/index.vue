@@ -61,27 +61,6 @@ export default defineComponent({
 				systemLogo: '',
 				systemLoginPIC: '',
 			},
-			amisjson: {
-				type: 'page',
-				title: '表单页面',
-				body: {
-					type: 'form',
-					mode: 'horizontal',
-					api: '/saveForm',
-					body: [
-						{
-							label: 'Name1Name1Name1Name1',
-							type: 'input-text',
-							name: 'name123',
-						},
-						{
-							label: 'Email2Email2Email2Email2',
-							type: 'input-email',
-							name: 'email1',
-						},
-					],
-				},
-			},
 		};
 	},
 	mounted() {

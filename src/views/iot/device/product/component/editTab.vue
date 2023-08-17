@@ -286,7 +286,6 @@ export default defineComponent({
 
 				state.typeData = datat || [];
 			});
-			console.log(row);
 			state.ruleForm = row;
 			if (row.valueType) {
 				state.ruleForm = row;
@@ -318,7 +317,6 @@ export default defineComponent({
 				}
 			}
 
-			console.log(row);
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
@@ -350,12 +348,9 @@ export default defineComponent({
 			state.type = val;
 			state.ruleForm.type = val;
 
-			console.log(val);
 		};
 		const seletChanges = (val) => {
-			console.log(val);
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {
@@ -377,8 +372,6 @@ export default defineComponent({
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
-
-			console.log(state.jsondata);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -424,7 +417,6 @@ export default defineComponent({
 						state.ruleForm.valueType = state.valueType;
 						state.ruleForm.productId = state.productId;
 
-						console.log(state.ruleForm);
 						api.model.tagedit(state.ruleForm).then(() => {
 							ElMessage.success('标签定义类型修改成功');
 							closeDialog(); // 关闭弹窗

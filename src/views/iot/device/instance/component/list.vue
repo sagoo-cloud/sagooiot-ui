@@ -84,7 +84,6 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null,devid) => {
 			resetForm();
 			if (row) {
-				console.log(row);
 				state.tableData.param.id = devid;
 				state.tableData.param.propertyKey=row.key
 				typeList();

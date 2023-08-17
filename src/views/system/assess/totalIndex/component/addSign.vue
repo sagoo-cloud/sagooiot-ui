@@ -114,9 +114,6 @@ export default defineComponent({
 		});
 		// 打开弹窗
 		const openDialog = (row:any, index: any, isEdit: Boolean) => {
-			console.log(row)
-			console.log(index)
-			console.log(isEdit)
 			
 			if(!isEdit) {
 				state.ruleForm = {
@@ -148,12 +145,9 @@ export default defineComponent({
 		// };
 		// 保存数据
 		const onSubmit = async (formEl: FormInstance | undefined) => {
-			console.log(formEl)
 			if (!formEl) return
 			await formEl.validate((valid, fields) => {
-				console.log(valid)
 				if (valid) {
-					console.log('submit!')
 					if(state.ruleForm.ranges.length) {
 						let item = state.ruleForm.ranges[state.ruleForm.ranges.length-1]
 						const { start_value, end_value, base_value } = item
@@ -162,11 +156,8 @@ export default defineComponent({
 							return 
 						}
 					}
-					console.log(state.ruleForm)
 					emit('handleChange', state.ruleForm, state.index, state.isEdit)
 					closeDialog();
-				} else {
-					console.log('error submit!', fields)
 				}
 			})
 		}
@@ -205,7 +196,6 @@ export default defineComponent({
 		// 	}]
 		// };
 		const addRange = () => {
-			console.log(state.ruleForm)
 			if(!state.ruleForm.ranges.length) {
 				state.ruleForm.ranges.push({
 					start_value: '',
@@ -227,7 +217,6 @@ export default defineComponent({
 			})
 		};
 		const deleteRange = (index: number) => {
-			console.log(index)
 			state.ruleForm.ranges.splice(index, 1)
 			// const { minVal, maxVal, score } = item
 			// if(!minVal || !maxVal || !score.toString()) {

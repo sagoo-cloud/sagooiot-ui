@@ -539,7 +539,6 @@ export default defineComponent({
 
     // 删除子设备
     const deleteSubDevice = (row: any) => {
-      console.log(row)
       ElMessageBox.confirm(`此操作将永久删除分类：${row.name}, 是否继续?`, '提示', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',

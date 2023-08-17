@@ -249,7 +249,6 @@ export default defineComponent({
 				state.ruleForm = row;
 
 				var data = JSON.parse(row.rule);
-				console.log(data);
 				data.forEach((item, index) => {
 					state.rule[index].expression = item.expression;
 					state.rule[index].replace = item.replace;
@@ -345,18 +344,6 @@ export default defineComponent({
 		}
 
 		const onKeyclick = (e) => {
-			//console.log(e);
-			// if (e.target.innerText && e.target.className == 'jv-key') {
-			// 	let str = e.target.innerText;
-			// 	str = str.substr(0, str.length - 1);
-			// 	state.ruleForm.value = str;
-			// 	state.dialogVisible = false;
-			// 	var con = {
-			// 		...state.jsonData,
-			// 	};
-			// 	// var jsonstr = getOrgIdArr([], str, con);
-			// 	// state.ruleForm.value = jsonstr.join('.');
-			// }
 		};
 
 		const jsonPath = (arr, json, basePath) => {
@@ -437,7 +424,6 @@ export default defineComponent({
 					break;
 				} else {
 					if (treeData[key] instanceof Object) {
-						// console.log(treeData[key]);
 						parents.push(key);
 
 						//没找到，遍历该节点的子节点

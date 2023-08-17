@@ -428,12 +428,10 @@ const submitData = async (formEl: any | undefined) => {
 	if (!formEl) return
 	await formEl.validate((valid: any, fields: any) => {
 		if (valid) {
-			console.log('submit!')
 			if (state.ruleForm.id) {
 				// 编辑
 				api.certificateManagement.edit(state.ruleForm).then((res: any) => {
 					ElMessage.success('证书编辑成功')
-					console.log(res)
 					state.dialogVisible = false
 					emit('update')
 					state.ruleForm = {}
@@ -442,13 +440,13 @@ const submitData = async (formEl: any | undefined) => {
 				// 新增
 				api.certificateManagement.add(state.ruleForm).then((res: any) => {
 					ElMessage.success('证书添加成功')
-					console.log(res)
 					state.dialogVisible = false
 					emit('update')
 					state.ruleForm = {}
 				})
 			}
 		} else {
+			// @ts-ignore
 			console.log('error submit!', fields)
 		}
 	})
@@ -460,7 +458,6 @@ const beforePublicUpload = (response: any, file: any, fileList: any) => {
 	reader.onload = function (e: any) {
 		let val = e.target.result //获取数据
 		let rtulist = val.split('\r\n')
-		console.log('rtulist:>> ', rtulist)
 		state.ruleForm.publicKeyContent = rtulist[0]
 	}
 }
@@ -471,12 +468,10 @@ const beforePrivateUpload = (response: any, file: any, fileList: any) => {
 	reader.onload = function (e: any) {
 		let val = e.target.result //获取数据
 		let rtulist = val.split('\r\n')
-		console.log('rtulist:>> ', rtulist)
 		state.ruleForm.privateKeyContent = rtulist[0]
 	}
 }
 const updateFile = (url: string) => {
-	console.log('文件上传成功')
 	state.ruleForm.fileContent = url
 }
 

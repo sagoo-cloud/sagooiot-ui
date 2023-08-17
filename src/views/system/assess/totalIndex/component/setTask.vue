@@ -211,8 +211,6 @@ export default defineComponent({
 						};
 						addDataSourceInfo(params);
 					}
-				} else {
-					console.log('error submit!', fields);
 				}
 			});
 		};
@@ -246,11 +244,7 @@ export default defineComponent({
 				object: state.ruleForm.object
 			}
 			api.testDataSource(params).then((res: any) => {
-				console.log(res)
 				state.testRes = res
-				// ElMessage.success('数据提交成功');
-				// closeDialog();
-				// state.isShow = false
 			});
 		};
 		// 获取数据源配置数据

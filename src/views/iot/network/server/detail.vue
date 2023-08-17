@@ -57,7 +57,6 @@ export default defineComponent({
 		const getDetail = () => {
 			const id = route.params && route.params.id;
 			api.server.getDetail({"id": id}).then((res: any) => {
-				console.log(res)
 				state.detail = res
 			})
 		};
@@ -72,7 +71,7 @@ export default defineComponent({
 			getDetail()
 		});
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event)
+			// console.log(tab, event)
 		}
 
 		return {

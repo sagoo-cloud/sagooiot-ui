@@ -232,7 +232,6 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				console.log(datat);
 				state.typeData = datat || [];
 			});
 
@@ -240,7 +239,6 @@ export default defineComponent({
 				// api.dict.getType(row.dictId).then((res:any)=>{
 				//   state.ruleForm = res.data.dictType
 				// }
-				console.log(row);
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
@@ -260,12 +258,9 @@ export default defineComponent({
 
 		const seletChange = (val) => {
 			state.type = val;
-			console.log(val);
 		};
 		const seletChanges = (val) => {
-			console.log(val);
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {

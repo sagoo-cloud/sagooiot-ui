@@ -408,7 +408,6 @@ export default defineComponent({
 			state.ruleForm.eventKey = ''
 
 			iotapi.product.event({key}).then((res: any) => {
-				// console.log(res)
 				state.eventList = res || []
 			// state.eventList = [{name: '事件1',  key: 1}]
 			})

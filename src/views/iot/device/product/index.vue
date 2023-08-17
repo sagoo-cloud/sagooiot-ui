@@ -142,7 +142,6 @@ export default defineComponent({
     const typeList = () => {
       state.tableData.loading = true;
       api.product.getList(state.tableData.param).then((res: any) => {
-        console.log(res);
         state.tableData.data = res.product;
         state.tableData.total = res.total;
       }).finally(() => (state.tableData.loading = false));

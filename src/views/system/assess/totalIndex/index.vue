@@ -120,7 +120,6 @@ export default defineComponent({
     };
     // 打开新增用户弹窗
     const onOpenAddItem = () => {
-      console.log(111)
       EditOrAddItem.value.openDialog();
     };
     // 打开修改用户弹窗

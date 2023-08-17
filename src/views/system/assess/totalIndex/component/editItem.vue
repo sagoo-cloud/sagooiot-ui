@@ -159,7 +159,6 @@ export default defineComponent({
 			// console.log(row.item_code)
 			if(row) {
 				api.getList({itemcode: row.item_code}).then((res: any) => {
-					console.log(res)
 					state.ruleForm = res;
 					state.tableData.data = res.targets
 					state.isShowDialog = true;
@@ -191,19 +190,14 @@ export default defineComponent({
 		const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (!formEl) return
 			await formEl.validate((valid, fields) => {
-				console.log(valid)
 				if (valid) {
 					state.ruleForm.targets = state.tableData.data
 					
 					api.setItem(state.ruleForm).then((res: any) => {
-						console.log(res);
 						ElMessage.success('提交成功');
 						emit('fetchList');
 						closeDialog(); // 关闭弹窗
 					});
-					console.log('submit!')
-				} else {
-					console.log('error submit!', fields)
 				}
 			})
 		}
@@ -214,7 +208,6 @@ export default defineComponent({
 				
 		// 打开编辑弹窗
 		const onOpenEditSign = (row: TableDataRow, index: number) => {
-			console.log(index)
 			addSignRef.value.openDialog(row, index, true);
 		};
 		// 打开任务接口弹窗
@@ -229,9 +222,6 @@ export default defineComponent({
 			}else {
 				state.tableData.data[index] = data
 			}
-			console.log(data);
-			console.log(index)
-			console.log(isEdit)
 		};
 		// 删除标识项
 		const onRowDel = (row: TableDataRow, index: number) => {

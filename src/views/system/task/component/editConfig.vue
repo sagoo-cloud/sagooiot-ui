@@ -186,7 +186,6 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					// console.log(state.ruleForm)
 					if (state.ruleForm.jobId) {
 						//修改
 						api.task.edit(state.ruleForm).then(() => {

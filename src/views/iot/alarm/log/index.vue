@@ -78,7 +78,7 @@
   
   <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { FormInstance } from 'element-plus';
 import api from '/@/api/alarm';
 import EditDic from './component/edit.vue';
 import DetailDic from './component/detail.vue';

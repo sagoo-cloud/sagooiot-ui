@@ -129,7 +129,6 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				console.log(datat);
 				state.typeData = datat || [];
 			});
 
@@ -137,7 +136,6 @@ export default defineComponent({
 				// api.dict.getType(row.dictId).then((res:any)=>{
 				//   state.ruleForm = res.data.dictType
 				// }
-				console.log(row);
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
@@ -154,7 +152,6 @@ export default defineComponent({
 
 		const seletChange = (val) => {
 			state.type = val;
-			console.log(val);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -180,9 +177,7 @@ export default defineComponent({
 					} else {
 						//添加
 
-						console.log(state.valueType);
 						state.ruleForm.valueType = state.valueType;
-						console.log(state.ruleForm);
 						api.model.propertyadd(state.ruleForm).then(() => {
 							ElMessage.success('属性定义类型添加成功');
 							closeDialog(); // 关闭弹窗

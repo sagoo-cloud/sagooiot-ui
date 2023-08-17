@@ -113,19 +113,11 @@ export default {
 	methods: {
 		open(row: any) {
 			this.temp = { ...row };
-			// this.temp.title = row.title
-			// this.temp.number = row.number
-			// this.temp.interval = row.interval
-			// this.temp.templateNumber = row.templateNumber
 			this.getDict();
 			this.dialogVisible = true;
 		},
 		downloadLog() {
 			window.open(getOrigin(import.meta.env.VITE_MODBUS_API) + '/debug/export_message?number=' + this.temp.number);
-			// downloadLog('3201019983').then(res => {
-			//   console.log(res)
-			//   this.$message.success('操作成功！')
-			// })
 		},
 		clsoeDialog() {
 			this.dialogVisible = false;
@@ -222,10 +214,12 @@ export default {
 						this.$refs.logContainer.insertAdjacentHTML('afterbegin', `<li style="color: ${color}">${content}</li>`);
 					}
 				} catch (e) {
+					// @ts-ignore
 					console.log('error', e);
 				}
 			};
 			this.evsrc.onerror = function (ev: any) {
+				// @ts-ignore
 				console.log('readyState = ' + ev.currentTarget.readyState);
 			};
 		},

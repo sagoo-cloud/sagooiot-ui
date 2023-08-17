@@ -82,7 +82,6 @@ const addCommonType = async (command: string) => {
 };
 
 const open = async (row: any) => {
-	// console.log(row);
 	title.value = '列表权限 - ' + row.title;
 	drawer.value = true;
 	menuRow.value = row;

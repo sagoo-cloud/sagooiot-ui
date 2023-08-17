@@ -223,7 +223,6 @@ export default defineComponent({
             state.foreCastAvgInfoTem.push(i.value);
           })
         }
-        console.log(state.xAxis)
         nextTick(() => {
           initTemLineChart();
         });

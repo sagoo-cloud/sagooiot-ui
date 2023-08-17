@@ -100,7 +100,6 @@ export default defineComponent({
 					res.list.forEach((item, index) => {
 						state.titleData[item.key] = item.name;
 					});
-					console.log(state.titleData);
 						//state.titleData = res.list;
 						//state.tableData.total = res.Total;
 					});
@@ -111,12 +110,10 @@ export default defineComponent({
 		};
 
 		const typeList = () => {
-			console.log(state.tableData.param);
 			api.template.getdata(state.tableData.param).then((res: any) => {
 				const jsonData = JSON.parse(res.data);
 				state.tableData.data = jsonData;
 				state.jData = Object.keys(jsonData[0]);
-				console.log(jsonData);
 				state.jData.forEach((item, index) => {
 					state.jsonsData[index] = jsonData[item];
 				});

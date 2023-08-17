@@ -7,7 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin'
@@ -37,7 +36,6 @@ const props = defineProps({
 
 const updateImg = (res: any) => {
   const url = getOrigin(import.meta.env.VITE_SERVER_URL + '/' + res.data?.path)
-  console.log(url)
   emit('setImg', url, props.name);
 };
 

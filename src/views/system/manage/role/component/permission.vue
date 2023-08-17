@@ -110,7 +110,6 @@ const openDialog = async (row: any) => {
 	// 设置选中
 	treeRef.value.setCheckedKeys(menuIds.value);
 	const res = await api.role.auth.getList(typeList[step.value - 1]);
-	// console.log(res);
 	treeData.value = res;
 	menuData.value = res;
 };

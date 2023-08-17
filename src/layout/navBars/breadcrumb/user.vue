@@ -76,7 +76,7 @@ import { useI18n } from 'vue-i18n';
 import { resetRoute } from '/@/router/index';
 import { useStore } from '/@/store/index';
 import other from '/@/utils/other';
-import { Session, Local } from '/@/utils/storage';
+import { Local } from '/@/utils/storage';
 import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import api from '/@/api/system';

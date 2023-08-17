@@ -95,7 +95,6 @@ export default defineComponent({
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
 			if (row) {
-				console.log(row);
 				state.tableData.param.sourceId = row.sourceId;
 
 
@@ -112,7 +111,6 @@ export default defineComponent({
 				const jsonData = JSON.parse(res.data);
 				state.tableData.data = jsonData;
 				state.jData = Object.keys(jsonData[0]);
-				console.log(jsonData);
 				state.jData.forEach((item, index) => {
 					state.jsonsData[index] = jsonData[item];
 				});

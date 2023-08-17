@@ -230,7 +230,6 @@ export default defineComponent({
         PageSize: state.param.pageSize
       }
       api.server.getList(params).then((res: any) => {
-        // console.log(res);
         const { list, total, page } = res
         state.data = list
         state.total = total

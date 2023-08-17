@@ -221,14 +221,13 @@ export default defineComponent({
     function toAddTag() {
       const tag = tagRef.value as any
       tag.addRow()
-    };
+    }
     function addTag(row: Tag) {
-      console.log(row)
       state.ruleForm.tags.push(row)
-    };
+    }
     function delTagRow(i: number) {
       state.ruleForm.tags.splice(i, 1)
-    };
+    }
     function selectPosition() {
       mapVisible.value = true;
       nextTick(() => {
@@ -236,7 +235,7 @@ export default defineComponent({
         map.centerAndZoom("沈阳市", 8);
         map.enableScrollWheelZoom(true);
         map.addEventListener("click", (e) => {
-          console.log("点击位置经纬度：" + e.latlng.lng + "," + e.latlng.lat);
+          // console.log("点击位置经纬度：" + e.latlng.lng + "," + e.latlng.lat);
           state.ruleForm.lng = e.latlng.lng.toFixed(5);
           state.ruleForm.lat = e.latlng.lat.toFixed(5);
           mapVisible.value = false;
@@ -246,7 +245,6 @@ export default defineComponent({
     // 所属产品变化的时候，更新产品详情
     const productIdChange = (productId: number) => {
       api.product.detail(productId).then((res: any) => {
-        // console.log(res.data)
         const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
         state.ruleForm.authType = authType

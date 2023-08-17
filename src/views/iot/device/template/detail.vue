@@ -416,7 +416,6 @@ export default defineComponent({
 				getrunData();
 				api.product.detail(res.data.product.id).then((res: any) => {
 					state.prodetail = res.data;
-					console.log(res.data);
 				});
 
 				//第一次加载
@@ -429,7 +428,6 @@ export default defineComponent({
 
 		const onLogDetail = (row: TableDataRow) => {
 			state.jsonData = JSON.parse(row.content);
-			console.log(JSON.parse(row.content));
 			state.dialogVisible = true;
 		};
 
@@ -588,7 +586,6 @@ export default defineComponent({
 		};
 
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			console.log(tab, event);
 			if (tab.props.name == 4) {
 				//获取日志
 				getlog();
@@ -637,7 +634,6 @@ export default defineComponent({
 		const getlog = () => {
 			state.logtableData.param.deviceKey = state.detail.key;
 			api.instance.getLogList(state.logtableData.param).then((res: any) => {
-				console.log(res, '22222222');
 				state.logtableData.data = res.list;
 				state.logtableData.total = res.Total;
 			});

@@ -389,8 +389,6 @@ export default defineComponent({
 					value: '',
 				},
 			]);
-
-			console.log(state.requestParams);
 		};
 		const addParams = (index) => {
 			state.requestParams[index].push({
@@ -420,7 +418,6 @@ export default defineComponent({
 			resetForm();
 			getDevData();
 
-			console.log(state.requestParams);
 			if (row) {
 				state.sourceId = row.sourceId;
 				api.common.detail(row.sourceId).then((res: any) => {
@@ -447,7 +444,6 @@ export default defineComponent({
 			if (e.target.innerText && e.target.className == 'jv-key') {
 				let str = e.target.innerText;
 				str = str.substr(0, str.length - 1);
-				console.log(str);
 			}
 		};
 		const resetForm = () => {
@@ -498,20 +494,17 @@ export default defineComponent({
 				api.common.api(state.sourceId).then((res: any) => {
 					state.jsonData = JSON.parse(res.data);
 					state.dialogVisible = true;
-					console.log(res);
 				});
 			} else if (state.ruleForm.from == 4) {
 				api.common.devapi(state.sourceId).then((res: any) => {
 					state.jsonData = JSON.parse(res.data);
 					state.dialogVisible = true;
-					console.log(res);
 				});
 			}
 		};
 		// 新增
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any;
-			console.log(formWrap);
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				
@@ -583,7 +576,6 @@ export default defineComponent({
 		};
 		
 		const handlelisten = (e) => {
-			console.log(e);
 			if(e.type=='config'){
 				state.config.cronExpression=e.cron
 			}else if(e.type=='tabconfig'){
