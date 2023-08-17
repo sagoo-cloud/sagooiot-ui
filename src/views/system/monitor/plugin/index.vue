@@ -66,7 +66,7 @@
 
 <script lang="ts" setup>
 import { ref, h } from 'vue'
-import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import api from '/@/api/system'
 import { useSearch } from '/@/hooks/useCommon'
 import EditForm from './edit.vue'
@@ -134,7 +134,7 @@ const addOrEdit = (row?: any) => {
 }
 
 const changeStatus = (row: any, status: number) => {
-	api.plugin.changeStatus({ id: row.id, status: status }).then((res: any) => {
+	api.plugin.changeStatus({ id: row.id, status: status }).then(() => {
 		ElMessage.success('操作成功')
 		getList()
 	})

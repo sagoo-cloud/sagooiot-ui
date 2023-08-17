@@ -1,55 +1,53 @@
 <template>
-  <div class="system-edit-dept-container">
-    <el-dialog :title="(ruleForm.id?'修改':'添加')+'分类'" v-model="isShowDialog" width="769px">
-      <el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
-        <el-row :gutter="35">
-        
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="上级分类">
-              <el-cascader :options="deptData" :props="{ checkStrictly: true,emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.parentId">
-                <template #default="{ node, data }">
-                  <span>{{ data.name }}</span>
-                  <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                </template>
-              </el-cascader>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" >
-            <el-form-item label="分类名称" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
-            </el-form-item>
-          </el-col>
-		  <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-			<el-form-item label="排序">
-			  <el-input-number v-model="ruleForm.sort" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
-			</el-form-item>
-		  </el-col>
-           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="分类标识" prop="key">
-              <el-input v-model="ruleForm.key" placeholder="请输入分类名称" clearable></el-input>
-            </el-form-item>
-          </el-col>
-         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="描述">
-              <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ruleForm.id?'修 改':'添 加'}}</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
+	<div class="system-edit-dept-container">
+		<el-dialog :title="(ruleForm.id ? '修改' : '添加') + '分类'" v-model="isShowDialog" width="769px">
+			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="上级分类">
+							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.parentId">
+								<template #default="{ node, data }">
+									<span>{{ data.name }}</span>
+									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+								</template>
+							</el-cascader>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="分类名称" prop="name">
+							<el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="排序" prop="sort">
+							<el-input-number v-model="ruleForm.sort" :min="0" controls-position="right" placeholder="请输入排序" class="w100" />
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="分类标识" prop="key">
+							<el-input v-model="ruleForm.key" placeholder="请输入分类名称" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="描述" prop="desc">
+							<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="onCancel" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import { phoneValidate } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
@@ -101,7 +99,7 @@ export default defineComponent({
 				state.deptData = res.category || [];
 			});
 
-			
+
 			if (row && typeof row === 'object') {
 				state.ruleForm = row;
 			} else if (row && typeof row === 'number') {

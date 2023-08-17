@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import api from '/@/api/alarm';
 import { ElMessage } from 'element-plus';
 
@@ -36,7 +36,7 @@ interface DeptSate {
 
 export default defineComponent({
 	name: 'level',
-	setup(prop, { emit }) {
+	setup() {
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DeptSate>({
 			isShowDialog: false,

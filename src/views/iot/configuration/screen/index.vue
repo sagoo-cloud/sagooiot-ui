@@ -3,12 +3,6 @@
     <div class="search">
       <el-form :inline="true">
         <el-form-item>
-          <!-- <el-button size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button> -->
           <el-button type="success" @click="addOrEdit()">
             <el-icon>
               <ele-FolderAdd />
@@ -61,33 +55,33 @@ const addOrEdit = async (row?: any) => {
   }
 };
 
-const add = async () => {
-  ElMessageBox.prompt('请输入项目名称', '创建大屏项目', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    inputValidator: (value: string) => {
-      if (value.trim()) {
-        return true;
-      } else {
-        return '请输入项目名称';
-      }
-    },
-    inputErrorMessage: '请输入描述',
-  }).then(async ({ value: projectName }) => {
-    ElMessageBox.prompt('请输入描述', '创建大屏项目', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-    }).then(async ({ value: remarks }) => {
-      await api.add({
-        indexImage: null,
-        projectName,
-        remarks,
-      });
-      ElMessage.success('新增成功');
-      getList();
-    });
-  });
-};
+// const add = async () => {
+//   ElMessageBox.prompt('请输入项目名称', '创建大屏项目', {
+//     confirmButtonText: '确认',
+//     cancelButtonText: '取消',
+//     inputValidator: (value: string) => {
+//       if (value.trim()) {
+//         return true;
+//       } else {
+//         return '请输入项目名称';
+//       }
+//     },
+//     inputErrorMessage: '请输入描述',
+//   }).then(async ({ value: projectName }) => {
+//     ElMessageBox.prompt('请输入描述', '创建大屏项目', {
+//       confirmButtonText: '确认',
+//       cancelButtonText: '取消',
+//     }).then(async ({ value: remarks }) => {
+//       await api.add({
+//         indexImage: null,
+//         projectName,
+//         remarks,
+//       });
+//       ElMessage.success('新增成功');
+//       getList();
+//     });
+//   });
+// };
 
 const edit = async (row: any) => {
   const url = import.meta.env.VITE_SCREEN_URL + '#/chart/home/' + row.id;

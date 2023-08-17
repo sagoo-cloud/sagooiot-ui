@@ -146,8 +146,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, 
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';
-import LrLayout from '/@/components/lrLayout/index.vue'
-import { Fold, Expand, More, Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
+import { More, Plus, Edit, Delete } from '@element-plus/icons-vue'
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -182,9 +181,8 @@ interface TableDataState {
 
 export default defineComponent({
   name: 'deviceTree',
-  components: { AddOrUpdate, LrLayout, Fold, Expand, More, Plus, Edit, Delete, Search },
+  components: { AddOrUpdate, More, Plus, Edit, Delete },
   setup() {
-    const { proxy } = getCurrentInstance() as any;
     const addOrUpdateRef = ref();
     const queryRef = ref();
     const state = reactive<TableDataState>({

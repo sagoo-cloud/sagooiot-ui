@@ -31,138 +31,6 @@
 				<el-input size="default" type="textarea" :rows="6" v-model="state.ruleForm.description"></el-input>
 			</el-form-item>
 		</el-form>
-		<!-- </el-tab-pane> -->
-		<!-- <el-tab-pane label="字段信息" name="2">
-				<el-table :data="state.columns" style="width: 100%">
-					<el-table-column label="字段描述" align="center" width="150" fixed="left">
-						<template #default="{ row }">
-							<el-input size="default" v-model="row.columnComment" placeholder=""></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="序号" type="index" width="60" align="center" />
-					<el-table-column label="字段列名" prop="columnName" width="150"> </el-table-column>
-					<el-table-column label="物理类型" prop="columnType" width="120"> </el-table-column>
-					<el-table-column label="go类型" prop="goType" width="120">
-						<template #default="{ row }">
-							<el-select size="default" v-model="row.goType" placeholder="">
-								<el-option label="int" value="int" />
-								<el-option label="unit" value="unit" />
-								<el-option label="int64" value="int64" />
-								<el-option label="unit64" value="unit64" />
-								<el-option label="float64" value="float64" />
-								<el-option label="string" value="string" />
-								<el-option label="Time" value="Time" />
-								<el-option label="byte" value="byte" />
-							</el-select>
-						</template>
-					</el-table-column>
-					<el-table-column label="go属性" prop="goField" width="150">
-						<template #default="{ row }">
-							<el-input size="default" v-model="row.goField" placeholder=""></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="json属性" prop="jsonField" width="150">
-						<template #default="{ row }">
-							<el-input size="default" v-model="row.jsonField" placeholder=""></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="插入" prop="isInsert" width="70">
-						<template #default="{ row }">
-							<el-checkbox size="default" v-model="row.isInsert"></el-checkbox>
-						</template>
-					</el-table-column>
-					<el-table-column label="编辑" prop="isEdit" width="70">
-						<template #default="{ row }">
-							<el-checkbox size="default" v-model="row.isEdit"></el-checkbox>
-						</template>
-					</el-table-column>
-					<el-table-column label="列表" prop="isList" width="70">
-						<template #default="{ row }">
-							<el-checkbox size="default" v-model="row.isList"></el-checkbox>
-						</template>
-					</el-table-column>
-					<el-table-column label="查询" prop="isQuery" width="70">
-						<template #default="{ row }">
-							<el-checkbox size="default" v-model="row.isQuery"></el-checkbox>
-						</template>
-					</el-table-column>
-					<el-table-column label="必填" prop="isRequired" width="70">
-						<template #default="{ row }">
-							<el-checkbox size="default" v-model="row.isRequired"></el-checkbox>
-						</template>
-					</el-table-column>
-					<el-table-column label="查询方式" prop="queryType" width="120">
-						<template #default="{ row }">
-							<el-select size="default" v-model="row.queryType" placeholder="">
-								<el-option label="=" value="EQ" />
-								<el-option label="!=" value="NE" />
-								<el-option label=">" value="GT" />
-								<el-option label=">=" value="GTE" />
-								<el-option label="<" value="LT" />
-								<el-option label="<=" value="LTE" />
-								<el-option label="LIKE" value="LIKE" />
-							</el-select>
-						</template>
-					</el-table-column>
-					<el-table-column label="显示类型" prop="htmlType" width="140">
-						<template #default="{ row }">
-							<el-select size="default" v-model="row.htmlType" placeholder="">
-								<el-option label="文本框" value="input" />
-								<el-option label="下拉框" value="select" />
-								<el-option label="开关" value="switch" />
-								<el-option label="单选框" value="radio" />
-								<el-option label="多选框" value="checkbox" />
-								<el-option label="文件选择" value="file" />
-								<el-option label="文本域" value="textarea" />
-								<el-option label="日期控件" value="datetime" />
-							</el-select>
-						</template>
-					</el-table-column>
-					<el-table-column label="字典类型" prop="dictType" width="160">
-						<template #default="{ row }">
-							<el-select size="default" v-model="row.dictType" placeholder="">
-								<el-option v-for="item in []" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-							</el-select>
-						</template>
-					</el-table-column>
-					<el-table-column label="关系表" prop="linkTableName" width="160">
-						<template #default="{ row }">
-							<el-select size="default" v-model="row.linkTableName" placeholder="">
-								<el-option v-for="item in []" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-							</el-select>
-						</template>
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-			<el-tab-pane label="生成信息" name="3">
-				<el-form ref="ruleForm" :model="state.ruleForm" label-width="120px">
-					<el-row>
-						<el-col :span="12">
-							<el-form-item label="指定应用名" prop="packageName">
-								<el-input size="default" v-model="state.ruleForm.packageName"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="生成模块名" prop="moduleName">
-								<el-input size="default" v-model="state.ruleForm.moduleName"></el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							<el-form-item label="生成业务名" prop="businessName">
-								<el-input size="default" v-model="state.ruleForm.businessName"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="生成功能名" prop="functionName">
-								<el-input size="default" v-model="state.ruleForm.functionName"></el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-				</el-form>
-			</el-tab-pane> -->
-		<!-- </el-tabs> -->
 
 		<template #footer>
 			<div class="dialog-footer">
@@ -174,10 +42,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, unref, getCurrentInstance } from 'vue'
-import { genFileId, FormRules, FormInstance } from 'element-plus'
+import { reactive, ref, getCurrentInstance } from 'vue'
+import { FormInstance } from 'element-plus'
 import uploadFile from '/@/components/upload/uploadFile.vue'
-import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import api from '/@/api/certificateManagement'
 import { ElMessage } from 'element-plus'
@@ -186,7 +53,6 @@ const emit = defineEmits(['update'])
 
 const ruleForm = ref<FormInstance>()
 
-// const tagOption = ref(['api', 'editVue', 'entity', 'jsApi', 'listVue', 'router', 'service']);
 const state = reactive({
 	dialogVisible: false,
 	activeName: '1',
@@ -416,13 +282,13 @@ const openDialog = (row: any) => {
 }
 
 // 关闭弹窗
-const closeDialog = () => {
-	state.dialogVisible = false
-}
+// const closeDialog = () => {
+// 	state.dialogVisible = false
+// }
 // 取消
-const onCancel = () => {
-	closeDialog()
-}
+// const onCancel = () => {
+// 	closeDialog()
+// }
 
 const submitData = async (formEl: any | undefined) => {
 	if (!formEl) return
@@ -430,7 +296,7 @@ const submitData = async (formEl: any | undefined) => {
 		if (valid) {
 			if (state.ruleForm.id) {
 				// 编辑
-				api.certificateManagement.edit(state.ruleForm).then((res: any) => {
+				api.certificateManagement.edit(state.ruleForm).then(() => {
 					ElMessage.success('证书编辑成功')
 					state.dialogVisible = false
 					emit('update')
@@ -438,21 +304,18 @@ const submitData = async (formEl: any | undefined) => {
 				})
 			} else {
 				// 新增
-				api.certificateManagement.add(state.ruleForm).then((res: any) => {
+				api.certificateManagement.add(state.ruleForm).then(() => {
 					ElMessage.success('证书添加成功')
 					state.dialogVisible = false
 					emit('update')
 					state.ruleForm = {}
 				})
 			}
-		} else {
-			// @ts-ignore
-			console.log('error submit!', fields)
 		}
 	})
 }
 
-const beforePublicUpload = (response: any, file: any, fileList: any) => {
+const beforePublicUpload = (response: any, file: any) => {
 	let reader = new FileReader()
 	reader.readAsText(file[file.length - 1].raw, 'UTF-8') //读取，转换字符编码
 	reader.onload = function (e: any) {
@@ -462,7 +325,7 @@ const beforePublicUpload = (response: any, file: any, fileList: any) => {
 	}
 }
 
-const beforePrivateUpload = (response: any, file: any, fileList: any) => {
+const beforePrivateUpload = (response: any, file: any) => {
 	let reader = new FileReader()
 	reader.readAsText(file[file.length - 1].raw, 'UTF-8') //读取，转换字符编码
 	reader.onload = function (e: any) {

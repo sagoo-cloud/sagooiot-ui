@@ -8,7 +8,7 @@
 
 				<el-form-item label="告警级别" prop="level">
 					<el-radio-group v-model="ruleForm.level">
-						<el-radio :label="item.level" v-for="item in levelData">{{ item.name }}</el-radio>
+						<el-radio :label="item.level" v-for="item in levelData" :key="item.level">{{ item.name }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -32,11 +32,11 @@
 
 				<el-form-item label="触发方式" prop="triggerType" v-if="ruleForm.productKey">
 					<el-radio-group v-model="ruleForm.triggerType" @change="getRadio()">
-						<el-radio :label="item.type" v-for="item in typeData">{{ item.title }}</el-radio>
+						<el-radio :label="item.type" v-for="item in typeData" :key="item.type">{{ item.title }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="选择事件" prop="eventKey" v-if="ruleForm.triggerType===4">
+				<el-form-item label="选择事件" prop="eventKey" v-if="ruleForm.triggerType === 4">
 					<el-select v-model="ruleForm.eventKey" filterable placeholder="请选择事件" @change="eventTypeChange">
 						<el-option v-for="item in eventList" :key="item.key" :label="item.name" :value="item.key"></el-option>
 					</el-select>
@@ -46,7 +46,9 @@
 				<div class="box-content">
 					<div v-for="(item, index) in requestParams" :key="index">
 						<div style="text-align: center" v-if="index > 0">
-							<el-icon><Top /></el-icon>
+							<el-icon>
+								<Top />
+							</el-icon>
 							<div>
 								<el-select v-model="item.andOr" placeholder="选择条件关系">
 									<el-option label="无" :value="0" />
@@ -54,20 +56,22 @@
 									<el-option label="或" :value="2" />
 								</el-select>
 							</div>
-							<el-icon><Bottom /></el-icon>
+							<el-icon>
+								<Bottom />
+							</el-icon>
 						</div>
 
-						<div
-							style="
+						<div style="
 								padding: 10px;
 								border: 1px solid var(--next-border-color-light);
 								background-color: var(--next-border-color-light);
 								margin-bottom: 10px;
 								position: relative;
-							"
-						>
+							">
 							<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
-								<el-icon @click="delParams(index)"><CircleClose /></el-icon>
+								<el-icon @click="delParams(index)">
+									<CircleClose />
+								</el-icon>
 							</div>
 
 							<div style="display: flex">
@@ -76,7 +80,9 @@
 
 							<div v-for="(aaa, bbb) in item.filters" :key="bbb">
 								<div style="text-align: center" v-if="bbb > 0">
-									<el-icon><Top /></el-icon>
+									<el-icon>
+										<Top />
+									</el-icon>
 									<div>
 										<el-select v-model="aaa.andOr" placeholder="选择条件关系" style="width: 150px">
 											<el-option label="无" :value="0" />
@@ -84,10 +90,12 @@
 											<el-option label="或" :value="2" />
 										</el-select>
 									</div>
-									<el-icon><Bottom /></el-icon>
+									<el-icon>
+										<Bottom />
+									</el-icon>
 								</div>
 								<div class="content-f">
-									<el-select v-model="aaa.key" :placeholder="ruleForm.triggerType  ===  4 && !ruleForm.eventKey ? '请先选择事件' : '选择参数'" style="width: 320px">
+									<el-select v-model="aaa.key" :placeholder="ruleForm.triggerType === 4 && !ruleForm.eventKey ? '请先选择事件' : '选择参数'" style="width: 320px">
 										<el-option v-for="a in triData" :key="a.paramKey" :label="a.title" :value="a.paramKey" />
 									</el-select>
 									<el-select v-model="aaa.operator" placeholder="选择操作符" style="width: 320px">
@@ -96,7 +104,9 @@
 									<el-input v-model="aaa.value" placeholder="请输入条件值" style="width: 320px" />
 
 									<div class="conicon">
-										<el-icon @click="delParamss(index, bbb)"><Delete /></el-icon>
+										<el-icon @click="delParamss(index, bbb)">
+											<Delete />
+										</el-icon>
 									</div>
 								</div>
 							</div>
@@ -110,17 +120,17 @@
 				<el-divider content-position="left">执行动作</el-divider>
 				<div class="box-content">
 					<div v-for="(item, index) in action" :key="index">
-						<div
-							style="
+						<div style="
 								padding: 10px;
 								border: 1px solid var(--next-border-color-light);
 								background-color: var(--next-border-color-light);
 								margin-bottom: 10px;
 								position: relative;
-							"
-						>
+							">
 							<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
-								<el-icon @click="delAction(index)"><CircleClose /></el-icon>
+								<el-icon @click="delAction(index)">
+									<CircleClose />
+								</el-icon>
 							</div>
 
 							<div style="display: flex">
@@ -141,10 +151,12 @@
 							<div>
 								<div style="display: flex; margin-bottom: 10px" v-for="(ph, phindex) in item.addressee" :key="phindex">
 									<el-input v-model="ph.phone" placeholder="请输入接收人信息" style="width: 320px" />
-									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex == 0" @click="AddPhone(index)"><CirclePlus /></el-icon>
-									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex > 0" @click="DelPhone(index, phindex)"
-										><Remove
-									/></el-icon>
+									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex == 0" @click="AddPhone(index)">
+										<CirclePlus />
+									</el-icon>
+									<el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex > 0" @click="DelPhone(index, phindex)">
+										<Remove />
+									</el-icon>
 								</div>
 							</div>
 						</div>
@@ -170,7 +182,7 @@ import alarm from '/@/api/alarm';
 import notice from '/@/api/notice';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right, CirclePlus, Remove } from '@element-plus/icons-vue';
+import { Delete, CircleClose, Top, Bottom, CirclePlus, Remove } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	id: number;
@@ -202,7 +214,7 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Plus, CircleClose, Minus, Right, Top, Bottom, CirclePlus, Remove },
+	components: { Delete, CircleClose, Top, Bottom, CirclePlus, Remove },
 
 	setup(prop, { emit }) {
 		const myRef = ref<HTMLElement | null>(null);
@@ -299,7 +311,7 @@ export default defineComponent({
 							state.sendGatewayData[index] = res.Data;
 						});
 
-						if(value.noticeConfig){
+						if (value.noticeConfig) {
 							notice.template.configIddetail(value.noticeConfig).then((res: any) => {
 								state.noticeConfigData[index] = [res];
 							});
@@ -407,9 +419,9 @@ export default defineComponent({
 			// 切换产品时候重新获取事件列表，清空之前选中的事件
 			state.ruleForm.eventKey = ''
 
-			iotapi.product.event({key}).then((res: any) => {
+			iotapi.product.event({ key }).then((res: any) => {
 				state.eventList = res || []
-			// state.eventList = [{name: '事件1',  key: 1}]
+				// state.eventList = [{name: '事件1',  key: 1}]
 			})
 		})
 
@@ -521,10 +533,10 @@ export default defineComponent({
 				state.typeData = res.list || [];
 			});
 			gettriData();
-		
+
 		};
 
-		const getRadio=()=>{
+		const getRadio = () => {
 			gettriData();
 		}
 		const gettriData = () => {
@@ -556,7 +568,7 @@ export default defineComponent({
 			// 如果是事件上报，需要传eventKey参数
 			if (triggerType === 4) {
 				form.eventKey = state.ruleForm.eventKey
-				if(!form.eventKey) return
+				if (!form.eventKey) return
 			}
 
 			alarm.common.trigger_params(form).then((res: any) => {
@@ -610,6 +622,7 @@ export default defineComponent({
 .inline {
 	display: inline-flex;
 }
+
 .el-input__wrapper {
 	width: 98%;
 }
@@ -624,9 +637,11 @@ export default defineComponent({
 	display: flex;
 	margin-bottom: 10px;
 }
+
 .content-f .el-input__wrapper {
 	margin-right: 5px;
 }
+
 .addbutton {
 	width: 100%;
 	margin-top: 10px;
@@ -634,6 +649,7 @@ export default defineComponent({
 	border: 1px solid #d1d1d1;
 	color: #8d8b8b;
 }
+
 .conicon {
 	width: 55px;
 	height: 25px;
@@ -642,8 +658,8 @@ export default defineComponent({
 	line-height: 28px;
 	cursor: pointer;
 }
+
 .jv-node {
 	margin-left: 25px;
-}
-</style>
+}</style>
  

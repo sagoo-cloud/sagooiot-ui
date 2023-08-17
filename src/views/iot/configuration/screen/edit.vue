@@ -20,18 +20,10 @@
 <script lang="ts" setup>
 import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/screen';
-import axios from 'axios';
 import { ruleRequired } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['getList']);
-
-const headers = {
-	Authorization: 'Bearer ' + localStorage.token,
-};
-const flowsUrl = window.location.origin + '/rule-engine/flow';
-// const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flow';
-
 
 const showDialog = ref(false);
 const formRef = ref();

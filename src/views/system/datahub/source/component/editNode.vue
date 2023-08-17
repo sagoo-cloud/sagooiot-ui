@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="数据节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey==1 && ruleForm.nodeId !== 0" />
+					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey == 1 && ruleForm.nodeId !== 0" />
 				</el-form-item>
 				<el-form-item label="数据节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
@@ -60,7 +60,9 @@
 						<!-- <el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" /> -->
 						<div class="conicon">
-							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
+							<el-icon @click="delRule(index)" v-if="index > 0">
+								<Delete />
+							</el-icon>
 						</div>
 					</el-form-item>
 				</div>
@@ -332,18 +334,18 @@ export default defineComponent({
 		};
 
 		const getNodeList = (e) => {
-			state.propertyData.forEach((item, index) => {
+			state.propertyData.forEach((item) => {
 				if (item.key === e) {
 					state.ruleForm.dataType = item.valueType.type;
 				}
 			});
 		};
 
-		const getDbList = (e)=>{
+		const getDbList = (e) => {
 			state.ruleForm.dataType = state.dbData[e].Type;
 		}
 
-		const onKeyclick = (e) => {
+		const onKeyclick = () => {
 		};
 
 		const jsonPath = (arr, json, basePath) => {
@@ -471,13 +473,16 @@ export default defineComponent({
 	display: flex;
 	margin-bottom: 10px;
 }
+
 .content-f .el-input__wrapper {
 	margin-right: 5px;
 }
+
 .addbutton {
 	width: 100%;
 	margin-top: 10px;
 }
+
 .conicon {
 	width: 55px;
 	height: 25px;
@@ -486,8 +491,8 @@ export default defineComponent({
 	line-height: 28px;
 	cursor: pointer;
 }
+
 .jv-key {
 	cursor: pointer;
 	color: #0034f1;
-}
-</style>
+}</style>

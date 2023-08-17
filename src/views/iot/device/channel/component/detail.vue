@@ -171,7 +171,7 @@ export default {
 					this.listLoading = false;
 				});
 		},
-		handleDelete(row: any, index: number) {
+		handleDelete(row: any) {
 			this.$confirm('是否确认删除任务名称为"' + row.Job.title + '"的数据项?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -184,7 +184,7 @@ export default {
 					this.handleFilter();
 					ElMessage.success('删除成功！');
 				})
-				.catch(function () {});
+				.catch(function () { });
 		},
 		handleCreate() {
 			(this.$refs.taskDialog as any).openDialog({
@@ -213,14 +213,14 @@ export default {
 						let content = `${obj.type === 'request' ? '请求：' : '应答：'} ${obj.msg}`;
 						this.$refs.logContainer.insertAdjacentHTML('afterbegin', `<li style="color: ${color}">${content}</li>`);
 					}
-				} catch (e) {
+				} catch (_e) {
 					// @ts-ignore
-					console.log('error', e);
+					// console.log('error', e);
 				}
 			};
-			this.evsrc.onerror = function (ev: any) {
+			this.evsrc.onerror = function (_ev: any) {
 				// @ts-ignore
-				console.log('readyState = ' + ev.currentTarget.readyState);
+				// console.log('readyState = ' + ev.currentTarget.readyState);
 			};
 		},
 		openEv() {

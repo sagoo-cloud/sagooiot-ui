@@ -3,50 +3,7 @@
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true">
-					<!--
-					<el-form-item label="名称" prop="name">
-						<el-input
-							v-model="tableData.param.name"
-							placeholder="请输入模型名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item> -->
-					<!-- <el-form-item label="触发方式" prop="name">
-						<el-input
-							v-model="tableData.param.triggerType"
-							placeholder="请输入模型名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item> -->
-					<!-- <el-form-item label="级别" prop="level">
-						<el-input
-							v-model="tableData.param.level"
-							placeholder="请输入模型名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item> -->
 					<el-form-item>
-						<!-- <el-button size="default" type="primary" class="ml10" @click="dataList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button> -->
 						<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
@@ -65,18 +22,13 @@
 			<div>
 				<div style="border: 1px solid var(--next-border-color-light)"></div>
 				<el-row>
-					<el-col :span="6" v-for="(item, index) in tableData.data" :key="index"
-						><div class="grid-content card">
+					<el-col :span="6" v-for="(item, index) in tableData.data" :key="index">
+						<div class="grid-content card">
 							<div class="ant-card">
 								<div class="ant-card-body">
 									<div class="pro-table-card-item">
 										<div class="card-item-avatar" v-col="'image'">
-											<img
-												width="88"
-												height="88"
-												src="/src/assets/img/alarm.svg"
-												alt=""
-											/>
+											<img width="88" height="88" src="/src/assets/img/alarm.svg" alt="" />
 										</div>
 										<div class="card-item-body">
 											<div class="card-item-header">
@@ -89,11 +41,11 @@
 												<div>
 													<label>触发：</label>
 													<div class="">
-														<div >级别：</div>
+														<div>级别：</div>
 													</div>
 												</div>
 												<div>
-													<label>{{item.triggerTypeName}}</label>
+													<label>{{ item.triggerTypeName }}</label>
 													<div class="">
 														<div>{{ item.alarmLevel.name }}</div>
 													</div>
@@ -110,17 +62,15 @@
 											</span>
 										</div>
 									</div>
-									<div class="card-state error" v-if="item.status == 0"  v-col="'liststatus'">
+									<div class="card-state error" v-if="item.status == 0" v-col="'liststatus'">
 										<div class="card-state-content">
-											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper"
-												><span class="ant-badge-status-dot ant-badge-status-error"></span><span class="ant-badge-status-text">未启用</span></span
-											>
+											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper"><span class="ant-badge-status-dot ant-badge-status-error"></span><span class="ant-badge-status-text">未启用</span></span>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="card-tools">
-								<div class="card-button" @click="onOpenEdit(item)"  v-auth="'edit'">
+								<div class="card-button" @click="onOpenEdit(item)" v-auth="'edit'">
 									<el-button size="default" type="primary" class="ml10" text bg>
 										<el-icon>
 											<ele-Edit />
@@ -130,8 +80,8 @@
 								</div>
 
 
-								<div class="card-button" v-if="item.status==0" v-auth="'status'">
-									<el-button size="default" type="warning" text bg  @click="onActionStatus(item)">
+								<div class="card-button" v-if="item.status == 0" v-auth="'status'">
+									<el-button size="default" type="warning" text bg @click="onActionStatus(item)">
 										<el-icon>
 											<ele-Check />
 										</el-icon>
@@ -139,8 +89,8 @@
 									</el-button>
 								</div>
 
-                <div class="card-button" v-if="item.status==1"  v-auth="'status'">
-									<el-button size="default" type="info" text bg  @click="onActionStatus(item)">
+								<div class="card-button" v-if="item.status == 1" v-auth="'status'">
+									<el-button size="default" type="info" text bg @click="onActionStatus(item)">
 										<el-icon>
 											<ele-Close />
 										</el-icon>
@@ -148,9 +98,7 @@
 									</el-button>
 								</div>
 
-
-
-								<div class="card-button" @click="onRowDel(item)"  v-auth="'del'">
+								<div class="card-button" @click="onRowDel(item)" v-auth="'del'">
 									<el-button size="default" type="danger" text bg>
 										<el-icon>
 											<ele-Delete />
@@ -163,13 +111,7 @@
 					</el-col>
 				</el-row>
 			</div>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 
 		<EditDic ref="editDicRef" @dataList="dataList" />
@@ -210,11 +152,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic,LevelDic },
+	components: { EditDic, LevelDic },
 
 	setup() {
 		const addDicRef = ref();
-    const levelDicRef=ref();
+		const levelDicRef = ref();
 		const editDicRef = ref();
 		const detailRef = ref();
 		const queryRef = ref();
@@ -247,10 +189,10 @@ export default defineComponent({
 				.finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增菜单弹窗
-		const onOpenAdd = (row?: TableDataRow) => {
+		const onOpenAdd = () => {
 			editDicRef.value.openDialog();
 		};
-    const onOpenLevel = (row?: TableDataRow) => {
+		const onOpenLevel = () => {
 			levelDicRef.value.openDialog();
 		};
 		// 打开修改模型弹窗
@@ -285,7 +227,6 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
 		};
 
 		// 页面加载时
@@ -298,29 +239,27 @@ export default defineComponent({
 			formEl.resetFields();
 			dataList();
 		};
-    const onActionStatus = (item: TableDataRow[]) => {
-      if (item.status == 0) {
-        alarm.common.deploy({ id: item.id }).then((res: any) => {
-          dataList();
-
-        });
-      } else {
-        alarm.common.undeploy({ id: item.id }).then((res: any) => {
-          dataList();
-
-        });
-      }
-    }
+		const onActionStatus = (item: TableDataRow[]) => {
+			if (item.status == 0) {
+				alarm.common.deploy({ id: item.id }).then(() => {
+					dataList();
+				});
+			} else {
+				alarm.common.undeploy({ id: item.id }).then(() => {
+					dataList();
+				});
+			}
+		}
 
 		return {
-      onActionStatus,
+			onActionStatus,
 			addDicRef,
 			editDicRef,
 			detailRef,
 			queryRef,
-      levelDicRef,
+			levelDicRef,
 			onOpenRecord,
-      onOpenLevel,
+			onOpenLevel,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
@@ -335,9 +274,11 @@ export default defineComponent({
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }
+
 .card {
 	padding: 10px;
 }
+
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
@@ -354,28 +295,34 @@ export default defineComponent({
 	transition: all 0.3s;
 	overflow: hidden;
 }
+
 .ant-card-body {
 	padding: 24px;
 	zoom: 1;
 	overflow: hidden;
 }
+
 .pro-table-card-item {
 	display: flex;
 }
+
 .pro-table-card-item .card-item-avatar {
 	margin-right: 16px;
 }
+
 .pro-table-card-item .card-item-body {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 	width: 0;
 }
+
 .pro-table-card-item .card-item-body .card-item-header {
 	display: flex;
 	margin-bottom: 12px;
 	margin-top: 10px;
 }
+
 .pro-table-card-item .card-item-body .card-item-content {
 	display: flex;
 	flex-wrap: wrap;
@@ -390,10 +337,12 @@ export default defineComponent({
 	text-overflow: ellipsis;
 	word-break: break-all;
 }
+
 .card-item-body .card-item-header .card-item-header-name {
 	font-weight: 700;
 	font-size: 16px;
 }
+
 .card-state {
 	position: absolute;
 	top: 0px;
@@ -405,22 +354,28 @@ export default defineComponent({
 	background-color: rgba(89, 149, 245, 0.15);
 	transform: skewX(45deg);
 }
+
 .card-state.success {
 	background-color: #f6ffed;
 	color: #000;
 }
+
 .iot-card .card-warp .card-content .card-state.error {
-    background-color: rgba(229,0,18,.1);
+	background-color: rgba(229, 0, 18, .1);
 }
+
 .card-state .card-state-content {
 	transform: skewX(-45deg);
 }
+
 .ant-badge-status-success {
 	background-color: #52c41a;
 }
+
 .ant-badge-status-error {
-    background-color: #ff4d4f;
+	background-color: #ff4d4f;
 }
+
 .ant-badge-status-dot {
 	position: relative;
 	top: -1px;
@@ -435,14 +390,17 @@ export default defineComponent({
 	display: flex;
 	margin-top: 2px;
 }
+
 .card-tools .card-button:not(:last-child) {
 	margin-right: 8px;
 }
+
 .card-tools .card-button {
 	display: flex;
 	flex-grow: 1;
 }
-.card-tools .card-button > span,
+
+.card-tools .card-button>span,
 .card-tools .card-button button {
 	width: 100%;
 	border-radius: 0;
@@ -454,10 +412,12 @@ export default defineComponent({
 	background: transparent;
 	box-shadow: none;
 }
+
 .ant-badge-status-text {
 	margin-left: 8px;
 	font-size: 14px;
 }
+
 .ant-btn {
 	line-height: 1.5715;
 	position: relative;
@@ -482,10 +442,12 @@ export default defineComponent({
 	border: 1px solid #d9d9d9;
 	background: #fff;
 }
-.ant-btn > .anticon {
+
+.ant-btn>.anticon {
 	line-height: 1;
 }
-.ant-btn > span {
+
+.ant-btn>span {
 	display: inline-block;
 }
 
@@ -493,14 +455,15 @@ export default defineComponent({
 	display: flex;
 	justify-content: space-between;
 }
+
 .statusname {
 	font-size: 30px;
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
+
 .comtest {
 	margin-top: 20px;
 	height: 30px;
 	line-height: 30px;
-}
-</style>
+}</style>

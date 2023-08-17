@@ -200,22 +200,22 @@
           </template>
           <div class="flex-row">
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="操作系统">{{hostData.os}}</el-form-item>
-              <el-form-item label="启动时间">{{goInfoData.startTime}}</el-form-item>
-              <el-form-item label="运行时长">{{timeFormat(goInfoData.runTime)}}</el-form-item>
-              <el-form-item label="运行内存">{{goInfoData.goMem}}</el-form-item>
+              <el-form-item label="操作系统">{{ hostData.os }}</el-form-item>
+              <el-form-item label="启动时间">{{ goInfoData.startTime }}</el-form-item>
+              <el-form-item label="运行时长">{{ timeFormat(goInfoData.runTime) }}</el-form-item>
+              <el-form-item label="运行内存">{{ goInfoData.goMem }}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="系统架构">{{goInfoData.arch}}</el-form-item>
-              <el-form-item label="语言环境">{{goInfoData.goName}}</el-form-item>
-              <el-form-item label="磁盘占用">{{goInfoData.goSize}}</el-form-item>
-              <el-form-item label="项目地址">{{goInfoData.pwd}}</el-form-item>
+              <el-form-item label="系统架构">{{ goInfoData.arch }}</el-form-item>
+              <el-form-item label="语言环境">{{ goInfoData.goName }}</el-form-item>
+              <el-form-item label="磁盘占用">{{ goInfoData.goSize }}</el-form-item>
+              <el-form-item label="项目地址">{{ goInfoData.pwd }}</el-form-item>
             </el-form>
             <el-form label-position="right" label-width="100px" class="flex1" style="max-width: 460px">
-              <el-form-item label="架构版本">{{hostData.kernelArch}}</el-form-item>
-              <el-form-item label="GO 版本">{{goInfoData.goVersion}}</el-form-item>
-              <el-form-item label="协程数量">{{goInfoData.goroutine}}</el-form-item>
-              <el-form-item label="服务器IP">{{hostData.intranet_ip}} (内) &nbsp;&nbsp;&nbsp; {{hostData.public_ip}} (公) </el-form-item>
+              <el-form-item label="架构版本">{{ hostData.kernelArch }}</el-form-item>
+              <el-form-item label="GO 版本">{{ goInfoData.goVersion }}</el-form-item>
+              <el-form-item label="协程数量">{{ goInfoData.goroutine }}</el-form-item>
+              <el-form-item label="服务器IP">{{ hostData.intranet_ip }} (内) &nbsp;&nbsp;&nbsp; {{ hostData.public_ip }} (公) </el-form-item>
             </el-form>
           </div>
         </el-card>
@@ -265,7 +265,7 @@ export default defineComponent({
       "virtualizationSystem": ""
     });
     const goInfoData = reactive({
-      "goOs": "-", "arch": "-", "goVersion": "-", "goMem": "-", "goName": "-", "goSize": "-", "goVersion": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
+      "goOs": "-", "arch": "-", "goVersion": "-", "goMem": "-", "goName": "-", "goSize": "-", "goroutine": '-', "pwd": "-", "rootPath": "-",
       "runTime": '', "startTime": "-", "intranet_ip": "-"
     });
 
@@ -737,41 +737,41 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .el-card {
-	height: 300px;
-	overflow-y: auto;
+  height: 300px;
+  overflow-y: auto;
 }
 
 .marg-b-15 {
-	margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .cell {
-	box-sizing: border-box;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: normal;
-	word-break: break-all;
-	line-height: 36px;
-	padding-left: 10px;
-	padding-right: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 36px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .cell-card {
-	box-sizing: border-box;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: normal;
-	word-break: break-all;
-	line-height: 36px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 36px;
 }
 
 .box-card {
-	min-height: 380px;
+  min-height: 380px;
 }
 
 .box-card-meter {
-	height: 230px;
+  height: 230px;
 
-	min-height: 180px;
+  min-height: 180px;
 }
 </style>
