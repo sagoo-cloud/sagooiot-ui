@@ -334,7 +334,7 @@
     <!-- 子设备-批量绑定弹窗 -->
     <SubDeviceMutipleBind ref="mutipleBindRef" @bindSuccess="getDeviceTableData" />
 
-    <el-dialog v-model="dialogVisible" title="返回Json数据" width="30%">
+    <el-dialog v-model="dialogVisible" title="日志数据内容" width="30%">
       <JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
 
       <template #footer>
