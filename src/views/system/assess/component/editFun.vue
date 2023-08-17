@@ -32,7 +32,7 @@
         </el-form-item>
 
         <el-form-item label="是否只读" prop="accessMode">
-          <el-radio-group v-model="ruleForm.accessMode" model-value="0">
+          <el-radio-group v-model="ruleForm.accessMode">
             <el-radio label="1">只读</el-radio>
             <el-radio label="0">读写</el-radio>
           </el-radio-group>

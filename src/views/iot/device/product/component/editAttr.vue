@@ -265,7 +265,6 @@ export default defineComponent({
 				key: [{ required: true, message: '属性定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
-
 			},
 		});
 
@@ -284,8 +283,6 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				console.log(row);
-				console.log(productId);
 				state.typeData = datat || [];
 			});
 			state.ruleForm = row;
@@ -351,14 +348,9 @@ export default defineComponent({
 		const seletChange = (val) => {
 			state.type = val;
 			state.ruleForm.type = val;
-
-
-			console.log(val);
 		};
 		const seletChanges = (val) => {
-			console.log(val);
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {
@@ -380,8 +372,6 @@ export default defineComponent({
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
-
-			console.log(state.jsondata);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
