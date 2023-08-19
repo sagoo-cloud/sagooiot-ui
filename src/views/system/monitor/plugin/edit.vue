@@ -89,8 +89,8 @@ const formData = reactive({
 })
 
 const ruleForm = {
-	types: [ruleRequired('通信方式不能为空')],
-	handleType: [ruleRequired('功能类型不能为空')],
+	types: [ruleRequired('插件类型不能为空')],
+	handleType: [ruleRequired('处理方式类型不能为空')],
 	name: [ruleRequired('名称不能为空')],
 	title: [ruleRequired('标题不能为空')],
 	// version: [ruleRequired('版本不能为空')],
