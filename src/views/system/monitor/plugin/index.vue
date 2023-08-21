@@ -33,7 +33,7 @@
 					<template #default="{ $index }">{{ params.pageSize * (params.pageNum - 1) + ($index + 1) }} </template>
 				</el-table-column>
 				<el-table-column label="名称" v-col="'name'" align="center" prop="name" />
-				<el-table-column label="通信方式" v-col="'types'" align="center" prop="types" />
+				<el-table-column label="插件类型" v-col="'types'" align="center" prop="types" />
 				<el-table-column label="功能类型" v-col="'handleType'" align="center" prop="handleType" />
 				<el-table-column label="说明" v-col="'description'" show-overflow-tooltip align="left" prop="description" />
 				<el-table-column label="作者" v-col="'author'" align="center" prop="author" />

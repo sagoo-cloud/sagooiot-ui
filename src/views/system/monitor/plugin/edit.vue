@@ -1,7 +1,7 @@
 <template>
 	<el-dialog class="api-edit" v-model="showDialog" title="编辑插件内容" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="110px" @keyup.enter="onSubmit">
-			<el-form-item label="通信方式" prop="types">
+			<el-form-item label="插件类型" prop="types">
 				<el-input v-model="formData.types" placeholder="输入接口名称" />
 			</el-form-item>
 			<el-form-item label="功能类型" prop="handleType">
