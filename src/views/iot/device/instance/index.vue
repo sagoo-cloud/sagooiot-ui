@@ -54,6 +54,7 @@
         <!--        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />-->
         <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
         <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
+        <el-table-column label="设备类型" prop="product.deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
         <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
         <!-- <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
 
