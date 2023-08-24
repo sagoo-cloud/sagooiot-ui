@@ -173,12 +173,12 @@ export default defineComponent({
 				...form
 			},
 			rules: {
-				name: [{ required: true, message: '产品名称不能为空', trigger: 'blur' }],
-				key: [{ required: true, message: '产品标识不能为空', trigger: 'blur' }],
-				parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
-				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
-				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '产品名称不能为空', trigger: 'change' }],
+				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' }],
+				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
+				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'change' }],
+				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],
+				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'change' }],
 			},
 		})
 
