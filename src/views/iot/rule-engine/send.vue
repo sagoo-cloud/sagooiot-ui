@@ -9,7 +9,7 @@
 							</el-icon>
 							查询
 						</el-button> -->
-          <el-button type="success" @click="addOrEdit()">
+          <el-button type="success" @click="addOrEdit()" v-auth="'add'">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
