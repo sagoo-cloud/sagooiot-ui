@@ -57,8 +57,9 @@
         <el-table-column label="状态" v-col="'status'" align="center" prop="status" width="100">
           <template #default="scope">
             <!-- {{ row.status ? '正常' : '暂停' }} -->
-            <el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+            <el-switch v-model="scope.row.status" inline-prompt :active-value="0" v-auth="'status'" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
             </el-switch>
+            <span v-noauth="'status'">{{ scope.row.status ? '正常' : '暂停' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">

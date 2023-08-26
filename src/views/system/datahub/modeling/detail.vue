@@ -7,7 +7,7 @@
 
         <div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
 
-        <div class="pro-option" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
+        <div class="pro-option" v-auth="'startOrStop'" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
       </div>
     </div>
 
@@ -302,4 +302,5 @@ export default defineComponent({
 .content-box .pro-box .buttonedit {
   border: 0px;
   color: #1890ff;
-}</style>
+}
+</style>

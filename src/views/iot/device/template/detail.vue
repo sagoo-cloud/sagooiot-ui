@@ -60,7 +60,7 @@
 					<div class="pro-box">
 						<div class="protitle">设备信息</div>
 						<div>
-							<el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
+							<el-button type="primary" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
 						</div>
 					</div>
 					<div class="ant-descriptions-view">
@@ -223,13 +223,7 @@
 								</el-table>
 							</el-tab-pane>
 						</el-tabs>
-						<pagination
-							v-show="tableData.total > 0"
-							:total="tableData.total"
-							v-model:page="tableData.param.pageNum"
-							v-model:limit="tableData.param.pageSize"
-							@pagination="getList"
-						/>
+						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
 					</div>
 				</el-tab-pane>
 
@@ -243,15 +237,7 @@
 							</el-form-item>
 
 							<el-form-item label="创建时间" prop="dateRange">
-								<el-date-picker
-									v-model="logtableData.param.dateRange"
-									size="default"
-									value-format="YYYY-MM-DD"
-									type="daterange"
-									range-separator="-"
-									start-placeholder="开始日期"
-									end-placeholder="结束日期"
-								></el-date-picker>
+								<el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 							</el-form-item>
 							<el-form-item>
 								<el-button size="default" type="primary" class="ml10" @click="getlog">
@@ -281,13 +267,7 @@
 						</el-table-column>
 					</el-table>
 
-					<pagination
-						v-show="logtableData.total > 0"
-						:total="logtableData.total"
-						v-model:page="logtableData.param.pageNum"
-						v-model:limit="logtableData.param.pageSize"
-						@pagination="getlog"
-					/>
+					<pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
 				</el-tab-pane>
 			</el-tabs>
 		</div>
@@ -519,7 +499,7 @@ export default defineComponent({
 						});
 					}
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 
 		//根据不同类型获取列表
@@ -708,28 +688,35 @@ export default defineComponent({
 	width: 100%;
 	padding: 20px;
 }
+
 .content-box {
 	background: #fff;
 	width: 100%;
 	padding: 20px;
 	margin-top: 20px;
 }
+
 .cont_box {
 	display: flex;
 }
+
 .cont_box .title {
 	font-size: 24px;
 }
+
 .cont_box .pro-status {
 	line-height: 40px;
 	margin-left: 30px;
 }
+
 .cont_box .pro-status .on {
 	background: #52c41a;
 }
+
 .cont_box .pro-status .off {
 	background: #c41a1a;
 }
+
 .cont_box .pro-status span {
 	position: relative;
 	top: -1px;
@@ -740,31 +727,37 @@ export default defineComponent({
 	border-radius: 50%;
 	margin-right: 5px;
 }
+
 .cont_box .pro-option {
 	line-height: 40px;
 	margin-left: 10px;
 	color: #1890ff;
 	cursor: pointer;
 }
+
 .content-box .pro-box {
 	display: flex;
 	padding: 10px;
 	justify-content: space-between;
 }
+
 .content-box .pro-box .protitle {
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 35px;
 }
+
 .content-box .pro-box .buttonedit {
 	border: 0px;
 	color: #1890ff;
 }
+
 table {
 	border-collapse: collapse;
 	text-indent: initial;
 	border-spacing: 2px;
 }
+
 tbody {
 	box-sizing: border-box;
 	display: table-row-group;
@@ -777,37 +770,46 @@ tr {
 	vertical-align: inherit;
 	border-color: inherit;
 }
+
 .ant-descriptions-view {
 	width: 100%;
 	overflow: hidden;
 	border-radius: 4px;
 }
+
 .ant-descriptions-view {
 	border: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-view table {
 	width: 100%;
 	table-layout: fixed;
 }
-.ant-descriptions-view > table {
+
+.ant-descriptions-view>table {
 	table-layout: auto;
 }
+
 .ant-descriptions-row {
 	border-bottom: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
 	color: rgba(0, 0, 0, 0.85);
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 1.5;
 }
+
 .ant-descriptions-item-label {
 	padding: 16px 24px;
 	border-right: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
 	background-color: #fafafa;
 }
+
 .ant-descriptions-item-content {
 	padding: 16px 24px;
 	border-right: 1px solid #e8e8e8;
@@ -816,11 +818,13 @@ tr {
 	font-size: 14px;
 	line-height: 1.5;
 }
+
 .wu-box {
 	border: #e8e8e8 solid 1px;
 	padding: 20px;
 	width: 100%;
 }
+
 .wu-box .wu-title {
 	display: flex;
 	flex-direction: row;
@@ -828,9 +832,11 @@ tr {
 	padding: 20px;
 	border-bottom: #e8e8e8 1px solid;
 }
+
 .wu-box .wu-title .title {
 	font-size: 18px;
 }
+
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
@@ -846,22 +852,25 @@ tr {
 	border-radius: 2px;
 	transition: all 0.3s;
 }
+
 .ant-card-body {
 	padding: 24px;
 	zoom: 1;
 }
+
 .cardflex {
 	display: flex;
 	justify-content: space-between;
 }
+
 .statusname {
 	font-size: 30px;
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
+
 .comtest {
 	margin-top: 20px;
 	height: 30px;
 	line-height: 30px;
-}
-</style>
+}</style>

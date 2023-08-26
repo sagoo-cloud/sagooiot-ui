@@ -13,7 +13,7 @@
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" @click="addOrEdit()">
+          <el-button type="success" v-auth="'add'" @click="addOrEdit()">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
@@ -31,9 +31,9 @@
       <el-table-column label="操作" width="200" align="center">
         <template #default="scope">
           <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">预览</el-button>
-          <el-button size="small" text type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+          <el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
           <el-button size="small" text type="warning" @click="edit(scope.row)">编辑组态图</el-button>
-          <el-button size="small" text type="danger" @click="del(scope.row)">删除</el-button>
+          <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

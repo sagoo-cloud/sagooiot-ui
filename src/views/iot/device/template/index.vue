@@ -19,7 +19,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="success" @click="addOrEdit()">
+						<el-button type="success" @click="addOrEdit()" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -39,10 +39,10 @@
 				<el-table-column prop="remarks" label="备注" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="160" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="handleImport(scope.row)">导入</el-button>
-						<el-button size="small" text type="primary" @click="handleExport(scope.row)">导出</el-button>
-						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">详情</el-button>
-						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" v-auth="'upload'" @click="handleImport(scope.row)">导入</el-button>
+						<el-button size="small" text type="primary" v-auth="'download'" @click="handleExport(scope.row)">导出</el-button>
+						<el-button size="small" text type="primary" v-auth="'detail'" @click="addOrEdit(scope.row)">详情</el-button>
+						<el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

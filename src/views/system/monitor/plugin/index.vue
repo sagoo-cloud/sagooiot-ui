@@ -19,7 +19,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="success" @click="addOrEdit()">
+						<el-button size="default" type="success" v-auth="'upload'" @click="addOrEdit()">
 							<el-icon>
 								<ele-Plus />
 							</el-icon>

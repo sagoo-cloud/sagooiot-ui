@@ -24,6 +24,9 @@
             <el-dropdown-item command="download-导出">导出</el-dropdown-item>
             <el-dropdown-item command="reset-重置">重置</el-dropdown-item>
             <el-dropdown-item command="more-更多">更多</el-dropdown-item>
+            <el-dropdown-item command="save-保存">保存</el-dropdown-item>
+            <el-dropdown-item command="startOrStop-启用停用">启用停用</el-dropdown-item>
+            <el-dropdown-item command="status-切换状态">切换状态</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

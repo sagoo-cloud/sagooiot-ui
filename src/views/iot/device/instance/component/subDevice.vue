@@ -61,7 +61,7 @@
 						<div class="pro-box">
 							<div class="protitle">设备信息</div>
 							<div>
-								<el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
+								<el-button type="primary" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
 							</div>
 						</div>
 

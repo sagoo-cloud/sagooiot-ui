@@ -3,7 +3,7 @@
     <div class="search">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="success" @click="addOrEdit()">
+          <el-button type="success" v-auth="'add'" @click="addOrEdit()">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
@@ -22,9 +22,9 @@
       <el-table-column label="操作" width="200" align="center">
         <template #default="scope">
           <el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
-          <el-button size="small" text type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+          <el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
           <el-button size="small" text type="warning" @click="edit(scope.row)">设计大屏</el-button>
-          <el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+          <el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

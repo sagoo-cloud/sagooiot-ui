@@ -43,7 +43,7 @@
                     <el-icon style="font-size: 18px;" @click="getrunData()">
                       <ele-Refresh />
                     </el-icon>
-                    <el-icon style="font-size: 18px;    margin-left: 10px;" @click="onOpenListDetail(item)">
+                    <el-icon style="font-size: 18px;margin-left: 10px;" @click="onOpenListDetail(item)">
                       <ele-Expand />
                     </el-icon>
                   </div>
@@ -61,7 +61,7 @@
           <div class="pro-box">
             <div class="protitle">设备信息</div>
             <div>
-              <el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
+              <el-button type="primary" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
             </div>
           </div>
 
@@ -116,7 +116,7 @@
                 <div class="wu-title">
                   <div class="title">属性定义</div>
                   <div>
-                    <el-button type="primary" @click="onOpenEditAttr()">添加</el-button>
+                    <el-button type="primary" v-auth="'add'" @click="onOpenEditAttr()">添加</el-button>
                   </div>
                 </div>
 
@@ -147,9 +147,9 @@
                   <el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
-                      <el-button size="small" text type="primary" @click="setAttr(scope.row)">设置属性</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+                      <el-button size="small" text type="primary" v-auth="'edit'" @click="setAttr(scope.row)">设置属性</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -158,7 +158,7 @@
                 <div class="wu-title">
                   <div class="title">功能定义</div>
                   <div>
-                    <el-button type="primary" @click="onOpenEditFun()">添加</el-button>
+                    <el-button type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
                   </div>
                 </div>
 
@@ -169,8 +169,8 @@
                   <el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -179,7 +179,7 @@
                 <div class="wu-title">
                   <div class="title">事件定义</div>
                   <div>
-                    <el-button type="primary" @click="onOpenEditEvent()">添加</el-button>
+                    <el-button type="primary" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
                   </div>
                 </div>
 
@@ -197,8 +197,8 @@
 
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" @click="onEditEvent(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -207,7 +207,7 @@
                 <div class="wu-title">
                   <div class="title">标签定义</div>
                   <div>
-                    <el-button type="primary" @click="onOpenEditTab()">添加</el-button>
+                    <el-button type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
                   </div>
                 </div>
 
@@ -229,8 +229,8 @@
                   <el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" @click="onEditTag(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>

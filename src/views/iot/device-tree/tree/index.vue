@@ -6,7 +6,7 @@
           <el-scrollbar v-loading="treeLoading">
             <el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
 
-            <el-button v-if="!treeLoading && !treeData.length" type="primary" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
+            <el-button v-if="!treeLoading && !treeData.length" type="primary"  v-auth="'add'" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
             <el-tree ref="zlTreeSearchRef" v-if="!treeLoading" :data="treeData" :props="{
               children: 'children',
               label: 'name'
@@ -17,7 +17,7 @@
                     <!-- <i class="iconfont icon-wenjianjia icon-wjj mr8" /> -->
                     {{ node.label }}
                   </span>
-                  <span class="tree-options" @click.stop>
+                  <span class="tree-options" @click.stop v-auth="'edit'">
                     <slot name="operate" :data="data">
                       <el-dropdown @command="command => operateCmd(command, data)">
                         <el-icon>
@@ -115,7 +115,7 @@
                   </el-select>
                 </el-form-item> -->
                 <el-form-item label=" " prop="category">
-                  <el-button type="primary" @click="onSaveTime">保存</el-button>
+                  <el-button type="primary" v-auth="'save'" @click="onSaveTime">保存</el-button>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -129,7 +129,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label=" " prop="category">
-                <el-button type="primary" @click="onSaveTime">保存</el-button>
+                <el-button type="primary" v-auth="'save'" @click="onSaveTime">保存</el-button>
               </el-form-item>
             </el-tab-pane>
           </el-tabs>

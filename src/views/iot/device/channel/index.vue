@@ -22,7 +22,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="success" @click="addOrEdit()">
+						<el-button type="success" @click="addOrEdit()" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -38,8 +38,8 @@
 				<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="viewDetail(scope.row)">详情</el-button>
-						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" v-auth="'detail'" @click="viewDetail(scope.row)">详情</el-button>
+						<el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

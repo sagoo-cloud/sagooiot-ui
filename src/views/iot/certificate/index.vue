@@ -43,7 +43,8 @@
 				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" :show-overflow-tooltip="true" />
 				<el-table-column label="状态" width="120" align="center">
 					<template #default="scope">
-						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
+						<el-switch v-auth="'startOrStop'" v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
+						<span v-noauth="'startOrStop'">{{ scope.row.status ? '正常' : '暂停' }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">

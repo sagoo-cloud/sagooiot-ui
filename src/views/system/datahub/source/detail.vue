@@ -5,7 +5,7 @@
 				<div class="title">数据源名称：{{ detail.name }}</div>
 				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
 
-				<div class="pro-option" v-auth="'pro-status'" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
+				<div class="pro-option" v-auth="'pro-status'" v-auth="'startOrStop'" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
 			</div>
 		</div>
 

@@ -9,7 +9,7 @@
 							</el-icon>
 							查询
 						</el-button> -->
-					<el-button type="success" @click="addOrEdit()">
+					<el-button type="success" v-auth="'add'" @click="addOrEdit()">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
@@ -31,11 +31,11 @@
 			</el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
-					<el-button size="small" text type="info" v-if="scope.row.status" @click="setStatus(scope.row, 0)">停止</el-button>
-					<el-button size="small" text type="primary" v-else @click="setStatus(scope.row, 1)">启动</el-button>
-					<el-button size="small" text type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+					<el-button size="small" text type="info" v-auth="'startOrStop'" v-if="scope.row.status" @click="setStatus(scope.row, 0)">停止</el-button>
+					<el-button size="small" text type="primary" v-auth="'startOrStop'" v-else @click="setStatus(scope.row, 1)">启动</el-button>
+					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
 					<el-button size="small" text type="warning" @click="edit(scope.row)">规则编辑</el-button>
-					<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+					<el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
