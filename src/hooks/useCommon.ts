@@ -30,7 +30,7 @@ export function useSearch<T>(api: any, resKey: string, expandParams?: any) {
   const params = reactive<SearchParams>({
     status: -1,
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 1,
     total: 0,
     ...expandParams
   })

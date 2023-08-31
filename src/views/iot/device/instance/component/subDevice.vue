@@ -230,7 +230,7 @@
 								:total="tableData.total"
 								v-model:page="tableData.param.pageNum"
 								v-model:limit="tableData.param.pageSize"
-								@pagination="getList"
+								@pagination="getList()"
 							/>
 						</div>
 					</el-tab-pane>

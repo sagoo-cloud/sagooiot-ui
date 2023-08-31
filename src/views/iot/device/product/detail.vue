@@ -161,7 +161,7 @@
 								</el-table>
 							</el-tab-pane>
 						</el-tabs>
-						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
+						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 					</div>
 				</el-tab-pane>
 				<el-tab-pane label="设备接入" name="3">

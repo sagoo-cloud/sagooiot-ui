@@ -17,7 +17,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList" style="padding: 20px 0 0 !important" />
+		<pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" style="padding: 20px 0 0 !important" />
 
 		<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="850px" :before-close="clsoeDialog" close="var-dialog" append-to-body :close-on-click-modal="false">
 			<el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="95px">
