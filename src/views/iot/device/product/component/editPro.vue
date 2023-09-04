@@ -23,7 +23,7 @@
 
 				<el-form-item label="消息协议" prop="messageProtocol">
 					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
-						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.types"> </el-option>
+						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.name"> </el-option>
 						<!-- 增加系统默认的mqtt选项 -->
 						<el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
 					</el-select>
