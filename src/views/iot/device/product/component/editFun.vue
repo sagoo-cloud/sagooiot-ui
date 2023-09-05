@@ -12,8 +12,9 @@
 				<el-form-item label="输入参数" prop="maxLength">
 					<div v-for="(item, index) in inputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
-							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }} ({{ item.key }})</div>
+							<div>参数标识：{{ item.key }}</div>
+							<div>参数名称：{{ item.name }}</div>
+							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
@@ -34,8 +35,9 @@
 				<el-form-item label="输出参数" prop="">
 					<div v-for="(item, index) in outputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
-							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }} ({{ item.key }})</div>
+							<div>参数标识：{{ item.key }}</div>
+							<div>参数名称：{{ item.name }}</div>
+							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
 								<!-- <el-link type="primary">编辑</el-link> -->
 								<el-link type="primary" @click="deljsonOut(index, 'fun')">删除</el-link>
