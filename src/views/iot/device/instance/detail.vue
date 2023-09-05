@@ -49,9 +49,15 @@
                   </div>
                 </div>
 
-                <div class="statusname">{{ item.value }}{{ item.unit }}</div>
+                <div class="statusname" v-if="item.type!='object'">{{ item.value }}{{ item.unit }}</div>
+                <div v-else>
+                 <div class="oblist" v-for="(vare, name) in item.value">
+                    <div class="name">{{name}}：</div>
+                    <div class="name">{{vare}}</div>
+                </div>
+                </div>
                 <div class="">
-                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float'" />
+                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
                 </div>
               </div>
             </div>
@@ -739,11 +745,16 @@ export default defineComponent({
           let datalist = item.list || [];
           temp[index] = [];
           var temps = new Array();
+ 
           datalist.forEach(function (a, b) {
             if (b < 15) {
               temps.push(a);
             }
           });
+          if(item.type=='object'){
+            item.value=JSON.parse(item.value);
+          }
+
           temp[index]['name'] = item.name
           temp[index]['key'] = item.key
           temp[index]['type'] = item.type
@@ -854,6 +865,15 @@ export default defineComponent({
 });
 </script>
 <style>
+.oblist{
+  display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 5px;
+    flex: 1;
+    margin-top: 10px;
+    margin-left: 10px;
+}
 .content {
   background: #fff;
   width: 100%;
