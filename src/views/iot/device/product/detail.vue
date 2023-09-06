@@ -3,8 +3,10 @@
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">产品：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
-				<div class="pro-option" @click="CkOption" v-auth="'startOrStop'"> {{ developer_status == 1 ? '停用' : '启用' }}</div>
+				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1
+					? '已发布' : '未发布' }}</div>
+				<div class="pro-option" @click="CkOption" v-auth="'startOrStop'"> {{ developer_status == 1 ? '停用' : '启用' }}
+				</div>
 			</div>
 		</div>
 
@@ -13,7 +15,8 @@
 				<el-tab-pane label="产品信息" name="1">
 					<div class="pro-box">
 						<div class="protitle">产品信息</div>
-						<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
+						<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'"
+							@click="onOpenEditDic(detail)">编辑</el-button>
 					</div>
 
 					<div class="ant-descriptions-view">
@@ -33,7 +36,8 @@
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}</td>
+									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}
+									</td>
 
 								</tr>
 								<tr class="ant-descriptions-row">
@@ -50,7 +54,8 @@
 							<el-tab-pane label="属性定义" name="attr">
 								<div class="wu-title">
 									<div class="title">属性定义</div>
-									<div><el-button type="primary" v-auth="'edit'" @click="onOpenEditAttr()">添加</el-button></div>
+									<div><el-button type="primary" v-auth="'edit'" @click="onOpenEditAttr()">添加</el-button>
+									</div>
 								</div>
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
@@ -80,8 +85,10 @@
 									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'"
+												@click="onEditAttr(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'"
+												@click="onRowDel(scope.row.key, 'attr')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -89,7 +96,8 @@
 							<el-tab-pane label="功能定义" name="fun">
 								<div class="wu-title">
 									<div class="title">功能定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button></div>
+									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
+									</div>
 								</div>
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
@@ -99,8 +107,10 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'"
+												@click="onEditFun(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'"
+												@click="onRowDel(scope.row.key, 'fun')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -108,7 +118,8 @@
 							<el-tab-pane label="事件定义" name="event">
 								<div class="wu-title">
 									<div class="title">事件定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button></div>
+									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
+									</div>
 								</div>
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
@@ -125,8 +136,10 @@
 
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'"
+												@click="onEditEvent(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'"
+												@click="onRowDel(scope.row.key, 'event')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -134,7 +147,8 @@
 							<el-tab-pane label="标签定义" name="tab">
 								<div class="wu-title">
 									<div class="title">标签定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button></div>
+									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
+									</div>
 								</div>
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
@@ -154,43 +168,49 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'"
+												@click="onEditTag(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'"
+												@click="onRowDel(scope.row.key, 'tab')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
 
 
-					
+
 
 						</el-tabs>
-						<div style="position: absolute; top: 26px; right: 35px;">
-								<div>
-									<el-button size="default" type="default" class="ml10" >
-									<el-icon>
-										<ele-Upload />
-									</el-icon>
-									导入物模型
+						<div class="import">
+							<div class="row_bet">
+								<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }"
+									:headers="headers" :action="uploadUrl" :on-success="updateImg">
+									<el-button>
+										<el-icon> <ele-Upload /> </el-icon>
+										导入物模型
 									</el-button>
-									<el-button size="default" type="default" class="ml10" @click="onRowExport()">
+								</el-upload>
+								<el-button size="default" type="default" class="ml10" @click="onRowExport()">
 									<el-icon>
 										<ele-Download />
 									</el-icon>
 									导出物模型
-									</el-button>
-								</div>
-					
+								</el-button>
 							</div>
 
-						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
+						</div>
+
+						<pagination v-show="tableData.total > 0" :total="tableData.total"
+							v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize"
+							@pagination="getList()" />
 					</div>
 				</el-tab-pane>
 				<el-tab-pane label="设备接入" name="3">
 					<deviceIn></deviceIn>
 				</el-tab-pane>
 				<el-tab-pane label="数据解析" name="4" lazy>
-					<dataParse v-if="activeName === '4'" :script="detail.scriptInfo" @updateScript="updateScript"></dataParse>
+					<dataParse v-if="activeName === '4'" :script="detail.scriptInfo" @updateScript="updateScript">
+					</dataParse>
 				</el-tab-pane>
 			</el-tabs>
 		</div>
@@ -206,6 +226,8 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import downloadFile from '/@/utils/download';
+import getOrigin from '/@/utils/origin';
+
 
 import EditDic from './component/editPro.vue';
 import deviceIn from './component/deviceIn.vue';
@@ -218,6 +240,7 @@ import EditTab from './component/editTab.vue';
 import { useRoute } from 'vue-router';
 
 import api from '/@/api/device';
+
 
 interface TableDataState {
 	ids: number[];
@@ -241,6 +264,11 @@ export default defineComponent({
 	components: { EditDic, EditAttr, EditFun, EditEvent, EditTab, deviceIn, dataParse },
 
 	setup(prop, context) {
+
+		const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/product/tsl/import");
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.token,
+		};
 		const route = useRoute();
 		const editDicRef = ref();
 		const editAttrRef = ref();
@@ -458,22 +486,32 @@ export default defineComponent({
 		// 导出
 		const onRowExport = () => {
 
-			api.product.export({key:state.detail.key}).then((res: any) => downloadFile(res,"TSL-"+state.detail.key+"-"+getCurrentTime()+".json"))
+			api.product.export({ key: state.detail.key }).then((res: any) => downloadFile(res, "TSL-" + state.detail.key + "-" + getCurrentTime() + ".json"))
 		};
 
 
-		const getCurrentTime=()=>{
+		const getCurrentTime = () => {
 			const date = new Date();
 			const year = date.getFullYear().toString();
 			const month = (date.getMonth() + 1).toString().padStart(2, '0');
 			const day = date.getDate().toString().padStart(2, '0');
 			const hours = date.getHours().toString().padStart(2, '0');
 			const minutes = date.getMinutes().toString().padStart(2, '0');
-			return  year + month + day + hours + minutes;
+			return year + month + day + hours + minutes;
 		}
-
+		const updateImg = (res: any) => {
+			if (res.code === 0) {
+				getList("attr");
+				ElMessage.success('物模型导入成功');
+			} else {
+				ElMessage.error(res.message);
+			}
+		};
 
 		return {
+			updateImg,
+			headers,
+			uploadUrl,
 			getCurrentTime,
 			onRowExport,
 			Edit,
@@ -507,6 +545,20 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.import {
+	position: absolute;
+	top: 26px;
+	right: 35px;
+}
+
+.import .row_bet {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-right: 5px;
+	flex: 1;
+}
+
 .content {
 	background: #fff;
 	width: 100%;
@@ -658,7 +710,6 @@ tr {
 
 .wu-box .wu-title .title {
 	font-size: 18px;
-}
-</style>
+}</style>
 
 
