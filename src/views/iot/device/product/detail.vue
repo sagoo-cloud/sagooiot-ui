@@ -160,7 +160,29 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
+
+
+					
+
 						</el-tabs>
+						<div style="position: absolute; top: 26px; right: 35px;">
+								<div>
+									<el-button size="default" type="default" class="ml10" >
+									<el-icon>
+										<ele-Upload />
+									</el-icon>
+									导入物模型
+									</el-button>
+									<el-button size="default" type="default" class="ml10" @click="onRowExport()">
+									<el-icon>
+										<ele-Download />
+									</el-icon>
+									导出物模型
+									</el-button>
+								</div>
+					
+							</div>
+
 						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 					</div>
 				</el-tab-pane>
@@ -183,6 +205,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import downloadFile from '/@/utils/download';
 
 import EditDic from './component/editPro.vue';
 import deviceIn from './component/deviceIn.vue';
@@ -430,13 +453,29 @@ export default defineComponent({
 					state.developer_status = 1;
 				});
 			}
-
-
-
-
 		}
 
+		// 导出
+		const onRowExport = () => {
+
+			api.product.export({key:state.detail.key}).then((res: any) => downloadFile(res,"TSL-"+state.detail.key+"-"+getCurrentTime()+".json"))
+		};
+
+
+		const getCurrentTime=()=>{
+			const date = new Date();
+			const year = date.getFullYear().toString();
+			const month = (date.getMonth() + 1).toString().padStart(2, '0');
+			const day = date.getDate().toString().padStart(2, '0');
+			const hours = date.getHours().toString().padStart(2, '0');
+			const minutes = date.getMinutes().toString().padStart(2, '0');
+			return  year + month + day + hours + minutes;
+		}
+
+
 		return {
+			getCurrentTime,
+			onRowExport,
 			Edit,
 			updateScript,
 			editDicRef,

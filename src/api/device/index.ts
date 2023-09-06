@@ -1,4 +1,4 @@
-import { get, post, del, put } from '/@/utils/request';
+import { get, post, del, put,file } from '/@/utils/request';
 
 export default {
   common:{
@@ -22,6 +22,8 @@ export default {
     undeploy: (data: object) => post('/product/undeploy', data),
     event: (data: object) => get('/product/tsl/event/all', data),
     getSubList: () => get('/product/sub_list'),
+    export: (params: object) => file('/product/tsl/export', params),
+
     deleteSubDevice: (id: number) => del('/product/device/del_sub', { id }),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
