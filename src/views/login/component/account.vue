@@ -55,7 +55,7 @@ import { useI18n } from 'vue-i18n';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { useStore } from '/@/store/index';
-import { Session } from '/@/utils/storage';
+import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import api from '/@/api/system';
 
@@ -117,6 +117,7 @@ export default defineComponent({
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
 								localStorage.setItem('token', res.token);
+								Local.set('userInfo', userInfos);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);
 								await store.dispatch('userInfos/setUserInfos', userInfos);

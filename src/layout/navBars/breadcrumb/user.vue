@@ -80,6 +80,7 @@ import { Local } from '/@/utils/storage';
 import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import api from '/@/api/system';
+
 export default defineComponent({
   name: 'layoutBreadcrumbUser',
   components: { UserNews, Search },
@@ -96,9 +97,9 @@ export default defineComponent({
       popoverVisible: false
     });
     // 获取用户信息 vuex
-    const getUserInfos = computed(() => {
-      return <any>store.state.userInfos.userInfos;
-    });
+    
+    const getUserInfos = ref(Local.get('userInfo') || {}) 
+
     // 获取布局配置信息
     const getThemeConfig = computed(() => {
       return store.state.themeConfig.themeConfig;
