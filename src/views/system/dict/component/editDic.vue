@@ -8,6 +8,12 @@
         <el-form-item label="字典类型" prop="dictType">
           <el-input v-model="ruleForm.dictType" placeholder="请输入字典类型" />
         </el-form-item>
+        <!-- 字典类型下拉框 -->
+        <el-form-item label="字典分类" prop="dictClass">
+          <el-select v-model="ruleForm.dictClass" placeholder="字典分类" clearable size="default" style="width: 240px">
+            <el-option v-for="dict in class_type" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="ruleForm.status">
             <el-radio :label="1" >启用</el-radio>
@@ -29,13 +35,14 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent,ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent,ref, unref , getCurrentInstance,} from 'vue';
 import api from '/@/api/system';
 import {ElMessage} from "element-plus";
 interface RuleFormState {
   dictId:number;
   dictName:string;
   dictType:string;
+  dictClass:string; // 字典分类
   status:number;
   remark:string;
 }
@@ -48,6 +55,8 @@ interface DicState {
 export default defineComponent({
 	name: 'systemEditDic',
 	setup(prop,{emit}) {
+    const { proxy } = getCurrentInstance() as any;
+    const { class_type } = proxy.useDict('class_type'); // 获取字典分类
     const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -55,6 +64,7 @@ export default defineComponent({
         dictId:0,
         dictName:'',
         dictType:'',
+        dictClass:'',
         status:1,
         remark:''
 			},
@@ -83,6 +93,7 @@ export default defineComponent({
         dictId:0,
         dictName:'',
         dictType:'',
+        dictClass: '',
         status:1,
         remark:''
       }
@@ -126,6 +137,7 @@ export default defineComponent({
 			closeDialog,
 			onCancel,
 			onSubmit,
+      class_type,
       formRef,
 			...toRefs(state),
 		};
