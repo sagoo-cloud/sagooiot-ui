@@ -10,9 +10,9 @@
 						<el-table-column prop="name" label="值" min-width="200">
 							<template #default="{ row }">
 								<el-select v-model="row.value" clearable v-if="row.valueType.type === 'enum'" style="wdith: 100% !important;">
-									<el-option v-for="item in row.valueType.elements" :key="item.value" :value="item.value" :label="item.text"></el-option>
+									<el-option v-for="item in row.valueType.elements" :key="item.value" :value="item.text" :label="item.text"></el-option>
 								</el-select>
-								<el-input v-model="row.value" clearable v-else>
+								<el-input v-model="row.value" clearable v-else :placeholder="row.valueType.type === 'array' ? 'JSON.stringify(arr)结果去掉外层单引号' : '请输入'">
 									<template v-if="row.valueType.unit" #append>{{ row.valueType.unit }}</template>
 								</el-input>
 							</template>
@@ -68,9 +68,22 @@ function run(row: IListItem) {
 	const notValid = row.inputs.some((item) => !item.value)
 	if (notValid) return ElMessage.info('请输入完整参数')
 
-	row.loading = true
 	const params: any = {}
-	row.inputs.forEach(({ key, value }) => (params[key] = value))
+	row.inputs.forEach(({ key, value, valueType }) => {
+		if (valueType.type === 'array') {
+			try {
+				value = JSON.parse(value)
+				if (typeof value !== 'object') {
+					throw new Error()
+				}
+			} catch (error: any) {
+				ElMessage.error('请输入正确的JSON数组字符串格式')
+				throw (error)
+			}
+		}
+		params[key] = value
+	})
+	row.loading = true
 	api.tabDeviceFucntion
 		.do({
 			deviceKey: props.deviceKey,
