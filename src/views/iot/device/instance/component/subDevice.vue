@@ -116,7 +116,7 @@
 										<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
 										<el-table-column prop="valueType" label="数据类型" width="100" align="center">
 											<template #default="scope">
-												<span>{{ scope.row.valueType.type }}</span>
+												<span>{{ scope.row.valueType?.type }}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="decimals" label="精度" width="60" align="center">

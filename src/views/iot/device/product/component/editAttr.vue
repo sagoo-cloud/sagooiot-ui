@@ -146,10 +146,9 @@
 					<div v-for="(item, index) in jsondata" :key="index" class="jslist">
 						<div class="jsonlist">
 							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.data.name }}</div>
+							<div style="width: 60%">{{ item.name }}</div>
 							<div class="jsonoption">
-								<el-link type="primary">编辑</el-link>
-								<el-link type="primary">删除</el-link>
+								<el-link type="primary" @click="deljson(index)">删除</el-link>
 							</div>
 						</div>
 					</div>
@@ -303,14 +302,14 @@ export default defineComponent({
 				}
 
 				if (row.type == 'object') {
-					state.jsondata = row.valueType.properties;
+					state.jsondata = JSON.parse(JSON.stringify(row.valueType.properties));
 				}
 
 				if (row.type == 'array' && state.types == 'enum') {
 					state.enumdata = row.valueType.elementType.elements
 				}
 				if (row.type == 'array' && state.types == 'object') {
-					state.jsondata = row.valueType.elementType.properties
+					state.jsondata = JSON.parse(JSON.stringify(row.valueType.elementType.properties));
 				}
 			}
 
@@ -366,7 +365,7 @@ export default defineComponent({
 		}
 
 		const addJson = () => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0 });
+			editOptionRef.vadeljsonue.openDialog({ product_id: 0, id: 0 });
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
