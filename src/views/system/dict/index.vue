@@ -47,12 +47,13 @@
         </el-form>
       </div>
       <!-- 字典切换 -->
-      <el-tabs v-model="tableData.param.dictClass" class="demo-tabs" @click="typeList">
-				<el-tab-pane v-for="dict in class_type" :label="dict.label" :name="dict.name">
+      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="typeList">
+				<el-tab-pane v-for="dict in dict_class_type" :label="dict.label" :name="dict.name">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="字典ID" v-col="'dictId'" align="center" prop="dictId" width="80" />
             <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
+            <el-table-column label="字典分类" v-col="'moduleClassify'" align="center" prop="moduleClassify" />
             <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
               <template #default="scope">
                 <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
@@ -93,6 +94,7 @@ import api from '/@/api/system';
 interface TableDataRow {
   dictId: number;
   dictName: string;
+  moduleClassify: string;
   dictType: string;
   status: number;
   remark: string;
@@ -108,10 +110,10 @@ interface TableDataState {
       pageNum: number;
       pageSize: number;
       dictName: string;
+      moduleClassify: string; // 字典类型
       dictType: string;
       status: string;
       dateRange: string[];
-      dictClass: string; // 字典类型
     };
   };
 }
@@ -121,7 +123,7 @@ export default defineComponent({
   components: { EditDic },
   setup() {
     const { proxy } = getCurrentInstance() as any;
-    const { class_type } = proxy.useDict('class_type'); // 获取字典类型
+    const { dict_class_type } = proxy.useDict('dict_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
@@ -135,10 +137,10 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           dictName: '',
+          moduleClassify: '0',// 字典分类
           dictType: '',
           status: '',
           dateRange: [],
-          dictClass: '0',
         },
       },
     });
@@ -152,6 +154,7 @@ export default defineComponent({
       api.dict
         .getTypeList(params)
         .then((res: any) => {
+          console.log(res.dictTypeList);
           state.tableData.data = res.dictTypeList;
           state.tableData.total = res.total;
         })
@@ -216,7 +219,7 @@ export default defineComponent({
       typeList,
       resetQuery,
       handleSelectionChange,
-      class_type,
+      dict_class_type,
       ...toRefs(state),
     };
   },

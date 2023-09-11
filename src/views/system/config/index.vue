@@ -45,26 +45,31 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="60" />
-        <el-table-column label="参数名称" v-col="'configName'" prop="configName" :show-overflow-tooltip="true" />
-        <el-table-column label="参数键名" v-col="'configKey'" prop="configKey" :show-overflow-tooltip="true" />
-        <el-table-column label="参数键值" v-col="'configValue'" prop="configValue" />
-        <el-table-column label="备注" prop="remark" v-col="'remark'" :show-overflow-tooltip="true" />
-        <!-- <el-table-column label="创建时间" prop="createdAt" width="180" align="center" /> -->
-        <el-table-column label="系统内置" v-col="'configType'" align="center" prop="configType" width="100">
-          <template #default="{ row }">
-            {{ row.configType ? '是' : '否' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="100" v-col="'handle'" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <!-- 字典切换 -->
+      <el-tabs v-model="tableData.param.dictClassCode" class="demo-tabs" @click="dataList">
+				<el-tab-pane v-for="dict in param_class_type" :label="dict.label" :name="dict.name">
+          <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="60" />
+            <el-table-column label="参数名称" v-col="'configName'" prop="configName" :show-overflow-tooltip="true" />
+            <el-table-column label="参数键名" v-col="'configKey'" prop="configKey" :show-overflow-tooltip="true" />
+            <el-table-column label="参数键值" v-col="'configValue'" prop="configValue" />
+            <el-table-column label="备注" prop="remark" v-col="'remark'" :show-overflow-tooltip="true" />
+            <!-- <el-table-column label="创建时间" prop="createdAt" width="180" align="center" /> -->
+            <el-table-column label="系统内置" v-col="'configType'" align="center" prop="configType" width="100">
+              <template #default="{ row }">
+                {{ row.configType ? '是' : '否' }}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100" v-col="'handle'" align="center" fixed="right">
+              <template #default="scope">
+                <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
+                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+			</el-tabs>
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
     </el-card>
     <EditConfig ref="editDicRef" @dataList="dataList" :sysYesNoOptions="sys_yes_no" />
@@ -86,6 +91,7 @@ interface TableDataRow {
   configType: number;
   remark: string;
   createdAt: string;
+  dictClassCode: string;
 }
 interface TableDataState {
   ids: number[];
@@ -100,6 +106,7 @@ interface TableDataState {
       configKey: string;
       configType: string;
       dateRange: string[];
+      dictClassCode: string;
     };
   };
 }
@@ -109,6 +116,7 @@ export default defineComponent({
   components: { EditConfig },
   setup() {
     const { proxy } = getCurrentInstance() as any;
+    const { param_class_type } = proxy.useDict('param_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
@@ -126,6 +134,7 @@ export default defineComponent({
           configName: '',
           configKey: '',
           configType: '',
+          dictClassCode: '0',// 字典分类
         },
       },
     });
@@ -208,6 +217,7 @@ export default defineComponent({
       resetQuery,
       handleSelectionChange,
       ...toRefs(state),
+      param_class_type,
     };
   },
 });

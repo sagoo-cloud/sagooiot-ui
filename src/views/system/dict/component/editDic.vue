@@ -9,9 +9,9 @@
           <el-input v-model="ruleForm.dictType" placeholder="请输入字典类型" />
         </el-form-item>
         <!-- 字典类型下拉框 -->
-        <el-form-item label="字典分类" prop="dictClass">
-          <el-select v-model="ruleForm.dictClass" placeholder="字典分类" clearable size="default" style="width: 240px">
-            <el-option v-for="dict in class_type" :label="dict.label" :value="dict.value" />
+        <el-form-item label="字典分类" prop="moduleClassify">
+          <el-select v-model="ruleForm.moduleClassify" placeholder="字典分类" clearable size="default" style="width: 240px">
+            <el-option v-for="dict in dict_class_type" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -42,7 +42,7 @@ interface RuleFormState {
   dictId:number;
   dictName:string;
   dictType:string;
-  dictClass:string; // 字典分类
+  moduleClassify:string; // 字典分类
   status:number;
   remark:string;
 }
@@ -56,7 +56,7 @@ export default defineComponent({
 	name: 'systemEditDic',
 	setup(prop,{emit}) {
     const { proxy } = getCurrentInstance() as any;
-    const { class_type } = proxy.useDict('class_type'); // 获取字典分类
+    const { dict_class_type } = proxy.useDict('dict_class_type'); // 获取字典分类
     const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -64,7 +64,7 @@ export default defineComponent({
         dictId:0,
         dictName:'',
         dictType:'',
-        dictClass:'',
+        moduleClassify:'',
         status:1,
         remark:''
 			},
@@ -93,7 +93,7 @@ export default defineComponent({
         dictId:0,
         dictName:'',
         dictType:'',
-        dictClass: '',
+        moduleClassify:'',
         status:1,
         remark:''
       }
@@ -137,7 +137,7 @@ export default defineComponent({
 			closeDialog,
 			onCancel,
 			onSubmit,
-      class_type,
+      dict_class_type,
       formRef,
 			...toRefs(state),
 		};
