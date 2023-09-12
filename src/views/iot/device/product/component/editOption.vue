@@ -12,23 +12,13 @@
 				<el-form-item label="数据类型" prop="type">
 					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
-							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="item.type == 'object'" />
+							<!-- <el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="item.type == 'object'" /> -->
+							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
 						</el-option-group>
 					</el-select>
 				</el-form-item>
 
-				<TypeItem :valueType="valueType"></TypeItem>
-
-				<el-form-item label="JSON对象" prop="maxLength" v-if="type == 'object'">
-					<div class="input-options" @click="addJson">
-						<el-icon>
-							<Plus />
-						</el-icon>
-						<div>添加参数</div>
-					</div>
-				</el-form-item>
-
-
+				<TypeItem :valueType="valueType" :typeData="typeData"></TypeItem>
 				<div v-if="type == 'array'">
 					<el-form-item label="元素类型" prop="type">
 						<el-select v-model="elementType.type" placeholder="请选择元素类型" @change="seletChanges">
@@ -37,30 +27,8 @@
 							</el-option-group>
 						</el-select>
 					</el-form-item>
-
-					<!-- 数组对象 -->
-					<el-form-item label="对象属性" v-if="['object'].includes(types)">
-						<div class="flex-row" style="gap:12px" v-for="(item, index) in properties" :key="index">
-							<el-input v-model="item.key" placeholder="请输入标识" />
-							<el-input v-model="item.name" placeholder="请输入名称" />
-							<el-select v-model="item.valueType.type" placeholder="请选择元素类型">
-								<el-option v-for="item in typeData[0].options" :key="item.type" :label="item.title" :value="item.type" />
-							</el-select>
-							<el-input v-model="item.desc" placeholder="请输入描述" />
-							<div class="input-option">
-								<el-icon @click="addEnum" v-if="index == 0">
-									<Plus />
-								</el-icon>
-								<el-icon @click="delEnum(index)" v-if="index != 0">
-									<Minus />
-								</el-icon>
-							</div>
-						</div>
-					</el-form-item>
-					<TypeItem :valueType="elementType"></TypeItem>
+					<TypeItem :valueType="elementType" :typeData="typeData"></TypeItem>
 				</div>
-
-				<!--根据数据类型输出不同表单-->
 
 				<el-form-item label="参数描述	" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入参数描述"></el-input>
@@ -89,7 +57,7 @@ interface RuleFormState {
 	desc: string;
 }
 
-const valueType = {
+const valueTypeBase = {
 	max: '',
 	min: '',
 	unit: '',
@@ -100,6 +68,22 @@ const valueType = {
 	falseValue: '',
 	type: '',
 	maxLength: '',
+}
+
+const valueType = {
+	...valueTypeBase,
+	properties: [{
+		'key': '',
+		'name': '',
+		'desc': '',
+		'valueType': {
+			...valueTypeBase,
+			elements: [{
+				'text': '',
+				'value': ''
+			}]
+		}
+	}],
 	elements: [{
 		'text': '',
 		'value': ''
@@ -160,7 +144,6 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				console.log(datat)
 				state.typeData = datat || [];
 			});
 
@@ -202,9 +185,6 @@ export default defineComponent({
 			state.enumdata.splice(index, 1);
 		}
 
-		const addJson = () => {
-
-		}
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -249,7 +229,6 @@ export default defineComponent({
 			openDialog,
 			addEnum,
 			delEnum,
-			addJson,
 			seletChange,
 			seletChanges,
 			closeDialog,
