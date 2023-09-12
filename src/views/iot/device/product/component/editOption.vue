@@ -19,12 +19,20 @@
 
 				<!--根据数据类型输出不同表单-->
 
-				<el-form-item label="精度" prop="decimals" v-if="type == 'float' || type == 'double'">
-					<el-input v-model="valueType.decimals" placeholder="请输入精度" />
-				</el-form-item>
+				<template v-if="['int', 'long', 'float', 'double'].includes(type)">
+					<el-form-item label="最大" prop="max">
+						<el-input v-model="valueType.max" placeholder="请输入最大值" />
+					</el-form-item>
+					<el-form-item label="最小" prop="min">
+						<el-input v-model="valueType.min" placeholder="请输入最小值" />
+					</el-form-item>
+					<el-form-item label="单位" prop="unit">
+						<el-input v-model="valueType.unit" placeholder="请输入单位" />
+					</el-form-item>
+				</template>
 
-				<el-form-item label="单位" prop="unit" v-if="type == 'int' || type == 'long' || type == 'float' || type == 'double'">
-					<el-input v-model="valueType.unit" placeholder="请输入单位" />
+				<el-form-item label="精度" prop="decimals" v-if="['float', 'double'].includes(type)">
+					<el-input v-model="valueType.decimals" placeholder="请输入精度" />
 				</el-form-item>
 
 				<el-form-item label="最大长度" prop="maxLength" v-if="type == 'string'">
@@ -83,14 +91,23 @@
 						</el-select>
 					</el-form-item>
 
+					<template v-if="['int', 'long', 'float', 'double'].includes(types)">
+						<el-form-item label="最大" prop="max">
+							<el-input v-model="elementType.max" placeholder="请输入最大值" />
+						</el-form-item>
+						<el-form-item label="最小" prop="min">
+							<el-input v-model="elementType.min" placeholder="请输入最小值" />
+						</el-form-item>
+						<el-form-item label="单位" prop="unit">
+							<el-input v-model="elementType.unit" placeholder="请输入单位" />
+						</el-form-item>
+					</template>
 
-					<el-form-item label="精度" prop="decimals" v-if="types == 'float' || types == 'double'">
+
+					<el-form-item label="精度" prop="decimals" v-if="['float', 'double'].includes(types)">
 						<el-input v-model="elementType.decimals" placeholder="请输入精度" />
 					</el-form-item>
 
-					<el-form-item label="单位" prop="unit" v-if="types == 'int' || types == 'long' || types == 'float' || types == 'double'">
-						<el-input v-model="elementType.unit" placeholder="请输入单位" />
-					</el-form-item>
 
 					<el-form-item label="最大长度" prop="maxLength" v-if="types == 'string'">
 						<el-input v-model="elementType.maxLength" placeholder="请输入最大长度" />
@@ -100,7 +117,7 @@
 						<el-input v-model="elementType.maxLength" placeholder="请输入时间格式" />
 					</el-form-item>
 
-					<el-form-item label="布尔值" prop="maxLength" v-if="types == 'boolean'">
+					<el-form-item label="布尔值" v-if="types == 'boolean'">
 						<div class="input-box">
 							<el-input v-model="elementType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
 							<el-input v-model="elementType.trueValue" placeholder="请输入布尔值" value="true" />
@@ -112,7 +129,7 @@
 						</div>
 					</el-form-item>
 
-					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
+					<el-form-item label="枚举项" prop="" v-if="types == 'enum'">
 						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
 							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
 									<Right />
@@ -297,7 +314,11 @@ export default defineComponent({
 						if (state.type == 'enum') {
 							state.valueType.elements = state.enumdata;
 						}
+						if (state.type == 'array') {
+							state.valueType.elementType = state.elementType;
+						}
 
+						console.log(state)
 						state.ruleForm.valueType = state.valueType;
 						ElMessage.success('参数类型添加成功');
 						closeDialog(); // 关闭弹窗
@@ -348,4 +369,5 @@ export default defineComponent({
 	align-items: center;
 	color: #409eff;
 	cursor: pointer
-}</style>
+}
+</style>
