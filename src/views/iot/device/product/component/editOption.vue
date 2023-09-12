@@ -17,60 +17,7 @@
 					</el-select>
 				</el-form-item>
 
-				<!--根据数据类型输出不同表单-->
-
-				<template v-if="['int', 'long', 'float', 'double'].includes(type)">
-					<el-form-item label="最大" prop="max">
-						<el-input v-model="valueType.max" placeholder="请输入最大值" />
-					</el-form-item>
-					<el-form-item label="最小" prop="min">
-						<el-input v-model="valueType.min" placeholder="请输入最小值" />
-					</el-form-item>
-					<el-form-item label="单位" prop="unit">
-						<el-input v-model="valueType.unit" placeholder="请输入单位" />
-					</el-form-item>
-				</template>
-
-				<el-form-item label="精度" prop="decimals" v-if="['float', 'double'].includes(type)">
-					<el-input v-model="valueType.decimals" placeholder="请输入精度" />
-				</el-form-item>
-
-				<el-form-item label="最大长度" prop="maxLength" v-if="type == 'string'">
-					<el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
-				</el-form-item>
-
-				<el-form-item label="时间格式" prop="maxLength" v-if="type == 'date'">
-					<el-input v-model="valueType.maxLength" placeholder="请输入时间格式" />
-				</el-form-item>
-
-				<el-form-item label="布尔值" prop="maxLength" v-if="type == 'boolean'">
-					<div class="input-box">
-						<el-input v-model="valueType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
-						<el-input v-model="valueType.trueValue" placeholder="请输入布尔值" value="true" />
-					</div>
-
-					<div class="input-box">
-						<el-input v-model="valueType.falseText" placeholder="请输入布尔值" value="否" /> <span style="margin: 0px 10px">~</span>
-						<el-input v-model="valueType.falseValue" placeholder="请输入布尔值" value="false" />
-					</div>
-				</el-form-item>
-
-				<el-form-item label="枚举项" prop="maxLength" v-if="type == 'enum'">
-					<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-						<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
-								<Right />
-							</el-icon></span>
-						<el-input v-model="item.value" placeholder="请输入枚举值" />
-						<div class="input-option">
-							<el-icon @click="addEnum" v-if="index == 0">
-								<Plus />
-							</el-icon>
-							<el-icon @click="delEnum(index)" v-if="index != 0">
-								<Minus />
-							</el-icon>
-						</div>
-					</div>
-				</el-form-item>
+				<TypeItem :valueType="valueType"></TypeItem>
 
 				<el-form-item label="JSON对象" prop="maxLength" v-if="type == 'object'">
 					<div class="input-options" @click="addJson">
@@ -91,50 +38,15 @@
 						</el-select>
 					</el-form-item>
 
-					<template v-if="['int', 'long', 'float', 'double'].includes(types)">
-						<el-form-item label="最大" prop="max">
-							<el-input v-model="elementType.max" placeholder="请输入最大值" />
-						</el-form-item>
-						<el-form-item label="最小" prop="min">
-							<el-input v-model="elementType.min" placeholder="请输入最小值" />
-						</el-form-item>
-						<el-form-item label="单位" prop="unit">
-							<el-input v-model="elementType.unit" placeholder="请输入单位" />
-						</el-form-item>
-					</template>
-
-
-					<el-form-item label="精度" prop="decimals" v-if="['float', 'double'].includes(types)">
-						<el-input v-model="elementType.decimals" placeholder="请输入精度" />
-					</el-form-item>
-
-
-					<el-form-item label="最大长度" prop="maxLength" v-if="types == 'string'">
-						<el-input v-model="elementType.maxLength" placeholder="请输入最大长度" />
-					</el-form-item>
-
-					<el-form-item label="时间格式" prop="maxLength" v-if="types == 'date'">
-						<el-input v-model="elementType.maxLength" placeholder="请输入时间格式" />
-					</el-form-item>
-
-					<el-form-item label="布尔值" v-if="types == 'boolean'">
-						<div class="input-box">
-							<el-input v-model="elementType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
-							<el-input v-model="elementType.trueValue" placeholder="请输入布尔值" value="true" />
-						</div>
-
-						<div class="input-box">
-							<el-input v-model="elementType.falseText" placeholder="请输入布尔值" value="否" /> <span style="margin: 0px 10px">~</span>
-							<el-input v-model="elementType.falseValue" placeholder="请输入布尔值" value="false" />
-						</div>
-					</el-form-item>
-
-					<el-form-item label="枚举项" prop="" v-if="types == 'enum'">
-						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
-									<Right />
-								</el-icon></span>
-							<el-input v-model="item.value" placeholder="请输入枚举文本" />
+					<!-- 数组对象 -->
+					<el-form-item label="对象属性" v-if="['object'].includes(types)">
+						<div class="flex-row" style="gap:12px" v-for="(item, index) in properties" :key="index">
+							<el-input v-model="item.key" placeholder="请输入标识" />
+							<el-input v-model="item.name" placeholder="请输入名称" />
+							<el-select v-model="item.valueType.type" placeholder="请选择元素类型">
+								<el-option v-for="item in typeData[0].options" :key="item.type" :label="item.title" :value="item.type" />
+							</el-select>
+							<el-input v-model="item.desc" placeholder="请输入描述" />
 							<div class="input-option">
 								<el-icon @click="addEnum" v-if="index == 0">
 									<Plus />
@@ -145,6 +57,7 @@
 							</div>
 						</div>
 					</el-form-item>
+					<TypeItem :valueType="elementType"></TypeItem>
 				</div>
 
 				<!--根据数据类型输出不同表单-->
@@ -166,6 +79,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
+import TypeItem from './typeItem.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 
@@ -174,32 +88,38 @@ interface RuleFormState {
 	name: string;
 	desc: string;
 }
-interface DicState {
-	isShowDialog: boolean;
-	ruleForm: RuleFormState;
-	typeData: RuleFormState[];
-	rules: {};
+
+const valueType = {
+	max: '',
+	min: '',
+	unit: '',
+	decimals: '',
+	trueText: '',
+	falseText: '',
+	trueValue: '',
+	falseValue: '',
+	type: '',
+	maxLength: '',
+	elements: [{
+		'text': '',
+		'value': ''
+	}]
 }
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { Plus, Minus, Right },
+	components: { Plus, Minus, Right, TypeItem },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 
-		const state = reactive<DicState>({
+		const state = reactive<any>({
 			isShowDialog: false,
 			typeData: [], //
 			type: '',
 			types: '',
-			valueType: {
-				type: '',
-				maxLength: '',
-			},
-			elementType: {
-				type: '',
-				maxLength: '',
-			},
+			valueType: JSON.parse(JSON.stringify(valueType)),
+			elementType: JSON.parse(JSON.stringify(valueType)),
+			properties: [JSON.parse(JSON.stringify(valueType))],
 			enumdata: [
 				{
 					'text': '',
@@ -215,10 +135,7 @@ export default defineComponent({
 				accessMode: '0',
 				status: 1,
 				valueType: {
-					type: '',
-					maxLength: '',
 				},
-
 				desc: '',
 			},
 			rules: {
@@ -233,7 +150,7 @@ export default defineComponent({
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
-				const datat = Object.values(res.dataType);
+				const datat: any = Object.values(res.dataType);
 				datat.forEach((item, index) => {
 					if (index == 0) {
 						datat[index]['label'] = '基础类型';
@@ -243,6 +160,7 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
+				console.log(datat)
 				state.typeData = datat || [];
 			});
 
@@ -259,12 +177,12 @@ export default defineComponent({
 				name: '',
 				desc: '',
 			};
-			state.valueType = {};
+			state.valueType = JSON.parse(JSON.stringify(valueType));
 			state.enumdata = [{
 				'text': '',
 				'value': '',
 			}];
-			state.elementType = {};
+			state.elementType = JSON.parse(JSON.stringify(valueType));
 		};
 
 		const seletChange = (val) => {
@@ -278,7 +196,6 @@ export default defineComponent({
 			state.enumdata.push({
 				'text': '',
 				'value': '',
-
 			});
 		};
 		const delEnum = (index) => {
@@ -310,7 +227,7 @@ export default defineComponent({
 							emit('typeList');
 						});
 					} else {
-						//添加
+						// //添加
 						if (state.type == 'enum') {
 							state.valueType.elements = state.enumdata;
 						}
@@ -344,7 +261,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .input-box {
 	display: flex;
 	flex-direction: row;
