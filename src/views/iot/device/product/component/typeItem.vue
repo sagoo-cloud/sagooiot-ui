@@ -56,7 +56,7 @@
           <el-input v-model="item.name" placeholder="属性名称" class="flex1" />
           <el-select v-model="item.valueType.type" placeholder="请选择元素类型" style="width: 140px;">
             <el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
-              <el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="['array', 'object'].includes(item.type)" />
+              <el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="['array', 'object', 'enum', 'date'].includes(item.type)" />
             </el-option-group>
           </el-select>
           <el-icon @click="addObject" v-if="index == 0">
