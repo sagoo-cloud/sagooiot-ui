@@ -23,7 +23,7 @@
 					<el-form-item label="元素类型" prop="type">
 						<el-select v-model="elementType.type" placeholder="请选择元素类型" @change="seletChanges">
 							<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
-								<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="item.type == 'array'" />
+								<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="['array', 'object', 'enum', 'date'].includes(item.type)" />
 							</el-option-group>
 						</el-select>
 					</el-form-item>
