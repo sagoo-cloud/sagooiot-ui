@@ -2,7 +2,7 @@
 	<div class="home-container">
 		<el-row :gutter="15" class="home-card-one mb15">
 			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in homeOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
-				
+
 				<div class="home-card-item ">
 					<div class="">{{ v.num3 }}</div>
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
@@ -138,7 +138,7 @@ export default defineComponent({
 					title2: '停用',
 					title1_bgcolor: '#3cd357',
 					title2_bgcolor: '#c1bbbb',
-					
+
 				},
 				{
 					allnum: '0',
@@ -406,7 +406,7 @@ export default defineComponent({
 				state.homeOne[0].num1 = `${overview.productActivation}`;
 				state.homeOne[0].num2 = `${overview.productDeactivation}`;
 				state.homeOne[1].allnum = overview.deviceTotal;
-				state.homeOne[1].num1 = overview.deviceTotal;
+				state.homeOne[1].num1 = `${overview.deviceTotal-overview.deviceOffline}`;
 				state.homeOne[1].num2 = `${overview.deviceOffline}`;
 				state.homeOne[2].allnum = overview.msgTotal;
 				state.homeOne[2].num1 = overview.msgTotal;
