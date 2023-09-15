@@ -2,16 +2,22 @@
 	<div class="home-container">
 		<el-row :gutter="15" class="home-card-one mb15">
 			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in homeOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
-				<div class="home-card-item flex">
+				
+				<div class="home-card-item ">
+					<div class="">{{ v.num3 }}</div>
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
-							<span class="font30">{{ v.num1 }}</span>
-							<span class="ml5 font16" :style="{ color: v.color1 }"> {{ v.num2 }}</span>
-							<div class="mt10">{{ v.num3 }}</div>
+
+							<span class="font30">{{ v.allnum }}</span>
 						</div>
-						<div class="home-card-item-icon flex" :style="{ background: `var(${v.color2})` }">
-							<i class="iconfont flex-margin font32" :class="v.num4" :style="{ color: `var(${v.color3})` }"></i>
+						<div class="home-card-item-icon flex" >
+							<img :src="'/src/assets/img/'+v.icoimg" class="icoimg">
+
 						</div>
+					</div>
+					<div class="flex" style="font-weight: bold;">
+						<div class="flex font14"><div class="title_status"  :style="{ backgroundColor: v.title1_bgcolor }"></div> {{ v.title1 }} {{ v.num1 }}</div>
+						<div class="flex ml10 font14"><div class="title_status"  :style="{  backgroundColor: v.title2_bgcolor}"></div>{{ v.title2 }} {{ v.num2 }}</div>
 					</div>
 				</div>
 			</el-col>
@@ -119,40 +125,65 @@ export default defineComponent({
 			},
 			homeOne: [
 				{
+					allnum: '0',
 					num1: '0',
 					num2: '0',
-					num3: '产品数',
+					num3: '产品',
 					num4: 'icon-zidingyibuju',
 					color1: '#6690F9',
 					color2: '--el-color-warning-lighter',
 					color3: '--el-color-warning',
+					icoimg: 'index_product.svg',
+					title1: '启用',
+					title2: '停用',
+					title1_bgcolor: '#3cd357',
+					title2_bgcolor: '#c1bbbb',
+					
 				},
 				{
+					allnum: '0',
 					num1: '0',
-					num2: '离线 0',
-					num3: '设备数',
+					num2: '0',
+					num3: '设备',
 					num4: 'icon-putong',
 					color1: '#FF6462',
 					color2: '--next-color-primary-lighter',
 					color3: '--el-color-primary',
+					icoimg: 'index_sensor.svg',
+					title1: '在线',
+					title2: '离线',
+					title1_bgcolor: '#3cd357',
+					title2_bgcolor: '#c1bbbb',
 				},
 				{
+					allnum: '0',
 					num1: '0',
 					num2: '0',
-					num3: '今日设备消息量',
+					num3: '设备消息',
 					num4: 'icon-shidu',
 					color1: '#6690F9',
 					color2: '--el-color-success-lighter',
 					color3: '--el-color-success',
+					icoimg: 'index_device.svg',
+					title1: '总量',
+					title2: '今日',
+					title1_bgcolor: '#c1bbbb',
+					title2_bgcolor: '#18f3ff',
 				},
 				{
+					allnum: '0',
 					num1: '0',
 					num2: '0',
-					num3: '设备报警量',
+					num3: '设备告警',
 					num4: 'icon-zaosheng',
 					color1: '#6690F9',
 					color2: '--el-color-warning-lighter',
 					color3: '--el-color-warning',
+					icoimg: 'index_alarm.svg',
+					title1: '总量',
+					title2: '新增',
+					title1_bgcolor: '#c1bbbb',
+					title2_bgcolor: '#ff1818',
 				},
 			],
 			myCharts: [],
@@ -371,12 +402,16 @@ export default defineComponent({
 				// "msgAdded": 7391, //今日设备消息增量
 				// "alarmTotal": 43, //设备报警总量
 				// "alarmAdded": 0 //今日设备报警增量
-				state.homeOne[0].num1 = overview.productTotal;
-				state.homeOne[0].num2 = `+${overview.productAdded}`;
+				state.homeOne[0].allnum = overview.productTotal;
+				state.homeOne[0].num1 = `${overview.productActivation}`;
+				state.homeOne[0].num2 = `${overview.productDeactivation}`;
+				state.homeOne[1].allnum = overview.deviceTotal;
 				state.homeOne[1].num1 = overview.deviceTotal;
-				state.homeOne[1].num2 = `离线 ${overview.deviceOffline}`;
+				state.homeOne[1].num2 = `${overview.deviceOffline}`;
+				state.homeOne[2].allnum = overview.msgTotal;
 				state.homeOne[2].num1 = overview.msgTotal;
-				state.homeOne[2].num2 = `+${overview.msgAdded}`;
+				state.homeOne[2].num2 = `${overview.msgAdded}`;
+				state.homeOne[3].allnum = overview.alarmTotal;
 				state.homeOne[3].num1 = overview.alarmTotal;
 				state.homeOne[3].num2 = `${overview.alarmAdded}`;
 
@@ -485,14 +520,24 @@ $homeNavLengh: 8;
 	.home-card-one,
 	.home-card-two,
 	.home-card-three {
-
+		.icoimg{
+			width: 50px;
+			height: 50px;
+		}
+		.title_status{
+			width: 10px;
+			height: 10px;
+			background: #c1bbbb;
+			border-radius: 50px;
+			margin-right: 5px;
+		}
 		.home-card-item,
 		.home-card-top {
 			width: 100%;
 			height: 130px;
 			border-radius: 4px;
 			transition: all ease 0.3s;
-			padding: 20px;
+			padding: 10px 20px;
 			overflow: hidden;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
