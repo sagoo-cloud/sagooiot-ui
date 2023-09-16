@@ -17,7 +17,7 @@
 					</div>
 					<div class="flex" style="font-weight: bold;">
 						<div class="flex font14"><div class="title_status"  :style="{ backgroundColor: v.title1_bgcolor }"></div> {{ v.title1 }} {{ v.num1 }}</div>
-						<div class="flex ml10 font14"><div class="title_status"  :style="{  backgroundColor: v.title2_bgcolor}"></div>{{ v.title2 }} {{ v.num2 }}</div>
+						<div class="flex ml20 font14"><div class="title_status"  :style="{  backgroundColor: v.title2_bgcolor}"></div>{{ v.title2 }} {{ v.num2 }}</div>
 					</div>
 				</div>
 			</el-col>
@@ -525,8 +525,8 @@ $homeNavLengh: 8;
 			height: 50px;
 		}
 		.title_status{
-			width: 10px;
-			height: 10px;
+			width: 7px;
+			height: 7px;
 			background: #c1bbbb;
 			border-radius: 50px;
 			margin-right: 5px;

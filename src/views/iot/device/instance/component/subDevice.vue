@@ -88,13 +88,13 @@
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">固件版本</th>
 										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.version }}</td>
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
-										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
+										<td class="ant-descriptions-item-content" colspan="1">{{ detail.updatedAt }}</td>
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
-										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
+										<td class="ant-descriptions-item-content" colspan="1">{{ detail.lastOnlineTime || '' }}</td>
 									</tr>
 									<tr class="ant-descriptions-row">
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
-										<td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
+										<td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
 									</tr>
 								</tbody>
 							</table>
