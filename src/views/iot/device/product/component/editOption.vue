@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '参数'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(typeof ruleForm.valueType !== 'undefined' ? '修改' : '添加') + '参数'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
 				<el-form-item label="参数标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入参数标识" :disabled="ruleForm.id !== 0 ? true : false" />
@@ -38,7 +38,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ typeof ruleForm.valueType !== 'undefined' ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -161,6 +161,7 @@ export default defineComponent({
 					state.valueType=row.valueType;
 				}
 
+				console.log(row);
 
 				state.ruleForm = row;
 			}
@@ -210,7 +211,20 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-				
+					if (typeof state.ruleForm.valueType !== 'undefined') {
+						//修改
+						if (state.type == 'enum') {
+							state.valueType.elements = state.enumdata;
+						}
+						if (state.type == 'array') {
+							state.valueType.elementType = state.elementType;
+						}
+
+						state.ruleForm.valueType = state.valueType;
+						ElMessage.success('参数类型修改成功');
+						closeDialog(); // 关闭弹窗
+						emit('editTypeList', state.ruleForm, state.ruleForm.type_data);
+					} else {
 						// //添加
 						if (state.type == 'enum') {
 							state.valueType.elements = state.enumdata;
@@ -223,7 +237,7 @@ export default defineComponent({
 						ElMessage.success('参数类型添加成功');
 						closeDialog(); // 关闭弹窗
 						emit('typeList', state.ruleForm, state.ruleForm.type_data);
-					
+					}
 				}
 			});
 		};

@@ -67,7 +67,7 @@
 			</template>
 		</el-dialog>
 		<EditOption ref="editOptionRef" key="editOptionRef" @typeList="getOptionData" />
-		<EditOption ref="editOptionOutRef" key="editOptionOutRef" @typeList="getOptionDataOut" />
+		<EditOption ref="editOptionOutRef" key="editOptionOutRef" @typeList="getOptionDataOut"  @editTypeList="editOptionDataOut"/>
 	</div>
 </template>
 
@@ -246,15 +246,21 @@ export default defineComponent({
 			} else {
 				state.jsondata.push(data);
 			}
-
+			console.log(state.inputsdata);
+			console.log(state.jsondata);
 		};
 		const getOptionDataOut = (data, type_data) => {
+
 			if (type_data == 'fun') {
 				state.outputsdata.push(data);
 			} else {
 				state.outputsdata.push(data);
 			}
+
+			
 		};
+		const editOptionDataOut =(data,type_data)=>{
+		}
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -292,6 +298,7 @@ export default defineComponent({
 		return {
 			editOptionRef,
 			editOptionOutRef,
+			editOptionDataOut,
 			getOptionData,
 			getOptionDataOut,
 			openDialog,
