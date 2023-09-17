@@ -246,8 +246,6 @@ export default defineComponent({
 			} else {
 				state.jsondata.push(data);
 			}
-			console.log(state.inputsdata);
-			console.log(state.jsondata);
 		};
 		const getOptionDataOut = (data, type_data) => {
 

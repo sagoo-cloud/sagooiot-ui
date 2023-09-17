@@ -161,8 +161,6 @@ export default defineComponent({
 					state.valueType=row.valueType;
 				}
 
-				console.log(row);
-
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
