@@ -11,7 +11,7 @@
 							<span class="font30">{{ v.allnum }}</span>
 						</div>
 						<div class="home-card-item-icon flex" >
-							<img :src="'/@/assets/img/'+v.icoimg" class="icoimg">
+							<img :src="'/imgs/'+v.icoimg" class="icoimg">
 
 						</div>
 					</div>
