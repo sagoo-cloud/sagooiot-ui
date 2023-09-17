@@ -131,7 +131,7 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null) => {
+		const openDialog = (row: RuleFormState | null,type='add') => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
@@ -152,6 +152,16 @@ export default defineComponent({
 				// api.dict.getType(row.dictId).then((res:any)=>{
 				//   state.ruleForm = res.data.dictType
 				// }
+
+				if (typeof row.valueType !== 'undefined') {
+					state.type=row.valueType.type;
+					state.elementType=row.valueType.elementType;
+					state.enumdata=row.valueType.elements;
+					state.properties=row.valueType.properties;
+					state.valueType=row.valueType;
+				}
+
+
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
@@ -216,7 +226,6 @@ export default defineComponent({
 							state.valueType.elementType = state.elementType;
 						}
 
-						console.log(state)
 						state.ruleForm.valueType = state.valueType;
 						ElMessage.success('参数类型添加成功');
 						closeDialog(); // 关闭弹窗

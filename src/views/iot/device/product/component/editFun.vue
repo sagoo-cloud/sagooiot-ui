@@ -16,7 +16,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<!-- <el-link type="primary">编辑</el-link> -->
+								<el-link type="primary"  @click="editjson(index, 'fun')">编辑</el-link>
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -39,7 +39,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<!-- <el-link type="primary">编辑</el-link> -->
+								<el-link type="primary" @click="editjsonOut(index, 'fun')">编辑</el-link>
 								<el-link type="primary" @click="deljsonOut(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -203,6 +203,15 @@ export default defineComponent({
 			state.enumdata.splice(index, 1);
 		};
 
+		const editjson=(index,type)=>{
+			if (type == 'fun') {
+				editOptionRef.value.openDialog(state.inputsdata[index]);
+			} else {
+				editOptionRef.value.openDialog(state.jsondata[index]);
+
+			}
+		}
+
 		const deljson = (index, type) => {
 			if (type == 'fun') {
 				state.inputsdata.splice(index, 1);
@@ -218,6 +227,10 @@ export default defineComponent({
 				state.outputsdata.splice(index, 1);
 			}
 		};
+
+		const editjsonOut=(index,type)=>{
+			editOptionOutRef.value.openDialog(state.outputsdata[index]);
+		}
 
 		const addJson = (type) => {
 			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
@@ -282,6 +295,8 @@ export default defineComponent({
 			getOptionData,
 			getOptionDataOut,
 			openDialog,
+			editjson,
+			editjsonOut,
 			deljson,
 			deljsonOut,
 			addEnum,

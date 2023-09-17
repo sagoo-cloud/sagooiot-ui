@@ -67,10 +67,11 @@
 				<el-form-item label="JSON对象" prop="maxLength" v-if="type == 'object'">
 					<div v-for="(item, index) in jsondata" :key="index" class="jslist">
 						<div class="jsonlist">
-							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }}</div>
+							<div>参数标识：{{ item.key }}</div>
+							<div>参数名称：{{ item.name }}</div>
+							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<!-- <el-link type="primary">编辑</el-link> -->
+								<el-link type="primary"  @click="editjson(index)">编辑</el-link>
 								<el-link type="primary" @click="deljson(index)">删除</el-link>
 							</div>
 						</div>
@@ -145,9 +146,11 @@
 				<el-form-item label="JSON对象" prop="maxLength" v-if="types == 'object'">
 					<div v-for="(item, index) in jsondata" :key="index" class="jslist">
 						<div class="jsonlist">
-							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }}</div>
+							<div>参数标识：{{ item.key }}</div>
+							<div>参数名称：{{ item.name }}</div>
+							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
+								<el-link type="primary"  @click="editjson(index)">编辑</el-link>
 								<el-link type="primary" @click="deljson(index)">删除</el-link>
 							</div>
 						</div>
@@ -360,6 +363,11 @@ export default defineComponent({
 			state.enumdata.splice(index, 1);
 		};
 
+		const editjson=(index)=>{
+
+			editOptionRef.value.openDialog(state.jsondata[index]);
+			
+		}
 		const deljson = (index) => {
 			state.jsondata.splice(index, 1);
 		}
@@ -463,6 +471,7 @@ export default defineComponent({
 			getOptionData,
 			openDialog,
 			deljson,
+			editjson,
 			addEnum,
 			delEnum,
 			addJson,
