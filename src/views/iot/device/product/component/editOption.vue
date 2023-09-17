@@ -210,14 +210,7 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					if (state.ruleForm.id !== 0) {
-						//修改
-						api.product.edit(state.ruleForm).then(() => {
-							ElMessage.success('参数类型修改成功');
-							closeDialog(); // 关闭弹窗
-							emit('typeList');
-						});
-					} else {
+				
 						// //添加
 						if (state.type == 'enum') {
 							state.valueType.elements = state.enumdata;
@@ -230,7 +223,7 @@ export default defineComponent({
 						ElMessage.success('参数类型添加成功');
 						closeDialog(); // 关闭弹窗
 						emit('typeList', state.ruleForm, state.ruleForm.type_data);
-					}
+					
 				}
 			});
 		};
