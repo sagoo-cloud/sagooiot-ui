@@ -1,24 +1,27 @@
 <template>
   <div class="type-item">
     <template v-if="['int', 'long', 'float', 'double'].includes(valueType.type)">
-      <el-form-item label="最大" prop="max">
-        <el-input v-model="valueType.max" placeholder="请输入最大值" />
-      </el-form-item>
-      <el-form-item label="最小" prop="min">
-        <el-input v-model="valueType.min" placeholder="请输入最小值" />
-      </el-form-item>
+      <div class="flex-row" style="margin-bottom: 0;">
+        <el-form-item label="取值范围" prop="max" class="flex1">
+          <el-input v-model="valueType.max" type="number" @input="setNull(valueType, 'max', $event)" placeholder="最大值" />
+        </el-form-item>
+        <div class="split" style="margin-bottom: 20px;">~</div>
+        <el-form-item label="" prop="min" class="flex1" label-width="0">
+          <el-input v-model="valueType.min" type="number" @input="setNull(valueType, 'min', $event)" placeholder="最小值" />
+        </el-form-item>
+      </div>
       <el-form-item label="单位" prop="unit">
         <el-input v-model="valueType.unit" placeholder="请输入单位" />
       </el-form-item>
     </template>
 
     <el-form-item label="精度" prop="decimals" v-if="['float', 'double'].includes(valueType.type)">
-      <el-input v-model="valueType.decimals" placeholder="请输入精度" />
+      <el-input v-model="valueType.decimals" type="number" placeholder="请输入精度" />
     </el-form-item>
 
 
     <el-form-item label="最大长度" prop="maxLength" v-if="valueType.type === 'string'">
-      <el-input v-model="valueType.maxLength" placeholder="请输入最大长度" />
+      <el-input v-model="valueType.maxLength" type="number" placeholder="请输入最大长度" />
     </el-form-item>
 
     <el-form-item label="布尔值" v-else-if="valueType.type === 'boolean'">
@@ -96,16 +99,16 @@ interface IValyeType {
 }
 
 const valueTypeBase = {
-  type: '',
-  max: '',
-  min: '',
-  unit: '',
-  decimals: '',
-  trueText: '',
-  falseText: '',
-  trueValue: '',
-  falseValue: '',
-  maxLength: '',
+  type: null,
+  // max: null,
+  // min: null,
+  unit: null,
+  decimals: null,
+  trueText: null,
+  falseText: null,
+  trueValue: null,
+  falseValue: null,
+  maxLength: null,
   elements: [{
     'text': '',
     'value': ''
@@ -143,6 +146,10 @@ const addObject = () => {
 
 const delObject = (index: number) => {
   props.valueType.properties.splice(index, 1)
+}
+
+const setNull = (row: any, key: string, val: string) => {
+  if (!val) row[key] = null
 }
 </script>
 <style scoped lang="scss">

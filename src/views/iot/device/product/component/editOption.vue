@@ -59,16 +59,16 @@ interface RuleFormState {
 }
 
 const valueTypeBase = {
-	max: '',
-	min: '',
-	unit: '',
-	decimals: '',
-	trueText: '',
-	falseText: '',
-	trueValue: '',
-	falseValue: '',
-	type: '',
-	maxLength: '',
+	// max: null,
+	// min: null,
+	unit: null,
+	decimals: null,
+	trueText: null,
+	falseText: null,
+	trueValue: null,
+	falseValue: null,
+	type: null,
+	maxLength: null,
 }
 
 const valueType = {
