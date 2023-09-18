@@ -9,11 +9,11 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入事件定义名称" />
 				</el-form-item>
 
-				<el-form-item label="事件级别" prop="level">
+				<el-form-item label="事件类型" prop="level">
 					<el-radio-group v-model="ruleForm.level">
-						<el-radio :label="0">普通</el-radio>
-						<el-radio :label="1">警告</el-radio>
-						<el-radio :label="2">紧急</el-radio>
+						<el-radio :label="0">信息</el-radio>
+						<el-radio :label="1">告警</el-radio>
+						<el-radio :label="2">故障</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
