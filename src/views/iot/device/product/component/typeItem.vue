@@ -38,10 +38,10 @@
 
     <el-form-item label="枚举项" prop="" v-else-if="valueType.type === 'enum'">
       <div class="input-box" v-for="(item, index) in valueType.elements" :key="index">
-        <el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
+        <el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
             <Right />
           </el-icon></span>
-        <el-input v-model="item.value" placeholder="请输入枚举文本" />
+        <el-input v-model="item.value" placeholder="请输入枚举值" />
         <div class="input-option">
           <el-icon @click="addEnum" v-if="index == 0">
             <Plus />
