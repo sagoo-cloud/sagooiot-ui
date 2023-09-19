@@ -66,7 +66,7 @@
 				</span>
 			</template>
 		</el-dialog>
-		<EditOption ref="editOptionRef" key="editOptionRef" @typeList="getOptionData" />
+		<EditOption ref="editOptionRef" key="editOptionRef" @typeList="getOptionData"  @editTypeList="editOptionDataOut" />
 		<EditOption ref="editOptionOutRef" key="editOptionOutRef" @typeList="getOptionDataOut"  @editTypeList="editOptionDataOut"/>
 	</div>
 </template>

@@ -149,17 +149,19 @@ export default defineComponent({
 			});
 
 			if (row) {
-				// api.dict.getType(row.dictId).then((res:any)=>{
-				//   state.ruleForm = res.data.dictType
-				// }
 
 				if (typeof row.valueType !== 'undefined') {
 					state.type=row.valueType.type;
+
 					if (typeof row.valueType.elementType !== 'undefined')state.elementType=row.valueType.elementType;
 					if (typeof row.valueType.elements !== 'undefined')state.enumdata=row.valueType.elements;
 					if (typeof row.valueType.properties !== 'undefined')state.properties=row.valueType.properties;
-					state.valueType.type=row.valueType.type;
+					if (typeof row.valueType.type !== 'undefined')state.valueType.type=row.valueType.type;
+
+					const fieldCount = Object.keys(row.valueType).length;
+					if(fieldCount>1)state.valueType=row.valueType;
 				}
+
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
@@ -211,9 +213,7 @@ export default defineComponent({
 				if (valid) {
 					if (typeof state.ruleForm.valueType !== 'undefined') {
 						//修改
-						if (state.type == 'enum') {
-							state.valueType.elements = state.enumdata;
-						}
+				
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 						}
@@ -224,12 +224,11 @@ export default defineComponent({
 						emit('editTypeList', state.ruleForm, state.ruleForm.type_data);
 					} else {
 						// //添加
-						if (state.type == 'enum') {
-							state.valueType.elements = state.enumdata;
-						}
+				
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 						}
+
 
 						state.ruleForm.valueType = state.valueType;
 						ElMessage.success('参数类型添加成功');
