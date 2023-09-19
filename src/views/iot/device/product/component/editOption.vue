@@ -155,12 +155,11 @@ export default defineComponent({
 
 				if (typeof row.valueType !== 'undefined') {
 					state.type=row.valueType.type;
-					state.elementType=row.valueType.elementType;
-					state.enumdata=row.valueType.elements;
-					state.properties=row.valueType.properties;
-					state.valueType=row.valueType;
+					if (typeof row.valueType.elementType !== 'undefined')state.elementType=row.valueType.elementType;
+					if (typeof row.valueType.elements !== 'undefined')state.enumdata=row.valueType.elements;
+					if (typeof row.valueType.properties !== 'undefined')state.properties=row.valueType.properties;
+					state.valueType.type=row.valueType.type;
 				}
-
 				state.ruleForm = row;
 			}
 			state.isShowDialog = true;
@@ -179,6 +178,7 @@ export default defineComponent({
 		};
 
 		const seletChange = (val) => {
+
 			state.type = val;
 		};
 		const seletChanges = (val) => {
