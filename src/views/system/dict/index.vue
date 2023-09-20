@@ -6,18 +6,18 @@
           <el-form-item label="字典名称" prop="dictName">
             <el-input v-model="tableData.param.dictName" placeholder="请输入字典名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
-          <el-form-item label="字典类型" prop="dictType">
-            <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
+<!--          <el-form-item label="字典类型" prop="dictType">-->
+<!--            <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />-->
+<!--          </el-form-item>-->
           <el-form-item label="状态" prop="status" style="width: 200px">
             <el-select v-model="tableData.param.status" placeholder="字典状态" clearable size="default" style="width: 240px">
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
+<!--          <el-form-item label="创建时间" prop="dateRange">-->
+<!--            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>-->
+<!--          </el-form-item>-->
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
               <el-icon>
