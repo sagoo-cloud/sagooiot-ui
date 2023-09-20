@@ -8,6 +8,12 @@
         <el-form-item label="参数键名" prop="configKey">
           <el-input v-model="ruleForm.configKey" placeholder="请输入参数键名" />
         </el-form-item>
+        <!-- 字典类型下拉框 -->
+        <el-form-item label="字典分类" prop="dictClassCode">
+          <el-select v-model="ruleForm.dictClassCode" placeholder="字典分类" clearable size="default" style="width: 240px">
+            <el-option v-for="dict in param_class_type" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="参数键值" prop="configValue">
           <el-input v-model="ruleForm.configValue" placeholder="请输入参数键值" />
         </el-form-item>
@@ -31,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance,} from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/system';
 interface RuleFormState {
@@ -41,6 +47,7 @@ interface RuleFormState {
   configValue: string;
   configType: string;
   remark: string;
+  dictClassCode:string; // 字典分类
 }
 interface DicState {
   isShowDialog: boolean;
@@ -57,6 +64,8 @@ export default defineComponent({
     },
   },
   setup(prop, { emit }) {
+    const { proxy } = getCurrentInstance() as any;
+    const { param_class_type } = proxy.useDict('param_class_type'); // 获取字典分类
     const formRef = ref<HTMLElement | null>(null);
     const state = reactive<DicState>({
       isShowDialog: false,
@@ -67,6 +76,7 @@ export default defineComponent({
         configValue: '',
         configType: '0',
         remark: '',
+        dictClassCode: '',
       },
       rules: {
         configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
@@ -94,6 +104,7 @@ export default defineComponent({
         configKey: '',
         configValue: '',
         configType: '0',
+        dictClassCode: '',
         remark: '',
       };
     };
@@ -136,6 +147,7 @@ export default defineComponent({
       onSubmit,
       formRef,
       ...toRefs(state),
+      param_class_type,
     };
   },
 });

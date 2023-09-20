@@ -46,40 +46,46 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="字典ID" v-col="'dictId'" align="center" prop="dictId" width="80" />
-        <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
-        <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
-          <template #default="scope">
-            <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
-              <span>{{ scope.row.dictType }}</span>
-            </router-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="字典状态" v-col="'status'" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
-            <el-tag type="info" size="small" v-else>禁用</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="remark" v-col="'remark'" label="字典描述" show-overflow-tooltip></el-table-column>
-        <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
-        <el-table-column label="操作" width="100" align="center" v-col="'handle'">
-          <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
+      <!-- 字典切换 -->
+      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="typeList">
+				<el-tab-pane v-for="dict in dict_class_type" :label="dict.label" :name="dict.name">
+          <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column label="字典ID" v-col="'dictId'" align="center" prop="dictId" width="80" />
+            <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
+            <el-table-column label="字典分类" v-col="'moduleClassify'" align="center" prop="moduleClassify" />
+            <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
+              <template #default="scope">
+                <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
+                  <span>{{ scope.row.dictType }}</span>
+                </router-link>
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" label="字典状态" v-col="'status'" width="120" align="center">
+              <template #default="scope">
+                <el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
+                <el-tag type="info" size="small" v-else>禁用</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="remark" v-col="'remark'" label="字典描述" show-overflow-tooltip></el-table-column>
+            <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
+            <el-table-column label="操作" width="100" align="center" v-col="'handle'">
+              <template #default="scope">
+                <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
+                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
+				</el-tab-pane>
+			</el-tabs>
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance} from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/editDic.vue';
 import api from '/@/api/system';
@@ -88,6 +94,7 @@ import api from '/@/api/system';
 interface TableDataRow {
   dictId: number;
   dictName: string;
+  moduleClassify: string;
   dictType: string;
   status: number;
   remark: string;
@@ -103,6 +110,7 @@ interface TableDataState {
       pageNum: number;
       pageSize: number;
       dictName: string;
+      moduleClassify: string; // 字典类型
       dictType: string;
       status: string;
       dateRange: string[];
@@ -114,6 +122,8 @@ export default defineComponent({
   name: 'systemDic',
   components: { EditDic },
   setup() {
+    const { proxy } = getCurrentInstance() as any;
+    const { dict_class_type } = proxy.useDict('dict_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
@@ -127,6 +137,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           dictName: '',
+          moduleClassify: '0',// 字典分类
           dictType: '',
           status: '',
           dateRange: [],
@@ -138,9 +149,10 @@ export default defineComponent({
       typeList();
     };
     const typeList = () => {
+      let params = state.tableData.param;
       state.tableData.loading = true;
       api.dict
-        .getTypeList(state.tableData.param)
+        .getTypeList(params)
         .then((res: any) => {
           state.tableData.data = res.dictTypeList;
           state.tableData.total = res.total;
@@ -206,6 +218,7 @@ export default defineComponent({
       typeList,
       resetQuery,
       handleSelectionChange,
+      dict_class_type,
       ...toRefs(state),
     };
   },
