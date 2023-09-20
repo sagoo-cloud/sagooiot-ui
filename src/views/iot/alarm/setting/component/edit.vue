@@ -192,24 +192,26 @@ interface RuleFormState {
 	eventKey: string;
 	productKey: string;
 	deviceKey: string;
-	triggerCondition: string;
+	triggerCondition: any;
+	action: any;
 }
 interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
-	rules: {};
-	sourceData: [];
-	productData: [];
-	typeData: [];
-	triData: [];
-	operData: [];
-	levelData: [];
-	requestParams: {};
-	triggerCondition: {};
-	action: {};
-	tempData: {};
-	sendGatewayData: {};
-	noticeConfigData: {};
+	rules: any;
+	sourceData: any;
+	productData: any;
+	typeData: any;
+	triData: any;
+	operData: any;
+	levelData: any;
+	requestParams: any;
+	triggerCondition: any;
+	action: any;
+	tempData: any;
+	sendGatewayData: any;
+	noticeConfigData: any;
+	eventList: any;
 }
 
 export default defineComponent({
@@ -303,10 +305,12 @@ export default defineComponent({
 			resetForm();
 			getDevData();
 			if (row) {
+				setType(true);
+
 				alarm.common.detail(row.id).then((res: any) => {
 					state.requestParams = res.data.condition.triggerCondition;
 
-					res.data.performAction.action.forEach(function (value, index) {
+					res.data.performAction.action.forEach(function (value: { sendGateway: any; noticeConfig: number; }, index: string | number) {
 						notice.config.getList({ sendGateway: value.sendGateway }).then((res: any) => {
 							state.sendGatewayData[index] = res.Data;
 						});
@@ -317,15 +321,14 @@ export default defineComponent({
 							});
 						}
 					});
-
 					state.action = res.data.performAction.action;
-					state.action.forEach(function (value, index) {
-						state.action[index].addressee = value.addressee.map((p) => {
+					state.action.forEach(function (value: { addressee: any[]; }, index: string | number) {
+						state.action[index].addressee = value.addressee.map((p: any) => {
 							return { phone: p };
 						});
 					});
 					state.ruleForm = res.data;
-					setType(true);
+
 				});
 			}
 			state.isShowDialog = true;
@@ -433,8 +436,8 @@ export default defineComponent({
 				if (valid) {
 					state.ruleForm.triggerCondition = state.requestParams;
 
-					state.action.forEach(function (value, index) {
-						state.action[index].addressee = value.addressee.map((p) => {
+					state.action.forEach(function (value: { addressee: any[]; }, index: string | number) {
+						state.action[index].addressee = value.addressee.map((p: { phone: any; }) => {
 							return p.phone;
 						});
 					});
@@ -460,13 +463,13 @@ export default defineComponent({
 			});
 		};
 
-		const AddPhone = (index) => {
+		const AddPhone = (index: string | number) => {
 			state.action[index].addressee.push({
 				phone: '',
 			});
 		};
 
-		const DelPhone = (index, bbb) => {
+		const DelPhone = (index: string | number, bbb: any) => {
 			state.action[index].addressee.splice(bbb, 1);
 		};
 
@@ -482,15 +485,15 @@ export default defineComponent({
 				],
 			});
 		};
-		const delAction = (index) => {
+		const delAction = (index: any) => {
 			state.action.splice(index, 1);
 		};
 
-		const delParams = (index) => {
+		const delParams = (index: any) => {
 			state.requestParams.splice(index, 1);
 		};
 
-		const delParamss = (index, bbb) => {
+		const delParamss = (index: string | number, bbb: any) => {
 			state.requestParams[index].filters.splice(bbb, 1);
 		};
 
@@ -507,7 +510,7 @@ export default defineComponent({
 				],
 			});
 		};
-		const addParams = (index) => {
+		const addParams = (index: string | number) => {
 			state.requestParams[index].filters.push({
 				key: '',
 				operator: '',
@@ -519,7 +522,7 @@ export default defineComponent({
 		const setType = (notResetDeviceKey: boolean) => {
 			!notResetDeviceKey && (state.ruleForm.deviceKey = '')
 			let product_id = 0;
-			state.productData.forEach((item) => {
+			state.productData.forEach((item: { key: string; id: number; }) => {
 				if (item.key == state.ruleForm.productKey) {
 					product_id = item.id;
 				}
@@ -576,14 +579,14 @@ export default defineComponent({
 			});
 		}
 
-		const getNode = (event, index) => {
+		const getNode = (event: any, index: string | number) => {
 			state.action[index].noticeConfig = '';
 			notice.config.getList({ sendGateway: event }).then((res: any) => {
 				state.sendGatewayData[index] = res.Data;
 			});
 		};
 
-		const getTem = (event, index) => {
+		const getTem = (event: number, index: string | number) => {
 			state.action[index].noticeTemplate = '';
 			notice.template.configIddetail(event).then((res: any) => {
 				state.noticeConfigData[index] = [res];
