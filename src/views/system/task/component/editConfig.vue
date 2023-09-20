@@ -14,7 +14,15 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item prop="invokeTarget">
+				<el-form-item label="调用方法" prop="invokeTarget">
+					<el-select v-model="ruleForm.invokeTarget" filterable placeholder="请选择调用方法">
+						<el-option v-for="invoke in invokeTargetList" :key="invoke.fun_name" :label="invoke.fun_name" :value="invoke.fun_name">
+							<span style="float: left">{{ invoke.fun_name }}</span>
+							<span style="float: right; margin-left: 20px;font-size: 13px;width:200px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;">{{ invoke.explain }}</span>
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<!-- <el-form-item prop="invokeTarget">
 					<template #label>
 						<div class="flex align-center">
 							调用方法
@@ -26,7 +34,7 @@
 						</div>
 					</template>
 					<el-input v-model="ruleForm.invokeTarget" placeholder="请输入调用方法" />
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item prop="jobParams">
 					<template #label>
 						<div class="flex align-center">
@@ -45,6 +53,12 @@
 					<el-input v-model="ruleForm.jobParams" placeholder="请输入执行参数" />
 				</el-form-item>
 				<el-form-item label="cron表达式" prop="cronExpression">
+					<div style="display:flex">
+						<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
+						<el-button type="success" @click="showCron('config')" style="margin-left: 5px;">设置</el-button>
+					</div>
+				</el-form-item>
+				<!-- <el-form-item label="cron表达式" prop="cronExpression">
 					<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
 					<ul style="list-style: none;">
 						<li>
@@ -73,7 +87,7 @@
 							</el-icon> 0 0 1 1 * ? : 每月1号凌晨1点执行一次
 						</li>
 					</ul>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="执行策略" prop="misfirePolicy">
 					<el-radio v-model="ruleForm.misfirePolicy" :label="1">重复执行</el-radio>
 					<el-radio v-model="ruleForm.misfirePolicy" :label="0">执行一次</el-radio>
@@ -90,6 +104,10 @@
 				</span>
 			</template>
 		</el-dialog>
+
+		<el-dialog v-model="cronShow" title="选择Cron规则" width="60%">
+			<vue3cron @handlelisten="handlelisten" :type="crontype" @close="cronclose"></vue3cron>
+		</el-dialog>
 	</div>
 </template>
 
@@ -97,6 +115,8 @@
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/system';
+import vue3cron from '/@/components/vue3cron/vue3cron.vue'; // cron规则模态框
+
 interface RuleFormState {
 	jobName: string;
 	jobParams: string;
@@ -115,6 +135,7 @@ interface DicState {
 }
 
 export default defineComponent({
+	components: { vue3cron }, // 注册cron模态框组件
 	name: 'systemEditDicData',
 	props: {
 		sysYesNoOptions: {
@@ -130,6 +151,9 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const { proxy } = getCurrentInstance() as any;
 		const state = reactive<DicState>({
+			cronShow: false, // cron模态框显示状态
+			invokeTargetList: [], // 调用方法集合初始化
+			crontype: '',
 			isShowDialog: false,
 			ruleForm: {
 				jobName: '',
@@ -147,7 +171,7 @@ export default defineComponent({
 				cronExpression: [{ required: true, message: 'cron表达式不能为空', trigger: 'blur' }],
 			},
 		});
-		let { sys_job_group } = proxy.useDict('sys_job_group')
+		let { sys_job_group } = proxy.useDict('sys_job_group');
 		// 打开弹窗
 		const openDialog = (row: RuleFormState | null) => {
 			resetForm();
@@ -158,6 +182,10 @@ export default defineComponent({
 				});
 				state.ruleForm = row;
 			}
+			// 调用方法接口
+			api.task.getFunList().then((res: any) => {
+				state.invokeTargetList = res;
+			});
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
@@ -204,6 +232,22 @@ export default defineComponent({
 				}
 			});
 		};
+		// 监听返回
+		const handlelisten = (e) => {
+			if (e.type == 'config') {
+				state.ruleForm.cronExpression = e.cron
+			}
+		};
+		// 显示模态框
+		const showCron = (type) => {
+			state.crontype = type
+			state.cronShow = true;
+
+		};
+		// 关闭模态框
+		const cronclose = () => {
+			state.cronShow = false;
+		}
 		return {
 			openDialog,
 			closeDialog,
@@ -211,6 +255,9 @@ export default defineComponent({
 			onSubmit,
 			formRef,
 			sys_job_group,
+			handlelisten,
+			showCron,
+			cronclose,
 			...toRefs(state),
 		};
 	},

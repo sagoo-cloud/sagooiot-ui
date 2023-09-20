@@ -132,7 +132,8 @@ export default {
     detail: (id: number) => get('/system/job/getJobById', { id }),
     run: (id: number) => put('/system/job/run', { id }),
     start: (id: number) => put('/system/job/start', { id }),
-    stop: (id: number) => put('/system/job/stop', { id })
+    stop: (id: number) => put('/system/job/stop', { id }),
+    getFunList: () => get('system/job/fun_list'),
   },
   city: {
     getList: (params: object) => get('/common/city/tree', params),
