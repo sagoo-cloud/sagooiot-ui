@@ -13,7 +13,7 @@
 				</el-form-item>
 
 				<el-form-item label="选择产品" prop="productKey">
-					<el-select v-model="ruleForm.productKey" filterable placeholder="请选择产品" @change="setType(true)">
+					<el-select v-model="ruleForm.productKey" filterable placeholder="请选择产品" @change="setType()">
 						<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
