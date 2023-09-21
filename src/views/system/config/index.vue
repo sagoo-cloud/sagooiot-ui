@@ -47,7 +47,7 @@
       </div>
       <!-- 字典切换 -->
       <el-tabs v-model="tableData.param.dictClassCode" class="demo-tabs" @click="dataList">
-				<el-tab-pane v-for="dict in param_class_type" :label="dict.label" :name="dict.name">
+				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="60" />
@@ -116,11 +116,11 @@ export default defineComponent({
   components: { EditConfig },
   setup() {
     const { proxy } = getCurrentInstance() as any;
-    const { param_class_type } = proxy.useDict('param_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
     const { sys_yes_no } = proxy.useDict('sys_yes_no');
+    const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
     const state = reactive<TableDataState>({
       ids: [],
       tableData: {
@@ -134,13 +134,17 @@ export default defineComponent({
           configName: '',
           configKey: '',
           configType: '',
-          dictClassCode: '0',// 字典分类
+          dictClassCode: '',// 字典分类
         },
       },
     });
+    // 页面加载时
+    onMounted(() => {
+      initTableData();
+    });
     // 初始化表格数据
     const initTableData = () => {
-      dataList();
+      dictList();
     };
     const dataList = () => {
       state.tableData.loading = true;
@@ -187,10 +191,6 @@ export default defineComponent({
         })
         .catch(() => { });
     };
-    // 页面加载时
-    onMounted(() => {
-      initTableData();
-    });
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
@@ -205,11 +205,21 @@ export default defineComponent({
     const typeFormat = (row: TableDataRow) => {
       return proxy.selectDictLabel(unref(sys_yes_no), row.configType);
     };
+    // 获取字典列表
+    const dictList = () => {
+      state.tableData.loading = true;
+      api.dict.getDataList({dictType: 'param_class_type',status: 1,pageNum: 1,pageSize: 50,defaultValue: ''})
+        .then((res: any) => {
+          tabDataList.value = tabDataList.value.concat(res.list);
+          dataList();
+        }).finally(() => (state.tableData.loading = false));
+    };
     return {
       addDicRef,
       editDicRef,
       queryRef,
       sys_yes_no,
+      tabDataList,
       onOpenAddDic,
       onOpenEditDic,
       onRowDel,
@@ -217,7 +227,6 @@ export default defineComponent({
       resetQuery,
       handleSelectionChange,
       ...toRefs(state),
-      param_class_type,
     };
   },
 });
