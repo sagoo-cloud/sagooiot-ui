@@ -6,17 +6,17 @@
           <el-form-item label="参数名称" prop="configName">
             <el-input v-model="tableData.param.configName" placeholder="请输入参数名称" clearable size="default" @keyup.enter.native="dataList" />
           </el-form-item>
-          <el-form-item label="参数键名" prop="configKey">
-            <el-input v-model="tableData.param.configKey" placeholder="请输入参数键名" clearable size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
+<!--          <el-form-item label="参数键名" prop="configKey">-->
+<!--            <el-input v-model="tableData.param.configKey" placeholder="请输入参数键名" clearable size="default" @keyup.enter.native="dataList" />-->
+<!--          </el-form-item>-->
           <el-form-item label="系统内置" prop="configType" style="width: 200px">
             <el-select v-model="tableData.param.configType" placeholder="系统内置" clearable size="default" style="width: 240px">
               <el-option v-for="dict in sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
+<!--          <el-form-item label="创建时间" prop="dateRange">-->
+<!--            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>-->
+<!--          </el-form-item>-->
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="dataList">
               <el-icon>
