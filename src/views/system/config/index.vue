@@ -46,7 +46,7 @@
         </el-form>
       </div>
       <!-- 字典切换 -->
-      <el-tabs v-model="tableData.param.dictClassCode" class="demo-tabs" @click="dataList">
+      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="dataList">
 				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
@@ -91,7 +91,7 @@ interface TableDataRow {
   configType: number;
   remark: string;
   createdAt: string;
-  dictClassCode: string;
+  moduleClassify: string;
 }
 interface TableDataState {
   ids: number[];
@@ -106,7 +106,7 @@ interface TableDataState {
       configKey: string;
       configType: string;
       dateRange: string[];
-      dictClassCode: string;
+      moduleClassify: string;
     };
   };
 }
@@ -134,7 +134,7 @@ export default defineComponent({
           configName: '',
           configKey: '',
           configType: '',
-          dictClassCode: '',// 字典分类
+          moduleClassify: '',// 字典分类
         },
       },
     });
