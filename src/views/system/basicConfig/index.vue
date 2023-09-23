@@ -8,13 +8,13 @@
 							<el-input v-model="state.info.name" placeholder="请输入系统名称" clearable size="default" />
 						</el-form-item>
 						<el-form-item label="系统版权" prop="keyWord">
-							<el-input v-model="state.info.copyright" placeholder="请输入主题色" clearable size="default" />
+							<el-input v-model="state.info.copyright" placeholder="请输入系统版权" clearable size="default" />
 						</el-form-item>
 						<el-form-item label="开放接口AK" prop="keyWord">
-							<el-input v-model="state.info.accesskey" placeholder="请输入高德API Key" clearable size="default" />
+							<el-input v-model="state.info.accesskey" placeholder="请输入开放接口AK" clearable size="default" />
 						</el-form-item>
 						<el-form-item label="开放接口SK" prop="keyWord">
-							<el-input v-model="state.info.secretkey" placeholder="请输入base-path" clearable size="default" />
+							<el-input v-model="state.info.secretkey" placeholder="请输入开放接口SK" clearable size="default" />
 						</el-form-item>
 						<el-row>
 							<el-col :span="12">
