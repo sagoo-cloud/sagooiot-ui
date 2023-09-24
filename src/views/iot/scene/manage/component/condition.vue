@@ -60,8 +60,8 @@
           </div>
 
           <div style="    padding-top: 12px;" @click="addSceneItem(index)">
-            <el-icon size="26">
-              <CirclePlus />
+            <el-icon size="18" style="    font-size: 24px;">
+              <CirclePlus size="18"/>
             </el-icon>
           </div>
         </div>

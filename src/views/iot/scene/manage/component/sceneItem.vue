@@ -58,7 +58,7 @@
       </div>
 
       <div class="title flex">
-        <div class="icon"></div>触发条件 <div class="ml10"> <el-switch v-model="item.where" />
+        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.where" />
         </div>
       </div>
         <Condition :condition="item.condition" :operate_index="index"  v-if="item.where"></Condition>

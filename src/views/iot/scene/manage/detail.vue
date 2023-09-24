@@ -17,7 +17,9 @@
 		</div>
 
 	</el-card>
-
+	<el-card style="  margin-top: 15px;" >
+		<SceneItem :sceneList="sceneList"></SceneItem>
+	</el-card>
 	
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
 </template>
