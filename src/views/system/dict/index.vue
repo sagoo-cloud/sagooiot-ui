@@ -6,18 +6,18 @@
           <el-form-item label="字典名称" prop="dictName">
             <el-input v-model="tableData.param.dictName" placeholder="请输入字典名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
-          <el-form-item label="字典类型" prop="dictType">
-            <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
-          </el-form-item>
+<!--          <el-form-item label="字典类型" prop="dictType">-->
+<!--            <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />-->
+<!--          </el-form-item>-->
           <el-form-item label="状态" prop="status" style="width: 200px">
             <el-select v-model="tableData.param.status" placeholder="字典状态" clearable size="default" style="width: 240px">
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
+<!--          <el-form-item label="创建时间" prop="dateRange">-->
+<!--            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>-->
+<!--          </el-form-item>-->
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
               <el-icon>
@@ -48,12 +48,11 @@
       </div>
       <!-- 字典切换 -->
       <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="typeList">
-				<el-tab-pane v-for="dict in dict_class_type" :label="dict.label" :name="dict.name">
+				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="字典ID" v-col="'dictId'" align="center" prop="dictId" width="80" />
             <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
-            <el-table-column label="字典分类" v-col="'moduleClassify'" align="center" prop="moduleClassify" />
             <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
               <template #default="scope">
                 <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
@@ -78,15 +77,15 @@
           </el-table>
           <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
 				</el-tab-pane>
-			</el-tabs>
+			</el-tabs> 
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance} from 'vue';
-import { ElMessageBox, ElMessage, FormInstance ,TabsPaneContext} from 'element-plus';
+import { toRefs, reactive, onMounted, ref, defineComponent} from 'vue';
+import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/editDic.vue';
 import api from '/@/api/system';
 
@@ -122,11 +121,10 @@ export default defineComponent({
   name: 'systemDic',
   components: { EditDic },
   setup() {
-    const { proxy } = getCurrentInstance() as any;
-    const { dict_class_type } = proxy.useDict('dict_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
+    const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
     const state = reactive<TableDataState>({
       ids: [],
       tableData: {
@@ -137,16 +135,20 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           dictName: '',
-          moduleClassify: '0',// 字典分类
+          moduleClassify: '',// 字典分类
           dictType: '',
           status: '',
           dateRange: [],
         },
       },
     });
+    // 页面加载时
+    onMounted(() => {
+      initTableData();
+    });
     // 初始化表格数据
     const initTableData = () => {
-      typeList();
+      dictList();
     };
     const typeList = () => {
       let params = state.tableData.param;
@@ -154,7 +156,6 @@ export default defineComponent({
       api.dict
         .getTypeList(params)
         .then((res: any) => {
-          console.log(res.dictTypeList);
           state.tableData.data = res.dictTypeList;
           state.tableData.total = res.total;
         })
@@ -195,10 +196,6 @@ export default defineComponent({
         })
         .catch(() => { });
     };
-    // 页面加载时
-    onMounted(() => {
-      initTableData();
-    });
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
@@ -209,17 +206,26 @@ export default defineComponent({
     const handleSelectionChange = (selection: TableDataRow[]) => {
       state.ids = selection.map((item) => item.dictId);
     };
+    // 获取字典列表
+    const dictList = () => {
+      state.tableData.loading = true;
+      api.dict.getDataList({dictType: 'dict_class_type',status: 1,pageNum: 1,pageSize: 50,defaultValue: ''})
+        .then((res: any) => {
+          tabDataList.value = tabDataList.value.concat(res.list);
+          typeList();
+        }).finally(() => (state.tableData.loading = false));
+    };
     return {
       addDicRef,
       editDicRef,
       queryRef,
+      tabDataList,
       onOpenAddDic,
       onOpenEditDic,
       onRowDel,
       typeList,
       resetQuery,
       handleSelectionChange,
-      dict_class_type,
       ...toRefs(state),
     };
   },

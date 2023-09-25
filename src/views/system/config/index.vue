@@ -6,17 +6,17 @@
           <el-form-item label="参数名称" prop="configName">
             <el-input v-model="tableData.param.configName" placeholder="请输入参数名称" clearable size="default" @keyup.enter.native="dataList" />
           </el-form-item>
-          <el-form-item label="参数键名" prop="configKey">
-            <el-input v-model="tableData.param.configKey" placeholder="请输入参数键名" clearable size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
+<!--          <el-form-item label="参数键名" prop="configKey">-->
+<!--            <el-input v-model="tableData.param.configKey" placeholder="请输入参数键名" clearable size="default" @keyup.enter.native="dataList" />-->
+<!--          </el-form-item>-->
           <el-form-item label="系统内置" prop="configType" style="width: 200px">
             <el-select v-model="tableData.param.configType" placeholder="系统内置" clearable size="default" style="width: 240px">
               <el-option v-for="dict in sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
+<!--          <el-form-item label="创建时间" prop="dateRange">-->
+<!--            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>-->
+<!--          </el-form-item>-->
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="dataList">
               <el-icon>
@@ -46,8 +46,8 @@
         </el-form>
       </div>
       <!-- 字典切换 -->
-      <el-tabs v-model="tableData.param.dictClassCode" class="demo-tabs" @click="dataList">
-				<el-tab-pane v-for="dict in param_class_type" :label="dict.label" :name="dict.name">
+      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="dataList">
+				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="60" />
@@ -91,7 +91,7 @@ interface TableDataRow {
   configType: number;
   remark: string;
   createdAt: string;
-  dictClassCode: string;
+  moduleClassify: string;
 }
 interface TableDataState {
   ids: number[];
@@ -106,7 +106,7 @@ interface TableDataState {
       configKey: string;
       configType: string;
       dateRange: string[];
-      dictClassCode: string;
+      moduleClassify: string;
     };
   };
 }
@@ -116,11 +116,11 @@ export default defineComponent({
   components: { EditConfig },
   setup() {
     const { proxy } = getCurrentInstance() as any;
-    const { param_class_type } = proxy.useDict('param_class_type'); // 获取字典类型
     const addDicRef = ref();
     const editDicRef = ref();
     const queryRef = ref();
     const { sys_yes_no } = proxy.useDict('sys_yes_no');
+    const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
     const state = reactive<TableDataState>({
       ids: [],
       tableData: {
@@ -134,13 +134,17 @@ export default defineComponent({
           configName: '',
           configKey: '',
           configType: '',
-          dictClassCode: '0',// 字典分类
+          moduleClassify: '',// 字典分类
         },
       },
     });
+    // 页面加载时
+    onMounted(() => {
+      initTableData();
+    });
     // 初始化表格数据
     const initTableData = () => {
-      dataList();
+      dictList();
     };
     const dataList = () => {
       state.tableData.loading = true;
@@ -187,10 +191,6 @@ export default defineComponent({
         })
         .catch(() => { });
     };
-    // 页面加载时
-    onMounted(() => {
-      initTableData();
-    });
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
@@ -205,11 +205,21 @@ export default defineComponent({
     const typeFormat = (row: TableDataRow) => {
       return proxy.selectDictLabel(unref(sys_yes_no), row.configType);
     };
+    // 获取字典列表
+    const dictList = () => {
+      state.tableData.loading = true;
+      api.dict.getDataList({dictType: 'param_class_type',status: 1,pageNum: 1,pageSize: 50,defaultValue: ''})
+        .then((res: any) => {
+          tabDataList.value = tabDataList.value.concat(res.list);
+          dataList();
+        }).finally(() => (state.tableData.loading = false));
+    };
     return {
       addDicRef,
       editDicRef,
       queryRef,
       sys_yes_no,
+      tabDataList,
       onOpenAddDic,
       onOpenEditDic,
       onRowDel,
@@ -217,7 +227,6 @@ export default defineComponent({
       resetQuery,
       handleSelectionChange,
       ...toRefs(state),
-      param_class_type,
     };
   },
 });
