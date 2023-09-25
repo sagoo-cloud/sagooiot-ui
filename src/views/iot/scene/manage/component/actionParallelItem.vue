@@ -49,7 +49,7 @@
     </div>
     <div>
       <div class=" flex-center">
-        <el-button :icon="DocumentAdd" @click="addScene()" style="border: 1px solid #409eff;color: #409eff;">新增串行动作</el-button>
+        <el-button :icon="DocumentAdd" @click="addScene()" style="border: 1px solid #409eff;color: #409eff;">新增并行动作</el-button>
       </div>
     </div>
 
@@ -158,7 +158,6 @@ const delScene = (index: number) => {
   }
 
   .item {
-    background-color: #f2f3f5;
     margin-bottom: 20px;
 
   }

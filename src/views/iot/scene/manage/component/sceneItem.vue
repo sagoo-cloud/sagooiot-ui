@@ -193,7 +193,7 @@ const cronclose = () => {
 
   .item {
     padding: 20px;
-    background-color: #f2f3f5;
+    // background-color: #f2f3f5;
     margin-top: 20px;
 
   }

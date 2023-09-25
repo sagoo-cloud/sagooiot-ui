@@ -148,7 +148,6 @@ const delScene = (index: number) => {
   }
 
   .item {
-    background-color: #f2f3f5;
     margin-bottom: 20px;
 
   }

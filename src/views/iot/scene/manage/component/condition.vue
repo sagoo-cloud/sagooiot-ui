@@ -1,10 +1,21 @@
 <template>
-  <div>
-    <div v-for="(item, index) in condition" :key="index">
-
+  <div >
+    <div v-for="(item, index) in condition" :key="index" >
+    
       <div v-if="index > 0"><el-divider>或满足以下条件</el-divider></div>
       <div class="type-item">
+        <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red"
+        v-if="index > 0">
+        <el-icon @click="delScene(index)" >
+          <CircleClose />
+        </el-icon>
+      </div>
+        <!-- <el-icon size="26" @click="delScene(index)" v-if="index > 0"
+          style="position: relative;font-size: 26px;    top: 18px;left: -14px;">
+          <CircleClose />
+        </el-icon> -->
         <div class="flex-warp item_list">
+         
           <div v-for="(vo, i) in item.list" :key="i">
 
             <div class="items">
@@ -64,17 +75,15 @@
               <CirclePlus size="18"/>
             </el-icon>
           </div>
+        
         </div>
 
-        <el-icon size="26" @click="delScene(index)" v-if="index > 0"
-          style="top: -69px;position: relative;font-size: 26px;right: 15px;">
-          <CircleClose />
-        </el-icon>
       </div>
+
 
     </div>
 
-    <div class="mt15"><el-button @click="addScene()">增加触发条件</el-button></div>
+    <div class="mt15"><el-button @click="addScene()">增加或条件</el-button></div>
 
 
 
@@ -144,10 +153,10 @@ const delScene = (index: number) => {
 
 </script>
 <style scoped lang="scss">
-::v-deep .el-divider__text {
-  background: #f6f6f6 !important;
+// ::v-deep .el-divider__text {
+//   background: #f2f3f5  !important;
 
-}
+// }
 
 //先保留
 // ::v-deep .condition_value{
@@ -190,11 +199,16 @@ const delScene = (index: number) => {
   margin-top: 15px;
 
   .conicon {
+    width: 55px;
+    height: 5px;
+
+    font-size: 24px;
+    line-height: 28px;
     cursor: pointer;
   }
 
   .item_list {
-    background: #fff;
+    // background: #fff;
     border: 1px dashed #959596;
 
     .items {
