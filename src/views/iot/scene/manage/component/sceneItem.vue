@@ -7,7 +7,6 @@
           <CircleClose />
         </el-icon>
       </div>
-      <div class="font16">场景定义</div>
       <div class="title flex">
         <div class="icon"></div>触发规则
       </div>
@@ -192,9 +191,8 @@ const cronclose = () => {
   }
 
   .item {
-    padding: 20px;
+    padding: 10px;
     // background-color: #f2f3f5;
-    margin-top: 20px;
 
   }
 

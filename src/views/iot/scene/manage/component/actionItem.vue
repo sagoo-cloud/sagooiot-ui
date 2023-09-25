@@ -7,7 +7,6 @@
           <CircleClose />
         </el-icon>
       </div>
-      <div class="font16">场景动作</div>
       <div class="title flex">
         <div class="icon"></div>串行动作
       </div>
@@ -103,9 +102,8 @@ const delAction = (index: number) => {
   }
 
   .item {
-    padding: 20px;
-    // background-color: #f2f3f5;
-    margin-top: 20px;
+    padding: 10px;
+
 
   }
 
