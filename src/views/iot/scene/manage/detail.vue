@@ -18,6 +18,7 @@
 
 	</el-card>
 	<el-card style="  margin-top: 15px;" >
+		<div class="font20">场景定义</div>
 		<SceneItem :sceneList="sceneList"></SceneItem>
 	</el-card>
 	

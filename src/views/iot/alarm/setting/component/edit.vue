@@ -307,7 +307,9 @@ export default defineComponent({
 			if (row) {
 				setType(true);
 
+
 				alarm.common.detail(row.id).then((res: any) => {
+					
 					state.requestParams = res.data.condition.triggerCondition;
 
 					res.data.performAction.action.forEach(function (value: { sendGateway: any; noticeConfig: number; }, index: string | number) {
@@ -327,9 +329,21 @@ export default defineComponent({
 							return { phone: p };
 						});
 					});
+					iotapi.product.event({key:res.data.productKey}).then((ress: any) => {
+						state.eventList = ress || []
+						state.ruleForm.eventKey=row.eventKey
+					})
 					state.ruleForm = res.data;
 
+
+					alarm.common.trigger_type(res.data.productKey).then((res: any) => {
+						state.typeData = res.list || [];
+					});
+					
+
 				});
+
+			
 			}
 			state.isShowDialog = true;
 		};
@@ -424,7 +438,6 @@ export default defineComponent({
 
 			iotapi.product.event({ key }).then((res: any) => {
 				state.eventList = res || []
-				// state.eventList = [{name: '事件1',  key: 1}]
 			})
 		})
 
@@ -531,10 +544,10 @@ export default defineComponent({
 			api.common.getdevList({ productId: product_id }).then((res: any) => {
 				state.sourceData = res.device;
 			});
-
 			alarm.common.trigger_type(state.ruleForm.productKey).then((res: any) => {
-				state.typeData = res.list || [];
-			});
+						state.typeData = res.list || [];
+					});
+		
 			gettriData();
 
 		};
