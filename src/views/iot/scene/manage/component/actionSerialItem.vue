@@ -1,27 +1,24 @@
+
 <template>
   <div class="type-item">
-    <div v-for="(item, index) in sceneList" :key="index" class="item " :class="index > 0 ? 'biankang' : ''">
+    <div v-for="(item, index) in seriallist" :key="index" class="item " :class="index > 0 ? 'biankang' : ''">
       <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -8px; top: -8px; color: red"
         v-if="index > 0">
         <el-icon @click="delScene(index)">
           <CircleClose />
         </el-icon>
       </div>
-      <div class="font16">场景定义</div>
-      <div class="title flex">
-        <div class="icon"></div>触发规则
-      </div>
       <div class="product flex flex-warp">
 
-        <el-form-item label="产品：" prop="product_key">
-          <el-select v-model="item.product_key" filterable placeholder="请选择产品">
+        <el-form-item label="动作类型：" prop="product_key">
+          <el-select v-model="item.product_key" filterable placeholder="请选择动作类型">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备：" prop="device_key">
+        <el-form-item label="用户类型：" prop="device_key">
           <el-select v-model="item.device_key" filterable placeholder="请选择设备">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
@@ -37,16 +34,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="定时请求">
-          <div style="display:flex">
-            <el-input v-model="item.cronExpression" placeholder="请输入cron表达式" />
-            <el-dialog v-model="dialogVisible" title="选择Cron规则" width="60%">
-              <vue3cron @handlelisten="handlelisten" :type="index" @close="cronclose"></vue3cron>
-            </el-dialog>
-            <el-button type="success"  @click="showCron()" style="margin-left: 5px;">设置</el-button>
-
-          </div>
-        </el-form-item>
+      
         <el-form-item label="属性：" prop="type">
           <el-select v-model="item.type" filterable placeholder="请选择触发类型">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
@@ -57,15 +45,11 @@
         </el-form-item>
       </div>
 
-      <div class="title flex">
-        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.where" />
-        </div>
-      </div>
-        <Condition :condition="item.condition" :operate_index="index"  v-if="item.where"></Condition>
+    
     </div>
     <div>
-      <div class="edit">
-        <el-button type="primary" :icon="DocumentAdd" @click="addScene()">新增场景定义</el-button>
+      <div class=" flex-center">
+        <el-button :icon="DocumentAdd" @click="addScene()" style="border: 1px solid #409eff;color: #409eff;">新增串行动作</el-button>
       </div>
     </div>
 
@@ -77,13 +61,8 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref,unref  } from 'vue'
-import { DocumentAdd, CircleClose, Right } from '@element-plus/icons-vue';
-import vue3cron from '/@/components/vue3cron/vue3cron.vue';
-
-import Condition from './condition.vue';
-
-const dialogVisible=ref();
+import { PropType, ref  } from 'vue'
+import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
 
 interface IConditionItem {
   param?: string;
@@ -92,14 +71,7 @@ interface IConditionItem {
 }
 
 interface IValueType {
-  type?: string;
-  product_key?: string;
-  device_key?: string;
-  where?: string;
-  cronExpression?: string;
-  condition?: {
-    list?: IConditionItem[] ;
-  }[];
+  seriallist?: IConditionItem[] ;
 }
 
 
@@ -112,7 +84,7 @@ interface testIValueType {
 
 const props = defineProps({
 
-  sceneList: {
+  seriallist: {
     type: Array as PropType<IValueType[]>,
     default: () => []
   },
@@ -139,7 +111,7 @@ const props = defineProps({
 
 
 const addScene = () => {
-  props.sceneList.push({
+  props.seriallist.push({
     'product_key': '',
     'device_key': '',
     'type': '',
@@ -151,33 +123,18 @@ const addScene = () => {
 										}]
 							}]
   });
-  console.log(props.sceneList);
+  console.log(props.seriallist);
 };
 const delScene = (index: number) => {
-  props.sceneList.splice(index, 1);
-}
-const setNull = (row: any, key: string, val: string) => {
-  if (!val) row[key] = null
-}
-const handlelisten = (e: any) => {
-  props.sceneList[e.type].cronExpression=e.cron;
- 
-};
-const showCron = () => {
-  dialogVisible.value = true;
-
-};
-const cronclose = () => {
-  dialogVisible.value = false;
+  props.seriallist.splice(index, 1);
 }
 </script>
 <style scoped lang="scss">
 
 .type-item {
-  margin-top: 15px;
+  width: 100%;
 
   .edit {
-    margin-top: 15px;
     margin-left: 10px;
     color: #2041d4;
   }
@@ -185,16 +142,14 @@ const cronclose = () => {
   .conicon {
     width: 55px;
     height: 25px;
-
     font-size: 28px;
     line-height: 28px;
     cursor: pointer;
   }
 
   .item {
-    padding: 20px;
     background-color: #f2f3f5;
-    margin-top: 20px;
+    margin-bottom: 20px;
 
   }
 
@@ -218,11 +173,10 @@ const cronclose = () => {
   }
 
   .product {
-
+    margin-bottom: 20px;
     .el-form-item {
       margin-left: 30px;
       margin-bottom: 10px;
-      margin-top: 10px;
     }
   }
 

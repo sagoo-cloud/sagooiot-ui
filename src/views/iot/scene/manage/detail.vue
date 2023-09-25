@@ -21,6 +21,10 @@
 		<div class="font20">场景定义</div>
 		<SceneItem :sceneList="sceneList"></SceneItem>
 	</el-card>
+	<el-card style="  margin-top: 15px;" >
+		<div class="font20">场景动作</div>
+		<ActionItem :actionList="actionList"></ActionItem>
+	</el-card>
 	
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
 </template>
@@ -30,6 +34,7 @@ import { ElMessage } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router';
 import { EditPen, DocumentAdd } from '@element-plus/icons-vue';
+import ActionItem from './component/actionItem.vue';
 import SceneItem from './component/sceneItem.vue';
 import EditForm from './edit.vue';
 import api from '/@/api/network';
@@ -51,18 +56,25 @@ const sceneList = [{
 
 
 export default defineComponent({
-	components: { EditPen, EditForm, DocumentAdd, SceneItem },
+	components: { EditPen, EditForm, DocumentAdd, SceneItem,ActionItem },
 	setup(props, context) {
 		const route = useRoute();
 		const router = useRouter();
 		const state = reactive({
 			developer_status: 2,
 			detail: {},
+			actionList: [{
+				'seriallist':[{
+
+				}],
+				'parallellist':[{
+					
+				}]
+			}],
 			sceneList: [{
 				'product_key': '',
 				'device_key': '',
 				'type': '',
-				'action': [{}],
 				'where': false,
 				'condition': [{
 					'list': [{

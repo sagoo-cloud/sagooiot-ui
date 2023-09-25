@@ -195,7 +195,7 @@ const delScene = (index: number) => {
 
   .item_list {
     background: #fff;
-    border: 1px dashed;
+    border: 1px dashed #959596;
 
     .items {
       padding: 10px;
