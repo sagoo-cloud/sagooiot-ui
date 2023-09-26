@@ -19,7 +19,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="success" @click="addOrEdit()" v-auth="'add'">
+						<el-button type="primary" @click="addOrEdit()" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>

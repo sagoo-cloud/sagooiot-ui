@@ -13,7 +13,7 @@
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" v-auth="'add'" @click="addOrEdit()">
+          <el-button type="primary" v-auth="'add'" @click="addOrEdit()">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>

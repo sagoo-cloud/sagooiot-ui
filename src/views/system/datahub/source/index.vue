@@ -29,7 +29,7 @@
               </el-icon>
               重置
             </el-button>
-            <el-button v-auth="'add'" size="default" type="success" class="ml10" @click="onOpenAdd">
+            <el-button v-auth="'add'" size="default" type="primary" class="ml10" @click="onOpenAdd">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>

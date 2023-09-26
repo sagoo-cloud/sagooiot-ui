@@ -22,7 +22,7 @@
               </el-icon>
               重置
             </el-button>
-            <el-button type="success" class="ml10" @click="onOpenAddMenu(null)" v-auth="'add'">
+            <el-button type="primary" class="ml10" @click="onOpenAddMenu(null)" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>

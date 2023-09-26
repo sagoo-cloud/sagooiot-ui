@@ -164,4 +164,10 @@ export default {
   certificate: {
     getList: () => get('/system/certificate/getAll')
   },
+  // 远程配置
+  remoteconf: {
+    getProductList: (params: object) => get('/product/list', params),
+    queryThingConfig: (params: object) => get('/operate/remoteconf/queryThingConfig', params),
+    saveThisConfig: (params: object) => post('/operate/remoteconf/addThingConfig', params),
+  },
 }

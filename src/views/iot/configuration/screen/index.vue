@@ -3,7 +3,7 @@
     <div class="search">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="success" v-auth="'add'" @click="addOrEdit()">
+          <el-button type="primary" v-auth="'add'" @click="addOrEdit()">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>

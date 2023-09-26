@@ -12,7 +12,7 @@
                     </el-icon>
                     查询
                 </el-button>
-                <el-button @click="toPage" size="default" type="success" v-auth="'add'" class="ml10">
+                <el-button @click="toPage" size="default" type="primary" v-auth="'add'" class="ml10">
                     <el-icon>
                         <ele-FolderAdd />
                     </el-icon>

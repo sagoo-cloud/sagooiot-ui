@@ -26,7 +26,7 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDept" v-auth="'add'">
+            <el-button size="default" type="primary" class="ml10" @click="onOpenAddDept" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>

@@ -4,7 +4,7 @@
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true">
 					<el-form-item>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
+						<el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
