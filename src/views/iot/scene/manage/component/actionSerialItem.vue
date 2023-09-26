@@ -12,7 +12,7 @@
 
         <el-form-item label="动作类型：" prop="product_key">
           <el-select v-model="item.product_key" filterable placeholder="请选择动作类型">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
+            <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
@@ -34,7 +34,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-      
+
         <el-form-item label="属性：" prop="type">
           <el-select v-model="item.type" filterable placeholder="请选择触发类型">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
@@ -45,7 +45,7 @@
         </el-form-item>
       </div>
 
-    
+
     </div>
     <div>
       <div class=" flex-center">
@@ -56,7 +56,7 @@
 
 
 
- 
+
   </div>
 </template>
 
@@ -105,6 +105,28 @@ const props = defineProps({
     }, {
       'key': 'test',
       'name': '测试',
+    }]
+  },
+  sourceActionTypeData: {
+    type: Array as PropType<testIValueType[]>,
+    default: () => [{
+      'key': 'deviceOutput',
+      'name': '设备输出',
+    }, {
+      'key': 'sendNotice',
+      'name': '发送通知',
+    }, {
+      'key': 'callWebService',
+      'name': '调用WEB服务',
+    }, {
+      'key': "triggerAlarm",
+      'name': '触发告警',
+    }, {
+      'key': 'delayExecution',
+      'name': '延迟执行',
+    }, {
+      'key': 'triggerCustomEvent',
+      'name': '触发场景自定义事件',
     }]
   }
 })
