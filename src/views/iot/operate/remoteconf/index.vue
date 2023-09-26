@@ -5,32 +5,32 @@
       <div class="container">
         <div class="selectContainer">
           <article style="margin-right: 20px">
-						<span class="label">产品:</span
-            ><el-select v-model="product" filterable>
-            <el-option v-for="item in productOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+						<span class="label">产品:</span>
+            <el-select v-model="product" filterable @change="handleChange">
+              <el-option v-for="item in productOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
           </article>
           <article>
-						<span class="label">配置格式:</span
-            ><el-select v-model="currentConfig.configFormat" filterable>
-            <el-option v-for="item in configTypeOptions" :key="item.key" :label="item.key" :value="item.key"> </el-option>
-          </el-select>
+						<span class="label">配置格式:</span>
+            <el-select v-model="currentConfig.configFormat" filterable>
+              <el-option v-for="item in configTypeOptions" :key="item.key" :label="item.key" :value="item.key"> </el-option>
+            </el-select>
           </article>
         </div>
 
         <div class="editorTitle">
           <div class="leftLabel">
             配置模板
-            <span style="color: #999; font-size: 12px; font-weight: normal; display: inline-block; margin-left: 10px; margin-right: 50px"
-            >当前文件大小{{ size }}KB(上限64KB)</span
-            >
-            <span style="color: #999; font-size: 14px; font-weight: normal">提交于{{ currentConfig.gmtCreate }}</span>
+            <span style="color: #999; font-size: 12px; font-weight: normal; display: inline-block; margin-left: 10px; margin-right: 50px">当前文件大小{{ size }}KB(上限64KB)</span>
+            <span style="color: #999; font-size: 14px; font-weight: normal" v-if="currentConfig.gmtCreate">提交于{{ currentConfig.gmtCreate }}</span>
           </div>
           <div class="rightLabel">
             <el-icon size="18" class="icon">
               <question-filled />
             </el-icon>
-            <span>远程配置以打开</span><el-switch v-model="onlineOpen" active-color="#13ce66" inactive-color="#ddd"></el-switch>
+            <span v-if="onlineOpen">远程配置已经打开</span>
+            <span v-if="!onlineOpen">远程配置已经关闭</span>
+            <el-switch v-model="onlineOpen" active-color="#13ce66" inactive-color="#ddd"></el-switch>
           </div>
         </div>
         <div style="border: 1px solid #ccc; border-top: none">
@@ -40,8 +40,7 @@
               mode=""
               :onchange="onchange"
               :readOnly="true"
-              :content="currentConfig.configContent"
-          ></codeEditor>
+              :content="currentConfig.configContent"></codeEditor>
         </div>
         <div class="btnContainer">
           <div v-if="!onlineOpen">
@@ -50,19 +49,16 @@
             </el-tooltip>
           </div>
           <div v-else style="margin-right: 20px"><el-button type="primary" @click="edit">编辑</el-button></div>
-
           <div v-if="canSave"><el-button type="primary" @click="saveDialogVisible = true">保存</el-button></div>
           <div v-else><el-button type="primary" @click="updateDialogVisible = true">批量更新</el-button></div>
         </div>
         <h2>配置版本记录</h2>
-        <el-table
-            :data="tableData.data"
+        <el-table :data="tableData.data"
             style="width: 100%"
             row-key="id"
             default-expand-all
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            v-loading="tableData.loading"
-        >
+            v-loading="tableData.loading">
           <el-table-column prop="configNumber" label="编号" width="200"> </el-table-column>
           <el-table-column prop="gmtCreate" label="版本更新时间"></el-table-column>
           <el-table-column label="操作" width="200">
@@ -83,7 +79,7 @@
         <div class="string">
           <h2>是否确认对该产品下的所有设备进行批量远程配置更新</h2>
           <p>注:该产品下的所有设备将自动更新该配置文件.设备端需订阅远程配置的topic</p>
-          <p>指定产品:测试设备01</p>
+          <p>指定产品:{{ selectProduct }}</p>
           <p>设备范围:所有设备</p>
         </div>
       </div>
@@ -102,7 +98,7 @@
           </el-icon>
         </div>
         <div class="string">
-          <h3>是否保存当前配置信息?保存后可以手动将配置批量更新到该产品下的所有设备，设备也可以主动获取配置</h3>
+          <h3>是否保存当前配置信息？ 保存后可以手动将配置批量更新到该产品下的所有设备，设备也可以主动获取配置</h3>
         </div>
       </div>
       <template #footer>
@@ -114,14 +110,12 @@
     </el-dialog>
     <el-dialog v-model="lookDialogVisible" width="40%">
       <div class="saveDialogContainer" v-if="lookDialogVisible">
-        <codeEditor
-            class="params flex1"
+        <codeEditor class="params flex1"
             ref="mirrorRefDialog"
             mode=""
             :onchange="onchange"
             :readOnly="true"
-            :content="tableData.data[lookIndex!].content"
-        ></codeEditor>
+            :content="tableData.data[lookIndex!].content"></codeEditor>
       </div>
       <template #footer>
 				<span class="dialog-footer">
@@ -167,9 +161,10 @@ export default defineComponent({
     const productOptions = ref<{ value: string; label: string; status: string }[]>([])
     const canSave = ref(false)
     const onlineOpen = ref(false)
-    const mirrorRef = ref<any>()
+    const mirrorRef = ref<any>() // 编辑器
     const mirrorRefDialog = ref<any>()
     const configTypeOptions = [{ key: 'json' }, { key: 'yaml' }]
+    const selectProduct = ref(); // 选中产品名称
     const currentConfig = ref({
       configContent: '',
       configFormat: 'json',
@@ -180,7 +175,6 @@ export default defineComponent({
     })
     // 页面加载时
     onMounted(() => {
-      // mirrorRef.value.setOption('readOnly', true)
       api.remoteconf.getProductList({ status: '1', name: '' }).then((res: any) => {
         productOptions.value = res.product.map((item: any) => {
           return {
@@ -191,6 +185,7 @@ export default defineComponent({
         })
         if (productOptions.value.length > 0) {
           product.value = productOptions.value[0].value
+          selectProduct.value = productOptions.value[0].label
         }
       })
     })
@@ -209,30 +204,32 @@ export default defineComponent({
           // 这里是 由false变为true
           if (!onlineOpen.value) {
             canSave.value = false
-
             mirrorRef.value.setOption('readOnly', true)
           }
         }
     )
-    watch(
-        () => product.value,
-        () => {
-          //product.value 就是那个key options里面转化了
-          updateTableData()
-        }
-    )
+    watch(() => product.value, () => {
+      //product.value 就是那个key options里面转化了
+      currentConfig.value.gmtCreate = '';
+      mirrorRef.value.setValue('');
+      tableData.data = [];
+      updateTableData()
+    })
+    // 选择下拉框替换批量更新产品名称
+    const handleChange = (value) => {
+      selectProduct.value = productOptions.value.find((item) => item.value === value).label;
+    }
     const updateTableData = () => {
-      api.remoteconf
-          .queryThingConfig({ pageNum: 1, PageSize: 50, productKey: product.value })
-          .then((res: any) => {
-            if (res.remoteconf) {
-              tableData.data = res.remoteconf.slice(1)
-              currentConfig.value = res.remoteconf[0]
-              mirrorRef.value.setValue(currentConfig.value.configContent)
-            }
-          }).catch((error: any) => {
-            ElMessage.error(error)
-          })
+      api.remoteconf.queryThingConfig({ pageNum: 1, PageSize: 50, productKey: product.value })
+        .then((res: any) => {
+          if (res.remoteconf) {
+            tableData.data = res.remoteconf.slice(1)
+            currentConfig.value = res.remoteconf[0]
+            mirrorRef.value.setValue(currentConfig.value.configContent)
+          }
+      }).catch((error: any) => {
+        ElMessage.error(error)
+      })
     }
     const size = ref('0')
 
@@ -255,24 +252,21 @@ export default defineComponent({
 
       // updateTime.value = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second
 
-      api.remoteconf
-          .saveThisConfig({
-            scope: 'product',
-            configName: '',
-            configFormat: currentConfig.value.configFormat,
-            configContent: mirrorRef.value.getValue(),
-            configSize: size.value,
-            status: productOptions.value.find((item: any) => item.value == product.value)?.status!,
-            productKey: product.value,
-          })
-          .then((res: any) => {
-            ElMessage.success('保存成功')
-            onlineOpen.value = false
-            updateTableData()
-          })
-          .catch((err: any) => {
-            ElMessage.error(err)
-          })
+      api.remoteconf.saveThisConfig({
+        scope: 'product',
+        configName: '',
+        configFormat: currentConfig.value.configFormat,
+        configContent: mirrorRef.value.getValue(),
+        configSize: size.value,
+        status: productOptions.value.find((item: any) => item.value == product.value)?.status!,
+        productKey: product.value,
+      }).then((res: any) => {
+        ElMessage.success('保存成功')
+        onlineOpen.value = false
+        updateTableData()
+      }).catch((err: any) => {
+        ElMessage.error(err)
+      })
     }
     const onchange = (e: any, b: any) => {
       var blob = new Blob([e.getValue()], { type: 'text/plain' })
@@ -306,6 +300,7 @@ export default defineComponent({
       saveHandle()
     }
     return {
+      selectProduct,
       productOptions,
       product,
       canSave,
@@ -327,6 +322,7 @@ export default defineComponent({
       configTypeOptions,
       updateDialogHandle,
       currentConfig,
+      handleChange,
     }
   },
 })

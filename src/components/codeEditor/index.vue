@@ -57,7 +57,17 @@ let props = defineProps({
     type: String,
     required: false,
     default: ''
-  }
+  },
+  readOnly: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  onchange: {
+    type: Object as any,
+    required: false,
+    default: () => {},
+  },
 })
 
 const editor = ref();
@@ -81,9 +91,11 @@ nextTick(() => {
     extraKeys: {
       "Alt-F": "findPersistent",
     },
+    readOnly: props.readOnly,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "breakpoints"]
   });
-  coder.setValue(props.content);
+  coder.setValue(props.content)
+  coder.on('change', props.onchange)
 });
 
 /**
@@ -107,9 +119,14 @@ const getValue = () => {
   return coder.getValue();
 };
 
+const setOption = (name: string, value: any) => {
+  return coder.setOption(name, value)
+}
+
 defineExpose({
   setValue,
   getValue,
   setMode,
+  setOption,
 })
 </script>
