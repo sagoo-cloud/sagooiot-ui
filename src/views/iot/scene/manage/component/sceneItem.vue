@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item label="触发类型：" prop="type">
           <el-select v-model="item.type" filterable placeholder="请选择触发类型">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
+            <el-option v-for="it in sourceTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
@@ -71,7 +71,7 @@
 
 
 
- 
+
   </div>
 </template>
 
@@ -133,6 +133,28 @@ const props = defineProps({
       'key': 'test',
       'name': '测试',
     }]
+  },
+  sourceTypeData: {
+    type: Array as PropType<testIValueType[]>,
+    default: () => [{
+      'key': 'onLine',
+      'name': '设备上线',
+    }, {
+      'key': 'offLine',
+      'name': '设备离线',
+    }, {
+      'key': 'readAttribute',
+      'name': '读取属性',
+    }, {
+      'key': 'modifyAttribute',
+      'name': '修改属性',
+    }, {
+      'key': 'reportAttribute',
+      'name': '上报属性',
+    }, {
+      'key': 'functionCall',
+      'name': '功能调用',
+    }]
   }
 })
 
@@ -160,7 +182,7 @@ const setNull = (row: any, key: string, val: string) => {
 }
 const handlelisten = (e: any) => {
   props.sceneList[e.type].cronExpression=e.cron;
- 
+
 };
 const showCron = () => {
   dialogVisible.value = true;
