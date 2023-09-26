@@ -224,6 +224,15 @@ export default defineComponent({
         .then((res: any) => {
           if (res.remoteconf) {
             tableData.data = res.remoteconf.slice(1)
+            // 重塑编号
+            for (let i = 0; i < tableData.data.length; i++) {
+              if ((i + 1) < 10) {
+                tableData.data[i].configNumber = '0' + (i + 1);
+              } else {
+                tableData.data[i].configNumber = i + 1;
+              }
+            }
+            console.log(tableData.data);
             currentConfig.value = res.remoteconf[0]
             mirrorRef.value.setValue(currentConfig.value.configContent)
           }
