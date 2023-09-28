@@ -51,7 +51,7 @@
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
 					<el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0" v-auth="'startOrStop'">启用</el-button>
           		   <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0" v-auth="'startOrStop'">停用</el-button>
-					<el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+					<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

@@ -37,7 +37,7 @@
               </el-icon>
               新增字典
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel()" v-auth="'del'">
+            <el-button size="default" type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -71,7 +71,7 @@
             <el-table-column label="操作" width="100" align="center" v-col="'handle'">
               <template #default="scope">
                 <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-                <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+                <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
               </template>
             </el-table-column>
           </el-table>

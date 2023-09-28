@@ -32,7 +32,7 @@
 				<Auth :value="'btn.del'">
 					<div class="flex-warp-item">
 						<div class="flex-warp-item-box">
-							<el-button type="danger" size="default">
+							<el-button type="info" size="default">
 								<el-icon>
 									<ele-Delete />
 								</el-icon>
@@ -84,7 +84,7 @@
 				<Auths :value="['btn.add', 'btn.edit', 'btn.del', 'btn.link']">
 					<div class="flex-warp-item">
 						<div class="flex-warp-item-box">
-							<el-button type="danger" size="default">
+							<el-button type="info" size="default">
 								<el-icon>
 									<ele-Delete />
 								</el-icon>
@@ -136,7 +136,7 @@
 				<AuthAll :value="['btn.add', 'btn.edit', 'btn.del', 'btn.link']">
 					<div class="flex-warp-item">
 						<div class="flex-warp-item-box">
-							<el-button type="danger" size="default">
+							<el-button type="info" size="default">
 								<el-icon>
 									<ele-Delete />
 								</el-icon>
@@ -186,7 +186,7 @@
 				</div>
 				<div class="flex-warp-item" v-auth="'btn.del'">
 					<div class="flex-warp-item-box">
-						<el-button type="danger" size="default">
+						<el-button type="info" size="default">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -230,7 +230,7 @@
 				</div>
 				<div class="flex-warp-item" v-auths="['btn.add', 'btn.edit', 'btn.del', 'btn.link']">
 					<div class="flex-warp-item-box">
-						<el-button type="danger" size="default">
+						<el-button type="info" size="default">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -274,7 +274,7 @@
 				</div>
 				<div class="flex-warp-item" v-auth-all="['btn.add', 'btn.edit', 'btn.del', 'btn.link']">
 					<div class="flex-warp-item-box">
-						<el-button type="danger" size="default">
+						<el-button type="info" size="default">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -321,7 +321,7 @@
 				</div>
 				<div class="flex-warp-item">
 					<div class="flex-warp-item-box">
-						<el-button type="danger" size="default" @click="onAuthAllClick">
+						<el-button type="info" size="default" @click="onAuthAllClick">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>

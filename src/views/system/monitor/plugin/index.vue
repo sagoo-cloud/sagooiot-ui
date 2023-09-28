@@ -53,7 +53,7 @@
 						<el-button :disabled="scope.row.status == 1" size="small" type="success" link @click="changeStatus(scope.row, 1)" v-auth="'start'"
 							>启用</el-button
 						>
-						<el-button :disabled="scope.row.status == 1" size="small" type="danger" link @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
+						<el-button :disabled="scope.row.status == 1" size="small" type="info" link @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
 						<el-button size="small" type="plain" link @click="addOrEdit(scope.row)">编辑</el-button>
 					</template>
 				</el-table-column>

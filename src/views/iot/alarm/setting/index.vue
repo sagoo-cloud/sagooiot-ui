@@ -99,7 +99,7 @@
 								</div>
 
 								<div class="card-button" @click="onRowDel(item)" v-auth="'del'">
-									<el-button size="default" type="danger" text bg>
+									<el-button size="default" type="info" text bg>
 										<el-icon>
 											<ele-Delete />
 										</el-icon>

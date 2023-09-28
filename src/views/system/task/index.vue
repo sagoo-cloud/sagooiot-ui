@@ -37,7 +37,7 @@
               </el-icon>
               新增任务
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -65,7 +65,7 @@
         <el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-button size="small" text type="primary" @click="onRowRun(scope.row)" v-auth="'do'">执行一次</el-button>
           </template>
         </el-table-column>

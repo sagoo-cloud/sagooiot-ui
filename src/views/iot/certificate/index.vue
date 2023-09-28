@@ -50,7 +50,7 @@
 				<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
-						<el-button size="small" v-auth="'del'" text type="danger" @click="operate('delete', scope.row)">删除</el-button>
+						<el-button size="small" v-auth="'del'" text type="info" @click="operate('delete', scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

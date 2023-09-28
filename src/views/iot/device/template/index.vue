@@ -42,7 +42,7 @@
 						<el-button size="small" text type="primary" v-auth="'upload'" @click="handleImport(scope.row)">导入</el-button>
 						<el-button size="small" text type="primary" v-auth="'download'" @click="handleExport(scope.row)">导出</el-button>
 						<el-button size="small" text type="primary" v-auth="'detail'" @click="addOrEdit(scope.row)">详情</el-button>
-						<el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

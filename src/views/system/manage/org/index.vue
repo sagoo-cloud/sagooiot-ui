@@ -50,7 +50,7 @@
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenAddDept(scope.row)" v-auth="'add'">新增</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditDept(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

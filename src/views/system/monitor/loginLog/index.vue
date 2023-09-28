@@ -39,7 +39,7 @@
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -52,7 +52,7 @@
               </el-icon>
               导出日志
             </el-button>
-            <!--<el-button size="default" type="danger" class="ml10" @click="onRowClear()">
+            <!--<el-button size="default" type="info" class="ml10" @click="onRowClear()">
               <el-icon>
                 <ele-Delete />
               </el-icon>

@@ -24,7 +24,7 @@
           <el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
           <el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
           <el-button size="small" text type="warning" @click="edit(scope.row)">设计大屏</el-button>
-          <el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+          <el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

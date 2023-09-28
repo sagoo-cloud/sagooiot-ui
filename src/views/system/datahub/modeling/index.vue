@@ -40,7 +40,7 @@
 							</el-icon>
 							新增模型
 						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel()" v-auth="'del'">
+						<el-button size="default" type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>
@@ -78,9 +78,9 @@
 						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)" v-if="scope.row.status == 1" v-auth="'record'"
 							>数据记录</el-button
 						>
-						<el-button size="small" text type="danger" @click="onOpenJuhe(scope.row)" v-auth="'juhe'">聚合设置</el-button>
+						<el-button size="small" text type="info" @click="onOpenJuhe(scope.row)" v-auth="'juhe'">聚合设置</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status == 0" v-auth="'edit'">修改</el-button>
-						<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status == 0" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.status == 0" v-auth="'del'">删除</el-button>
 						<el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
 					</template>
 				</el-table-column>

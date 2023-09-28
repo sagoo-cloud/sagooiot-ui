@@ -50,7 +50,7 @@
         <el-table-column label="操作" width="220" v-col="'handle'" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenEditRole(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-button size="small" text type="success" @click="permission(scope.row)" v-auth="'role-premission'">角色权限</el-button>
             <el-button size="small" text type="info" @click="dataPermission(scope.row)" v-auth="'data-premission'">数据权限</el-button>
             <!-- <el-dropdown size="small">

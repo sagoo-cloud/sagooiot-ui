@@ -43,7 +43,7 @@
         <el-table-column label="排序" v-col="'weigh'" prop="weigh" width="80" align="center"></el-table-column>
         <el-table-column label="类型" v-col="'menuType'" width="80" align="center">
           <template #default="scope">
-            <el-tag :type="scope.row.menuType === 0 ? 'danger' : scope.row.menuType === 1 ? 'success' : 'warning'" size="small">{{
+            <el-tag :type="scope.row.menuType === 0 ? 'info' : scope.row.menuType === 1 ? 'success' : 'warning'" size="small">{{
 							scope.row.menuType === 0 ? '目录' : scope.row.menuType === 1 ? '菜单' : '按钮'
 						}}</el-tag>
           </template>
@@ -57,7 +57,7 @@
           <template #default="scope">
             <el-button v-if="!scope.row.menuType" size="small" type="text" @click="onOpenAddMenu(scope.row)" v-auth="'add'">新增</el-button>
             <el-button size="small" text type="warning" @click="onOpenEditMenu(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-dropdown v-if="scope.row.menuType">
               <el-button type="text" size="small" style="margin-top: 1px; margin-left: 10px" v-auth="'more'">更多
                 <el-icon>

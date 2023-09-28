@@ -49,7 +49,7 @@
 									</el-icon>
 									新增用户
 								</el-button>
-								<!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+								<!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
                   <el-icon>
                     <ele-Delete />
                   </el-icon>
@@ -78,7 +78,7 @@
 								<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
                 <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth-all="['edit','del']">修改</el-button> -->
 								<el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth="'edit'">修改</el-button>
-								<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.id !== 1" v-auth="'del'">删除</el-button>
+								<el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.id !== 1" v-auth="'del'">删除</el-button>
 								<el-button size="small" text type="success" @click="handleResetPwd(scope.row)" v-auth="'reset'">重置</el-button>
 							</template>
 						</el-table-column>

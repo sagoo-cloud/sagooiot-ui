@@ -39,7 +39,7 @@
 				<el-table-column label="操作" width="100" align="center">
 					<template #default="scope">
 						<el-button size="small" text type="primary" v-auth="'detail'" @click="viewDetail(scope.row)">详情</el-button>
-						<el-button size="small" text type="danger" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

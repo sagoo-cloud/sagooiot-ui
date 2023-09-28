@@ -35,7 +35,7 @@
               </el-icon>
               新增数据源
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel()" v-auth="'del'">
+            <el-button size="default" type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -71,7 +71,7 @@
             </router-link>
             <el-button size="small" text type="success" @click="onOpenList(scope.row)" v-if="scope.row.status==1" v-auth="'detail'">数据记录</el-button>
             <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status==0" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="scope.row.status==0" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.status==0" v-auth="'del'">删除</el-button>
             <el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
           </template>
         </el-table-column>

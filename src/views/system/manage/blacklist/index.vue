@@ -31,7 +31,7 @@
               </el-icon>
               新建
             </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -74,7 +74,7 @@
               <span>详情</span>
             </router-link> -->
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">编辑</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-popover
               placement="bottom"
               :width="154"

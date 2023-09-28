@@ -15,7 +15,7 @@
 				<el-table-column label="操作" width="150" align="center">
 					<template #default="scope">
 						<el-button size="small" text type="primary" v-if="!scope.row.isRead">设为已读</el-button>
-						<el-button size="small" text type="danger" @click="onDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
