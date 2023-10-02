@@ -26,19 +26,19 @@
 						查询
 					</el-button>
 				</el-form-item>
-			
+
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
 			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="动作类型" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="name" label="场景类型" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="执行状态" width="100" align="center">
 				<template #default="scope">
 					<el-tag type="success" size="small" v-if="scope.row.status">成功</el-tag>
 					<el-tag type="info" size="small" v-else>失败</el-tag>
 				</template>
-			</el-table-column> 
+			</el-table-column>
 			<el-table-column prop="createdAt" label="执行时间" min-width="100" align="center"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
@@ -52,7 +52,7 @@
 			@pagination="getList()" />
 	</el-card>
 </template>
-  
+
 <script lang="ts" setup>
 import api from '/@/api/scene';
 import { useSearch } from '/@/hooks/useCommon';
@@ -64,7 +64,7 @@ getList();
 
 
 const view = (row: any) => {
-	
+
 };
 
 const del = (row: any) => {
@@ -79,4 +79,3 @@ const del = (row: any) => {
 	});
 };
 </script>
-  

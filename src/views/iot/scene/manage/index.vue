@@ -12,7 +12,7 @@
 						<el-option label="禁用" :value="0" />
 					</el-select>
 				</el-form-item>
-			
+
 				<el-form-item>
 
 					<el-button size="default" type="primary" class="ml10" @click="getList()">
@@ -36,13 +36,14 @@
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
 			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="描述" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="name" label="类型" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="name" label="描述" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="运行状态" width="100" align="center">
 				<template #default="scope">
 					<el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
 					<el-tag type="info" size="small" v-else>禁用</el-tag>
 				</template>
-			</el-table-column> 
+			</el-table-column>
 			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
@@ -60,7 +61,7 @@
 		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
 	</el-card>
 </template>
-  
+
 <script lang="ts" setup>
 import api from '/@/api/scene';
 import { useSearch } from '/@/hooks/useCommon';
@@ -137,4 +138,3 @@ const del = (row: any) => {
 	});
 };
 </script>
-  
