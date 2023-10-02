@@ -27,7 +27,7 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属品类</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.categoryName }}</td>
-									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属部门</th>
+									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属组织</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>

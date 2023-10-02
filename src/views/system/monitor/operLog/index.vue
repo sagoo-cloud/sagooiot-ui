@@ -75,7 +75,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" :show-overflow-tooltip="true" />
-        <el-table-column label="部门名称" align="center" prop="deptName" />
+        <el-table-column label="组织名称" align="center" prop="deptName" />
         <el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
         <el-table-column label="操作地点" v-col="'operLocation'" show-overflow-tooltip align="center" prop="operLocation" />
         <el-table-column label="操作时间" v-col="'operTime'" show-overflow-tooltip align="center" prop="operTime" />

@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dept-container">
-		<el-dialog :title="(ruleForm.deptId ? '修改' : '添加') + '部门'" v-model="isShowDialog" width="769px">
+		<el-dialog :title="(ruleForm.deptId ? '修改' : '添加') + '组织'" v-model="isShowDialog" width="769px">
 			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
 				<el-row :gutter="35">
 					<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -14,8 +14,8 @@
 						</el-form-item>
 					</el-col> -->
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="上级部门">
-							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.parentId">
+						<el-form-item label="上级组织">
+							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择组织" clearable class="w100" v-model="ruleForm.parentId">
 								<template #default="{ node, data }">
 									<span>{{ data.deptName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -24,8 +24,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-						<el-form-item label="部门名称" prop="deptName">
-							<el-input v-model="ruleForm.deptName" placeholder="请输入部门名称" clearable></el-input>
+						<el-form-item label="组织名称" prop="deptName">
+							<el-input v-model="ruleForm.deptName" placeholder="请输入组织名称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -49,7 +49,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-						<el-form-item label="部门状态">
+						<el-form-item label="组织状态">
 							<el-switch v-model="ruleForm.status" :active-value="1" :inactive-value="0" inline-prompt active-text="启" inactive-text="禁"></el-switch>
 						</el-form-item>
 					</el-col>
@@ -92,8 +92,8 @@ interface DeptSate {
 }
 
 const baseForm: RuleFormState = {
-	parentId: -1, // 上级部门
-	deptName: '', // 部门名称
+	parentId: -1, // 上级组织
+	deptName: '', // 组织名称
 	organizationId: 1, // 组织名称
 	orderNum: 0,
 	leader: '',
@@ -111,11 +111,11 @@ export default defineComponent({
 			ruleForm: {
 				...baseForm,
 			},
-			deptData: [], // 部门数据
+			deptData: [], // 组织数据
 			orgData: [], // 组织数据
 			rules: {
 				organizationId: [{ required: true, message: '组织不能为空', trigger: 'blur' }],
-				deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
+				deptName: [{ required: true, message: '组织名称不能为空', trigger: 'blur' }],
 				leader: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
 				phone: [{ validator: phoneValidate, trigger: 'blur' }],
 				email: [{ type: 'email', message: '请输入正确邮箱', trigger: 'blur' }],

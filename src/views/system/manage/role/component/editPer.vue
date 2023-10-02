@@ -8,8 +8,8 @@
         <el-select v-model="ruleForm.dataScope" placeholder="请选择" clearable class="w100">
           <el-option label="全部数据权限" :value="1" />
           <el-option label="自定数据权限" :value="2" />
-          <el-option label="本部门数据权限" :value="3" />
-          <el-option label="本部门及以下数据权限" :value="4" />
+          <el-option label="本组织数据权限" :value="3" />
+          <el-option label="本组织及以下数据权限" :value="4" />
         </el-select>
       </el-form-item>
       <el-form-item label="数据权限" prop="deptIds" v-if="ruleForm.dataScope===2">
@@ -35,8 +35,8 @@ import { ElMessage } from 'element-plus';
 interface DialogRow {
 	id?: number;
 	name: string;
-	dataScope: 1 | 2 | 3 | 4; // 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）
-	deptIds: number[]; // 部门id
+	dataScope: 1 | 2 | 3 | 4; // 数据范围（1：全部数据权限 2：自定数据权限 3：本组织数据权限 4：本组织及以下数据权限）
+	deptIds: number[]; // 组织id
 }
 
 const baseForm: DialogRow = {

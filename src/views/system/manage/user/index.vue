@@ -4,7 +4,7 @@
 			<el-col :span="5">
 				<el-card shadow="hover">
 					<el-scrollbar>
-						<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入部门名称" clearable size="default" style="width: 100%;" />
+						<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable size="default" style="width: 100%;" />
 						<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick" />
 					</el-scrollbar>
 				</el-card>
@@ -63,7 +63,7 @@
 						<el-table-column type="index" label="序号" width="60" align="center" />
 						<el-table-column prop="userName" label="账户名称" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="userNickname" label="用户昵称" v-col="'userNickname'" min-width="160" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="dept.deptName" label="部门" v-col="'deptName'" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="dept.deptName" label="组织" v-col="'deptName'" show-overflow-tooltip></el-table-column>
 						<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>
 						<el-table-column prop="status" label="用户状态" width="120" v-col="'status'" align="center">

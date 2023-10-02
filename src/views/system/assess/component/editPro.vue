@@ -23,8 +23,8 @@
           </el-cascader>
         </el-form-item>
 
-        <el-form-item label="所属部门" prop="deptId">
-          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
+        <el-form-item label="所属组织" prop="deptId">
+          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属组织" clearable class="w100" v-model="ruleForm.deptId">
             <template #default="{ node, data }">
               <span>{{ data.deptName }}</span>
               <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -105,10 +105,10 @@ export default defineComponent({
     const state = reactive<DicState>({
       isShowDialog: false,
       cateData: [], // 分类数据
-      deptData: [], // 
-      messageData: [], // 
-      tranData: [], // 
-      imageUrl: "", // 
+      deptData: [], //
+      messageData: [], //
+      tranData: [], //
+      imageUrl: "", //
       singleImg: baseURL + "/product/icon/upload",
 
       ruleForm: {
@@ -130,7 +130,7 @@ export default defineComponent({
           { required: true, message: "产品标识不能为空", trigger: "blur" }
         ],
         parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        deptId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
         transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],

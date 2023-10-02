@@ -29,8 +29,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="部门" prop="deptId">
-							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.deptId">
+						<el-form-item label="组织" prop="deptId">
+							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择组织" clearable class="w100" v-model="ruleForm.deptId">
 								<template #default="{ node, data }">
 									<span>{{ data.deptName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -59,7 +59,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="岗位" prop="postIds">
-							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.postIds">
+							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择组织" clearable class="w100" v-model="ruleForm.postIds">
 								<template #default="{ node, data }">
 									<span>{{ data.postName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -106,7 +106,7 @@ interface DialogRow {
 	id?: number;
 	userName: string; // 用户名
 	userNickname: string; // 用户昵称
-	deptId: number | null; // 部门id
+	deptId: number | null; // 组织id
 	mobile: string; // 中国手机不带国家代码，国际手机号格式为：国家代码-手机号
 	roleIds: number[]; // 角色ID数组
 	postIds: number[]; // 岗位ID数组
@@ -171,7 +171,7 @@ export default defineComponent({
 			rules: {
 				userName: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
 				userNickname: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
-				deptId: [{ required: true, message: '归属部门不能为空', trigger: 'blur' }],
+				deptId: [{ required: true, message: '归属组织不能为空', trigger: 'blur' }],
 				postIds: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
 				roleIds: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
 				mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
@@ -227,7 +227,7 @@ export default defineComponent({
 				}
 			});
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 		};
 		// 页面加载时

@@ -280,7 +280,7 @@ export default defineComponent({
 		const onCancel = () => {
 			closeDialog();
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => { };
 		// 页面加载时
 		onMounted(() => {

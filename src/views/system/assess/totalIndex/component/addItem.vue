@@ -134,7 +134,7 @@ export default defineComponent({
 				userName: '', // 账户名称
 				userNickname: '', // 用户昵称
 				roleSign: '', // 关联角色
-				department: [], // 部门
+				department: [], // 组织
 				phone: '', // 手机号
 				email: '', // 邮箱
 				sex: '', // 性别
@@ -143,7 +143,7 @@ export default defineComponent({
 				status: true, // 用户状态
 				describe: '', // 用户描述
 			},
-			// deptData: [], // 部门数据
+			// deptData: [], // 组织数据
 			// 标识列表数据
 			tableData: {
 				data: [],
@@ -175,7 +175,7 @@ export default defineComponent({
 		const onOpenAddSign = () => {
 			addSignRef.value.openDialog();
 		};
-				
+
 		// 打开编辑弹窗
 		const onOpenEditSign = (row: TableDataRow) => {
 			addSignRef.value.openDialog(row);
@@ -204,7 +204,7 @@ export default defineComponent({
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 			const data: Array<TableDataRow> = [];
 			for (let i = 0; i < 6; i++) {

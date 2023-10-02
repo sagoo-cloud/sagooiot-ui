@@ -62,7 +62,7 @@ export default defineComponent({
 
     const state = reactive<DicState>({
       isShowDialog: false,
-      typeData: [], // 
+      typeData: [], //
 
       ruleForm: {
         id: 0,
@@ -81,7 +81,7 @@ export default defineComponent({
           { required: true, message: "功能定义标识不能为空", trigger: "blur" }
         ],
         accessMode: [{ required: true, message: '功能定义分类不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        deptId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
     });

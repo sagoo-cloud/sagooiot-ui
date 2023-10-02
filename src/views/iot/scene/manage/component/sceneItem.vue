@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item label="设备：" prop="device_key">
           <el-select v-model="item.device_key" filterable placeholder="请选择设备">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
+            <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
@@ -134,6 +134,25 @@ const props = defineProps({
       'name': '测试',
     }]
   },
+  deviceListData: {
+    type: Array as PropType<testIValueType[]>,
+    default: () => [{
+      'key': 'all',
+      'name': '全部设备',
+    }, {
+      'key': '3242342424',
+      'name': 'A21楼智能电表',
+    }, {
+      'key': '453423424',
+      'name': '五楼温湿度传感设备',
+    }, {
+      'key': '4534323311',
+      'name': '1楼震动传感设备',
+    }, {
+      'key': 'aworr324242',
+      'name': '2号院充电桩',
+    }]
+  },
   sourceTypeData: {
     type: Array as PropType<testIValueType[]>,
     default: () => [{
@@ -150,7 +169,10 @@ const props = defineProps({
       'name': '修改属性',
     }, {
       'key': 'reportAttribute',
-      'name': '上报属性',
+      'name': '属性上报',
+    }, {
+      'key': 'reportEvent',
+      'name': '事件上报',
     }, {
       'key': 'functionCall',
       'name': '功能调用',

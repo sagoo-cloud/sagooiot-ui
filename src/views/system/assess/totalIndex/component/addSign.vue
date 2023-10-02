@@ -114,7 +114,7 @@ export default defineComponent({
 		});
 		// 打开弹窗
 		const openDialog = (row:any, index: any, isEdit: Boolean) => {
-			
+
 			if(!isEdit) {
 				state.ruleForm = {
 					name: '', // 标识
@@ -140,8 +140,8 @@ export default defineComponent({
 		};
 		// // 新增
 		// const onSubmit = () => {
-			
-			
+
+
 		// };
 		// 保存数据
 		const onSubmit = async (formEl: FormInstance | undefined) => {
@@ -153,7 +153,7 @@ export default defineComponent({
 						const { start_value, end_value, base_value } = item
 						if(!start_value || !end_value || !base_value.toString()) {
 							ElMessage.error('请完善表单');
-							return 
+							return
 						}
 					}
 					emit('handleChange', state.ruleForm, state.index, state.isEdit)
@@ -161,14 +161,14 @@ export default defineComponent({
 				}
 			})
 		}
-		// 初始化部门数据
+		// 初始化组织数据
 		// const initTableData = () => {
 		// 	state.deptData.push({
 		// 		deptName: 'vueNextAdmin',
 		// 		createTime: new Date().toLocaleString(),
 		// 		status: true,
 		// 		sort: Math.random(),
-		// 		describe: '顶级部门',
+		// 		describe: '顶级组织',
 		// 		id: Math.random(),
 		// 		children: [
 		// 			{
@@ -208,7 +208,7 @@ export default defineComponent({
 			const { start_value, end_value, base_value } = item
 			if(!start_value || !end_value || !base_value.toString()) {
 				ElMessage.error('请完善表单');
-				return 
+				return
 			}
 			state.ruleForm.ranges.push({
 				start_value: '',
@@ -221,7 +221,7 @@ export default defineComponent({
 			// const { minVal, maxVal, score } = item
 			// if(!minVal || !maxVal || !score.toString()) {
 			// 	ElMessage.error('请完善表单');
-			// 	return 
+			// 	return
 			// }
 			// state.ruleForm.list.push({
 			// 	minVal: '',

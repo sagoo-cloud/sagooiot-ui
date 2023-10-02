@@ -111,7 +111,7 @@ export default defineComponent({
 				item_code: '',
 				targets: []
 			},
-			// deptData: [], // 部门数据
+			// deptData: [], // 组织数据
 			// 标识列表数据
 			tableData: {
 				data: [],
@@ -214,7 +214,7 @@ export default defineComponent({
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 			const data: Array<TableDataRow> = [];
 			for (let i = 0; i < 6; i++) {

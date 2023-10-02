@@ -126,7 +126,7 @@ export default defineComponent({
     const onSubmit = () => {
       closeDialog();
     };
-    // 初始化部门数据
+    // 初始化组织数据
     const initTableData = () => {
 
     };

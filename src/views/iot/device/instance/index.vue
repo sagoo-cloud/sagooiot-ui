@@ -56,7 +56,7 @@
         <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
         <el-table-column label="设备类型" prop="product.deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
         <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
-        <!-- <el-table-column label="部门" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
+        <!-- <el-table-column label="组织" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
