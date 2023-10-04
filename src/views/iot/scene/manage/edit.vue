@@ -11,6 +11,13 @@
 			<el-form-item label="场景描述" prop="name">
 				<el-input v-model="formData.name" placeholder="请输入场景描述" />
 			</el-form-item>
+      <el-form-item label="触发方式" prop="sceneType">
+        <el-radio-group v-model="formData.sceneType">
+          <el-radio label="1" value="device">设备触发</el-radio>
+          <el-radio label="2" value="manual">手动触发</el-radio>
+          <el-radio label="3" value="timer">定时触发</el-radio>
+        </el-radio-group>
+      </el-form-item>
 			<el-form-item label="场景描述" prop="desc">
 				<el-input v-model="formData.desc" type="textarea" :rows="3" />
 			</el-form-item>
@@ -38,6 +45,7 @@ const formRef = ref();
 const baseForm = {
 	id: undefined,
 	name: '',
+  sceneType:"device",
 	desc: '',
 };
 
