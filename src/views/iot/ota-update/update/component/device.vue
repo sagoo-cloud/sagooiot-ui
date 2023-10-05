@@ -1,4 +1,3 @@
-
 <template>
 	<el-card shadow="hover">
 		<div class="search">
@@ -7,7 +6,7 @@
 					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
 						@keyup.enter.native="getList" />
 				</el-form-item>
-		
+
 				<el-form-item>
 
 					<el-button size="default" type="primary" class="ml10" @click="getList()">
@@ -17,45 +16,40 @@
 						查询
 					</el-button>
 				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-auth="'add'" @click="addOrEdit()">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						添加升级包
-					</el-button>
-
-				</el-form-item>
+				
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
 			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="升级包名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="typo" label="类型" show-overflow-tooltip>
+			<el-table-column prop="deviceName" label="设备名称" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="status" label="状态" show-overflow-tooltip>
 				<template #default="scope">
-					<el-tag  size="small" v-if="scope.row.typo==1">整包</el-tag>
-					<el-tag  type="info" size="small" v-if="scope.row.typo==2">差分</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 0">待推送</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 1">已推送</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 2">升级中</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 3">升级成功</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 4">升级失败</el-tag>
+					<el-tag size="small" v-if="scope.row.status == 5">已取消</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="productName" label="所属产品" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="moduleName" label="模块名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="状态" width="100" align="center">
+			<el-table-column prop="step" label="升级进度" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="fail" label="失败原因" width="100" align="center">
 				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status">验证</el-tag>
-					<el-tag type="info" size="small" v-else>未验证</el-tag>
+					<el-tag size="small" v-if="scope.row.fail == -1">升级失败</el-tag>
+					<el-tag size="small" v-if="scope.row.fail == -2">下载失败</el-tag>
+					<el-tag size="small" v-if="scope.row.fail == -3">校验失败</el-tag>
+					<el-tag size="small" v-if="scope.row.fail == -4">烧写失败</el-tag>
 				</template>
-			</el-table-column> 
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
-			<el-table-column label="操作" width="200" align="center">
+			</el-table-column>
+			<el-table-column prop="createdAt" label="时间" min-width="100" align="center"></el-table-column>
+			<!-- <el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
-					<el-button size="small" text type="primary" v-if="!scope.row.folderName"
-						@click="toDetail(scope.row.id)">查看</el-button>
+
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-					<el-button size="small" text type="success" v-auth="'edit'" @click="CheckUpdate(scope.row)">验证</el-button>
-				
+
 					<el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"
 			@pagination="getList()" />
@@ -67,47 +61,21 @@
 import api from '/@/api/ota';
 import { useSearch } from '/@/hooks/useCommon';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import getOrigin from '/@/utils/origin'
-
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+const props = defineProps({
+	detail: {
+		type: Object,
+		default: () => { }
+	},
+})
 const queryRef = ref();
-const router = useRouter();
 
-const editFormRef = ref();
-const checkFormRef = ref();
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'fireware', { keyWord: '' });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.device.getList, 'fireware', {devOtaFirewareId: props.detail.id});
 
 getList();
-/** 重置按钮操作 */
-const resetQuery = (formEl: FormInstance | undefined) => {
-	if (!formEl) return;
-	formEl.resetFields();
-	getList();
-};
-const toDetail = (id: number) => {
-      router.push(`/iotmanager/ota/update/detail/${id}`)
-};
 
-const CheckUpdate= async (row?: any) => {
-	if (row) {
-		checkFormRef.value.open(row);
-		return;
-	} else {
-		checkFormRef.value.open();
-	}
-};
-
-const addOrEdit = async (row?: any) => {
-	if (row) {
-		editFormRef.value.open(row);
-		return;
-	} else {
-		editFormRef.value.open();
-	}
-};
 
 const del = (row: any) => {
 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {

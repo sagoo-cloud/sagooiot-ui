@@ -2,19 +2,19 @@
 	<el-card class="system-dic-container" style="position: relative">
 		<div class="content">
 			<div class="flex cont_box">
-				<div class="font26">升级包名称：店里车间场景</div>
+				<div class="font26">升级包名称：{{detail.name}}</div>
 				<div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '已验证' : '未验证' }}</div>
 			</div>
 			<div class="mt20"></div>
 			<div class="container">
-				<div class="item">升级包类型：整包</div>
+				<div class="item">升级包类型：{{detail.typo==1?'整包':'差分'}}</div>
 				<div class="item">升级包签名：d52b637c5eaf2bc9c24008bc4b723600</div>
 			</div>
 			<div class="container">
-				<div class="item">签名算法：MD5</div>
+				<div class="item">签名算法：{{detail.are}}</div>
 				<div class="item">模块名称：default</div>
 			</div>
-			<div class="mt20"></div>
+			<!-- <div class="mt20"></div>
 			<div class="status_list">
 				<div class="otaflex">
 					<div class="otaflex_div1">
@@ -44,20 +44,20 @@
 
 						</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</el-card>
 	<div class="mt10"></div>
 	<el-card class="system-dic-container" style="position: relative">
 		<el-tabs v-model="activeTab">
 				<el-tab-pane label="批次管理" name="tab1">
-					<BatchList :updata_id="detail.id"></BatchList>
+					<BatchList v-if="detail.id" :detail="detail"></BatchList>
 				</el-tab-pane>
 				<el-tab-pane label="设备列表" name="tab2">
-					<DeviceList :updata_id="detail.id"></DeviceList>
+					<DeviceList v-if="detail.id" :detail="detail"></DeviceList>
 				</el-tab-pane>
 				<el-tab-pane label="升级包信息" name="tab3">
-					<InfoList :updata_id="detail.id"></InfoList>
+					<InfoList v-if="detail.id" :detail="detail"></InfoList>
 				</el-tab-pane>
 			</el-tabs>
 	</el-card>
@@ -73,7 +73,7 @@ import EditForm from './edit.vue'
 import InfoList from './component/info.vue'
 import DeviceList from './component/device.vue'
 import BatchList from './component/batch.vue'
-import api from '/@/api/network'
+import api from '/@/api/ota'
 
 const editFormRef = ref()
 
@@ -85,12 +85,17 @@ export default defineComponent({
 		const state = reactive({
 			activeTab:'tab1',
 			developer_status: 2,
-			detail: {},
+			detail: {
+				'id':'',
+				'name':'',
+				'typo':1,
+				'are':'',
+			},
 			
 		})
 		const getDetail = () => {
 			const id = route.params && route.params.id
-			api.server.getDetail({ id: id }).then((res: any) => {
+			api.manage.detail(id).then((res: any) => {
 				state.detail = res
 			})
 		}
@@ -98,25 +103,16 @@ export default defineComponent({
 			editFormRef.value.open(row)
 		}
 
-		const freshData = () => {
-			getDetail()
-			ElMessage.success('刷新成功')
-		}
-		const toEdit = () => {
-			router.push(`/iotmanager/network/server/edit/${route.params && route.params.id}`)
-		}
 		onMounted(() => {
-			// getDetail()
+			getDetail()
 		})
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			// console.log(tab, event)
 		}
 
 		return {
-			toEdit,
 			addOrEdit,
 			editFormRef,
-			freshData,
 			getDetail,
 			handleClick,
 			...toRefs(props),

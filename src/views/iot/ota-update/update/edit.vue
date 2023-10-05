@@ -30,15 +30,15 @@
 				</el-select>
 				</el-form-item>
 			</div>
-			<el-form-item label="升级包版本号" prop="version" v-if="formData.typo == 1">
+			<el-form-item label="升级包版本号" prop="version" v-if="formData.typo == '1'">
 				<el-input v-model="formData.version" placeholder="请输入待升级包版本号" />
 			</el-form-item>
 
-			<el-form-item label="待升级版本号" prop="waitVersion" v-if="formData.typo == 2">
+			<el-form-item label="待升级版本号" prop="waitVersion" v-if="formData.typo == '2'">
 				<el-input v-model="formData.waitVersion" placeholder="请输入待升级版本号" />
 			</el-form-item>
 
-			<el-form-item label="升级后版本号" prop="afterVersion" v-if="formData.typo == 2">
+			<el-form-item label="升级后版本号" prop="afterVersion" v-if="formData.typo == '2'">
 				<el-input v-model="formData.afterVersion" placeholder="请输入升级后版本号" />
 			</el-form-item>
 
@@ -50,9 +50,10 @@
 
 			<el-form-item label="选择升级包" prop="url">
 				<el-upload :accept="['.bin','.tar','.gz','.tar.xz','.zip','.gzip','.apk','.dav','.pack']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
-				
 					<el-button type="Default">上传升级包</el-button>
 				</el-upload>
+				<div v-if="url_name" style="color: green;margin-left: 10px;">{{url_name}}，上传成功</div>
+
 			</el-form-item>
 
 			<el-form-item label="升级包是否验证" prop="check">
@@ -90,10 +91,10 @@ const emit = defineEmits(['getList'])
 
 const showDialog = ref(false)
 const formRef = ref()
-const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/dev_ota_fireware/upload");
-		const headers = {
-			Authorization: 'Bearer ' + localStorage.token,
-		};
+const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile");
+const headers = {
+		Authorization: 'Bearer ' + localStorage.token,
+};
 const areType = ref([
 	{
 		label: 'MD5',
@@ -132,6 +133,8 @@ const baseForm = {
 	waitVersion: '',
 }
 
+const url_name=ref();
+
 const formData = reactive({
 	...baseForm,
 })
@@ -150,9 +153,9 @@ const ruleForm = {
 }
 
 const updateImg = (res: any) => {
-	console.log(res);
-
 			if (res.code === 0) {
+				formData.url=res.data.full_path
+				url_name.value=res.data.name
 				ElMessage.success('上传成功');
 			} else {
 				ElMessage.error(res.message);

@@ -3,70 +3,40 @@
 		<div class="content">
 		
 			<div class="container">
-				<div class="item">升级包 ID：BV2IA9D4wF1b3ZfcRfWQ030100</div>
-				<div class="item">升级包名称：测试</div>
-				<div class="item">所属产品：测试</div>
+				<div class="item">升级包 ID：{{detail.id}}</div>
+				<div class="item">升级包名称：{{detail.name}}</div>
+				<div class="item">所属产品：{{detail.productName}}</div>
 			</div>
 			<div class="container">
 				<div class="item">升级包签名：d52b637c5eaf2bc9c24008bc4b723600</div>
-				<div class="item">升级包版本号：1.0</div>
-				<div class="item">创建时间：2023/09/30 13:08:46</div>
+				<div class="item">升级包版本号：{{detail.version}}</div>
+				<div class="item">创建时间：{{detail.createdAt}}</div>
 			</div>
 			<div class="container">
-				<div class="item">签名算法：MD5</div>
+				<div class="item">签名算法：{{detail.are}}</div>
 				<div class="item">升级包状态：未验证</div>
 				<div class="item">验证进度：0%</div>
 			</div>
 			<div class="container">
-				<div class="item">升级包描述：22222222222222</div>
-				<div class="item">推送给设备的自定义信息：22222222222222233</div>
+				<div class="item">升级包描述：{{detail.describe}}</div>
+				<div class="item">推送给设备的自定义信息：{{detail.info}}</div>
 				<div class="item"></div>
 			</div>
 			
 		</div>
 	</el-card>
 </template>
-<script lang="ts">
-import { toRefs, reactive, onMounted, defineComponent } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
-import { useRoute } from 'vue-router'
-import { EditPen, DocumentAdd } from '@element-plus/icons-vue'
-import api from '/@/api/network'
+<script lang="ts" setup>
 
+const props = defineProps({
 
-export default defineComponent({
-	components: { EditPen, DocumentAdd },
-	setup(props, context) {
-		const route = useRoute()
-		const state = reactive({
-			developer_status: 2,
-			detail: {},
-			
-		})
-		const getDetail = () => {
-			const id = route.params && route.params.id
-			api.server.getDetail({ id: id }).then((res: any) => {
-				state.detail = res
-			})
-		}
-	
-	
-	
-		onMounted(() => {
-			 getDetail()
-		})
-		const handleClick = (tab: TabsPaneContext, event: Event) => {
-			// console.log(tab, event)
-		}
+detail: {
+  type: Object,
+  default: () => {}
+},
 
-		return {
-			getDetail,
-			handleClick,
-			...toRefs(props),
-			...toRefs(state),
-		}
-	},
 })
+
 </script>
 
 <style scoped lang="scss">

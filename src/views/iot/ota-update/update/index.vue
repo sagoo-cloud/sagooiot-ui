@@ -68,7 +68,6 @@
 import api from '/@/api/ota';
 import { useSearch } from '/@/hooks/useCommon';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import getOrigin from '/@/utils/origin'
 import EditForm from './edit.vue';
 import CheckForm from './check.vue';
 import { ref } from 'vue';
