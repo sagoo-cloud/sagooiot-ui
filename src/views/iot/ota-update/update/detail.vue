@@ -12,7 +12,7 @@
 			</div>
 			<div class="container">
 				<div class="item">签名算法：{{detail.are}}</div>
-				<div class="item">模块名称：default</div>
+				<div class="item">模块名称：{{detail.moduleName}}</div>
 			</div>
 			<!-- <div class="mt20"></div>
 			<div class="status_list">
@@ -90,12 +90,13 @@ export default defineComponent({
 				'name':'',
 				'typo':1,
 				'are':'',
+				'moduleName':''
 			},
 			
 		})
 		const getDetail = () => {
 			const id = route.params && route.params.id
-			api.manage.detail(id).then((res: any) => {
+			api.manage.detail(Number(id)).then((res: any) => {
 				state.detail = res
 			})
 		}

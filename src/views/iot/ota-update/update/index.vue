@@ -3,8 +3,8 @@
 	<el-card shadow="hover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
-				<el-form-item label="升级包名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+				<el-form-item label="升级包名称：" prop="keyWord">
+					<el-input v-model="params.keyWord" placeholder="请输入升级包名称" clearable size="default" style="width: 240px"
 						@keyup.enter.native="getList" />
 				</el-form-item>
 
@@ -94,10 +94,12 @@ const toDetail = (id: number) => {
 
 const CheckUpdate= async (row?: any) => {
 	if (row) {
-		checkFormRef.value.open(row);
+		let array={
+			productId:row.productId,
+			devOtaFirewareId:row.id
+		}
+		checkFormRef.value.open(array);
 		return;
-	} else {
-		checkFormRef.value.open();
 	}
 };
 

@@ -54,7 +54,7 @@ const productData=ref([{
 const baseForm = {
 	id: undefined,
 	name: '',
-	productId: 0,
+	productId: '',
 	nameAs: '',
 	describe: '',
 };
