@@ -1,22 +1,23 @@
 <template>
-  <div >
-    <div v-for="(item, index) in condition" :key="index" >
-    
+  <div>
+    <div v-for="(item, index) in condition" :key="index">
+
       <div v-if="index > 0"><el-divider>或满足以下条件</el-divider></div>
       <div class="type-item">
-        <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red"
-        v-if="index > 0">
-        <el-icon @click="delScene(index)" >
-          <CircleClose />
-        </el-icon>
-      </div>
+        <div class="conicon"
+          style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red"
+          v-if="index > 0">
+          <el-icon @click="delScene(index)">
+            <CircleClose />
+          </el-icon>
+        </div>
         <!-- <el-icon size="26" @click="delScene(index)" v-if="index > 0"
           style="position: relative;font-size: 26px;    top: 18px;left: -14px;">
           <CircleClose />
         </el-icon> -->
         <div class="flex-warp item_list">
-         
-          <div v-for="(vo, i) in item.list" :key="i">
+
+          <div v-for="(vo, i) in item" :key="i">
 
             <div class="items">
               <el-button
@@ -25,12 +26,13 @@
 
               <el-popover placement="bottom" trigger="click">
                 <template #reference>
-                  <el-button style="background: #9adbff4d; color: #00a4fe;border: 1px solid #00a4fe4d;">{{ vo.param ||
+                  <el-button style="background: #9adbff4d; color: #00a4fe;border: 1px solid #00a4fe4d;">{{ vo.parameter_text ||
                     '请选择参数' }}</el-button>
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="option in options" :key="option.value" @click="vo.param = option.value;">{{ option.label }}
+                    <li v-for="(option, d) in columnList" :key="d"  @click="setParameter(vo,option)">
+                    {{option.name }}
                     </li>
                   </ul>
                 </div>
@@ -38,12 +40,12 @@
 
               <el-popover placement="bottom" trigger="click">
                 <template #reference>
-                  <el-button style="background: #a3caff4d; color: #2f54eb;border: 1px solid #2f54eb4d;">{{ vo.operator ||
+                  <el-button style="background: #a3caff4d; color: #2f54eb;border: 1px solid #2f54eb4d;">{{ vo.operator_text ||
                     '操作符' }}</el-button>
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="option in options" :key="option.value" @click="vo.operator = option.value;">{{ option.label
+                    <li v-for="option in operatorList" :key="option.Key" @click="vo.operator = option.Key;vo.operator_text = option.Name;">{{ option.Name
                     }}</li>
                   </ul>
                 </div>
@@ -55,10 +57,8 @@
                     '参数值' }}</el-button>
                 </template>
                 <div class="popover-content">
-                  <ul>
-                    <li v-for="option in options" :key="option.value" @click="vo.value = option.value;">{{ option.label }}
-                    </li>
-                  </ul>
+                   <el-input v-model="vo.value" placeholder="请输入参数值" />
+
                 </div>
               </el-popover>
 
@@ -72,10 +72,10 @@
 
           <div style="    padding-top: 12px;" @click="addSceneItem(index)">
             <el-icon size="18" style="    font-size: 24px;">
-              <CirclePlus size="18"/>
+              <CirclePlus size="18" />
             </el-icon>
           </div>
-        
+
         </div>
 
       </div>
@@ -96,26 +96,30 @@
 import { PropType, ref } from 'vue'
 import { CirclePlus, CircleClose, Right } from '@element-plus/icons-vue';
 
-const options = [
-  { label: '选项一', value: 'option1' },
-  { label: '选项二', value: 'option2' },
-  { label: '选项三', value: 'option3' },
-];
+const operatorList=ref([{
+  'Key':'',
+  'Name':'',
+}]);
 
 interface IConditionItem {
-  param?: string;
+  [x: string]: any;
+  parameter?: string;
   operator?: string;
   value?: string;
 }
 
 interface IValueType {
-  list: IConditionItem[] ;
+  list: IConditionItem[];
 }
 
 const props = defineProps({
 
   condition: {
-    type: Array as PropType<IValueType[]> | undefined,
+    type: Array as PropType<IConditionItem[]> | undefined,
+    default: () => []
+  },
+  columnList: {
+    type: Array,
     default: () => []
   },
   operate_index: {
@@ -124,28 +128,32 @@ const props = defineProps({
   }
 })
 
+const setParameter=(vo: IConditionItem,item:any)=>{
+  vo.parameter_text = item.name;
+  vo.parameter = item.column;
+  operatorList.value=item.termTypes
+
+}
+
 const addSceneItem = (index: any | number) => {
-  props.condition[index].list.push({
-    'param': '',
+  props.condition[index].push({
+    'parameter': '',
     'operator': '',
     'value': ''
   })
 }
 
 const DelSceneItem = (index: any | number) => {
-  props.condition[index].list.splice(index, 1);
+  props.condition[index].splice(index, 1);
 }
 
 
 const addScene = () => {
-  props.condition.push({
-    'list': [{
-      'param': '',
-      'operator': '',
-      'value': ''
-    }],
-
-  });
+  props.condition.push([{
+    'parameter': '',
+    'operator': '',
+    'value': ''
+  }]);
 };
 const delScene = (index: number) => {
   props.condition.splice(index, 1);
@@ -209,7 +217,6 @@ const delScene = (index: number) => {
 
   .item_list {
     // background: #fff;
-    border: 1px dashed #959596;
 
     .items {
       padding: 10px;

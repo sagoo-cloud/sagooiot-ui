@@ -12,55 +12,49 @@
       </div>
       <div class="product flex flex-warp">
 
-        <el-form-item label="产品：" prop="product_key">
-          <el-select v-model="item.product_key" filterable placeholder="请选择产品">
+        <el-form-item label="产品：" prop="productKey">
+          <el-select v-model="item.productKey" filterable placeholder="请选择产品" @change="seletChange(index,item.productKey!)">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备：" prop="device_key">
-          <el-select v-model="item.device_key" filterable placeholder="请选择设备">
+        <el-form-item label="设备：" prop="deviceKey">
+          <el-select v-model="item.deviceKey" filterable placeholder="请选择设备">
             <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="触发类型：" prop="type">
-          <el-select v-model="item.type" filterable placeholder="请选择触发类型">
+        <el-form-item label="触发类型：" prop="triggerType">
+          <el-select v-model="item.triggerType" filterable placeholder="请选择触发类型" @change="getcolumns(index,item.triggerType!)">
             <el-option v-for="it in sourceTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="定时请求">
+        <el-form-item label="定时请求" v-if="item.triggerType && ['readAttribute', 'functionCall'].includes(item.triggerType)">
           <div style="display:flex">
-            <el-input v-model="item.cronExpression" placeholder="请输入cron表达式" />
+            <el-input v-model="item.timer" placeholder="请输入cron表达式" />
             <el-dialog v-model="dialogVisible" title="选择Cron规则" width="60%">
               <vue3cron @handlelisten="handlelisten" :type="index" @close="cronclose"></vue3cron>
             </el-dialog>
-            <el-button type="success"  @click="showCron()" style="margin-left: 5px;">设置</el-button>
+            <el-button type="success" @click="showCron()" style="margin-left: 5px;">设置</el-button>
 
           </div>
         </el-form-item>
-        <el-form-item label="属性：" prop="type">
-          <el-select v-model="item.type" filterable placeholder="请选择触发类型">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
+
       </div>
 
       <div class="title flex">
-        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.where" />
+        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.triggerSwitch" />
         </div>
       </div>
-        <Condition :condition="item.condition" :operate_index="index"  v-if="item.where"></Condition>
+      <Condition :condition="item.condition" :operate_index="index" :columnList="columnList" v-if="item.triggerSwitch">
+      </Condition>
     </div>
     <div>
       <div class="edit">
@@ -76,34 +70,39 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref,unref  } from 'vue'
+import { PropType, ref, unref, reactive, getCurrentInstance } from 'vue'
 import { DocumentAdd, CircleClose, Right } from '@element-plus/icons-vue';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
-
+import api from '/@/api/scene';
+import product from '/@/api/device';
 import Condition from './condition.vue';
+const { proxy } = getCurrentInstance() as any;
+const scene_type = proxy.useDict('scene_type');
 
-const dialogVisible=ref();
+const dialogVisible = ref();
+const sourceData = ref<testIValueType[]>([]);
 
+const deviceListData = ref<testIValueType[]>([]);
+const columnList = ref([]);
+let product_key = "";
 interface IConditionItem {
-  param?: string;
+  parameter?: string;
   operator?: string;
   value?: string;
 }
 
 interface IValueType {
-  type?: string;
-  product_key?: string;
-  device_key?: string;
-  where?: string;
-  cronExpression?: string;
-  condition?: {
-    list?: IConditionItem[] ;
-  }[];
+  triggerType?: string;
+  productKey?: string;
+  deviceKey?: string;
+  triggerSwitch?: boolean;
+  timer?: string;
+  condition?: IConditionItem[][]; // 更新这里的类型定义
 }
 
 
-
 interface testIValueType {
+  id: string;
   key: string;
   name?: string;
 
@@ -113,46 +112,15 @@ const props = defineProps({
 
   sceneList: {
     type: Array as PropType<IValueType[]>,
-    default: () => []
+    default: () => [],
   },
-  sourceData: {
-    type: Array as PropType<testIValueType[]>,
-    default: () => [{
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }]
+
+  sceneType: {
+    type: String,
+    default: () => '',
   },
-  deviceListData: {
-    type: Array as PropType<testIValueType[]>,
-    default: () => [{
-      'key': 'all',
-      'name': '全部设备',
-    }, {
-      'key': '3242342424',
-      'name': 'A21楼智能电表',
-    }, {
-      'key': '453423424',
-      'name': '五楼温湿度传感设备',
-    }, {
-      'key': '4534323311',
-      'name': '1楼震动传感设备',
-    }, {
-      'key': 'aworr324242',
-      'name': '2号院充电桩',
-    }]
-  },
+
+
   sourceTypeData: {
     type: Array as PropType<testIValueType[]>,
     default: () => [{
@@ -179,22 +147,75 @@ const props = defineProps({
     }]
   }
 })
+const getProductList = () => {
+  product.product.getSubList().then((res: any) => {
+    sourceData.value = res.product;
+  });
+};
+getProductList();
+const seletChange = (index: number, val: string) => {
 
+  product_key = val;
 
+  //根据产品key获取产品ID
+  let info = unref(sourceData)?.find((pro: { key: any; }) => pro.key === val);
+  if (info) {
+    // 重置 deviceKey 的值
+    props.sceneList[index].deviceKey = '';
+    // 重置当前项的 condition 值
+    props.sceneList[index].condition = [[{
+      'parameter': '',
+      'operator': '',
+      'value': ''
+    }]];
+    getDeviceList(info.id)
+  }
+
+}
+const getDeviceList = (_id: any) => {
+  product.device.allList({ productId: _id }).then((res: any) => {
+    deviceListData.value = res.device
+  })
+}
+const getcolumns = (index: number, val: string)  => {
+  let where = {
+    "sceneType": props.sceneType, //场景类型
+    "typeName": scene_type[props.sceneType],
+    "device": {
+      "operation": {
+        "operator": val
+      },
+      "productKey": product_key,
+      "selector": "all"
+    }
+  }
+  getcolumnsList(where);
+ // 重置当前项的 condition 值
+ props.sceneList[index].condition = [[{
+      'parameter': '',
+      'operator': '',
+      'value': ''
+    }]];
+}
+const getcolumnsList = (where: any) => {
+  api.manage.getColumns(where).then((res: any) => {
+    columnList.value = res;
+  })
+}
 const addScene = () => {
   props.sceneList.push({
-    'product_key': '',
-    'device_key': '',
-    'type': '',
-    'condition':[{
-								'list': [{
-											'param': '',
-											'operator': '',
-											'value': ''
-										}]
-							}]
+    'productKey': '',
+    'deviceKey': '',
+    'triggerType': '',
+    'timer': '',
+    'triggerSwitch': false,
+    'condition': [[{
+      'parameter': '',
+      'operator': '',
+      'value': ''
+
+    }]]
   });
-  console.log(props.sceneList);
 };
 const delScene = (index: number) => {
   props.sceneList.splice(index, 1);
@@ -203,7 +224,7 @@ const setNull = (row: any, key: string, val: string) => {
   if (!val) row[key] = null
 }
 const handlelisten = (e: any) => {
-  props.sceneList[e.type].cronExpression=e.cron;
+  props.sceneList[e.type].timer = e.cron;
 
 };
 const showCron = () => {
@@ -215,7 +236,6 @@ const cronclose = () => {
 }
 </script>
 <style scoped lang="scss">
-
 .type-item {
   margin-top: 15px;
 
@@ -242,8 +262,11 @@ const cronclose = () => {
 
   .biankang {
 
-    border: 1px dashed #959596;;
+    border: 1px solid #e8e2e2;
+    ;
     border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
   }
 
 

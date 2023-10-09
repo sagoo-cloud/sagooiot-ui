@@ -2,14 +2,14 @@
 	<el-card class="system-dic-container" style="position: relative;">
 		<div class="content">
 			<div class="flex cont_box">
-				<div class="font26">场景名称：店里车间场景</div>
-				<div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2
-					? '启用' : '禁用' }}</div>
+				<div class="font26">场景名称：{{detail.name}}</div>
+				<div class="pro-status"><span :class="detail.status == 1 ? 'on' : 'off'"></span>{{ detail.status  == 1
+					? '启用' : '未启用' }}</div>
 			</div>
 
 			<div class="flex">
-				<div class="desc">场景描述：这个组队电力车间整个场景进行模拟计算</div>
-				<div class="edit" @click="addOrEdit({})"><el-link type="primary"> <el-icon>
+				<div class="desc">场景描述：{{detail.description}}</div>
+				<div class="edit" @click="addOrEdit(detail)"><el-link type="primary"> <el-icon>
 							<EditPen color="#409eff" />
 						</el-icon>修改</el-link></div>
 			</div>
@@ -19,7 +19,7 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;" >
 		<div class="font20">场景定义</div>
-		<SceneItem :sceneList="sceneList"></SceneItem>
+		<SceneItem :sceneList="sceneList" :sceneType="detail.sceneType"></SceneItem>
 	</el-card>
 	<el-card style="  margin-top: 15px;" >
 		<div class="font20">场景动作</div>
@@ -37,21 +37,23 @@ import { EditPen, DocumentAdd } from '@element-plus/icons-vue';
 import ActionItem from './component/actionItem.vue';
 import SceneItem from './component/sceneItem.vue';
 import EditForm from './edit.vue';
-import api from '/@/api/network';
+import api from '/@/api/scene';
+import product from '/@/api/device';
 
 const editFormRef = ref();
 const sceneList = [{
-	'product_key': '',
-	'device_key': '',
-	'type': '',
-	'where': false,
-	'condition': [{
-		'list': [{
-			'param': '',
-			'operator': '',
-			'value': ''
-		}]
-	}]
+	'productKey': '',
+				'deviceKey': '',
+				'triggerType': '',
+				'timer': '',
+				'triggerSwitch': false,
+				'condition': [[{
+
+						'parameter': '',
+						'operator': '',
+						'value': ''
+
+				}]]
 }];
 
 
@@ -63,6 +65,7 @@ export default defineComponent({
 		const state = reactive({
 			developer_status: 2,
 			detail: {},
+			sourceData:[],
 			actionList: [{
 				'seriallist':[{
 
@@ -72,30 +75,33 @@ export default defineComponent({
 				}]
 			}],
 			sceneList: [{
-				'product_key': '',
-				'device_key': '',
-				'type': '',
-				'where': false,
-				'condition': [{
-					'list': [{
-						'param': '',
+				'productKey': '',
+				'deviceKey': '',
+				'triggerType': '',
+				'timer': '',
+				'triggerSwitch': false,
+				'condition': [[{
+
+						'parameter': '',
 						'operator': '',
 						'value': ''
-					}]
-				}]
+
+				}]]
 			}],
 
 		});
 		const activeName = ref('first')
 		const getDetail = () => {
 			const id = route.params && route.params.id;
-			api.server.getDetail({ "id": id }).then((res: any) => {
+			api.manage.getDetail({ "id": id }).then((res: any) => {
 				state.detail = res
 			})
 		};
 		const addOrEdit = async (row?: any) => {
 			editFormRef.value.open(row);
 		};
+		
+
 
 		const freshData = () => {
 			getDetail()
@@ -105,7 +111,7 @@ export default defineComponent({
 			router.push(`/iotmanager/network/server/edit/${route.params && route.params.id}`)
 		};
 		onMounted(() => {
-			// getDetail()
+			getDetail();
 		});
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			// console.log(tab, event)

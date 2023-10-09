@@ -3,7 +3,7 @@
 		<div class="content">
 			<div class="flex cont_box">
 				<div class="font26">升级包名称：{{detail.name}}</div>
-				<div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '已验证' : '未验证' }}</div>
+				<div class="pro-status"><span :class="detail.checkres == 1 ? 'on' : 'off'"></span>{{ detail.checkres == 1 ? '已验证' : '未验证' }}</div>
 			</div>
 			<div class="mt20"></div>
 			<div class="container">
@@ -14,6 +14,7 @@
 				<div class="item">签名算法：{{detail.are}}</div>
 				<div class="item">模块名称：{{detail.moduleName}}</div>
 			</div>
+
 			<!-- <div class="mt20"></div>
 			<div class="status_list">
 				<div class="otaflex">
@@ -90,7 +91,8 @@ export default defineComponent({
 				'name':'',
 				'typo':1,
 				'are':'',
-				'moduleName':''
+				'moduleName':'',
+				'checkres':0,
 			},
 			
 		})

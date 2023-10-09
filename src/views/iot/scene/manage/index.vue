@@ -34,24 +34,34 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="name" label="类型" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="name" label="描述" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="运行状态" width="100" align="center">
+			<el-table-column prop="id" label="ID"  min-width="100" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="name" label="场景名称"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="sceneType" label="场景类型" align="center">
 				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status">启用</el-tag>
-					<el-tag type="info" size="small" v-else>禁用</el-tag>
+					<el-tag size="small" v-if="scope.row.sceneType == 'device'">设备触发</el-tag>
+					<el-tag size="small" v-if="scope.row.sceneType == 'manual'">手动触发</el-tag>
+					<el-tag size="small" v-if="scope.row.sceneType == 'timer'">定时触发</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
+
+			<el-table-column prop="status" label="状态" align="center">
+				<template #default="scope">
+					<el-tag size="small" type="success" v-if="scope.row.status == 1">启用</el-tag>
+					<el-tag size="small" type="info" v-if="scope.row.status == 0">未启用</el-tag>
+				</template>
+			</el-table-column>
+			<el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
+	
+			<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
 					<el-button size="small" text type="primary" v-if="!scope.row.folderName"
 						@click="toDetail(scope.row.id)">详情</el-button>
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-					<el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0" v-auth="'startOrStop'">启用</el-button>
-          		   <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0" v-auth="'startOrStop'">停用</el-button>
+					<el-button size="small" text type="success" @click="onActionStatus(scope.row)"
+						v-if="scope.row.status == 0" v-auth="'startOrStop'">启用</el-button>
+					<el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0"
+						v-auth="'startOrStop'">停用</el-button>
 					<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -76,7 +86,7 @@ const router = useRouter();
 
 const editFormRef = ref();
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'data', { keyWord: '' });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'Data', { keyWord: '' });
 
 getList();
 /** 重置按钮操作 */
@@ -86,7 +96,7 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 	getList();
 };
 const toDetail = (id: number) => {
-      router.push(`/iotmanager/scene/manage/detail/${id}`)
+	router.push(`/iotmanager/scene/manage/detail/${id}`)
 };
 function getTokenUrl(url: string) {
 	const tokenUrl = import.meta.env.VITE_TOPO_URL
@@ -114,18 +124,18 @@ const edit = (row: any) => {
 	window.open(url);
 };
 const onActionStatus = (item: any) => {
-      if (item.status == 0) {
-        api.manage.deploy({ id: item.id }).then((res: any) => {
+	if (item.status == 0) {
+		api.manage.status({ id: item.id,status:1 }).then((res: any) => {
 			getList();
-          ElMessage.success(res.message || '操作成功');
-        });
-      } else {
-        api.manage.undeploy({ id: item.id }).then((res: any) => {
+			ElMessage.success(res.message || '操作成功');
+		});
+	} else {
+		api.manage.status({ id: item.id,status:0 }).then((res: any) => {
 			getList();
-          ElMessage.success(res.message || '操作成功');
-        });
-      }
-    }
+			ElMessage.success(res.message || '操作成功');
+		});
+	}
+}
 const del = (row: any) => {
 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',

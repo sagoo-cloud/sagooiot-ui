@@ -39,9 +39,9 @@
 			</el-table-column>
 			<el-table-column prop="productName" label="所属产品" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="moduleName" label="模块名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="状态" width="100" align="center">
+			<el-table-column prop="checkres" label="状态" width="100" align="center">
 				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status">验证</el-tag>
+					<el-tag type="success" size="small" v-if="scope.row.checkres==1">验证</el-tag>
 					<el-tag type="info" size="small" v-else>未验证</el-tag>
 				</template>
 			</el-table-column> 
