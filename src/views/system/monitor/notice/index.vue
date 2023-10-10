@@ -5,7 +5,7 @@
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="MessageInfo.title" label="标题" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="MessageInfo.content" label="内容" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="MessageInfo.createdAt" label="发生事件" width="160"></el-table-column>
+				<el-table-column prop="MessageInfo.createdAt" label="发生时间" width="160"></el-table-column>
 				<el-table-column prop="" label="状态" min-width="100" align="center">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.isRead">已读</el-tag>
