@@ -14,7 +14,7 @@
 				</el-table-column>
 				<el-table-column label="操作" width="150" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" v-if="!scope.row.isRead">设为已读</el-button>
+						<el-button size="small" text type="primary" @click="read(scope.row)" v-if="!scope.row.isRead">设为已读</el-button>
 						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -47,6 +47,13 @@ const onDel = (row: ApiRow) => {
 	}).then(async () => {
 		await api.del([row.id as number]);
 		ElMessage.success('删除成功');
+		getList();
+	});
+};
+
+const read = (row: ApiRow) => {
+	api.read(row.id as number).then(() => {
+		ElMessage.success('已读成功');
 		getList();
 	});
 };
