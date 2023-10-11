@@ -46,6 +46,33 @@
               </el-icon>
               删除
             </el-button>
+            <el-button size="default" type="success" class="ml10" @click="setDeviceStatus1(null)" v-auth="'del'">
+              <el-icon>
+                <ele-Delete />
+              </el-icon>
+              批量启用
+            </el-button>
+            <el-button size="default" type="warning" class="ml10" @click="setDeviceStatus0(null)" v-auth="'del'">
+              <el-icon>
+                <ele-Delete />
+              </el-icon>
+              批量禁用
+            </el-button>
+
+            <el-button size="default"  class="ml10" @click="onOpenexcelDic('upload')" v-auth="'add'">
+              <el-icon>
+                <ele-Upload />
+              </el-icon>
+              导入设备
+            </el-button>
+            <el-button size="default"  class="ml10" @click="onOpenexcelDic('down')" v-auth="'add'">
+              <el-icon>
+                <ele-Download />
+              </el-icon>
+              导出设备
+            </el-button>
+
+           
           </el-form-item>
         </el-form>
       </div>
@@ -86,6 +113,7 @@
       <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
+    <ExcelDic ref="excelDicRef" @typeList="typeList" />
   </div>
 </template>
 
@@ -93,7 +121,9 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
+import ExcelDic from './component/excel.vue';
 import api from '/@/api/device';
+
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -123,10 +153,11 @@ interface TableDataState {
 
 export default defineComponent({
   name: 'deviceInstance',
-  components: { EditDic },
+  components: { EditDic,ExcelDic },
   setup() {
     const addDicRef = ref();
     const editDicRef = ref();
+    const excelDicRef = ref();
     const detailRef = ref();
     const queryRef = ref();
     const state = reactive<TableDataState>({
@@ -169,6 +200,63 @@ export default defineComponent({
     const onOpenEditDic = (row: TableDataRow) => {
       editDicRef.value.openDialog(row);
     };
+    
+
+    const onOpenexcelDic = (type:string) => {
+      excelDicRef.value.openDialog(type);
+    };
+    
+    //批量启用
+    const setDeviceStatus1=(row: TableDataRow)=>{
+      let ids: number[] = [];
+      if (row) {
+        ids = [row.id];
+      } else {
+        ids = state.ids;
+      }
+      if (ids.length === 0) {
+        ElMessage.error('请选择要操作的数据。');
+        return;
+      }
+      ElMessageBox.confirm("确认要批量启用这些设备吗？", '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          api.device.setDeviceStatus({ids:ids,status:1}).then(() => {
+            ElMessage.success('启用成功');
+            typeList();
+          });
+        })
+        .catch(() => { });
+    }
+
+    //批量禁用
+    const setDeviceStatus0=(row: TableDataRow)=>{
+      let ids: number[] = [];
+      if (row) {
+        ids = [row.id];
+      } else {
+        ids = state.ids;
+      }
+      if (ids.length === 0) {
+        ElMessage.error('请选择要操作的数据。');
+        return;
+      }
+      ElMessageBox.confirm("确认要批量禁用这些设备吗？", '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          api.device.setDeviceStatus({ids:ids,status:0}).then(() => {
+            ElMessage.success('禁用成功');
+            typeList();
+          });
+        })
+        .catch(() => { });
+    }
     // 删除产品
     const onRowDel = (row: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
@@ -224,11 +312,16 @@ export default defineComponent({
       }
     }
     return {
+
       addDicRef,
+      excelDicRef,
+      onOpenexcelDic,
       editDicRef,
       detailRef,
       queryRef,
       onActionStatus,
+      setDeviceStatus1,
+      setDeviceStatus0,
       onOpenDetail,
       onOpenAddDic,
       onOpenEditDic,
