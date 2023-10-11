@@ -19,7 +19,7 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;" >
 		<div class="font20">场景定义</div>
-		<SceneItem :sceneList="sceneList" :sceneType="detail.sceneType"></SceneItem>
+		<SceneItem v-if="showstatus" :sceneList="sceneList" :sceneType="detail.sceneType" @addScenesDetail="addScenesDetail" @delScenesDetail="delScenesDetail" @editScenesDetail="editScenesDetail"></SceneItem>
 	</el-card>
 	<el-card style="  margin-top: 15px;" >
 		<div class="font20">场景动作</div>
@@ -41,7 +41,8 @@ import api from '/@/api/scene';
 import product from '/@/api/device';
 
 const editFormRef = ref();
-const sceneList = [{
+//原始
+const sceneList = {
 	'productKey': '',
 				'deviceKey': '',
 				'triggerType': '',
@@ -54,7 +55,8 @@ const sceneList = [{
 						'value': ''
 
 				}]]
-}];
+};
+const originalSceneList=ref([{}]);
 
 
 export default defineComponent({
@@ -64,6 +66,7 @@ export default defineComponent({
 		const router = useRouter();
 		const state = reactive({
 			developer_status: 2,
+			showstatus : false,
 			detail: {},
 			sourceData:[],
 			actionList: [{
@@ -96,7 +99,59 @@ export default defineComponent({
 			api.manage.getDetail({ "id": id }).then((res: any) => {
 				state.detail = res
 			})
+			getOneDetail();
 		};
+
+		const getOneDetail = () => {
+			const id = route.params && route.params.id;
+			api.manage.getOneDetail({ "sceneId": id,'group':'definition' }).then((res: any) => {
+				if(!res){
+					addScenesDetail('definition');
+					getOneDetail();
+				}
+				originalSceneList.value=res;
+				const scenes = res.map((scene:any) => {
+					const parsedBodyJson = JSON.parse(scene.bodyjson);
+					return {
+						...parsedBodyJson
+					};
+				});
+
+				state.sceneList=scenes;
+				state.showstatus = true;
+
+			})
+		};
+
+		//新增一条场景定义
+		const addScenesDetail=(type:String)=>{
+			let data={
+				sceneId:route.params && route.params.id,
+				group:type,
+				bodyjson:sceneList,
+			}
+			api.manage.addDetail(data).then((res: any) => {
+				getOneDetail();
+			});
+		}
+
+		//删除一条场景
+		const delScenesDetail=(index)=>{
+			let ids=originalSceneList.value[index].id;
+			api.manage.delDetail(ids).then((res: any) => {
+				// getOneDetail();
+			});
+		}
+		
+		//修改一条场景
+		const editScenesDetail=(index:number)=>{
+			let saveData=state.sceneList[index];
+			let ids=originalSceneList.value[index].id;
+			api.manage.editDetail({id:ids,bodyjson:saveData}).then((res: any) => {
+				getOneDetail();
+			});
+			
+		}
 		const addOrEdit = async (row?: any) => {
 			editFormRef.value.open(row);
 		};
@@ -111,18 +166,21 @@ export default defineComponent({
 			router.push(`/iotmanager/network/server/edit/${route.params && route.params.id}`)
 		};
 		onMounted(() => {
-			getDetail();
+
 		});
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 			// console.log(tab, event)
 		}
 
+		getDetail();
 
 
 		return {
 			toEdit,
 			addOrEdit,
-
+			delScenesDetail,
+			addScenesDetail,
+			editScenesDetail,
 			editFormRef,
 			activeName,
 			freshData,

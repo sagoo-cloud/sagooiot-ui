@@ -13,7 +13,8 @@
       <div class="product flex flex-warp">
 
         <el-form-item label="产品：" prop="productKey">
-          <el-select v-model="item.productKey" filterable placeholder="请选择产品" @change="seletChange(index,item.productKey!)">
+          <el-select v-model="item.productKey" filterable placeholder="请选择产品"
+            @change="seletChange(index, item.productKey!)">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -21,7 +22,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备：" prop="deviceKey">
-          <el-select v-model="item.deviceKey" filterable placeholder="请选择设备">
+          <el-select v-model="item.deviceKey" filterable placeholder="请选择设备" @change="EditPen(index)">
             <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -29,14 +30,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="触发类型：" prop="triggerType">
-          <el-select v-model="item.triggerType" filterable placeholder="请选择触发类型" @change="getcolumns(index,item.triggerType!)">
+          <el-select v-model="item.triggerType" filterable placeholder="请选择触发类型"
+            @change="getSelectcolumns(index, item.triggerType!)">
             <el-option v-for="it in sourceTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="定时请求" v-if="item.triggerType && ['readAttribute', 'functionCall'].includes(item.triggerType)">
+        <el-form-item label="定时请求"
+          v-if="item.triggerType && ['readAttribute', 'functionCall'].includes(item.triggerType)">
           <div style="display:flex">
             <el-input v-model="item.timer" placeholder="请输入cron表达式" />
             <el-dialog v-model="dialogVisible" title="选择Cron规则" width="60%">
@@ -46,14 +49,13 @@
 
           </div>
         </el-form-item>
-
       </div>
 
       <div class="title flex">
-        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.triggerSwitch" />
+        <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.triggerSwitch"   @change="EditPen(index)"/>
         </div>
       </div>
-      <Condition :condition="item.condition" :operate_index="index" :columnList="columnList" v-if="item.triggerSwitch">
+      <Condition :condition="item.condition" :operate_index="index" :columnList="columnList" v-if="item.triggerSwitch && columnList.length>0" @EditPen="EditPen">
       </Condition>
     </div>
     <div>
@@ -78,6 +80,8 @@ import product from '/@/api/device';
 import Condition from './condition.vue';
 const { proxy } = getCurrentInstance() as any;
 const scene_type = proxy.useDict('scene_type');
+
+const emit = defineEmits(['addScenesDetail','delScenesDetail','editScenesDetail']);
 
 const dialogVisible = ref();
 const sourceData = ref<testIValueType[]>([]);
@@ -107,6 +111,8 @@ interface testIValueType {
   name?: string;
 
 }
+
+
 
 const props = defineProps({
 
@@ -147,18 +153,23 @@ const props = defineProps({
     }]
   }
 })
+
+
+
+
 const getProductList = () => {
   product.product.getSubList().then((res: any) => {
     sourceData.value = res.product;
+    intScenel();
   });
 };
-getProductList();
+
+
 const seletChange = (index: number, val: string) => {
-
   product_key = val;
-
   //根据产品key获取产品ID
   let info = unref(sourceData)?.find((pro: { key: any; }) => pro.key === val);
+
   if (info) {
     // 重置 deviceKey 的值
     props.sceneList[index].deviceKey = '';
@@ -170,14 +181,28 @@ const seletChange = (index: number, val: string) => {
     }]];
     getDeviceList(info.id)
   }
-
+  EditPen(index);
 }
 const getDeviceList = (_id: any) => {
   product.device.allList({ productId: _id }).then((res: any) => {
     deviceListData.value = res.device
   })
 }
-const getcolumns = (index: number, val: string)  => {
+
+const getSelectcolumns=(index: number, val: string) => {
+  EditPen(index);
+
+  getcolumns(index,val);
+
+    // 重置当前项的 condition 值
+    props.sceneList[index].condition = [[{
+    'parameter': '',
+    'operator': '',
+    'value': ''
+  }]];
+
+}
+const getcolumns = (index: number, val: string) => {
   let where = {
     "sceneType": props.sceneType, //场景类型
     "typeName": scene_type[props.sceneType],
@@ -190,16 +215,15 @@ const getcolumns = (index: number, val: string)  => {
     }
   }
   getcolumnsList(where);
- // 重置当前项的 condition 值
- props.sceneList[index].condition = [[{
-      'parameter': '',
-      'operator': '',
-      'value': ''
-    }]];
+  
+
+
 }
 const getcolumnsList = (where: any) => {
   api.manage.getColumns(where).then((res: any) => {
-    columnList.value = res;
+    if(res){
+      columnList.value = res;
+    }
   })
 }
 const addScene = () => {
@@ -216,8 +240,16 @@ const addScene = () => {
 
     }]]
   });
+  emit('addScenesDetail', 'definition');
 };
+
+const EditPen=(index: number)=>{
+  emit('editScenesDetail',index);
+
+}
 const delScene = (index: number) => {
+  emit('delScenesDetail', index);
+
   props.sceneList.splice(index, 1);
 }
 const setNull = (row: any, key: string, val: string) => {
@@ -225,6 +257,7 @@ const setNull = (row: any, key: string, val: string) => {
 }
 const handlelisten = (e: any) => {
   props.sceneList[e.type].timer = e.cron;
+  EditPen(e.type);
 
 };
 const showCron = () => {
@@ -234,6 +267,28 @@ const showCron = () => {
 const cronclose = () => {
   dialogVisible.value = false;
 }
+
+//初始化
+const intScenel=()=>{
+  let array_data=props.sceneList;
+  console.log(array_data);
+
+  array_data.map((val:any,index) => {
+      if(val.productKey){
+          product_key = val.productKey;
+          let info = unref(sourceData)?.find((pro: { key: any; }) => pro.key === val.productKey);
+
+          if (info) {
+            getDeviceList(info.id)
+          }
+      }
+      if(val.triggerType){
+        getcolumns(index,val.triggerType)
+      } 
+  });
+}
+getProductList(); 
+
 </script>
 <style scoped lang="scss">
 .type-item {

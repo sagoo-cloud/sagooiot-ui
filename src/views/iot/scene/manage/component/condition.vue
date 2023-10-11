@@ -24,7 +24,7 @@
                 style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;"
                 v-if="i > 0">并且</el-button>
 
-              <el-popover placement="bottom" trigger="click">
+              <el-popover placement="bottom" trigger="click"  ref="popoverRef" v-model:visible="isPopoverVisible">
                 <template #reference>
                   <el-button style="background: #9adbff4d; color: #00a4fe;border: 1px solid #00a4fe4d;">{{ vo.parameter_text ||
                     '请选择参数' }}</el-button>
@@ -38,14 +38,14 @@
                 </div>
               </el-popover>
 
-              <el-popover placement="bottom" trigger="click">
+              <el-popover placement="bottom" trigger="click" v-model:visible="isPopoverVisible1">
                 <template #reference>
                   <el-button style="background: #a3caff4d; color: #2f54eb;border: 1px solid #2f54eb4d;">{{ vo.operator_text ||
                     '操作符' }}</el-button>
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="option in operatorList" :key="option.Key" @click="vo.operator = option.Key;vo.operator_text = option.Name;">{{ option.Name
+                    <li v-for="option in vo.operatorList" :key="option.Key" @click="vo.operator = option.Key;vo.operator_text = option.Name;saveData();isPopoverVisible1=false;">{{ option.Name
                     }}</li>
                   </ul>
                 </div>
@@ -57,12 +57,12 @@
                     '参数值' }}</el-button>
                 </template>
                 <div class="popover-content">
-                   <el-input v-model="vo.value" placeholder="请输入参数值" />
+                   <el-input v-model="vo.value" placeholder="请输入参数值"  @input="saveData"  />
 
                 </div>
               </el-popover>
 
-              <el-icon size="16" v-if="i > 0" @click="DelSceneItem(index)" style="position: relative;top: -13px;">
+              <el-icon size="16" v-if="i > 0" @click="DelSceneItem(i, index)" style="position: relative;top: -13px;">
                 <CircleClose />
               </el-icon>
 
@@ -95,7 +95,9 @@
 <script lang="ts" setup>
 import { PropType, ref } from 'vue'
 import { CirclePlus, CircleClose, Right } from '@element-plus/icons-vue';
-
+const emit = defineEmits(['EditPen']);
+const isPopoverVisible = ref(false);
+const isPopoverVisible1 = ref(false);
 const operatorList=ref([{
   'Key':'',
   'Name':'',
@@ -131,20 +133,31 @@ const props = defineProps({
 const setParameter=(vo: IConditionItem,item:any)=>{
   vo.parameter_text = item.name;
   vo.parameter = item.column;
-  operatorList.value=item.termTypes
+  // operatorList.value=item.termTypes
+  vo.operatorList = item.termTypes; 
+  isPopoverVisible.value = false; // 关闭弹窗
 
+  saveData();
 }
 
-const addSceneItem = (index: any | number) => {
+const saveData=()=>{
+  emit('EditPen', props.operate_index);
+}
+
+const addSceneItem = (index:number) => {
   props.condition[index].push({
     'parameter': '',
     'operator': '',
     'value': ''
   })
+  saveData();
+
 }
 
-const DelSceneItem = (index: any | number) => {
-  props.condition[index].splice(index, 1);
+const DelSceneItem = (index: number, parentIndex: number) => {
+  props.condition[parentIndex].splice(index, 1);
+  saveData();
+
 }
 
 
@@ -158,6 +171,24 @@ const addScene = () => {
 const delScene = (index: number) => {
   props.condition.splice(index, 1);
 }
+const initItem = () => {
+  console.log(props.condition,'aaaaaa');
+  console.log(props.columnList,'bbbbbb');
+  props.condition.forEach((item) => {
+    item.forEach((vo) => {
+      const operator = vo.operator;
+      const matchedColumn = props.columnList.find((column) =>
+        column.termTypes.some((term) => term.Key === operator)
+      ); 
+      if (matchedColumn) {
+        vo.operatorList = matchedColumn.termTypes; 
+      } else {
+        vo.operatorList = []; // 如果没有匹配的列，设置为空数组
+      }
+    });
+  });
+};
+initItem();
 
 </script>
 <style scoped lang="scss">
