@@ -98,6 +98,9 @@ export default {
     mutipleBind: (data: object) => post('/product/device/bind_sub', data),
     mutipleUnbind: (data: object) => post('/product/device/unbind_sub', data),
     updateOnlineTimeout: (data: object) => put('/product/device/extend/update', data),
+    setDeviceStatus: (data: object) => post('/product/device/setDeviceStatus', data),
+    import: (data: object) => post('/product/device/import', data),
+    export: (data: object) => file('/product/device/export', data),
   }
   
   
