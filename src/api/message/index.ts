@@ -10,7 +10,7 @@ export default {
   // 获取消息列表
   getList: (data: object) => get('/system/message/list', data),
   // 阅读消息
-  red: (id: number) => put('/system/message/red', { id }),
+  read: (id: number) => put('/system/message/read', { id }),
   // 获取所有未读消息数量
   unReadCount: () => get('/system/message/unReadCount')
 }
