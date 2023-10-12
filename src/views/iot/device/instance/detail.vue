@@ -3,7 +3,8 @@
     <div class="content">
       <div class="cont_box">
         <div class="title">设备：{{ detail.name }}</div>
-        <div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '在线' : '离线' }}</div>
+        <div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '在线'
+          : '离线' }}</div>
 
         <!-- <div class="pro-option" @click="CkOption">{{ developer_status == 2 ? '下线' : '上线' }}</div> -->
       </div>
@@ -49,15 +50,16 @@
                   </div>
                 </div>
 
-                <div class="statusname" v-if="item.type!='object'">{{ item.value }}{{ item.unit }}</div>
+                <div class="statusname" v-if="item.type != 'object'">{{ item.value }}{{ item.unit }}</div>
                 <div v-else>
-                 <div class="oblist" v-for="(vare, name) in item.value">
-                    <div class="name">{{name}}：</div>
-                    <div class="name">{{vare}}</div>
-                </div>
+                  <div class="oblist" v-for="(vare, name) in item.value">
+                    <div class="name">{{ name }}：</div>
+                    <div class="name">{{ vare }}</div>
+                  </div>
                 </div>
                 <div class="">
-                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
+                  <devantd :json="item.list" :antdid="item.key"
+                    v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
                 </div>
               </div>
             </div>
@@ -80,7 +82,10 @@
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备名称</th>
                   <td class="ant-descriptions-item-content" colspan="1">{{ detail.name }}</td>
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属产品</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.productName }}</td>
+                  <td class="ant-descriptions-item-content" colspan="1">
+                    <router-link :to="'/iotmanager/device/product/detail/' + prodetail.id" class="link-type">{{
+                      detail.productName }} </router-link>
+                  </td>
 
                 </tr>
                 <tr class="ant-descriptions-row">
@@ -153,9 +158,12 @@
                   <el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
-                      <el-button size="small" text type="primary" v-auth="'edit'" @click="setAttr(scope.row)">设置属性</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'"
+                        @click="onEditAttr(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'"
+                        @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+                      <el-button size="small" text type="primary" v-auth="'edit'"
+                        @click="setAttr(scope.row)">设置属性</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -175,8 +183,10 @@
                   <el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'"
+                        @click="onEditFun(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'"
+                        @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -203,8 +213,10 @@
 
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'"
+                        @click="onEditEvent(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'"
+                        @click="onRowDel(scope.row.key, 'event')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -235,18 +247,22 @@
                   <el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
                   <el-table-column label="操作" width="300" align="center" fixed="right">
                     <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+                      <el-button size="small" text type="warning" v-auth="'edit'"
+                        @click="onEditTag(scope.row)">修改</el-button>
+                      <el-button size="small" text type="danger" v-auth="'del'"
+                        @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
               </el-tab-pane>
             </el-tabs>
-            <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
+            <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum"
+              v-model:limit="tableData.param.pageSize" @pagination="getList()" />
           </div>
         </el-tab-pane>
         <el-tab-pane label="设备功能" name="5">
-          <functionCom :device-key="detail.key" :product-key="prodetail.key" v-if="detail.key && prodetail.key && activeName === '5'"></functionCom>
+          <functionCom :device-key="detail.key" :product-key="prodetail.key"
+            v-if="detail.key && prodetail.key && activeName === '5'"></functionCom>
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
@@ -258,7 +274,8 @@
               </el-form-item>
 
               <el-form-item label="创建时间" prop="dateRange">
-                <el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                <el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD"
+                  type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button size="default" type="primary" class="ml10" @click="getlog">
@@ -288,7 +305,8 @@
             </el-table-column>
           </el-table>
 
-          <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
+          <pagination v-show="logtableData.total > 0" :total="logtableData.total"
+            v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
         </el-tab-pane>
         <el-tab-pane v-if="prodetail.deviceType == '网关'" label="子设备" name="6">
           <div class="wu-box">
@@ -296,11 +314,13 @@
               <div class="title">子设备列表</div>
               <div>
                 <el-button v-auth="'mutipleBind'" type="primary" @click="onOpenMutipleBind()">批量绑定</el-button>
-                <el-button v-auth="'cancleMutipleBind'" :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
+                <el-button v-auth="'cancleMutipleBind'" :disabled="!deviceKeyList.length" type="primary"
+                  @click="mutipleUnbind()">批量解绑</el-button>
               </div>
             </div>
 
-            <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
+            <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange"
+              v-loading="deviceTableData.loading">
               <el-table-column type="selection" width="55" align="center" />
               <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" />
               <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" />
@@ -318,12 +338,16 @@
 
               <el-table-column label="操作" width="160" align="center" fixed="right">
                 <template #default="scope">
-                  <el-button size="small" text type="danger" v-auth="'del'" @click="deleteSubDevice(scope.row)">删除</el-button>
-                  <el-button size="small" text type="warning" v-auth="'detail'" @click="onOpenDetail(scope.row)">详情</el-button>
+                  <el-button size="small" text type="danger" v-auth="'del'"
+                    @click="deleteSubDevice(scope.row)">删除</el-button>
+                  <el-button size="small" text type="warning" v-auth="'detail'"
+                    @click="onOpenDetail(scope.row)">详情</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <pagination v-show="deviceTableData.total > 0" :total="deviceTableData.total" v-model:page="deviceTableData.param.pageNum" v-model:limit="deviceTableData.param.pageSize" @pagination="getDeviceTableData" />
+            <pagination v-show="deviceTableData.total > 0" :total="deviceTableData.total"
+              v-model:page="deviceTableData.param.pageNum" v-model:limit="deviceTableData.param.pageSize"
+              @pagination="getDeviceTableData" />
           </div>
 
         </el-tab-pane>
@@ -751,8 +775,8 @@ export default defineComponent({
               temps.push(a);
             }
           });
-          if(item.type=='object'){
-            item.value=JSON.parse(item.value);
+          if (item.type == 'object') {
+            item.value = JSON.parse(item.value);
           }
 
           temp[index]['name'] = item.name
@@ -865,15 +889,16 @@ export default defineComponent({
 });
 </script>
 <style>
-.oblist{
+.oblist {
   display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-right: 5px;
-    flex: 1;
-    margin-top: 10px;
-    margin-left: 10px;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 5px;
+  flex: 1;
+  margin-top: 10px;
+  margin-left: 10px;
 }
+
 .content {
   background: #fff;
   width: 100%;
@@ -1065,7 +1090,6 @@ tr {
   margin-top: 20px;
   height: 30px;
   line-height: 30px;
-}
-</style>
+}</style>
 
 

@@ -4,10 +4,12 @@
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+              @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.key" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+              @keyup.enter.native="typeList" />
           </el-form-item>
 
           <el-form-item label="状态" prop="status" style="width: 200px;">
@@ -19,7 +21,9 @@
           </el-form-item>
 
           <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px"
+              value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期"
+              end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
@@ -46,37 +50,47 @@
               </el-icon>
               删除
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="setDeviceStatus1(null)" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              批量启用
-            </el-button>
-            <el-button size="default" type="warning" class="ml10" @click="setDeviceStatus0(null)" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              批量禁用
-            </el-button>
 
-            <el-button size="default"  class="ml10" @click="onOpenexcelDic('upload')" v-auth="'add'">
-              <el-icon>
-                <ele-Upload />
-              </el-icon>
-              导入设备
-            </el-button>
-            <el-button size="default"  class="ml10" @click="onOpenexcelDic('down')" v-auth="'add'">
-              <el-icon>
-                <ele-Download />
-              </el-icon>
-              导出设备
-            </el-button>
-
-           
+            <el-dropdown>
+              <el-button type="danger" class="ml10">
+                更多操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item> <el-button size="default" type="success" @click="setDeviceStatus1(null)"
+                     >
+                      <el-icon>
+                        <ele-Delete />
+                      </el-icon>
+                      批量启用
+                    </el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button size="default" type="warning" @click="setDeviceStatus0(null)"
+                     >
+                      <el-icon>
+                        <ele-Delete />
+                      </el-icon>
+                      批量禁用
+                    </el-button></el-dropdown-item>
+                  <el-dropdown-item> <el-button size="default" @click="onOpenexcelDic('upload')" >
+                      <el-icon>
+                        <ele-Upload />
+                      </el-icon>
+                      导入设备
+                    </el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button size="default" @click="onOpenexcelDic('down')" >
+                      <el-icon>
+                        <ele-Download />
+                      </el-icon>
+                      导出设备
+                    </el-button></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange"
+        v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <!--        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />-->
         <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
@@ -87,12 +101,13 @@
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
-            <el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
-            <el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
-            <el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status == 1">离线</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status == 2">在线</el-tag>
+            <el-tag type="info" size="small" v-if="scope.row.status == 0">未启用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="registryTime" label="激活时间" align="center" width="150" v-col="'registryTime'"></el-table-column>
+        <el-table-column prop="registryTime" label="激活时间" align="center" width="150"
+          v-col="'registryTime'"></el-table-column>
         <!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
         <el-table-column prop="desc" label="说明" v-col="'desc'"></el-table-column>
 
@@ -100,17 +115,21 @@
           <template #default="scope">
 
             <!-- <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button> -->
-            <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
+            <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type"
+              style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status==0" v-auth="'status'">启用</el-button>
-            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status>0" v-auth="'status'">停用</el-button>
+            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status == 0"
+              v-auth="'status'">启用</el-button>
+            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0"
+              v-auth="'status'">停用</el-button>
             <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum"
+        v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
     <ExcelDic ref="excelDicRef" @typeList="typeList" />
@@ -123,6 +142,7 @@ import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import ExcelDic from './component/excel.vue';
 import api from '/@/api/device';
+import { ArrowDown } from '@element-plus/icons-vue'
 
 
 // 定义接口来定义对象的类型
@@ -150,10 +170,9 @@ interface TableDataState {
     };
   };
 }
-
 export default defineComponent({
   name: 'deviceInstance',
-  components: { EditDic,ExcelDic },
+  components: { EditDic, ExcelDic, ArrowDown },
   setup() {
     const addDicRef = ref();
     const editDicRef = ref();
@@ -200,14 +219,14 @@ export default defineComponent({
     const onOpenEditDic = (row: TableDataRow) => {
       editDicRef.value.openDialog(row);
     };
-    
 
-    const onOpenexcelDic = (type:string) => {
+
+    const onOpenexcelDic = (type: string) => {
       excelDicRef.value.openDialog(type);
     };
-    
+
     //批量启用
-    const setDeviceStatus1=(row: TableDataRow)=>{
+    const setDeviceStatus1 = (row: TableDataRow) => {
       let ids: number[] = [];
       if (row) {
         ids = [row.id];
@@ -224,7 +243,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.device.setDeviceStatus({ids:ids,status:1}).then(() => {
+          api.device.setDeviceStatus({ ids: ids, status: 1 }).then(() => {
             ElMessage.success('启用成功');
             typeList();
           });
@@ -233,7 +252,7 @@ export default defineComponent({
     }
 
     //批量禁用
-    const setDeviceStatus0=(row: TableDataRow)=>{
+    const setDeviceStatus0 = (row: TableDataRow) => {
       let ids: number[] = [];
       if (row) {
         ids = [row.id];
@@ -250,7 +269,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.device.setDeviceStatus({ids:ids,status:0}).then(() => {
+          api.device.setDeviceStatus({ ids: ids, status: 0 }).then(() => {
             ElMessage.success('禁用成功');
             typeList();
           });
