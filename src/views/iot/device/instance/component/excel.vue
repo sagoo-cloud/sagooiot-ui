@@ -155,11 +155,11 @@ export default defineComponent({
       });
     };
     const down=()=>{
-      const fileURL = '/example.xlsx';
+      const fileURL = '/deviceImportExample.xlsx';
       // 创建下载链接
       const link = document.createElement('a');
       link.href = fileURL;
-      link.setAttribute('download', 'example.xlsx');
+      link.setAttribute('download', 'deviceImportExample.xlsx');
 
       // 模拟点击下载链接进行下载
       document.body.appendChild(link);
