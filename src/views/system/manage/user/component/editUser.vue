@@ -5,17 +5,17 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20" v-if="!ruleForm.id">
 						<el-form-item label="用户名" prop="userName">
-							<el-input v-model="ruleForm.userName" placeholder="请输入账户名称" clearable></el-input>
+							<el-input v-model="ruleForm.userName" placeholder="请输入用户名" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20" v-if="!ruleForm.id">
-						<el-form-item label="账户密码" prop="userPassword">
-							<el-input v-model="ruleForm.userPassword" placeholder="请输入" type="password" clearable></el-input>
+						<el-form-item label="密码" prop="userPassword">
+							<el-input v-model="ruleForm.userPassword" placeholder="请输入密码" type="password" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称" prop="userNickname">
-							<el-input v-model="ruleForm.userNickname" placeholder="请输入用户昵称" clearable></el-input>
+						<el-form-item label="姓名" prop="userNickname">
+							<el-input v-model="ruleForm.userNickname" placeholder="请输入姓名" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -59,7 +59,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="岗位" prop="postIds">
-							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择组织" clearable class="w100" v-model="ruleForm.postIds">
+							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择岗位" clearable class="w100" v-model="ruleForm.postIds">
 								<template #default="{ node, data }">
 									<span>{{ data.postName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
