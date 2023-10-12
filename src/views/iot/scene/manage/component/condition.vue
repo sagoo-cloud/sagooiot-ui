@@ -11,10 +11,7 @@
             <CircleClose />
           </el-icon>
         </div>
-        <!-- <el-icon size="26" @click="delScene(index)" v-if="index > 0"
-          style="position: relative;font-size: 26px;    top: 18px;left: -14px;">
-          <CircleClose />
-        </el-icon> -->
+
         <div class="flex-warp item_list">
 
           <div v-for="(vo, i) in item" :key="i">
@@ -24,29 +21,32 @@
                 style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;"
                 v-if="i > 0">并且</el-button>
 
-              <el-popover placement="bottom" trigger="click"  ref="popoverRef" v-model:visible="isPopoverVisible">
+              <el-popover placement="bottom" trigger="click" ref="popoverRef" v-model:visible="vo.isPopoverVisible">
                 <template #reference>
-                  <el-button style="background: #9adbff4d; color: #00a4fe;border: 1px solid #00a4fe4d;">{{ vo.parameter_text ||
+                  <el-button style="background: #9adbff4d; color: #00a4fe;border: 1px solid #00a4fe4d;">{{
+                    vo.parameter_text ||
                     '请选择参数' }}</el-button>
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="(option, d) in columnList" :key="d"  @click="setParameter(vo,option)">
-                    {{option.name }}
+                    <li v-for="(option, d) in columnList" :key="d" @click="setParameter(vo, option)" >
+                      {{ option.name }}
                     </li>
                   </ul>
                 </div>
               </el-popover>
 
-              <el-popover placement="bottom" trigger="click" v-model:visible="isPopoverVisible1">
+              <el-popover placement="bottom" trigger="click" v-model:visible="vo.isPopoverVisible1">
                 <template #reference>
-                  <el-button style="background: #a3caff4d; color: #2f54eb;border: 1px solid #2f54eb4d;">{{ vo.operator_text ||
+                  <el-button style="background: #a3caff4d; color: #2f54eb;border: 1px solid #2f54eb4d;">{{
+                    vo.operator_text ||
                     '操作符' }}</el-button>
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="option in vo.operatorList" :key="option.Key" @click="vo.operator = option.Key;vo.operator_text = option.Name;saveData();isPopoverVisible1=false;">{{ option.Name
-                    }}</li>
+                    <li v-for="option in vo.operatorList" :key="option.Key"
+                      @click="vo.operator = option.Key; vo.operator_text = option.Name; vo.isPopoverVisible1 = false; saveData();">
+                      {{ option.Name }}</li>
                   </ul>
                 </div>
               </el-popover>
@@ -57,12 +57,12 @@
                     '参数值' }}</el-button>
                 </template>
                 <div class="popover-content">
-                   <el-input v-model="vo.value" placeholder="请输入参数值"  @input="saveData"  />
+                  <el-input v-model="vo.value" placeholder="请输入参数值" @input="saveData" />
 
                 </div>
               </el-popover>
 
-              <el-icon size="16" v-if="i > 0" @click="DelSceneItem(i, index)" style="position: relative;top: -13px;">
+              <el-icon size="16" v-if="i>0" @click="DelSceneItem(i, index)" style="position: relative;top: -13px;">
                 <CircleClose />
               </el-icon>
 
@@ -96,32 +96,22 @@
 import { PropType, ref } from 'vue'
 import { CirclePlus, CircleClose, Right } from '@element-plus/icons-vue';
 const emit = defineEmits(['EditPen']);
-const isPopoverVisible = ref(false);
-const isPopoverVisible1 = ref(false);
-const operatorList=ref([{
-  'Key':'',
-  'Name':'',
-}]);
-
 interface IConditionItem {
   [x: string]: any;
   parameter?: string;
   operator?: string;
   value?: string;
 }
-
-interface IValueType {
-  list: IConditionItem[];
+interface Column {
+  termTypes: any[]; 
 }
-
 const props = defineProps({
-
   condition: {
     type: Array as PropType<IConditionItem[]> | undefined,
     default: () => []
   },
   columnList: {
-    type: Array,
+    type: Array as PropType<Column[]>,
     default: () => []
   },
   operate_index: {
@@ -130,21 +120,21 @@ const props = defineProps({
   }
 })
 
-const setParameter=(vo: IConditionItem,item:any)=>{
+const setParameter = (vo: IConditionItem, item: any) => {
   vo.parameter_text = item.name;
   vo.parameter = item.column;
   // operatorList.value=item.termTypes
-  vo.operatorList = item.termTypes; 
-  isPopoverVisible.value = false; // 关闭弹窗
+  vo.operatorList = item.termTypes;
+  vo.isPopoverVisible = false; // 关闭弹窗
 
   saveData();
 }
 
-const saveData=()=>{
+const saveData = () => {
   emit('EditPen', props.operate_index);
 }
 
-const addSceneItem = (index:number) => {
+const addSceneItem = (index: number) => {
   props.condition[index].push({
     'parameter': '',
     'operator': '',
@@ -160,7 +150,6 @@ const DelSceneItem = (index: number, parentIndex: number) => {
 
 }
 
-
 const addScene = () => {
   props.condition.push([{
     'parameter': '',
@@ -172,16 +161,14 @@ const delScene = (index: number) => {
   props.condition.splice(index, 1);
 }
 const initItem = () => {
-  console.log(props.condition,'aaaaaa');
-  console.log(props.columnList,'bbbbbb');
   props.condition.forEach((item) => {
-    item.forEach((vo) => {
-      const operator = vo.operator;
-      const matchedColumn = props.columnList.find((column) =>
-        column.termTypes.some((term) => term.Key === operator)
-      ); 
+    item.forEach((vo:any) => {
+      let operator = vo.operator;
+      let matchedColumn = props.columnList.find((column:any) =>
+        column.termTypes.some((term:any) => term.Key === operator)
+      );
       if (matchedColumn) {
-        vo.operatorList = matchedColumn.termTypes; 
+        vo.operatorList = matchedColumn.termTypes;
       } else {
         vo.operatorList = []; // 如果没有匹配的列，设置为空数组
       }
@@ -192,29 +179,7 @@ initItem();
 
 </script>
 <style scoped lang="scss">
-// ::v-deep .el-divider__text {
-//   background: #f2f3f5  !important;
 
-// }
-
-//先保留
-// ::v-deep .condition_value{
-//    .el-input__wrapper {
-//       width: 120px;
-//       background: #9adbff4d !important;
-//       box-shadow:0px !important;
-//     .el-input__inner{
-//       color: #00a4fe;
-//       text-align: center;
-//     }
-//     .el-input__wrapper .is-focus{
-//       box-shadow:0px !important;
-//     }
-//     .el-input__inner::placeholder{
-//       color: #00a4fe;
-//     }
-//   }
-// }
 .popover-content {
   padding: 0px;
 }
@@ -294,6 +259,5 @@ initItem();
     }
   }
 
-}
-</style>
+}</style>
 
