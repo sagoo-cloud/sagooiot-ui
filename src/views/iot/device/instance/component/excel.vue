@@ -19,12 +19,17 @@
           </el-upload>
           <div>{{ ruleForm.path }}</div>
         </el-form-item>
-
+        <el-form-item label="样表下载" v-if="open_type === 'upload'">
+          <el-button  @click="down" type="primary" text="primary">
+              <el-icon> <ele-Download /> </el-icon>
+              下载文件
+            </el-button>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ open_type === 'upload' ? '导入设备' : '导出设备'
+          <el-button type="primary" @click="onSubmit" size="default" v-if="open_type !== 'upload'">{{ open_type === 'upload' ? '导入设备' : '导出设备'
           }}</el-button>
         </span>
       </template>
@@ -149,10 +154,23 @@ export default defineComponent({
         }
       });
     };
+    const down=()=>{
+      const fileURL = '/example.xlsx';
+      // 创建下载链接
+      const link = document.createElement('a');
+      link.href = fileURL;
+      link.setAttribute('download', 'example.xlsx');
+
+      // 模拟点击下载链接进行下载
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
     return {
       uploadUrl,
       headers,
       tagRef,
+      down,
       updateImg,
       openDialog,
       closeDialog,

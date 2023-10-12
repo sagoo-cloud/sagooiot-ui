@@ -11,7 +11,6 @@
         <div class="icon"></div>触发规则
       </div>
       <div class="product flex flex-warp">
-
         <el-form-item label="产品：" prop="productKey">
           <el-select v-model="item.productKey" filterable placeholder="请选择产品"
             @change="seletChange(index, item.productKey!)">
@@ -50,7 +49,6 @@
           </div>
         </el-form-item>
       </div>
-
       <div class="title flex">
         <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.triggerSwitch"   @change="EditPen(index)"/>
         </div>
@@ -63,11 +61,6 @@
         <el-button type="primary" :icon="DocumentAdd" @click="addScene()">新增场景定义</el-button>
       </div>
     </div>
-
-
-
-
-
   </div>
 </template>
 
@@ -80,12 +73,8 @@ import product from '/@/api/device';
 import Condition from './condition.vue';
 const { proxy } = getCurrentInstance() as any;
 const scene_type = proxy.useDict('scene_type');
-
 const emit = defineEmits(['addScenesDetail','delScenesDetail','editScenesDetail']);
-
 const dialogVisible = ref();
-const sourceData = ref<testIValueType[]>([]);
-
 const deviceListData = ref<testIValueType[]>([]);
 const columnList = ref([]);
 let product_key = "";
@@ -94,7 +83,6 @@ interface IConditionItem {
   operator?: string;
   value?: string;
 }
-
 interface IValueType {
   triggerType?: string;
   productKey?: string;
@@ -103,30 +91,24 @@ interface IValueType {
   timer?: string;
   condition?: IConditionItem[][]; // 更新这里的类型定义
 }
-
-
 interface testIValueType {
   id: string;
   key: string;
   name?: string;
-
 }
-
-
-
 const props = defineProps({
-
   sceneList: {
     type: Array as PropType<IValueType[]>,
     default: () => [],
   },
-
   sceneType: {
     type: String,
     default: () => '',
   },
-
-
+  sourceData:{
+    type: Array as PropType<testIValueType[]>,
+    default: () => []
+  },
   sourceTypeData: {
     type: Array as PropType<testIValueType[]>,
     default: () => [{
@@ -154,21 +136,10 @@ const props = defineProps({
   }
 })
 
-
-
-
-const getProductList = () => {
-  product.product.getSubList().then((res: any) => {
-    sourceData.value = res.product;
-    intScenel();
-  });
-};
-
-
 const seletChange = (index: number, val: string) => {
   product_key = val;
   //根据产品key获取产品ID
-  let info = unref(sourceData)?.find((pro: { key: any; }) => pro.key === val);
+  let info = props.sourceData?.find((pro: { key: any; }) => pro.key === val);
 
   if (info) {
     // 重置 deviceKey 的值
@@ -188,19 +159,15 @@ const getDeviceList = (_id: any) => {
     deviceListData.value = res.device
   })
 }
-
 const getSelectcolumns=(index: number, val: string) => {
   EditPen(index);
-
   getcolumns(index,val);
-
     // 重置当前项的 condition 值
     props.sceneList[index].condition = [[{
     'parameter': '',
     'operator': '',
     'value': ''
   }]];
-
 }
 const getcolumns = (index: number, val: string) => {
   let where = {
@@ -215,9 +182,6 @@ const getcolumns = (index: number, val: string) => {
     }
   }
   getcolumnsList(where);
-  
-
-
 }
 const getcolumnsList = (where: any) => {
   api.manage.getColumns(where).then((res: any) => {
@@ -245,11 +209,9 @@ const addScene = () => {
 
 const EditPen=(index: number)=>{
   emit('editScenesDetail',index);
-
 }
 const delScene = (index: number) => {
   emit('delScenesDetail', index);
-
   props.sceneList.splice(index, 1);
 }
 const setNull = (row: any, key: string, val: string) => {
@@ -258,25 +220,21 @@ const setNull = (row: any, key: string, val: string) => {
 const handlelisten = (e: any) => {
   props.sceneList[e.type].timer = e.cron;
   EditPen(e.type);
-
 };
 const showCron = () => {
   dialogVisible.value = true;
-
 };
 const cronclose = () => {
   dialogVisible.value = false;
 }
-
 //初始化
 const intScenel=()=>{
+  console.log(props.sourceData);
   let array_data=props.sceneList;
-  console.log(array_data);
-
   array_data.map((val:any,index) => {
       if(val.productKey){
           product_key = val.productKey;
-          let info = unref(sourceData)?.find((pro: { key: any; }) => pro.key === val.productKey);
+          let info = props.sourceData?.find((pro: { key: any; }) => pro.key === val.productKey);
 
           if (info) {
             getDeviceList(info.id)
@@ -287,8 +245,7 @@ const intScenel=()=>{
       } 
   });
 }
-getProductList(); 
-
+intScenel();
 </script>
 <style scoped lang="scss">
 .type-item {
@@ -311,21 +268,14 @@ getProductList();
 
   .item {
     padding: 10px;
-    // background-color: #f2f3f5;
-
   }
-
   .biankang {
-
     border: 1px solid #e8e2e2;
-    ;
     border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
   }
-
-
-  .title {
+    .title {
     height: 40px;
 
     .icon {
@@ -336,16 +286,13 @@ getProductList();
       background-color: #315efb;
     }
   }
-
   .product {
-
     .el-form-item {
       margin-left: 30px;
       margin-bottom: 10px;
       margin-top: 10px;
     }
   }
-
 }
 </style>
 

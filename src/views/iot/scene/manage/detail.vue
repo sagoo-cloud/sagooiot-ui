@@ -16,26 +16,26 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;">
 		<div class="font20">场景定义</div>
-		<SceneItem v-if="showstatus" :sceneList="sceneList" :sceneType="detail.sceneType" @addScenesDetail="addScenesDetail"
+		<SceneItem v-if="showstatus && sourceData.length>0" :sceneList="sceneList" :sourceData="sourceData" :sceneType="detail.sceneType" @addScenesDetail="addScenesDetail"
 			@delScenesDetail="delScenesDetail" @editScenesDetail="editScenesDetail"></SceneItem>
 	</el-card>
 	<el-card style="  margin-top: 15px;">
 		<div class="font20">场景动作</div>
-		<ActionItem :actionList="actionList"></ActionItem>
+		<ActionItem :actionList="actionList"  :sourceData="sourceData"></ActionItem>
 	</el-card>
 
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { ElMessage } from 'element-plus';
-import type { TabsPaneContext } from 'element-plus'
+import { toRefs, reactive, ref, defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { EditPen, DocumentAdd } from '@element-plus/icons-vue';
 import ActionItem from './component/actionItem.vue';
 import SceneItem from './component/sceneItem.vue';
 import EditForm from './edit.vue';
 import api from '/@/api/scene';
+import product from '/@/api/device';
+
 const editFormRef = ref();
 //原始
 const sceneList = {
@@ -45,7 +45,6 @@ const sceneList = {
 	'timer': '',
 	'triggerSwitch': false,
 	'condition': [[{
-
 		'parameter': '',
 		'operator': '',
 		'value': ''
@@ -63,6 +62,7 @@ export default defineComponent({
 		const state = reactive({
 			developer_status: 2,
 			showstatus: false,
+			sourceData: [],
 			detail: {
 				name: '',
 				status: 0,
@@ -100,6 +100,11 @@ export default defineComponent({
 			})
 			getOneDetail();
 		};
+		const getProductList = () => {
+			product.product.getSubList().then((res: any) => {
+				state.sourceData = res.product;
+			});
+		};
 
 		const getOneDetail = () => {
 			const id = route.params && route.params.id;
@@ -115,6 +120,7 @@ export default defineComponent({
 						...parsedBodyJson
 					};
 				});
+				getProductList();
 				state.sceneList = scenes;
 				state.showstatus = true;
 			})

@@ -106,7 +106,7 @@
             <el-tag type="info" size="small" v-if="scope.row.status == 0">未启用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="registryTime" label="激活时间" align="center" width="150"
+        <el-table-column prop="createdAt" label="创建时间" align="center" width="160"
           v-col="'registryTime'"></el-table-column>
         <!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
         <el-table-column prop="desc" label="说明" v-col="'desc'"></el-table-column>
