@@ -62,8 +62,7 @@
 						<!-- <el-table-column type="selection" width="55" align="center" /> -->
 						<el-table-column type="index" label="序号" width="60" align="center" />
 						<el-table-column prop="userName" label="用户名" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="userNickname" label="昵称" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="userNickname" label="姓名" v-col="'userNickname'" min-width="160" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="userNickname" label="姓名" v-col="'userNickname'" width="160" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="dept.deptName" label="组织" v-col="'deptName'" show-overflow-tooltip></el-table-column>
 						<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>

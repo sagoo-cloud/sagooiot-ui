@@ -122,7 +122,7 @@ export default defineComponent({
 			isShowDialog: false,
 			ruleForm: {
 				userName: '', // 账户名称
-				userNickname: '', // 用户昵称
+				userNickname: '', // 姓名
 				roleSign: '', // 关联角色
 				department: [], // 组织
 				phone: '', // 手机号

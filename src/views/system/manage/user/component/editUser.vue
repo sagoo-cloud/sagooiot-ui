@@ -169,8 +169,8 @@ export default defineComponent({
 			},
 			//表单校验
 			rules: {
-				userName: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
-				userNickname: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
+				userName: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+				userNickname: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
 				deptId: [{ required: true, message: '归属组织不能为空', trigger: 'blur' }],
 				postIds: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
 				roleIds: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
