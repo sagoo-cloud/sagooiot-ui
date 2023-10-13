@@ -17,7 +17,7 @@
 								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{ info.userName }}，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
 								<!-- 昵称 -->
 								<el-col :xs="24" :sm="24" class="personal-item mb6">
-									<div class="personal-item-label">昵称：</div>
+									<div class="personal-item-label">姓名：</div>
 									<div v-if="isEditStatus" class="personal-item-value">{{ info.userNickname }}</div>
 									<el-input v-else class="personal-item-value personal-item-value-edit" v-model="info.userNickname"></el-input>
 								</el-col>
@@ -378,4 +378,5 @@ const dateChange = (e: any) => {
 			}
 		}
 	}
-}</style>
+}
+</style>
