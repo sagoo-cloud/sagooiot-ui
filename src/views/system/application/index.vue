@@ -12,12 +12,6 @@
 						@keyup.enter.native="getList"
 					/>
 				</el-form-item>
-				<el-form-item label="应用状态" prop="status" style="width: 200px;">
-					<el-select v-model="params.status" placeholder="应用状态" clearable size="default" style="width: 240px">
-						<el-option label="启用" :value="1" />
-						<el-option label="禁用" :value="0" />
-					</el-select>
-				</el-form-item>
 				<el-form-item>
 					<el-button size="default" type="primary" class="ml10" @click="getList()">
 						<el-icon>
@@ -38,8 +32,8 @@
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
 			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="应用标识" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="nameAs" label="应用名称" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="appId" label="应用标识" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="name" label="应用名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="status" label="应用状态" align="center">
 				<template #default="scope">
 					<el-tag size="small" type="success" v-if="scope.row.status == 1">启用</el-tag>
@@ -70,11 +64,12 @@ import { ref } from 'vue'
 import api from '/@/api/application'
 import user from '/@/api/system';
 import { useSearch } from '/@/hooks/useCommon'
+
 const queryRef = ref()
 const deptData = ref([])
 const roleData = ref([])
 const editFormRef = ref()
-const { params, tableData, getList, loading } = useSearch<any[]>(api.module.getList, 'Data', { keyWord: '' })
+const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { keyWord: '' })
 getList()
 const initTableData = () => {
 	user.dept.getList({status:1}).then((res: any) => {
@@ -87,12 +82,12 @@ const initTableData = () => {
 initTableData();
 const onActionStatus = (item: any) => {
 	if (item.status == 0) {
-		api.manage.status({ id: item.id,status:1 }).then((res: any) => {
+		api.status({ id: item.id,status:1 }).then((res: any) => {
 			getList();
 			ElMessage.success(res.message || '操作成功');
 		});
 	} else {
-		api.manage.status({ id: item.id,status:0 }).then((res: any) => {
+		api.status({ id: item.id,status:0 }).then((res: any) => {
 			getList();
 			ElMessage.success(res.message || '操作成功');
 		});
@@ -107,12 +102,12 @@ const addOrEdit = async (row?: any) => {
 	}
 }
 const del = (row: any) => {
-	ElMessageBox.confirm(`此操作将删除模型：“${row.name}”，是否继续?`, '提示', {
+	ElMessageBox.confirm(`此操作将删除应用：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.module.del(row.id)
+		await api.del(row.id)
 		ElMessage.success('删除成功')
 		getList()
 	})
