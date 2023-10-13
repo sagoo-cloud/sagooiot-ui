@@ -4,15 +4,15 @@
 			<el-form :model="ruleForm" size="default" label-width="90px">
 				<!-- <el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
-						<el-form-item label="评价名称" required>
-							<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
-						</el-form-item>
-					<!-- </el-col>
+				<el-form-item label="评价名称" required>
+					<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
+				</el-form-item>
+				<!-- </el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
-						<el-form-item label="描述">
-							<el-input width="400"  size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
-						</el-form-item>
-					<!-- </el-col> -->
+				<el-form-item label="描述">
+					<el-input width="400" size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
+				</el-form-item>
+				<!-- </el-col> -->
 				<!-- </el-row> -->
 			</el-form>
 			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
@@ -26,9 +26,9 @@
 				<el-table-column align="center" prop="userName" label="标识" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="num" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
+				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{item}}</el-tag>
+						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{ item }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column align="center" label="操作" width="160">
@@ -39,18 +39,8 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="tableData.param.pageNum"
-				background
-				v-model:page-size="tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="tableData.total"
-			>
+			<el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30]" v-model:current-page="tableData.param.pageNum" background v-model:page-size="tableData.param.pageSize"
+				layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 			</el-pagination>
 
 			<template #footer>
@@ -124,7 +114,7 @@ interface ItemState {
 
 export default defineComponent({
 	name: 'systemAddUser',
-	components: { AddSign, SetTask},
+	components: { AddSign, SetTask },
 	setup() {
 		const addSignRef = ref();
 		const setTaskRef = ref();
@@ -186,7 +176,7 @@ export default defineComponent({
 		};
 		// 删除标识项
 		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除账户：“${row.userName}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
@@ -194,7 +184,7 @@ export default defineComponent({
 				.then(() => {
 					ElMessage.success('删除成功');
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
@@ -247,9 +237,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
-
 ::v-deep .el-form {
+
 	// display: flex;
 	// justify-self: center;
 	// flex-direction: column;
@@ -258,19 +247,20 @@ export default defineComponent({
 		width: 500px;
 		margin: 8px auto;
 	}
+
 	::v-deep .el-input__inner,
 	::v-deep .el-textarea__inner {
 		width: 400px;
 		// flex-grow: 0;
 	}
+
 	::v-deep .el-input__inner {
 		padding: 1px 10px;
 	}
+
 	::v-deep .el-input__wrapper {
 		flex-grow: 0;
 		padding: 0
 	}
 }
-
-
 </style>

@@ -16,9 +16,9 @@
 							<el-form-item label="关键字" prop="keyWords">
 								<el-input v-model="tableData.param.keyWords" placeholder="请输入用户名或姓名" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />
 							</el-form-item>
-<!--							<el-form-item label="手机号码" prop="mobile">-->
-<!--								<el-input v-model="tableData.param.mobile" placeholder="请输入手机号码" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />-->
-<!--							</el-form-item>-->
+							<!--							<el-form-item label="手机号码" prop="mobile">-->
+							<!--								<el-input v-model="tableData.param.mobile" placeholder="请输入手机号码" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />-->
+							<!--							</el-form-item>-->
 							<el-form-item label="状态" prop="status" style="width: 200px;">
 								<el-select v-model="tableData.param.status" placeholder="用户状态" size="default" style="width: 240px">
 									<el-option label="全部" :value="-1" />
@@ -62,6 +62,7 @@
 						<!-- <el-table-column type="selection" width="55" align="center" /> -->
 						<el-table-column type="index" label="序号" width="60" align="center" />
 						<el-table-column prop="userName" label="用户名" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="userNickname" label="昵称" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="userNickname" label="姓名" v-col="'userNickname'" min-width="160" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="dept.deptName" label="组织" v-col="'deptName'" show-overflow-tooltip></el-table-column>
 						<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" :show-overflow-tooltip="true"></el-table-column>

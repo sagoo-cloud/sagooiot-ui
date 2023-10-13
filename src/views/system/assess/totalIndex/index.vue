@@ -132,7 +132,7 @@ export default defineComponent({
     };
     // 删除
     const onRowDel = (row: TableDataRow) => {
-      ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
+      ElMessageBox.confirm(`此操作将永久删除账户：“${row.title}”，是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
@@ -176,6 +176,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 ::v-deep .el-dialog__body {
-	border-top: 1px var(--el-border-color) var(--el-border-style);
+  border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 </style>
