@@ -2,9 +2,9 @@
 	<el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id ? '编辑应用' : '新增应用'}`" width="600px"
 		:close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-			<!-- <el-form-item label="应用标识" prop="appId">
-				<el-input v-model="formData.appId" placeholder="请输入应用标识" />
-			</el-form-item> -->
+			<el-form-item label="应用标识" prop="appId" v-if="formData.id">
+				<el-input v-model="formData.appId" placeholder="请输入应用标识"  disabled/>
+			</el-form-item>
 			<el-form-item label="应用名称" prop="name">
 				<el-input v-model="formData.name" placeholder="请输入应用名称" />
 			</el-form-item>
@@ -80,6 +80,7 @@ const props = defineProps({
 })
 const baseForm = {
 	id: undefined,
+	appId:'',
 	name: '',
 	icon: '',
 	accessKey: '',

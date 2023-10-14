@@ -50,11 +50,17 @@
                   </div>
                 </div>
 
-                <div class="statusname" v-if="item.type != 'object'">{{ item.value }}{{ item.unit }}</div>
+                <div class="statusname" v-if="item.type != 'object'">
+
+                  {{getValueText(item.key,item.value)}}
+                  <!-- {{ item.value }}{{ item.unit }} -->
+                  
+                </div>
                 <div v-else>
                   <div class="oblist" v-for="(vare, name) in item.value">
-                    <div class="name">{{ name }}：</div>
-                    <div class="name">{{ vare }}</div>
+                    <div> {{getStatusText(name,vare)}}</div>
+                    <!-- <div class="name">{{ name }}：</div>
+                    <div class="name">{{ vare }}</div> -->
                   </div>
                 </div>
                 <div class="">
@@ -442,6 +448,7 @@ export default defineComponent({
   components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
   setup(prop, context) {
+    const array_list=ref([]);
     const route = useRoute();
     const editDicRef = ref();
     const setAttrRef = ref();
@@ -509,16 +516,19 @@ export default defineComponent({
         state.developer_status = res.data.status;
         state.tableData.param.productId = res.data.product.id;
         state.product_id = res.data.product.id;
-        getrunData();
         api.product.detail(res.data.product.id).then((res: any) => {
           state.prodetail = res.data;
         });
 
         //第一次加载
         api.model.property(state.tableData.param).then((res: any) => {
+
           state.tableData.data = res.Data;
           state.tableData.total = res.Total;
+          array_list.value=res.Data;
         });
+        getrunData();
+
         getDeviceTableData()
       });
 
@@ -552,6 +562,7 @@ export default defineComponent({
       state.deviceTableData.param.gatewayKey = state.detail.key;
       api.device.getList(state.deviceTableData.param).then((res: any) => {
         state.deviceTableData.data = res.list;
+
         state.deviceTableData.total = res.Total;
       });
     };
@@ -704,6 +715,7 @@ export default defineComponent({
     const getproperty = () => {
       api.model.property(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
+
         state.tableData.total = res.Total;
       });
     };
@@ -724,6 +736,7 @@ export default defineComponent({
     const gettab = () => {
       api.model.tag(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
+
         state.tableData.total = res.Total;
       });
     };
@@ -757,8 +770,60 @@ export default defineComponent({
         getrunData();
       }
     };
+ 
+    const getValueText=(key, value)=>{
+      let data =array_list.value;
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+        if (item.key === key) {
+          if (item.valueType.type === "enum") {
+            const option = item.valueType.elements.find((element) => element.value === value.toString());
+            if (option) {
+              return option.text;
+            }
+          } else {
+            return value;
+          }
+        }
+      }
+
+      return value;
+    }
+    const getStatusText=(name, value) =>{
+      let data =array_list.value;
+      for (let i = 0; i < data.length; i++) {
+        const field = data[i];
+        if (field.valueType.type === "object") {
+          for (let j = 0; j < field.valueType.properties.length; j++) {
+            const property = field.valueType.properties[j];
+            if (property.key === name) {
+              if (property.valueType.type === "enum") {
+                const element = property.valueType.elements.find((element) => element.value === value.toString());
+                if (element) {
+                  return `${property.name}: ${element.text}`;
+                }
+              } else {
+                return `${property.name}: ${value}`;
+              }
+            }
+          }
+        } else if (field.key === name) {
+          if (field.valueType.type === "enum") {
+            const element = field.valueType.elements.find((element) => element.value === value.toString());
+            if (element) {
+              return `${field.name}: ${element.text}`;
+            }
+          } else {
+            return `${field.name}: ${value}`;
+          }
+        }
+      }
+
+      return name+':'+value;
+    }
 
     const getrunData = () => {
+      
       api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
         state.areaData = res
         let properties = state.areaData.properties || [];
@@ -766,6 +831,7 @@ export default defineComponent({
         var temp = new Array();
 
         properties.forEach(function (item, index) {
+          
           let datalist = item.list || [];
           temp[index] = [];
           var temps = new Array();
@@ -778,6 +844,10 @@ export default defineComponent({
           if (item.type == 'object') {
             item.value = JSON.parse(item.value);
           }
+
+
+
+
 
           temp[index]['name'] = item.name
           temp[index]['key'] = item.key
@@ -842,6 +912,8 @@ export default defineComponent({
       setAttrRef.value.show(row)
     }
     return {
+      getStatusText,
+      getValueText,
       onlineTimeoutUpdate,
       setAttr,
       tinyAreas,
