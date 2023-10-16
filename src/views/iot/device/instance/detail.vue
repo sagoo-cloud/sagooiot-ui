@@ -806,7 +806,6 @@ export default defineComponent({
             if (property.key === name) {
               if (property.valueType.type === "enum") {
                 const element = property.valueType.elements.find((element) => element.value === value);
-                console.log(element);
                 if (element) {
                   return `${property.name}: ${element.text}`;
                 }else{
