@@ -9,60 +9,38 @@
         </el-icon>
       </div>
       <div class="product flex flex-warp">
-
-        <el-form-item label="动作类型：" prop="product_key">
-          <el-select v-model="item.product_key" filterable placeholder="请选择动作类型">
+        <el-form-item label="动作类型：" prop="actionType">
+          <el-select v-model="item.actionType" filterable placeholder="请选择动作类型">
             <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户类型：" prop="device_key">
-          <el-select v-model="item.device_key" filterable placeholder="请选择设备">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="触发类型：" prop="type">
-          <el-select v-model="item.type" filterable placeholder="请选择触发类型">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="属性：" prop="type">
-          <el-select v-model="item.type" filterable placeholder="请选择触发类型">
-            <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <DeviceOut :sourceData="sourceData" v-if="item.actionType=='deviceOutput'"></DeviceOut>
+        <SendNotice  v-if="item.actionType=='sendNotice'"></SendNotice>
+        <CallWebService  v-if="item.actionType=='callWebService'"></CallWebService>
       </div>
-
-
     </div>
     <div>
       <div class=" flex-center">
-        <el-button :icon="DocumentAdd" @click="addScene()" style="border: 1px solid #409eff;color: #409eff;">新增串行动作</el-button>
+        <el-button :icon="DocumentAdd" @click="addScene()"
+          style="border: 1px solid #409eff;color: #409eff;">新增串行动作</el-button>
       </div>
     </div>
-
-
-
-
-
   </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref  } from 'vue'
+import { PropType, ref } from 'vue'
 import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
+import DeviceOut from './actionType/deviceOut.vue';
+import SendNotice from './actionType/sendNotice.vue';
+import CallWebService from './actionType/callWebService.vue';
+
+let product_key = "";
+
+const deviceListData = ref<testIValueType[]>([]);
 
 interface IConditionItem {
   param?: string;
@@ -71,7 +49,10 @@ interface IConditionItem {
 }
 
 interface IValueType {
-  seriallist?: IConditionItem[] ;
+  actionType:'';
+  productKey:'';
+  deviceKey:'';
+  seriallist?: IConditionItem[];
 }
 
 
@@ -90,22 +71,7 @@ const props = defineProps({
   },
   sourceData: {
     type: Array as PropType<testIValueType[]>,
-    default: () => [{
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }, {
-      'key': 'test',
-      'name': '测试',
-    }]
+    default: () => []
   },
   sourceActionTypeData: {
     type: Array as PropType<testIValueType[]>,
@@ -135,24 +101,14 @@ const props = defineProps({
 const addScene = () => {
   props.seriallist.push({
     'product_key': '',
-    'device_key': '',
-    'type': '',
-    'condition':[{
-								'list': [{
-											'param': '',
-											'operator': '',
-											'value': ''
-										}]
-							}]
+
   });
-  console.log(props.seriallist);
 };
 const delScene = (index: number) => {
   props.seriallist.splice(index, 1);
 }
 </script>
 <style scoped lang="scss">
-
 .type-item {
   width: 100%;
 
@@ -176,7 +132,8 @@ const delScene = (index: number) => {
 
   .biankang {
 
-    border: 1px dashed #959596;;
+    border: 1px dashed #959596;
+    ;
     border-radius: 10px;
   }
 
@@ -195,6 +152,7 @@ const delScene = (index: number) => {
 
   .product {
     margin-bottom: 20px;
+
     .el-form-item {
       margin-left: 30px;
       margin-bottom: 10px;

@@ -11,7 +11,7 @@
         <div class="icon"></div>串行动作
       </div>
       <div class="product flex flex-warp">
-        <ActionSerialItem :seriallist="item.seriallist"></ActionSerialItem>
+        <ActionSerialItem :seriallist="item.seriallist" :sourceData="sourceData"></ActionSerialItem>
 
       
       </div>
@@ -49,7 +49,11 @@ interface IConditionItem {
   operator?: string;
   value?: string;
 }
-
+interface testIValueType {
+  id: string;
+  key: string;
+  name?: string;
+}
 interface IValueType {
   seriallist?:IConditionItem[] ;
   parallellist?:IConditionItem[] ;
@@ -62,6 +66,10 @@ const props = defineProps({
     default: () => []
   },
 
+  sourceData: {
+    type: Array as PropType<testIValueType[]>,
+    default: () => []
+  },
 })
 
 
@@ -74,7 +82,6 @@ const addAction = () => {
       
     }],
   });
-  console.log(props.actionList);
 };
 const delAction = (index: number) => {
   props.actionList.splice(index, 1);

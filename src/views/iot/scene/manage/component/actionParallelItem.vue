@@ -155,7 +155,6 @@ const addScene = () => {
 										}]
 							}]
   });
-  console.log(props.parallellist);
 };
 const delScene = (index: number) => {
   props.parallellist.splice(index, 1);

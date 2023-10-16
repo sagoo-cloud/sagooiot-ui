@@ -111,7 +111,7 @@ export default defineComponent({
 			api.manage.getOneDetail({ "sceneId": id, 'group': 'definition' }).then((res: any) => {
 				if (!res) {
 					addScenesDetail('definition');
-					getOneDetail();
+					// getOneDetail();
 				}
 				originalSceneList.value = res;
 				const scenes = res.map((scene: any) => {

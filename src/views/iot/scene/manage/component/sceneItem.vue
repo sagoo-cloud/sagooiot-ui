@@ -229,7 +229,6 @@ const cronclose = () => {
 }
 //初始化
 const intScenel=()=>{
-  console.log(props.sourceData);
   let array_data=props.sceneList;
   array_data.map((val:any,index) => {
       if(val.productKey){
