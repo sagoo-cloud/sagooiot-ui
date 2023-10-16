@@ -777,7 +777,7 @@ export default defineComponent({
         const item = data[i];
         if (item.key === key) {
           if (item.valueType.type === "enum") {
-            const option = item.valueType.elements.find((element) => element.value === value.toString());
+            const option = item.valueType.elements.find((element) => element.value === value);
             if (option) {
               return option.text;
             }
