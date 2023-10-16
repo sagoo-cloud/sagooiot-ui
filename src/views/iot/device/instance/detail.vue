@@ -398,6 +398,7 @@ import SubDevice from './component/subDevice.vue';
 import setAttr from './component/setAttr.vue';
 import SubDeviceMutipleBind from './component/subDeviceMutipleBind.vue';
 import api from '/@/api/device';
+import datahub from '/@/api/datahub';
 
 import { useRoute } from 'vue-router';
 
@@ -520,12 +521,18 @@ export default defineComponent({
           state.prodetail = res.data;
         });
 
+        //加载全部属性
+        datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
+          array_list.value=re;
+				});
+
         //第一次加载
         api.model.property(state.tableData.param).then((res: any) => {
 
           state.tableData.data = res.Data;
           state.tableData.total = res.Total;
-          array_list.value=res.Data;
+         
+
         });
         getrunData();
 
@@ -799,8 +806,11 @@ export default defineComponent({
             if (property.key === name) {
               if (property.valueType.type === "enum") {
                 const element = property.valueType.elements.find((element) => element.value === value);
+                console.log(element);
                 if (element) {
                   return `${property.name}: ${element.text}`;
+                }else{
+                  return `${property.name}: ${value}`;
                 }
               } else {
                 return `${property.name}: ${value}`;
@@ -809,11 +819,12 @@ export default defineComponent({
           }
         } else if (field.key === name) {
           if (field.valueType.type === "enum") {
-            const element = field.valueType.elements.find((element) => element.value === value.toString());
+            const element = field.valueType.elements.find((element) => element.value === value);
             if (element) {
               return `${field.name}: ${element.text}`;
             }
           } else {
+
             return `${field.name}: ${value}`;
           }
         }
