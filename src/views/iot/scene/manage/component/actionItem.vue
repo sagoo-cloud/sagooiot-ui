@@ -115,7 +115,6 @@ const delScenesDetail = (index: number) => {
 
 //修改一条场景
 const saveData = (data: any) => {
-  console.log(actionList.value,"111111111111111111");
 			let ids = props.scene_id;
 			api.manage.editDetail({ id: ids, bodyjson:actionList.value }).then((res: any) => {
 				  getOneDetail();
