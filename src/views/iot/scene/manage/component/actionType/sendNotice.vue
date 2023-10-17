@@ -33,6 +33,7 @@
 import { PropType, ref, getCurrentInstance } from 'vue'
 import notice from '/@/api/notice';
 import { CirclePlus, Remove } from '@element-plus/icons-vue';
+const emit = defineEmits(['SetSaveData']);
 
 const { proxy } = getCurrentInstance() as any;
 const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
@@ -48,9 +49,13 @@ const props = defineProps({
     type: Array as PropType<testIValueType[]>,
     default: () => []
   },
+  index:{
+    type: Number,
+    default: () => 0
+  },
 })
 const fromData = ref({
-  actionType: "notice",
+  actionType: "sendNotice",
   notice: {
     types: "",
     name: "",
@@ -61,6 +66,7 @@ const fromData = ref({
     }]
   }
 })
+
 const AddPhone = () => {
   fromData.value.notice.object_temp.push({
     info:'',
@@ -86,10 +92,15 @@ const saveData = () => {
   const result = fromData.value.notice.object_temp.map(item => item.info);
   fromData.value.notice.object = result;
 
-  console.log(fromData);
+  SetSaveData();
 }
-saveData();
-
+const SetSaveData = () => {
+  let newdata={
+    index:props.index,
+    data:fromData.value,
+  }
+  emit('SetSaveData',newdata);
+}
 
 </script>
 <style scoped lang="scss">

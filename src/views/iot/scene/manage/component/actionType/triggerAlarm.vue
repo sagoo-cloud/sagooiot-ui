@@ -10,6 +10,15 @@
 
 <script lang="ts" setup>
 import {  ref } from 'vue'
+
+const emit = defineEmits(['SetSaveData']);
+
+const props = defineProps({
+  index:{
+    type: Number,
+    default: () => 0
+  },
+})
 const fromData = ref({
   actionType: "triggerAlarm",
   alarm:{
@@ -20,9 +29,12 @@ const fromData = ref({
 
 
 const saveData = () => {
-  console.log(fromData);
+  let newdata={
+    index:props.index,
+    data:fromData.value,
+  }
+  emit('SetSaveData',newdata);
 }
-saveData();
 
 
 </script>

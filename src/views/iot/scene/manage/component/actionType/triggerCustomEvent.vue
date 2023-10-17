@@ -9,7 +9,14 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import api from '/@/api/scene';
+const emit = defineEmits(['SetSaveData']);
 
+const props = defineProps({
+  index:{
+    type: Number,
+    default: () => 0
+  },
+})
 const fromData = ref({
   actionType: "triggerCustomEvent",
   executeAction:''
@@ -35,8 +42,12 @@ const getsceneList=()=>{
 getsceneList();
 
 const saveData = () => {
-  console.log(fromData);
+  let newdata={
+    index:props.index,
+    data:fromData.value,
+  }
+  emit('SetSaveData',newdata);
 }
-saveData();
+
 </script>
 

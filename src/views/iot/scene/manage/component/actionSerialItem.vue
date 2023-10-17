@@ -18,11 +18,11 @@
           </el-select>
         </el-form-item>
         <DeviceOut :index="index" :sourceData="sourceData" v-if="item.actionType==='deviceOutput'" @SetSaveData="SetSaveData"></DeviceOut>
-        <SendNotice  v-if="item.actionType==='sendNotice'"  @saveData="saveData"></SendNotice>
-        <CallWebService  v-if="item.actionType==='callWebService'"  @saveData="saveData"></CallWebService>
-        <TriggerAlarm  v-if="item.actionType==='triggerAlarm'"  @saveData="saveData"></TriggerAlarm>
-        <DelayExecution  v-if="item.actionType==='delayExecution'"  @saveData="saveData"></DelayExecution>
-        <TriggerCustomEvent  v-if="item.actionType==='triggerCustomEvent'"  @saveData="saveData"></TriggerCustomEvent>
+        <SendNotice  :index="index" v-if="item.actionType==='sendNotice'"  @SetSaveData="SetSaveData"></SendNotice>
+        <CallWebService :index="index"  v-if="item.actionType==='callWebService'"  @SetSaveData="SetSaveData"></CallWebService>
+        <TriggerAlarm :index="index"  v-if="item.actionType==='triggerAlarm'"  @saveData="saveData"></TriggerAlarm>
+        <DelayExecution  :index="index" v-if="item.actionType==='delayExecution'"  @saveData="saveData"></DelayExecution>
+        <TriggerCustomEvent :index="index"  v-if="item.actionType==='triggerCustomEvent'"  @saveData="saveData"></TriggerCustomEvent>
       </div>
     </div>
     <div>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType, ref,watch  } from 'vue'
 import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
 import DeviceOut from './actionType/deviceOut.vue';
 import SendNotice from './actionType/sendNotice.vue';
@@ -93,14 +93,16 @@ const serialValue = ref(props.serial);
 const saveData=()=>{
   emit('saveData',props.serial);
 }
+watch(() => props.serial, (newSerial) => {
+  serialValue.value = newSerial;
+});
 
-const SetSaveData=(data:any,index:number)=>{
 
-  // serialValue.value[index]=data;  
-  console.log(serialValue.value,55555555555);
-  //  props.serial.push(data);
-  // emit('saveData',serialValue.value);
 
+
+const SetSaveData = (data:any) => {
+  serialValue.value[data.index] = data.data;
+  emit('saveData', serialValue.value);
 }
 const addScene = () => {
   props.serial.push({
@@ -135,8 +137,7 @@ const delScene = (index: number) => {
 
   .biankang {
 
-    border: 1px dashed #959596;
-    ;
+    border: 1px solid #d6d6d6;
     border-radius: 10px;
   }
 

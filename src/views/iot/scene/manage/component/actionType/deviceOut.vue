@@ -117,7 +117,7 @@ const propertyCallList=ref<testIValueType[]>([]);
 const productKey=ref();
 const setPropertiesItem=ref([]);
 const fromData=ref({
-  actionType: "deviceOut", 
+  actionType: "deviceOutput", 
   productKey: "",
   deviceKey: "",
   executeAction:"",
@@ -171,7 +171,11 @@ const setProperties=(val:any)=>{
 }
 
 const saveData = () => {
-  emit('SetSaveData',fromData.value,props.index);
+  let newdata={
+    index:props.index,
+    data:fromData.value,
+  }
+  emit('SetSaveData',newdata);
 }
 
 const getDeviceList = (_id: any) => {

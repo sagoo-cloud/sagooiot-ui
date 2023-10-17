@@ -24,7 +24,14 @@
 
 <script lang="ts" setup>
 import {  ref } from 'vue'
+const emit = defineEmits(['SetSaveData']);
 
+const props = defineProps({
+  index:{
+    type: Number,
+    default: () => 0
+  },
+})
 const fromData = ref({
   actionType: "callWebService",
   callWebService: {
@@ -37,10 +44,13 @@ const fromData = ref({
   }
 })
 
-const emit = defineEmits(['saveData']);
 
 const saveData = () => {
-  emit('saveData',fromData);
+  let newdata={
+    index:props.index,
+    data:fromData.value,
+  }
+  emit('SetSaveData',newdata);
 
 }
 
