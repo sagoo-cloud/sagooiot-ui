@@ -10,7 +10,7 @@
           </el-form-item>
 
           <el-form-item label="设备：" prop="deviceKey" class="form-item">
-            <el-select v-model="fromData.deviceKey" filterable placeholder="请选择设备">
+            <el-select v-model="fromData.deviceKey" filterable placeholder="请选择设备" @change="saveData">
               <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
                 <span style="float: left">{{ it.name }}</span>
                 <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -28,7 +28,7 @@
           </el-form-item>
 
           <el-form-item label="功能调用" prop="type" class="form-item" v-if="fromData.executeAction=='functionCall'">
-            <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择触发类型">
+            <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择触发类型" @change="saveData">
               <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
                 <span style="float: left">{{ it.name }}</span>
                 <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -81,6 +81,8 @@
 import { PropType, ref  } from 'vue'
 import product from '/@/api/device';
 import datahub from '/@/api/datahub';
+const emit = defineEmits(['SetSaveData']);
+
 interface testIValueType {
   id?: string;
   key?: string;
@@ -90,6 +92,10 @@ const props = defineProps({
   sourceData: {
     type: Array as PropType<testIValueType[]>,
     default: () => []
+  },
+  index:{
+    type: Number,
+    default: () => 0
   },
   sourceActionTypeData: {
     type: Array as PropType<testIValueType[]>,
@@ -144,11 +150,12 @@ const getAction=(val:string)=>{
         });
       break;
     }
+    saveData();
 }
 
 const saveSetData=()=>{
   fromData.value.setProperties = setPropertiesItem.value; 
-  console.log(fromData);
+  saveData();  
 
 }
 const setProperties=(val:any)=>{
@@ -160,10 +167,11 @@ const setProperties=(val:any)=>{
       });
 
        fromData.value.setProperties = setPropertiesItem.value;
-       console.log(fromData);
+       saveData();  
 }
-const saveData=()=>{
-  console.log(fromData.value);
+
+const saveData = () => {
+  emit('SetSaveData',fromData.value,props.index);
 }
 
 const getDeviceList = (_id: any) => {
@@ -180,6 +188,7 @@ const seletChange = (val:string) => {
     fromData.value.deviceKey = '';
     getDeviceList(info.id)
   }
+  saveData();
 }
 </script>
 <style scoped lang="scss">

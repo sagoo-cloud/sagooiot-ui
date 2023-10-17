@@ -21,7 +21,7 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;">
 		<div class="font20">场景动作</div>
-		<ActionItem :actionList="actionList"  :sourceData="sourceData"></ActionItem>
+		<ActionItem v-if="detail.id" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
 	</el-card>
 
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
@@ -64,6 +64,7 @@ export default defineComponent({
 			showstatus: false,
 			sourceData: [],
 			detail: {
+				id: '',
 				name: '',
 				status: 0,
 				description: '',
@@ -108,6 +109,7 @@ export default defineComponent({
 
 		const getOneDetail = () => {
 			const id = route.params && route.params.id;
+
 			api.manage.getOneDetail({ "sceneId": id, 'group': 'definition' }).then((res: any) => {
 				if (!res) {
 					addScenesDetail('definition');

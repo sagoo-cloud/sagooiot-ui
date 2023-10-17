@@ -1,7 +1,7 @@
 
 <template>
   <div class="type-item">
-    <div v-for="(item, index) in seriallist" :key="index" class="item " :class="index > 0 ? 'biankang' : ''">
+    <div v-for="(item, index) in serial" :key="index" class="item " :class="index > 0 ? 'biankang' : ''">
       <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -8px; top: -8px; color: red"
         v-if="index > 0">
         <el-icon @click="delScene(index)">
@@ -10,16 +10,19 @@
       </div>
       <div class="product flex flex-warp">
         <el-form-item label="动作类型：" prop="actionType">
-          <el-select v-model="item.actionType" filterable placeholder="请选择动作类型">
+          <el-select v-model="item.actionType" filterable placeholder="请选择动作类型" @change="saveData">
             <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <DeviceOut :sourceData="sourceData" v-if="item.actionType=='deviceOutput'"></DeviceOut>
-        <SendNotice  v-if="item.actionType=='sendNotice'"></SendNotice>
-        <CallWebService  v-if="item.actionType=='callWebService'"></CallWebService>
+        <DeviceOut :index="index" :sourceData="sourceData" v-if="item.actionType==='deviceOutput'" @SetSaveData="SetSaveData"></DeviceOut>
+        <SendNotice  v-if="item.actionType==='sendNotice'"  @saveData="saveData"></SendNotice>
+        <CallWebService  v-if="item.actionType==='callWebService'"  @saveData="saveData"></CallWebService>
+        <TriggerAlarm  v-if="item.actionType==='triggerAlarm'"  @saveData="saveData"></TriggerAlarm>
+        <DelayExecution  v-if="item.actionType==='delayExecution'"  @saveData="saveData"></DelayExecution>
+        <TriggerCustomEvent  v-if="item.actionType==='triggerCustomEvent'"  @saveData="saveData"></TriggerCustomEvent>
       </div>
     </div>
     <div>
@@ -37,35 +40,24 @@ import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
 import DeviceOut from './actionType/deviceOut.vue';
 import SendNotice from './actionType/sendNotice.vue';
 import CallWebService from './actionType/callWebService.vue';
-
-let product_key = "";
-
+import TriggerAlarm from './actionType/triggerAlarm.vue';
+import DelayExecution from './actionType/delayExecution.vue';
+import TriggerCustomEvent from './actionType/triggerCustomEvent.vue';
 const deviceListData = ref<testIValueType[]>([]);
-
-interface IConditionItem {
-  param?: string;
-  operator?: string;
-  value?: string;
-}
+const emit = defineEmits(['addScenesDetail','delScenesDetail','saveData']);
 
 interface IValueType {
-  actionType:'';
-  productKey:'';
-  deviceKey:'';
-  seriallist?: IConditionItem[];
+  actionType?:string;
 }
-
-
-
 interface testIValueType {
-  key: string;
+  key?: string;
   name?: string;
 
 }
 
 const props = defineProps({
 
-  seriallist: {
+  serial: {
     type: Array as PropType<IValueType[]>,
     default: () => []
   },
@@ -96,16 +88,27 @@ const props = defineProps({
     }]
   }
 })
+const serialValue = ref(props.serial);
 
+const saveData=()=>{
+  emit('saveData',props.serial);
+}
 
+const SetSaveData=(data:any,index:number)=>{
+
+  // serialValue.value[index]=data;  
+  console.log(serialValue.value,55555555555);
+  //  props.serial.push(data);
+  // emit('saveData',serialValue.value);
+
+}
 const addScene = () => {
-  props.seriallist.push({
-    'product_key': '',
-
+  props.serial.push({
+    'actionType': '',
   });
 };
 const delScene = (index: number) => {
-  props.seriallist.splice(index, 1);
+  props.serial.splice(index, 1);
 }
 </script>
 <style scoped lang="scss">

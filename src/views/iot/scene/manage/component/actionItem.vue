@@ -11,7 +11,7 @@
         <div class="icon"></div>串行动作
       </div>
       <div class="product flex flex-warp">
-        <ActionSerialItem :seriallist="item.seriallist" :sourceData="sourceData"></ActionSerialItem>
+        <ActionSerialItem :serial="item.serial" :sourceData="sourceData" @saveData="saveData" ></ActionSerialItem>
 
       
       </div>
@@ -20,7 +20,7 @@
         <div class="icon"></div>并行动作
       </div>
       <div class="product flex flex-warp">
-            <ActionParallelItem :parallellist="item.parallellist"></ActionParallelItem>
+            <ActionParallelItem :parallel="item.parallel"></ActionParallelItem>
       
       </div>
     </div>
@@ -29,10 +29,6 @@
         <el-button type="primary" :icon="DocumentAdd" @click="addAction()">新增场景动作</el-button>
       </div>
     </div>
-
-
-
-
  
   </div>
 </template>
@@ -42,49 +38,100 @@ import { PropType, ref  } from 'vue'
 import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
 import ActionSerialItem from './actionSerialItem.vue';
 import ActionParallelItem from './actionParallelItem.vue';
+import api from '/@/api/scene';
 
 
-interface IConditionItem {
-  param?: string;
-  operator?: string;
-  value?: string;
-}
+//初始化数据
+const actionList_temp=ref([{
+  serial:[{}],
+  parallel:[{}],
+}]);
+const actionList=ref([{
+  serial:[{}],
+  parallel:[{}],
+}]);
+const originalSceneList = ref([{
+	id: 0
+}]);
 interface testIValueType {
   id: string;
   key: string;
   name?: string;
 }
-interface IValueType {
-  seriallist?:IConditionItem[] ;
-  parallellist?:IConditionItem[] ;
-}
 
 const props = defineProps({
-
-  actionList: {
-    type: Array as PropType<IValueType[]>,
-    default: () => []
-  },
-
   sourceData: {
     type: Array as PropType<testIValueType[]>,
     default: () => []
   },
+  scene_id:{
+    type:String,
+    default: () => ''
+  }
 })
+
+const getOneDetail = () => {
+			api.manage.getOneDetail({ "sceneId": props.scene_id, 'group': 'action' }).then((res: any) => {
+				if (!res) {
+					addActionDetail();
+					// getOneDetail();
+				}
+       	originalSceneList.value = res;
+
+				const action = res.map((scene: any) => {
+					const parsedBodyJson = JSON.parse(scene.bodyjson);
+					return {
+						...parsedBodyJson
+					};
+				});
+
+        
+        // actionList.value=action;
+        console.log(action);
+
+
+			})
+		};
+getOneDetail();    
+
+//新增一条场景动作
+const addActionDetail = () => {
+		let data = {
+			sceneId: props.scene_id,
+			group: 'action',
+			bodyjson: actionList_temp.value,
+		}
+		api.manage.addDetail(data).then((res: any) => {
+			getOneDetail();
+		});
+}
+//删除一条场景
+const delScenesDetail = (index: number) => {
+			let ids =props.scene_id;
+			api.manage.delDetail(ids).then((res: any) => {
+				// getOneDetail();
+			});
+}
+
+//修改一条场景
+const saveData = (data: any) => {
+  console.log(actionList.value,"111111111111111111");
+			let ids = props.scene_id;
+			api.manage.editDetail({ id: ids, bodyjson:actionList.value }).then((res: any) => {
+				  getOneDetail();
+			});
+
+}
 
 
 const addAction = () => {
-  props.actionList.push({
-    'seriallist':[{
-
-    }],
-    'parallellist':[{
-      
-    }],
+  actionList.value.push({
+    'serial':[],
+    'parallel':[],
   });
 };
 const delAction = (index: number) => {
-  props.actionList.splice(index, 1);
+  actionList.value.splice(index, 1);
 }
 
 </script>
