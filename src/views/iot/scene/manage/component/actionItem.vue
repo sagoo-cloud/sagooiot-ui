@@ -78,7 +78,7 @@ const getOneDetail = () => {
 				}
 
        	originalSceneList.value = res;
-        const combinedArray = res.map(scene => {
+        const combinedArray = res.map((scene: any)  => {
           const parsedBodyJson = JSON.parse(scene.bodyjson);
           if (Array.isArray(parsedBodyJson)) {
             const serial = parsedBodyJson.map(item => item.serial).flat();

@@ -215,7 +215,7 @@ onMounted(() => {
       setPropertiesItem.value =props.data.setProperties
     }
 
-    fromData.value = infoc
+    fromData.value = infoc as typeof fromData.value;
 
     if (props.data && props.data.functionCall) {
       fromData.value.functionCall = props.data.functionCall;

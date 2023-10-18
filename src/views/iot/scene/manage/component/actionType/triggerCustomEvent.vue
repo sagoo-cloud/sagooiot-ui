@@ -41,7 +41,6 @@ const getsceneList=()=>{
 		};
     api.manage.getList(param).then((res: any) => {
       sceneList.value=res.Data;
-      initData();
 
     });
 }
