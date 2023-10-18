@@ -119,22 +119,27 @@ const props = defineProps({
     }, {
       'key': 'offLine',
       'name': '设备离线',
-    }, {
-      'key': 'readAttribute',
-      'name': '读取属性',
-    }, {
-      'key': 'modifyAttribute',
-      'name': '修改属性',
-    }, {
+    }, 
+    
+    // {
+    //   'key': 'readAttribute',
+    //   'name': '读取属性',
+    // }, {
+    //   'key': 'modifyAttribute',
+    //   'name': '修改属性',
+    // }, 
+    {
       'key': 'reportAttribute',
       'name': '属性上报',
     }, {
       'key': 'reportEvent',
       'name': '事件上报',
-    }, {
-      'key': 'functionCall',
-      'name': '功能调用',
-    }]
+    },
+    //  {
+    //   'key': 'functionCall',
+    //   'name': '功能调用',
+    // }
+  ]
   }
 })
 
