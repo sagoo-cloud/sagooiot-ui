@@ -11,7 +11,7 @@
         <div class="icon"></div>串行动作
       </div>
       <div class="product flex flex-warp">
-        <ActionSerialItem :serial="item.serial" :sourceData="sourceData" @saveData="saveData" ></ActionSerialItem>
+        <ActionSerialItem :index="index" :serial="item.serial" :sourceData="sourceData" @saveData="saveData" @delData="delData"></ActionSerialItem>
 
       
       </div>
@@ -76,20 +76,18 @@ const getOneDetail = () => {
 					addActionDetail();
 					// getOneDetail();
 				}
+
        	originalSceneList.value = res;
 
-				const action = res.map((scene: any) => {
-					const parsedBodyJson = JSON.parse(scene.bodyjson);
-					return {
-						...parsedBodyJson
-					};
-				});
-
+         const action = res.map(scene=> {
+              const parsedBodyJson = JSON.parse(scene.bodyjson);
+              return {
+                  serial: parsedBodyJson[0].serial,
+                  parallel: parsedBodyJson[0].parallel
+              };
+          });
         
-        // actionList.value=action;
-        console.log(action);
-
-
+        actionList.value=action;
 			})
 		};
 getOneDetail();    
@@ -106,8 +104,8 @@ const addActionDetail = () => {
 		});
 }
 //删除一条场景
-const delScenesDetail = (index: number) => {
-			let ids =props.scene_id;
+const delData = (index: number) => {
+			let ids =originalSceneList.value[index].id;
 			api.manage.delDetail(ids).then((res: any) => {
 				// getOneDetail();
 			});
@@ -115,7 +113,7 @@ const delScenesDetail = (index: number) => {
 
 //修改一条场景
 const saveData = (data: any) => {
-			let ids = props.scene_id;
+      let ids = originalSceneList.value[data.index].id;
 			api.manage.editDetail({ id: ids, bodyjson:actionList.value }).then((res: any) => {
 				  getOneDetail();
 			});
@@ -128,6 +126,8 @@ const addAction = () => {
     'serial':[],
     'parallel':[],
   });
+  addActionDetail();
+
 };
 const delAction = (index: number) => {
   actionList.value.splice(index, 1);

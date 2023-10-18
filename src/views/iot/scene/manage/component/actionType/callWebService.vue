@@ -23,10 +23,14 @@
 </template>
 
 <script lang="ts" setup>
-import {  ref } from 'vue'
+import {  ref,onMounted } from 'vue'
 const emit = defineEmits(['SetSaveData']);
 
 const props = defineProps({
+  data: {
+    type: Object,
+    default: () => { }
+  },
   index:{
     type: Number,
     default: () => 0
@@ -54,7 +58,11 @@ const saveData = () => {
 
 }
 
-
+onMounted(() => {
+    if (props.data && props.data.callWebService) {
+      fromData.value.callWebService = { ...props.data.callWebService }
+    }
+});
 </script>
 <style scoped lang="scss">
 .form-item {

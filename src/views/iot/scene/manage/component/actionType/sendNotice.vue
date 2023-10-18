@@ -5,7 +5,7 @@
     </el-select>
   </el-form-item>
 
-  <el-form-item label="通知配置：" prop="deviceKey" class="form-item">
+  <el-form-item label="通知配置：" prop="name" class="form-item">
     <el-select v-model="fromData.notice.name" filterable placeholder="请选择通知配置" @change="getTemplist">
       <el-option v-for="item in sendGatewayData" :key="item.id" :label="item.title" :value="item.id" />
     </el-select>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref, getCurrentInstance } from 'vue'
+import { PropType, ref, getCurrentInstance,onMounted } from 'vue'
 import notice from '/@/api/notice';
 import { CirclePlus, Remove } from '@element-plus/icons-vue';
 const emit = defineEmits(['SetSaveData']);
@@ -48,6 +48,10 @@ const props = defineProps({
   sourceData: {
     type: Array as PropType<testIValueType[]>,
     default: () => []
+  },
+  data: {
+    type: Object,
+    default: () => { }
   },
   index:{
     type: Number,
@@ -102,6 +106,14 @@ const SetSaveData = () => {
   emit('SetSaveData',newdata);
 }
 
+onMounted(() => {
+    if (props.data && props.data.notice) {
+      fromData.value.notice = { ...props.data.notice }
+      let infoc = props.data;
+      seletChange(infoc.notice.types);
+      getTemplist(infoc.notice.notice);
+    }
+});
 </script>
 <style scoped lang="scss">
 .form-item {

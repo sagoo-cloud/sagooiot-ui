@@ -1,84 +1,82 @@
 <template>
-          <el-form-item label="产品：" prop="productKey" class="form-item" style="margin-left: 50px;">
-            <el-select v-model="fromData.productKey" filterable placeholder="请选择产品"
-              @change="seletChange">
-              <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
+  <el-form-item label="产品：" prop="productKey" class="form-item" style="margin-left: 50px;">
+    <el-select v-model="fromData.productKey" filterable placeholder="请选择产品" @change="seletChange">
+      <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
 
-          <el-form-item label="设备：" prop="deviceKey" class="form-item">
-            <el-select v-model="fromData.deviceKey" filterable placeholder="请选择设备" @change="saveData">
-              <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
+  <el-form-item label="设备：" prop="deviceKey" class="form-item">
+    <el-select v-model="fromData.deviceKey" filterable placeholder="请选择设备" @change="saveData">
+      <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
 
-          <el-form-item label="触发类型：" prop="executeAction" class="form-item">
-            <el-select v-model="fromData.executeAction" filterable placeholder="请选择触发类型" @change="getAction">
-              <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
+  <el-form-item label="触发类型：" prop="executeAction" class="form-item">
+    <el-select v-model="fromData.executeAction" filterable placeholder="请选择触发类型" @change="getAction">
+      <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
 
-          <el-form-item label="功能调用" prop="type" class="form-item" v-if="fromData.executeAction=='functionCall'">
-            <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择触发类型" @change="saveData">
-              <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-
-          <el-form-item label="参数" prop="type" class="form-item" v-if="fromData.executeAction=='functionCall'">
-                <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" />
-          </el-form-item>
+  <el-form-item label="功能调用" prop="type" class="form-item" v-if="fromData.executeAction == 'functionCall'">
+    <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择触发类型" @change="saveData">
+      <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
 
 
-          
-          <el-form-item label="读取属性" prop="type" class="form-item" v-if="fromData.executeAction=='getProperties'">
-            <el-select v-model="fromData.getProperties" filterable multiple  placeholder="请选择读取属性" @change="saveData">
-              <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
+  <el-form-item label="参数" prop="type" class="form-item" v-if="fromData.executeAction == 'functionCall'">
+    <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" />
+  </el-form-item>
 
-          <el-form-item label="设置属性" prop="type" class="form-item" v-if="fromData.executeAction=='setProperties'">
-            <el-select v-model="fromData.setProperties_temp" filterable multiple  placeholder="请选择设置属性" @change="setProperties">
-              <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
-                <span style="float: left">{{ it.name }}</span>
-                <span style="float: right; font-size: 13px">{{ it.key }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <div class="form-item" v-if="fromData.executeAction=='setProperties'">
-            <el-table :data="setPropertiesItem">
-                <el-table-column>
-                  <template #default="{row}">
-                    <span>{{row.name}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column >
-                  <template #default="{row}">
-                    <el-input v-model="row.value" @input="saveSetData"></el-input>
-                  </template>
-                </el-table-column>
-              </el-table>
-          </div>
 
+
+  <el-form-item label="读取属性" prop="type" class="form-item" v-if="fromData.executeAction == 'getProperties'">
+    <el-select v-model="fromData.getProperties" filterable multiple placeholder="请选择读取属性" @change="saveData">
+      <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
+
+  <el-form-item label="设置属性" prop="type" class="form-item" v-if="fromData.executeAction == 'setProperties'">
+    <el-select v-model="fromData.setProperties_temp" filterable multiple placeholder="请选择设置属性" @change="setProperties">
+      <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
+        <span style="float: left">{{ it.name }}</span>
+        <span style="float: right; font-size: 13px">{{ it.key }}</span>
+      </el-option>
+    </el-select>
+  </el-form-item>
+  <div class="form-item" v-if="fromData.executeAction == 'setProperties'">
+    <el-table :data="setPropertiesItem">
+      <el-table-column>
+        <template #default="{ row }">
+          <span>{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column>
+        <template #default="{ row }">
+          <el-input v-model="row.value" @input="saveSetData"></el-input>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref  } from 'vue'
+import { PropType, ref } from 'vue'
 import product from '/@/api/device';
 import datahub from '/@/api/datahub';
 const emit = defineEmits(['SetSaveData']);
@@ -93,9 +91,13 @@ const props = defineProps({
     type: Array as PropType<testIValueType[]>,
     default: () => []
   },
-  index:{
+  index: {
     type: Number,
     default: () => 0
+  },
+  data: {
+    type: Object,
+    default: () => { }
   },
   sourceActionTypeData: {
     type: Array as PropType<testIValueType[]>,
@@ -112,70 +114,70 @@ const props = defineProps({
   },
 })
 const deviceListData = ref<testIValueType[]>([]);
-const functionCallList=ref<testIValueType[]>([]);
-const propertyCallList=ref<testIValueType[]>([]);
-const productKey=ref();
-const setPropertiesItem=ref([]);
-const fromData=ref({
-  actionType: "deviceOutput", 
+const functionCallList = ref<testIValueType[]>([]);
+const propertyCallList = ref<testIValueType[]>([]);
+const productKey = ref();
+const setPropertiesItem = ref([]);
+const fromData = ref({
+  actionType: "deviceOutput",
   productKey: "",
   deviceKey: "",
-  executeAction:"",
+  executeAction: "",
   functionCall: {
     functionName: "",
     parameter: ""
   },
-  getProperties:{},
-  setProperties:[],
-  setProperties_temp:[],
+  getProperties: {},
+  setProperties: [],
+  setProperties_temp: [],
 })
 
 //获取类型数据
-const getAction=(val:string)=>{
-    switch(val){
-      case 'functionCall':
-        product.tabDeviceFucntion.getList({ key: productKey.value }).then((res: any) => {
-          functionCallList.value = res
-        })
+const getAction = (val: string) => {
+  switch (val) {
+    case 'functionCall':
+      product.tabDeviceFucntion.getList({ key: productKey.value }).then((res: any) => {
+        functionCallList.value = res
+      })
       break;
-      case 'getProperties':
-        datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
-          propertyCallList.value=re;
-        });
-  
-      break;
-      case 'setProperties':
-        datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
-          propertyCallList.value=re;
-        });
-      break;
-    }
-    saveData();
-}
-
-const saveSetData=()=>{
-  fromData.value.setProperties = setPropertiesItem.value; 
-  saveData();  
-
-}
-const setProperties=(val:any)=>{
-  setPropertiesItem.value = val.map((item:string) => {
-        return {
-          name: item,
-          value: ''
-        };
+    case 'getProperties':
+      datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
+        propertyCallList.value = re;
       });
 
-       fromData.value.setProperties = setPropertiesItem.value;
-       saveData();  
+      break;
+    case 'setProperties':
+      datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
+        propertyCallList.value = re;
+      });
+      break;
+  }
+  // saveData();
+}
+
+const saveSetData = () => {
+  fromData.value.setProperties = setPropertiesItem.value;
+  saveData();
+
+}
+const setProperties = (val: any) => {
+  setPropertiesItem.value = val.map((item: string) => {
+    return {
+      name: item,
+      value: ''
+    };
+  });
+
+  fromData.value.setProperties = setPropertiesItem.value;
+  saveData();
 }
 
 const saveData = () => {
-  let newdata={
-    index:props.index,
-    data:fromData.value,
+  let newdata = {
+    index: props.index,
+    data: fromData.value,
   }
-  emit('SetSaveData',newdata);
+  emit('SetSaveData', newdata);
 }
 
 const getDeviceList = (_id: any) => {
@@ -183,8 +185,8 @@ const getDeviceList = (_id: any) => {
     deviceListData.value = res.device
   })
 }
-const seletChange = (val:string) => {
-  productKey.value=val;
+const seletChange = (val: string) => {
+  productKey.value = val;
   //根据产品key获取产品ID
   let info = props.sourceData?.find((pro: testIValueType) => pro.key === val);
   if (info) {
@@ -194,9 +196,27 @@ const seletChange = (val:string) => {
   }
   saveData();
 }
+
+
+const initData = () => {
+  let infoc = props.data;
+  if (infoc.productKey) {
+    productKey.value = infoc.productKey;
+    let info = props.sourceData?.find((pro: testIValueType) => pro.key === infoc.productKey);
+    if (info) {
+       getDeviceList(info.id)
+    }
+  }
+  getAction(infoc.executeAction);
+  fromData.value = infoc
+}
+
+initData();
+
+
 </script>
 <style scoped lang="scss">
-.form-item{
+.form-item {
   flex: 0 0 25%;
 
 }

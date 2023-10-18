@@ -17,12 +17,12 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <DeviceOut :index="index" :sourceData="sourceData" v-if="item.actionType==='deviceOutput'" @SetSaveData="SetSaveData"></DeviceOut>
-        <SendNotice  :index="index" v-if="item.actionType==='sendNotice'"  @SetSaveData="SetSaveData"></SendNotice>
-        <CallWebService :index="index"  v-if="item.actionType==='callWebService'"  @SetSaveData="SetSaveData"></CallWebService>
-        <TriggerAlarm :index="index"  v-if="item.actionType==='triggerAlarm'"  @saveData="saveData"></TriggerAlarm>
-        <DelayExecution  :index="index" v-if="item.actionType==='delayExecution'"  @saveData="saveData"></DelayExecution>
-        <TriggerCustomEvent :index="index"  v-if="item.actionType==='triggerCustomEvent'"  @saveData="saveData"></TriggerCustomEvent>
+        <DeviceOut :index="index" :data="serial[index]" :sourceData="sourceData" v-if="item.actionType==='deviceOutput' && serial[index] && sourceData.length>0" @SetSaveData="SetSaveData"></DeviceOut>
+        <SendNotice  :index="index" :data="serial[index]" v-if="item.actionType==='sendNotice'  && serial[index]"  @SetSaveData="SetSaveData"></SendNotice>
+        <CallWebService :index="index" :data="serial[index]"  v-if="item.actionType==='callWebService'  && serial[index]"  @SetSaveData="SetSaveData"></CallWebService>
+        <TriggerAlarm :index="index" :data="serial[index]"  v-if="item.actionType==='triggerAlarm'  && serial[index]"  @SetSaveData="SetSaveData"></TriggerAlarm>
+        <DelayExecution  :index="index" :data="serial[index]" v-if="item.actionType==='delayExecution'  && serial[index]"  @SetSaveData="SetSaveData"></DelayExecution>
+        <TriggerCustomEvent :index="index" :data="serial[index]"  v-if="item.actionType==='triggerCustomEvent'  && serial[index]"  @SetSaveData="SetSaveData"></TriggerCustomEvent>
       </div>
     </div>
     <div>
@@ -44,7 +44,7 @@ import TriggerAlarm from './actionType/triggerAlarm.vue';
 import DelayExecution from './actionType/delayExecution.vue';
 import TriggerCustomEvent from './actionType/triggerCustomEvent.vue';
 const deviceListData = ref<testIValueType[]>([]);
-const emit = defineEmits(['addScenesDetail','delScenesDetail','saveData']);
+const emit = defineEmits(['addScenesDetail','delData','saveData']);
 
 interface IValueType {
   actionType?:string;
@@ -63,6 +63,10 @@ const props = defineProps({
   },
   sourceData: {
     type: Array as PropType<testIValueType[]>,
+    default: () => []
+  },
+  index: {
+    type: Number ,
     default: () => []
   },
   sourceActionTypeData: {
@@ -91,7 +95,11 @@ const props = defineProps({
 const serialValue = ref(props.serial);
 
 const saveData=()=>{
-  emit('saveData',props.serial);
+  let newData={
+    index:props.index,
+    data:props.serial,
+  }
+  emit('saveData',newData);
 }
 watch(() => props.serial, (newSerial) => {
   serialValue.value = newSerial;
@@ -102,7 +110,11 @@ watch(() => props.serial, (newSerial) => {
 
 const SetSaveData = (data:any) => {
   serialValue.value[data.index] = data.data;
-  emit('saveData', serialValue.value);
+  let newData={
+    index:props.index,
+    data:serialValue.value,
+  }
+  emit('saveData', newData);
 }
 const addScene = () => {
   props.serial.push({
@@ -111,7 +123,15 @@ const addScene = () => {
 };
 const delScene = (index: number) => {
   props.serial.splice(index, 1);
+  let newData={
+    index:props.index,
+    data:props.serial,
+  }
+  emit('saveData',newData);
 }
+
+
+
 </script>
 <style scoped lang="scss">
 .type-item {
@@ -137,8 +157,8 @@ const delScene = (index: number) => {
 
   .biankang {
 
-    border: 1px solid #d6d6d6;
-    border-radius: 10px;
+    border-top: 1px solid #d6d6d6;
+    // border-radius: 10px;
   }
 
 

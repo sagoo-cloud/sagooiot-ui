@@ -7,10 +7,14 @@
 </template>
 
 <script lang="ts" setup>
-import {  ref } from 'vue'
+import {  ref,onMounted } from 'vue'
 const emit = defineEmits(['SetSaveData']);
 
 const props = defineProps({
+  data: {
+    type: Object,
+    default: () => { }
+  },
   index:{
     type: Number,
     default: () => 0
@@ -31,6 +35,11 @@ const saveData = () => {
   emit('SetSaveData',newdata);
 }
 
+onMounted(() => {
+    if (props.data && props.data.delayTime) {
+      fromData.value.delayTime = { ...props.data.delayTime }
+    }
+});
 
 </script>
 <style scoped lang="scss">

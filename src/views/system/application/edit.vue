@@ -51,6 +51,9 @@
 				</el-radio-group>
 			</el-form-item>
 		</el-form>
+		<el-form-item label="回调地址" prop="callbackUri">
+			<el-input v-model="formData.callbackUri" placeholder="请输入回调地址" />
+		</el-form-item>
 		<template #footer>
 			<div class="dialog-footer">
 				<el-button @click="showDialog = false">取消</el-button>
@@ -89,6 +92,7 @@ const baseForm = {
 	roleId: '',
 	desc: '',
 	status: 1,
+	callbackUri:''
 };
 const formData = reactive({
 	...baseForm,

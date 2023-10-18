@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
+import {ref,onMounted} from 'vue';
 import api from '/@/api/scene';
 const emit = defineEmits(['SetSaveData']);
 
@@ -15,6 +15,10 @@ const props = defineProps({
   index:{
     type: Number,
     default: () => 0
+  },
+  data: {
+    type: Object,
+    default: () => { }
   },
 })
 const fromData = ref({
@@ -37,6 +41,8 @@ const getsceneList=()=>{
 		};
     api.manage.getList(param).then((res: any) => {
       sceneList.value=res.Data;
+      initData();
+
     });
 }
 getsceneList();
@@ -48,6 +54,12 @@ const saveData = () => {
   }
   emit('SetSaveData',newdata);
 }
+onMounted(() => {
+    if (props.data && props.data.executeAction) {
+      fromData.value.executeAction = { ...props.data.executeAction }
+    }
+});
+
 
 </script>
 

@@ -17,12 +17,12 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <DeviceOut :index="index" :sourceData="sourceData" v-if="item.actionType==='deviceOutput'" @SetSaveData="SetSaveData"></DeviceOut>
-        <SendNotice  :index="index" v-if="item.actionType==='sendNotice'"  @SetSaveData="SetSaveData"></SendNotice>
-        <CallWebService :index="index"  v-if="item.actionType==='callWebService'"  @SetSaveData="SetSaveData"></CallWebService>
-        <TriggerAlarm :index="index"  v-if="item.actionType==='triggerAlarm'"  @saveData="saveData"></TriggerAlarm>
-        <DelayExecution  :index="index" v-if="item.actionType==='delayExecution'"  @saveData="saveData"></DelayExecution>
-        <TriggerCustomEvent :index="index"  v-if="item.actionType==='triggerCustomEvent'"  @saveData="saveData"></TriggerCustomEvent>
+        <DeviceOut :index="index" :data="parallel[index]" :sourceData="sourceData" v-if="item.actionType==='deviceOutput' && parallel[index] && sourceData.length>0" @SetSaveData="SetSaveData"></DeviceOut>
+        <SendNotice  :index="index" :data="parallel[index]" v-if="item.actionType==='sendNotice'  && parallel[index]"  @SetSaveData="SetSaveData"></SendNotice>
+        <CallWebService :index="index" :data="parallel[index]"  v-if="item.actionType==='callWebService'  && parallel[index]"  @SetSaveData="SetSaveData"></CallWebService>
+        <TriggerAlarm :index="index" :data="parallel[index]"  v-if="item.actionType==='triggerAlarm'  && parallel[index]"  @SetSaveData="SetSaveData"></TriggerAlarm>
+        <DelayExecution  :index="index" :data="parallel[index]" v-if="item.actionType==='delayExecution'  && parallel[index]"  @SetSaveData="SetSaveData"></DelayExecution>
+        <TriggerCustomEvent :index="index" :data="parallel[index]"  v-if="item.actionType==='triggerCustomEvent'  && parallel[index]"  @SetSaveData="SetSaveData"></TriggerCustomEvent>
       </div>
     </div>
     <div>
@@ -44,7 +44,7 @@ import TriggerAlarm from './actionType/triggerAlarm.vue';
 import DelayExecution from './actionType/delayExecution.vue';
 import TriggerCustomEvent from './actionType/triggerCustomEvent.vue';
 const deviceListData = ref<testIValueType[]>([]);
-const emit = defineEmits(['addScenesDetail','delScenesDetail','saveData']);
+const emit = defineEmits(['addScenesDetail','delData','saveData']);
 
 interface IValueType {
   actionType?:string;
@@ -63,6 +63,10 @@ const props = defineProps({
   },
   sourceData: {
     type: Array as PropType<testIValueType[]>,
+    default: () => []
+  },
+  index: {
+    type: Number ,
     default: () => []
   },
   sourceActionTypeData: {
@@ -88,21 +92,29 @@ const props = defineProps({
     }]
   }
 })
-const serialValue = ref(props.parallel);
+const parallelValue = ref(props.parallel);
 
 const saveData=()=>{
-  emit('saveData',props.parallel);
+  let newData={
+    index:props.index,
+    data:props.parallel,
+  }
+  emit('saveData',newData);
 }
 watch(() => props.parallel, (newSerial) => {
-  serialValue.value = newSerial;
+  parallelValue.value = newSerial;
 });
 
 
 
 
 const SetSaveData = (data:any) => {
-  serialValue.value[data.index] = data.data;
-  emit('saveData', serialValue.value);
+  parallelValue.value[data.index] = data.data;
+  let newData={
+    index:props.index,
+    data:parallelValue.value,
+  }
+  emit('saveData', newData);
 }
 const addScene = () => {
   props.parallel.push({
@@ -111,7 +123,15 @@ const addScene = () => {
 };
 const delScene = (index: number) => {
   props.parallel.splice(index, 1);
+  let newData={
+    index:props.index,
+    data:props.parallel,
+  }
+  emit('saveData',newData);
 }
+
+
+
 </script>
 <style scoped lang="scss">
 .type-item {
@@ -137,8 +157,8 @@ const delScene = (index: number) => {
 
   .biankang {
 
-    border: 1px solid #d6d6d6;
-    border-radius: 10px;
+    border-top: 1px solid #d6d6d6;
+    // border-radius: 10px;
   }
 
 
