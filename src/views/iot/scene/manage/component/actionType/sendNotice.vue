@@ -20,7 +20,7 @@
 
   <div class="form-item" v-for="(ph, phindex) in fromData.notice.object_temp" :key="phindex">
     <el-input v-model="ph.info" placeholder="请输入接收人信息" style="width: 320px" @input="saveData" />
-    <el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex == 0" @click="AddPhone(index)">
+    <el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex == 0" @click="AddPhone()">
       <CirclePlus />
     </el-icon>
     <el-icon style="width: 32px; height: 32px; font-size: 24px" v-if="phindex > 0" @click="DelPhone( phindex)">
@@ -37,12 +37,13 @@ const emit = defineEmits(['SetSaveData']);
 
 const { proxy } = getCurrentInstance() as any;
 const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
-const sendGatewayData = ref([]);
-const noticeConfigData = ref([]);
+const sendGatewayData = ref(<testIValueType[]>[]);
+const noticeConfigData = ref(<testIValueType[]>[]);
 interface testIValueType {
   id?: string;
   key?: string;
   name?: string;
+  title?: string;
 }
 const props = defineProps({
   sourceData: {

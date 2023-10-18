@@ -47,11 +47,6 @@
             <el-button type="success" @click="showCron()" style="margin-left: 5px;">设置</el-button>
 
           </div>
-
-
-
-
-
         </el-form-item>
       </div>
       <div class="title flex">

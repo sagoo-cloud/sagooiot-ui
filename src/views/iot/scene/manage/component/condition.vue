@@ -19,7 +19,7 @@
             <div class="items">
               <el-button
                 style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;"
-                v-if="i > 0">并且</el-button>
+                v-if="(i as number)  > 0">并且</el-button>
 
               <el-popover placement="bottom" trigger="click" ref="popoverRef" v-model:visible="vo.isPopoverVisible">
                 <template #reference>
@@ -62,7 +62,7 @@
                 </div>
               </el-popover>
 
-              <el-icon size="16" v-if="i>0" @click="DelSceneItem(i, index)" style="position: relative;top: -13px;">
+              <el-icon size="16" v-if="(i as number)>0" @click="DelSceneItem(i as number, index)" style="position: relative;top: -13px;">
                 <CircleClose />
               </el-icon>
 
@@ -102,7 +102,9 @@ interface IConditionItem {
   operator?: string;
   value?: string;
 }
+
 interface Column {
+  name: string;
   termTypes: any[]; 
 }
 const props = defineProps({
