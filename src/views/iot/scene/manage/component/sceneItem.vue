@@ -47,6 +47,11 @@
             <el-button type="success" @click="showCron()" style="margin-left: 5px;">设置</el-button>
 
           </div>
+
+
+
+
+
         </el-form-item>
       </div>
       <div class="title flex">
@@ -76,6 +81,8 @@ const scene_type = proxy.useDict('scene_type');
 const emit = defineEmits(['addScenesDetail','delScenesDetail','editScenesDetail']);
 const dialogVisible = ref();
 const deviceListData = ref<testIValueType[]>([]);
+const functionCallList = ref<testIValueType[]>([]);
+const propertyCallList = ref<testIValueType[]>([]);
 const columnList = ref([]);
 let product_key = "";
 interface IConditionItem {

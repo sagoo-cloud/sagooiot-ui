@@ -27,7 +27,7 @@
   </el-form-item>
 
   <el-form-item label="功能调用" prop="type" class="form-item" v-if="fromData.executeAction == 'functionCall'">
-    <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择触发类型" @change="saveData">
+    <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择功能调用" @change="saveData">
       <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
         <span style="float: left">{{ it.name }}</span>
         <span style="float: right; font-size: 13px">{{ it.key }}</span>

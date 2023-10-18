@@ -144,7 +144,7 @@ export default defineComponent({
 		const getOneDetail = () => {
 
 			const id = route.params && route.params.id;
-			if(state.detail.sceneType==='device'){
+			if(state.detail.sceneType=='device'){
 				api.manage.getOneDetail({ "sceneId": id, 'group': 'definition' }).then((res: any) => {
 					if (!res) {
 						addScenesDetail('definition');

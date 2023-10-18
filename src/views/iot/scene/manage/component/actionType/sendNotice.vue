@@ -111,7 +111,7 @@ onMounted(() => {
       fromData.value.notice = { ...props.data.notice }
       let infoc = props.data;
       seletChange(infoc.notice.types);
-      getTemplist(infoc.notice.notice);
+      getTemplist(infoc.notice.name);
     }
 });
 </script>
