@@ -53,7 +53,7 @@
         <div class="icon"></div> 触发条件 <div class="ml10"> <el-switch v-model="item.triggerSwitch"   @change="EditPen(index)"/>
         </div>
       </div>
-      <Condition :condition="item.condition" :operate_index="index" :columnList="columnList" v-if="item.triggerSwitch" @EditPen="EditPen">
+      <Condition :condition="item.condition" :operate_index="index" :columnList="columnList" v-if="item.triggerSwitch && columnList.length>0" @EditPen="EditPen">
       </Condition>
     </div>
     <div>

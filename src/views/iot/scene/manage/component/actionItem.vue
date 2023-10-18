@@ -78,7 +78,6 @@ const getOneDetail = () => {
 				}
 
        	originalSceneList.value = res;
-        console.log(res);
         const combinedArray = res.map(scene => {
           const parsedBodyJson = JSON.parse(scene.bodyjson);
           if (Array.isArray(parsedBodyJson)) {
@@ -95,7 +94,6 @@ const getOneDetail = () => {
             };
           }
         });
-      console.log(combinedArray,3333);
 
         actionList.value=combinedArray;
 			})
