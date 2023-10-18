@@ -6,7 +6,7 @@
 					<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable size="default" style="width: 240px"
 						@keyup.enter.native="getList" />
 				</el-form-item>
-		
+
 				<el-form-item label="触发方式" prop="sceneType" style="width: 200px;">
 					<el-select v-model="params.sceneType" placeholder="触发方式" clearable size="default" style="width: 240px">
 						<el-option label="设备触发" value="device" />
@@ -44,8 +44,8 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID"  min-width="100" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="场景名称"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="sceneType" label="场景类型" align="center">
 				<template #default="scope">
 					<el-tag size="small" v-if="scope.row.sceneType == 'device'">设备触发</el-tag>
@@ -61,7 +61,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
-	
+
 			<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
@@ -70,8 +70,8 @@
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
 					<el-button size="small" text type="success" @click="onActionStatus(scope.row)"
 						v-if="scope.row.status == 0" v-auth="'startOrStop'">启用</el-button>
-					<el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0"
-						v-auth="'startOrStop'">停用</el-button>
+					<el-button size="small" text type="primary" @click="onActionStatus(scope.row)"
+						v-if="scope.row.status > 0" v-auth="'startOrStop'">停用</el-button>
 					<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -97,22 +97,10 @@ const router = useRouter();
 const editFormRef = ref();
 
 const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'Data', { keyWord: '' });
-
 getList();
-/** 重置按钮操作 */
-const resetQuery = (formEl: FormInstance | undefined) => {
-	if (!formEl) return;
-	formEl.resetFields();
-	getList();
-};
 const toDetail = (id: number) => {
 	router.push(`/iotmanager/scene/manage/detail/${id}`)
 };
-function getTokenUrl(url: string) {
-	const tokenUrl = import.meta.env.VITE_TOPO_URL
-	return getOrigin(tokenUrl + url)
-}
-
 
 const addOrEdit = async (row?: any) => {
 
@@ -123,16 +111,14 @@ const addOrEdit = async (row?: any) => {
 		editFormRef.value.open();
 	}
 };
-
-
 const onActionStatus = (item: any) => {
 	if (item.status == 0) {
-		api.manage.status({ id: item.id,status:1 }).then((res: any) => {
+		api.manage.status({ id: item.id, status: 1 }).then((res: any) => {
 			getList();
 			ElMessage.success(res.message || '操作成功');
 		});
 	} else {
-		api.manage.status({ id: item.id,status:0 }).then((res: any) => {
+		api.manage.status({ id: item.id, status: 0 }).then((res: any) => {
 			getList();
 			ElMessage.success(res.message || '操作成功');
 		});
