@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType, ref,onMounted } from 'vue'
 import { CirclePlus, CircleClose, Right } from '@element-plus/icons-vue';
 const emit = defineEmits(['EditPen']);
 interface IConditionItem {
@@ -160,7 +160,7 @@ const addScene = () => {
 const delScene = (index: number) => {
   props.condition.splice(index, 1);
 }
-const initItem = () => {
+onMounted(() => {
   props.condition.forEach((item) => {
     item.forEach((vo:any) => {
       let operator = vo.operator;
@@ -174,8 +174,8 @@ const initItem = () => {
       }
     });
   });
-};
-initItem();
+});
+
 
 </script>
 <style scoped lang="scss">

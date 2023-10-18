@@ -20,7 +20,7 @@
         <div class="icon"></div>并行动作
       </div>
       <div class="product flex flex-warp">
-            <ActionParallelItem :parallel="item.parallel"></ActionParallelItem>
+            <ActionParallelItem :index="index"  :parallel="item.parallel" :sourceData="sourceData" @saveData="saveData" @delData="delData"></ActionParallelItem>
       
       </div>
     </div>
@@ -78,16 +78,26 @@ const getOneDetail = () => {
 				}
 
        	originalSceneList.value = res;
+        console.log(res);
+        const combinedArray = res.map(scene => {
+          const parsedBodyJson = JSON.parse(scene.bodyjson);
+          if (Array.isArray(parsedBodyJson)) {
+            const serial = parsedBodyJson.map(item => item.serial).flat();
+            const parallel = parsedBodyJson.map(item => item.parallel).flat();
+            return {
+              serial,
+              parallel
+            };
+          } else {
+            return {
+              serial: [parsedBodyJson.serial].flat(),
+              parallel: [parsedBodyJson.parallel].flat()
+            };
+          }
+        });
+      console.log(combinedArray,3333);
 
-         const action = res.map(scene=> {
-              const parsedBodyJson = JSON.parse(scene.bodyjson);
-              return {
-                  serial: parsedBodyJson[0].serial,
-                  parallel: parsedBodyJson[0].parallel
-              };
-          });
-        
-        actionList.value=action;
+        actionList.value=combinedArray;
 			})
 		};
 getOneDetail();    
@@ -114,7 +124,7 @@ const delData = (index: number) => {
 //修改一条场景
 const saveData = (data: any) => {
       let ids = originalSceneList.value[data.index].id;
-			api.manage.editDetail({ id: ids, bodyjson:actionList.value }).then((res: any) => {
+			api.manage.editDetail({ id: ids, bodyjson:actionList.value[data.index] }).then((res: any) => {
 				  getOneDetail();
 			});
 
@@ -131,6 +141,7 @@ const addAction = () => {
 };
 const delAction = (index: number) => {
   actionList.value.splice(index, 1);
+  delData(index);
 }
 
 </script>
@@ -161,9 +172,9 @@ const delAction = (index: number) => {
   }
 
   .biankang {
-
-    border: 1px dashed #959596;;
-    border-radius: 10px;
+    margin-top: 10px;
+    border: 1px solid #cfcfcf;;
+    border-radius: 2px;
   }
 
 

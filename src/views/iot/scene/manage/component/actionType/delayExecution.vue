@@ -36,9 +36,10 @@ const saveData = () => {
 }
 
 onMounted(() => {
-    if (props.data && props.data.delayTime) {
-      fromData.value.delayTime = { ...props.data.delayTime }
-    }
+    // if (props.data && props.data.delayTime) {
+    //   fromData.value.delayTime = { ...props.data.delayTime }
+    // }
+    fromData.value= props.data
 });
 
 </script>

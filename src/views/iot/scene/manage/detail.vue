@@ -27,7 +27,7 @@
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
 </template>
 <script lang="ts">
-import { toRefs, reactive, ref, defineComponent } from 'vue';
+import { toRefs, reactive, ref, defineComponent,onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { EditPen, DocumentAdd } from '@element-plus/icons-vue';
 import ActionItem from './component/actionItem.vue';
@@ -159,9 +159,10 @@ export default defineComponent({
 			editFormRef.value.open(row);
 		};
 
-		getDetail();
 
-
+		onMounted(() => {
+			getDetail();
+		});
 		return {
 			addOrEdit,
 			delScenesDetail,

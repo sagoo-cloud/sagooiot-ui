@@ -18,7 +18,7 @@
   </el-form-item>
 
   <el-form-item label="触发类型：" prop="executeAction" class="form-item">
-    <el-select v-model="fromData.executeAction" filterable placeholder="请选择触发类型" @change="getAction">
+    <el-select v-model="fromData.executeAction" filterable placeholder="请选择触发类型" @change="selectAction">
       <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
         <span style="float: left">{{ it.name }}</span>
         <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType, ref,onMounted } from 'vue'
 import product from '/@/api/device';
 import datahub from '/@/api/datahub';
 const emit = defineEmits(['SetSaveData']);
@@ -132,6 +132,10 @@ const fromData = ref({
   setProperties_temp: [],
 })
 
+const selectAction=(val:string)=>{
+  saveData();
+  getAction(val);
+}
 //获取类型数据
 const getAction = (val: string) => {
   switch (val) {
@@ -152,7 +156,6 @@ const getAction = (val: string) => {
       });
       break;
   }
-  // saveData();
 }
 
 const saveSetData = () => {
@@ -197,21 +200,34 @@ const seletChange = (val: string) => {
   saveData();
 }
 
-
-const initData = () => {
-  let infoc = props.data;
-  if (infoc.productKey) {
+onMounted(() => {
+    let infoc = props.data;
+    if (infoc.productKey) {
     productKey.value = infoc.productKey;
     let info = props.sourceData?.find((pro: testIValueType) => pro.key === infoc.productKey);
     if (info) {
        getDeviceList(info.id)
     }
   }
-  getAction(infoc.executeAction);
-  fromData.value = infoc
-}
 
-initData();
+    getAction(infoc.executeAction);
+    if (props.data && props.data.setProperties) {
+      setPropertiesItem.value =props.data.setProperties
+    }
+
+    fromData.value = infoc
+
+    if (props.data && props.data.functionCall) {
+      fromData.value.functionCall = props.data.functionCall;
+    } else {
+      fromData.value.functionCall = {
+        functionName: "",
+        parameter: ""
+      };
+}
+    
+});
+
 
 
 </script>
