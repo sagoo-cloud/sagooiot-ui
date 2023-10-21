@@ -4,12 +4,16 @@
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 240px"
               @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 240px"
               @keyup.enter.native="typeList" />
+          </el-form-item>
+          <el-form-item label="产品标识" prop="key">
+            <el-input v-model="tableData.param.productId" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
+                      @keyup.enter.native="typeList" />
           </el-form-item>
 
           <el-form-item label="状态" prop="status" style="width: 200px;">
@@ -165,6 +169,7 @@ interface TableDataState {
       pageSize: number;
       name: string;
       key: string;
+      productId:string;
       status: string;
       dateRange: string[];
     };
