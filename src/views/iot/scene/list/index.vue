@@ -1,10 +1,3 @@
-<!--
- * @Author: yukai
- * @Date: 2023-09-18 13:15:08
- * @LastEditors: 
- * @LastEditTime: 2023-10-22 22:37:04
- * @Description: 请填写简介
--->
 <template>
 	<el-card shadow="hover">
 		<div class="search">
