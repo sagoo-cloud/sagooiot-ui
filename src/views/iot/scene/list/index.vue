@@ -1,3 +1,10 @@
+<!--
+ * @Author: yukai
+ * @Date: 2023-09-18 13:15:08
+ * @LastEditors: 
+ * @LastEditTime: 2023-10-22 22:37:04
+ * @Description: 请填写简介
+-->
 <template>
 	<el-card shadow="hover">
 		<div class="search">
@@ -8,6 +15,7 @@
 				</el-form-item>
 				<el-form-item label="状态" prop="status" style="width: 200px;">
 					<el-select v-model="params.status" placeholder="发布状态" clearable size="default" style="width: 240px">
+						<el-option label="全部" :value="-1" />
 						<el-option label="成功" :value="1" />
 						<el-option label="失败" :value="0" />
 					</el-select>
