@@ -1,5 +1,4 @@
 <template>
-	<div>
 	<el-card class="system-dic-container" style="position: relative;">
 		<div class="content">
 			<div class="flex cont_box">
@@ -38,7 +37,6 @@
 	</el-card>
 
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
-</div>
 </template>
 <script lang="ts">
 import { toRefs, reactive, ref, defineComponent,onMounted } from 'vue';
@@ -138,7 +136,7 @@ export default defineComponent({
 			})
 		};
 		const getProductList = () => {
-			product.product.getSubList().then((res: any) => {
+			product.product.getLists().then((res: any) => {
 				state.sourceData = res.product;
 			});
 		};

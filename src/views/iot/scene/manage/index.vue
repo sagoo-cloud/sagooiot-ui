@@ -99,7 +99,7 @@ const editFormRef = ref();
 const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'Data', { keyWord: '' });
 getList();
 const toDetail = (id: number) => {
-	router.push(`/iotmanager/scene/manage/detail/${id}`)
+	router.push(`/iotmanager/scene/manage/${id}`)
 };
 
 const addOrEdit = async (row?: any) => {
