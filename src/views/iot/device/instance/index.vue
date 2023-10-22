@@ -11,10 +11,11 @@
             <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 240px"
               @keyup.enter.native="typeList" />
           </el-form-item>
-          <el-form-item label="产品标识" prop="key">
-            <el-input v-model="tableData.param.productId" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
-                      @keyup.enter.native="typeList" />
-          </el-form-item>
+    		<el-form-item label="所属产品" prop="productId">
+					<el-select v-model="tableData.param.productId" filterable  placeholder="请选择产品">
+						<el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
+					</el-select>
+				</el-form-item>
 
           <el-form-item label="状态" prop="status" style="width: 200px;">
             <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 240px">
@@ -160,6 +161,7 @@ interface TableDataRow {
 }
 interface TableDataState {
   ids: number[];
+  productData: Array<TableDataRow>;
   tableData: {
     data: Array<TableDataRow>;
     total: number;
@@ -186,6 +188,7 @@ export default defineComponent({
     const queryRef = ref();
     const state = reactive<TableDataState>({
       ids: [],
+      productData:[],
       tableData: {
         data: [],
         total: 0,
@@ -203,6 +206,8 @@ export default defineComponent({
     // 初始化表格数据
     const initTableData = () => {
       typeList();
+      getProductList()
+
     };
     const typeList = () => {
       state.tableData.loading = true;
@@ -211,7 +216,11 @@ export default defineComponent({
         state.tableData.total = res.total;
       }).finally(() => (state.tableData.loading = false));
     };
-
+    const getProductList = () => {
+      api.product.getSubList().then((res: any) => {
+        state.productData = res.product
+      })
+    }
     //查看详情
     const onOpenDetail = (row: TableDataRow) => {
       detailRef.value.openDialog(row);
