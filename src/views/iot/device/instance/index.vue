@@ -217,7 +217,7 @@ export default defineComponent({
       }).finally(() => (state.tableData.loading = false));
     };
     const getProductList = () => {
-      api.product.getSubList().then((res: any) => {
+      api.product.getLists().then((res: any) => {
         state.productData = res.product
       })
     }
