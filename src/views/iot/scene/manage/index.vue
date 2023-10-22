@@ -66,7 +66,7 @@
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 					
-						<router-link :to="'/iotmanager/scene/manage/detail/' + scope.row.id" class="link-type"
+						<router-link :to="'/iotmanager/scene/manage/' + scope.row.id" class="link-type"
 							style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
 							<span>详情</span>
 						</router-link>
