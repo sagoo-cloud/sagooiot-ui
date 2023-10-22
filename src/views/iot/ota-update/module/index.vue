@@ -36,12 +36,12 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="模块名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="nameAs" label="模块别名" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="ProductName" label="所属产品" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip  v-col="'id'"></el-table-column>
+			<el-table-column prop="name" label="模块名称" show-overflow-tooltip  v-col="'name'"></el-table-column>
+			<el-table-column prop="nameAs" label="模块别名" show-overflow-tooltip   v-col="'nameAs'"></el-table-column>
+			<el-table-column prop="ProductName" label="所属产品" show-overflow-tooltip   v-col="'ProductName'"></el-table-column>
 
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
+			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" v-col="'createdAt'"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>

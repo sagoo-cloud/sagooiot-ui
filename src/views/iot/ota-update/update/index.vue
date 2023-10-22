@@ -29,23 +29,23 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="升级包名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="typo" label="类型" show-overflow-tooltip>
+			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip v-col="'id'"></el-table-column>
+			<el-table-column prop="name" label="升级包名称" show-overflow-tooltip  v-col="'name'"></el-table-column>
+			<el-table-column prop="typo" label="类型" show-overflow-tooltip  v-col="'typo'">
 				<template #default="scope">
 					<el-tag  size="small" v-if="scope.row.typo==1">整包</el-tag>
 					<el-tag  type="info" size="small" v-if="scope.row.typo==2">差分</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="productName" label="所属产品" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="moduleName" label="模块名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="checkres" label="状态" width="100" align="center">
+			<el-table-column prop="productName" label="所属产品" show-overflow-tooltip v-col="'productName'"></el-table-column>
+			<el-table-column prop="moduleName" label="模块名称" show-overflow-tooltip  v-col="'moduleName'"></el-table-column>
+			<el-table-column prop="checkres" label="状态" width="100" align="center" v-col="'checkres'">
 				<template #default="scope">
 					<el-tag type="success" size="small" v-if="scope.row.checkres==1">验证</el-tag>
 					<el-tag type="info" size="small" v-else>未验证</el-tag>
 				</template>
 			</el-table-column> 
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
+			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"  v-col="'createdAt'"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
 					<el-button size="small" text type="primary" v-if="!scope.row.folderName"

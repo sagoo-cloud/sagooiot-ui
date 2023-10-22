@@ -44,9 +44,9 @@
 				</el-form>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sceneType" label="场景类型" align="center">
+				<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip  v-col="'id'"></el-table-column>
+				<el-table-column prop="name" label="场景名称" show-overflow-tooltip v-col="'name'"></el-table-column>
+				<el-table-column prop="sceneType" label="场景类型" align="center" v-col="'sceneType'">
 					<template #default="scope">
 						<el-tag size="small" v-if="scope.row.sceneType == 'device'">设备触发</el-tag>
 						<el-tag size="small" v-if="scope.row.sceneType == 'manual'">手动触发</el-tag>
@@ -54,15 +54,15 @@
 					</template>
 				</el-table-column>
 
-				<el-table-column prop="status" label="状态" align="center">
+				<el-table-column prop="status" label="状态" align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag size="small" type="success" v-if="scope.row.status == 1">启用</el-tag>
 						<el-tag size="small" type="info" v-if="scope.row.status == 0">未启用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="description" label="描述" show-overflow-tooltip v-col="'description'"></el-table-column>
 
-				<el-table-column prop="createdAt" label="创建时间" align="center"></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'"></el-table-column>
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 					
