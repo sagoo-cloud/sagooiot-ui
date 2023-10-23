@@ -27,6 +27,8 @@ export default defineComponent({
 	created() {
 		api.sysinfo().then((res: any) => {
 			localStorage.setItem('sysinfo', JSON.stringify(res));
+			sessionStorage.setItem('btnNoAuth', res.sysButtonSwitch ? '' : '1');
+			sessionStorage.setItem('colNoAuth', res.sysColumnSwitch ? '' : '1');
 		});
 	},
 	setup() {
@@ -80,8 +82,8 @@ export default defineComponent({
 		});
 		// 页面销毁时，关闭监听布局配置/i18n监听
 		onUnmounted(() => {
-			proxy.mittBus.off('openSetingsDrawer', () => {});
-			proxy.mittBus.off('getI18nConfig', () => {});
+			proxy.mittBus.off('openSetingsDrawer', () => { });
+			proxy.mittBus.off('getI18nConfig', () => { });
 		});
 		// 监听路由的变化，设置网站标题
 		watch(
