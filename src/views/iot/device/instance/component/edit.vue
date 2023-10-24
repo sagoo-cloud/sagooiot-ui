@@ -13,10 +13,6 @@
             <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="设备坐标" prop="lng">
-          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectPosition" read-only />
-        </el-form-item> -->
-
         <el-form-item label="设备坐标" prop="lng">
           <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectMap" read-only />
         </el-form-item>
@@ -254,7 +250,6 @@ export default defineComponent({
 
     //回调地图选点
     const updateMap=(data:any)=>{
-      console.log(data);
       state.ruleForm.lng = data.lng;
       state.ruleForm.lat = data.lat;
     }
