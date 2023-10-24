@@ -1,4 +1,5 @@
 <template>
+	<div>
 	<el-card class="system-dic-container" style="position: relative">
 		<div class="content">
 			<div class="flex cont_box">
@@ -62,7 +63,7 @@
 				</el-tab-pane>
 			</el-tabs>
 	</el-card>
-
+</div>
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue'
