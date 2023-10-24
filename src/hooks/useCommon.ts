@@ -40,7 +40,7 @@ export function useSearch<T>(api: any, resKey: string, expandParams?: any) {
   const tableData = ref<T[] | any[]>([])
 
   const getList = async (pageNum?: number) => {
-    pageNum && (params.pageNum = pageNum);
+    // pageNum && (params.pageNum = pageNum);
     tableData.value = [];
     loading.value = true;
     params.total = 0;
