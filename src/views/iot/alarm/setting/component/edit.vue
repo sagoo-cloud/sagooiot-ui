@@ -23,7 +23,7 @@
 
 				<el-form-item label="选择设备" prop="deviceKey">
 					<el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-						<el-option label="全部" value="-1">全部</el-option>
+						<el-option label="全部" value="all">全部</el-option>
 						<el-option v-for="item in sourceData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
