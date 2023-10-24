@@ -7,7 +7,7 @@ export default {
     getList: (data: any) => get('/dev_ota_fireware/list', data),
     del: (ids: number) => del('/dev_ota_fireware/delete', { ids }),
     add: (data: any) => post('/dev_ota_fireware/add', data),
-    edit: (data: any) => post('/dev_ota_fireware/edit', data),
+    edit: (data: any) => put('/dev_ota_fireware/edit', data),
     detail: (id: number) => get('/dev_ota_fireware/get', { id }),
 
   },
@@ -16,14 +16,15 @@ export default {
     getList: (data: any) => get('/dev_ota_module/list', data),
     del: (ids: number) => del('/dev_ota_module/delete', { ids }),
     add: (data: any) => post('/dev_ota_module/add', data),
-    edit: (data: any) => post('/dev_ota_module/edit', data),
+    edit: (data: any) => put('/dev_ota_module/edit', data),
+    detail: (id: number) => get('/dev_ota_module/get', { id }),
   },
   batch: {
     getList: (data: any) => get('/dev_ota_strategy/list', data),
     getDeviceList: (data: any) => get('/product/device/list', data),
     del: (ids: number) => del('/dev_ota_strategy/delete', { ids }),
     add: (data: any) => post('/dev_ota_strategy/add', data),
-    edit: (data: any) => post('/dev_ota_strategy/edit', data),
+    edit: (data: any) => put('/dev_ota_strategy/edit', data),
   },
   device: {
     getList: (data: any) => get('/dev_ota_detail/list', data),
