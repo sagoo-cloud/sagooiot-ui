@@ -11,14 +11,11 @@
 		<el-card shadow="hover" class="page-full-part">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
-					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入通道名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
-					</el-form-item>
-					<el-form-item label="注册码" prop="number">
-						<el-input v-model="params.number" placeholder="请输入注册码" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+					<el-form-item label="设备名称" prop="title">
+						<el-input v-model="params.title" placeholder="请输入设备名称" clearablestyle="width: 240px" @keyup.enter.native="getList()" />
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						<el-button size="default" type="primary" class="ml10" @click="getList()">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
@@ -30,7 +27,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="primary" @click="addOrEdit()" v-auth="'add'">
+						<el-button type="primary" @click="addOrEdit()">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -41,32 +38,31 @@
 			</div>
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column type="index" label="序号" width="80" align="center" />
-				<el-table-column prop="Title" label="设备名称"  align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="SubCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="CommonAddr" label="通用设备地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="TemplateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="ProductKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="DeviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="CreatedAt" label="创建时间" min-width="160" align="center"></el-table-column>
-				<el-table-column prop="UpdateAt" label="更新时间" min-width="160" align="center"></el-table-column>
+				<el-table-column prop="title" label="设备名称"  align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="number" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="subCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="commonAddr" label="通用设备地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="templateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="productKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="deviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" min-width="160" align="center"></el-table-column>
+				<el-table-column prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
 				<el-table-column fixed="right" label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="viewDetail(scope.row)">编辑</el-button>
+						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">编辑</el-button>
 						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-		<detailForm ref="detailFormRef" @getList="getList()"></detailForm>
+		<EditForm ref="editFormRef" @updateList="getList()"></EditForm>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import EditForm from './component/edit.vue';
-import detailForm from './component/detail.vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
@@ -75,7 +71,7 @@ const editFormRef = ref();
 const detailFormRef = ref();
 const queryRef = ref();
 
-const { params, tableData, getList, loading } = useSearch(api.device.getList, 'data', { keyWord: '', number: '' });
+const { params, tableData, getList, loading } = useSearch(api.device.getList, 'data', { title: '' });
 
 getList();
 
@@ -89,7 +85,7 @@ const viewDetail = async (row: any) => {
 // 重置表单
 const resetQuery = () => {
 	queryRef.value.resetFields();
-	getList(1);
+	getList();
 };
 
 const onDel = (row: any) => {
@@ -98,9 +94,9 @@ const onDel = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.channel.deleteDevice({ number: row.number });
+		await api.device.deleteItem({number: row.number});
 		ElMessage.success('删除成功');
-		getList(1);
+		getList();
 	});
 };
 </script>

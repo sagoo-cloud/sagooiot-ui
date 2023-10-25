@@ -16,13 +16,14 @@ export default {
     getList: (params: object) => get('/device/list', params),
     addItem: (data: object) => post('/device/add', data),
     editItem: (data: object) => put('/device/edit', data),
-    deleteItem: (ids: number) => del('/device/delete', { ids }),
+    deleteItem: (data: object) => del('/device/delete', data),
   },
   template: {
+    getAll: (params: object) => get('/template/all', params),
     getList: (params: object) => get('/template/list', params),
     addItem: (data: object) => post('/template/add', data),
     editItem: (data: object) => put('/template/edit', data),
-    deleteItem: (ids: number) => del('/template/delete', { ids }),
+    deleteItem:  (data: object) => del('/template/delete', data),
   },
   deviceTask: {
     getList: (params: object) => get('/device/job/list', params),

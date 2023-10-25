@@ -2,7 +2,7 @@
  * @Author: vera_min vera_min@163.com
  * @Date: 2023-10-23 17:05:57
  * @LastEditors: vera_min vera_min@163.com
- * @LastEditTime: 2023-10-25 08:53:40
+ * @LastEditTime: 2023-10-25 10:11:06
  * @FilePath: /sagoo-admin-ui/src/views/iot/ice104/index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,11 +11,8 @@
 		<el-card shadow="hover" class="page-full-part">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
-					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入通道名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
-					</el-form-item>
-					<el-form-item label="注册码" prop="number">
-						<el-input v-model="params.number" placeholder="请输入注册码" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+					<el-form-item label="设备执行名称" prop="title">
+						<el-input v-model="params.title" placeholder="请输入设备执行名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
@@ -34,20 +31,29 @@
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
-							新增通道
+							新增
 						</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column type="index" label="序号" width="80" align="center" />
-				<el-table-column prop="title" label="通道名称" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="number" label="注册码" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100" align="center">
+				<el-table-column prop="title" label="名称"  align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="number" label="编码"  align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="deviceNumber" label="设备编号"  align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="interval" label="执行间隔"  align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="jobType" label="job类型" align="center" show-overflow-tooltip>
+					<!-- 100-》总召唤，101-》电度召唤，103-》时钟同步 -->
 					<template #default="scope">
-						<el-button size="small" text type="primary" v-auth="'detail'" @click="viewDetail(scope.row)">详情</el-button>
-						<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+						<el-tag type="info" size="small" v-if="scope.row.jobType == 100">总召唤</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.jobType == 101">电度召唤</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.jobType == 103">时钟同步</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column fixed="right" label="操作" width="100" align="center">
+					<template #default="scope">
+						<el-button size="small" text type="primary" @click="viewDetail(scope.row)">编辑</el-button>
+						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -64,14 +70,13 @@ import EditForm from './component/edit.vue';
 import detailForm from './component/detail.vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
-// import { useSearch } from '/@/hooks/useCommon';
 import { useSearch } from '/@/hooks/useCommonIce104';
 
 const editFormRef = ref();
 const detailFormRef = ref();
 const queryRef = ref();
 
-const { params, tableData, getList, loading } = useSearch(api.device.getList, 'list', { keyWord: '', number: '' });
+const { params, tableData, getList, loading } = useSearch(api.deviceTask.getList, 'data', { title: '' });
 
 getList();
 

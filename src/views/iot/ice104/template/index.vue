@@ -27,7 +27,7 @@
 							</el-icon>
 							重置
 						</el-button>
-						<el-button type="primary" @click="addOrEdit()" v-auth="'add'">
+						<el-button type="primary" @click="addOrEdit()">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -46,26 +46,23 @@
 						<el-tag type="info" size="small" v-if="scope.row.status == 0">停用</el-tag>
 					</template>
 				</el-table-column>
-				<!-- <el-table-column prop="mode" label="模式" align="center" show-overflow-tooltip></el-table-column> -->
 				<el-table-column prop="remarks" label="备注" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column fixed="right" label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="viewDetail(scope.row)">编辑</el-button>
+						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">编辑</el-button>
 						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-		<detailForm ref="detailFormRef" @getList="getList()"></detailForm>
+		<EditForm ref="editFormRef" @updateList="getList()"></EditForm>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import EditForm from './component/edit.vue';
-import detailForm from './component/detail.vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
@@ -81,14 +78,11 @@ getList();
 const addOrEdit = async (row?: any) => {
 	editFormRef.value.open(row);
 };
-const viewDetail = async (row: any) => {
-	detailFormRef.value.open(row);
-};
 
 // 重置表单
 const resetQuery = () => {
 	queryRef.value.resetFields();
-	getList(1);
+	getList();
 };
 
 const onDel = (row: any) => {
@@ -97,9 +91,9 @@ const onDel = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.channel.deleteDevice({ number: row.number });
+		await api.template.deleteItem({ number: row.number });
 		ElMessage.success('删除成功');
-		getList(1);
+		getList();
 	});
 };
 </script>
