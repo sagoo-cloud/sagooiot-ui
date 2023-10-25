@@ -138,7 +138,7 @@ export default defineComponent({
 			})
 		};
 		const getProductList = () => {
-			product.product.getLists().then((res: any) => {
+			product.product.getLists({}).then((res: any) => {
 				state.sourceData = res.product;
 			});
 		};
@@ -177,6 +177,8 @@ export default defineComponent({
 							getOneDetail();
 						});
 					}
+					getProductList();
+
 					state.timer_id=res[0].id
 					state.timerData=JSON.parse(res[0].bodyjson);
 

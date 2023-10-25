@@ -1,120 +1,261 @@
-
 <template>
-	<el-card shadow="hover">
-		<div class="search">
-			<el-form :inline="true" ref="queryRef">
-				<el-form-item label="批次名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
-						@keyup.enter.native="getList" />
-				</el-form-item>
+  <div class="ota-module-container">
+    <el-card shadow="hover">
+      <div class="ota-module-search mb15">
+        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="90px">
+          <el-form-item label="批次名称：" prop="name">
+            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable size="default" style="width: 240px"
+              @keyup.enter.native="getList" />
+          </el-form-item>
 
-				<el-form-item>
+          <el-form-item>
+            <el-button size="default" type="primary" class="ml10" @click="getList">
+              <el-icon>
+                <ele-Search />
+              </el-icon>
+              查询
+            </el-button>
+            <el-button size="default" @click="resetQuery(queryRef)">
+              <el-icon>
+                <ele-Refresh />
+              </el-icon>
+              重置
+            </el-button>
+            <el-button type="primary" v-auth="'add'" @click="onOpenAdd()">
+              <el-icon>
+                <ele-FolderAdd />
+              </el-icon>
+              添加批次
+            </el-button>
+          </el-form-item>
 
-					<el-button size="default" type="primary" class="ml10" @click="getList()">
-						<el-icon>
-							<ele-Search />
-						</el-icon>
-						查询
-					</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="CheckUpdate()">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						添加批次
-					</el-button>
-
-				</el-form-item>
-			</el-form>
-		</div>
-		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="waitVersion" label="待升级版本号" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="method" label="协议方式" show-overflow-tooltip>
-				<template #default="scope">
-					<el-tag size="small" v-if="scope.row.method == 1">http</el-tag>
-					<el-tag size="small" v-if="scope.row.method == 2">https</el-tag>
-					<el-tag size="small" v-if="scope.row.method == 3">mqtt</el-tag>
-				</template>
-			</el-table-column>
-			<el-table-column prop="stratege" label="升级方式" show-overflow-tooltip>
-				<template #default="scope">
-					<el-tag size="small" v-if="scope.row.stratege == 1">静态升级 </el-tag>
-					<el-tag size="small" v-if="scope.row.stratege == 2">动态升级</el-tag>
-				</template>
-			</el-table-column>
-
-			<el-table-column prop="push" label="主动推送" show-overflow-tooltip>
-				<template #default="scope">
-					<el-tag size="small" v-if="scope.row.push == 1">是 </el-tag>
-					<el-tag size="small" v-if="scope.row.push == 2">否</el-tag>
-				</template>
-			</el-table-column>
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
-			<!-- <el-table-column label="操作" width="200" align="center">
-				<template #default="scope">
-					<el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>
-					<el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
-				</template>
-			</el-table-column> -->
-		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"
-			@pagination="getList()" />
-
-	</el-card>
-	<CheckForm ref="checkFormRef" @getList="getList()"></CheckForm>
+			  </el-form>
+      </div>
+      <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+        <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column prop="name" label="名称" />
+        <el-table-column prop="waitVersion" label="待升级版本号" />
+        <el-table-column prop="method" label="协议方式" show-overflow-tooltip>
+          <template #default="scope">
+            <el-tag size="small" v-if="scope.row.method == 1">http</el-tag>
+            <el-tag size="small" v-if="scope.row.method == 2">https</el-tag>
+            <el-tag size="small" v-if="scope.row.method == 3">mqtt</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="stratege" label="升级方式" show-overflow-tooltip>
+          <template #default="scope">
+            <el-tag size="small" v-if="scope.row.stratege == 1">静态升级 </el-tag>
+            <el-tag size="small" v-if="scope.row.stratege == 2">动态升级</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="push" label="主动推送" show-overflow-tooltip>
+          <template #default="scope">
+            <el-tag size="small" v-if="scope.row.push == 1">是 </el-tag>
+            <el-tag size="small" v-if="scope.row.push == 2">否</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
+        <!-- <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>
+            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+          </template>
+        </el-table-column> -->
+      </el-table>
+<!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
+<!--        @pagination="getList()" />-->
+<!--      <CheckForm ref="checkFormRef" @getList="getList()"></CheckForm>-->
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
+      <CheckConfig ref="checkRef" @getList="getList" />
+	  </el-card>
+  </div>
 </template>
   
-<script lang="ts" setup>
+<script lang="ts">
 import api from '/@/api/ota';
-import { useSearch } from '/@/hooks/useCommon';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import CheckForm from '../check.vue';
+import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { ElMessageBox, ElMessage, FormInstance} from 'element-plus'
+import CheckConfig from '/@/views/iot/ota-update/update/component/check.vue';
 
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-const props = defineProps({
-	detail: {
-		type: Object,
-		default: () => { }
-	},
-})
-const queryRef = ref();
-const router = useRouter();
-
-const checkFormRef = ref();
-
-const { params, tableData, getList, loading } = useSearch<any[]>(api.batch.getList, 'Data', { devOtaFirewareId: props.detail.id });
-
-getList();
-
-const CheckUpdate = async (row?: any) => {
-	if (row) {
-		checkFormRef.value.open(row);
-		return;
-	} else {
-
-		let array={
-			productId:props.detail.productId,
-			devOtaFirewareId:props.detail.id
-		}
-		checkFormRef.value.open(array);
-	}
-};
-
-
-const del = (row: any) => {
-	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	}).then(async () => {
-		await api.manage.del(row.id);
-		ElMessage.success('删除成功');
-		getList();
-	});
-};
+// 定义接口来定义对象的类型
+interface TableDataRow {
+  id: number;
+  name: string;
+  waitVersion: string;
+  method: number;
+  stratege: string;
+  push: string;
+  createdAt: string;
+}
+interface TableDataState {
+  ids: number[];
+  tableData: {
+    data: Array<TableDataRow>;
+    total: number;
+    loading: boolean;
+    param: {
+      id: number;
+      pageNum: number;
+      pageSize: number;
+      keyWord: string;
+      dateRange: string[];
+      devOtaFirewareId: number;
+    };
+  };
+}
+export default defineComponent({
+  components: { CheckConfig },
+  props: {
+    detail: {
+      type: Object,
+      default: ''
+    }
+  },
+  setup(props) {
+    const checkRef = ref();
+    const queryRef = ref();
+    const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
+    const state = reactive<TableDataState>({
+      ids: [],
+      tableData: {
+        data: [],
+        total: 0,
+        loading: false,
+        param: {
+          id: 0,
+          dateRange: [],
+          pageNum: 1,
+          pageSize: 10,
+          keyWord: '',
+          devOtaFirewareId: 0,
+        },
+      },
+    });
+    // 页面加载时
+    onMounted(() => {
+      initTableData();
+    });
+    // 初始化表格数据
+    const initTableData = () => {
+      batchList();
+    };
+    const getList = () => {
+      state.tableData.loading = true;
+      state.tableData.param.devOtaFirewareId = props.detail.id;
+      api.batch
+          .getList(state.tableData.param)
+          .then((res: any) => {
+            state.tableData.data = res.Data;
+            state.tableData.total = res.Total;
+          })
+          .finally(() => (state.tableData.loading = false));
+    };
+    // 打开新增弹窗
+    const onOpenAdd = () => {
+      state.tableData.param.id = props.detail.id;
+      checkRef.value.openDialog(state.tableData.param);
+    };
+    // 删除模块
+    const onRowDel = (row?: TableDataRow) => {
+      let msg = '你确定要删除所选数据？';
+      let ids: number[] = [];
+      if (row) {
+        msg = `此操作将永久删除：“${row.name}”，是否继续?`;
+        ids = [row.id];
+      } else {
+        ids = state.ids;
+      }
+      if (ids.length === 0) {
+        ElMessage.error('请选择要删除的数据。');
+        return;
+      }
+      ElMessageBox.confirm(msg, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        api.batch.del(ids).then(() => {
+          ElMessage.success('删除成功');
+          getList();
+        });
+      })
+          .catch(() => { });
+    };
+    /** 重置按钮操作 */
+    const resetQuery = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      getList();
+    };
+    // 多选框选中数据
+    const handleSelectionChange = (selection: TableDataRow[]) => {
+      state.ids = selection.map((item) => item.id);
+    };
+    // 获取列表
+    const batchList = () => {
+      getList();
+    };
+    return {
+      checkRef,
+      queryRef,
+      tabDataList,
+      onOpenAdd,
+      onRowDel,
+      getList,
+      resetQuery,
+      handleSelectionChange,
+      ...toRefs(props),
+      ...toRefs(state),
+    };
+  },
+});
+// import api from '/@/api/ota';
+// import { useSearch } from '/@/hooks/useCommon';
+// import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+// // import CheckForm from '../check.vue';
+// import CheckForm from '/@/views/iot/ota-update/update/component/check.vue';
+//
+// import { ref } from 'vue';
+// import { useRouter } from 'vue-router';
+// const props = defineProps({
+// 	detail: {
+// 		type: Object,
+// 		default: () => { }
+// 	},
+// })
+// const queryRef = ref();
+// const router = useRouter();
+//
+// const checkFormRef = ref();
+//
+// const { params, tableData, getList, loading } = useSearch<any[]>(api.batch.getList, 'Data', { devOtaFirewareId: props.detail.id });
+//
+// getList();
+//
+// const CheckUpdate = async (row?: any) => {
+// 	if (row) {
+// 		checkFormRef.value.open(row);
+// 		return;
+// 	} else {
+// 		let array = {
+// 			productId: props.detail.productId,
+// 			devOtaFirewareId: props.detail.id
+// 		}
+// 		checkFormRef.value.open(array);
+// 	}
+// };
+//
+//
+// const del = (row: any) => {
+// 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
+// 		confirmButtonText: '确认',
+// 		cancelButtonText: '取消',
+// 		type: 'warning',
+// 	}).then(async () => {
+// 		await api.manage.del(row.id);
+// 		ElMessage.success('删除成功');
+// 		getList();
+// 	});
+// };
 </script>
   

@@ -23,6 +23,7 @@
 
 				<el-form-item label="选择设备" prop="deviceKey">
 					<el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
+						<el-option label="全部" value="all">全部</el-option>
 						<el-option v-for="item in sourceData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
@@ -40,82 +41,86 @@
 					<el-select v-model="ruleForm.eventKey" filterable placeholder="请选择事件" @change="eventTypeChange">
 						<el-option v-for="item in eventList" :key="item.key" :label="item.name" :value="item.key"></el-option>
 					</el-select>
+				
 				</el-form-item>
 
-				<el-divider content-position="left">触发条件</el-divider>
-				<div class="box-content">
-					<div v-for="(item, index) in requestParams" :key="index">
-						<div style="text-align: center" v-if="index > 0">
-							<el-icon>
-								<Top />
-							</el-icon>
-							<div>
-								<el-select v-model="item.andOr" placeholder="选择条件关系">
-									<el-option label="无" :value="0" />
-									<el-option label="并且" :value="1" />
-									<el-option label="或" :value="2" />
-								</el-select>
-							</div>
-							<el-icon>
-								<Bottom />
-							</el-icon>
-						</div>
 
-						<div style="
-								padding: 10px;
-								border: 1px solid var(--next-border-color-light);
-								background-color: var(--next-border-color-light);
-								margin-bottom: 10px;
-								position: relative;
-							">
-							<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
-								<el-icon @click="delParams(index)">
-									<CircleClose />
+				<div v-if="ruleForm.triggerType>2" >
+					<el-divider content-position="left">触发条件</el-divider>
+					<div class="box-content">
+						<div v-for="(item, index) in requestParams" :key="index">
+							<div style="text-align: center" v-if="index > 0">
+								<el-icon>
+									<Top />
+								</el-icon>
+								<div>
+									<el-select v-model="item.andOr" placeholder="选择条件关系">
+										<el-option label="无" :value="0" />
+										<el-option label="并且" :value="1" />
+										<el-option label="或" :value="2" />
+									</el-select>
+								</div>
+								<el-icon>
+									<Bottom />
 								</el-icon>
 							</div>
 
-							<div style="display: flex">
-								<el-divider content-position="left">参数设置</el-divider>
-							</div>
-
-							<div v-for="(aaa, bbb) in item.filters" :key="bbb">
-								<div style="text-align: center" v-if="bbb > 0">
-									<el-icon>
-										<Top />
-									</el-icon>
-									<div>
-										<el-select v-model="aaa.andOr" placeholder="选择条件关系" style="width: 150px">
-											<el-option label="无" :value="0" />
-											<el-option label="并且" :value="1" />
-											<el-option label="或" :value="2" />
-										</el-select>
-									</div>
-									<el-icon>
-										<Bottom />
+							<div style="
+									padding: 10px;
+									border: 1px solid var(--next-border-color-light);
+									background-color: var(--next-border-color-light);
+									margin-bottom: 10px;
+									position: relative;
+								">
+								<div class="conicon" style="width: 100%; text-align: right; position: absolute; right: -8px; top: -8px; color: red">
+									<el-icon @click="delParams(index)">
+										<CircleClose />
 									</el-icon>
 								</div>
-								<div class="content-f">
-									<el-select v-model="aaa.key" :placeholder="ruleForm.triggerType === 4 && !ruleForm.eventKey ? '请先选择事件' : '选择参数'" style="width: 320px">
-										<el-option v-for="a in triData" :key="a.paramKey" :label="a.title" :value="a.paramKey" />
-									</el-select>
-									<el-select v-model="aaa.operator" placeholder="选择操作符" style="width: 320px">
-										<el-option v-for="b in operData" :key="b.type" :label="b.title" :value="b.type" />
-									</el-select>
-									<el-input v-model="aaa.value" placeholder="请输入条件值" style="width: 320px" />
 
-									<div class="conicon">
-										<el-icon @click="delParamss(index, bbb)">
-											<Delete />
+								<div style="display: flex">
+									<el-divider content-position="left">参数设置</el-divider>
+								</div>
+
+								<div v-for="(aaa, bbb) in item.filters" :key="bbb">
+									<div style="text-align: center" v-if="bbb > 0">
+										<el-icon>
+											<Top />
+										</el-icon>
+										<div>
+											<el-select v-model="aaa.andOr" placeholder="选择条件关系" style="width: 150px">
+												<el-option label="无" :value="0" />
+												<el-option label="并且" :value="1" />
+												<el-option label="或" :value="2" />
+											</el-select>
+										</div>
+										<el-icon>
+											<Bottom />
 										</el-icon>
 									</div>
-								</div>
-							</div>
+									<div class="content-f">
+										<el-select v-model="aaa.key" :placeholder="ruleForm.triggerType === 4 && !ruleForm.eventKey ? '请先选择事件' : '选择参数'" style="width: 320px">
+											<el-option v-for="a in triData" :key="a.paramKey" :label="a.title" :value="a.paramKey" />
+										</el-select>
+										<el-select v-model="aaa.operator" placeholder="选择操作符" style="width: 320px">
+											<el-option v-for="b in operData" :key="b.type" :label="b.title" :value="b.type" />
+										</el-select>
+										<el-input v-model="aaa.value" placeholder="请输入条件值" style="width: 320px" />
 
-							<el-button type="primary" class="addbutton" @click="addParams(index)">增加条件</el-button>
+										<div class="conicon">
+											<el-icon @click="delParamss(index, bbb)">
+												<Delete />
+											</el-icon>
+										</div>
+									</div>
+								</div>
+
+								<el-button type="primary" class="addbutton" @click="addParams(index)">增加条件</el-button>
+							</div>
 						</div>
 					</div>
+					<el-button type="success" class="addbutton" @click="addParamss">增加分组</el-button>
 				</div>
-				<el-button type="success" class="addbutton" @click="addParamss">增加分组</el-button>
 
 				<el-divider content-position="left">执行动作</el-divider>
 				<div class="box-content">
@@ -311,7 +316,7 @@ export default defineComponent({
 				alarm.common.detail(row.id).then((res: any) => {
 					
 					state.requestParams = res.data.condition.triggerCondition;
-
+					let product_key=res.data.productKey;
 					res.data.performAction.action.forEach(function (value: { sendGateway: any; noticeConfig: number; }, index: string | number) {
 						notice.config.getList({ sendGateway: value.sendGateway }).then((res: any) => {
 							state.sendGatewayData[index] = res.Data;
@@ -335,12 +340,12 @@ export default defineComponent({
 					})
 					state.ruleForm = res.data;
 
-
-					alarm.common.trigger_type(res.data.productKey).then((res: any) => {
-						state.typeData = res.list || [];
-					});
-					
-
+					if(product_key){
+						alarm.common.trigger_type(product_key).then((res: any) => {
+							state.typeData = res.list || [];
+						});
+						
+					}
 				});
 
 			

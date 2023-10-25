@@ -14,8 +14,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备坐标" prop="lng">
-          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectPosition" read-only />
+          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectMap" read-only />
         </el-form-item>
+
         <el-form-item label="标签设置" prop="lng">
           <div class="tags-wrapper">
             <el-button type="primary" size="small" @click="toAddTag">添加标签</el-button>
@@ -69,10 +70,8 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog title="地图选点（点击地图即可）" v-model="mapVisible" width="1000px" append-to-body>
-      <div class="map" id="map-container-conpany" style="height: 65vh"></div>
-    </el-dialog>
     <tagVue ref="tagRef"></tagVue>
+    <Map ref="mapRef" @updateMap="updateMap"></Map>
   </div>
 </template>
 
@@ -81,6 +80,7 @@ import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/device';
 import { ElMessage } from "element-plus";
 import tagVue from './tag.vue'
+import Map from './map.vue'
 import certApi from '/@/api/certificateManagement';
 
 interface RuleFormState {
@@ -134,11 +134,12 @@ export default defineComponent({
   name: 'deviceEditPro',
   components: {
     tagVue,
+    Map,
   },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
-    const mapVisible = ref(false);
+    const mapRef = ref();
     const certList = ref([])
     const state = reactive<DicState>({
       isShowDialog: false,
@@ -157,6 +158,11 @@ export default defineComponent({
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       }
     });
+
+    //地图选点
+    const selectMap=()=>{
+      mapRef.value.openDialog();
+    }
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
@@ -228,20 +234,7 @@ export default defineComponent({
     function delTagRow(i: number) {
       state.ruleForm.tags.splice(i, 1)
     }
-    function selectPosition() {
-      mapVisible.value = true;
-      nextTick(() => {
-        var map = new BMapGL.Map("map-container-conpany");
-        map.centerAndZoom("沈阳市", 8);
-        map.enableScrollWheelZoom(true);
-        map.addEventListener("click", (e) => {
-          // console.log("点击位置经纬度：" + e.latlng.lng + "," + e.latlng.lat);
-          state.ruleForm.lng = e.latlng.lng.toFixed(5);
-          state.ruleForm.lat = e.latlng.lat.toFixed(5);
-          mapVisible.value = false;
-        });
-      });
-    }
+
     // 所属产品变化的时候，更新产品详情
     const productIdChange = (productId: number) => {
       api.product.detail(productId).then((res: any) => {
@@ -255,15 +248,22 @@ export default defineComponent({
       })
     }
 
+    //回调地图选点
+    const updateMap=(data:any)=>{
+      state.ruleForm.lng = data.lng;
+      state.ruleForm.lat = data.lat;
+    }
+
     return {
       certList,
       productIdChange,
       tagRef,
+      selectMap,
+      mapRef,
+      updateMap,
       delTagRow,
       toAddTag,
       addTag,
-      mapVisible,
-      selectPosition,
       openDialog,
       closeDialog,
       onCancel,

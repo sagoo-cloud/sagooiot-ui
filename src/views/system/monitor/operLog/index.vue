@@ -81,9 +81,8 @@
         <el-table-column label="操作时间" v-col="'operTime'" show-overflow-tooltip align="center" prop="operTime" />
         <el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="80">
           <template #default="scope">
-            <el-tag type="info" size="small" v-if="scope.row.status === 1">正常</el-tag>
-            <el-tag type="success" size="small" v-else-if="scope.row.status === 0">停用</el-tag>
-            <el-tag type="info" size="small" v-else-if="scope.row.status === -1">全部</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
+            <el-tag type="warning" size="small" v-else-if="scope.row.status === 0">停用</el-tag>
             <el-tag type="info" size="small" v-else>-</el-tag>
           </template>
         </el-table-column>
@@ -118,7 +117,8 @@
           {{ currentRow.jsonResult }}
         </el-form-item>
         <el-form-item label="操作状态" prop="title">
-          {{ currentRow.status === 0 ? '正常' : '异常' }}
+          <el-tag type="success" size="small" v-if="currentRow.status">正常</el-tag>
+          <el-tag type="warning" size="small" v-else>停用</el-tag>
         </el-form-item>
         <el-form-item label="操作时间" prop="title">
           {{ currentRow.operTime }}

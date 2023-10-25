@@ -87,7 +87,7 @@
                         <div class="cell-card">剩余:</div>
                       </td>
                       <td>
-                        <div class="cell-card">{{ memorySizeFormat(sysInfo.memFree) }}</div>
+                        <div class="cell-card">{{ memorySizeFormat(sysInfo.available) }}</div>
                       </td>
                     </tr>
                     <tr>
@@ -613,7 +613,7 @@ export default defineComponent({
       setOptChart2(data.usedPercent.toFixed(2));
       state.sysInfo.memTotal = data.total
       state.sysInfo.memUsed = data.used
-      state.sysInfo.memFree = data.free
+      state.sysInfo.available = data.available
       state.sysInfo.goUsed = data.goUsed
       state.sysInfo.memUsage = data.usedPercent.toFixed(2)
       setOptChart(myChart5, myChart5Data, state.sysInfo.memUsage);
