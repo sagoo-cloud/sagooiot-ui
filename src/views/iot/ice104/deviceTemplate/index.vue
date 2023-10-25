@@ -1,14 +1,14 @@
 <!--
  * @Author: vera_min vera_min@163.com
- * @Date: 2023-10-23 09:09:35
+ * @Date: 2023-10-23 17:05:57
  * @LastEditors: vera_min vera_min@163.com
- * @LastEditTime: 2023-10-23 17:46:43
- * @FilePath: /sagoo-admin-ui/src/views/iot/device/channel/index.vue
+ * @LastEditTime: 2023-10-25 08:53:48
+ * @FilePath: /sagoo-admin-ui/src/views/iot/ice104/index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-	<div class="page">
-		<el-card shadow="hover">
+	<div class="page page-full">
+		<el-card shadow="hover" class="page-full-part">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
 					<el-form-item label="通道名称" prop="title">
@@ -62,15 +62,16 @@
 import { ref } from 'vue';
 import EditForm from './component/edit.vue';
 import detailForm from './component/detail.vue';
-import api from '/@/api/device/modbus';
+import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { useSearch } from '/@/hooks/useCommonModbus';
+// import { useSearch } from '/@/hooks/useCommon';
+import { useSearch } from '/@/hooks/useCommonIce104';
 
 const editFormRef = ref();
 const detailFormRef = ref();
 const queryRef = ref();
 
-const { params, tableData, getList, loading } = useSearch(api.channel.getList, 'list', { title: '', number: '' });
+const { params, tableData, getList, loading } = useSearch(api.device.getList, 'list', { keyWord: '', number: '' });
 
 getList();
 
