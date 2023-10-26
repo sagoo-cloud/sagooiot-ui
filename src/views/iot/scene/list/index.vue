@@ -60,7 +60,7 @@ import { useSearch } from '/@/hooks/useCommon';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import { ref } from 'vue';
 const queryRef = ref();
-const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'data', { keyWord: '' });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.log.getList, 'data', { keyWord: '' });
 getList();
 
 
@@ -74,7 +74,7 @@ const del = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.manage.del(row.id);
+		await api.log.del(row.id);
 		ElMessage.success('删除成功');
 		getList(1);
 	});

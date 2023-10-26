@@ -15,5 +15,11 @@ export default {
     editDetail: (data: any) => put('/scene/detail/edit', data),
     delDetail: (ids: number) => del('/scene/detail/delete', { ids }),
     getOneDetail: (data: any) => get('/scene/detail/list', data),
+  },
+  log:{
+    getList: (data: any) => get('/scene/scene_log/list', data),
+    getDetail: (data: any) => get('/scene/scene_log/get', data),
+    del: (ids: number) => del('/scene/scene_log/delete', { ids }),
+
   }
 }
