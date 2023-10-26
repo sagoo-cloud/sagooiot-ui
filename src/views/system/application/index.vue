@@ -54,7 +54,7 @@
 			</el-table-column>
 		</el-table>
 		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-		<EditForm ref="editFormRef"  :deptData="deptData" :roleData="roleData" @getList="getList()"></EditForm>
+		<EditForm ref="editFormRef"  :deptData="deptData" @getList="getList()"></EditForm>
 	</el-card>
 </template>
   
@@ -68,16 +68,12 @@ import { useSearch } from '/@/hooks/useCommon'
 
 const queryRef = ref()
 const deptData = ref([])
-const roleData = ref([])
 const editFormRef = ref()
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { keyWord: '' })
 getList()
 const initTableData = () => {
 	user.dept.getList({status:1}).then((res: any) => {
 		deptData.value = res;
-	});
-	user.role.getList({status:1}).then((res: any) => {
-		roleData.value = res;
 	});
 };
 initTableData();

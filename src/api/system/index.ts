@@ -16,6 +16,7 @@ export default {
     del: (id: number) => del('/system/api/del', { id }),
     edit: (data: object) => put('/system/api/edit', data),
     bindMenus: (bindMenus: any[]) => post('/system/api/bindMenus', { bindMenus }),
+    import: () => post('/system/api/import'),
   },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
