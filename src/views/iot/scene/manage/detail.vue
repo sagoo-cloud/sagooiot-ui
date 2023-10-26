@@ -34,7 +34,7 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;">
 		<div class="font20">场景动作</div>
-		<ActionItem v-if="detail.id" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
+		<ActionItem v-if="detail.id && sourceData.length>0" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
 	</el-card>
 
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
@@ -159,7 +159,6 @@ export default defineComponent({
 							...parsedBodyJson
 						};
 					});
-					getProductList();
 					state.sceneList = scenes;
 					state.showstatus = true;
 				})
@@ -177,7 +176,6 @@ export default defineComponent({
 							getOneDetail();
 						});
 					}
-					getProductList();
 
 					state.timer_id=res[0].id
 					state.timerData=JSON.parse(res[0].bodyjson);
@@ -185,6 +183,7 @@ export default defineComponent({
 				})
 			}
 
+			getProductList();
 
 
 
