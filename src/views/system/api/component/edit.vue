@@ -1,12 +1,5 @@
 <template>
-	<el-dialog
-		class="api-edit"
-		v-model="showDialog"
-		:title="`${formData.id ? '编辑接口' : '新增接口'}`"
-		width="600px"
-		:close-on-click-modal="false"
-		:close-on-press-escape="false"
-	>
+	<el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id ? '编辑接口' : '新增接口'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px" @keyup.enter="onSubmit">
 			<el-form-item label="选择类型" prop="types">
 				<el-radio-group v-model="formData.types">
@@ -16,20 +9,13 @@
 			</el-form-item>
 			<template v-if="formData.types === 1">
 				<el-form-item label="上级分类" prop="parentId">
-					<el-cascader
-						:options="[
-							{
-								id: -1,
-								name: '根节点',
-								children: typeData,
-							},
-						]"
-						:props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
-						placeholder="请选择关联页面"
-						clearable
-						class="w100"
-						v-model="formData.parentId"
-					></el-cascader>
+					<el-cascader :options="[
+						{
+							id: -1,
+							name: '根节点',
+							children: typeData,
+						},
+					]" :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
 				</el-form-item>
 				<el-form-item label="分类名称" prop="name">
 					<el-input v-model="formData.name" placeholder="输入接口名称" />
@@ -37,24 +23,10 @@
 			</template>
 			<template v-else>
 				<el-form-item label="上级分类" prop="parentId">
-					<el-cascader
-						:options="typeData"
-						:props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
-						placeholder="请选择关联页面"
-						clearable
-						class="w100"
-						v-model="formData.parentId"
-					></el-cascader>
+					<el-cascader :options="typeData" :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
 				</el-form-item>
 				<el-form-item label="关联页面" prop="menuIds">
-					<el-cascader
-						:options="menuData"
-						:props="{ checkStrictly: false, multiple: true, emitPath: false, value: 'id', label: 'title' }"
-						placeholder="请选择关联页面"
-						clearable
-						class="w100"
-						v-model="formData.menuIds"
-					></el-cascader>
+					<el-cascader :options="menuData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'id', label: 'title' }" placeholder="请选择关联页面" filterable clearable class="w100" v-model="formData.menuIds"></el-cascader>
 				</el-form-item>
 				<el-form-item label="接口名称" prop="name">
 					<el-input v-model="formData.name" placeholder="输入接口名称" />

@@ -15,6 +15,7 @@ export default {
     add: (data: object) => post('/system/api/add', data),
     del: (id: number) => del('/system/api/del', { id }),
     edit: (data: object) => put('/system/api/edit', data),
+    bindMenus: (bindMenus: any[]) => post('/system/api/bindMenus', { bindMenus }),
   },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
@@ -144,7 +145,7 @@ export default {
   },
   plugin: {
     getList: (params: object) => get('/system/plugins/list', params),
-    del: (ids: object) => del('/system/plugins/del', {ids}),
+    del: (ids: object) => del('/system/plugins/del', { ids }),
     changeStatus: (data: object) => post('/system/plugins/set', data),
     edit: (data: any) => put('/system/plugins/edit', data),
     addPluginFile: (formatDate: FormData) => post('/system/plugins/add', formatDate),

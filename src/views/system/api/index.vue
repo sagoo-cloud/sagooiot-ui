@@ -35,17 +35,19 @@
 							</el-icon>
 							新增接口
 						</el-button>
+						<el-button type="primary" :disabled="!ids.length" @click="bindMenus()" v-auth="'add'">
+							<el-icon>
+								<ele-Grid />
+							</el-icon>
+							批量绑定菜单
+						</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table
-				:data="tableData"
-				style="width: 100%"
-				v-loading="loading"
-				row-key="id"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
-				<el-table-column type="index" label="序号" width="60" align="center" />
+			<el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" v-loading="loading" :expand-row-keys="['41']" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+				<el-table-column type="selection" width="55" align="center" />
+				<!-- <el-table-column type="index" label="序号" width="60" align="center" /> -->
+				<el-table-column prop="id" label="ID" width="100" align="center" />
 				<el-table-column prop="name" v-col="'name'" label="接口名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="address" v-col="'address'" label="接口地址" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" v-col="'status'" label="状态" min-width="100" align="center">
@@ -54,6 +56,7 @@
 						<el-tag type="info" size="small" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
+				<el-table-column prop="menuIds" label="绑定菜单" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100" align="center" v-col="'handle'">
 					<template #default="scope">
 						<el-button size="small" text type="warning" @click="addOrEdit(scope.row)" v-auth="'edit'">修改</el-button>
@@ -64,19 +67,23 @@
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		</el-card>
 		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<bindVue ref="bindRef" @getList="getList()"></bindVue>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import EditForm from './component/edit.vue'
+import bindVue from './component/bind.vue'
 import { ApiRow } from '/@/api/model/system/menu'
 import api from '/@/api/system'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useSearch } from '/@/hooks/useCommon'
 
 const editFormRef = ref()
+const bindRef = ref()
 const queryRef = ref()
+const ids = ref<number[]>([])
 
 const { params, tableData, getList, loading } = useSearch<ApiRow[]>(api.api.getList, 'Info', { name: '', address: '', types: -1 })
 
@@ -92,10 +99,19 @@ const addOrEdit = async (row?: ApiRow) => {
 	}
 }
 
+const handleSelectionChange = (selection: any[]) => {
+	ids.value = selection.filter(item => item.types === 2).map((item) => item.id);
+};
+
 // 重置表单
 const resetQuery = () => {
 	queryRef.value.resetFields()
 	getList(1)
+}
+
+// 重置表单
+const bindMenus = () => {
+	bindRef.value.open(ids.value)
 }
 
 const onDel = (row: ApiRow) => {
