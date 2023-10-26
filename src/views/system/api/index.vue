@@ -44,7 +44,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" v-loading="loading" :expand-row-keys="['41']" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+			<el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" v-loading="loading" :expand-row-keys="[]" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column type="selection" width="55" align="center" />
 				<!-- <el-table-column type="index" label="序号" width="60" align="center" /> -->
 				<el-table-column prop="id" label="ID" width="100" align="center" />
