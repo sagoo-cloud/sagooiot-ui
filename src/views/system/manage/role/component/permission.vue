@@ -28,17 +28,7 @@
 			<el-step title="接口权限" />
 		</el-steps>
 		<div class="scroll-part mt-3">
-			<el-tree
-				ref="treeRef"
-				:data="treeData"
-				show-checkbox
-				default-expand-all
-				node-key="id"
-				highlight-current
-				:props="defaultProps"
-				check-on-click-node
-				:expand-on-click-node="false"
-			/>
+			<el-tree ref="treeRef" :data="treeData" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" check-on-click-node :expand-on-click-node="false" />
 		</div>
 	</el-dialog>
 </template>
@@ -138,9 +128,15 @@ const next = async () => {
 	const treeDataRes = await api.role.auth.getList(typeList[step.value], menuIds.value.concat(menuIdsHalf.value));
 	// 最外层是菜单，如果菜单下没有按钮，列表或者接口，就不显示这个菜单
 	// 菜单id和其他id可能会重复，所以最外层的菜单id变一下，避免重复
+	const itemsType = typeList[step.value]
 	const treeDateFilter = (treeDataRes || []).filter((item: any) => {
 		if (item.children?.length) {
 			item.id += '_memu';
+			if (itemsType === 'api') {
+				item.children.forEach((i: any) => {
+					i.title += `【${i.method}】` + (i.remark ? `【${i.remark}】` : '')
+				});
+			}
 			return true;
 		}
 		return false;
