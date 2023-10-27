@@ -134,7 +134,7 @@ const next = async () => {
 			item.id += '_memu';
 			if (itemsType === 'api') {
 				item.children.forEach((i: any) => {
-					i.title += `【${i.method}】` + (i.remark ? `【${i.remark}】` : '')
+					i.title = i.method + '-' + i.title + (i.remark ? `(${i.remark})` : '')
 				});
 			}
 			return true;
