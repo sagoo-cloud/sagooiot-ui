@@ -172,4 +172,8 @@ export default {
     queryThingConfig: (params: object) => get('/operate/remoteconf/queryThingConfig', params),
     saveThisConfig: (params: object) => post('/operate/remoteconf/addThingConfig', params),
   },
+  lastLinesLog: {
+    getList: (params: object) => get('/system/monitor/listLogs', params),
+    detail: (params: object) => get('/system/monitor/lastLinesLog', params),
+  },
 }
