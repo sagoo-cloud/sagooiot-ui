@@ -175,5 +175,6 @@ export default {
   lastLinesLog: {
     getList: (params: object) => get('/system/monitor/listLogs', params),
     detail: (params: object) => get('/system/monitor/lastLinesLog', params),
+    down:(params:object)=>file('system/monitor/downloadLog',params),
   },
 }

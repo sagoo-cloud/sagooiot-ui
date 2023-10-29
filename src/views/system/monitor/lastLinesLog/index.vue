@@ -30,8 +30,8 @@
 import api from '/@/api/system';
 import { useSearch } from '/@/hooks/useCommon';
 import getOrigin from '/@/utils/origin'
+import downloadFile from '/@/utils/download';
 import { ref } from 'vue';
-const queryRef = ref();
 const { params, tableData, getList, loading } = useSearch<any[]>(api.lastLinesLog.getList, 'list', { keyWord: '' });
 getList();
 
@@ -44,19 +44,16 @@ const view = (row: any) => {
 	es.addEventListener('log', ({ data }) => {
 		topmsg.value=data;
 	});
-
 	api.lastLinesLog.detail({name:row.name}).then((res: any) => {
 		errorMessage.value=res.list;
+		dialogVisible.value=true;
     });
-
-	dialogVisible.value=true;
-
 };
-
-
 const down = (row: any) => {
-	window.open(getOrigin(import.meta.env.VITE_SERVER_URL + "api/v1/system/monitor/downloadLog?name="+row.name));
+	// window.open(getOrigin(import.meta.env.VITE_SERVER_URL + "system/monitor/downloadLog?name="+row.name));
+	api.lastLinesLog.down({ name: row.name }).then((res: any) => downloadFile(res,row.name))
 };
+
 </script>
 <style scoped>
 .error-line {
