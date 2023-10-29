@@ -19,7 +19,8 @@
 	</el-card>
 
 	<el-dialog v-model="dialogVisible" title="查看详情">
-		<div>{{topmsg}}</div>
+		<div v-for="line in topmsg" :key="line" class="error-line">{{ line }}</div>
+
 		<div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
 	</el-dialog>
 
@@ -37,12 +38,13 @@ getList();
 
 const dialogVisible=ref(false);
 const errorMessage=ref([]);
-const topmsg=ref();
+const topmsg=ref([]);
 
 const view = (row: any) => {
 	const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "subscribe/logInfo?name="+row.name));
 	es.addEventListener('log', ({ data }) => {
-		topmsg.value=data;
+
+		topmsg.value.push(data);
 	});
 	api.lastLinesLog.detail({name:row.name}).then((res: any) => {
 		errorMessage.value=res.list;
