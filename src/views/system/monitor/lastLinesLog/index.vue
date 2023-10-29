@@ -43,8 +43,7 @@ const topmsg=ref([]);
 const view = (row: any) => {
 	const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "subscribe/logInfo?name="+row.name));
 	es.addEventListener('log', ({ data }) => {
-
-		topmsg.value.push(data);
+		topmsg.value.unshift(data);
 	});
 	api.lastLinesLog.detail({name:row.name}).then((res: any) => {
 		errorMessage.value=res.list;
