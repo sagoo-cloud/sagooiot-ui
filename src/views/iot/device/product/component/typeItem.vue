@@ -2,12 +2,12 @@
   <div class="type-item">
     <template v-if="['int', 'long', 'float', 'double'].includes(valueType.type)">
       <div class="flex-row" style="margin-bottom: 0;">
-        <el-form-item label="取值范围" prop="max" class="flex1">
-          <el-input v-model="valueType.max" type="number" @input="setNull(valueType, 'max', $event)" placeholder="最大值" />
+        <el-form-item label="取值范围" prop="min" class="flex1">
+          <el-input v-model="valueType.min" type="number" @input="setNull(valueType, 'min', $event)" placeholder="最小值" />
         </el-form-item>
         <div class="split" style="margin-bottom: 20px;">~</div>
-        <el-form-item label="" prop="min" class="flex1" label-width="0">
-          <el-input v-model="valueType.min" type="number" @input="setNull(valueType, 'min', $event)" placeholder="最小值" />
+        <el-form-item prop="max" class="flex1" label-width="0">
+          <el-input v-model="valueType.max" type="number" @input="setNull(valueType, 'max', $event)" placeholder="最大值" />
         </el-form-item>
       </div>
       <el-form-item label="单位" prop="unit">
