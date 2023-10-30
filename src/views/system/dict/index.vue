@@ -47,7 +47,7 @@
         </el-form>
       </div>
       <!-- 字典切换 -->
-      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @click="typeList">
+      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @tab-change="typeList">
 				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
