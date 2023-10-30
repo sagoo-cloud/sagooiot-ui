@@ -139,16 +139,16 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 const operate = (type: string, row: any) => {
 	switch (type) {
 		case 'preview':
-			previewRef.value.openDialog(row)
+			previewRef.value.openDialog({ ...row })
 			break
 		case 'add':
 			editParamsRef.value.openDialog()
 			break
 		case 'editParams':
-			editParamsRef.value.openDialog(row)
+			editParamsRef.value.openDialog({...row})
 			break
 		case 'buildConfig':
-			buildConfigRef.value.openDialog(row)
+			buildConfigRef.value.openDialog({ ...row })
 			break
 		case 'delete':
 			ElMessageBox.confirm(`是否确认删除编号为"${row.id}"的数据项?`, '提示', {
