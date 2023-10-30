@@ -117,7 +117,7 @@ export default {
 			(this.$refs['dataForm'] as any).validate((valid: boolean) => {
 				if (valid) {
 					api.template.editTemplate(this.temp).then(() => {
-						this.$emit('finish');
+						this.$emit('getList');
 						this.clsoeDialog();
 						ElMessage.success('操作成功！');
 					});

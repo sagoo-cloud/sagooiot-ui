@@ -37,7 +37,7 @@ const formData = reactive<ApiRow>({
 });
 
 const ruleForm = {
-	menuIds: [ruleRequired('关联页面不能为空', 'change')],
+	// menuIds: [ruleRequired('关联页面不能为空', 'change')],
 };
 
 // 加载菜单列表

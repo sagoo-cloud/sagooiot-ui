@@ -10,12 +10,6 @@
 						<el-form-item label="系统版权" prop="keyWord">
 							<el-input v-model="state.info.copyright" placeholder="请输入系统版权" clearable size="default" />
 						</el-form-item>
-						<el-form-item label="开放接口AK" prop="keyWord">
-							<el-input v-model="state.info.accesskey" placeholder="请输入开放接口AK" clearable size="default" />
-						</el-form-item>
-						<el-form-item label="开放接口SK" prop="keyWord">
-							<el-input v-model="state.info.secretkey" placeholder="请输入开放接口SK" clearable size="default" />
-						</el-form-item>
 						<el-row>
 							<el-col :span="12">
 								<el-form-item label="系统LOGO" prop="keyWord">
@@ -90,17 +84,13 @@ const initBasicConfigInfo = () => {
 };
 const queryBasicConfigInfo = () => {
 	state.tableData.loading = true
-	api.basicConfig.getDetails().then((res: any) => {
+	api.basicConfig.getDetails({types: 0}).then((res: any) => {
 		state.data = res.data;
 		res.data.forEach((element: object) => {
 			if (element.configName == '系统名称') {
 				state.info.name = element.configValue
 			} else if (element.configName == '系统版权') {
 				state.info.copyright = element.configValue
-			} else if (element.configName == '开放接口AK') {
-				state.info.accesskey = element.configValue
-			} else if (element.configName == '开放接口SK') {
-				state.info.secretkey = element.configValue
 			} else if (element.configName == '系统LOGO') {
 				state.info.logo = element.configValue
 			} else if (element.configName == '系统LOGO（小图标）') {
@@ -121,14 +111,6 @@ const setDetails = () => {
 		ElMessage.error('请填写系统版权');
 		return;
 	}
-	if (!state.info.accesskey) {
-		ElMessage.error('请填写开放接口AK');
-		return;
-	}
-	if (!state.info.secretkey) {
-		ElMessage.error('请填写开放接口SK');
-		return;
-	}
 	if (!state.info.logo) {
 		ElMessage.error('请上传系统LOGO');
 		return;
@@ -146,10 +128,6 @@ const setDetails = () => {
 			element.configValue = state.info.name
 		} else if (element.configName == '系统版权') {
 			element.configValue = state.info.copyright
-		} else if (element.configName == '开放接口AK') {
-			element.configValue = state.info.accesskey
-		} else if (element.configName == '开放接口SK') {
-			element.configValue = state.info.secretkey
 		} else if (element.configName == '系统LOGO') {
 			element.configValue = state.info.logo
 		} else if (element.configName == '系统LOGO（小图标）') {

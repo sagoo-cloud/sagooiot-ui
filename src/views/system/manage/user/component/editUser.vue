@@ -191,9 +191,11 @@ export default defineComponent({
 			if (row) {
 				api.user.detail(row.id).then((user: any) => {
 					state.ruleForm = user;
+					state.isShowDialog = true;
 				});
+			} else {
+				state.isShowDialog = true;
 			}
-			state.isShowDialog = true;
 		};
 		// 关闭弹窗
 		const closeDialog = () => {

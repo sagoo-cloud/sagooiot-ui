@@ -160,8 +160,8 @@ export default {
     changeStatus: (data: object) => post('/system/blacklist/status', data),
   },
   basicConfig: {
-    getDetails: () => get('/getBaseSetting'),
-    setDetails: (data: object) => put('/editBaseSetting', data),
+    getDetails: (params: object) => get('/common/getSysConfigSetting', params),
+    setDetails: (data: object) => put('/common/editSysConfigSetting', data),
   },
   certificate: {
     getList: () => get('/system/certificate/getAll')

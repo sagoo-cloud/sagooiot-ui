@@ -98,7 +98,7 @@ watch(
 
 const ruleForm = {
 	parentId: [ruleRequired('上级分类不能为空', 'change')],
-	menuIds: [ruleRequired('关联页面不能为空', 'change')],
+	// menuIds: [ruleRequired('关联页面不能为空', 'change')],
 	method: [ruleRequired('请求方式不能为空', 'change')],
 	name: [ruleRequired('接口名称不能为空')],
 	address: [ruleRequired('接口地址不能为空')],
