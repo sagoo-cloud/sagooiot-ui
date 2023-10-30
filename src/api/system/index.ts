@@ -32,6 +32,10 @@ export default {
       edit: (data: object) => put('/system/menu/button/edit', data),
       setStatus: (id: number, menuId: number, status: number) => put('/system/menu/button/editStatus', { id, menuId, status })
     },
+    api: {
+      getList: (params: object) => get('/system/menu/api/tree', params),
+      add: (data: object) => post('/system/menu/api/add', data),
+    },
     list: {
       getList: (params: object) => get('/system/menu/column/tree', params),
       detail: (id: number) => get('/system/menu/column/detail', { id }),
