@@ -38,7 +38,7 @@
             @current-change="onHandleCurrentChange"
             class="mt15"
             :pager-count="5"
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]"
             v-model:current-page="param.page"
             background
             v-model:page-size="param.pageSize"
