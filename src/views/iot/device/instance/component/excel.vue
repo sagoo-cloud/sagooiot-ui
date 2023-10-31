@@ -10,8 +10,9 @@
         </el-form-item>
 
         <el-form-item label="导入文件" prop="path" v-if="open_type === 'upload'">
-          <el-upload accept="xls,xlsx,csv" :show-file-list="false"  :data="{ productId:ruleForm.productId }"  :limit="1" :headers="headers" :action="uploadUrl"
-            :on-success="updateImg">
+          <el-upload accept="xls,xlsx,csv" :show-file-list="true" 
+  :data="{ productId:ruleForm.productId }"  :limit="1" :headers="headers" :action="uploadUrl"
+            :on-success="updateImg" :before-upload="beforeAvatarUpload">
             <el-button>
               <el-icon> <ele-Upload /> </el-icon>
               上传文件
@@ -40,7 +41,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/device';
-import { ElMessage } from "element-plus";
+import { ElMessage,UploadProps } from "element-plus";
 import downloadFile from '/@/utils/download';
 import getOrigin from '/@/utils/origin';
 
@@ -86,6 +87,19 @@ export default defineComponent({
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       }
     });
+
+
+    const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+      if (!state.ruleForm.productId) {
+        ElMessage.error('请先选择所属产品!');
+        return false;
+      }
+      if (rawFile.size / 1024 / 1024 > 2) {
+        ElMessage.error('文件不能超过2MB!');
+        return false;
+      }
+      return true;
+    };
 
     const updateImg = (res: any) => {
       if (res.code === 0) {
@@ -170,6 +184,7 @@ export default defineComponent({
       uploadUrl,
       headers,
       tagRef,
+      beforeAvatarUpload,
       down,
       updateImg,
       openDialog,
