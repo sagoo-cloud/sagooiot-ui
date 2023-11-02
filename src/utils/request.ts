@@ -128,7 +128,7 @@ export function file(url: string, params?: any, method: 'get' | 'post' = 'get'):
 			url,
 			method,
 			params,
-			timeout: 30000,
+			timeout: 100000,
 			responseType: 'arraybuffer',
 		});
 	} else {
