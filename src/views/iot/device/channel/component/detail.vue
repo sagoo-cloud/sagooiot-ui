@@ -156,8 +156,7 @@ export default {
 		// 获取任务list
 		getList() {
 			this.listLoading = true;
-			api.task
-				.getList(this.listQuery)
+			api.task.getList(this.listQuery)
 				.then((res: any) => {
 					this.taskList = res.list || [];
 					this.total = res.Total;
