@@ -10,14 +10,18 @@
 
 							<span class="font30">{{ v.allnum }}</span>
 						</div>
-						<div class="home-card-item-icon flex" >
-							<img :src="'/imgs/'+v.icoimg" class="icoimg">
+						<div class="home-card-item-icon flex">
+							<img :src="'/imgs/' + v.icoimg" class="icoimg">
 
 						</div>
 					</div>
 					<div class="flex" style="font-weight: bold;">
-						<div class="flex font14"><div class="title_status"  :style="{ backgroundColor: v.title1_bgcolor }"></div> {{ v.title1 }} {{ v.num1 }}</div>
-						<div class="flex ml20 font14"><div class="title_status"  :style="{  backgroundColor: v.title2_bgcolor}"></div>{{ v.title2 }} {{ v.num2 }}</div>
+						<div class="flex font14">
+							<div class="title_status" :style="{ backgroundColor: v.title1_bgcolor }"></div> {{ v.title1 }} {{ v.num1 }}
+						</div>
+						<div class="flex ml20 font14">
+							<div class="title_status" :style="{ backgroundColor: v.title2_bgcolor }"></div>{{ v.title2 }} {{ v.num2 }}
+						</div>
 					</div>
 				</div>
 			</el-col>
@@ -301,7 +305,7 @@ export default defineComponent({
 			for (var i = 0; i < getname.length; i++) {
 				data.push({ name: getname[i], value: getvalue[i] });
 			}
-			const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#968AF5', '#FF0000'];
+			const colorList = ['#FF0000', '#FEC279', '#968AF5', '#51A3FC', '#36C78B',];
 			const option = {
 				backgroundColor: state.charts.bgColor,
 				title: {
@@ -399,7 +403,7 @@ export default defineComponent({
 				state.homeOne[0].num1 = `${overview.productActivation}`;
 				state.homeOne[0].num2 = `${overview.productDeactivation}`;
 				state.homeOne[1].allnum = overview.deviceTotal;
-				state.homeOne[1].num1 = `${overview.deviceTotal-overview.deviceOffline}`;
+				state.homeOne[1].num1 = `${overview.deviceTotal - overview.deviceOffline}`;
 				state.homeOne[1].num2 = `${overview.deviceOffline}`;
 				state.homeOne[2].allnum = overview.msgTotal;
 				state.homeOne[2].num1 = overview.msgTotal;
@@ -513,17 +517,19 @@ $homeNavLengh: 8;
 	.home-card-one,
 	.home-card-two,
 	.home-card-three {
-		.icoimg{
+		.icoimg {
 			width: 50px;
 			height: 50px;
 		}
-		.title_status{
+
+		.title_status {
 			width: 7px;
 			height: 7px;
 			background: #c1bbbb;
 			border-radius: 50px;
 			margin-right: 5px;
 		}
+
 		.home-card-item,
 		.home-card-top {
 			width: 100%;
@@ -687,5 +693,4 @@ $homeNavLengh: 8;
 	.box-card.xx {
 		margin-top: 20px;
 	}
-}
-</style>
+}</style>
