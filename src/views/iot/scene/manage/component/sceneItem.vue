@@ -70,6 +70,8 @@ import { DocumentAdd, CircleClose, Right } from '@element-plus/icons-vue';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 import api from '/@/api/scene';
 import product from '/@/api/device';
+import datahub from '/@/api/datahub';
+
 import Condition from './condition.vue';
 const { proxy } = getCurrentInstance() as any;
 const scene_type = proxy.useDict('scene_type');
@@ -121,13 +123,13 @@ const props = defineProps({
       'name': '设备离线',
     }, 
     
-    // {
-    //   'key': 'readAttribute',
-    //   'name': '读取属性',
-    // }, {
-    //   'key': 'modifyAttribute',
-    //   'name': '修改属性',
-    // }, 
+    {
+      'key': 'readAttribute',
+      'name': '读取属性',
+    }, {
+      'key': 'modifyAttribute',
+      'name': '修改属性',
+    }, 
     {
       'key': 'reportAttribute',
       'name': '属性上报',
@@ -135,10 +137,10 @@ const props = defineProps({
       'key': 'reportEvent',
       'name': '事件上报',
     },
-    //  {
-    //   'key': 'functionCall',
-    //   'name': '功能调用',
-    // }
+     {
+      'key': 'functionCall',
+      'name': '功能调用',
+    }
   ]
   }
 })
@@ -175,7 +177,30 @@ const getSelectcolumns=(index: number, val: string) => {
     'operator': '',
     'value': ''
   }]];
+
 }
+//获取类型数据
+const getAction = (val: string) => {
+  switch (val) {
+    case 'functionCall':
+      product.tabDeviceFucntion.getList({ key: product_key }).then((res: any) => {
+        functionCallList.value = res
+      })
+      break;
+    case 'readAttribute':
+      datahub.node.getpropertyList({ key: product_key }).then((re: any) => {
+        propertyCallList.value = re;
+      });
+
+      break;
+    case 'modifyAttribute':
+      datahub.node.getpropertyList({ key: product_key }).then((re: any) => {
+        propertyCallList.value = re;
+      });
+      break;
+  }
+}
+
 const getcolumns = (index: number, val: string) => {
   let where = {
     "sceneType": props.sceneType, //场景类型

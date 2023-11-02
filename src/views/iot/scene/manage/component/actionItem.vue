@@ -94,7 +94,6 @@ const getOneDetail = () => {
             };
           }
         });
-
         actionList.value=combinedArray;
 			})
 		};
