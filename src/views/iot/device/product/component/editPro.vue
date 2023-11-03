@@ -224,7 +224,7 @@ export default defineComponent({
 					transportProtocolChange(row.transportProtocol)
 				}
 			} else {
-				state.imageUrl = ""
+				state.imageUrl = "" 
 			}
 			state.isShowDialog = true
 		}
