@@ -174,7 +174,9 @@ export default defineComponent({
 			},
 			rules: {
 				name: [ { required: true, message: '产品名称不能为空', trigger: 'change' },
-        				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' }],
+        				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
+						{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
+					],
 				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
 				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'change' }],
@@ -269,7 +271,16 @@ export default defineComponent({
 			})
 		}
 
+		const validateNoSpace=(rule, value, callback) =>{
+			if (/\s/.test(value)) {
+			callback(new Error('产品名称不能包含空格'));
+			} else {
+			callback();
+			}
+		}
+
 		return {
+			validateNoSpace,
 			transportProtocolChange,
 			submitLoading,
 			certList,
