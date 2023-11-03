@@ -232,9 +232,15 @@ export default defineComponent({
 			state.ruleForm = {
 				...form
 			}
+			const formWrap = unref(formRef) as any;
+			if (formWrap) {
+				formWrap.resetFields();
+			}
 		}
 		// 关闭弹窗
 		const closeDialog = () => {
+			resetForm();
+
 			state.isShowDialog = false
 		}
 		// 取消
