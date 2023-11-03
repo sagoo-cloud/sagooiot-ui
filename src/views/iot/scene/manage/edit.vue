@@ -1,3 +1,10 @@
+<!--
+ * @Author: yukai
+ * @Date: 2023-09-18 13:15:34
+ * @LastEditors: 
+ * @LastEditTime: 2023-11-02 10:36:07
+ * @Description: 请填写简介
+-->
 <template>
 	<el-dialog
 		class="api-edit"
@@ -8,8 +15,8 @@
 		:close-on-press-escape="false"
 	>
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-			<el-form-item label="场景描述" prop="name">
-				<el-input v-model="formData.name" placeholder="请输入场景描述" />
+			<el-form-item label="场景名称" prop="name">
+				<el-input v-model="formData.name" placeholder="请输入场景名称" />
 			</el-form-item>
       <el-form-item label="触发方式" prop="sceneType">
         <el-radio-group v-model="formData.sceneType">

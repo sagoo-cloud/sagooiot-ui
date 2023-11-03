@@ -18,6 +18,7 @@
 						<el-dropdown-item command="status-状态">状态</el-dropdown-item>
 						<el-dropdown-item command="createdAt-创建时间">创建时间</el-dropdown-item>
 						<el-dropdown-item command="handle-操作">操作</el-dropdown-item>
+						<el-dropdown-item command="selection-复选框">复选框</el-dropdown-item>
 					</el-dropdown-menu>
 				</template>
 			</el-dropdown>

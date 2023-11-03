@@ -2,7 +2,7 @@
   <div class="system-user-container">
     <el-card shadow="hover">
       <div class="system-menu-search">
-        <el-form :model="state.queryParams" :inline="true" ref="queryRef">
+        <el-form :model="state.queryParams" :inline="true" ref="queryRef" @keyup.enter="handleQuery()">
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="state.queryParams.title" placeholder="请输入菜单名称" size="default" clearable class="w-50" />
           </el-form-item>
@@ -68,6 +68,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item @click.native="authOpen(scope.row, 'buttonAuthorizeList')" v-auth="'btn'">按钮权限</el-dropdown-item>
                   <el-dropdown-item @click.native="authOpen(scope.row, 'listAuthorizeList')" v-auth="'list'">列表权限</el-dropdown-item>
+                  <el-dropdown-item @click.native="authOpen(scope.row, 'apiAuthorizeList')" v-auth="'list'">接口权限</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -89,10 +90,12 @@ import EditMenu from '/@/views/system/menu/component/editMenu.vue';
 import api from '/@/api/system';
 import ButtonAuthorizeListDrawer from './component/btn.vue';
 import ListAuthorizeListDrawer from './component/list.vue';
+import ApiAuthorizeListDrawer from './component/api.vue';
 const editMenuRef = ref();
 const queryRef = ref();
 const buttonAuthorizeList = ref();
 const listAuthorizeList = ref();
+const apiAuthorizeList = ref();
 const state = reactive({
   loading: false,
   queryParams: {
@@ -123,6 +126,9 @@ const authOpen = (row: any, key: string) => {
   }
   if (key === 'listAuthorizeList') {
     return listAuthorizeList.value.open(row);
+  }
+  if (key === 'apiAuthorizeList') {
+    return apiAuthorizeList.value.open(row);
   }
 };
 

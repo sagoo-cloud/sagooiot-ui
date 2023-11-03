@@ -34,7 +34,7 @@ export default {
     deleteTemplate: (data: object) => post('/template/delete', data),
     editTemplate: (data: object) => post('/template/edit', data),
     importFile: (data: object, config: object) => post('/data_area/import', data, config),
-    exportFile: (params: object) => get('/data_area/import', params, {
+    exportFile: (params: object) => get('/data_area/export', params, {
       headers: {
         responseType: 'blob'
       }

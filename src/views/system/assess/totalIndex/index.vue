@@ -114,9 +114,8 @@ export default defineComponent({
       state.tableData.loading = true
       api.getList().then((res: any) => {
         state.tableData.data = res;
-        state.tableData.loading = false
         // state.tableData.total = res.total;
-      });
+      }).finally(()  => state.tableData.loading = false)
     };
     // 打开新增用户弹窗
     const onOpenAddItem = () => {

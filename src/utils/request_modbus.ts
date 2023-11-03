@@ -41,6 +41,7 @@ service.interceptors.response.use(
 		} else if (code === undefined && res.message === undefined) { // 可能是下载文件
 			return response
 		} else if (code !== 0) {
+			ElMessage.closeAll()
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
 		} else {

@@ -78,8 +78,7 @@ export default {
 	methods: {
 		getList() {
 			this.listLoading = true;
-			api.area
-				.getList({ template_number: this.templateNumber })
+			api.area.getList({ template_number: this.templateNumber })
 				.then((res: any) => {
 					this.list = res.list || [];
 					this.total = res.Total;

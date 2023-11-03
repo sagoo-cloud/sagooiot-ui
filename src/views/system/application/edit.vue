@@ -28,16 +28,6 @@
 					</template>
 				</el-cascader>
 			</el-form-item>
-			<el-form-item label="角色" prop="roleId">
-				<el-cascader :options="roleData"
-					:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }"
-					placeholder="请选择角色" clearable class="w100" v-model="formData.roleId">
-					<template #default="{ node, data }">
-						<span>{{ data.name }}</span>
-						<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-					</template>
-				</el-cascader>
-			</el-form-item>
 			<el-form-item label="应用描述" prop="desc">
 				<el-input v-model="formData.desc" type="textarea" :rows="3" />
 			</el-form-item>
@@ -73,10 +63,6 @@ const showDialog = ref(false);
 const formRef = ref();
 const props = defineProps({
 	deptData: {
-		type: Array,
-		default: () => [],
-	},
-	roleData: {
 		type: Array,
 		default: () => [],
 	},

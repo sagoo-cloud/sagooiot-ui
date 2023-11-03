@@ -31,11 +31,11 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
-								</tr>
+								</tr> 
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">链接协议</th>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">接入方式</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}
 									</td>
 
@@ -46,7 +46,7 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
+					</div> 
 				</el-tab-pane>
 				<el-tab-pane label="物模型" name="2">
 					<div class="wu-box">

@@ -219,7 +219,7 @@ export default defineComponent({
 						}
 
 						state.ruleForm.valueType = state.valueType;
-						ElMessage.success('参数类型修改成功');
+						// ElMessage.success('参数类型修改成功');
 						closeDialog(); // 关闭弹窗
 						emit('editTypeList', state.ruleForm, state.ruleForm.type_data);
 					} else {

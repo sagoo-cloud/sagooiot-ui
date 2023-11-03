@@ -101,6 +101,8 @@ import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } fro
 import api from '/@/api/device'
 import certApi from '/@/api/certificateManagement';
 import uploadVue from '/@/components/upload/index.vue'
+import { validateNoSpace } from '/@/utils/validator';
+
 import { ElMessage, UploadProps } from 'element-plus'
 import getOrigin from '/@/utils/origin'
 
@@ -173,8 +175,12 @@ export default defineComponent({
 				...form
 			},
 			rules: {
-				name: [{ required: true, message: '产品名称不能为空', trigger: 'change' }],
-				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' }],
+				name: [ { required: true, message: '产品名称不能为空', trigger: 'change' },
+        				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
+						{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
+					],
+				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' },
+					{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
 				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'change' }],
 				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],
@@ -226,9 +232,15 @@ export default defineComponent({
 			state.ruleForm = {
 				...form
 			}
+			const formWrap = unref(formRef) as any;
+			if (formWrap) {
+				formWrap.resetFields();
+			}
 		}
 		// 关闭弹窗
 		const closeDialog = () => {
+			resetForm();
+
 			state.isShowDialog = false
 		}
 		// 取消
@@ -267,6 +279,8 @@ export default defineComponent({
 				}
 			})
 		}
+
+
 
 		return {
 			transportProtocolChange,

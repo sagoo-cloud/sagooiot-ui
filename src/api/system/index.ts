@@ -16,6 +16,7 @@ export default {
     del: (id: number) => del('/system/api/del', { id }),
     edit: (data: object) => put('/system/api/edit', data),
     bindMenus: (bindMenus: any[]) => post('/system/api/bindMenus', { bindMenus }),
+    import: () => post('/system/api/import'),
   },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
@@ -30,6 +31,10 @@ export default {
       del: (id: number) => del('/system/menu/button/del', { id }),
       edit: (data: object) => put('/system/menu/button/edit', data),
       setStatus: (id: number, menuId: number, status: number) => put('/system/menu/button/editStatus', { id, menuId, status })
+    },
+    api: {
+      getList: (params: object) => get('/system/menu/api/tree', params),
+      add: (data: object) => post('/system/menu/api/add', data),
     },
     list: {
       getList: (params: object) => get('/system/menu/column/tree', params),
@@ -159,8 +164,8 @@ export default {
     changeStatus: (data: object) => post('/system/blacklist/status', data),
   },
   basicConfig: {
-    getDetails: () => get('/getBaseSetting'),
-    setDetails: (data: object) => put('/editBaseSetting', data),
+    getDetails: (params: object) => get('/common/getSysConfigSetting', params),
+    setDetails: (data: object) => put('/common/editSysConfigSetting', data),
   },
   certificate: {
     getList: () => get('/system/certificate/getAll')
@@ -170,5 +175,10 @@ export default {
     getProductList: (params: object) => get('/product/list', params),
     queryThingConfig: (params: object) => get('/operate/remoteconf/queryThingConfig', params),
     saveThisConfig: (params: object) => post('/operate/remoteconf/addThingConfig', params),
+  },
+  lastLinesLog: {
+    getList: (params: object) => get('/system/monitor/listLogs', params),
+    detail: (params: object) => get('/system/monitor/lastLinesLog', params),
+    down:(params:object)=>file('system/monitor/downloadLog',params),
   },
 }

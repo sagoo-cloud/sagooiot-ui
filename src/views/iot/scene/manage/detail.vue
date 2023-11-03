@@ -8,6 +8,7 @@
 					? '启用' : '未启用' }}</div>
 			</div>
 			<div class="flex">
+				<div class="desc" style="margin-right: 20px;">场景类型：{{typeList[detail.sceneType]}}</div>
 				<div class="desc">场景描述：{{ detail.description }}</div>
 				<div class="edit" @click="addOrEdit(detail)"><el-link type="primary"> <el-icon>
 							<EditPen color="#409eff" />
@@ -34,7 +35,7 @@
 	</el-card>
 	<el-card style="  margin-top: 15px;">
 		<div class="font20">场景动作</div>
-		<ActionItem v-if="detail.id" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
+		<ActionItem v-if="detail.id && sourceData.length>0" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
 	</el-card>
 
 	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
@@ -50,8 +51,6 @@ import EditForm from './edit.vue';
 import api from '/@/api/scene';
 import product from '/@/api/device';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
-import { stat } from 'fs';
-
 
 const editFormRef = ref();
 //原始
@@ -82,6 +81,11 @@ export default defineComponent({
 			dialogVisible:false,
 			developer_status: 2,
 			showstatus: false,
+			typeList:{
+				'device':'设备触发',
+				'manual':'手动触发',
+				'timer':'定时触发',
+			} as any,
 			sourceData: [],
 			timerData: {
 					triggerType:'timer',
@@ -159,7 +163,6 @@ export default defineComponent({
 							...parsedBodyJson
 						};
 					});
-					getProductList();
 					state.sceneList = scenes;
 					state.showstatus = true;
 				})
@@ -177,7 +180,6 @@ export default defineComponent({
 							getOneDetail();
 						});
 					}
-					getProductList();
 
 					state.timer_id=res[0].id
 					state.timerData=JSON.parse(res[0].bodyjson);
@@ -185,6 +187,7 @@ export default defineComponent({
 				})
 			}
 
+			getProductList();
 
 
 

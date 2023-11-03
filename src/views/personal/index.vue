@@ -14,7 +14,7 @@
 						</div>
 						<div class="personal-user-right">
 							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{ info.userName }}，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
+								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{ info.userName }} </el-col>
 								<!-- 昵称 -->
 								<el-col :xs="24" :sm="24" class="personal-item mb6">
 									<div class="personal-item-label">姓名：</div>

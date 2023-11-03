@@ -17,6 +17,11 @@
 						},
 					]" :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择关联页面" clearable class="w100" v-model="formData.parentId"></el-cascader>
 				</el-form-item>
+				<el-form-item label="接口类型" prop="apiTypes">
+					<el-select v-model="formData.apiTypes" filterable clearable placeholder="请选择接口类型" style="width: 100%;">
+						<el-option v-for="dict in api_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="分类名称" prop="name">
 					<el-input v-model="formData.name" placeholder="输入接口名称" />
 				</el-form-item>
@@ -33,6 +38,11 @@
 				</el-form-item>
 				<el-form-item label="接口地址" prop="address">
 					<el-input v-model="formData.address" placeholder="接口地址" />
+				</el-form-item>
+				<el-form-item label="接口类型" prop="apiTypes">
+					<el-select v-model="formData.apiTypes" filterable clearable placeholder="请选择接口类型" style="width: 100%;">
+						<el-option v-for="dict in api_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="访问类型" prop="method">
 					<el-select v-model="formData.method" placeholder="请选择访问类型">
@@ -57,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, nextTick, watch } from 'vue';
+import { ref, reactive, nextTick, watch, getCurrentInstance } from 'vue';
 import api from '/@/api/system';
 import { ApiRow } from '/@/api/model/system/menu';
 import { ruleRequired } from '/@/utils/validator';
@@ -65,6 +75,8 @@ import { ElMessage } from 'element-plus';
 import apiDatahub from '/@/api/datahub';
 
 const emit = defineEmits(['getList']);
+const { proxy } = getCurrentInstance() as any;
+const { api_types } = proxy.useDict('api_types');
 
 const showDialog = ref(false);
 const formRef = ref();
@@ -78,6 +90,7 @@ const baseForm: ApiRow = {
 	parentId: undefined,
 	name: '',
 	types: 2,
+	apiTypes: '',
 	address: '',
 	method: '',
 	remark: '',
@@ -98,8 +111,9 @@ watch(
 
 const ruleForm = {
 	parentId: [ruleRequired('上级分类不能为空', 'change')],
-	menuIds: [ruleRequired('关联页面不能为空', 'change')],
+	// menuIds: [ruleRequired('关联页面不能为空', 'change')],
 	method: [ruleRequired('请求方式不能为空', 'change')],
+	apiTypes: [ruleRequired('接口类型不能为空', 'change')],
 	name: [ruleRequired('接口名称不能为空')],
 	address: [ruleRequired('接口地址不能为空')],
 };

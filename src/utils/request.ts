@@ -44,6 +44,7 @@ service.interceptors.response.use(
 		} else if (code === undefined && res.message === undefined) { // 可能是下载文件
 			return response
 		} else if (code !== 0) {
+			ElMessage.closeAll()
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
 		} else {
@@ -127,7 +128,7 @@ export function file(url: string, params?: any, method: 'get' | 'post' = 'get'):
 			url,
 			method,
 			params,
-			timeout: 30000,
+			timeout: 100000,
 			responseType: 'arraybuffer',
 		});
 	} else {
