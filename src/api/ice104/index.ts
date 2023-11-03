@@ -9,32 +9,36 @@
 import { get, post, del, put,file } from '/@/utils/request_ice104';
 
 export default {
-  common:{
-    singleImg: (data: object) => post('/common/singleImg', data),
-  },
+  // 设备
   device: {
+    getAll: (params: object) => get('/device/all', params),
     getList: (params: object) => get('/device/list', params),
     addItem: (data: object) => post('/device/add', data),
     editItem: (data: object) => put('/device/edit', data),
     deleteItem: (data: object) => del('/device/delete', data),
+    detailItem: (number: any) => get('/device/get', { number }),
   },
+  // 设备任务
+  job: {
+    getList: (params: object) => get('/device/job/list', params),
+    addItem: (data: object) => post('/device/job/add', data),
+    deleteItem: (data: object) => del('/device/job/delete', data),
+    editItem: (data: object) => put('/device/job/edit', data),
+  },
+  // 模版
   template: {
     getAll: (params: object) => get('/template/all', params),
     getList: (params: object) => get('/template/list', params),
     addItem: (data: object) => post('/template/add', data),
     editItem: (data: object) => put('/template/edit', data),
-    deleteItem:  (data: object) => del('/template/delete', data),
+    deleteItem: (data: object) => del('/template/delete', data),
+    detailItem: (number: any) => get('/template/get', { number }),
   },
-  deviceTask: {
-    getList: (params: object) => get('/device/job/list', params),
-    addItem: (data: object) => post('/device/job/add', data),
-    editItem: (data: object) => put('/device/job/edit', data),
-    deleteItem: (ids: number) => del('/device/job/delete', { ids }),
-  },
+// 模版点位
   deviceTemplate: {
     getList: (params: object) => get('/device/template/list', params),
     addItem: (data: object) => post('/device/template/add', data),
     editItem: (data: object) => put('/device/template/edit', data),
-    deleteItem: (ids: number) => del('/device/template/delete', { ids }),
+    deleteItem: (data: object) => del('/device/template/delete', data),
   }
 }

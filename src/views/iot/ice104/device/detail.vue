@@ -9,6 +9,19 @@
 <template>
 	<div class="page page-full">
 		<el-card shadow="hover" class="page-full-part">
+			<el-tabs
+				v-model="activeName"
+				class="demo-tabs"
+				@tab-click="handleClick"
+			>
+				<el-tab-pane label="设备详情" name="1">
+					<EditDeviceForm ref="editFormRef" />
+				</el-tab-pane>
+				<el-tab-pane label="设备任务" name="2">
+					<DeviceTaskTable />
+				</el-tab-pane>
+			</el-tabs>
+			<!-- <div style="height: 100px;"></div>
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
 					<el-form-item label="设备名称" prop="title">
@@ -50,50 +63,50 @@
 				<el-table-column prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
 				<el-table-column fixed="right" label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
+						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">详情</el-button>
 						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
+		 -->
 		</el-card>
-		<EditForm ref="editFormRef" @updateList="getList()"></EditForm>
+		
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import EditForm from './component/edit.vue';
+import EditDeviceForm from './component/editDeviceForm.vue';
+import DeviceTaskTable from './component/deviceTaskTable.vue';
+
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import type { TabsPaneContext } from 'element-plus'
 
-const router = useRouter();
+const route = useRoute();
 const editFormRef = ref();
+const detailFormData = ref({});
 const queryRef = ref();
+
+const activeName = ref('1')
+
 
 
 const { params, tableData, getList, loading } = useSearch(api.device.getList, 'data', { title: '' });
 
 getList();
 
-/**
- * 去往设备详情页面
- */
-const toDetailPage = async (row?: any) => {
-	// editFormRef.value.open(row);
-	// router.push('/monitor/notice');
-	
-	// router.push(`/iotmanager/network/tunnel/edit/${route.params && route.params.id}`)
-	router.push(`/ice104/device/detail/${row.number}`)
-};
 
-/**
- * 新增设备
- */
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event)
+}
+
 const addOrEdit = async (row?: any) => {
-	editFormRef.value.open(row);
+	
 };
 
 // 重置表单
@@ -102,9 +115,6 @@ const resetQuery = () => {
 	getList();
 };
 
-/**
- * 单一删除
- */
 const onDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将删除接口：“${row.title}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
@@ -116,5 +126,23 @@ const onDel = (row: any) => {
 		getList();
 	});
 };
+
+/**
+ * 获取设备详情
+ */
+const initDeviceInfo = async () => {
+	const res = await api.device.detailItem(route.params && route.params.id)
+	console.log(res)
+	detailFormData.value = res.data;
+	editFormRef.value.open(res.data);
+}
+	// 页面加载时
+	onMounted(() => {
+		// const id: = route.params && route.params.id;
+		// console.log(id)
+		initDeviceInfo()
+	});
+	
+
 
 </script>

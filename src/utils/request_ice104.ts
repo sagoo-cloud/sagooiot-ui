@@ -4,8 +4,8 @@ import getOrigin from '/@/utils/origin'
 
 // 配置新建一个 axios 实例
 const service = axios.create({
-	// baseURL: getOrigin(import.meta.env.VITE_ICE104_API),
-	baseURL: 'http://qt9nk7.natappfree.cc',
+	baseURL: getOrigin(import.meta.env.VITE_ICE104_API),
+	// baseURL: 'http://awzr9z.natappfree.cc',
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json' },
 });

@@ -3,7 +3,7 @@
 		:title="isEdit ? '修改设备' : '添加设备'"
 		v-model="dialogVisible"
 		width="600px"
-		:before-close="clsoeDialog"
+		:before-close="closeDialog"
 		:close-on-click-modal="false"
 	>
 		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
@@ -21,34 +21,41 @@
 			</el-form-item>
 			<el-form-item label="模版编号">
 				<el-select v-model="ruleForm.templateNumber" placeholder="请选择模版编号" class="width100">
-					<el-option :label="item.title" :value="item.number" v-for="(item, index) in tableData" :key="index"></el-option>
+					<el-option :label="item.title" :value="item.number" v-for="(item, index) in tableData" :key="index" />
 				</el-select>
 			</el-form-item>
 			<el-form-item label="产品key">
-				<el-input v-model="ruleForm.productKey" placeholder="请输入产品key" />
+				<el-select @change="handleProductChange" v-model="ruleForm.productKey" placeholder="请选择产品key" class="width100">
+					<el-option :label="item.name" :value="item.key" v-for="(item, index) in productList" :key="index" />
+				</el-select>
 			</el-form-item>
-			<el-form-item label="设备key">
-				<el-input v-model="ruleForm.deviceKey" placeholder="请输入设备key" />
+			<el-form-item label="设备key" v-if="ruleForm.productKey">
+				<el-select v-model="ruleForm.deviceKey" placeholder="请选择设备key" class="width100">
+					<el-option :label="item.name" :value="item.key" v-for="(item, index) in deviceList" :key="index" />
+				</el-select>
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="clsoeDialog()"> 取 消 </el-button>
+			<el-button @click="closeDialog()"> 取 消 </el-button>
 			<el-button :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onMounted } from 'vue';
 import api from '/@/api/ice104/index';
 import { useI18n } from 'vue-i18n';
 import { ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
+import apiDevice from '/@/api/device';
 
 const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '' });
 getList();
 
 const dialogVisible = ref(false);
 const btnLoading = ref(false);
+const productList = ref([]);
+const deviceList = ref([]);
 const emit = defineEmits(['updateList']);
 const formRef = ref();
 const ruleForm = ref({
@@ -95,13 +102,28 @@ const submitData = async () => {
 	})
 }
 
+const handleProductChange = (data:any) => {
+	console.log(data)
+	ruleForm.value.deviceKey = "";
+	let findItem:any = productList.value.find((v: any) => v.key === data);
+	console.log(findItem)
+	getDeviceList(findItem.id)
+}
+
+const getDeviceList = (id:number) => {
+	apiDevice.device.allList({productId: id}).then((res: any) => {
+		console.log(res)
+		deviceList.value = res.device
+	})
+}
+
 /**
  * 关闭弹窗
  */
 const closeDialog = () => {
   dialogVisible.value = false;
   ruleForm.value = {
-	id: '',
+	// id: '',
 	number: '',
 	title: '',
 	commonAddr: '',
@@ -124,6 +146,18 @@ const open = async (row: any) => {
 		isEdit.value = false;
 	}
 }
+
+
+const getDeviceProduct = () => {
+	apiDevice.product.getLists({}).then((res: any) => {
+		productList.value = res.product
+	})
+}
+
+// 页面加载时
+onMounted(() => {
+	getDeviceProduct();
+});
 
 defineExpose({ open })
 </script>

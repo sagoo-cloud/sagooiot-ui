@@ -31,7 +31,7 @@
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
-							新增
+							新增模版
 						</el-button>
 					</el-form-item>
 				</el-form>
@@ -49,7 +49,7 @@
 				<el-table-column prop="remarks" label="备注" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column fixed="right" label="操作" width="100" align="center">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="addOrEdit(scope.row)">编辑</el-button>
+						<el-button size="small" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
 						<el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -66,6 +66,9 @@ import EditForm from './component/edit.vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const editFormRef = ref();
 const detailFormRef = ref();
@@ -77,6 +80,16 @@ getList();
 
 const addOrEdit = async (row?: any) => {
 	editFormRef.value.open(row);
+};
+/**
+ * 去往设备详情页面
+ */
+const toDetailPage = async (row?: any) => {
+	// editFormRef.value.open(row);
+	// router.push('/monitor/notice');
+	
+	// router.push(`/iotmanager/network/tunnel/edit/${route.params && route.params.id}`)
+	router.push(`/ice104/template/detail/${row.number}`)
 };
 
 // 重置表单
