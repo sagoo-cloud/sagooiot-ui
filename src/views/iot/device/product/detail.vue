@@ -46,7 +46,7 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
+					</div> 
 				</el-tab-pane>
 				<el-tab-pane label="物模型" name="2">
 					<div class="wu-box">
