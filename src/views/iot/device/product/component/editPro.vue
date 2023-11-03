@@ -174,7 +174,7 @@ export default defineComponent({
 			},
 			rules: {
 				name: [ { required: true, message: '产品名称不能为空', trigger: 'change' },
-        				{ max: 64, message: '产品名称不能超过64个字符', trigger: 'change' }],
+        				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' }],
 				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
 				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'change' }],
