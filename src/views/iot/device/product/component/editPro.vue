@@ -101,6 +101,8 @@ import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } fro
 import api from '/@/api/device'
 import certApi from '/@/api/certificateManagement';
 import uploadVue from '/@/components/upload/index.vue'
+import { validateNoSpace } from '/@/utils/validator';
+
 import { ElMessage, UploadProps } from 'element-plus'
 import getOrigin from '/@/utils/origin'
 
@@ -271,16 +273,9 @@ export default defineComponent({
 			})
 		}
 
-		const validateNoSpace=(rule, value, callback) =>{
-			if (/\s/.test(value)) {
-			callback(new Error('产品名称不能包含空格'));
-			} else {
-			callback();
-			}
-		}
+
 
 		return {
-			validateNoSpace,
 			transportProtocolChange,
 			submitLoading,
 			certList,
