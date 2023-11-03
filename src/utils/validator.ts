@@ -14,3 +14,11 @@ export const phoneValidate = (rule: any, value: any, callback: any) => {
 export const ruleRequired = (message = '不能为空', trigger = 'blur') => {
   return { required: true, message, trigger }
 }
+
+export const validateNoSpace = (rule: any, value: any, callback: any) => {
+  if (/\s/.test(value)) {
+    callback(new Error('名称不能包含空格'));
+  } else {
+    callback();
+  }
+}
