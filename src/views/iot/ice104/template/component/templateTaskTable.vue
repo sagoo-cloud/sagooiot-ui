@@ -5,19 +5,19 @@
                 <el-input v-model="params.title" placeholder="请输入点位名称" clearablestyle="width: 240px" @keyup.enter.native="getList()" />
             </el-form-item>
             <el-form-item>
-                <el-button size="default" type="primary" class="ml10" @click="getList()">
+                <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList()">
                     <el-icon>
                         <ele-Search />
                     </el-icon>
                     查询
                 </el-button>
-                <el-button size="default" @click="resetQuery()">
+                <el-button v-auth="'reset'" size="default" @click="resetQuery()">
                     <el-icon>
                         <ele-Refresh />
                     </el-icon>
                     重置
                 </el-button>
-                <el-button type="primary" @click="addOrEdit()">
+                <el-button v-auth="'add'" type="primary" @click="addOrEdit()">
                     <el-icon>
                         <ele-FolderAdd />
                     </el-icon>
@@ -26,15 +26,15 @@
             </el-form-item>
         </el-form>
         <el-table :data="tableData" style="width: 100%" v-loading="loading">
-            <el-table-column type="index" label="序号" width="80" align="center" />
-            <el-table-column prop="title" label="点位名称"  align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dataAttribName" label="数据项编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dataAddress" label="数据项点位" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dataCoef" label="倍率" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-             <el-table-column fixed="right" label="操作" width="100" align="center">
+            <el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
+            <el-table-column v-col="'title'" prop="title" label="点位名称"  align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'dataAttribName'" prop="dataAttribName" label="数据项编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'dataAddress'" prop="dataAddress" label="数据项点位" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'dataCoef'" prop="dataCoef" label="倍率" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
                 <template #default="scope">
-                    <el-button size="small" text type="primary" @click="addOrEdit(scope.row)">修改</el-button>
-                    <el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
+                    <el-button v-auth="'edit'" size="small" text type="primary" @click="addOrEdit(scope.row)">修改</el-button>
+                    <el-button v-auth="'del'" size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -53,7 +53,6 @@ import EditForm from './addOrEditTemplateTask.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-
 const { params, tableData, getList, loading } = useSearch(api.deviceTemplate.getList, 'data', { title: '', templateNumber: route.params.id });
 
 const emit = defineEmits(['updateList']);
@@ -64,7 +63,8 @@ const queryRef = ref();
  * 新增设备任务
  */
 const addOrEdit = async (row?: any) => {
-	editFormRef.value.open(row);
+    const data = {...row};
+	editFormRef.value.open(data);
 };
 
 /**
@@ -76,7 +76,7 @@ const onDel = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.deviceTemplate.deleteItem({number: row.number});
+		await api.deviceTemplate.deleteItem({DtId: row.dtId});
 		ElMessage.success('删除成功');
 		getList();
 	});
@@ -93,7 +93,6 @@ onMounted(() => {
     getList();
 });
 
-// defineExpose({ open })
 </script>
 
 <style lang="scss" scoped>

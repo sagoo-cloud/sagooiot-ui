@@ -28,7 +28,7 @@
             </el-select>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" :loading="btnLoading" @click="submitData"> 保 存 </el-button>
+            <el-button type="primary" v-auth="'save'" :loading="btnLoading" @click="submitData"> 保 存 </el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -65,7 +65,6 @@ const formRules = computed(() => ({
 
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		if (isEdit.value) {
@@ -87,23 +86,19 @@ const handleProductChange = (data:any, isClear: boolean) => {
 		ruleForm.value.deviceKey = "";
 	}
 	let findItem:any = productList.value.find((v: any) => v.key === data);
-	console.log(findItem)
 	if(!findItem) return;
 	getDeviceList(findItem.id)
 }
 
 const getDeviceList = (id:number) => {
 	apiDevice.device.allList({productId: id}).then((res: any) => {
-		console.log(res)
 		deviceList.value = res.device
 	})
 }
 
 
 const open = async (row: any) => {
-	console.log(row)
 	if (row && row.number.toString()) {
-		console.log(row)
 		ruleForm.value = row;
 		isEdit.value = true;
 		handleProductChange(ruleForm.value.productKey, false)
@@ -111,7 +106,6 @@ const open = async (row: any) => {
 		isEdit.value = false;
 	}
 }
-
 
 const getDeviceProduct = () => {
 	apiDevice.product.getLists({}).then((res: any) => {

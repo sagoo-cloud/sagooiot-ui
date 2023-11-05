@@ -4,30 +4,25 @@
 		:title="isEdit ? '修改设备任务' : '添加设备任务'"
 		v-model="dialogVisible"
 		width="600px"
-		:before-close="clsoeDialog"
+		:before-close="closeDialog"
 		:close-on-click-modal="false"
 	>
 		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
-			<el-form-item label="设备任务名称">
+			<el-form-item label="设备任务名称" prop="title">
 				<el-input v-model="ruleForm.title" placeholder="请输入设备任务名称" />
 			</el-form-item>
-			<!-- <el-form-item label="所属设备">
-				<el-select v-model="ruleForm.deviceNumber" placeholder="请选择所属设备" class="width100">
-					<el-option :label="item.title" :value="item.number" v-for="(item, index) in deviceList" :key="index" />
-				</el-select>
-			</el-form-item> -->
-            <el-form-item label="执行间隔">
+            <el-form-item label="执行间隔" prop="interval">
 				<el-input type="number" :min="0" v-model.number="ruleForm.interval" placeholder="请输入执行间隔" />
 			</el-form-item>
-			<el-form-item label="任务类型">
+			<el-form-item label="任务类型" prop="jobType">
 				<el-select v-model="ruleForm.jobType" placeholder="请选择任务类型" class="width100">
 					<el-option v-for="dict in device_job_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 				</el-select>
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="clsoeDialog()"> 取 消 </el-button>
-			<el-button :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
+			<el-button v-auth="'cancelTask'" @click="closeDialog()"> 取 消 </el-button>
+			<el-button v-auth="'addTask'" :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
@@ -50,11 +45,9 @@ getList();
 
 const dialogVisible = ref(false);
 const btnLoading = ref(false);
-// const deviceList = ref([]);
 const emit = defineEmits(['updateList']);
 const formRef = ref();
 const ruleForm = ref({
-	// number: route.params && route.params.id,
     number: 0,
 	title: '',
     deviceNumber: route.params && route.params.id,
@@ -64,14 +57,15 @@ const ruleForm = ref({
 const isEdit = ref(false);
 
 const formRules = computed(() => ({
-	number: [{ required: true, trigger: 'change', message: '请输入设备编码' }],
+	title: [{ required: true, trigger: 'blur', message: '请输入设备任务名称' }],
+	interval: [{ required: true, trigger: 'blur', message: '请输入执行间隔' }],
+	jobType: [{ required: true, trigger: 'blur', message: '请选择任务类型' }],
 }));
 const getRandom = (num:number) =>{
     return Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,num-1));
 }
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		if (isEdit.value) {
@@ -104,6 +98,7 @@ const submitData = async () => {
  */
 const closeDialog = () => {
   dialogVisible.value = false;
+  isEdit.value = false;
   ruleForm.value = {
 	number: 0,
 	title: '',
@@ -116,25 +111,14 @@ const closeDialog = () => {
 
 const open = async (row: any) => {
 	dialogVisible.value = true
-	console.log(row)
 	if (row && row.number.toString()) {
-		console.log(row)
         row.jobType = row.jobType.toString();
 		ruleForm.value = row;
 		isEdit.value = true;
-        console.log(ruleForm.value)
 	}else {
 		isEdit.value = false;
 	}
 }
-
-
-
-
-// 页面加载时
-onMounted(() => {
-    // getDeviceList();
-});
 
 defineExpose({ open })
 </script>

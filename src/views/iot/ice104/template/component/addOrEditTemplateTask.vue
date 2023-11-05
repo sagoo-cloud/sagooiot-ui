@@ -4,7 +4,7 @@
 		:title="isEdit ? '修改模版点位' : '添加模版点位'"
 		v-model="dialogVisible"
 		width="600px"
-		:before-close="clsoeDialog"
+		:before-close="closeDialog"
 		:close-on-click-modal="false"
 	>
 		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
@@ -23,8 +23,8 @@
 
 		</el-form>
 		<template #footer>
-			<el-button @click="clsoeDialog()"> 取 消 </el-button>
-			<el-button :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
+			<el-button v-auth="'cancelData'" @click="closeDialog()"> 取 消 </el-button>
+			<el-button v-auth="'saveData'" :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
@@ -67,7 +67,6 @@ const getRandom = (num:number) =>{
 }
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		if (isEdit.value) {
@@ -100,6 +99,7 @@ const submitData = async () => {
  */
 const closeDialog = () => {
   dialogVisible.value = false;
+  isEdit.value = false;
   ruleForm.value = {
     dtId: 0,
 	title: '',
@@ -113,7 +113,6 @@ const closeDialog = () => {
 
 const open = async (row: any) => {
 	dialogVisible.value = true
-	console.log(row)
 	if (row && row.dtId.toString()) {
 		row.DataCoef = row.dataCoef
 		ruleForm.value = row;

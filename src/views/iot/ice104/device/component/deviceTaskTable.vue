@@ -5,19 +5,19 @@
                 <el-input v-model="params.title" placeholder="请输入任务名称" clearablestyle="width: 240px" @keyup.enter.native="getList()" />
             </el-form-item>
             <el-form-item>
-                <el-button size="default" type="primary" class="ml10" @click="getList()">
+                <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList()">
                     <el-icon>
                         <ele-Search />
                     </el-icon>
                     查询
                 </el-button>
-                <el-button size="default" @click="resetQuery()">
+                <el-button v-auth="'reset'" size="default" @click="resetQuery()">
                     <el-icon>
                         <ele-Refresh />
                     </el-icon>
                     重置
                 </el-button>
-                <el-button type="primary" @click="addOrEdit()">
+                <el-button v-auth="'add'" type="primary" @click="addOrEdit()">
                     <el-icon>
                         <ele-FolderAdd />
                     </el-icon>
@@ -26,21 +26,21 @@
             </el-form-item>
         </el-form>
         <el-table :data="tableData" style="width: 100%" v-loading="loading">
-            <el-table-column type="index" label="序号" width="80" align="center" />
-            <el-table-column prop="title" label="任务名称"  align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="deviceNumber" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="interval" label="执行间隔（s）" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="interval" label="任务类型" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
+            <el-table-column v-col="'title'" prop="title" label="任务名称"  align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'deviceNumber'" prop="deviceNumber" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'interval'" prop="interval" label="执行间隔（s）" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column v-col="'jobType'" prop="jobType" label="任务类型" min-width="120" align="center" show-overflow-tooltip>
                 <template #default="scope">
 						<el-tag type="info" size="small" v-if="scope.row.jobType == 100">总召唤</el-tag>
 						<el-tag type="info" size="small" v-if="scope.row.jobType == 101">电度召唤</el-tag>
 						<el-tag type="info" size="small" v-if="scope.row.jobType == 103">时钟同步</el-tag>
 					</template>
             </el-table-column>
-             <el-table-column fixed="right" label="操作" width="100" align="center">
+             <el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
                 <template #default="scope">
-                    <el-button size="small" text type="primary" @click="addOrEdit(scope.row)">修改</el-button>
-                    <el-button size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
+                    <el-button size="small" v-auth="'edit'" text type="primary" @click="addOrEdit(scope.row)">修改</el-button>
+                    <el-button size="small" v-auth="'del'" text type="info" @click="onDel(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -70,7 +70,8 @@ const queryRef = ref();
  * 新增设备任务
  */
 const addOrEdit = async (row?: any) => {
-	editFormRef.value.open(row);
+    const data = {...row};
+	editFormRef.value.open(data);
 };
 
 /**
@@ -99,7 +100,6 @@ onMounted(() => {
     getList();
 });
 
-// defineExpose({ open })
 </script>
 
 <style lang="scss" scoped>

@@ -9,14 +9,11 @@
 <template>
 	<div class="page page-full">
 		<el-card shadow="hover" class="page-full-part">
-			<el-tabs
-				v-model="activeName"
-				@tab-click="handleClick"
-			>
-				<el-tab-pane label="模版详情" name="1">
+			<el-tabs v-model="activeName">
+				<el-tab-pane label="模版详情" name="detail">
 					<EditTemplateForm ref="editFormRef" />
 				</el-tab-pane>
-				<el-tab-pane label="模版点位" name="2">
+				<el-tab-pane label="模版点位" name="point">
 					<TemplateTaskTable />
 				</el-tab-pane>
 			</el-tabs>
@@ -39,31 +36,22 @@ const route = useRoute();
 const editFormRef = ref();
 const detailFormData = ref({});
 const queryRef = ref();
-
-const activeName = ref('1')
-
-
+const activeName = ref('detail')
 
 const { params, tableData, getList, loading } = useSearch(api.device.getList, 'data', { title: '' });
-
 getList();
 
-
-
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
-
-const addOrEdit = async (row?: any) => {
-	
-};
-
-// 重置表单
+/**
+ * 重置表单
+ */
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getList();
 };
 
+/**
+ * 删除
+ */
 const onDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将删除接口：“${row.title}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
@@ -81,17 +69,11 @@ const onDel = (row: any) => {
  */
 const initTemplateInfo = async () => {
 	const res = await api.template.detailItem(route.params && route.params.id)
-	console.log(res)
 	detailFormData.value = res.data;
 	editFormRef.value.open(res.data);
 }
 // 页面加载时
 onMounted(() => {
-	// const id: = route.params && route.params.id;
-	// console.log(id)
 	initTemplateInfo()
 });
-	
-
-
 </script>

@@ -56,7 +56,6 @@ const formRules = computed(() => ({
 
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		// 修改
@@ -72,17 +71,10 @@ const submitData = async () => {
 }
 
 const open = async (row: any) => {
-	console.log(row)
 	if (row && row.number.toString()) {
-		console.log(row)
 		ruleForm.value = row;
 	}
 }
-
-// 页面加载时
-onMounted(() => {
-
-});
 
 defineExpose({ open })
 </script>

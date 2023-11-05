@@ -10,8 +10,8 @@
 			<el-form-item label="模版编码" prop="number">
 				<el-input :disabled="isEdit" v-model="ruleForm.number" placeholder="请输入模版编码" />
 			</el-form-item>
-			<el-form-item label="名称">
-				<el-input v-model="ruleForm.title" placeholder="请输入名称" />
+			<el-form-item label="模版名称">
+				<el-input v-model="ruleForm.title" placeholder="请输入模版名称" />
 			</el-form-item>
 			<el-form-item label="状态">
 				<el-switch
@@ -30,8 +30,8 @@
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="clsoeDialog()"> 取 消 </el-button>
-			<el-button :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
+			<el-button v-auth="'canceSaveTemplate'" @click="clsoeDialog()"> 取 消 </el-button>
+			<el-button v-auth="'saveTemplate'" :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
@@ -60,7 +60,6 @@ const formRules = computed(() => ({
 
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		if (isEdit.value) {
@@ -104,9 +103,7 @@ const closeDialog = () => {
 
 const open = async (row: any) => {
 	dialogVisible.value = true
-	console.log(row)
 	if (row && row.number.toString()) {
-		console.log(row)
 		ruleForm.value = row;
 		isEdit.value = true;
 	}else {

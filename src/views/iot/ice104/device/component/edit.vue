@@ -36,8 +36,8 @@
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="closeDialog()"> 取 消 </el-button>
-			<el-button :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
+			<el-button v-auth="'cancelSaveDevice'" @click="closeDialog()"> 取 消 </el-button>
+			<el-button v-auth="'saveDevice'" :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
@@ -75,7 +75,6 @@ const formRules = computed(() => ({
 
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) return
 		btnLoading.value = true
 		if (isEdit.value) {
@@ -103,16 +102,13 @@ const submitData = async () => {
 }
 
 const handleProductChange = (data:any) => {
-	console.log(data)
 	ruleForm.value.deviceKey = "";
 	let findItem:any = productList.value.find((v: any) => v.key === data);
-	console.log(findItem)
 	getDeviceList(findItem.id)
 }
 
 const getDeviceList = (id:number) => {
 	apiDevice.device.allList({productId: id}).then((res: any) => {
-		console.log(res)
 		deviceList.value = res.device
 	})
 }
@@ -123,7 +119,6 @@ const getDeviceList = (id:number) => {
 const closeDialog = () => {
   dialogVisible.value = false;
   ruleForm.value = {
-	// id: '',
 	number: '',
 	title: '',
 	commonAddr: '',
@@ -137,9 +132,7 @@ const closeDialog = () => {
 
 const open = async (row: any) => {
 	dialogVisible.value = true
-	console.log(row)
 	if (row && row.number.toString()) {
-		console.log(row)
 		ruleForm.value = row;
 		isEdit.value = true;
 	}else {
