@@ -32,7 +32,6 @@ import { computed, reactive, ref, onMounted } from 'vue';
 import api from '/@/api/ice104/index';
 import { useI18n } from 'vue-i18n';
 import { ElMessage } from 'element-plus';
-import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 
 const btnLoading = ref(false);

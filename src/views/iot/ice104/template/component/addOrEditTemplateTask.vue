@@ -32,7 +32,6 @@
 import { computed, reactive, ref, onMounted } from 'vue';
 import api from '/@/api/ice104/index';
 import { ElMessage } from 'element-plus';
-import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 import { useRoute } from 'vue-router';
 
