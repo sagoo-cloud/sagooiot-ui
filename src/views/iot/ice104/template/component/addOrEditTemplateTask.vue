@@ -36,9 +36,6 @@ import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 import { useRoute } from 'vue-router';
 
-const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '' });
-getList();
-
 const route = useRoute();
 
 const dialogVisible = ref(false);

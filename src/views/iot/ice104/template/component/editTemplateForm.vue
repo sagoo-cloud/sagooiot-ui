@@ -35,9 +35,6 @@ import { ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 
-const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '' });
-getList();
-
 const btnLoading = ref(false);
 
 const emit = defineEmits(['updateList']);

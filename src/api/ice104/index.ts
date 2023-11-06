@@ -11,7 +11,6 @@ import { get, post, del, put,file } from '/@/utils/request_ice104';
 export default {
   // 设备
   device: {
-    getAll: (params: object) => get('/device/all', params),
     getList: (params: object) => get('/device/list', params),
     addItem: (data: object) => post('/device/add', data),
     editItem: (data: object) => put('/device/edit', data),
