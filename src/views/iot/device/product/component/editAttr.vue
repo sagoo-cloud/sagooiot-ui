@@ -195,6 +195,7 @@ import api from '/@/api/device';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
 import { ElMessage } from 'element-plus';
+import { validateNoSpace } from '/@/utils/validator';
 
 interface RuleFormState {
 	id: number;
@@ -261,7 +262,10 @@ export default defineComponent({
 				desc: '',
 			},
 			rules: {
-				name: [{ required: true, message: '属性定义名称不能为空', trigger: 'blur' }],
+				name: [ { required: true, message: '属性定义名称不能为空', trigger: 'blur' },
+        				{ max: 32, message: '属性定义名称不能超过32个字符', trigger: 'blur' },
+						{ validator: validateNoSpace, message: '属性定义名称不能包含空格', trigger: 'blur' }
+					],
 				key: [{ required: true, message: '属性定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],

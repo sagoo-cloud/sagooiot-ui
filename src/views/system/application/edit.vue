@@ -89,7 +89,7 @@ const ruleForm = {
 	accessKey: [ruleRequired('AK不能为空')],
 	secureKey: [ruleRequired('SK不能为空')],
 	orgId: [ruleRequired('组织不能为空')],
-	roleId: [ruleRequired('角色产品不能为空')],
+	roleId: [ruleRequired('角色不能为空')],
 };
 const onSubmit = async () => {
 	await formRef.value.validate();

@@ -104,7 +104,7 @@
                 </tr>
                 <tr class="ant-descriptions-row">
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">固件版本</th>
-                  <td class="ant-descriptions-item-content" colspan="1">{{ prodetail.version }}</td>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.version }}</td>
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
                   <td class="ant-descriptions-item-content" colspan="1">{{ detail.updatedAt }}</td>
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
@@ -272,7 +272,7 @@
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
-            <el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
+            <el-form :model="logtableData.param" ref="logqueryRef" :inline="true" label-width="68px">
               <el-form-item label="日志类型" prop="types">
                 <el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
                   <el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
@@ -290,7 +290,7 @@
                   </el-icon>
                   查询
                 </el-button>
-                <el-button size="default" @click="resetQuery(queryRef)">
+                <el-button size="default" @click="resetQuery(logqueryRef)">
                   <el-icon>
                     <ele-Refresh />
                   </el-icon>
@@ -449,6 +449,8 @@ export default defineComponent({
   components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
   setup(prop, context) {
+    const logqueryRef = ref();
+
     const array_list=ref([]);
     const route = useRoute();
     const editDicRef = ref();
@@ -884,6 +886,12 @@ export default defineComponent({
         state.logtableData.total = res.Total;
       });
     };
+        	/** 重置按钮操作 */
+		const resetQuery = (formEl: FormInstance | undefined) => {
+			if (!formEl) return;
+			formEl.resetFields();
+			getlog();
+		};
 
     const CkOption = () => {
       if (state.developer_status == 2) {
@@ -921,7 +929,10 @@ export default defineComponent({
     const setAttr = (row: any) => {
       setAttrRef.value.show(row)
     }
+
     return {
+      logqueryRef,
+      resetQuery,
       getStatusText,
       getValueText,
       onlineTimeoutUpdate,
