@@ -125,7 +125,7 @@
 			</el-tab-pane>
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 20px;">
-			<el-button size="medium">取消</el-button>
+			<el-button size="medium" @click="goBack">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
 		</div>
 	</el-card>
@@ -225,7 +225,7 @@ export default defineComponent({
             activeViewName: ['1','2','3'],
             form:{
                 // 名称
-                name: '新建服务器',
+                name: '',
                 // AccessToken
                 accessToken: "",
                 // 认证密码
@@ -326,9 +326,12 @@ export default defineComponent({
             // return
             api.server.editItem(params).then((res: any) => {
                 ElMessage.success('修改成功')
-                router.go(-1);
+                goBack()
 			});
         };
+        const goBack = () => {
+            router.go(-1);
+        }
         const initData = () => {
             state.stick = {
                 "delimit,omitempty": "",

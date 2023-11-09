@@ -26,6 +26,10 @@
         <el-form-item label="告警数据">
           <JsonViewer style="width:100%;" :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
         </el-form-item>
+
+        <el-form-item label="处理意见">
+          {{ ruleForm.content }}
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">

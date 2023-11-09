@@ -123,7 +123,7 @@
 			</el-tab-pane>
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 20px;">
-			<el-button size="medium">取消</el-button>
+			<el-button size="medium" @click="goBack">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
 		</div>
 	</el-card>
@@ -175,7 +175,7 @@ export default defineComponent({
             activeViewName: ['1','2','3','4','5'],
             form:{
                 // 名称
-                name: '新建通道',
+                name: '',
                 // 类型
                 types: 'serial',
                 // 启用
@@ -239,9 +239,12 @@ export default defineComponent({
             // return
             api.tunnel.addItem({...state.form}).then((res: any) => {
                 ElMessage.success('添加成功')
-                router.go(-1);
+                goBack()
 			});
         };
+        const goBack = () => {
+            router.go(-1);
+        }
 		onMounted(() => {
 			let obj = {}
             var jsonData = JSON.stringify(obj);
@@ -259,6 +262,7 @@ export default defineComponent({
             tunnel_serial_parity,
             network_protocols,
             submit,
+            goBack,
 			...toRefs(props),
 			...toRefs(state),
 		};

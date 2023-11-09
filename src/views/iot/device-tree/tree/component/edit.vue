@@ -171,7 +171,7 @@ export default defineComponent({
 			treeData: [] as any[]
 		});
 
-		// const { tree_types_2 } = proxy.useDict('tree_types_2');
+		const { tree_types_2 } = proxy.useDict('tree_types_2');
 
 		const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
 
@@ -247,7 +247,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
-			// tree_types_2,
+			tree_types_2,
 			tree_types,
 			tree_category,
 			...toRefs(state),

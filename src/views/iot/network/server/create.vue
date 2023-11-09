@@ -139,7 +139,7 @@
             </el-tab-pane> -->
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 20px;">
-			<el-button size="medium">取消</el-button>
+			<el-button size="medium" @click="goBack">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
 		</div>
 
@@ -262,7 +262,7 @@ export default defineComponent({
                 // 证书id
                 certificateId: "",
                 // 名称
-                name: '新建服务器',
+                name: '',
                 // 类型
                 types: 'tcp',
                 // 禁用
@@ -313,13 +313,16 @@ export default defineComponent({
             // return
             api.server.addItem(params).then((res: any) => {
                 ElMessage.success('添加成功')
-                router.go(-1);
+                goBack()
                 // const { list, total, page } = res
                 // state.data = list
                 // state.total = total
                 // state.param.page = page
 			});
         };
+        const goBack = () => {
+            router.go(-1);
+        }
 		onMounted(() => {
             
 			let obj = {}
@@ -387,6 +390,7 @@ export default defineComponent({
 			// editTabRef,
             getCertificateList,
             submit,
+            goBack,
             initData,
             handleChangeType,
 			...toRefs(props),

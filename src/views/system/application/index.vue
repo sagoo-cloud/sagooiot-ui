@@ -19,8 +19,12 @@
 						</el-icon>
 						查询
 					</el-button>
-				</el-form-item>
-				<el-form-item>
+					<el-button size="default" @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
 					<el-button type="primary" v-auth="'add'" @click="addOrEdit()">
 						<el-icon>
 							<ele-FolderAdd />
@@ -71,6 +75,12 @@ const deptData = ref([])
 const editFormRef = ref()
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { keyWord: '' })
 getList()
+/** 重置按钮操作 */
+const resetQuery = (formEl: any) => {
+	if (!formEl) return;
+	formEl.resetFields();
+	getList();
+};
 const initTableData = () => {
 	user.dept.getList({status:1}).then((res: any) => {
 		deptData.value = res;

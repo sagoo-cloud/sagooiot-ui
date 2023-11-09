@@ -1,5 +1,5 @@
 <template>
-	<el-dialog @close="state.ruleForm = {}" :title="state.ruleForm.id ? '编辑证书' : '新增证书'" v-model="state.dialogVisible" width="60%">
+	<el-dialog @close="closeDialog" :title="state.ruleForm.id ? '编辑证书' : '新增证书'" v-model="state.dialogVisible" width="60%">
 		<!-- <el-tabs v-model="state.activeName" @tab-click="onTabClick"> -->
 		<!-- <el-tab-pane label="基本信息" name="1"> -->
 		<el-form :rules="state.rules" ref="ruleForm" :model="state.ruleForm" label-width="120px">
@@ -34,7 +34,7 @@
 
 		<template #footer>
 			<div class="dialog-footer">
-				<el-button type="default" @click="state.dialogVisible = false">取 消</el-button>
+				<el-button type="default" @click="closeDialog">取 消</el-button>
 				<el-button type="primary" @click="submitData(ruleForm)">提 交</el-button>
 			</div>
 		</template>
@@ -60,10 +60,10 @@ const state = reactive({
 	ruleForm: {},
 	rules: {
 		name: [{ required: true, message: '证书名称不能为空', trigger: 'blur' }],
-		standard: [{ required: true, message: '证书标准不能为空', trigger: 'blur' }],
+		standard: [{ required: true, message: '证书标准不能为空', trigger: ['blur', 'change'] }],
 		fileContent: [{ required: true, message: '证书文件不能为空', trigger: 'blur' }],
-		publicKeyContent: [{ required: true, message: '证书公钥不能为空', trigger: 'blur' }],
-		privateKeyContent: [{ required: true, message: '证书私钥不能为空', trigger: 'blur' }],
+		publicKeyContent: [{ required: true, message: '证书公钥不能为空', trigger: ['blur', 'change'] }],
+		privateKeyContent: [{ required: true, message: '证书私钥不能为空', trigger: ['blur', 'change'] }],
 	},
 	columns: [
 		{
@@ -282,9 +282,11 @@ const openDialog = (row: any) => {
 }
 
 // 关闭弹窗
-// const closeDialog = () => {
-// 	state.dialogVisible = false
-// }
+const closeDialog = () => {
+	state.dialogVisible = false
+	state.ruleForm = {}
+	ruleForm.value?.clearValidate()
+}
 // 取消
 // const onCancel = () => {
 // 	closeDialog()

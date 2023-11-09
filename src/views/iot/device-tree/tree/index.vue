@@ -53,7 +53,7 @@
       </el-col>
       <el-col :span="19">
         <el-card shadow="hover">
-          <el-tabs v-model="tabName">
+          <el-tabs v-model="tabName" @tab-click="onTabClick">
             <el-tab-pane label="设备树信息" name="1">
               <table>
                 <tbody>
@@ -79,7 +79,9 @@
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
                     <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.image }}</td>
+                    <td class="ant-descriptions-item-content" colspan="1">
+                      <img :src="treeDetail.image" v-if="treeDetail.image">
+                    </td>
                   </tr>
                   <tr class="ant-descriptions-row">
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
@@ -137,7 +139,7 @@
       </el-col>
     </el-row>
 
-    <AddOrUpdate ref="addOrUpdateRef" @finish="getTreeList" />
+    <AddOrUpdate ref="addOrUpdateRef" @finish="onFinish" />
   </div>
 </template>
 
@@ -177,6 +179,7 @@ interface TableDataState {
   searchVal: string
   treeDetail: any
   unitData: any
+  currentTree: any
 }
 
 export default defineComponent({
@@ -210,6 +213,7 @@ export default defineComponent({
         { label: '时', value: 3 },
         { label: '天', value: 4 },
       ],
+      currentTree: {}
     });
 
     let ruleForm = ref({
@@ -262,6 +266,10 @@ export default defineComponent({
       state.ids = selection.map((item) => item.id);
     };
     const nodeClick = (data: any) => {
+      state.currentTree = data
+      getTreeDetail(data)
+    }
+    const getTreeDetail = (data: any) => {
       api.tree.detail({ infoId: data.infoId })
         .then((res: any) => {
           state.treeDetail = res.data || {}
@@ -270,9 +278,23 @@ export default defineComponent({
           ruleForm.value.deviceKey = state.treeDetail.deviceKey
         })
     }
+    const onFinish = () => {
+      getTreeList()
+      getTreeDetail(state.currentTree)
+    }
+    const onTabClick = () => {
+      ruleForm.value.startDate = ''
+      ruleForm.value.endDate = ''
+      ruleForm.value.deviceKey = ''
+    }
     const onSaveTime = () => {
       if (!state.treeDetail.id) {
         ElMessage.warning('请选择节点树')
+        return
+      }
+      
+      if (!(new Date(ruleForm.value.endDate) >= new Date(ruleForm.value.startDate))) {
+        ElMessage.warning('开始时间不能大于结束时间')
         return
       }
       //修改
@@ -295,7 +317,7 @@ export default defineComponent({
           addOrUpdateRef.value.openDialog(type, data)
           break
         case 'delete':
-          ElMessageBox.confirm('是否删除该设备树', '提示', {
+          ElMessageBox.confirm('是否删除该设备树?', '提示', {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
@@ -323,7 +345,9 @@ export default defineComponent({
       ...toRefs(state),
       ruleForm,
       onSaveTime,
-      filterNode
+      filterNode,
+      onFinish,
+      onTabClick
     };
   },
 });
