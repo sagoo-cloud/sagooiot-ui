@@ -29,8 +29,8 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="传输协议" prop="transportProtocol">
-					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议" @change="transportProtocolChange">
+				<el-form-item label="接入方式" prop="transportProtocol">
+					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择接入方式" @change="transportProtocolChange">
 						<el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 					</el-select>
 				</el-form-item>
@@ -182,7 +182,7 @@ export default defineComponent({
 				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' },
 					{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
-				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'change' }],
+				transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'change' }],
 				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],
 				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'change' }],
 			},
@@ -264,14 +264,14 @@ export default defineComponent({
 					if (state.ruleForm.id !== 0) {
 						//修改
 						api.product.edit(state.ruleForm).then(() => {
-							ElMessage.success('产品类型修改成功')
+							ElMessage.success('产品修改成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
 						}).finally(() => submitLoading.value = false)
 					} else {
 						//添加
 						api.product.add(state.ruleForm).then(() => {
-							ElMessage.success('产品类型添加成功')
+							ElMessage.success('产品添加成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
 						}).finally(() => submitLoading.value = false)

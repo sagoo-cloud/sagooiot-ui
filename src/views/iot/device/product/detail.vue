@@ -25,7 +25,7 @@
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品标识</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">所属品类</th>
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品分类</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.categoryName }}</td>
 									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属组织</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
@@ -33,6 +33,8 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
 								</tr> 
 								<tr class="ant-descriptions-row">
+									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品图片</th>
+									<td class="ant-descriptions-item-content" colspan="1"><img :src="detail.icon" style="height: 80px;width: 80px;"></td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">接入方式</th>

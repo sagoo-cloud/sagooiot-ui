@@ -38,7 +38,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default"  :loading="loading">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -79,6 +79,7 @@ export default defineComponent({
 	name: 'deviceEditCate',
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
+	    const loading = ref(false); // 添加loading状态
 		const state = reactive<DeptSate>({
 			isShowDialog: false,
 			ruleForm: {
@@ -119,35 +120,51 @@ export default defineComponent({
 		const onSubmit = () => {
 			const formWrap = unref(formRef) as any;
 			if (!formWrap) return;
-			formWrap.validate((valid: boolean) => {
+			formWrap.validate(async (valid: boolean) => {
 				if (valid) {
-					if (!state.ruleForm.parentId) {
-						state.ruleForm.parentId = 0;
+				// 禁用按钮
+				loading.value = true;
+				if (!state.ruleForm.parentId) {
+					state.ruleForm.parentId = 0;
+				}
+				if (!state.ruleForm.id) {
+					//添加
+					try {
+					// 等待提交完成
+					await api.category.add(state.ruleForm);
+					ElMessage.success('分类添加成功');
+					closeDialog(); // 关闭弹窗
+					emit('getCateList');
+					} catch (error) {
+					ElMessage.error('分类添加失败');
 					}
-					if (!state.ruleForm.id) {
-						//添加
-						api.category.add(state.ruleForm).then(() => {
-							ElMessage.success('分类添加成功');
-							closeDialog(); // 关闭弹窗
-							emit('getCateList');
-						});
-					} else {
-						//修改
-						api.category.edit(state.ruleForm).then(() => {
-							ElMessage.success('分类修改成功');
-							closeDialog(); // 关闭弹窗
-							emit('getCateList');
-						});
+				} else {
+					//修改
+					try {
+					// 等待提交完成
+					await api.category.edit(state.ruleForm);
+					ElMessage.success('分类修改成功');
+					closeDialog(); // 关闭弹窗
+					emit('getCateList');
+					} catch (error) {
+					ElMessage.error('分类修改失败');
 					}
 				}
+				// 启用按钮
+				loading.value = false;
+				} else {
+				// 表单验证失败时，启用按钮
+				loading.value = false;
+				}
 			});
-		};
+			};
 		const resetForm = () => {
 			state.ruleForm = {
 				...baseForm,
 			};
 		};
 		return {
+			loading,
 			openDialog,
 			closeDialog,
 			onCancel,
