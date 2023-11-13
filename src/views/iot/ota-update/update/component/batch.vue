@@ -2,14 +2,13 @@
   <div class="ota-module-container">
     <el-card shadow="hover">
       <div class="ota-module-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="90px">
+        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="90px" @keyup.enter.native="getList(1)">
           <el-form-item label="批次名称：" prop="name">
-            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable size="default" style="width: 240px"
-              @keyup.enter.native="getList" />
+            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable size="default" style="width: 240px" />
           </el-form-item>
 
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="getList">
+            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
               <el-icon>
                 <ele-Search />
               </el-icon>
@@ -29,7 +28,7 @@
             </el-button>
           </el-form-item>
 
-			  </el-form>
+        </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column prop="id" label="ID" width="60" />
@@ -62,19 +61,19 @@
           </template>
         </el-table-column> -->
       </el-table>
-<!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
-<!--        @pagination="getList()" />-->
-<!--      <CheckForm ref="checkFormRef" @getList="getList()"></CheckForm>-->
+      <!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
+      <!--        @pagination="getList()" />-->
+      <!--      <CheckForm ref="checkFormRef" @getList="getList()"></CheckForm>-->
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
-      <CheckConfig ref="checkRef" @getList="getList" />
-	  </el-card>
+      <CheckConfig ref="checkRef" @getList="getList(1)" />
+    </el-card>
   </div>
 </template>
   
 <script lang="ts">
 import api from '/@/api/ota';
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { ElMessageBox, ElMessage, FormInstance} from 'element-plus'
+import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
 import CheckConfig from '/@/views/iot/ota-update/update/component/check.vue';
 
 // 定义接口来定义对象的类型
@@ -114,7 +113,7 @@ export default defineComponent({
   setup(props) {
     const checkRef = ref();
     const queryRef = ref();
-    const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
+    const tabDataList = ref([{ dictLabel: '全部', dictValue: '' }]);
     const state = reactive<TableDataState>({
       ids: [],
       tableData: {
@@ -139,16 +138,17 @@ export default defineComponent({
     const initTableData = () => {
       batchList();
     };
-    const getList = () => {
+    const getList = (pageNum: number) => {
+      typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       state.tableData.param.devOtaFirewareId = props.detail.id;
       api.batch
-          .getList(state.tableData.param)
-          .then((res: any) => {
-            state.tableData.data = res.Data;
-            state.tableData.total = res.Total;
-          })
-          .finally(() => (state.tableData.loading = false));
+        .getList(state.tableData.param)
+        .then((res: any) => {
+          state.tableData.data = res.Data;
+          state.tableData.total = res.Total;
+        })
+        .finally(() => (state.tableData.loading = false));
     };
     // 打开新增弹窗
     const onOpenAdd = () => {
@@ -179,7 +179,7 @@ export default defineComponent({
           getList();
         });
       })
-          .catch(() => { });
+        .catch(() => { });
     };
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {

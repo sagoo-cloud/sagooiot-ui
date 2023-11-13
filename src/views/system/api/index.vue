@@ -72,8 +72,8 @@
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
-		<bindVue ref="bindRef" @getList="getList()"></bindVue>
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
+		<bindVue ref="bindRef" @getList="getList(1)"></bindVue>
 	</div>
 </template>
 

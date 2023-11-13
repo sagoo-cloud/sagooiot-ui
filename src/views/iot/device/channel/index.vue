@@ -54,7 +54,7 @@
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
 		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-		<detailForm ref="detailFormRef" @getList="getList()"></detailForm>
+		<detailForm ref="detailFormRef" @getList="getList(1)"></detailForm>
 	</div>
 </template>
 

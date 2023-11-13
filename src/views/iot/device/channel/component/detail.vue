@@ -47,7 +47,7 @@
 				</el-table>
 
 				<pagination v-if="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" />
-				<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList" />
+				<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList(1)" />
 			</el-tab-pane>
 			<el-tab-pane label="通道码流" name="3">
 				<div>

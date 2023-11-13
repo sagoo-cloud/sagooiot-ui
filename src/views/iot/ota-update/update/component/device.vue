@@ -3,20 +3,19 @@
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
 				<el-form-item label="设备名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px"
-						@keyup.enter.native="getList" />
+					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @submit.prevent />
 				</el-form-item>
 
 				<el-form-item>
 
-					<el-button size="default" type="primary" class="ml10" @click="getList()">
+					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
 						查询
 					</el-button>
 				</el-form-item>
-				
+
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
@@ -51,8 +50,7 @@
 				</template>
 			</el-table-column> -->
 		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"
-			@pagination="getList()" />
+		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 
 	</el-card>
 </template>
@@ -72,7 +70,7 @@ const props = defineProps({
 const queryRef = ref();
 
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.device.getList, 'fireware', {devOtaFirewareId: props.detail.id});
+const { params, tableData, getList, loading } = useSearch<any[]>(api.device.getList, 'fireware', { devOtaFirewareId: props.detail.id });
 
 getList();
 

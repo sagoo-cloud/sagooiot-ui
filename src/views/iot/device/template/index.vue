@@ -48,7 +48,7 @@
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 		<ImportFile ref="importFile" />
 	</div>
 </template>

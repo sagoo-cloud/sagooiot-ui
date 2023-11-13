@@ -21,7 +21,7 @@
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</div>
 </template>
 

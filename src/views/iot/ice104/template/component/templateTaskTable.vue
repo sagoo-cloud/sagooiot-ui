@@ -2,10 +2,10 @@
     <div>
         <el-form :model="params" :inline="true" ref="queryRef">
             <el-form-item label="点位名称" prop="title">
-                <el-input v-model="params.title" placeholder="请输入点位名称" clearablestyle="width: 240px" @keyup.enter.native="getList()" />
+                <el-input v-model="params.title" placeholder="请输入点位名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
             </el-form-item>
             <el-form-item>
-                <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList()">
+                <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
                     <el-icon>
                         <ele-Search />
                     </el-icon>
@@ -39,7 +39,7 @@
             </el-table-column>
         </el-table>
         <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-        <EditForm ref="editFormRef" @updateList="getList()"></EditForm>
+        <EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
     </div>
 </template>
 <script lang="ts" setup>

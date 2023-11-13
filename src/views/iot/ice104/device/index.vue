@@ -10,12 +10,12 @@
 	<div class="page page-full">
 		<el-card shadow="hover" class="page-full-part">
 			<div class="search">
-				<el-form :model="params" :inline="true" ref="queryRef">
+				<el-form :model="params" :inline="true" ref="queryRef" @submit.prevent>
 					<el-form-item label="设备名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入设备名称" clearablestyle="width: 240px" @keyup.enter.native="getList()" />
+						<el-input v-model="params.title" placeholder="请输入设备名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item>
-						<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList()">
+						<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
@@ -57,7 +57,7 @@
 			</el-table>
 			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		</el-card>
-		<EditForm ref="editFormRef" @updateList="getList()"></EditForm>
+		<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
 	</div>
 </template>
 

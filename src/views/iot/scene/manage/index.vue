@@ -1,10 +1,9 @@
 <template>
 	<el-card shadow="hover">
 		<div class="search">
-			<el-form :inline="true" ref="queryRef">
+			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
 				<el-form-item label="场景名称：" prop="keyWord">
-					<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable size="default" style="width: 240px"
-						@keyup.enter.native="getList" />
+					<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable size="default" style="width: 240px" />
 				</el-form-item>
 
 				<el-form-item label="触发方式" prop="sceneType" style="width: 200px;">
@@ -25,7 +24,7 @@
 
 				<el-form-item>
 
-					<el-button size="default" type="primary" class="ml10" @click="getList()">
+					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
@@ -54,31 +53,27 @@
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="status" label="状态" align="center"  v-col="'status'">
+			<el-table-column prop="status" label="状态" align="center" v-col="'status'">
 				<template #default="scope">
 					<el-tag size="small" type="success" v-if="scope.row.status == 1">启用</el-tag>
 					<el-tag size="small" type="info" v-if="scope.row.status == 0">未启用</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="description" label="描述" show-overflow-tooltip  v-col="'description'"></el-table-column>
+			<el-table-column prop="description" label="描述" show-overflow-tooltip v-col="'description'"></el-table-column>
 
 			<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
-					<el-button size="small" text type="primary" v-if="!scope.row.folderName"
-						@click="toDetail(scope.row.id)">详情</el-button>
+					<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">详情</el-button>
 					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-					<el-button size="small" text type="success" @click="onActionStatus(scope.row)"
-						v-if="scope.row.status == 0" v-auth="'startOrStop'">启用</el-button>
-					<el-button size="small" text type="primary" @click="onActionStatus(scope.row)"
-						v-if="scope.row.status > 0" v-auth="'startOrStop'">停用</el-button>
+					<el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status == 0" v-auth="'startOrStop'">启用</el-button>
+					<el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0" v-auth="'startOrStop'">停用</el-button>
 					<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"
-			@pagination="getList()" />
-		<EditForm ref="editFormRef" @getList="getList()"></EditForm>
+		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</el-card>
 </template>
 

@@ -10,10 +10,10 @@
 							clearable
 							size="default"
 							style="width: 240px;"
-							@keyup.enter.native="getList" />
+							@keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList">
+						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
@@ -64,9 +64,9 @@
 				</el-table-column>
 			</el-table>
 			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
-			<EditConfig ref="editRef" @getList="getList" />
+			<EditConfig ref="editRef" @getList="getList(1)" />
     
-      <CheckConfig ref="checkRef" @getList="getList" />
+      <CheckConfig ref="checkRef" @getList="getList(1)" />
 		</el-card>
 	</div>
 </template>
@@ -136,7 +136,8 @@ export default defineComponent({
     const initTableData = () => {
       manageList();
     };
-    const getList = () => {
+    const getList = (pageNum: number) => {
+      typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       api.manage
         .getList(state.tableData.param)
