@@ -93,8 +93,8 @@
 					<el-radio v-model="ruleForm.misfirePolicy" :label="0">执行一次</el-radio>
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-radio v-model="ruleForm.status" :label="1">正常</el-radio>
-					<el-radio v-model="ruleForm.status" :label="0">暂停</el-radio>
+					<el-radio v-model="ruleForm.status" :label="0">正常</el-radio>
+					<el-radio v-model="ruleForm.status" :label="1">暂停</el-radio>
 				</el-form-item>
 			</el-form>
 			<template #footer>
