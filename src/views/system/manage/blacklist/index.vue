@@ -185,6 +185,8 @@ export default defineComponent({
     };
     const typeList = () => {
       state.tableData.loading = true;
+      state.tableData.data = [];
+      state.tableData.total = 0;
       api.blackList.getList(state.tableData.param).then((res: any) => {
         state.tableData.data = res.list;
         state.tableData.total = res.total;
