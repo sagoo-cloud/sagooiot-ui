@@ -325,6 +325,7 @@ export default defineComponent({
             .then(() => {
               api.tree.delete({ id: data.infoId }).then(() => {
                 ElMessage.success('删除成功');
+                state.searchVal = ''
                 getTreeList();
               });
             })
