@@ -2,7 +2,7 @@
 	<el-dialog custom-class="custom-dialog" title="分配数据权限" v-model="isShowDialog" width="500px">
 		<el-form ref="formRef" :model="ruleForm" label-width="90px">
 			<el-form-item label="角色名称" prop="name">
-				<el-input v-model="ruleForm.name" disabled placeholder="请输入角色名称" clearable></el-input>
+				<el-input v-model.trim="ruleForm.name" disabled placeholder="请输入角色名称" clearable></el-input>
 			</el-form-item>
 			<el-form-item label="权限范围" prop="dataScope">
 				<el-select v-model="ruleForm.dataScope" placeholder="请选择" clearable class="w100">

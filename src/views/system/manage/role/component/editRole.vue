@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="角色名称" prop="name">
-							<el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
+							<el-input v-model.trim="formData.name" placeholder="请输入角色名称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">

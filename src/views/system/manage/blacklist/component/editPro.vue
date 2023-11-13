@@ -3,7 +3,7 @@
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加')" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
         <el-form-item label="IP地址" prop="ip">
-          <el-input type="textarea" v-model="ruleForm.ip" placeholder="请输入IP地址" />
+          <el-input type="textarea" v-model.trim="ruleForm.ip" placeholder="请输入IP地址" />
           <div style="color: #a4a4a4;line-height: 20px;">
             <div>支持添加IP：如果添加多个IP请用“,”隔开</div>
             <div v-if="ruleForm.id == 0">支持添加IP段，如192.168.0.0/24</div>

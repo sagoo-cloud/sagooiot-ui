@@ -2,7 +2,7 @@
   <div class="system-dept-container">
     <el-card shadow="hover">
       <div class="system-dept-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
+        <el-form :model="tableData.param" :inline="true" ref="queryRef" @keyup.enter="deptList">
           <el-form-item label="组织名称" prop="deptName">
             <el-input size="default" v-model="tableData.param.deptName" placeholder="请输入组织名称" class="w-50" clearable />
           </el-form-item>

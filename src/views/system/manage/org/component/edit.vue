@@ -15,12 +15,12 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="区域名称" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入区域名称" clearable></el-input>
+              <el-input v-model.trim="ruleForm.name" placeholder="请输入区域名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="负责人" prop="leader">
-              <el-select v-model="ruleForm.leader" placeholder="请输入负责人" filterable clearable>
+              <el-select v-model.trim="ruleForm.leader" placeholder="请输入负责人" filterable clearable>
                 <el-option :value="user.userNickname" :label="user.userNickname" v-for="user in userList" :key="user.id"></el-option>
               </el-select>
             </el-form-item>

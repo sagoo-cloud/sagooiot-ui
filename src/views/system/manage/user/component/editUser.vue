@@ -5,7 +5,7 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!ruleForm.id">
 						<el-form-item label="用户名" prop="userName">
-							<el-input v-model="ruleForm.userName" placeholder="请输入用户名" clearable></el-input>
+							<el-input v-model.trim="ruleForm.userName" placeholder="请输入用户名" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!ruleForm.id">
@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="姓名" prop="userNickname">
-							<el-input v-model="ruleForm.userNickname" placeholder="请输入姓名" clearable></el-input>
+							<el-input v-model.trim="ruleForm.userNickname" placeholder="请输入姓名" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">

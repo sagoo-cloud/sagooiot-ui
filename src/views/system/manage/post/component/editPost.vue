@@ -13,7 +13,7 @@
 					</el-form-item>
 				</el-col>
 				<el-form-item label="岗位名称" prop="postName">
-					<el-input v-model="formData.postName" placeholder="请输入岗位名称" />
+					<el-input v-model.trim="formData.postName" placeholder="请输入岗位名称" />
 				</el-form-item>
 				<!-- <el-form-item label="岗位编码" prop="postCode">
           <el-input v-model="formData.postCode" placeholder="请输入编码名称" />
