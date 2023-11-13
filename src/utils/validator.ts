@@ -8,6 +8,7 @@ export const phoneValidate = (rule: any, value: any, callback: any) => {
   if (!reg_tel.test(value)) {
     callback(new Error('请填写正确手机号'))
   }
+  return callback()
 }
 
 
