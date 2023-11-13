@@ -247,3 +247,9 @@
 		overflow: auto;
 	}
 }
+
+
+.el-tree-node__label{
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

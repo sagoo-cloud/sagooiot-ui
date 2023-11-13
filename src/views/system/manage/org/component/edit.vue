@@ -15,7 +15,7 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="区域名称" prop="name">
-              <el-input v-model.trim="ruleForm.name" placeholder="请输入区域名称" clearable></el-input>
+              <el-input v-model.trim="ruleForm.name" show-word-limit maxlength="20" placeholder="请输入区域名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">

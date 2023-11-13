@@ -1,6 +1,6 @@
 <template>
   <div class="system-edit-dic-container">
-    <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加')" v-model="isShowDialog" width="769px">
+    <el-dialog :title="(ruleForm.id ? '修改' : '添加')" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
         <el-form-item label="IP地址" prop="ip">
           <el-input type="textarea" v-model.trim="ruleForm.ip" placeholder="请输入IP地址" />
@@ -35,20 +35,16 @@
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/system';
 import { ElMessage } from "element-plus";
-import getOrigin from '/@/utils/origin'
 
 interface RuleFormState {
   id: number;
+  ip: string;
   status: string;
   remark: string;
 }
 interface DicState {
   isShowDialog: boolean;
   ruleForm: RuleFormState;
-  cateData: RuleFormState[];
-  deptData: RuleFormState[];
-  messageData: RuleFormState[];
-  tranData: RuleFormState[];
   rules: {}
 }
 
@@ -56,22 +52,12 @@ export default defineComponent({
   name: 'deviceEditPro',
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
-    const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
-
-    const { proxy } = getCurrentInstance() as any;
-    const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
 
     const state = reactive<DicState>({
       isShowDialog: false,
-      cateData: [], // 分类数据
-      deptData: [], // 
-      messageData: [], // 
-      tranData: [], // 
-      imageUrl: "", // 
-      singleImg: baseURL + "/product/icon/upload",
-
       ruleForm: {
         id: 0,
+        ip: '',
         status: '1',
         remark: ''
       },
@@ -99,9 +85,7 @@ export default defineComponent({
     const resetForm = () => {
       state.ruleForm = {
         id: 0,
-        // name: '',
-        // dictType: '',
-        // deviceType: '设备',
+        ip: '',
         status: '1',
         remark: ''
       }
@@ -145,8 +129,6 @@ export default defineComponent({
       closeDialog,
       onCancel,
       onSubmit,
-      network_server_type,
-      network_protocols,
       formRef,
       ...toRefs(state),
     };
