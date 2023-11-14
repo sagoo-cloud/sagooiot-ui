@@ -102,7 +102,7 @@ const resetQuery = () => {
  * 单一删除
  */
 const onDel = (row: any) => {
-	ElMessageBox.confirm(`此操作将删除接口：“${row.title}”，是否继续?`, '提示', {
+	ElMessageBox.confirm(`此操作将设备名为：“${row.title}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
