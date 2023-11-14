@@ -122,7 +122,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{ acType === 'add' ? '新 增' : '修 改' }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">提 交</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -189,7 +189,7 @@ export default defineComponent({
 				component: [{ required: true, message: '组件地址不能为空', trigger: 'blur' }],
 				path: [{ required: true, message: '路由地址不能为空', trigger: 'blur' }],
 				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
-				name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }],
 				menuType: [{ required: true, message: '菜单类型不能为空', trigger: 'blur' }],
 			},
 		});

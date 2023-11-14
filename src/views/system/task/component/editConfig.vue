@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.jobId ? '修改' : '添加' ) + '任务'" v-model="isShowDialog" width="650px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="100px">
 				<el-form-item label="任务名称" prop="jobName">
-					<el-input v-model="ruleForm.jobName" placeholder="请输入任务名称" />
+					<el-input v-model.trim="ruleForm.jobName" placeholder="请输入任务名称" />
 				</el-form-item>
 				<el-form-item label="任务描述" prop="remark">
 					<el-input v-model="ruleForm.remark" placeholder="请输入任务描述" type="textarea" />
@@ -93,8 +93,8 @@
 					<el-radio v-model="ruleForm.misfirePolicy" :label="0">执行一次</el-radio>
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-radio v-model="ruleForm.status" :label="0">正常</el-radio>
-					<el-radio v-model="ruleForm.status" :label="1">暂停</el-radio>
+					<el-radio v-model="ruleForm.status" :label="0">启用</el-radio>
+					<el-radio v-model="ruleForm.status" :label="1">禁用</el-radio>
 				</el-form-item>
 			</el-form>
 			<template #footer>
@@ -167,7 +167,7 @@ export default defineComponent({
 			},
 			rules: {
 				jobName: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
-				invokeTarget: [{ required: true, message: '执行方法不能为空', trigger: 'blur' }],
+				invokeTarget: [{ required: true, message: '调用方法不能为空', trigger: 'blur' }],
 				cronExpression: [{ required: true, message: 'cron表达式不能为空', trigger: 'blur' }],
 			},
 		});

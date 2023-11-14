@@ -13,8 +13,8 @@
           </el-form-item>
           <el-form-item label="任务状态" prop="status" style="width: 200px">
             <el-select v-model="tableData.param.status" size="mini" placeholder="请选择">
-              <el-option label="正常" :value="0" />
-              <el-option label="暂停" :value="1" />
+              <el-option label="启用" :value="0" />
+              <el-option label="禁用" :value="1" />
             </el-select>
           </el-form-item>
 

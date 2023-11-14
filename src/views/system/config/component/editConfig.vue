@@ -45,7 +45,7 @@ interface RuleFormState {
   configName: string;
   configKey: string;
   configValue: string;
-  configType: string;
+  configType: number;
   remark: string;
   moduleClassify:string; // 字典分类
 }
@@ -53,6 +53,16 @@ interface DicState {
   isShowDialog: boolean;
   ruleForm: RuleFormState;
   rules: {};
+}
+
+const baseForm: RuleFormState = {
+  configId: 0,
+  configName: '',
+  configKey: '',
+  configValue: '',
+  configType: 0,
+  remark: '',
+  moduleClassify: '',
 }
 
 export default defineComponent({
@@ -70,18 +80,13 @@ export default defineComponent({
     const state = reactive<DicState>({
       isShowDialog: false,
       ruleForm: {
-        configId: 0,
-        configName: '',
-        configKey: '',
-        configValue: '',
-        configType: '0',
-        remark: '',
-        moduleClassify: '',
+        ...baseForm
       },
       rules: {
-        configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
-        configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
-        configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }],
+        configName: [{ required: true, message: '参数名称不能为空', trigger: 'change' }],
+        configKey: [{ required: true, message: '参数键名不能为空', trigger: 'change' }],
+        moduleClassify: [{ required: true, message: '字典分类不能为空', trigger: 'change' }],
+        configValue: [{ required: true, message: '参数键值不能为空', trigger: 'change' }],
       },
     });
     // 打开弹窗
@@ -90,7 +95,6 @@ export default defineComponent({
       if (row) {
         api.config.detail(row.configId).then((res: any) => {
           const data: RuleFormState = res.data.data;
-          data.configType = String(data.configType);
           state.ruleForm = data;
         });
         state.ruleForm = row;
@@ -99,13 +103,7 @@ export default defineComponent({
     };
     const resetForm = () => {
       state.ruleForm = {
-        configId: 0,
-        configName: '',
-        configKey: '',
-        configValue: '',
-        configType: '0',
-        moduleClassify: '',
-        remark: '',
+        ...baseForm
       };
     };
     // 关闭弹窗
