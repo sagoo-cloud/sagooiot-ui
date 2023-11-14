@@ -15,6 +15,13 @@
 							end-placeholder="结束日期"
 						></el-date-picker>
 					</el-form-item>
+          <el-form-item label="告警状态" prop="status" style="width: 200px;">
+            <el-select v-model="tableData.param.status" placeholder="告警状态" clearable size="default" style="width: 240px">
+              <el-option label="未处理" :value="0" />
+              <el-option label="已处理" :value="1" />
+              <el-option label="已忽略" :value="2" />
+            </el-select>
+          </el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="typeList">
 							<el-icon>
@@ -50,8 +57,9 @@
 
 				<el-table-column prop="status" label="告警状态" width="100" align="center" v-col="'status'">
 					<template #default="scope">
-						<el-tag type="success" size="small" v-if="scope.row.status">已处理</el-tag>
-						<el-tag type="info" size="small" v-else>未处理</el-tag>
+            <el-tag type="danger" size="small" v-if="scope.row.status == 0">未处理</el-tag>
+						<el-tag type="success" size="small" v-if="scope.row.status == 1">已处理</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.status == 2">已忽略</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="createdAt" label="告警时间" align="center" width="180" v-col="'createdAt'"></el-table-column>
@@ -103,6 +111,7 @@ interface TableDataState {
 			pageSize: number;
 
 			dateRange: string[];
+      status: string;
 		};
 	};
 }
