@@ -47,19 +47,15 @@
 				</el-table-column>
 				<el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">
 					<template #default="scope">
-						<el-button v-if="scope.row.status == 1" type="warning" size="small" link @click="changeStatus(scope.row, 0)" v-auth="'stop'"
-							>停用</el-button
-						>
-						<el-button v-if="scope.row.status == 0" size="small" type="success" link @click="changeStatus(scope.row, 1)" v-auth="'start'"
-							>启用</el-button
-						>
+						<el-button v-if="scope.row.status == 1" type="warning" size="small" link @click="changeStatus(scope.row, 0)" v-auth="'stop'">停用</el-button>
+						<el-button v-if="scope.row.status == 0" size="small" type="success" link @click="changeStatus(scope.row, 1)" v-auth="'start'">启用</el-button>
 						<el-button v-if="scope.row.status == 0" size="small" type="info" link @click="onDel(scope.row)" v-auth="'del'">删除</el-button>
 						<el-button size="small" type="plain" link @click="addOrEdit(scope.row)">编辑</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 
-	    <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		</el-card>
 		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</div>
@@ -91,13 +87,14 @@ const addOrEdit = (row?: any) => {
 	if (row) {
 		editFormRef.value.open(row)
 	} else {
+		uploadFile = null
 		// add
 		ElMessageBox({
 			title: '上传插件',
 			message: h('input', {
 				type: 'file',
 				accept: '.zip',
-				onchange: (file: any) => {
+				onchange: function (file: any) {
 					uploadFile = file.target.files[0]
 					// console.log(uploadFile)
 				},
@@ -121,14 +118,14 @@ const addOrEdit = (row?: any) => {
 							ElMessage.success('上传成功')
 							getList(1)
 							done()
-						})
-						.finally(() => {
+						}).finally(() => {
 							instance.confirmButtonLoading = false
+							instance.confirmButtonText = '上传'
 						})
 				} else {
+					uploadFile = null
 					done()
 				}
-				uploadFile = null
 			},
 		})
 	}
