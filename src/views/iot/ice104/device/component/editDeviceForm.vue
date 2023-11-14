@@ -40,7 +40,7 @@ import { ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 
-const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '' });
+const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '', status: 1 });
 getList();
 
 const btnLoading = ref(false);
