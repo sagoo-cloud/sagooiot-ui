@@ -141,7 +141,7 @@ export default defineComponent({
       let msg = '你确定要删除所选数据？';
       // let ids: number[] = [];
       // if (row) {
-      msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
+      msg = `此操作将永久删除城市：“${row.name}”，是否继续?`;
       // ids = [row.id];
       // } else {
       // 	ids = state.ids;
