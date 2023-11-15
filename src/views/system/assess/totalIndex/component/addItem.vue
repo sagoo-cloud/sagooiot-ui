@@ -176,7 +176,7 @@ export default defineComponent({
 		};
 		// 删除标识项
 		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户：“${row.userName}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除指数：“${row.userName}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
