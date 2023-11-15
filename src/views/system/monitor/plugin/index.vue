@@ -1,6 +1,6 @@
 <template>
-	<div class="system-plugin-container">
-		<el-card shadow="hover">
+	<div class="system-plugin-container page-full">
+		<el-card shadow="hover" class="page-full-part">
 			<div class="system-user-search mb15">
 				<el-form :model="params" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="关键字" prop="keyWord">
@@ -148,7 +148,7 @@ const resetQuery = () => {
 }
 
 const onDel = (row: any) => {
-	ElMessageBox.confirm(`此操作将删除接口：“${row.name}”，是否继续?`, '提示', {
+	ElMessageBox.confirm(`此操作将删除插件：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',

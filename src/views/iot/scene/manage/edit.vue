@@ -16,7 +16,7 @@
 	>
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
 			<el-form-item label="场景名称" prop="name">
-				<el-input v-model="formData.name" placeholder="请输入场景名称" />
+				<el-input v-model.trim="formData.name" placeholder="请输入场景名称" />
 			</el-form-item>
       <el-form-item label="触发方式" prop="sceneType">
         <el-radio-group v-model="formData.sceneType">

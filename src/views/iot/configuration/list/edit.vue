@@ -1,8 +1,8 @@
 <template>
   <el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id ? '编辑组态图' : '新增组态图'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
-    <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-      <el-form-item label="图纸名称" prop="name">
-        <el-input v-model="formData.name" placeholder="输入图纸名称" />
+    <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="100px">
+      <el-form-item label="组态图名称" prop="name">
+        <el-input v-model="formData.name" placeholder="输入组态图名称" />
       </el-form-item>
       <!-- <el-form-item label="说明" prop="remarks">
         <el-input v-model="formData.remarks" type="textarea" :rows="3" />

@@ -93,10 +93,14 @@ const updateImg = () => {
 			return item.url
 		}
 	})
-
+	console.log(props.limit)
 	if (props.limit === 1) {
 		const img = list[0]
-		emit('setImg', props.widthHost ? img : img.replace(getOrigin(import.meta.env.VITE_SERVER_URL + '/'), ''))
+		if(!img) {
+			emit('setImg', '');
+			return;
+		}
+		emit('setImg', props.widthHost ? img : img.replace(getOrigin(import.meta.env.VITE_SERVER_URL + '/'), ''));
 	} else {
 		emit('setImgs', list)
 	}

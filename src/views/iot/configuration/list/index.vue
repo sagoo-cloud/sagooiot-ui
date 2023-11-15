@@ -17,7 +17,7 @@
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
-            新增图纸
+            新增组态图
           </el-button>
         </el-form-item>
       </el-form>

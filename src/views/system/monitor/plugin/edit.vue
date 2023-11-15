@@ -24,7 +24,7 @@
 			</el-form-item>
 			<el-form-item label="插件图标" prop="icon">
 				<!-- <el-input v-model="formData.icon" placeholder="输入插件图标" /> -->
-				<uploadVue :width-host="false" :img="formData.icon" @set-img="formData.icon = $event"></uploadVue>
+				<uploadVue :width-host="false" :img="formData.icon" @set-img="setImage"></uploadVue>
 			</el-form-item>
 			<el-form-item label="插件网址" prop="link">
 				<el-input v-model="formData.link" placeholder="输入插件网址" />
@@ -98,6 +98,10 @@ const ruleForm = {
 	// icon: [ruleRequired('插件图标不能为空')],
 	// command: [ruleRequired('运行指令不能为空')],
 	// args: [ruleRequired('指令参数不能为空')],
+}
+
+const setImage = (data:string) => {
+	formData.icon = data
 }
 
 const onSubmit = async () => {

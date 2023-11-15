@@ -2,7 +2,7 @@
 	<el-dialog
 		class="api-edit"
 		v-model="showDialog"
-		:title="`${formData.id ? '编辑规则' : '新增规则'}`"
+		:title="`${formData.id ? '编辑数据转发' : '新增数据转发'}`"
 		width="600px"
 		:close-on-click-modal="false"
 		:close-on-press-escape="false"

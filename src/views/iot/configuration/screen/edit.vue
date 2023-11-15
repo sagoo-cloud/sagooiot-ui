@@ -1,7 +1,7 @@
 <template>
 	<el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id ? '编辑大屏' : '新增大屏'}`" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-			<el-form-item label="规则名称" prop="projectName">
+			<el-form-item label="项目名称" prop="projectName">
 				<el-input v-model="formData.projectName" placeholder="输入大屏项目名称" />
 			</el-form-item>
 			<el-form-item label="说明" prop="remarks">
