@@ -36,10 +36,6 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
 
-
-
-
-
 				<el-form-item label="数据类型" prop="dataType">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
 						<el-option v-for="item in tabData" :key="item.value" :label="item.label" :value="item.value" />
@@ -79,7 +75,7 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="描述" prop="desc">
+				<el-form-item label="备注说明" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
 			</el-form>
@@ -191,7 +187,7 @@ export default defineComponent({
 			rules: {
 				key: [{ required: true, message: '字段节点标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '字段节点名称不能为空', trigger: 'blur' }],
-				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
+				dataType: [{ required: true, message: '数据类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
 				method: [{ required: true, message: '请选择取值方式', trigger: 'blur' }],
 				isSorting: [{ required: true, message: '请选择是否参与排序', trigger: 'blur' }],

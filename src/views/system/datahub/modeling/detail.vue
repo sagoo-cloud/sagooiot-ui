@@ -29,7 +29,7 @@
                 </el-icon>
                 查询
               </el-button>
-              <el-button size="default" @click="resetQuery(queryRef)">
+              <el-button size="default" @click="resetQuery()">
                 <el-icon>
                   <ele-Refresh />
                 </el-icon>
@@ -63,7 +63,7 @@
             </template>
           </el-table-column>
           <el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" v-col="'default'" />
-          <el-table-column label="备注说明" prop="value" width="100" :show-overflow-tooltip="true" v-col="'value'" />
+          <el-table-column label="备注说明" prop="desc" width="100" :show-overflow-tooltip="true" v-col="'value'" />
           <el-table-column prop="createdAt" label="创建时间" align="center" width="160" v-col="'createdAt'"></el-table-column>
 
           <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -95,22 +95,6 @@ import EditDic from './component/editNode.vue';
 import RelationDic from './component/relation.vue';
 import api from '/@/api/datahub';
 
-interface TableDataState {
-  ids: number[];
-  tableData: {
-    data: [];
-    total: number;
-    loading: boolean;
-    param: {
-      pageNum: number;
-      pageSize: number;
-      name: string;
-      deviceType: string;
-      status: string;
-      dateRange: string[];
-    };
-  };
-}
 export default defineComponent({
   name: 'dataDetail',
   components: { EditDic, RelationDic },
@@ -118,13 +102,9 @@ export default defineComponent({
     const editDicRef = ref();
     const relationRef = ref();
     const route = useRoute();
-    const state = reactive<TableDataState>({
-      config: {},
-
-      isShowDialog: false,
+    const state = reactive<any>({
       detail: [],
       developer_status: 0,
-
       tableData: {
         data: [],
         total: 0,
@@ -132,15 +112,16 @@ export default defineComponent({
         param: {
           pageNum: 1,
           pageSize: 10,
-          tid: route.params && route.params.id,
+          tid: route.params.id as string,
           status: '',
-          dateRange: [],
+          key: '',
+          name: '',
         },
       },
     });
 
     onMounted(() => {
-      const ids = route.params && route.params.id;
+      const ids = route.params?.id as string;
       api.template.detail(ids).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status
@@ -155,6 +136,12 @@ export default defineComponent({
         state.tableData.data = res.list;
         //state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
+    };
+
+    const resetQuery = () => {
+      state.tableData.param.key = ''
+      state.tableData.param.name = ''
+      typeList();
     };
 
     const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -226,6 +213,7 @@ export default defineComponent({
       relationRef,
       editDicRef,
       onOpenAdd,
+      resetQuery,
       typeList,
       onRowDel,
       onOpenEdit,

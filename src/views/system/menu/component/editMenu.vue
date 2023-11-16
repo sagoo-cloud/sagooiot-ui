@@ -54,7 +54,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="链接地址">
-							<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http:xxx.com）" clearable :disabled="ruleForm.isLink === 0">
+							<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http://xxx.com）" clearable :disabled="ruleForm.isLink === 0">
 							</el-input>
 						</el-form-item>
 					</el-col>

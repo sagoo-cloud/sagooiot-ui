@@ -3,10 +3,10 @@
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '模型'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="模型标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入模型名称" :disabled="ruleForm.id" />
+					<el-input v-model.trim="ruleForm.key" placeholder="请输入模型名称" :disabled="ruleForm.id" />
 				</el-form-item>
 				<el-form-item label="模型名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入模型名称" />
+					<el-input v-model.trim="ruleForm.name" placeholder="请输入模型名称" />
 				</el-form-item>
 
 				<el-form-item label="模型类型" prop="type">
@@ -14,8 +14,7 @@
 						<el-option v-for="item in datahub_model_type" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
-				<el-form-item label="定时请求">
-
+				<el-form-item label="定时请求" prop="cronExpression">
 					<div style="display:flex">
 						<el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式" />
 						<el-button type="success" @click="showCron('ruleForm')" style="margin-left: 5px;">设置</el-button>
@@ -111,6 +110,7 @@ export default defineComponent({
 				key: [{ required: true, message: '模型标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
 				type: [{ required: true, message: '模型类型不能为空', trigger: 'blur' }],
+				cronExpression: [{ required: true, message: '定时请求不能为空', trigger: 'blur' }],
 				interval: [{ required: true, message: '请输入更新时间', trigger: 'blur' }],
 			},
 		});

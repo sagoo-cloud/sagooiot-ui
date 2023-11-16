@@ -57,7 +57,7 @@
 										<el-option v-for="item in paramData" :key="item.value" :label="item.label" :value="item.value" />
 									</el-select>
 									<el-input v-model="aaa.name" placeholder="请输入参数标题" style="width: 320px" />
-									<el-input v-model="aaa.key" placeholder="请输入参数名" style="width: 320px" />
+									<el-input v-model="aaa.key" placeholder="请输入参标识" style="width: 320px" />
 									<el-input v-model="aaa.value" placeholder="请输入参数值" style="width: 320px" />
 									<div class="conicon">
 										<el-icon @click="delParamss(index, bbb)">
