@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.sourceId !== 0 ? '修改' : '添加') + '数据源'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px" v-if="isShowDialog">
 				<el-form-item label="数据源标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入数据源名称" :disabled="ruleForm.sourceId" />
 				</el-form-item>
@@ -199,6 +199,22 @@ interface DicState {
 	rules: {};
 }
 
+const baseFrom = {
+	sourceId: 0,
+	name: '',
+	from: 1,
+	key: '',
+	rule: [],
+	config: {
+		method: '',
+		url: '',
+		interval: '',
+		intervalUnit: '',
+		requestParams: [],
+	},
+	desc: '',
+}
+
 export default defineComponent({
 	name: 'Edit',
 	components: { Delete, CircleClose, vue3cron },
@@ -293,21 +309,7 @@ export default defineComponent({
 				},
 			],
 
-			ruleForm: {
-				sourceId: 0,
-				name: '',
-				from: 1,
-				key: '',
-				rule: [],
-				config: {
-					method: '',
-					url: '',
-					interval: '',
-					intervalUnit: '',
-					requestParams: [],
-				},
-				desc: '',
-			},
+			ruleForm: JSON.parse(JSON.stringify(baseFrom)),
 			rules: {
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '数据源名称不能为空', trigger: 'blur' }],
@@ -379,6 +381,8 @@ export default defineComponent({
 						// state.rule[index].params.value = item.params[Object.keys(item.params)];
 					});
 				});
+			} else {
+				state.requestParams = []
 			}
 			state.isShowDialog = true;
 		};
@@ -391,24 +395,13 @@ export default defineComponent({
 		const resetForm = () => {
 			state.devconfig = {};
 			state.tabconfig = {};
-			state.ruleForm = {
-				sourceId: 0,
-				name: '',
-				from: 1,
-				key: '',
-				rule: [],
-				config: {
-					method: '',
-					url: '',
-					interval: '',
-					intervalUnit: '',
-					requestParams: [],
-				},
-				desc: '',
-			};
+			state.config = { ...baseFrom.config };
+			state.ruleForm = JSON.parse(JSON.stringify(baseFrom))
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
+			resetForm()
+			formRef.value && formRef.value.resetFields()
 			state.isShowDialog = false;
 		};
 		// 取消
