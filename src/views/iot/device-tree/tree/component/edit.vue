@@ -40,8 +40,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-						<el-form-item label="类型" prop="template">
-							<el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" style="width: 100%;">
+						<el-form-item label="页面模板" prop="template">
+							<el-select v-model="ruleForm.template" filterable clearable placeholder="请选择页面模板" style="width: 100%;">
 								<el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -60,7 +60,6 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备所属区域" prop="area">
-
 							<el-cascader :options="orgData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择区域" clearable class="w100" v-model="ruleForm.area">
 								<template #default="{ node, data }">
 									<span>{{ data.name }}</span>
@@ -171,9 +170,7 @@ export default defineComponent({
 			treeData: [] as any[]
 		});
 
-		const { tree_types_2 } = proxy.useDict('tree_types_2');
-
-		const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
+		const { tree_types_2, tree_types, tree_category } = proxy.useDict('tree_types_2', 'tree_types', 'tree_category');
 
 		// 打开弹窗
 		const openDialog = (type: string, row?: any) => {
@@ -209,7 +206,7 @@ export default defineComponent({
 		const getDetail = () => {
 			api.tree.detail({ infoId: state.ruleForm.id })
 				.then((res: any) => {
-					state.ruleForm = { ...res.data }
+					state.ruleForm = { ...res.data, area: Number(res.data.area) }
 				})
 		}
 		// 新增

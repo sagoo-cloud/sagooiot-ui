@@ -6,7 +6,7 @@
           <el-scrollbar v-loading="treeLoading">
             <el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
 
-            <el-button v-if="!treeLoading && !treeData.length" type="primary"  v-auth="'add'" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
+            <el-button v-if="!treeLoading && !treeData.length" type="primary" v-auth="'add'" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
             <el-tree ref="zlTreeSearchRef" v-if="!treeLoading" :data="treeData" :props="{
               children: 'children',
               label: 'name'
@@ -52,7 +52,7 @@
         </el-card>
       </el-col>
       <el-col :span="19">
-        <el-card shadow="hover">
+        <el-card shadow="hover" v-if="treeDetail.name">
           <el-tabs v-model="tabName" @tab-click="onTabClick">
             <el-tab-pane label="设备树信息" name="1">
               <table>
@@ -292,7 +292,7 @@ export default defineComponent({
         ElMessage.warning('请选择节点树')
         return
       }
-      
+
       if (!(new Date(ruleForm.value.endDate) >= new Date(ruleForm.value.startDate))) {
         ElMessage.warning('开始时间不能大于结束时间')
         return
@@ -326,6 +326,7 @@ export default defineComponent({
               api.tree.delete({ id: data.infoId }).then(() => {
                 ElMessage.success('删除成功');
                 state.searchVal = ''
+                state.treeDetail = {}
                 getTreeList();
               });
             })

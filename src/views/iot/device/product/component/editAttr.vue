@@ -6,7 +6,7 @@
 					<el-input v-model="ruleForm.key" placeholder="请输入属性定义标识" :disabled="ruleForm.id !== 0 ? true : false" />
 				</el-form-item>
 				<el-form-item label="属性定义名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入属性定义名称" />
+					<el-input v-model.trim="ruleForm.name" placeholder="请输入属性定义名称" />
 				</el-form-item>
 
 				<el-form-item label="数据类型" prop="type">

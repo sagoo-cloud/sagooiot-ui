@@ -248,8 +248,12 @@
 	}
 }
 
-
-.el-tree-node__label{
+.el-tree-node__label,
+.custom-tree-node{
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.el-popper {
+    max-width: 50vw;
 }

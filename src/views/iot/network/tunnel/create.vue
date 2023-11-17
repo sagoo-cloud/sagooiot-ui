@@ -6,7 +6,7 @@
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
                             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="68px">
-                                <el-form-item label="名称">
+                                <el-form-item label="名称" prop="name">
                                     <el-input v-model="form.name" placeholder="请填写名称" />
                                 </el-form-item>
                                 <el-form-item label="类型">

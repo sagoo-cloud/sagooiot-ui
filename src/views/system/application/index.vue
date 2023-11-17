@@ -1,8 +1,8 @@
 <template>
 	<el-card shadow="hover">
 		<div class="search">
-			<el-form :inline="true" ref="queryRef">
-				<el-form-item label="应用名称：" prop="name" @submit.prevent>
+			<el-form :model="params" :inline="true" ref="queryRef">
+				<el-form-item label="应用名称：" prop="keyWord" @submit.prevent>
 					<el-input v-model="params.keyWord" placeholder="请输入应用名称" clearable size="default" style="width: 240px" @keyup.enter.native="getList(1)" />
 				</el-form-item>
 				<el-form-item>
@@ -70,7 +70,7 @@ getList()
 const resetQuery = (formEl: any) => {
 	if (!formEl) return;
 	formEl.resetFields();
-	getList();
+	getList(1);
 };
 const initTableData = () => {
 	user.dept.getList({ status: 1 }).then((res: any) => {

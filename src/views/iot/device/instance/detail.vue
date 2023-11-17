@@ -663,7 +663,7 @@ export default defineComponent({
 
     // 删除产品
     const onRowDel = (key, type) => {
-      let msg = `此操作将永久删除该数据吗？，是否继续?`;
+      let msg = `此操作将永久删除该数据，是否继续?`;
 
       if (key.length === 0) {
         ElMessage.error('请选择要删除的数据。');

@@ -175,12 +175,12 @@ export default defineComponent({
 				...form
 			},
 			rules: {
-				name: [ { required: true, message: '产品名称不能为空', trigger: 'change' },
-        				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
-						{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
-					],
+				name: [{ required: true, message: '产品名称不能为空', trigger: 'change' },
+				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
+				{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
+				],
 				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' },
-					{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
+				{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
 				transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'change' }],
 				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],

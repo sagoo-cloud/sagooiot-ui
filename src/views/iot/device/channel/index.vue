@@ -10,12 +10,12 @@
 	<div class="page">
 		<el-card shadow="hover">
 			<div class="search">
-				<el-form :model="params" :inline="true" ref="queryRef">
+				<el-form :model="params" :inline="true" ref="queryRef" @keyup.enter.native="getList(1)">
 					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入通道名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+						<el-input v-model="params.title" placeholder="请输入通道名称" clearablestyle="width: 240px" />
 					</el-form-item>
 					<el-form-item label="注册码" prop="number">
-						<el-input v-model="params.number" placeholder="请输入注册码" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+						<el-input v-model="params.number" placeholder="请输入注册码" clearablestyle="width: 240px" />
 					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="getList(1)">

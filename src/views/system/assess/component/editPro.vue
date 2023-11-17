@@ -41,10 +41,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="传输协议" prop="transportProtocol">
+        <el-form-item label="接入方式" prop="transportProtocol">
 
 
-          <el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+          <el-select v-model="ruleForm.transportProtocol" placeholder="请选择接入方式">
             <el-option v-for="item in tranData" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -132,7 +132,7 @@ export default defineComponent({
         parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
         deptId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
-        transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
+        transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
     });

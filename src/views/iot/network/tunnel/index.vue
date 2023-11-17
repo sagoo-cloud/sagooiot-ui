@@ -1,7 +1,7 @@
 <template>
     <el-card shadow="hover">
         <el-form :inline="true" label-width="68px">
-            <el-form-item label="通道名称">
+            <el-form-item label="通道名称"  @keyup.enter.native="searchData()">
                 <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
             </el-input>
             </el-form-item>

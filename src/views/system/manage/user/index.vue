@@ -5,7 +5,12 @@
 				<el-card shadow="hover">
 					<el-scrollbar>
 						<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable size="default" style="width: 100%;" />
-						<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick" />
+						<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick">
+							<template #default="{ node, data }">
+								<div class="custom-tree-node" :title="node.label">
+									{{ node.label }}
+								</div>
+							</template></el-tree>
 					</el-scrollbar>
 				</el-card>
 			</el-col>
