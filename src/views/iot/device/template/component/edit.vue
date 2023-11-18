@@ -23,11 +23,11 @@
 					<DeviceTemplateDialog :templateNumber="temp.number" :mode="temp.mode" ref="deviceTemplateDialog" v-if="activeName === '2'" />
 				</el-tab-pane>
 			</el-tabs>
-			<template #footer class="dialog-footer">
-				<el-button @click="clsoeDialog"> 取 消 </el-button>
-				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
-			</template>
 		</div>
+		<template #footer class="dialog-footer">
+			<el-button @click="clsoeDialog"> 取 消 </el-button>
+			<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
+		</template>
 	</el-dialog>
 </template>
 
