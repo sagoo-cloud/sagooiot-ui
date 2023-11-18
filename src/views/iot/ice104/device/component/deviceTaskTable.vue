@@ -2,7 +2,7 @@
     <div>
         <el-form :model="params" :inline="true" ref="queryRef">
             <el-form-item label="任务名称" prop="title">
-                <el-input v-model="params.title" placeholder="请输入任务名称" clearablestyle="width: 240px" @submit.prevent />
+                <el-input v-model="params.title" placeholder="请输入任务名称" clearable style="width: 240px" @submit.prevent />
             </el-form-item>
             <el-form-item>
                 <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
@@ -78,7 +78,7 @@ const addOrEdit = async (row?: any) => {
  * 单一删除
  */
 const onDel = (row: any) => {
-    ElMessageBox.confirm(`此操作将删除接口：“${row.title}”，是否继续?`, '提示', {
+    ElMessageBox.confirm(`此操作将删除任务：“${row.title}”，是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',

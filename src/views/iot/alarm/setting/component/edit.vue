@@ -298,10 +298,10 @@ export default defineComponent({
 				],
 			},
 			rules: {
-				name: [{ required: true, message: '告警名称不能为空', trigger: 'blur' }],
-				level: [{ required: true, message: '告警级别不能为空', trigger: 'blur' }],
-				productKey: [{ required: true, message: '请选择产品', trigger: 'blur' }],
-				deviceKey: [{ required: true, message: '请选择设备', trigger: 'blur' }],
+				name: [{ required: true, message: '告警名称不能为空', trigger: 'change' }],
+				level: [{ required: true, message: '告警级别不能为空', trigger: 'change' }],
+				productKey: [{ required: true, message: '请选择产品', trigger: 'change' }],
+				deviceKey: [{ required: true, message: '请选择设备', trigger: 'change' }],
 			},
 		});
 
@@ -467,7 +467,7 @@ export default defineComponent({
 						alarm.common.edit(state.ruleForm).then(() => {
 							ElMessage.success('告警修改成功');
 							closeDialog(); // 关闭弹窗
-							emit('typeList');
+							emit('dataList');
 						});
 					} else {
 						//添加

@@ -4,13 +4,13 @@
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
 					<el-form-item label="接口名称" prop="name">
-						<el-input v-model="params.name" placeholder="请输入接口名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+						<el-input v-model="params.name" placeholder="请输入接口名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item label="接口地址" prop="address">
-						<el-input v-model="params.address" placeholder="请输入接口地址" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+						<el-input v-model="params.address" placeholder="请输入接口地址" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item label="状态" prop="status" style="width: 200px">
-						<el-select v-model="params.status" placeholder="接口状态" clearablestyle="width: 240px">
+						<el-select v-model="params.status" placeholder="接口状态" clearable style="width: 240px">
 							<el-option label="全部" :value="-1" />
 							<el-option label="启用" :value="1" />
 							<el-option label="禁用" :value="0" />

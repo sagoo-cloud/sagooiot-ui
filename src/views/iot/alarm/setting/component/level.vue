@@ -4,8 +4,8 @@
 			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20" v-for="(item, index) in levelData" :key="index">
-						<el-form-item :label="'级别' + item.level" prop="name">
-							<el-input v-model="item.name" placeholder="请输入分类名称"></el-input>
+						<el-form-item :label="'级别' + item.level" prop="name" required>
+							<el-input v-model.trim="item.name" placeholder="请输入告警级别名称"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>

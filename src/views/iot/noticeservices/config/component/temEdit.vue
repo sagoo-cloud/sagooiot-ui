@@ -3,11 +3,10 @@
 		<el-dialog title="设置配置模板" v-model="isShowDialog" width="50%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
 				<el-form-item label="名称" prop="title">
-					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
+					<el-input v-model.trim="ruleForm.title" placeholder="请输入名称" />
 				</el-form-item>
 
 				<!-- <el-form-item label="通知配置" prop="configId">
-       
 						<el-select v-model="ruleForm.configId" placeholder="请选择通知配置" class="w100">
 						<el-option
 						v-for="item in configData"
@@ -25,11 +24,9 @@
 					</el-radio-group>
 				</el-form-item> -->
 
-			
 				<el-form-item label="模板内容" prop="content">
-          <el-input v-model="ruleForm.content" type="textarea" placeholder="请输入内容"></el-input>
+          <el-input v-model.trim="ruleForm.content" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
-				
 
 			</el-form>
 			<template #footer>

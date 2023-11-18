@@ -12,7 +12,7 @@
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
 					<el-form-item label="模版名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入模版名称" clearablestyle="width: 240px" @keyup.enter.native="getList(1)" />
+						<el-input v-model="params.title" placeholder="请输入模版名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item>
 						<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">

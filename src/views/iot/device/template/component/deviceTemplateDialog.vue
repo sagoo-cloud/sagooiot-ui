@@ -93,10 +93,10 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<div slot="footer" class="dialog-footer" style="margin-top: 20px">
+			<template #footer class="dialog-footer">
 				<el-button @click="clsoeDialog"> 取 消 </el-button>
 				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
-			</div>
+			</template>
 		</el-dialog>
 	</div>
 </template>

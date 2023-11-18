@@ -2,16 +2,9 @@
 	<div class="system-dic-container">
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true">
-					<el-form-item label="配置名称" prop="name">
-						<el-input
-							v-model="tableData.param.title"
-							placeholder="请输入配置名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" @keyup.enter.native="dataList">
+					<el-form-item label="配置名称" prop="keyWord">
+						<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable size="default" style="width: 240px" />
 					</el-form-item>
 					<!-- <el-form-item label="通知方式" prop="name">
 						<el-input
@@ -49,18 +42,13 @@
 			<div>
 				<div style="border: 1px solid var(--next-border-color-light)"></div>
 				<el-row>
-					<el-col :span="8" v-for="(item, index) in tableData.data" :key="index"
-						><div class="grid-content card">
+					<el-col :span="8" v-for="(item, index) in tableData.data" :key="index">
+						<div class="grid-content card">
 							<div class="ant-card">
 								<div class="ant-card-body">
 									<div class="pro-table-card-item">
 										<div class="card-item-avatar">
-											<img
-												width="88"
-												height="88"
-												:src="'/imgs/notice/'+tableData.param.sendGateway+'.svg'"
-												alt=""
-											/>
+											<img width="88" height="88" :src="'/imgs/notice/' + tableData.param.sendGateway + '.svg'" alt="" />
 										</div>
 										<div class="card-item-body">
 											<div class="card-item-header">
@@ -70,18 +58,13 @@
 												</div>
 											</div>
 											<div class="card-item-content">
-												<div>
-													<label>通知方式</label>
-													<div class="">
-														<div style="width: 100%">{{item.types==1?'即时发送':'预约发送'}}</div>
-													</div>
-												</div>
-												<div>
+												通知方式：<el-tag>{{ item.types == 1 ? '即时发送' : '预约发送' }}</el-tag>
+												<!-- <div>
 													<label>说明</label>
 													<div class="ellipsis">
 														<div style="width: 100%"></div>
 													</div>
-												</div>
+												</div> -->
 											</div>
 										</div>
 									</div>
@@ -135,24 +118,18 @@
 					</el-col>
 				</el-row>
 			</div>
-			<div  style="text-align: center;padding: 28px;" v-if="(tableData.total==0)">暂无数据</div>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
+			<div style="text-align: center;padding: 28px;" v-if="(tableData.total == 0)">暂无数据</div>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		</el-card>
 
 		<EditDic ref="editDicRef" @dataList="dataList" />
 		<EditTemDic ref="temeditDicRef" @dataList="dataList" />
-	<!-- 	<LevelDic ref="levelDicRef" @dataList="dataList" /> -->
+		<!-- 	<LevelDic ref="levelDicRef" @dataList="dataList" /> -->
 	</div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref,getCurrentInstance,defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, getCurrentInstance, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/setEdit.vue';
 import EditTemDic from './component/temEdit.vue';
@@ -164,7 +141,7 @@ import { useRoute } from 'vue-router';
 // 定义接口来定义对象的类型
 interface TableDataRow {
 	id: number;
-	title: string;
+	keyWord: string;
 	sendGateway: string;
 	type: string;
 }
@@ -177,7 +154,7 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-			title: string;
+			keyWord: string;
 			sendGateway: string;
 			types: string;
 		};
@@ -186,11 +163,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic,EditTemDic },
+	components: { EditDic, EditTemDic },
 
 	setup() {
-		
-   		 const { proxy } = getCurrentInstance() as any;
+
+		const { proxy } = getCurrentInstance() as any;
 		// const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
 		const addDicRef = ref();
 		const editDicRef = ref();
@@ -200,7 +177,7 @@ export default defineComponent({
 		const route = useRoute();
 
 		const state = reactive<TableDataState>({
-			type:'',
+			type: '',
 			tableData: {
 				data: [],
 				total: 0,
@@ -208,7 +185,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 20,
-					title: '',
+					keyWord: '',
 					sendGateway: '',
 					types: '',
 				},
@@ -216,7 +193,7 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			state.tableData.param.sendGateway=route.params.id;
+			state.tableData.param.sendGateway = route.params.id;
 			dataList();
 		};
 		const dataList = () => {
@@ -230,24 +207,24 @@ export default defineComponent({
 				.finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增菜单弹窗
-		const onOpenAdd = (row?: TableDataRow ) => {
-			editDicRef.value.openDialog(null,state.tableData.param.sendGateway);
-		};
-	
-		// 打开修改模型弹窗
-		const onOpenEdit = (row: TableDataRow ) => {
-			editDicRef.value.openDialog({ ...row },state.tableData.param.sendGateway);
+		const onOpenAdd = (row?: TableDataRow) => {
+			editDicRef.value.openDialog(null, state.tableData.param.sendGateway);
 		};
 
-		const onOpenEditTem = (row: TableDataRow ) => {
-			temeditDicRef.value.opentemDialog(row.id,state.tableData.param.sendGateway);
+		// 打开修改模型弹窗
+		const onOpenEdit = (row: TableDataRow) => {
+			editDicRef.value.openDialog({ ...row }, state.tableData.param.sendGateway);
+		};
+
+		const onOpenEditTem = (row: TableDataRow) => {
+			temeditDicRef.value.opentemDialog(row.id, state.tableData.param.sendGateway);
 		};
 
 		const onRowDel = (row?: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除模型：“${row.title}”，是否继续?`;
+				msg = `此操作将永久删除：“${row.title}”，是否继续?`;
 				ids = row.id;
 			} else {
 				ids = state.ids;
@@ -267,7 +244,7 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 
 		// 页面加载时
@@ -299,7 +276,7 @@ export default defineComponent({
 			addDicRef,
 			editDicRef,
 			detailRef,
-			queryRef,			
+			queryRef,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
@@ -318,9 +295,11 @@ export default defineComponent({
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }
+
 .card {
 	padding: 10px;
 }
+
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
@@ -337,35 +316,43 @@ export default defineComponent({
 	transition: all 0.3s;
 	overflow: hidden;
 }
+
 .ant-card-body {
 	padding: 24px;
 	zoom: 1;
 	overflow: hidden;
 }
+
 .pro-table-card-item {
 	display: flex;
 }
+
 .pro-table-card-item .card-item-avatar {
 	margin-right: 16px;
 }
+
 .pro-table-card-item .card-item-body {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 	width: 0;
 }
+
 .pro-table-card-item .card-item-body .card-item-header {
 	display: flex;
 	width: calc(100% - 86px);
 	margin-bottom: 12px;
 }
+
 .pro-table-card-item .card-item-body .card-item-content {
 	display: flex;
 	flex-wrap: wrap;
 }
-.pro-table-card-item .card-item-body .card-item-content > div {
+
+.pro-table-card-item .card-item-body .card-item-content>div {
 	width: 50%;
 }
+
 .ellipsis {
 	display: -webkit-box;
 	overflow: hidden;
@@ -373,10 +360,12 @@ export default defineComponent({
 	text-overflow: ellipsis;
 	word-break: break-all;
 }
+
 .card-item-body .card-item-header .card-item-header-name {
 	font-weight: 700;
 	font-size: 16px;
 }
+
 .card-state {
 	position: absolute;
 	top: 30px;
@@ -388,21 +377,27 @@ export default defineComponent({
 	background-color: rgba(89, 149, 245, 0.15);
 	transform: skewX(45deg);
 }
+
 .card-state.success {
 	background-color: #f6ffed;
 }
+
 .iot-card .card-warp .card-content .card-state.error {
 	background-color: rgba(229, 0, 18, 0.1);
 }
+
 .card-state .card-state-content {
 	transform: skewX(-45deg);
 }
+
 .ant-badge-status-success {
 	background-color: #52c41a;
 }
+
 .ant-badge-status-error {
 	background-color: #ff4d4f;
 }
+
 .ant-badge-status-dot {
 	position: relative;
 	top: -1px;
@@ -417,14 +412,17 @@ export default defineComponent({
 	display: flex;
 	margin-top: 2px;
 }
+
 .card-tools .card-button:not(:last-child) {
 	margin-right: 8px;
 }
+
 .card-tools .card-button {
 	display: flex;
 	flex-grow: 1;
 }
-.card-tools .card-button > span,
+
+.card-tools .card-button>span,
 .card-tools .card-button button {
 	width: 100%;
 	border-radius: 0;
@@ -435,11 +433,13 @@ export default defineComponent({
 	background: transparent;
 	box-shadow: none;
 }
+
 .ant-badge-status-text {
 	margin-left: 8px;
 	color: rgba(0, 0, 0, 0.85);
 	font-size: 14px;
 }
+
 .ant-btn {
 	line-height: 1.5715;
 	position: relative;
@@ -461,10 +461,12 @@ export default defineComponent({
 	border-radius: 2px;
 
 }
-.ant-btn > .anticon {
+
+.ant-btn>.anticon {
 	line-height: 1;
 }
-.ant-btn > span {
+
+.ant-btn>span {
 	display: inline-block;
 }
 
@@ -472,11 +474,13 @@ export default defineComponent({
 	display: flex;
 	justify-content: space-between;
 }
+
 .statusname {
 	font-size: 30px;
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
+
 .comtest {
 	margin-top: 20px;
 	height: 30px;

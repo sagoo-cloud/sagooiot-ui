@@ -93,11 +93,11 @@ export default defineComponent({
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
       if (row) {
+        state.ruleForm = row;
         api.config.detail(row.configId).then((res: any) => {
-          const data: RuleFormState = res.data.data;
+          const data: RuleFormState = res.data;
           state.ruleForm = data;
         });
-        state.ruleForm = row;
       }
       state.isShowDialog = true;
     };

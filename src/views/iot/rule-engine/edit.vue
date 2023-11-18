@@ -2,14 +2,14 @@
 	<el-dialog
 		class="api-edit"
 		v-model="showDialog"
-		:title="`${formData.id ? '编辑数据转发' : '新增数据转发'}`"
+		:title="`${formData.id ? '编辑' : '新增'}`"
 		width="600px"
 		:close-on-click-modal="false"
 		:close-on-press-escape="false"
 	>
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="80px">
-			<el-form-item label="规则名称" prop="name">
-				<el-input v-model="formData.name" placeholder="输入接口名称" />
+			<el-form-item label="名称" prop="name">
+				<el-input v-model.trim="formData.name" placeholder="输入名称" />
 			</el-form-item>
 			<el-form-item label="说明" prop="expound">
 				<el-input v-model="formData.expound" type="textarea" :rows="3" />

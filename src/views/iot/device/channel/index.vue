@@ -12,10 +12,10 @@
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef" @keyup.enter.native="getList(1)">
 					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入通道名称" clearablestyle="width: 240px" />
+						<el-input v-model="params.title" placeholder="请输入通道名称" clearable style="width: 240px" />
 					</el-form-item>
 					<el-form-item label="注册码" prop="number">
-						<el-input v-model="params.number" placeholder="请输入注册码" clearablestyle="width: 240px" />
+						<el-input v-model="params.number" placeholder="请输入注册码" clearable style="width: 240px" />
 					</el-form-item>
 					<el-form-item>
 						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
@@ -88,7 +88,7 @@ const resetQuery = () => {
 };
 
 const onDel = (row: any) => {
-	ElMessageBox.confirm(`此操作将删除接口：“${row.title}”，是否继续?`, '提示', {
+	ElMessageBox.confirm(`此操作将删除通道：“${row.title}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',

@@ -1,6 +1,6 @@
 <template>
-	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="600px" :before-close="clsoeDialog" append-to-body :close-on-click-modal="false">
-		<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin: 0 auto">
+	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="500px" :before-close="clsoeDialog" append-to-body :close-on-click-modal="false">
+		<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px">
 			<el-form-item label="标题" prop="title">
 				<el-input v-model="temp.title" placeholder="请输入标题" />
 			</el-form-item>
@@ -22,10 +22,10 @@
 				</el-select>
 			</el-form-item>
 		</el-form>
-		<div slot="footer" class="dialog-footer">
+		<template #footer class="dialog-footer">
 			<el-button @click="clsoeDialog"> 取 消 </el-button>
 			<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
-		</div>
+		</template>
 	</el-dialog>
 </template>
 

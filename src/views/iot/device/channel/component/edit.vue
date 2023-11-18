@@ -2,19 +2,19 @@
 	<el-dialog title="添加设备通道" v-model="dialogVisible" width="600px" :before-close="clsoeDialog" :close-on-click-modal="false">
 		<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
 			<el-form-item label="通道名称" prop="title">
-				<el-input v-model="temp.title" placeholder="请输入通道名称" />
+				<el-input v-model.trim="temp.title" placeholder="请输入通道名称" />
 			</el-form-item>
 			<el-form-item label="注册码" prop="number">
-				<el-input v-model="temp.number" placeholder="请输入注册码" />
+				<el-input v-model.trim="temp.number" placeholder="请输入注册码" />
 			</el-form-item>
 			<el-form-item label="设备地址" prop="slaveId">
 				<el-input v-model.number="temp.slaveId" placeholder="请输入设备地址" />
 			</el-form-item>
 		</el-form>
-		<div slot="footer" class="dialog-footer">
+		<template #footer class="dialog-footer">
 			<el-button @click="clsoeDialog()"> 取 消 </el-button>
 			<el-button type="primary" @click="createData()"> 保 存 </el-button>
-		</div>
+		</template>
 	</el-dialog>
 </template>
 <script lang="ts">
