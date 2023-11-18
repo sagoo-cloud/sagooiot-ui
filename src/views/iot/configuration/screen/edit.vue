@@ -40,7 +40,7 @@ const formData = reactive({
 });
 
 const ruleForm = {
-	name: [ruleRequired('规则名称不能为空')],
+	projectName: [ruleRequired('规则名称不能为空')],
 };
 
 const onSubmit = async () => {

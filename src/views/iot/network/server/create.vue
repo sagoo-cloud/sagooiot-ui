@@ -1,35 +1,27 @@
 <template>
-	<el-card class="system-dic-container" style="position: relative;">
-		<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-			<el-tab-pane label="新建服务器" name="first">
-				<el-collapse v-model="activeViewName">
+    <el-card class="system-dic-container" style="position: relative;">
+        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+            <el-tab-pane label="新建服务器" name="first">
+                <el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
                             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
                                 <el-form-item label="名称">
-                                    <el-input v-model="form.name" placeholder="请填写名称" />
+                                    <el-input v-model="form.name" show-word-limit maxlength="20" placeholder="请填写名称" />
                                 </el-form-item>
                                 <el-form-item label="类型">
                                     <el-select @change="handleChangeType" v-model="form.types" placeholder="请选择类型">
-                                        <el-option
-                                            v-for="dict in network_server_type"
-                                            :key="dict.value"
-                                            :label="dict.label"
-                                            :value="dict.value">
+                                        <el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item v-if="form.types == 'tcp'" label="粘拆包规则">
                                     <el-select @change="initData" v-model="stickValue" placeholder="请选择类型">
-                                        <el-option
-                                            v-for="dict in stick_type"
-                                            :key="dict.value"
-                                            :label="dict.label"
-                                            :value="dict.value">
+                                        <el-option v-for="dict in stick_type" :key="dict.value" :label="dict.label" :value="dict.value">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                 <el-form-item v-if="form.types == 'tcp' && stickValue">
+                                <el-form-item v-if="form.types == 'tcp' && stickValue">
                                     <el-form-item v-if="stickValue == '分隔符'" class="flex-column" label="分隔符">
                                         <el-input v-model="stick['delimit,omitempty']" placeholder="请填写分隔符" />
                                     </el-form-item>
@@ -46,7 +38,7 @@
                                         <el-input type="number" v-model="stick['len,omitempty']['offset']" placeholder="请填写偏移量" />
                                     </el-form-item>
                                     <el-form-item v-if="stickValue == '长度字段'" class="flex-column" label="大小端">
-                                        <el-select  v-model="stick['len,omitempty']['endian']" placeholder="请选择大小端">
+                                        <el-select v-model="stick['len,omitempty']['endian']" placeholder="请选择大小端">
                                             <el-option label="大端" value="大端" />
                                             <el-option label="小端" value="小端" />
                                         </el-select>
@@ -56,23 +48,19 @@
                                     <el-input v-model="form.addr" placeholder="端口号" />
                                 </el-form-item>
                                 <el-form-item label="开启TLS">
-                                       <el-radio-group v-model="form.isTls" class="ml-4">
-                                            <el-radio :label="1">是</el-radio>
-                                            <el-radio :label="0">否</el-radio>
-                                        </el-radio-group>
+                                    <el-radio-group v-model="form.isTls" class="ml-4">
+                                        <el-radio :label="1">是</el-radio>
+                                        <el-radio :label="0">否</el-radio>
+                                    </el-radio-group>
                                 </el-form-item>
                                 <el-form-item v-if="form.isTls == 1 && form.types != 'mqtt_server'" label="选择证书">
                                     <el-select v-model="form.certificateId" placeholder="请选择证书">
-                                        <el-option
-                                            v-for="item in certificateList"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
+                                        <el-option v-for="item in certificateList" :key="item.id" :label="item.name" :value="item.id">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                 <el-form-item v-if="form.isTls == 1 && form.types == 'mqtt_server'" label="接入方式">
-                                     <el-select  v-model="form.authType" placeholder="选择接入方式">
+                                <el-form-item v-if="form.isTls == 1 && form.types == 'mqtt_server'" label="接入方式">
+                                    <el-select v-model="form.authType" placeholder="选择接入方式">
                                         <el-option label="Basic" :value="1" />
                                         <el-option label="AccessToken" :value="2" />
                                         <!-- <el-option label="证书" :value="3" /> -->
@@ -104,11 +92,7 @@
                         <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
                             <el-form-item label="协议">
                                 <el-select v-model="form.protocol.name" placeholder="请选择协议适配">
-                                    <el-option
-                                        v-for="dict in network_protocols"
-                                        :key="dict.value"
-                                        :label="dict.label"
-                                        :value="dict.value">
+                                    <el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value">
                                     </el-option>
                                     <!-- <el-option label="Modbus RTU" value="Modbus RTU" />
                                     <el-option label="Modbus TCP" value="Modbus TCP" />
@@ -124,31 +108,28 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="协议参数">
-                                <codeEditor class="params" ref="mirrorRef"
-                                :mode="resourceModalPro.mode"
-                                :content="resourceModalPro.content"
-                                >
+                                <codeEditor class="params" ref="mirrorRef" :mode="resourceModalPro.mode" :content="resourceModalPro.content">
                                 </codeEditor>
                             </el-form-item>
                         </el-form>
                     </el-collapse-item>
                 </el-collapse>
-			</el-tab-pane>
-			<!-- <el-tab-pane label="专家视图" name="second">
+            </el-tab-pane>
+            <!-- <el-tab-pane label="专家视图" name="second">
                 <h1>专家视图</h1>
             </el-tab-pane> -->
-		</el-tabs>
-		<div style="position: absolute;right:20px;top: 20px;">
-			<el-button size="medium" @click="goBack">取消</el-button>
+        </el-tabs>
+        <div style="position: absolute;right:20px;top: 20px;">
+            <el-button size="medium" @click="$router.replace('/iotmanager/network/server')">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
-		</div>
+        </div>
 
-	  	 <!-- <codeEditor ref="mirrorRef"
+        <!-- <codeEditor ref="mirrorRef"
 	  :mode="resourceModalPro.mode"
 	  :content="resourceModalPro.content"
 	  >
 	  </codeEditor> -->
-	</el-card>
+    </el-card>
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
@@ -165,15 +146,15 @@ import api from '/@/api/network';
 import api2 from '/@/api/system';
 
 interface TableDataState {
-	// ids: number[];
-	// id: string;
+    // ids: number[];
+    // id: string;
     activeViewName: string[];
-	resourceModalPro: {
-		mode: string,
-		content: string,
-		// content: object,
-	},
-	detail: object,
+    resourceModalPro: {
+        mode: string,
+        content: string,
+        // content: object,
+    },
+    detail: object,
     form: object,
     certificateList: object[];
     stick: {
@@ -195,21 +176,21 @@ interface TableDataState {
 
 }
 export default defineComponent({
-	name: 'serverCreate',
-	components: { codeEditor, serverDetail },
-	props: {
-		type: {
-			type: String,
-			default: ''
-		}
-	},
+    name: 'serverCreate',
+    components: { codeEditor, serverDetail },
+    props: {
+        type: {
+            type: String,
+            default: ''
+        }
+    },
 
-	setup(props, context) {
+    setup(props, context) {
         const { proxy } = getCurrentInstance() as any;
-		const route = useRoute();
+        const route = useRoute();
         const router = useRouter();
         const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
-		
+
         const state = reactive<TableDataState>({
             stickValue: "",
             stick: {
@@ -240,14 +221,14 @@ export default defineComponent({
                     value: "长度字段"
                 }
             ],
-			resourceModalPro: {
-				mode: '',
-				content: ''
-			},
-			detail:{},
-            activeViewName: ['1','2','3'],
+            resourceModalPro: {
+                mode: '',
+                content: ''
+            },
+            detail: {},
+            activeViewName: ['1', '2', '3'],
             certificateList: [],
-            form:{
+            form: {
                 id: "",
                 // AccessToken
                 accessToken: "",
@@ -288,17 +269,17 @@ export default defineComponent({
                 // 设备
                 devices: []
             }
-		});
+        });
         const mirrorRef = ref('mirrorRef')
-		const activeName = ref('first')
-		const getDetail = () => {
-			const id = route.params && route.params.id;
-			api.tunnel.getDetail({"id": id}).then((res: any) => {
-				state.detail = res
-			})
-		};
+        const activeName = ref('first')
+        const getDetail = () => {
+            const id = route.params && route.params.id;
+            api.tunnel.getDetail({ "id": id }).then((res: any) => {
+                state.detail = res
+            })
+        };
         const submit = () => {
-            if(!state.form.id) {
+            if (!state.form.id) {
                 delete state.form.id;
             }
             let params = {
@@ -307,7 +288,7 @@ export default defineComponent({
                     ...state.stick
                 }
             }
-            if(mirrorRef.value.getValue()) {
+            if (mirrorRef.value.getValue()) {
                 state.form.protocol.options = eval("(" + mirrorRef.value.getValue() + ")")
             }
             // return
@@ -318,25 +299,22 @@ export default defineComponent({
                 // state.data = list
                 // state.total = total
                 // state.param.page = page
-			});
+            });
         };
-        const goBack = () => {
-            router.go(-1);
-        }
-		onMounted(() => {
-            
-			let obj = {}
-			var jsonData = JSON.stringify(obj);
-			state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+        onMounted(() => {
+
+            let obj = {}
+            var jsonData = JSON.stringify(obj);
+            state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData), null, 4);
             getCertificateList()
-		});
-		const handleClick = (tab: TabsPaneContext, event: Event) => {
-		}
+        });
+        const handleClick = (tab: TabsPaneContext, event: Event) => {
+        }
         const getCertificateList = () => {
             api2.certificate.getList().then((res: any) => {
                 state.certificateList = res.Info;
-			})
-		}
+            })
+        }
         const initData = () => {
             state.stick = {
                 "delimit,omitempty": "",
@@ -350,85 +328,89 @@ export default defineComponent({
             }
         }
         const handleChangeType = () => {
-            if(state.form.types != 'mqtt_server' && state.form.isTls == 1) {
+            if (state.form.types != 'mqtt_server' && state.form.isTls == 1) {
                 state.form.authType = 3
                 return;
             }
-            if(state.form.isTls == 0) {
+            if (state.form.isTls == 0) {
                 state.form.authType = ""
             }
         }
-		watch(
-			() => state.form.types,
-			(value) => {
+        watch(
+            () => state.form.types,
+            (value) => {
                 getCertificateList()
                 // api.certificate.getList();
-			}
-		);
+            }
+        );
 
         watch(
-			() => state.form.isTls,
-			(value) => {
-                if(value == 0) {
+            () => state.form.isTls,
+            (value) => {
+                if (value == 0) {
                     state.form.authType = ""
                 }
                 // api.certificate.getList();
-			}
-		);
-		return {
-			Edit,
+            }
+        );
+        return {
+            Edit,
             mirrorRef,
-			activeName,
-			getDetail,
-			handleClick,
+            activeName,
+            getDetail,
+            handleClick,
             network_server_type,
             network_protocols,
-			// editDicRef,
-			// editAttrRef,
-			// editFunRef,
-			// editEventRef,
-			// editTabRef,
+            // editDicRef,
+            // editAttrRef,
+            // editFunRef,
+            // editEventRef,
+            // editTabRef,
             getCertificateList,
             submit,
-            goBack,
             initData,
             handleChangeType,
-			...toRefs(props),
-			...toRefs(state),
-		};
-	},
+            ...toRefs(props),
+            ...toRefs(state),
+        };
+    },
 });
 </script>
 
 <style>
 .CodeMirror {
-  width: 100%;
-  height: 600px;
-  font-size: 16px;
+    width: 100%;
+    height: 600px;
+    font-size: 16px;
 }
 </style>
 <style lang="scss" scoped>
 ::v-deep .el-collapse-item__header {
     position: relative;
     padding-left: 20px;
+
     .el-collapse-item__arrow {
-        margin: 0!important;
+        margin: 0 !important;
         position: absolute;
         left: 0;
         right: 0;
-        
+
     }
 }
+
 ::v-deep .el-input,
 ::v-deep .el-input-number {
     width: 500px;
 }
+
 ::v-deep .params {
     width: 600px;
 }
+
 ::v-deep .flex-column {
     display: flex;
     flex-direction: column;
+
     .el-form-item__label {
         justify-content: flex-start;
     }

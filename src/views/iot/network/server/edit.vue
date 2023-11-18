@@ -1,35 +1,27 @@
 <template>
-	<el-card class="system-dic-container" style="position: relative;">
-		<el-tabs v-model="activeName" class="demo-tabs">
-			<el-tab-pane label="编辑服务器" name="first">
-				<el-collapse v-model="activeViewName">
+    <el-card class="system-dic-container" style="position: relative;">
+        <el-tabs v-model="activeName" class="demo-tabs">
+            <el-tab-pane label="编辑服务器" name="first">
+                <el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
                             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
                                 <el-form-item label="名称">
-                                    <el-input v-model="form.name" placeholder="请填写名称" />
+                                    <el-input v-model="form.name" show-word-limit maxlength="20" placeholder="请填写名称" />
                                 </el-form-item>
                                 <el-form-item label="类型">
                                     <el-select @change="handleChangeType" v-model="form.types" placeholder="请选择类型">
-                                        <el-option
-                                            v-for="dict in network_server_type"
-                                            :key="dict.value"
-                                            :label="dict.label"
-                                            :value="dict.value">
+                                        <el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item v-if="form.types == 'tcp'" label="粘拆包规则">
                                     <el-select @change="initData" v-model="stickValue" placeholder="请选择类型">
-                                        <el-option
-                                            v-for="dict in stick_type"
-                                            :key="dict.value"
-                                            :label="dict.label"
-                                            :value="dict.value">
+                                        <el-option v-for="dict in stick_type" :key="dict.value" :label="dict.label" :value="dict.value">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                 <el-form-item v-if="form.types == 'tcp' && stickValue">
+                                <el-form-item v-if="form.types == 'tcp' && stickValue">
                                     <el-form-item v-if="stickValue == '分隔符'" class="flex-column" label="分隔符">
                                         <el-input v-model="stick['delimit,omitempty']" placeholder="请填写分隔符" />
                                     </el-form-item>
@@ -46,7 +38,7 @@
                                         <el-input type="number" v-model="stick['len,omitempty']['offset']" placeholder="请填写偏移量" />
                                     </el-form-item>
                                     <el-form-item v-if="stickValue == '长度字段'" class="flex-column" label="大小端">
-                                        <el-select  v-model="stick['len,omitempty']['endian']" placeholder="请选择大小端">
+                                        <el-select v-model="stick['len,omitempty']['endian']" placeholder="请选择大小端">
                                             <el-option label="大端" value="大端" />
                                             <el-option label="小端" value="小端" />
                                         </el-select>
@@ -56,23 +48,19 @@
                                     <el-input v-model="form.addr" placeholder="端口号" />
                                 </el-form-item>
                                 <el-form-item label="开启TLS">
-                                       <el-radio-group v-model="form.isTls" class="ml-4">
-                                            <el-radio :label="1">是</el-radio>
-                                            <el-radio :label="0">否</el-radio>
-                                        </el-radio-group>
+                                    <el-radio-group v-model="form.isTls" class="ml-4">
+                                        <el-radio :label="1">是</el-radio>
+                                        <el-radio :label="0">否</el-radio>
+                                    </el-radio-group>
                                 </el-form-item>
                                 <el-form-item v-if="form.isTls == 1 && form.types != 'mqtt_server'" label="选择证书">
                                     <el-select v-model="form.certificateId" placeholder="请选择证书">
-                                        <el-option
-                                            v-for="item in certificateList"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
+                                        <el-option v-for="item in certificateList" :key="item.id" :label="item.name" :value="item.id">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item v-if="form.isTls == 1 && form.types == 'mqtt_server'" label="接入方式">
-                                     <el-select  v-model="form.authType" placeholder="选择接入方式">
+                                    <el-select v-model="form.authType" placeholder="选择接入方式">
                                         <el-option label="Basic" :value="1" />
                                         <el-option label="AccessToken" :value="2" />
                                         <!-- <el-option label="证书" :value="3" /> -->
@@ -104,31 +92,24 @@
                         <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
                             <el-form-item label="协议">
                                 <el-select v-model="form.protocol.name" placeholder="请选择协议适配">
-                                    <el-option
-                                        v-for="dict in network_protocols"
-                                        :key="dict.value"
-                                        :label="dict.label"
-                                        :value="dict.value">
+                                    <el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="协议参数">
-                                <codeEditor class="params" ref="mirrorRef"
-                                :mode="resourceModalPro.mode"
-                                :content="resourceModalPro.content"
-                                >
+                                <codeEditor class="params" ref="mirrorRef" :mode="resourceModalPro.mode" :content="resourceModalPro.content">
                                 </codeEditor>
                             </el-form-item>
                         </el-form>
                     </el-collapse-item>
                 </el-collapse>
-			</el-tab-pane>
-		</el-tabs>
-		<div style="position: absolute;right:20px;top: 20px;">
-			<el-button size="medium" @click="goBack">取消</el-button>
+            </el-tab-pane>
+        </el-tabs>
+        <div style="position: absolute;right:20px;top: 20px;">
+            <el-button size="medium" @click="$router.replace('/iotmanager/network/server')">取消</el-button>
             <el-button @click="submit" size="medium" type="primary">提交</el-button>
-		</div>
-	</el-card>
+        </div>
+    </el-card>
 </template>
 <script lang="ts">
 import { watch, toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
@@ -145,11 +126,11 @@ import api2 from '/@/api/system';
 
 interface TableDataState {
     activeViewName: string[];
-	resourceModalPro: {
-		mode: string,
-		content: string,
-	},
-	detail: object,
+    resourceModalPro: {
+        mode: string,
+        content: string,
+    },
+    detail: object,
     form: object,
     certificateList: object[];
     stick: {
@@ -170,21 +151,21 @@ interface TableDataState {
     stickValue: string;
 }
 export default defineComponent({
-	name: 'serverCreate',
-	components: { codeEditor, serverDetail },
-	props: {
-		type: {
-			type: String,
-			default: ''
-		}
-	},
+    name: 'serverCreate',
+    components: { codeEditor, serverDetail },
+    props: {
+        type: {
+            type: String,
+            default: ''
+        }
+    },
 
-	setup(props, context) {
+    setup(props, context) {
         const { proxy } = getCurrentInstance() as any;
-		const route = useRoute();
+        const route = useRoute();
         const router = useRouter();
         const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
-		
+
         const state = reactive<TableDataState>({
             // id: "",
             stickValue: "",
@@ -216,14 +197,14 @@ export default defineComponent({
                     value: "长度字段"
                 }
             ],
-			resourceModalPro: {
-				mode: '',
-				content: ''
-			},
+            resourceModalPro: {
+                mode: '',
+                content: ''
+            },
             certificateList: [],
-			detail:{},
-            activeViewName: ['1','2','3'],
-            form:{
+            detail: {},
+            activeViewName: ['1', '2', '3'],
+            form: {
                 // 名称
                 name: '',
                 // AccessToken
@@ -263,14 +244,14 @@ export default defineComponent({
                 // 设备
                 devices: []
             }
-		});
+        });
         const mirrorRef = ref('mirrorRef')
-		const activeName = ref('first')
-		const getDetail = () => {
-			const id = route.params && route.params.id;
-			api.server.getDetail({"id": id}).then((res: any) => {
-                
-                const {id, isTls, authType, certificateId, authUser, authPasswd, accessToken, name, types, status, addr, register, protocol, heartbeat, devices, stick} = res
+        const activeName = ref('first')
+        const getDetail = () => {
+            const id = route.params && route.params.id;
+            api.server.getDetail({ "id": id }).then((res: any) => {
+
+                const { id, isTls, authType, certificateId, authUser, authPasswd, accessToken, name, types, status, addr, register, protocol, heartbeat, devices, stick } = res
                 state.form["id"] = id
                 state.form["name"] = name
                 state.form["types"] = types
@@ -287,32 +268,32 @@ export default defineComponent({
                 state.form["heartbeat"] = JSON.parse(heartbeat)
                 state.form["devices"] = JSON.parse(devices)
                 let stickInfo = JSON.parse(stick)
-                if(stickInfo.len && stickInfo.len.endian) {
+                if (stickInfo.len && stickInfo.len.endian) {
                     state.stick["len,omitempty"] = stickInfo.len
-                }else if(stickInfo.fixedLen) {
+                } else if (stickInfo.fixedLen) {
                     state.stick["fixedLen,omitempty"] = stickInfo.fixedLen
-                }else if(stickInfo.custom) {
+                } else if (stickInfo.custom) {
                     state.stick["custom,omitempty"] = stickInfo.custom
-                }else if(stickInfo.delimit) {
+                } else if (stickInfo.delimit) {
                     state.stick["delimit,omitempty"] = stickInfo.delimit
                 }
-                if(types == 'tcp') {
-                    if(state.stick['delimit,omitempty']) {
+                if (types == 'tcp') {
+                    if (state.stick['delimit,omitempty']) {
                         state.stickValue = '分隔符'
-                    }else if(state.stick['custom,omitempty']) {
+                    } else if (state.stick['custom,omitempty']) {
                         state.stickValue = '自定义脚本'
-                    }else if(state.stick['fixedLen,omitempty']) {
+                    } else if (state.stick['fixedLen,omitempty']) {
                         state.stickValue = '固定长度'
-                    }else if(state.stick['len,omitempty']) {
+                    } else if (state.stick['len,omitempty']) {
                         state.stickValue = '长度字段'
                     }
                 }
 
                 let jsonData = JSON.stringify(JSON.parse(protocol).options);
-				state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData),null,4);
+                state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData), null, 4);
                 mirrorRef.value.setValue(state.resourceModalPro.content);
-			})
-		};
+            })
+        };
         const submit = () => {
             let params = {
                 ...state.form,
@@ -320,14 +301,14 @@ export default defineComponent({
                     ...state.stick
                 }
             }
-            if(mirrorRef.value.getValue()) {
+            if (mirrorRef.value.getValue()) {
                 state.form.protocol.options = eval("(" + mirrorRef.value.getValue() + ")")
             }
             // return
             api.server.editItem(params).then((res: any) => {
                 ElMessage.success('修改成功')
                 goBack()
-			});
+            });
         };
         const goBack = () => {
             router.go(-1);
@@ -345,64 +326,67 @@ export default defineComponent({
             }
         }
         const handleChangeType = () => {
-            if(state.form.types != 'mqtt_server' && state.form.isTls == 1) {
+            if (state.form.types != 'mqtt_server' && state.form.isTls == 1) {
                 state.form.authType = 3
                 return;
             }
-            if(state.form.isTls == 0) {
+            if (state.form.isTls == 0) {
                 state.form.authType = ""
             }
         }
         const getCertificateList = () => {
             api2.certificate.getList().then((res: any) => {
                 state.certificateList = res.Info;
-			})
-		}
+            })
+        }
         watch(
-			() => state.form.isTls,
-			(value) => {
-                if(value == 0) {
+            () => state.form.isTls,
+            (value) => {
+                if (value == 0) {
                     state.form.authType = ""
                 }
-			}
-		);
-		onMounted(() => {
+            }
+        );
+        onMounted(() => {
             getDetail();
             getCertificateList();
-		});
+        });
 
-		return {
+        return {
             mirrorRef,
-			activeName,
-			getDetail,
+            activeName,
+            getDetail,
             network_server_type,
             network_protocols,
             submit,
             initData,
             handleChangeType,
             getCertificateList,
-			...toRefs(props),
-			...toRefs(state),
-		};
-	},
+            ...toRefs(props),
+            ...toRefs(state),
+        };
+    },
 });
 </script>
 <style lang="scss" scoped>
 ::v-deep .el-collapse-item__header {
     position: relative;
     padding-left: 20px;
+
     .el-collapse-item__arrow {
-        margin: 0!important;
+        margin: 0 !important;
         position: absolute;
         left: 0;
         right: 0;
-        
+
     }
 }
+
 ::v-deep .el-input,
 ::v-deep .el-input-number {
     width: 500px;
 }
+
 ::v-deep .params {
     width: 600px;
 }
@@ -410,10 +394,10 @@ export default defineComponent({
 ::v-deep .flex-column {
     display: flex;
     flex-direction: column;
+
     .el-form-item__label {
         justify-content: flex-start;
     }
 }
-
 </style>
 

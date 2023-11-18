@@ -3,7 +3,7 @@
         <el-table v-loading="loading" :data="data" style="width: 100%">
             <el-table-column align="center" prop="id" v-col="'id'" label="ID" width="80"/>
             <el-table-column align="center" prop="name" v-col="'name'" label="名称"/>
-            <el-table-column align="center" prop="types" v-col="'type'" label="类型"/>
+            <el-table-column align="center" prop="types" v-col="'type'" label="类型" :formatter="(a:any) => typesFormat(a.types)"/>
             <el-table-column align="center" prop="addr" v-col="'address'" label="地址"/>
             <el-table-column show-overflow-tooltip align="center" v-col="'createTime'" prop="createdAt" label="创建时间" width="170"/>
             <el-table-column align="center" prop="types" v-col="'status'" label="状态">
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, reactive, onMounted, nextTick, computed, watch, defineComponent } from 'vue';
+import { ref, toRefs, reactive, onMounted, getCurrentInstance, unref, watch, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -85,6 +85,15 @@ export default defineComponent({
 		},
     },
     setup(props, { emit }) {
+
+        const { proxy } = getCurrentInstance() as any;
+
+        const { network_tunnel_type } = proxy.useDict('network_tunnel_type');
+
+        const typesFormat = (types: string) => {
+            return proxy.selectDictLabel(unref(network_tunnel_type), types);
+        };
+
         const router = useRouter();
         const state = reactive<TableData>({
 			data: [],
@@ -95,8 +104,6 @@ export default defineComponent({
                 pageSize: 10,
             },
             isShowMore: true
-            
-            
 		});
         // 改变状态
         const onChangeStatus = (id: number, status: number) => {
@@ -158,17 +165,6 @@ export default defineComponent({
         const toEdit = (id: number) => {
             router.push(`/iotmanager/network/tunnel/edit/${id}`)
         };
-        // 监听双向绑定 keyWord 的变化
-		watch(
-            () => props.keyWord,
-            // 新数据
-            () => {
-                fetchList()
-            },
-            {   deep: true,
-                immediate: true
-            },
-        );
         // 页面加载时
 		onMounted(() => {
 			initTableData();
@@ -181,6 +177,7 @@ export default defineComponent({
             onRowDel,
             onHandleSizeChange,
             onHandleCurrentChange,
+            typesFormat,
             ...toRefs(state),
         };
     }

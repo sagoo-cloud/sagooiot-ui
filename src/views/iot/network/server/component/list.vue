@@ -1,159 +1,50 @@
 <template>
   <div>
-    <el-table
-      v-loading="loading"
-      :data="data"
-      style="width: 100%"
-    >
-      <el-table-column
-        align="center"
-        prop="id"
-        label="ID"
-        width="80"
-        v-col="'id'"
-      />
+    <el-table v-loading="loading" :data="data" style="width: 100%">
+      <el-table-column align="center" prop="id" label="ID" width="80" v-col="'id'" />
       <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
-      <el-table-column
-        align="center"
-        prop="name"
-        label="名称"
-        v-col="'name'"
-      />
-      <el-table-column
-        align="center"
-        prop="types"
-        label="类型"
-        v-col="'types'"
-      />
-      <el-table-column
-        align="center"
-        prop="addr"
-        label="地址"
-        v-col="'addr'"
-      />
-      <el-table-column
-        show-overflow-tooltip
-        align="center"
-        prop="createdAt"
-        label="创建时间"
-        width="170"
-        v-col="'createdAt'"
-      />
+      <el-table-column align="center" prop="name" label="名称" v-col="'name'" />
+      <el-table-column align="center" prop="types" v-col="'types'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />
+      <el-table-column align="center" prop="addr" label="地址" v-col="'addr'" />
+      <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间" width="170" v-col="'createdAt'" />
       <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
-      <el-table-column
-        align="center"
-        prop="types"
-        label="状态"
-        v-col="'status'"
-      >
+      <el-table-column align="center" prop="types" label="状态" v-col="'status'">
         <template #default="scope">
-          <el-tag
-            v-if="!scope.row.status"
-            class="ml-2"
-            type="info"
-          >未启动</el-tag>
-          <el-tag
-            v-else
-            class="ml-2"
-            type="success"
-          >启动</el-tag>
+          <el-tag v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
+          <el-tag v-else class="ml-2" type="success">启动</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="操作"
-        width="200"
-        v-col="'auth'"
-      >
+      <el-table-column align="center" label="操作" width="200" v-col="'auth'">
         <template #default="scope">
 
-          <el-button
-            @click="toDetail(scope.row.id)"
-            size="small"
-            type="text"
-            v-auth="'detail'"
-          >详情</el-button>
-          <el-button
-            size="small"
-            link
-            key="info"
-            type="info"
-            v-auth="'edit'"
-            @click="toEdit(scope.row.id)"
-          >编辑</el-button>
+          <el-button @click="toDetail(scope.row.id)" size="small" type="text" v-auth="'detail'">详情</el-button>
+          <el-button size="small" link key="info" type="info" v-auth="'edit'" @click="toEdit(scope.row.id)">编辑</el-button>
 
-          <el-popover
-            placement="bottom"
-            :width="170"
-            trigger="click"
-          >
+          <el-popover placement="bottom" :width="170" trigger="click">
             <template #reference>
-              <el-button
-                size="small"
-                type="text"
-                class="more-btn"
-                @click="isShowMore = !isShowMore"
-                v-auth="'more'"
-              >更多
-                <i
-                  style="margin-left: 2px;"
-                  :class="isShowMore ? 'fa fa-angle-down':'fa fa-angle-up'"
-                ></i>
+              <el-button size="small" type="text" class="more-btn" @click="isShowMore = !isShowMore" v-auth="'more'">更多
+                <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down' : 'fa fa-angle-up'"></i>
               </el-button>
             </template>
             <div class="more-opearte-wrap">
-              <el-button
-                @click="onChangeStatus(scope.row.id, 1)"
-                :disabled="scope.row.status"
-                link
-                size="small"
-                key="success"
-                type="success"
-                v-auth="'on'"
-              >启 用</el-button>
+              <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" link size="small" key="success" type="success" v-auth="'on'">启 用</el-button>
               <el-divider direction="vertical" />
-              <el-button
-                @click="onChangeStatus(scope.row.id, 0)"
-                :disabled="!scope.row.status"
-                link
-                size="small"
-                key="warning"
-                type="warning"
-                v-auth="'off'"
-              >禁 用</el-button>
+              <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" link size="small" key="warning" type="warning" v-auth="'off'">禁 用</el-button>
               <el-divider direction="vertical" />
-              <el-button
-                @click="onRowDel(scope.row)"
-                link
-                size="small"
-                key="danger"
-                type="danger"
-                v-auth="'delete'"
-              >删 除</el-button>
+              <el-button @click="onRowDel(scope.row)" link size="small" key="danger" type="danger" v-auth="'delete'">删 除</el-button>
             </div>
           </el-popover>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="onHandleSizeChange"
-      @current-change="onHandleCurrentChange"
-      class="mt15"
-      :pager-count="5"
-      :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]"
-      v-model:current-page="param.page"
-      background
-      v-model:page-size="param.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
+    <el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="param.page" background v-model:page-size="param.pageSize"
+      layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </div>
-
 </template>
 
 <script lang="ts">
-import { ref, toRefs, reactive, onMounted, nextTick, computed, watch, defineComponent } from 'vue';
+import { ref, toRefs, reactive, onMounted, nextTick, getCurrentInstance, unref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -188,6 +79,15 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const router = useRouter();
+
+    const { proxy } = getCurrentInstance() as any;
+
+    const { network_server_type } = proxy.useDict('network_server_type');
+
+    const typesFormat = (types: string) => {
+      return proxy.selectDictLabel(unref(network_server_type), types);
+    };
+
     const state = reactive<TableData>({
       data: [],
       total: 0,
@@ -260,18 +160,6 @@ export default defineComponent({
     const toEdit = (id: number) => {
       router.push(`/iotmanager/network/server/edit/${id}`)
     };
-    // 监听双向绑定 keyWord 的变化
-    watch(
-      () => props.keyWord,
-      // 新数据
-      () => {
-        fetchList()
-      },
-      {
-        deep: true,
-        immediate: true
-      },
-    );
     // 页面加载时
     onMounted(() => {
       initTableData();
@@ -280,6 +168,7 @@ export default defineComponent({
       fetchList,
       toDetail,
       toEdit,
+      typesFormat,
       onChangeStatus,
       onRowDel,
       onHandleSizeChange,
@@ -292,10 +181,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 ::v-deep div.more-opearte-wrap {
-	flex-direction: row;
-	background-color: pink;
-	// padding: 4px!important;
-	div {
-	}
+  flex-direction: row;
+  background-color: pink;
+
+  // padding: 4px!important;
+  div {}
 }
 </style>
