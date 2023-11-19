@@ -22,18 +22,18 @@
 				</el-form-item>
 				<el-divider content-position="left">数据源配置</el-divider>
 
-				<div v-if="ruleForm.from == 1">
-					<el-form-item label="请求方法">
-						<el-select v-model="config.method" placeholder="请选择请求方法">
+				<div v-if="ruleForm.from == 1" >
+					<el-form-item label="请求方法" prop="method">
+						<el-select v-model="config.method" placeholder="请选择请求方法" >
 							<el-option v-for="item in methodData" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>
 
-					<el-form-item label="请求地址">
+					<el-form-item label="请求地址" prop="url">
 						<el-input v-model="config.url" placeholder="请输入请求地址" />
 					</el-form-item>
 
-					<el-form-item label="定时请求">
+					<el-form-item label="定时请求" prop="cronExpression">
 						<div style="display:flex">
 							<el-input v-model="config.cronExpression" placeholder="请输入cron表达式" />
 							<el-button type="success" @click="showCron('config')" style="    margin-left: 5px;">设置</el-button>
@@ -74,7 +74,7 @@
 				</div>
 
 				<div v-if="ruleForm.from == 4">
-					<el-form-item label="选择设备">
+					<el-form-item label="选择设备" prop="deviceKey">
 						<el-select v-model="devconfig.deviceKey" filterable placeholder="请选择设备" @change="setNode">
 							<el-option v-for="item in sourceData" :key="item.id" :label="item.key" :value="item.id">
 								<span style="float: left">{{ item.name }}</span>
@@ -96,25 +96,25 @@
 					</el-form-item>
 
 					<div class="inline">
-						<el-form-item label="主机地址">
+						<el-form-item label="主机地址" prop="host">
 							<el-input v-model="tabconfig.host" placeholder="请输入主机地址" />
 						</el-form-item>
 
-						<el-form-item label="端口号">
+						<el-form-item label="端口号" prop="port">
 							<el-input v-model="tabconfig.port" placeholder="请输入端口号" />
 						</el-form-item>
 					</div>
 					<div class="inline">
-						<el-form-item label="用户名">
+						<el-form-item label="用户名" prop="user">
 							<el-input v-model="tabconfig.user" placeholder="请输入用户名" />
 						</el-form-item>
 
-						<el-form-item label="密码">
+						<el-form-item label="密码" prop="passwd">
 							<el-input v-model="tabconfig.passwd" placeholder="请输入密码" />
 						</el-form-item>
 					</div>
 
-					<el-form-item label="数据库名称">
+					<el-form-item label="数据库名称" prop="dbName">
 						<el-input v-model="tabconfig.dbName" placeholder="请输入数据库名称" />
 					</el-form-item>
 
@@ -126,21 +126,21 @@
 						</el-radio-group>
 					</el-form-item>
 
-					<el-form-item label="">
+					<el-form-item label="" prop="tableName">
 						<el-input v-model="tabconfig.tableName" type="textarea" :placeholder="tabconfig.queryType == 'sql' ? '请输入sql语句' : '请输入表名称'" />
 					</el-form-item>
 
-					<el-form-item label="主键字段">
+					<el-form-item label="主键字段" prop="pk">
 						<el-input v-model="tabconfig.pk" placeholder="请输入主键字段" />
 					</el-form-item>
 
-					<el-form-item label="每次获取数量">
+					<el-form-item label="每次获取数量" prop="num">
 						<el-input v-model="tabconfig.num" placeholder="请输入每次获取数量" />
 					</el-form-item>
 
-					<el-form-item label="任务表达式">
+					<el-form-item label="任务表达式" prop="tabcronExpression">
 
-						<div style="display:flex">
+						<div style="display:flex" >
 							<el-input v-model="tabconfig.cronExpression" placeholder="请输入cron任务表达式" />
 							<el-button type="success" @click="showCron('tabconfig')" style="    margin-left: 5px;">设置</el-button>
 
@@ -179,6 +179,7 @@ import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import 'vue3-json-viewer/dist/index.css';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
+import { validateNoSpace } from '/@/utils/validator';
 
 import { ElMessage } from 'element-plus';
 import { Delete, CircleClose, } from '@element-plus/icons-vue';
@@ -229,7 +230,9 @@ export default defineComponent({
 			crontype: '',
 			config: {},
 			devconfig: {},
-			tabconfig: {},
+			tabconfig: {
+				type:'mysql'
+			},
 			sourceData: [],
 			sourceId: 0,
 			jsonData: '',
@@ -312,8 +315,26 @@ export default defineComponent({
 			ruleForm: JSON.parse(JSON.stringify(baseFrom)),
 			rules: {
 				key: [{ required: true, message: '数据源标识不能为空', trigger: 'blur' }],
-				name: [{ required: true, message: '数据源名称不能为空', trigger: 'blur' }],
+				name: [ { required: true, message: '数据源名称不能为空', trigger: 'blur' },
+        				{ max: 32, message: '数据源名称不能超过32个字符', trigger: 'blur' },
+						{ validator: validateNoSpace, message: '数据源名称不能包含空格', trigger: 'blur' }
+					],
 				from: [{ required: true, message: '数据源类型不能为空', trigger: 'blur' }],
+				method: [{ required: true, message: '请求方法不能为空', trigger: 'blur', when: (formItem:any) => formItem.from === 1 }],
+				url: [{ required: true, message: '请求地址不能为空', trigger: 'blur', when: (formItem:any) => formItem.from === 1 }],
+				cronExpression: [{ required: true, message: '定时请求不能为空', trigger: 'blur', when: (formItem:any) => formItem.from === 1 }],
+				deviceKey: [{ required: true, message: '请选择设备', trigger: 'blur', when: (formItem:any) => formItem.from === 2 }],
+				type: [{ required: true, message: '请选择数据来源', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				host: [{ required: true, message: '请输入主机地址', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				port: [{ required: true, message: '请输入端口号', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				user: [{ required: true, message: '请输入用户名', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				passwd: [{ required: true, message: '请输入密码', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				dbName: [{ required: true, message: '请输入数据库名称', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				queryType: [{ required: true, message: '请选择执行方式', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				tableName: [{ required: true, message: '该项不能为空', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				pk: [{ required: true, message: '请输入主键字段', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				num: [{ required: true, message: '请输入每次获取数量', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
+				tabcronExpression: [{ required: true, message: '请输入cron任务表达式', trigger: 'blur', when: (formItem:any) => formItem.from === 3 }],
 			},
 		});
 		const delParams = (index) => {
@@ -394,7 +415,9 @@ export default defineComponent({
 		};
 		const resetForm = () => {
 			state.devconfig = {};
-			state.tabconfig = {};
+			state.tabconfig = {
+				type:'mysql'
+			};
 			state.config = { ...baseFrom.config };
 			state.ruleForm = JSON.parse(JSON.stringify(baseFrom))
 		};
