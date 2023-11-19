@@ -1,6 +1,6 @@
 <template>
   <div class="ota-edit-module-container">
-    <el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'升级包'" v-model="isShowDialog" width="769px">
+    <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '升级包'" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="160px">
         <el-form-item label="升级包类型" prop="typo">
           <el-radio-group v-model="ruleForm.typo">
@@ -10,42 +10,41 @@
         </el-form-item>
 
         <el-form-item label="升级包名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入升级包名称"/>
+          <el-input v-model.trim="ruleForm.name" placeholder="请输入升级包名称" />
         </el-form-item>
 
         <el-form-item label="所属产品" prop="productId">
           <el-select v-model="ruleForm.productId" placeholder="请选择产品" @change="seletChange">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()"/>
+            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="升级包模块" prop="module">
           <el-select v-model="ruleForm.module" placeholder="请选择产品">
-            <el-option v-for="item in moduleData" :key="item.id" :label="item.name" :value="item.id.toString()"/>
+            <el-option v-for="item in moduleData" :key="item.id" :label="item.name" :value="item.id.toString()" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="升级包版本号" prop="version" v-if="ruleForm.typo == '1'">
-          <el-input v-model="ruleForm.version" placeholder="请输入待升级包版本号"/>
+          <el-input v-model="ruleForm.version" placeholder="请输入待升级包版本号" />
         </el-form-item>
 
         <el-form-item label="待升级版本号" prop="waitVersion" v-if="ruleForm.typo == '2'">
-          <el-input v-model="ruleForm.waitVersion" placeholder="请输入待升级版本号"/>
+          <el-input v-model="ruleForm.waitVersion" placeholder="请输入待升级版本号" />
         </el-form-item>
 
         <el-form-item label="升级后版本号" prop="afterVersion" v-if="ruleForm.typo == '2'">
-          <el-input v-model="ruleForm.afterVersion" placeholder="请输入升级后版本号"/>
+          <el-input v-model="ruleForm.afterVersion" placeholder="请输入升级后版本号" />
         </el-form-item>
 
         <el-form-item label="算法签名" prop="are">
           <el-select v-model="ruleForm.are" placeholder="请选择算法签名">
-            <el-option v-for="item in areType" :key="item.value" :label="item.label" :value="item.value"/>
+            <el-option v-for="item in areType" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="选择升级包" prop="url">
-          <el-upload :accept="['.bin','.tar','.gz','.tar.xz','.zip','.gzip','.apk','.dav','.pack']"
-                     :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+          <el-upload :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
             <el-button type="Default">上传升级包</el-button>
           </el-upload>
           <div v-if="ruleForm.urlName" style="color: green;margin-left: 10px;">{{ ruleForm.urlName }}，上传成功</div>
@@ -60,27 +59,26 @@
         </el-form-item>
 
         <el-form-item label="升级包描述" prop="describe">
-          <el-input v-model="ruleForm.describe" type="textarea" :rows="3"/>
+          <el-input v-model="ruleForm.describe" type="textarea" :rows="3" />
         </el-form-item>
 
         <el-form-item label="推送设备的自定义消息" prop="info">
-          <el-input v-model="ruleForm.info" type="textarea" :rows="3"/>
+          <el-input v-model="ruleForm.info" type="textarea" :rows="3" />
         </el-form-item>
       </el-form>
       <template #footer>
-				<span class="dialog-footer">
-				<el-button @click="onCancel" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit"
-                   size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
-				</span>
+        <span class="dialog-footer">
+          <el-button @click="onCancel" size="default">取 消</el-button>
+          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import {reactive, toRefs, defineComponent, ref, unref, getCurrentInstance,} from 'vue';
-import {ElMessage} from 'element-plus';
+import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance, } from 'vue';
+import { ElMessage } from 'element-plus';
 import api from '/@/api/ota';
 import getOrigin from '/@/utils/origin';
 
@@ -111,9 +109,9 @@ interface UpdateState {
 
 export default defineComponent({
   name: 'otaEditUpdateData',
-  setup(prop, {emit}) {
+  setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
-    const headers = {Authorization: 'Bearer ' + localStorage.token,};
+    const headers = { Authorization: 'Bearer ' + localStorage.token, };
     const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile");
     const areType = ref([
       {
@@ -147,15 +145,15 @@ export default defineComponent({
       productData: [],
       moduleData: [],
       rules: {
-        typo: [{required: true, message: '升级包类型不能为空', trigger: 'blur'}],
-        name: [{required: true, message: '升级包名称不能为空', trigger: 'blur'}],
-        productId: [{required: true, message: '所属产品不能为空', trigger: 'blur'}],
-        module: [{required: true, message: '升级包模块不能为空', trigger: 'blur'}],
-        version: [{required: true, message: '升级包版本号不能为空', trigger: 'blur'}],
-        waitVersion: [{required: true, message: '待升级版本号不能为空', trigger: 'blur'}],
-        afterVersion: [{required: true, message: '升级后版本号不能为空', trigger: 'blur'}],
-        are: [{required: true, message: '算法签名不能为空', trigger: 'blur'}],
-        url: [{required: true, message: '升级包不能为空', trigger: 'blur'}],
+        typo: [{ required: true, message: '升级包类型不能为空', trigger: 'change' }],
+        name: [{ required: true, message: '升级包名称不能为空', trigger: 'change' }],
+        productId: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
+        module: [{ required: true, message: '升级包模块不能为空', trigger: 'change' }],
+        version: [{ required: true, message: '升级包版本号不能为空', trigger: 'change' }],
+        waitVersion: [{ required: true, message: '待升级版本号不能为空', trigger: 'change' }],
+        afterVersion: [{ required: true, message: '升级后版本号不能为空', trigger: 'change' }],
+        are: [{ required: true, message: '算法签名不能为空', trigger: 'change' }],
+        url: [{ required: true, message: '升级包不能为空', trigger: 'change' }],
       },
     });
     // 打开弹窗
@@ -209,7 +207,7 @@ export default defineComponent({
     };
     const getModuleList = (productID: Number) => {
       state.ruleForm.module = '';
-      api.module.getList({productID: productID}).then((res: any) => {
+      api.module.getList({ productID: productID }).then((res: any) => {
         state.moduleData = res.Data;
       });
     };

@@ -4,8 +4,8 @@
 			<el-tab-pane label="通道详情" name="first">
 				<serverDetail :detail="detail" />
 			</el-tab-pane>
-			<el-tab-pane label="相关详情" name="second">相关详情</el-tab-pane>
-			<el-tab-pane label="通道" name="third">通道</el-tab-pane>
+			<!-- <el-tab-pane label="相关详情" name="second">相关详情</el-tab-pane>
+			<el-tab-pane label="通道" name="third">通道</el-tab-pane> -->
 		</el-tabs>
 		<div style="position: absolute;right:20px;top: 34px;">
 			<el-icon @click="freshData" style="cursor: pointer;font-size: 16px;margin-right:6px;"><ele-RefreshRight /></el-icon>
