@@ -5,7 +5,7 @@
                 <el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">
                         <div class="collapse-wrap">
-                            <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="68px">
+                            <el-form style="width: 600px;margin: 0 auto;" :model="form" :rules="rules" label-width="68px">
                                 <el-form-item label="名称" prop="name">
                                     <el-input v-model="form.name" show-word-limit maxlength="20" placeholder="请填写名称" />
                                 </el-form-item>
@@ -119,7 +119,8 @@ interface TableDataState {
         content: string,
     },
     detail: object,
-    form: object
+    form: object,
+    rules: object,
 }
 export default defineComponent({
     name: 'tunnelCreate',
@@ -180,6 +181,11 @@ export default defineComponent({
                     text: "",
                     timeout: 30
                 }
+            },
+            rules: {
+                name: [
+                    { required: true, message: '名称不能为空', trigger: 'change' }
+                ]
             }
         });
 

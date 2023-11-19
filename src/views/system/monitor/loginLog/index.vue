@@ -16,7 +16,7 @@
           </el-form-item> -->
 
           <el-form-item label="状态" prop="status">
-            <el-select v-model="tableData.param.status" placeholder="登录状态" clearable size="default" style="width: 180px">
+            <el-select v-model="tableData.param.status" placeholder="登录状态" size="default" style="width: 180px">
               <el-option label="全部" :value="-1" />
               <el-option label="成功" :value="1" />
               <el-option label="失败" :value="0" />
@@ -48,7 +48,7 @@
 
             <el-button size="default" type="primary" class="ml10" @click="onRowExport()">
               <el-icon>
-                <ele-Delete />
+                <ele-Download />
               </el-icon>
               导出日志
             </el-button>
@@ -65,7 +65,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="编号" align="center" width="60" prop="infoId" />
         <el-table-column label="登录名称" align="center" prop="loginName" />
-        <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
+        <el-table-column label="登录地址" align="center" prop="ipaddr" width="150" :show-overflow-tooltip="true" />
         <el-table-column label="登录地点" v-col="'loginLocation'" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
         <el-table-column label="浏览器" align="center" prop="browser" />
         <el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
@@ -197,7 +197,10 @@ export default defineComponent({
 
     // 导出日志
     const onRowExport = () => {
-      api.log.export(state.tableData.param).then((res: any) => downloadFile(res))
+      api.log.export({
+        ...state.tableData.param,
+        // pageSize: state.tableData.total
+      }).then((res: any) => downloadFile(res))
     };
 
 

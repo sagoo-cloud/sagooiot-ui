@@ -21,7 +21,7 @@
           </el-form-item>
 
           <el-form-item label="状态" prop="status">
-            <el-select v-model="tableData.param.status" placeholder="请选择状态" clearable size="default" style="width: 180px">
+            <el-select v-model="tableData.param.status" placeholder="请选择状态" size="default" style="width: 180px">
               <el-option label="全部" :value="-1" />
               <el-option label="正常" :value="0" />
               <el-option label="停用" :value="1" />

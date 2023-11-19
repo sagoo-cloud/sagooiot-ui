@@ -1,12 +1,12 @@
 <template>
   <el-form-item label="请求方式" prop="productKey" class="form-item" style="margin-left: 50px;">
-    <el-select v-model="fromData.callWebService.method" filterable placeholder="请选择请求方式" @change="saveData">
+    <el-select v-model="fromData.callWebService.method" filterable clearable placeholder="请选择请求方式" @change="saveData">
       <el-option label="POST" value="POST" />
       <el-option label="GET" value="GET" />
     </el-select>
   </el-form-item>
   <el-form-item label="编码：" prop="executeAction" class="form-item">
-    <el-select v-model="fromData.callWebService.encoding" filterable placeholder="请选择触发类型"  @change="saveData">
+    <el-select v-model="fromData.callWebService.encoding" filterable clearable placeholder="请选择触发类型"  @change="saveData">
       <el-option label="UTF-8" value="UTF-8" />
       <el-option label="GBK" value="GBK" />
     </el-select>

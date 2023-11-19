@@ -4,13 +4,13 @@
 			<el-tab-pane label="通道信息" name="1">
 				<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
 					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="temp.title" placeholder="请输入通道名称" />
+						<el-input v-model="temp.title" disabled placeholder="请输入通道名称" />
 					</el-form-item>
 					<el-form-item label="注册码" prop="number">
-						<el-input v-model="temp.number" placeholder="请输入注册码" />
+						<el-input v-model="temp.number" disabled placeholder="请输入注册码" />
 					</el-form-item>
 					<el-form-item label="设备地址" prop="slaveId">
-						<el-input v-model.number="temp.slaveId" placeholder="请输入设备地址" />
+						<el-input v-model.number="temp.slaveId" disabled placeholder="请输入设备地址" />
 					</el-form-item>
 					<!-- <el-form-item label="调度周期(秒)" prop="interval">
             <el-input v-model="temp.interval" placeholder="请输入调度周期" />
@@ -18,7 +18,7 @@
 					<el-form-item label="" prop="">
 						<div align="right">
 							<el-button @click="clsoeDialog"> 取 消 </el-button>
-							<el-button type="primary" @click="updateData()"> 保 存 </el-button>
+							<!-- <el-button type="primary" @click="updateData()"> 保 存 </el-button> -->
 						</div>
 					</el-form-item>
 				</el-form>

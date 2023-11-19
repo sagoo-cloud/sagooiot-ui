@@ -130,7 +130,7 @@ export default defineComponent({
       isShowDialog: false,
       ruleForm: {
         id: 0,
-        typo: '',
+        typo: '1',
         name: '',
         productId: '',
         module: '',
@@ -147,6 +147,7 @@ export default defineComponent({
       productData: [],
       moduleData: [],
       rules: {
+        typo: [{required: true, message: '升级包类型不能为空', trigger: 'blur'}],
         name: [{required: true, message: '升级包名称不能为空', trigger: 'blur'}],
         productId: [{required: true, message: '所属产品不能为空', trigger: 'blur'}],
         module: [{required: true, message: '升级包模块不能为空', trigger: 'blur'}],
@@ -179,7 +180,7 @@ export default defineComponent({
     const resetForm = () => {
       state.ruleForm = {
         id: 0,
-        typo: '',
+        typo: '1',
         name: '',
         productId: '',
         module: '',

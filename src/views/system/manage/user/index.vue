@@ -29,7 +29,7 @@
 									<el-option label="全部" :value="-1" />
 									<el-option label="启用" :value="1" />
 									<el-option label="禁用" :value="0" />
-									<el-option label="未验证" :value="2" />
+									<!-- <el-option label="未验证" :value="2" /> -->
 								</el-select>
 							</el-form-item>
 							<el-form-item label="创建时间" prop="dateRange">

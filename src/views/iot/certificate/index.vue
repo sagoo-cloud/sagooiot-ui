@@ -109,7 +109,7 @@ const filterStandard = (type: any) => {
 // 状态修改
 const handleStatusChange = (row: any) => {
 	let text = row.status === 1 ? '启用' : '停用';
-	ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"楼宇吗?', '警告', {
+	ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"证书吗?', '警告', {
 		confirmButtonText: '确定',
 		cancelButtonText: '取消',
 		type: 'warning',

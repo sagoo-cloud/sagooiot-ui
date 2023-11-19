@@ -1,18 +1,18 @@
 <template>
   <el-form-item label="通知方式" prop="productKey" class="form-item" style="margin-left: 50px;">
-    <el-select v-model="fromData.notice.types" filterable placeholder="请选择通知方式" @change="seletChange">
+    <el-select v-model="fromData.notice.types" filterable clearable placeholder="请选择通知方式" @change="seletChange">
       <el-option v-for="item in notice_send_gateway" :key="item.value" :label="item.label" :value="item.value" />
     </el-select>
   </el-form-item>
 
   <el-form-item label="通知配置：" prop="name" class="form-item">
-    <el-select v-model="fromData.notice.name" filterable placeholder="请选择通知配置" @change="getTemplist">
+    <el-select v-model="fromData.notice.name" filterable clearable placeholder="请选择通知配置" @change="getTemplist">
       <el-option v-for="item in sendGatewayData" :key="item.id" :label="item.title" :value="item.id" />
     </el-select>
   </el-form-item>
 
   <el-form-item label="通知模板：" prop="executeAction" class="form-item">
-    <el-select v-model="fromData.notice.template" filterable placeholder="请选择触发类型">
+    <el-select v-model="fromData.notice.template" filterable clearable placeholder="请选择触发类型">
       <el-option v-for="item in noticeConfigData" :key="item.id" :label="item.title" :value="item.id" />
     </el-select>
   </el-form-item>

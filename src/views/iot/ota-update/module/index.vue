@@ -4,7 +4,7 @@
       <div class="ota-module-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px" @keyup.enter.native="getList(1)">
           <el-form-item label="模块名称" prop="name">
-            <el-input v-model="tableData.param.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 200px;" />
+            <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable size="default" style="width: 200px;" />
           </el-form-item>
           <el-form-item label="所属产品" prop="productId">
             <el-select v-model="tableData.param.productId" filterable placeholder="请选择产品">

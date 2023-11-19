@@ -1,6 +1,6 @@
 <template>
   <el-form-item label="自定义场景：" prop="executeAction" class="form-item">
-    <el-select v-model="fromData.executeAction" filterable placeholder="请选择自定义场景" @change="saveData">
+    <el-select v-model="fromData.executeAction" filterable clearable placeholder="请选择自定义场景" @change="saveData">
       <el-option v-for="item in sceneList" :key="item.id" :label="item.name" :value="item.id" />
     </el-select>
   </el-form-item>

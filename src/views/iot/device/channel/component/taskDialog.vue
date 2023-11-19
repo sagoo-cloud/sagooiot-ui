@@ -52,10 +52,9 @@ export default {
 				templateNumber: '',
 			},
 			rules: {
-				title: [{ required: true, message: '请输入模板名称', trigger: 'change' }],
+				title: [{ required: true, message: '请输入标题', trigger: 'change' }],
 				publishTopic: [{ required: true, message: '请输入mqtt主题', trigger: 'change' }],
-				mode: [{ required: true, message: '请选择模式', trigger: 'change' }],
-				templateNumber: [{ required: true, message: '请选择模式', trigger: 'change' }],
+				templateNumber: [{ required: true, message: '请选择设备模板', trigger: 'change' }],
 			},
 			dialogVisible: false,
 			listLoading: false,

@@ -1,6 +1,6 @@
 <template>
-  <el-form-item label="产品：" prop="productKey" class="form-item" style="margin-left: 50px;">
-    <el-select v-model="fromData.productKey" filterable placeholder="请选择产品" @change="seletChange">
+  <el-form-item label="产品：" prop="productKey" class="form-item">
+    <el-select v-model="fromData.productKey" filterable clearable placeholder="请选择产品" @change="seletChange">
       <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
         <span style="float: left">{{ it.name }}</span>
         <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -9,7 +9,7 @@
   </el-form-item>
 
   <el-form-item label="设备：" prop="deviceKey" class="form-item">
-    <el-select v-model="fromData.deviceKey" filterable placeholder="请选择设备" @change="saveData">
+    <el-select v-model="fromData.deviceKey" filterable clearable placeholder="请选择设备" @change="saveData">
       <el-option label="全部" value="all">全部</el-option>
 
       <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
@@ -236,6 +236,5 @@ onMounted(() => {
 <style scoped lang="scss">
 .form-item {
   flex: 0 0 25%;
-
 }
 </style>

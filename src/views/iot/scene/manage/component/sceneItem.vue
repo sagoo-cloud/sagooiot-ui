@@ -24,7 +24,7 @@
           <el-select v-model="item.deviceKey" filterable placeholder="请选择设备" @change="EditPen(index)">
             <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
+              <span style="float: right; margin-left: 8px;font-size: 13px">{{ it.key }}</span>
             </el-option>
           </el-select>
         </el-form-item>
