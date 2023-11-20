@@ -138,7 +138,7 @@ export default defineComponent({
     const initTableData = () => {
       batchList();
     };
-    const getList = (pageNum: number) => {
+    const getList = (pageNum?: number) => {
       typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       state.tableData.param.devOtaFirewareId = props.detail.id;

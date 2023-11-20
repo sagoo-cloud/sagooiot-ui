@@ -164,7 +164,7 @@ export default defineComponent({
 
     // };
     const toDetail = (id: number) => {
-      router.push(`/iotmanager/ota/update/detail/${id}`)
+      router.push(`/iotmanager/operation/ota/update/detail/${id}`)
     };
     // 删除模块
     const onRowDel = (row?: TableDataRow) => {

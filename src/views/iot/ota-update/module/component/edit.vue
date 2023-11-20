@@ -11,10 +11,10 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入模块名称" />
 				</el-form-item>
 				<el-form-item label="模块别名" prop="nameAs">
-					<el-input v-model="ruleForm.nameAs" placeholder="请输入模块别名" />
+					<el-input v-model.trim="ruleForm.nameAs" placeholder="请输入模块别名" />
 				</el-form-item>
 				<el-form-item label="模块描述" prop="describe">
-					<el-input v-model="ruleForm.describe" type="textarea" placeholder="请输入内容" />
+					<el-input v-model.trim="ruleForm.describe" type="textarea" placeholder="请输入内容" />
 				</el-form-item>
 			</el-form>
 			<template #footer>

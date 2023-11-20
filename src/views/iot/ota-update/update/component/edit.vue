@@ -20,7 +20,7 @@
         </el-form-item>
 
         <el-form-item label="升级包模块" prop="module">
-          <el-select v-model="ruleForm.module" placeholder="请选择产品">
+          <el-select v-model="ruleForm.module" placeholder="请选择升级包模块">
             <el-option v-for="item in moduleData" :key="item.id" :label="item.name" :value="item.id.toString()" />
           </el-select>
         </el-form-item>
@@ -44,7 +44,7 @@
         </el-form-item>
 
         <el-form-item label="选择升级包" prop="url">
-          <el-upload :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+          <el-upload :file-list="fileList" :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
             <el-button type="Default">上传升级包</el-button>
           </el-upload>
           <div v-if="ruleForm.urlName" style="color: green;margin-left: 10px;">{{ ruleForm.urlName }}，上传成功</div>
@@ -53,8 +53,8 @@
 
         <el-form-item label="升级包是否验证" prop="check">
           <el-radio-group v-model="ruleForm.check">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="2">否</el-radio>
+            <el-radio label="1">是</el-radio>
+            <el-radio label="2">否</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -123,6 +123,7 @@ export default defineComponent({
         value: 'SHA256',
       },
     ]);
+    const fileList = ref([]);
     const urlName = ref();
     const state = reactive<UpdateState>({
       isShowDialog: false,
@@ -197,6 +198,7 @@ export default defineComponent({
       if (res.code === 0) {
         state.ruleForm.url = res.data.full_path
         state.ruleForm.urlName = res.data.name
+        fileList.value = []
         ElMessage.success('上传成功');
       } else {
         ElMessage.error(res.message);
@@ -253,6 +255,7 @@ export default defineComponent({
       areType,
       headers,
       uploadUrl,
+      fileList,
       urlName,
       updateImg,
       ...toRefs(state),

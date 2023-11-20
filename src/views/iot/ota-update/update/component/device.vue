@@ -3,7 +3,7 @@
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
 				<el-form-item label="设备名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @submit.prevent />
+					<el-input v-model="params.keyWord" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @submit.prevent />
 				</el-form-item>
 
 				<el-form-item>
