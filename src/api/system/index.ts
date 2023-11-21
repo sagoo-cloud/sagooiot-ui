@@ -167,6 +167,10 @@ export default {
   basicConfig: {
     getDetails: (params: object) => get('/common/getSysConfigSetting', params),
     setDetails: (data: object) => put('/common/editSysConfigSetting', data),
+    getEmailSetting: () => get('/common/getEmailSetting'),
+    editEmailSetting: (data: object) => put('/common/editEmailSetting', data),
+    getSecuritySetting: () => get('/common/getSecuritySetting'),
+    editSecuritySetting: (data: object) => put('/common/editSecuritySetting', data),
   },
   certificate: {
     getList: () => get('/system/certificate/getAll')
@@ -180,6 +184,6 @@ export default {
   lastLinesLog: {
     getList: (params: object) => get('/system/monitor/listLogs', params),
     detail: (params: object) => get('/system/monitor/lastLinesLog', params),
-    down:(params:object)=>file('system/monitor/downloadLog',params),
+    down: (params: object) => file('system/monitor/downloadLog', params),
   },
 }
