@@ -44,12 +44,14 @@
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
+		<changePwd ref="changePwdRef"></changePwd>
 	</el-form>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, defineComponent, computed, onMounted, getCurrentInstance } from 'vue';
+import { ref, toRefs, reactive, defineComponent, computed, onMounted, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import changePwd from './changePwd.vue';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
@@ -57,6 +59,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { useStore } from '/@/store/index';
 import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
+import { encrypt } from '/@/utils/rsa'
 import api from '/@/api/system';
 
 // 是否是开源版本
@@ -64,7 +67,11 @@ const ISOPEN = import.meta.env.VITE_ISOPEN
 
 export default defineComponent({
 	name: 'loginAccount',
+	components: {
+		changePwd
+	},
 	setup() {
+		const changePwdRef = ref();
 		const { t } = useI18n();
 		const store = useStore();
 		const route = useRoute();
@@ -111,8 +118,23 @@ export default defineComponent({
 					if (valid) {
 						state.loading.signIn = true;
 						api.login
-							.login(state.ruleForm)
+							.login({
+								...state.ruleForm,
+								password: encrypt(state.ruleForm.password)
+							})
 							.then(async (res: any) => {
+								// 检查是否需要更换密码
+								if (res.isChangePwd) {
+									const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
+									ElMessage.error(`密码已超过${sysinfo.passwordChangePeriod}天未修改，请先修改密码再登录`)
+									state.loading.signIn = false;
+									getCaptcha();
+									return changePwdRef.value.toShow({
+										userName: state.ruleForm.userName,
+										oldUserPassword: state.ruleForm.password,
+									})
+								}
+
 								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
@@ -182,6 +204,7 @@ export default defineComponent({
 			ElMessage.success(`${currentTimeInfo}，${signInText}`);
 		};
 		return {
+			changePwdRef,
 			onSignIn,
 			getCaptcha,
 			...toRefs(state),

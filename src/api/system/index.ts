@@ -5,6 +5,7 @@ export default {
   login: {
     login: (data: object) => post('/login', data),
     currentUser: () => get('/system/user/currentUser'),
+    editPassword: (data: object) => post('/user/editPassword', data),
     captcha: () => get('/captcha'),
     logout: () => post('/loginOut'),
   },
