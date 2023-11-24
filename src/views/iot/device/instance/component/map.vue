@@ -60,6 +60,14 @@
         setAddressByCoordinate(lng.value, lat.value);
       });
     });
+
+
+    lng.value="";
+    lat.value="";
+    searchKeyword.value="";
+
+
+
   };
   
   const confirmAddress = () => {
