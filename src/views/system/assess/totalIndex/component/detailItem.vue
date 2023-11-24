@@ -12,7 +12,7 @@
         </div>
         <div class="table-item-wrap">
           <div class="label">SecretKey</div>
-          <div class="value">调用API的安全密码、请联系管理员获取</div>
+          <div class="value">调用API的安全密码，请联系管理员获取</div>
         </div>
         <div class="table-item-wrap">
           <div class="label" style="display: flex;flex-direction: column;justify-content: center;">
