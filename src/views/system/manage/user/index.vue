@@ -104,6 +104,7 @@ import { Search } from '@element-plus/icons-vue';
 import EditUser from './component/editUser.vue';
 import api from '/@/api/system';
 import useCommon from '/@/hooks/useCommon';
+import { encrypt } from '/@/utils/rsa'
 
 interface Tree {
 	id: number;
@@ -266,12 +267,13 @@ export default defineComponent({
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 			})
-				.then(({ value }) => {
+				.then(async ({ value }) => {
 					if (!value || value == '') {
 						ElMessage.success('密码不能为空');
 						return;
 					}
-					api.user.resetPassword(row.id, value).then(() => {
+					const password = await encrypt(value) as string
+					api.user.resetPassword(row.id, password).then(() => {
 						ElMessage.success('修改成功，新密码是：' + value);
 					});
 				})
