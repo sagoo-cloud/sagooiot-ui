@@ -8,7 +8,11 @@
           <div class="coordinate-search">
 
 
-            <el-input v-model="searchKeyword" placeholder="搜索地名" />
+            <el-input v-model="searchKeyword" placeholder="搜索地名"  @keyup.enter.native="searchByCoordinate" >
+              <template #append>
+                <el-button :icon="Search" />
+              </template>    
+      </el-input>
 
 
             <el-input v-model="lng" placeholder="经度" />
@@ -32,7 +36,9 @@
   
   <script lang="ts" setup>
   import { defineEmits, defineExpose, nextTick, ref } from 'vue';
-  
+  import { Search} from '@element-plus/icons-vue';
+
+
   const mapContainer = ref<HTMLElement | null>(null);
   const address = ref('');
   const lng = ref('');
@@ -63,7 +69,7 @@
         returnlng.value = e.latlng.lng.toFixed(5);
         returnlat.value = e.latlng.lat.toFixed(5);
 
-       
+
         setMarker(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
         setAddressByCoordinate(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
 
