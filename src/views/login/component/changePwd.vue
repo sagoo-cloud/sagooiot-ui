@@ -52,10 +52,13 @@ const formRules = computed(() => ({
 async function onSubmit() {
 	await formRef.value.validate()
 
+	const oldUserPassword = await encrypt(ruleForm.oldUserPassword)
+	const userPassword = await encrypt(ruleForm.userPassword)
+
 	api.login.editPassword({
 		userName: ruleForm.userName,
-		oldUserPassword: encrypt(ruleForm.oldUserPassword),
-		userPassword: encrypt(ruleForm.userPassword)
+		oldUserPassword,
+		userPassword,
 	}).then(() => {
 		show.value = false
 		ElMessage.success('修改成功')

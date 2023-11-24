@@ -114,13 +114,14 @@ export default defineComponent({
 		const onSignIn = () => {
 			// 验证表单
 			proxy.$refs.loginForm
-				.validate((valid: boolean) => {
+				.validate(async (valid: boolean) => {
 					if (valid) {
 						state.loading.signIn = true;
+						const password = await encrypt(state.ruleForm.password)
 						api.login
 							.login({
 								...state.ruleForm,
-								password: encrypt(state.ruleForm.password)
+								password
 							})
 							.then(async (res: any) => {
 								// 检查是否需要更换密码
