@@ -53,9 +53,7 @@
       map = new BMapGL.Map(mapContainer.value!);
       map.centerAndZoom("沈阳市", 10);
       map.enableScrollWheelZoom(true);
-  
       searchByCoordinate();
-  
       map.addEventListener("click", (e: any) => {
         if(!searchKeyword.value){
           lng.value = e.latlng.lng.toFixed(5);
@@ -105,7 +103,8 @@
   const geocoder = new BMapGL.Geocoder();
   geocoder.getPoint(point, (pointResult: any) => {
     if (pointResult) {
-      geocoder.getLocation(pointResult, (result: any) => {
+      const locationPoint = new BMapGL.Point(pointResult.lng, pointResult.lat);
+      geocoder.getLocation(locationPoint, (result: any) => {
         if (result) {
           console.log(result);
           const formattedAddress = result.address;
