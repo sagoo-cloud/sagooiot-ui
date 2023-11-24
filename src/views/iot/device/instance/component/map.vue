@@ -37,6 +37,9 @@
   const address = ref('');
   const lng = ref('');
   const lat = ref('');
+  const returnlng = ref('');
+  const returnlat = ref('');
+
   const searchKeyword = ref(''); // 搜索输入框的值
 
   const isShowDialog = ref(false);
@@ -54,13 +57,21 @@
       searchByCoordinate();
   
       map.addEventListener("click", (e: any) => {
-        lng.value = e.latlng.lng.toFixed(5);
-        lat.value = e.latlng.lat.toFixed(5);
-        setMarker(lng.value, lat.value);
-        setAddressByCoordinate(lng.value, lat.value);
+        if(!searchKeyword.value){
+          lng.value = e.latlng.lng.toFixed(5);
+          lat.value = e.latlng.lat.toFixed(5);
+        }
+       
+        returnlng.value = e.latlng.lng.toFixed(5);
+        returnlat.value = e.latlng.lat.toFixed(5);
+
+       
+        setMarker(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
+        setAddressByCoordinate(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
+
+     
       });
     });
-
 
     lng.value="";
     lat.value="";
@@ -72,7 +83,7 @@
   
   const confirmAddress = () => {
     isShowDialog.value = false;
-    emit('updateMap', { lng: lng.value, lat: lat.value });
+    emit('updateMap', { lng: returnlng.value, lat: returnlat.value });
   };
   
   const setMarker = (lng: string, lat: string) => {
@@ -86,26 +97,34 @@
     map?.addOverlay(marker.value);
     // 移动地图中心到选点位置
     map?.panTo(point);
+
   };
   
   const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
-    const point = new BMapGL.Point(lng, lat);
-    const geocoder = new BMapGL.Geocoder();
-    geocoder.getLocation(point, (result: any) => {
-      if (result) {
-        const formattedAddress = result.address;
-        address.value = formattedAddress;
-      }
-    });
-  };
+  const point = new BMapGL.Point(lng, lat);
+  const geocoder = new BMapGL.Geocoder();
+  geocoder.getPoint(point, (pointResult: any) => {
+    if (pointResult) {
+      geocoder.getLocation(pointResult, (result: any) => {
+        if (result) {
+          console.log(result);
+          const formattedAddress = result.address;
+          address.value = formattedAddress;
+        }
+      });
+    }
+  });
+};
   
   const searchByCoordinate = () => {
+    
     if (lng.value && lat.value) {
       setMarker(lng.value, lat.value);
       setAddressByCoordinate(lng.value, lat.value);
     }else if(searchKeyword.value){
       searchByKeyword(searchKeyword.value);
     }
+
   };
 
   const searchByKeyword = () => { // 搜索方法
@@ -118,9 +137,13 @@
           lat.value = point.lat.toFixed(5);
           setMarker(lng.value, lat.value);
           setAddressByCoordinate(lng.value, lat.value);
+          lng.value="";
+          lat.value="";
         }
       }
+     
     }
+    
   });
 
   local.search(searchKeyword.value);
