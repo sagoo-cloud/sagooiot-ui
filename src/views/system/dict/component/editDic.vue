@@ -115,14 +115,14 @@ export default defineComponent({
           if(state.ruleForm.dictId!==0){
             //修改
             api.dict.editType(state.ruleForm).then(()=>{
-              ElMessage.success('字典类型修改成功');
+              ElMessage.success('修改成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
           }else{
             //添加
             api.dict.addType(state.ruleForm).then(()=>{
-              ElMessage.success('字典类型添加成功');
+              ElMessage.success('添加成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })

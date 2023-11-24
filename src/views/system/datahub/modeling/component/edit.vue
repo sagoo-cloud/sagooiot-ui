@@ -170,14 +170,14 @@ export default defineComponent({
 						//修改
 
 						api.template.edit(state.ruleForm).then(() => {
-							ElMessage.success('模型类型修改成功');
+							ElMessage.success('修改成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});
 					} else {
 						//添加
 						api.template.add(state.ruleForm).then(() => {
-							ElMessage.success('模型类型添加成功');
+							ElMessage.success('添加成功');
 							closeDialog(); // 关闭弹窗
 							emit('typeList');
 						});

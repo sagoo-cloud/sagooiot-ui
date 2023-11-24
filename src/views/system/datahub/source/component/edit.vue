@@ -490,19 +490,19 @@ export default defineComponent({
 
 						if (state.ruleForm.from == 1) {
 							api.common.edit(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型修改成功');
+								ElMessage.success('修改成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
 						} else if (state.ruleForm.from == 4) {
 							api.common.devedit(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型修改成功');
+								ElMessage.success('修改成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
 						} else if (state.ruleForm.from == 2) {
 							api.common.dbedit(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型修改成功');
+								ElMessage.success('修改成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
@@ -511,19 +511,19 @@ export default defineComponent({
 						//添加
 						if (state.ruleForm.from == 1) {
 							api.common.add(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型添加成功');
+								ElMessage.success('添加成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
 						} else if (state.ruleForm.from == 4) {
 							api.common.devadd(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型添加成功');
+								ElMessage.success('添加成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
 						} else if (state.ruleForm.from == 2) {
 							api.common.dbadd(state.ruleForm).then(() => {
-								ElMessage.success('数据源类型添加成功');
+								ElMessage.success('添加成功');
 								closeDialog(); // 关闭弹窗
 								emit('typeList');
 							});
