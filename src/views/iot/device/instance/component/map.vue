@@ -2,12 +2,23 @@
     <div>
       <el-dialog title="地图选点" v-model="isShowDialog" width="900px" append-to-body>
         <div class="map-container">
+
+
+
           <div class="coordinate-search">
+
+
+            <el-input v-model="searchKeyword" placeholder="搜索地名" />
+
+
             <el-input v-model="lng" placeholder="经度" />
             <div>-</div>
             <el-input v-model="lat" placeholder="纬度" />
             <el-button @click="searchByCoordinate" type="primary">搜索</el-button>
           </div>
+
+
+
           <div class="map" ref="mapContainer"></div>
           <!-- 地址解析结果 -->
           <div class="address-result" v-if="address">
@@ -26,6 +37,8 @@
   const address = ref('');
   const lng = ref('');
   const lat = ref('');
+  const searchKeyword = ref(''); // 搜索输入框的值
+
   const isShowDialog = ref(false);
   const marker = ref<BMapGL.Marker | null>(null);
   let map: BMapGL.Map | null = null;
@@ -82,8 +95,28 @@
     if (lng.value && lat.value) {
       setMarker(lng.value, lat.value);
       setAddressByCoordinate(lng.value, lat.value);
+    }else if(searchKeyword.value){
+      searchByKeyword(searchKeyword.value);
     }
   };
+
+  const searchByKeyword = () => { // 搜索方法
+  const local = new BMapGL.LocalSearch(map, {
+    onSearchComplete(results: any) {
+      if (local.getStatus() === BMAP_STATUS_SUCCESS) {
+        if (results && results.getPoi(0)) {
+          const point = results.getPoi(0).point;
+          lng.value = point.lng.toFixed(5);
+          lat.value = point.lat.toFixed(5);
+          setMarker(lng.value, lat.value);
+          setAddressByCoordinate(lng.value, lat.value);
+        }
+      }
+    }
+  });
+
+  local.search(searchKeyword.value);
+};
   
   const emit = defineEmits(['updateMap']);
   
