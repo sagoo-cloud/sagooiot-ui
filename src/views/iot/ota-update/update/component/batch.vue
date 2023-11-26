@@ -14,7 +14,7 @@
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" @click="resetQuery()">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
@@ -182,9 +182,8 @@ export default defineComponent({
         .catch(() => { });
     };
     /** 重置按钮操作 */
-    const resetQuery = (formEl: FormInstance | undefined) => {
-      if (!formEl) return;
-      formEl.resetFields();
+    const resetQuery = () => {
+      queryRef.value.resetFields();
       getList();
     };
     // 多选框选中数据
