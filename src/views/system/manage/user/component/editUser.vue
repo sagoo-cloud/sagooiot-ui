@@ -10,7 +10,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!ruleForm.id">
 						<el-form-item label="密码" prop="userPassword">
-							<el-input v-model="ruleForm.userPassword" placeholder="请输入密码" type="password" clearable></el-input>
+							<el-input v-model="ruleForm.userPassword" placeholder="请输入密码" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">

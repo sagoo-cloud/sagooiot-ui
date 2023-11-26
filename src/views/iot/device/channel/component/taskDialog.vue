@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="500px" :before-close="clsoeDialog" append-to-body :close-on-click-modal="false">
-		<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px">
+		<el-form ref="dataForm" :rules="rules" :model="temp" label-width="80px">
 			<el-form-item label="标题" prop="title">
 				<el-input v-model="temp.title" placeholder="请输入标题" />
 			</el-form-item>

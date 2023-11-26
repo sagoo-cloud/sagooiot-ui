@@ -55,11 +55,11 @@
 									新增用户
 								</el-button>
 								<!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
-                  <el-icon>
-                    <ele-Delete />
-                  </el-icon>
-                  删除用户
-                </el-button> -->
+									<el-icon>
+										<ele-Delete />
+									</el-icon>
+									删除用户
+								</el-button> -->
 							</el-form-item>
 						</el-form>
 					</div>
