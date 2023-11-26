@@ -11,7 +11,6 @@
 				<el-select v-model="temp.encoding" placeholder="请选择转发格式" style="width: 100%">
 					<el-option v-for="item in formatOptions" :key="item.value" :label="item.title" :value="item.value"> </el-option>
 				</el-select>
-				<!-- <el-input v-model="temp.encoding" placeholder="请输入转发格式"/> -->
 			</el-form-item>
 			<el-form-item label="mqtt主题" prop="publishTopic">
 				<el-input v-model="temp.publishTopic" placeholder="请输入mqtt主题" />
