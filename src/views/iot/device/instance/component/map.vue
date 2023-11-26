@@ -3,22 +3,17 @@
     <el-dialog title="地图选点" v-model="isShowDialog" width="900px" append-to-body>
       <div class="map-container">
         <div class="coordinate-search">
-          <el-tooltip
-        class="box-item"
-        effect="dark"
-        content="点击放大镜或回车按键检索地址"
-        placement="top-start"
-      >
-          <el-input v-model="searchKeyword" placeholder="搜索地名" @keyup.enter.native="searchByKeyword(searchKeyword)">
-            <template #append>
-              <el-button :icon="Search" @click="searchByKeyword(searchKeyword)" />
-            </template>
-          </el-input>
-        </el-tooltip>
+          <el-tooltip class="box-item" effect="dark" content="点击放大镜或回车按键检索地址" placement="top-start">
+            <el-input v-model="searchKeyword" placeholder="搜索地名" @keyup.enter.native="searchByKeyword(searchKeyword)">
+              <template #append>
+                <el-button :icon="Search" @click="searchByKeyword(searchKeyword)" />
+              </template>
+            </el-input>
+          </el-tooltip>
           <el-input v-model="lng" placeholder="经度" />
           <div>-</div>
           <el-input v-model="lat" placeholder="纬度" />
-          <el-button @click="searchByCoordinate" type="primary">搜索</el-button>
+          <!-- <el-button @click="searchByCoordinate" type="primary">搜索</el-button> -->
         </div>
 
         <div class="map" ref="mapContainer"></div>
@@ -55,8 +50,8 @@ const openDialog = () => {
     map.enableScrollWheelZoom(true);
     searchByCoordinate();
     map.addEventListener('click', (e: any) => {
-        lng.value = e.latlng.lng.toFixed(5);
-        lat.value = e.latlng.lat.toFixed(5);
+      lng.value = e.latlng.lng.toFixed(5);
+      lat.value = e.latlng.lat.toFixed(5);
 
       setMarker(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
       setAddressByCoordinate(e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5));
@@ -137,7 +132,7 @@ const searchByKeyword = (keyword?: string) => {
         }
       }
     });
-    localSearch.search(keyword?keyword:searchKeyword.value);
+    localSearch.search(keyword ? keyword : searchKeyword.value);
   }
 };
 
