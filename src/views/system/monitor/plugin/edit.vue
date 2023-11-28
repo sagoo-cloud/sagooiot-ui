@@ -125,6 +125,7 @@ const open = async (row: any) => {
 	showDialog.value = true
 	nextTick(() => {
 		Object.assign(formData, row)
+		formData.author = JSON.parse(row.author).join(",");
 	})
 }
 
