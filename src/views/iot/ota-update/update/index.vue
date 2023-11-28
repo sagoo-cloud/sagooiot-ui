@@ -2,7 +2,7 @@
 	<div class="ota-module-container">
 		<el-card shadow="hover">
 			<div class="ota-module-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="80px">
+				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
 					<el-form-item label="升级包名称" prop="keyWord">
 						<el-input
 							v-model="tableData.param.keyWord"
