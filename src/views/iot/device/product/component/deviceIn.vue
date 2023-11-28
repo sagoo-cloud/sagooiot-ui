@@ -56,10 +56,10 @@ const data = reactive({
 	"certificateId": 0
 })
 
-api.product.connect_intro(route.params.id as string).then((res: any) => {
-	console.log(res.data)
-	Object.assign(data, res.data)
-})
+// api.product.connect_intro(route.params.id as string).then((res: any) => {
+// 	console.log(res.data)
+// 	Object.assign(data, res.data)
+// })
 
 </script>
 <style lang="scss" scoped>

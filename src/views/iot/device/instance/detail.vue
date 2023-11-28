@@ -520,10 +520,10 @@ export default defineComponent({
 
     const getDeviceTableData = () => {
       state.deviceTableData.param.gatewayKey = state.detail.key;
-      api.device.getList(state.deviceTableData.param).then((res: any) => {
-        state.deviceTableData.data = res.list;
-        state.deviceTableData.total = res.Total;
-      });
+      // api.device.getList(state.deviceTableData.param).then((res: any) => {
+      //   state.deviceTableData.data = res.list;
+      //   state.deviceTableData.total = res.Total;
+      // });
     };
 
     // 多选框选中数据

@@ -162,9 +162,9 @@ export default defineComponent({
       resetForm();
 
       // 证书列表
-      certApi.certificateManagement.getAll().then((res: any) => {
-        certList.value = res.Info || []
-      });
+      // certApi.certificateManagement.getAll().then((res: any) => {
+      //   certList.value = res.Info || []
+      // });
 
       api.product.getLists({ status: 1 }).then((res: any) => {
         state.productData = res.product || [];
