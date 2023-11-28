@@ -198,9 +198,9 @@ export default defineComponent({
 			api.dept.getList({ status: -1 }).then((res: any) => {
 				state.deptData = res || []
 			})
-			// api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
-			// 	state.messageData = res || [];
-			// });
+			api.product.getTypesAll({ types: 'protocol' }).then((res: any) => {
+				state.messageData = res || [];
+			});
 
 			// 证书列表
 			// certApi.certificateManagement.getAll().then((res: any) => {
