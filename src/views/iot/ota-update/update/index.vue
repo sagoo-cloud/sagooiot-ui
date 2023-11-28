@@ -53,7 +53,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column label="创建时间" prop="createdAt" align="center" />
-				<el-table-column label="操作" width="120" v-col="'handle'" align="center" fixed="right">
+				<el-table-column label="操作" width="200" v-col="'handle'" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">查看</el-button>
 						<el-button size="small" text type="warning" v-auth="'edit'" @click="onOpenEdit(scope.row)">编辑</el-button>
