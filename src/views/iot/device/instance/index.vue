@@ -97,13 +97,10 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange"
         v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <!--        <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />-->
-        <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
-        <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-        <el-table-column label="设备类型" prop="product.deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
-        <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
-        <!-- <el-table-column label="组织" prop="deptName" :show-overflow-tooltip="true" v-col="'deptName'"/> -->
-
+        <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
+        <el-table-column label="设备类型" prop="product.deviceType" show-overflow-tooltip v-col="'deviceType'" />
+        <el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
             <el-tag type="info" size="small" v-if="scope.row.status == 1">离线</el-tag>
@@ -113,13 +110,10 @@
         </el-table-column>
         <el-table-column prop="createdAt" label="创建时间" align="center" width="160"
           v-col="'registryTime'"></el-table-column>
-        <!--        <el-table-column prop="lastOnlineTime" label="最后上线时间" align="center" width="150" v-col="'lastOnlineTime'"></el-table-column>-->
-        <el-table-column prop="desc" label="说明" v-col="'desc'"></el-table-column>
+        <el-table-column prop="desc" label="说明" show-overflow-tooltip v-col="'desc'"></el-table-column>
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
-
-            <!-- <el-button size="small" text type="primary" @click="onOpenDetail(scope.row)">详情</el-button> -->
             <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type"
               style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>

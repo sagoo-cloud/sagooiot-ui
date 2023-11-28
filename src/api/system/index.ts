@@ -186,4 +186,5 @@ export default {
     detail: (params: object) => get('/system/monitor/lastLinesLog', params),
     down: (params: object) => file('system/monitor/downloadLog', params),
   },
+  getInfoByKey: (params: object) => get('/common/config/getInfoByKey', params)
 }

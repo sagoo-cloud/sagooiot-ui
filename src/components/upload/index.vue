@@ -75,6 +75,10 @@ const props = defineProps({
 		type: String,
 		default: '',
 	},
+	// keyName: {
+	// 	type: String,
+	// 	default: '',
+	// },
 })
 
 const fileList = ref<any[]>([
@@ -103,6 +107,11 @@ const updateImg = () => {
 		emit('setImg', props.widthHost ? img : img.replace(getOrigin(import.meta.env.VITE_SERVER_URL + '/'), ''));
 	} else {
 		emit('setImgs', list)
+		// if(props.keyName) {
+		// 	emit('setImgs', { list: list, keyName: props.keyName})
+		// }else {
+		// 	emit('setImgs', list)
+		// }
 	}
 }
 

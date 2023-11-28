@@ -62,6 +62,15 @@
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
+        <el-form-item label="设备图片">
+					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
+				</el-form-item>
+        <el-form-item label="设备说明">
+          <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
+        </el-form-item>
+        <el-form-item label="证书图片">
+					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>
+				</el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -76,12 +85,15 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/device';
+import apiSystem from '/@/api/system';
 import { ElMessage } from "element-plus";
-import tagVue from './tag.vue'
-import Map from './map.vue'
+import tagVue from './tag.vue';
+import Map from './map.vue';
+import UploadVue from '/@/components/upload/index.vue';
 import certApi from '/@/api/certificateManagement';
+import { json } from 'stream/consumers';
 
 interface RuleFormState {
   id: number;
@@ -98,6 +110,7 @@ interface RuleFormState {
   authPasswd: string;
   accessToken: string;
   certificateId: string;
+  extensionInfo: string;
 }
 
 const form: RuleFormState = {
@@ -114,7 +127,8 @@ const form: RuleFormState = {
   authPasswd: '',
   accessToken: '',
   certificateId: '',
-  desc: ''
+  desc: '',
+  extensionInfo: ''
 }
 
 interface DicState {
@@ -122,7 +136,12 @@ interface DicState {
   product: any;
   isShowDialog: boolean;
   ruleForm: RuleFormState;
-  rules: {}
+  rules: {};
+  deviceImgLimit: number;
+  certificateLimit: number;
+  phone: any[];
+  certificate: any[];
+  intro: string;
 }
 interface Tag {
   key: string;
@@ -135,6 +154,7 @@ export default defineComponent({
   components: {
     tagVue,
     Map,
+    UploadVue
   },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
@@ -156,7 +176,12 @@ export default defineComponent({
           { required: true, message: "设备标识不能为空", trigger: "blur" }
         ],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
-      }
+      },
+      deviceImgLimit: 0,
+      certificateLimit: 0,
+      phone: [],
+      certificate: [],
+      intro: ""
     });
 
     //地图选点
@@ -178,11 +203,11 @@ export default defineComponent({
 
 
       if (row) {
-        // api.dict.getType(row.id).then((res:any)=>{
-        //   state.ruleForm = res.data.dictType
-        // })
         state.ruleForm = row;
-        state.ruleForm.tags = row.tags || []
+        state.ruleForm.tags = row.tags || [];
+        state.phone = JSON.parse(row.extensionInfo).phone;
+        state.certificate = JSON.parse(row.extensionInfo).certificate;
+        state.intro = JSON.parse(row.extensionInfo).intro;
         productIdChange(row.productId as number)
       }
       state.isShowDialog = true;
@@ -192,6 +217,14 @@ export default defineComponent({
         ...form
       }
     };
+    // 上传设备图
+    const setImgsPhone = (res:any) => {
+      state.phone = res;
+    }
+    // 上传设备资格证书
+    const setImgsCertificate = (res:any) => {
+      state.certificate = res;
+    }
     // 关闭弹窗
     const closeDialog = () => {
       state.isShowDialog = false;
@@ -208,14 +241,30 @@ export default defineComponent({
         if (valid) {
           if (state.ruleForm.id !== 0) {
             //修改
-            api.instance.edit(state.ruleForm).then(() => {
+            const params = {
+              ...state.ruleForm,
+              extensionInfo: JSON.stringify({
+                "phone": state.phone,
+                "certificate": state.certificate,
+                "intro": state.intro
+              })
+            }
+            api.instance.edit(params).then(() => {
               ElMessage.success('设备类型修改成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
           } else {
             //添加
-            api.instance.add(state.ruleForm).then(() => {
+            const params = {
+              ...state.ruleForm,
+              extensionInfo: JSON.stringify({
+                "phone": state.phone,
+                "certificate": state.certificate,
+                "intro": state.intro
+              })
+            }
+            api.instance.add(params).then(() => {
               ElMessage.success('设备类型添加成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
@@ -254,6 +303,15 @@ export default defineComponent({
       state.ruleForm.lat = data.lat;
     }
 
+    onMounted(() => {
+      apiSystem.getInfoByKey({ ConfigKey: 'sys.device.phone.limit' }).then((res: any) => {
+        state.deviceImgLimit = parseInt(res.data.configValue);
+      });
+      apiSystem.getInfoByKey({ ConfigKey: 'sys.device.certificate.limit' }).then((res: any) => {
+        state.certificateLimit = parseInt(res.data.configValue);
+      });
+    })
+
     return {
       certList,
       productIdChange,
@@ -268,6 +326,8 @@ export default defineComponent({
       closeDialog,
       onCancel,
       onSubmit,
+      setImgsPhone,
+      setImgsCertificate,
       formRef,
       ...toRefs(state),
     };

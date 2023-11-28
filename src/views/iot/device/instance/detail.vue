@@ -357,6 +357,20 @@
           </div>
 
         </el-tab-pane>
+        <el-tab-pane label="设备扩展属性信息" name="6">
+          <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+            <el-form-item v-if="phone.length" label="设备图片">
+              <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
+            </el-form-item>
+            <el-form-item v-if="certificate.length" label="证书图片">
+              <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in certificate" :key="index" />
+            </el-form-item>
+            <el-form-item label="设备说明">
+              <el-input disabled v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-tab-pane>
       </el-tabs>
     </div>
     <EditDic ref="editDicRef" @typeList="typeList" />
@@ -403,6 +417,9 @@ import datahub from '/@/api/datahub';
 import { useRoute } from 'vue-router';
 
 interface TableDataState {
+  phone: any[];
+  certificate: any[];
+  intro: string;
   ids: number[];
   detail: any;
   deviceKeyList: string[];
@@ -463,6 +480,9 @@ export default defineComponent({
     const subDeviceRef = ref();
     const mutipleBindRef = ref();
     const state = reactive<TableDataState>({
+      certificate: [],
+      phone: [],
+      intro: '',
       deviceKeyList: [],
       areaData: [],
       isShowDialog: false,
@@ -522,6 +542,9 @@ export default defineComponent({
         api.product.detail(res.data.product.id).then((res: any) => {
           state.prodetail = res.data;
         });
+        state.phone = JSON.parse(res.data.extensionInfo).phone;
+        state.certificate = JSON.parse(res.data.extensionInfo).certificate;
+        state.intro = JSON.parse(res.data.extensionInfo).intro;
 
         //加载全部属性
         datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
