@@ -62,12 +62,12 @@
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="设备图片">
-					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
-				</el-form-item>
         <el-form-item label="设备说明">
           <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
         </el-form-item>
+        <el-form-item label="设备图片">
+					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
+				</el-form-item>
         <el-form-item label="证书图片">
 					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>
 				</el-form-item>
@@ -205,9 +205,9 @@ export default defineComponent({
       if (row) {
         state.ruleForm = row;
         state.ruleForm.tags = row.tags || [];
-        state.phone = JSON.parse(row.extensionInfo).phone;
-        state.certificate = JSON.parse(row.extensionInfo).certificate;
-        state.intro = JSON.parse(row.extensionInfo).intro;
+        state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
+        state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
+        state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
         productIdChange(row.productId as number)
       }
       state.isShowDialog = true;
