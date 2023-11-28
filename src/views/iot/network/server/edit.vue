@@ -351,9 +351,9 @@ export default defineComponent({
             }
         }
         const getCertificateList = () => {
-            api2.certificate.getList().then((res: any) => {
-                state.certificateList = res.Info;
-			})
+      //       api2.certificate.getList().then((res: any) => {
+      //           state.certificateList = res.Info;
+			// })
 		}
         watch(
 			() => state.form.isTls,

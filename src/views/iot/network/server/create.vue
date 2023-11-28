@@ -330,9 +330,9 @@ export default defineComponent({
 		const handleClick = (tab: TabsPaneContext, event: Event) => {
 		}
         const getCertificateList = () => {
-            api2.certificate.getList().then((res: any) => {
-                state.certificateList = res.Info;
-			})
+      //       api2.certificate.getList().then((res: any) => {
+      //           state.certificateList = res.Info;
+			// })
 		}
         const initData = () => {
             state.stick = {

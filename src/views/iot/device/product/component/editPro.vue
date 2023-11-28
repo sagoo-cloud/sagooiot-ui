@@ -67,13 +67,13 @@
 						</el-form-item>
 					</template>
 				</template>
-				<template v-else-if="ruleForm.authType === 3">
-					<el-form-item label="认证证书" prop="certificateId">
-						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">
-							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
-						</el-select>
-					</el-form-item>
-				</template>
+<!--				<template v-else-if="ruleForm.authType === 3">-->
+<!--					<el-form-item label="认证证书" prop="certificateId">-->
+<!--						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">-->
+<!--							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>-->
+<!--						</el-select>-->
+<!--					</el-form-item>-->
+<!--				</template>-->
 
 				<el-form-item label="设备类型" prop="deviceType">
 					<el-radio-group v-model="ruleForm.deviceType">
@@ -198,14 +198,14 @@ export default defineComponent({
 			api.dept.getList({ status: -1 }).then((res: any) => {
 				state.deptData = res || []
 			})
-			api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
-				state.messageData = res || [];
-			});
+			// api.product.getTypesAll({ handleType: 'protocol' }).then((res: any) => {
+			// 	state.messageData = res || [];
+			// });
 
 			// 证书列表
-			certApi.certificateManagement.getAll().then((res: any) => {
-				certList.value = res.Info || []
-			});
+			// certApi.certificateManagement.getAll().then((res: any) => {
+			// 	certList.value = res.Info || []
+			// });
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
 			// });
