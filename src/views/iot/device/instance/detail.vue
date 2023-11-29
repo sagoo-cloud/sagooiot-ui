@@ -357,23 +357,22 @@
           </div>
 
         </el-tab-pane>
-        <el-tab-pane label="设备扩展属性信息" name="6">
-          <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-            <el-form-item v-if="phone.length" label="设备图片">
+        <el-tab-pane label="设备扩展属性信息" name="7">
+          <el-form size="default" label-width="110px">
+            <el-form-item label="设备图片">
               <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
             </el-form-item>
-            <el-form-item v-if="certificate.length" label="证书图片">
+            <el-form-item label="证书图片">
               <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in certificate" :key="index" />
             </el-form-item>
             <el-form-item label="设备说明">
               <el-input disabled v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
             </el-form-item>
-
           </el-form>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <EditDic ref="editDicRef" @typeList="typeList" />
+    <EditDic ref="editDicRef" @typeList="initData" />
     <EditAttr ref="editAttrRef" @typeList="getproperty" />
     <EditFun ref="editFunRef" @typeList="getfunction" />
     <EditEvent ref="editEventRef" @typeList="getevent" />
@@ -533,6 +532,11 @@ export default defineComponent({
     });
 
     onMounted(() => {
+      initData()
+    });
+
+    function initData() {
+      
       const ids = route.params && route.params.id;
       api.instance.detail(ids).then((res: any) => {
         state.detail = res.data;
@@ -542,29 +546,27 @@ export default defineComponent({
         api.product.detail(res.data.product.id).then((res: any) => {
           state.prodetail = res.data;
         });
-        state.phone = JSON.parse(res.data.extensionInfo).phone;
-        state.certificate = JSON.parse(res.data.extensionInfo).certificate;
-        state.intro = JSON.parse(res.data.extensionInfo).intro;
+
+        const { phone, certificate, intro } = JSON.parse(res.data.extensionInfo || '{}')
+        state.phone = phone || [];
+        state.certificate = certificate || [];
+        state.intro = intro
 
         //加载全部属性
         datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
-          array_list.value=re;
-				});
+          array_list.value = re;
+        });
 
         //第一次加载
         api.model.property(state.tableData.param).then((res: any) => {
-
           state.tableData.data = res.Data;
           state.tableData.total = res.Total;
-         
-
         });
         getrunData();
 
         getDeviceTableData()
       });
-
-    });
+    }
 
     const mutipleUnbind = () => {
       let msg = '是否进行批量解绑？';
@@ -954,6 +956,7 @@ export default defineComponent({
     }
 
     return {
+      initData,
       logqueryRef,
       resetQuery,
       getStatusText,

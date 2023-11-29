@@ -97,7 +97,6 @@ const updateImg = () => {
 			return item.url
 		}
 	})
-	console.log(props.limit)
 	if (props.limit === 1) {
 		const img = list[0]
 		if(!img) {
