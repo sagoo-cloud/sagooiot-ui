@@ -68,7 +68,7 @@ interface RuleFormState {
   method: string;
   devices: string;
   stratege: string;
-  devOtaFirewareId: number;
+  devOtaFirmwareId: number;
   push: string;
 }
 interface UpdateState {
@@ -91,7 +91,7 @@ export default defineComponent({
 			method: '',
 			devices: '',
 			stratege: '',
-      devOtaFirewareId: 0,
+      devOtaFirmwareId: 0,
 			push: '',
 		},
 	  	productData: [],
@@ -109,7 +109,7 @@ export default defineComponent({
       resetForm();
       if (row) {
         // api.manage.detail(row.id).then((res: any) => {
-          state.ruleForm.devOtaFirewareId = row.id;
+          state.ruleForm.devOtaFirmwareId = row.id;
         // });
       }
       state.isShowDialog = true;
@@ -122,7 +122,7 @@ export default defineComponent({
           method: '',
           devices: '',
           stratege: '',
-          devOtaFirewareId: 0,
+          devOtaFirmwareId: 0,
           push: '',
       	};
     };
@@ -169,82 +169,4 @@ export default defineComponent({
   },
 });
 
-
-// import { ref, reactive, nextTick } from 'vue'
-// import api from '/@/api/ota'
-// import { ruleRequired } from '/@/utils/validator'
-// import { ElMessage } from 'element-plus'
-
-
-// const emit = defineEmits(['getList'])
-
-// const showDialog = ref(false)
-// const formRef = ref()
-
-// const productData = ref([
-// 	{
-// 		id: '',
-// 		name: '',
-// 	},
-// ])
-// const baseForm = {
-// 	id: undefined,
-// 	method: '1',
-// 	push: '1',
-// 	name: '',
-// 	devices: '',
-// 	stratege: '1',
-// 	waitVersion: '',
-// 	devOtaFirewareId: '',
-// 	productId:'',
-// }
-
-// const formData = reactive({
-// 	...baseForm,
-// })
-
-// const ruleForm = {
-// 	method: [ruleRequired('请选择批次类型')],
-// 	name: [ruleRequired('批次名称不能为空')],
-// 	productId: [ruleRequired('请选择所属产品')],
-// 	devices: [ruleRequired('请选择批次模块')],
-// 	stratege: [ruleRequired('批次版本号不能为空')],
-// 	waitVersion: [ruleRequired('升级后版本号不能为空')],
-// }
-
-
-// const onSubmit = async () => {
-// 	await formRef.value.validate()
-
-// 	const theApi = formData.id ? api.batch.edit : api.batch.add
-// 	await theApi(formData)
-// 	ElMessage.success('操作成功')
-// 	resetForm()
-// 	showDialog.value = false
-// 	emit('getList')
-// }
-
-// const getProductList = () => {
-// 	api.batch.getDeviceList({productId:formData.productId}).then((res: any) => {
-// 		let productDataList = res.device
-// 		productData.value = productDataList
-// 	})
-// }
-
-// const resetForm = async () => {
-// 	Object.assign(formData, { ...baseForm })
-// 	formRef.value && formRef.value.resetFields()
-// }
-
-// const open = async (row: any) => {
-// 	resetForm()
-// 	showDialog.value = true
-// 	nextTick(() => {
-// 		Object.assign(formData, { ...row })
-// 		getProductList()
-
-// 	})
-// }
-
-// defineExpose({ open })
 </script>

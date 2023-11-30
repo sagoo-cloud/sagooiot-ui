@@ -69,7 +69,7 @@
     </el-card>
   </div>
 </template>
-  
+
 <script lang="ts">
 import api from '/@/api/ota';
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
@@ -98,7 +98,7 @@ interface TableDataState {
       pageSize: number;
       keyWord: string;
       dateRange: string[];
-      devOtaFirewareId: number;
+      devOtaFirmwareId: number;
     };
   };
 }
@@ -126,7 +126,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           keyWord: '',
-          devOtaFirewareId: 0,
+          devOtaFirmwareId: 0,
         },
       },
     });
@@ -141,7 +141,7 @@ export default defineComponent({
     const getList = (pageNum?: number) => {
       typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
-      state.tableData.param.devOtaFirewareId = props.detail.id;
+      state.tableData.param.devOtaFirmwareId = props.detail.id;
       api.batch
         .getList(state.tableData.param)
         .then((res: any) => {
@@ -208,53 +208,5 @@ export default defineComponent({
     };
   },
 });
-// import api from '/@/api/ota';
-// import { useSearch } from '/@/hooks/useCommon';
-// import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-// // import CheckForm from '../check.vue';
-// import CheckForm from '/@/views/iot/ota-update/update/component/check.vue';
-//
-// import { ref } from 'vue';
-// import { useRouter } from 'vue-router';
-// const props = defineProps({
-// 	detail: {
-// 		type: Object,
-// 		default: () => { }
-// 	},
-// })
-// const queryRef = ref();
-// const router = useRouter();
-//
-// const checkFormRef = ref();
-//
-// const { params, tableData, getList, loading } = useSearch<any[]>(api.batch.getList, 'Data', { devOtaFirewareId: props.detail.id });
-//
-// getList();
-//
-// const CheckUpdate = async (row?: any) => {
-// 	if (row) {
-// 		checkFormRef.value.open(row);
-// 		return;
-// 	} else {
-// 		let array = {
-// 			productId: props.detail.productId,
-// 			devOtaFirewareId: props.detail.id
-// 		}
-// 		checkFormRef.value.open(array);
-// 	}
-// };
-//
-//
-// const del = (row: any) => {
-// 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
-// 		confirmButtonText: '确认',
-// 		cancelButtonText: '取消',
-// 		type: 'warning',
-// 	}).then(async () => {
-// 		await api.manage.del(row.id);
-// 		ElMessage.success('删除成功');
-// 		getList();
-// 	});
-// };
+
 </script>
-  

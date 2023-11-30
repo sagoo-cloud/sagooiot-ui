@@ -58,19 +58,19 @@
 						<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">查看</el-button>
 						<el-button size="small" text type="warning" v-auth="'edit'" @click="onOpenEdit(scope.row)">编辑</el-button>
 						<el-button size="small" text type="success" v-auth="'check'" @click="onOpenCheck(scope.row)">验证</el-button>
-					
+
 						<el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
 			<EditConfig ref="editRef" @getList="getList(1)" />
-    
+
       <CheckConfig ref="checkRef" @getList="getList(1)" />
 		</el-card>
 	</div>
 </template>
-  
+
 <script lang="ts">
 import api from '/@/api/ota';
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
@@ -142,7 +142,7 @@ export default defineComponent({
       api.manage
         .getList(state.tableData.param)
         .then((res: any) => {
-          state.tableData.data = res.fireware;
+          state.tableData.data = res.firmware;
           state.tableData.total = res.Total;
         })
         .finally(() => (state.tableData.loading = false));
@@ -224,4 +224,3 @@ export default defineComponent({
   },
 });
 </script>
-  

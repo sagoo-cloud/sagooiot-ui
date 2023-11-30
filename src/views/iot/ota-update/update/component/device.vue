@@ -54,13 +54,12 @@
 
 	</el-card>
 </template>
-  
+
 <script lang="ts" setup>
 import api from '/@/api/ota';
 import { useSearch } from '/@/hooks/useCommon';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 const props = defineProps({
 	detail: {
 		type: Object,
@@ -70,7 +69,7 @@ const props = defineProps({
 const queryRef = ref();
 
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.device.getList, 'fireware', { devOtaFirewareId: props.detail.id });
+const { params, tableData, getList, loading } = useSearch<any[]>(api.device.getList, 'firmware', { devOtaFirmwareId: props.detail.id });
 
 getList();
 
@@ -87,4 +86,3 @@ const del = (row: any) => {
 	});
 };
 </script>
-  
