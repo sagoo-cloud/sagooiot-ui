@@ -20,13 +20,13 @@
         <!-- 地址解析结果 -->
         <div class="address-result" v-if="address">
 <!--          解析到地址：{{ address }}-->
-          <el-form-item label="经度" prop="lng" class="input-item">
+          <el-form-item label="经度" class="input-item">
             <el-input v-model="lng" />
           </el-form-item>
-          <el-form-item label="纬度" prop="lat" class="input-item">
+          <el-form-item label="纬度" class="input-item">
             <el-input v-model="lat" />
           </el-form-item>
-          <el-form-item label="详细地址" prop="address" class="input-item">
+          <el-form-item label="详细地址" class="input-item">
             <el-input v-model="address" />
           </el-form-item>
           <el-button @click="confirmAddress" style="margin-left: 10px;" type="success">确认</el-button>
@@ -44,6 +44,7 @@ const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
 const lng = ref('');
 const lat = ref('');
+const oldAddress = ref('');
 
 const searchKeyword = ref(''); // 搜索输入框的值
 
@@ -51,7 +52,8 @@ const isShowDialog = ref(false);
 const marker = ref<BMapGL.Marker | null>(null);
 let map: BMapGL.Map | null = null;
 
-const openDialog = () => {
+const openDialog = (row: any) => {
+  oldAddress.value = '';
   isShowDialog.value = true;
   nextTick(() => {
     map = new BMapGL.Map(mapContainer.value!);
@@ -74,6 +76,17 @@ const openDialog = () => {
       const position = marker.getPosition();
       map?.setCenter(position); // 将标点设置为地图中心
     });
+
+    // 如果添加了经纬度则进入地图后还原上次地址
+    if (row.lng && row.lat) {
+      lng.value = row.lng;
+      lat.value = row.lat;
+      searchByCoordinate();
+    }
+
+    if (row.address) {
+      oldAddress.value = row.address;
+    }
   });
 
   lng.value = "";
@@ -109,6 +122,9 @@ const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
         if (result) {
           const formattedAddress = result.address;
           address.value = formattedAddress;
+          if (oldAddress.value) {
+            address.value = oldAddress.value;
+          }
         }
       });
     }

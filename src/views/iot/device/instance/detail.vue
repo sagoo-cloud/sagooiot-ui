@@ -111,6 +111,10 @@
                   <td class="ant-descriptions-item-content" colspan="1">{{ detail.lastOnlineTime || '' }}</td>
                 </tr>
                 <tr class="ant-descriptions-row">
+                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">详细地址</th>
+                  <td class="ant-descriptions-item-content" colspan="1">{{ detail.address }}</td>
+                </tr>
+                <tr class="ant-descriptions-row">
                   <th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
                   <td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
                 </tr>

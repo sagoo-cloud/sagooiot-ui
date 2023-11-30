@@ -14,7 +14,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备坐标" prop="lng">
-          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectMap" read-only />
+          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectMap(ruleForm)" read-only />
         </el-form-item>
 
         <el-form-item label="标签设置" prop="lng">
@@ -187,8 +187,8 @@ export default defineComponent({
     });
 
     //地图选点
-    const selectMap=()=>{
-      mapRef.value.openDialog();
+    const selectMap = (row: any) => {
+      mapRef.value.openDialog(row);
     }
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
