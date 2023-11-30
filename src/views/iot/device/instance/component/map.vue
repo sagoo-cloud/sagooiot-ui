@@ -13,14 +13,23 @@
           <el-input v-model="lng" placeholder="经度" />
           <div>-</div>
           <el-input v-model="lat" placeholder="纬度" />
-          <!-- <el-button @click="searchByCoordinate" type="primary">搜索</el-button> -->
+           <el-button @click="searchByCoordinate" type="primary">搜索</el-button>
         </div>
 
         <div class="map" ref="mapContainer"></div>
         <!-- 地址解析结果 -->
         <div class="address-result" v-if="address">
-          解析到地址：{{ address }}
-          <el-button @click="confirmAddress" style="margin-left: 10px;" type="success">确认地址</el-button>
+<!--          解析到地址：{{ address }}-->
+          <el-form-item label="经度" prop="lng" class="input-item">
+            <el-input v-model="lng" />
+          </el-form-item>
+          <el-form-item label="纬度" prop="lat" class="input-item">
+            <el-input v-model="lat" />
+          </el-form-item>
+          <el-form-item label="详细地址" prop="address" class="input-item">
+            <el-input v-model="address" />
+          </el-form-item>
+          <el-button @click="confirmAddress" style="margin-left: 10px;" type="success">确认</el-button>
         </div>
       </div>
     </el-dialog>
@@ -74,7 +83,7 @@ const openDialog = () => {
 
 const confirmAddress = () => {
   isShowDialog.value = false;
-  emit('updateMap', { lng: lng.value, lat: lat.value });
+  emit('updateMap', { lng: lng.value, lat: lat.value, address: address.value });
 };
 
 const setMarker = (lng: string, lat: string) => {
@@ -167,7 +176,13 @@ defineExpose({ openDialog });
   width: 100px;
 }
 
+.input-item {
+  margin-right: 10px;
+}
+
 .address-result {
+  display: flex;
+  flex-direction: row;
   margin-top: 20px;
 }
 </style>

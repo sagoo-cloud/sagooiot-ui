@@ -111,6 +111,7 @@ interface RuleFormState {
   accessToken: string;
   certificateId: string;
   extensionInfo: string;
+  address: string;
 }
 
 const form: RuleFormState = {
@@ -128,7 +129,8 @@ const form: RuleFormState = {
   accessToken: '',
   certificateId: '',
   desc: '',
-  extensionInfo: ''
+  extensionInfo: '',
+  address: '',
 }
 
 interface DicState {
@@ -301,6 +303,7 @@ export default defineComponent({
     const updateMap=(data:any)=>{
       state.ruleForm.lng = data.lng;
       state.ruleForm.lat = data.lat;
+      state.ruleForm.address = data.address;
     }
 
     onMounted(() => {
