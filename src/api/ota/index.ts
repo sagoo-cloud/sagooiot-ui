@@ -1,35 +1,33 @@
-import { get, post, del, put, file } from '/@/utils/request';
-import getOrigin from '/@/utils/origin';
-const baseUrl = getOrigin(import.meta.env.VITE_SERVER_URL);
+import { get, post, del, put } from '/@/utils/request';
 
 export default {
   manage: {
-    getList: (data: any) => get('/dev_ota_fireware/list', data),
-    del: (ids: number) => del('/dev_ota_fireware/delete', { ids }),
-    add: (data: any) => post('/dev_ota_fireware/add', data),
-    edit: (data: any) => put('/dev_ota_fireware/edit', data),
-    detail: (id: number) => get('/dev_ota_fireware/get', { id }),
+    getList: (data: any) => get('/operate/ota_firmware/list', data),
+    del: (ids: number) => del('/operate/ota_firmware/delete', { ids }),
+    add: (data: any) => post('/operate/ota_firmware/add', data),
+    edit: (data: any) => put('/operate/ota_firmware/edit', data),
+    detail: (id: number) => get('/operate/ota_firmware/get', { id }),
 
   },
   module: {
     getSubList: () => get('/product/list'),
-    getList: (data: any) => get('/dev_ota_module/list', data),
-    del: (ids: number) => del('/dev_ota_module/delete', { ids }),
-    add: (data: any) => post('/dev_ota_module/add', data),
-    edit: (data: any) => put('/dev_ota_module/edit', data),
-    detail: (id: number) => get('/dev_ota_module/get', { id }),
+    getList: (data: any) => get('/operate/ota_module/list', data),
+    del: (ids: number) => del('/operate/ota_module/delete', { ids }),
+    add: (data: any) => post('/operate/ota_module/add', data),
+    edit: (data: any) => put('/operate/ota_module/edit', data),
+    detail: (id: number) => get('/operate/ota_module/get', { id }),
   },
   batch: {
-    getList: (data: any) => get('/dev_ota_strategy/list', data),
+    getList: (data: any) => get('/operate/ota_strategy/list', data),
     getDeviceList: (data: any) => get('/product/device/list', data),
-    del: (ids: number) => del('/dev_ota_strategy/delete', { ids }),
-    add: (data: any) => post('/dev_ota_strategy/add', data),
-    edit: (data: any) => put('/dev_ota_strategy/edit', data),
+    del: (ids: number) => del('/operate/ota_strategy/delete', { ids }),
+    add: (data: any) => post('/operate/ota_strategy/add', data),
+    edit: (data: any) => put('/operate/ota_strategy/edit', data),
   },
   device: {
-    getList: (data: any) => get('/dev_ota_detail/list', data),
-    del: (ids: number) => del('/dev_ota_detail/delete', { ids }),
-    add: (data: any) => post('/dev_ota_detail/add', data),
-    edit: (data: any) => post('/dev_ota_detail/edit', data),
+    getList: (data: any) => get('/operate/ota_detail/list', data),
+    del: (ids: number) => del('/operate/ota_detail/delete', { ids }),
+    add: (data: any) => post('/operate/ota_detail/add', data),
+    edit: (data: any) => post('/operate/ota_detail/edit', data),
   }
-} 
+}
