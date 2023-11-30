@@ -4,7 +4,12 @@
 			<el-form ref="formRef" size="default" label-width="110px">
 				<el-form-item label="内容">
 					<div v-html="content"></div>
-				</el-form-item>
+
+        </el-form-item>
+
+        <el-form-item label="调试">
+          <div v-html="failMsg"></div>
+        </el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -21,6 +26,7 @@ import { reactive, toRefs, defineComponent, ref } from 'vue';
 interface DicState {
 	isShowDialog: boolean;
 	content: string;
+  failMsg: string;
 }
 
 export default defineComponent({
@@ -30,10 +36,12 @@ export default defineComponent({
 		const state = reactive<DicState>({
 			isShowDialog: false,
 			content: '',
+      failMsg: '',
 		});
 		// 打开弹窗
 		const openDialog = (row: any) => {
 			state.content = row.content;
+      state.failMsg = row.failMsg;
 			state.isShowDialog = true;
 		};
 
