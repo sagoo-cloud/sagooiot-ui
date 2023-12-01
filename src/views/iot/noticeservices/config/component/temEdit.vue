@@ -2,29 +2,13 @@
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置配置模板" v-model="isShowDialog" width="50%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
-				<el-form-item label="名称" prop="title">
+        <el-form-item label="模版代码" prop="code">
+          <el-input v-model.trim="ruleForm.code" placeholder="请输入代码" />
+        </el-form-item>
+				<el-form-item label="模版名称" prop="title">
 					<el-input v-model.trim="ruleForm.title" placeholder="请输入名称" />
 				</el-form-item>
-
-				<!-- <el-form-item label="通知配置" prop="configId">
-						<el-select v-model="ruleForm.configId" placeholder="请选择通知配置" class="w100">
-						<el-option
-						v-for="item in configData"
-						:key="item.id"
-						:label="item.title"
-						:value="item.id"
-						/>
-					</el-select>
-				</el-form-item>  -->
-
-				<!-- <el-form-item label="配置类型" prop="types">
-					<el-radio-group v-model="ruleForm.types">
-						<el-radio label="1"  value="1">即时发送</el-radio>
-						<el-radio label="2" value="2">预约发送</el-radio>
-					</el-radio-group>
-				</el-form-item> -->
-
-				<el-form-item label="模板内容" prop="content">
+        <el-form-item label="模板内容" prop="content">
           <el-input v-model.trim="ruleForm.content" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
 
@@ -49,12 +33,13 @@ import { Delete, Plus, CircleClose, Top, Bottom, Minus, Right } from '@element-p
 import { stat } from 'fs';
 
 interface RuleFormState {
+  code: string;
 	title: string;
 	configId:string;
 	sendGateway:string;
 	content:string;
-	
-	
+
+
 }
 interface DicState {
 	isShowDialog: boolean;
@@ -80,21 +65,23 @@ export default defineComponent({
 			isShowDialog: false,
 			configId:'',
 			sendGateway:'',
-			
+
 			ruleForm: {
+        code: '',
 				title: '',
 				content:'',
 				sendGateway:'',
 				configId:'',
 
-				
+
 			},
 			rules: {
+        code: [{ required: true, message: '模版代码不能为空', trigger: 'blur' }],
 				title: [{ required: true, message: '配置名称不能为空', trigger: 'blur' }],
 				configId: [{ required: true, message: '通知配置不能为空', trigger: 'blur' }],
 				types: [{ required: true, message: '配置类型不能为空', trigger: 'blur' }],
 				content: [{ required: true, message: '模板内容不能为空', trigger: 'blur' }],
-				
+
 			},
 		});
 
@@ -128,14 +115,15 @@ export default defineComponent({
 			// state.isShowDialog = true;
 		};
 
-		
+
 
 		const resetForm = () => {
-		
+
 			state.ruleForm = {
+        code: '',
 				title: '',
 				content:'',
-			
+
 			};
 		};
 		// 关闭弹窗
@@ -153,7 +141,7 @@ export default defineComponent({
 			if (!formWrap) return;
 			formWrap.validate((valid: boolean) => {
 				if (valid) {
-					
+
 					//修改
 					state.ruleForm.sendGateway=state.sendGateway;
 						state.ruleForm.configId=state.configId;
@@ -166,11 +154,11 @@ export default defineComponent({
 			});
 		};
 
-	
+
 
 
 		return {
-		
+
 			openDialog,
 			opentemDialog,
 			closeDialog,
