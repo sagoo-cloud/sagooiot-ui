@@ -4,6 +4,7 @@
 		:show-file-list="false"
 		v-model:file-list="fileList"
 		:limit="1"
+		:data="{ source }"
 		:headers="headers"
 		:before-upload="beforeAvatarUpload"
 		:action="uploadUrl"
@@ -22,6 +23,8 @@ import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin';
 
+const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+
 const headers = {
 	Authorization: 'Bearer ' + localStorage.token,
 };
@@ -37,7 +40,6 @@ const props = defineProps({
 		type: String,
 		default: '/common/singleFile',
 	},
-	// https://zhgy.sagoo.cn/api/v1/common/singleFile
 });
 
 const fileList = ref<any[]>([
@@ -56,7 +58,7 @@ const updateImg = (res: any) => {
 		ElMessage.error(res.message);
 	}
 	fileList.value = []
-	emit('update', res.data.path)
+	emit('update', res.data.full_path)
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
