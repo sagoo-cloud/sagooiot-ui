@@ -1,74 +1,74 @@
 <template>
-	<div class="ota-module-container">
-		<el-card shadow="hover">
-			<div class="ota-module-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
-					<el-form-item label="升级包名称" prop="keyWord">
-						<el-input
-							v-model="tableData.param.keyWord"
-							placeholder="请输入升级包名称"
-							clearable
-							size="default"
-							style="width: 240px;"
-							@keyup.enter.native="getList(1)" />
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button type="primary" v-auth="'add'" @click="onOpenAdd()">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							添加升级包
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+  <div class="ota-module-container">
+    <el-card shadow="hover">
+      <div class="ota-module-search mb15">
+        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
+          <el-form-item label="升级包名称" prop="keyWord">
+            <el-input
+                v-model="tableData.param.keyWord"
+                placeholder="请输入升级包名称"
+                clearable
+                size="default"
+                style="width: 240px;"
+                @keyup.enter.native="getList(1)" />
+          </el-form-item>
+          <el-form-item>
+            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+              <el-icon>
+                <ele-Search />
+              </el-icon>
+              查询
+            </el-button>
+            <el-button size="default" @click="resetQuery(queryRef)">
+              <el-icon>
+                <ele-Refresh />
+              </el-icon>
+              重置
+            </el-button>
+            <el-button type="primary" v-auth="'add'" @click="onOpenAdd()">
+              <el-icon>
+                <ele-FolderAdd />
+              </el-icon>
+              添加升级包
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
 
-			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column label="ID" v-col="'id'" align="center" prop="id" width="60" />
-				<el-table-column label="升级包名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
-				<el-table-column prop="typo" label="类型" show-overflow-tooltip v-col="'typo'">
-					<template #default="scope">
-						<el-tag  size="small" v-if="scope.row.typo == 1">整包</el-tag>
-						<el-tag  type="info" size="small" v-if="scope.row.typo == 2">差分</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column label="所属产品" v-col="'productName'" prop="productName" :show-overflow-tooltip="true" />
-				<el-table-column label="模块名称" v-col="'moduleName'" prop="moduleName" :show-overflow-tooltip="true" />
-				<el-table-column label="状态" prop="checkres" v-col="'checkres'" width="120" align="center">
-					<template #default="scope">
-						<el-tag type="success" size="small" v-if="scope.row.checkres == 1">验证</el-tag>
-						<el-tag type="info" size="small" v-else>未验证</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column label="创建时间" prop="createdAt" align="center" />
-				<el-table-column label="操作" width="200" v-col="'handle'" align="center" fixed="right">
-					<template #default="scope">
-						<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">查看</el-button>
-						<el-button size="small" text type="warning" v-auth="'edit'" @click="onOpenEdit(scope.row)">编辑</el-button>
-						<el-button size="small" text type="success" v-auth="'check'" @click="onOpenCheck(scope.row)">验证</el-button>
+      <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+        <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="60" />
+        <el-table-column label="升级包名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
+        <el-table-column prop="typo" label="类型" show-overflow-tooltip v-col="'typo'">
+          <template #default="scope">
+            <el-tag  size="small" v-if="scope.row.typo == 1">整包</el-tag>
+            <el-tag  type="info" size="small" v-if="scope.row.typo == 2">差分</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属产品" v-col="'productName'" prop="productName" :show-overflow-tooltip="true" />
+        <el-table-column label="模块名称" v-col="'moduleName'" prop="moduleName" :show-overflow-tooltip="true" />
+        <el-table-column label="状态" prop="checkres" v-col="'checkres'" width="120" align="center">
+          <template #default="scope">
+            <el-tag type="success" size="small" v-if="scope.row.checkres == 1">验证</el-tag>
+            <el-tag type="info" size="small" v-else>未验证</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="createdAt" align="center" />
+        <el-table-column label="操作" width="200" v-col="'handle'" align="center" fixed="right">
+          <template #default="scope">
+            <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">查看</el-button>
+            <el-button size="small" text type="warning" v-auth="'edit'" @click="onOpenEdit(scope.row)">编辑</el-button>
+            <el-button size="small" text type="success" v-auth="'handle'" @click="onOpenCheck(scope.row)">操作</el-button>
 
-						<el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
-			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
-			<EditConfig ref="editRef" @getList="getList(1)" />
+            <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
+      <EditConfig ref="editRef" @getList="getList(1)" />
 
       <CheckConfig ref="checkRef" @getList="getList(1)" />
-		</el-card>
-	</div>
+    </el-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -111,11 +111,11 @@ export default defineComponent({
     const router = useRouter();
     const editRef = ref();
     const checkRef = ref();
-	  const detailRef = ref();
+    const detailRef = ref();
     const queryRef = ref();
     const tabDataList = ref([{dictLabel: '全部', dictValue: ''}]);
     const state = reactive<TableDataState>({
-	  ids: [],
+      ids: [],
       tableData: {
         data: [],
         total: 0,
@@ -140,12 +140,12 @@ export default defineComponent({
       typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       api.manage
-        .getList(state.tableData.param)
-        .then((res: any) => {
-          state.tableData.data = res.firmware;
-          state.tableData.total = res.Total;
-        })
-        .finally(() => (state.tableData.loading = false));
+          .getList(state.tableData.param)
+          .then((res: any) => {
+            state.tableData.data = res.firmware;
+            state.tableData.total = res.Total;
+          })
+          .finally(() => (state.tableData.loading = false));
     };
     // 打开新增弹窗
     const onOpenAdd = () => {
@@ -185,12 +185,12 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-          api.manage.del(ids).then(() => {
-            ElMessage.success('删除成功');
-            getList();
-          });
-        })
-        .catch(() => { });
+        api.manage.del(ids).then(() => {
+          ElMessage.success('删除成功');
+          getList();
+        });
+      })
+          .catch(() => { });
     };
     /** 重置按钮操作 */
     const resetQuery = (formEl: FormInstance | undefined) => {

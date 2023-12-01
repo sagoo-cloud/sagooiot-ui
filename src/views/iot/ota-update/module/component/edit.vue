@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance,} from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref} from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/ota';
 interface RuleFormState {

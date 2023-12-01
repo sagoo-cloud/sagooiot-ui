@@ -33,7 +33,19 @@
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column prop="id" label="ID" width="60" />
         <el-table-column prop="name" label="名称" />
-        <el-table-column prop="waitVersion" label="待升级版本号" />
+<!--        <el-table-column prop="waitVersion" label="待升级版本号" width="120" />-->
+        <el-table-column label="类型" prop="typo" width="120" align="center">
+          <template #default="scope">
+            <el-tag type="success" size="small" v-if="scope.row.typo == 0">验证</el-tag>
+            <el-tag type="info" size="small" v-else>升级</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" prop="active" width="120" align="center">
+          <template #default="scope">
+            <el-tag type="success" size="small" v-if="scope.row.active == 1">是</el-tag>
+            <el-tag type="info" size="small" v-else>否</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="method" label="协议方式" show-overflow-tooltip>
           <template #default="scope">
             <el-tag size="small" v-if="scope.row.method == 1">http</el-tag>
@@ -47,6 +59,7 @@
             <el-tag size="small" v-if="scope.row.stratege == 2">动态升级</el-tag>
           </template>
         </el-table-column>
+
         <el-table-column prop="push" label="主动推送" show-overflow-tooltip>
           <template #default="scope">
             <el-tag size="small" v-if="scope.row.push == 1">是 </el-tag>
@@ -54,12 +67,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
-        <!-- <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>
-            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>
-          </template>
-        </el-table-column> -->
+<!--        <el-table-column label="操作" width="200" align="center">-->
+<!--          <template #default="scope">-->
+<!--            &lt;!&ndash;            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>&ndash;&gt;-->
+<!--            <el-button size="small" text type="success" v-if="scope.row.active != 1" @click="activation(scope.row)">激活</el-button>-->
+<!--            <el-button size="small" text type="danger" v-else @click="activation(scope.row)">禁用</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
       <!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
       <!--        @pagination="getList()" />-->
@@ -73,7 +88,7 @@
 <script lang="ts">
 import api from '/@/api/ota';
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import CheckConfig from '/@/views/iot/ota-update/update/component/check.vue';
 
 // 定义接口来定义对象的类型
@@ -134,6 +149,18 @@ export default defineComponent({
     onMounted(() => {
       initTableData();
     });
+    // 激活操作
+    const activation = (row: any) => {
+      let active = 0;
+      console.log(row);
+      if (row.active === 1) active = 0;
+      if (row.active === 0) active = 1;
+      console.log(active);
+      api.batch.stop({id: row.id, active: active}).then((res: any) => {
+        ElMessage.success('操作成功');
+        batchList();
+      });
+    };
     // 初始化表格数据
     const initTableData = () => {
       batchList();
@@ -143,12 +170,12 @@ export default defineComponent({
       state.tableData.loading = true;
       state.tableData.param.devOtaFirmwareId = props.detail.id;
       api.batch
-        .getList(state.tableData.param)
-        .then((res: any) => {
-          state.tableData.data = res.Data;
-          state.tableData.total = res.Total;
-        })
-        .finally(() => (state.tableData.loading = false));
+          .getList(state.tableData.param)
+          .then((res: any) => {
+            state.tableData.data = res.Data;
+            state.tableData.total = res.Total;
+          })
+          .finally(() => (state.tableData.loading = false));
     };
     // 打开新增弹窗
     const onOpenAdd = () => {
@@ -179,7 +206,7 @@ export default defineComponent({
           getList();
         });
       })
-        .catch(() => { });
+          .catch(() => { });
     };
     /** 重置按钮操作 */
     const resetQuery = () => {
@@ -201,6 +228,7 @@ export default defineComponent({
       onOpenAdd,
       onRowDel,
       getList,
+      activation,
       resetQuery,
       handleSelectionChange,
       ...toRefs(props),
@@ -208,5 +236,52 @@ export default defineComponent({
     };
   },
 });
-
+// import api from '/@/api/ota';
+// import { useSearch } from '/@/hooks/useCommon';
+// import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+// // import CheckForm from '../check.vue';
+// import CheckForm from '/@/views/iot/ota-update/update/component/check.vue';
+//
+// import { ref } from 'vue';
+// import { useRouter } from 'vue-router';
+// const props = defineProps({
+// 	detail: {
+// 		type: Object,
+// 		default: () => { }
+// 	},
+// })
+// const queryRef = ref();
+// const router = useRouter();
+//
+// const checkFormRef = ref();
+//
+// const { params, tableData, getList, loading } = useSearch<any[]>(api.batch.getList, 'Data', { devOtaFirewareId: props.detail.id });
+//
+// getList();
+//
+// const CheckUpdate = async (row?: any) => {
+// 	if (row) {
+// 		checkFormRef.value.open(row);
+// 		return;
+// 	} else {
+// 		let array = {
+// 			productId: props.detail.productId,
+// 			devOtaFirewareId: props.detail.id
+// 		}
+// 		checkFormRef.value.open(array);
+// 	}
+// };
+//
+//
+// const del = (row: any) => {
+// 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
+// 		confirmButtonText: '确认',
+// 		cancelButtonText: '取消',
+// 		type: 'warning',
+// 	}).then(async () => {
+// 		await api.manage.del(row.id);
+// 		ElMessage.success('删除成功');
+// 		getList();
+// 	});
+// };
 </script>

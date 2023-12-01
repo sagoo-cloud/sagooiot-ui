@@ -23,3 +23,15 @@ export const validateNoSpace = (rule: any, value: any, callback: any) => {
     callback();
   }
 }
+
+// 校验版本号
+export const checkVersion = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback()
+  }
+
+  if (!/^(\d{1,3}\.){2}\d{1,3}$/.test(value)) {
+    callback(new Error('输入版本号格式错误，示例：（xx.xxx.xxx）'))
+  }
+  return callback()
+}

@@ -39,11 +39,13 @@
 <script lang="ts" setup>
 import { defineEmits, defineExpose, nextTick, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
+import editDic from "/@/views/system/dict/component/editDic.vue";
 
 const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
 const lng = ref('');
 const lat = ref('');
+const editMap = ref(false);
 const oldAddress = ref('');
 
 const searchKeyword = ref(''); // 搜索输入框的值
@@ -55,6 +57,7 @@ let map: BMapGL.Map | null = null;
 const openDialog = (row: any) => {
   oldAddress.value = '';
   isShowDialog.value = true;
+  editMap.value = false;
   nextTick(() => {
     map = new BMapGL.Map(mapContainer.value!);
     map.centerAndZoom('沈阳市', 10);
@@ -81,6 +84,7 @@ const openDialog = (row: any) => {
     if (row.lng && row.lat) {
       lng.value = row.lng;
       lat.value = row.lat;
+      editMap.value = true;
       searchByCoordinate();
     }
 
@@ -110,6 +114,9 @@ const setMarker = (lng: string, lat: string) => {
   map?.addOverlay(marker.value);
   // 移动地图中心到选点位置
   map?.setCenter(point);
+  if (editMap.value == true) {
+    map?.centerAndZoom();
+  }
 };
 
 const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
@@ -139,7 +146,6 @@ const searchByCoordinate = () => {
     lng.value = "";
     lat.value = "";
     searchByKeyword(searchKeyword.value);
-
   }
 };
 

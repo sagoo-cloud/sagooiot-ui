@@ -5,7 +5,7 @@
         <el-form-item label="升级包类型" prop="typo">
           <el-radio-group v-model="ruleForm.typo">
             <el-radio label="1">整包</el-radio>
-            <el-radio label="2">差分</el-radio>
+            <el-radio label="2" disabled>差分</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -23,6 +23,9 @@
           <el-select v-model="ruleForm.module" placeholder="请选择升级包模块">
             <el-option v-for="item in moduleData" :key="item.id" :label="item.name" :value="item.id.toString()" />
           </el-select>
+
+          <!-- 添加模块 -->
+          <el-button type="success" @click="onOpenAddDic()" style="margin-left: 5px;">添加升级包模块</el-button>
         </el-form-item>
 
         <el-form-item label="升级包版本号" prop="version" v-if="ruleForm.typo == '1'">
@@ -44,7 +47,7 @@
         </el-form-item>
 
         <el-form-item label="选择升级包" prop="url">
-          <el-upload :file-list="fileList" :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+          <el-upload :file-list="fileList" :accept="fileAccept" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
             <el-button type="Default">上传升级包</el-button>
           </el-upload>
           <div v-if="ruleForm.urlName" style="color: green;margin-left: 10px;">{{ ruleForm.urlName }}，上传成功</div>
@@ -73,14 +76,20 @@
         </span>
       </template>
     </el-dialog>
+
+    <!-- 添加模块 -->
+    <EditConfig ref="editDicRef"/>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance, } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/ota';
 import getOrigin from '/@/utils/origin';
+import {checkVersion} from '/@/utils/validator';
+import apiSystem from "/@/api/system";
+import EditConfig from "/@/views/iot/ota-update/module/component/edit.vue";
 
 interface RuleFormState {
   id: number;
@@ -96,15 +105,19 @@ interface RuleFormState {
   describe: string;
   info: string;
   url: string;
+  ossurl: string,
   urlName: string;
 }
 
 interface UpdateState {
+  uploadUrl: string;
   isShowDialog: boolean;
   ruleForm: RuleFormState;
   productData: [];
   moduleData: [];
   rules: {};
+  uploadFileWay: number;
+  fileAccept: [];
 }
 
 export default defineComponent({
@@ -112,7 +125,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const headers = { Authorization: 'Bearer ' + localStorage.token, };
-    const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile");
+    const editDicRef = ref();
     const areType = ref([
       {
         label: 'MD5',
@@ -126,6 +139,7 @@ export default defineComponent({
     const fileList = ref([]);
     const urlName = ref();
     const state = reactive<UpdateState>({
+      uploadUrl: '', // 上传地址
       isShowDialog: false,
       ruleForm: {
         id: 0,
@@ -141,6 +155,7 @@ export default defineComponent({
         describe: '',
         info: '',
         url: '',
+        ossurl: '',
         urlName: '',
       },
       productData: [],
@@ -150,19 +165,24 @@ export default defineComponent({
         name: [{ required: true, message: '升级包名称不能为空', trigger: 'change' }],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
         module: [{ required: true, message: '升级包模块不能为空', trigger: 'change' }],
-        version: [{ required: true, message: '升级包版本号不能为空', trigger: 'change' }],
+        version: [
+            { required: true, message: '升级包版本号不能为空', trigger: 'change' },
+            { validator: checkVersion, message: '输入版本号格式错误，示例：（xx.xxx.xxx）', trigger: 'blue' }
+        ],
         waitVersion: [{ required: true, message: '待升级版本号不能为空', trigger: 'change' }],
         afterVersion: [{ required: true, message: '升级后版本号不能为空', trigger: 'change' }],
         are: [{ required: true, message: '算法签名不能为空', trigger: 'change' }],
         url: [{ required: true, message: '升级包不能为空', trigger: 'change' }],
       },
+      uploadFileWay: 0,// 上传方式
+      fileAccept: [], // 上传格式
     });
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
       if (row) {
         api.manage.detail(row.id).then((res: any) => {
-          const data: RuleFormState = res.data.data;
+          const data: RuleFormState = res;
           state.ruleForm = data;
         });
         seletChange(row.productId);
@@ -175,6 +195,20 @@ export default defineComponent({
       });
 
       state.isShowDialog = true;
+
+      // 获取上传方式
+      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.way' }).then((res: any) => {
+        state.uploadFileWay = parseInt(res.data.configValue);
+        state.uploadUrl = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile?Source=" + state.uploadFileWay);
+      });
+      // 获取上传格式
+      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
+        let fileType = res.data.configValue.split(",");
+        for (let i = 0; i < fileType.length; i++) {
+          fileType[i] = '.' + fileType[i];
+        }
+        state.fileAccept = fileType;
+      });
     };
     const resetForm = () => {
       state.ruleForm = {
@@ -191,6 +225,7 @@ export default defineComponent({
         describe: '',
         info: '',
         url: '',
+        ossurl: '',
         urlName: '',
       };
     };
@@ -198,6 +233,7 @@ export default defineComponent({
       if (res.code === 0) {
         state.ruleForm.url = res.data.full_path
         state.ruleForm.urlName = res.data.name
+        state.ruleForm.ossurl = res.data.full_path
         fileList.value = []
         ElMessage.success('上传成功');
       } else {
@@ -229,6 +265,7 @@ export default defineComponent({
         if (valid) {
           if (state.ruleForm.id !== 0) {
             //修改
+            state.ruleForm.ossurl = state.ruleForm.url;
             api.manage.edit(state.ruleForm).then(() => {
               ElMessage.success('升级包修改成功');
               closeDialog(); // 关闭弹窗
@@ -245,7 +282,12 @@ export default defineComponent({
         }
       });
     };
+    // 添加模块
+    const onOpenAddDic = () => {
+      editDicRef.value.openDialog();
+    };
     return {
+      editDicRef,
       openDialog,
       closeDialog,
       seletChange,
@@ -254,12 +296,13 @@ export default defineComponent({
       formRef,
       areType,
       headers,
-      uploadUrl,
       fileList,
       urlName,
       updateImg,
+      onOpenAddDic,
       ...toRefs(state),
     };
   },
+  components: {EditConfig},
 });
 </script>
