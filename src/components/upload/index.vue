@@ -6,6 +6,7 @@
 			:accept="accept"
 			list-type="picture-card"
 			:limit="limit"
+			:data="{ source }"
 			:multiple="multiple"
 			:headers="headers"
 			:before-upload="beforeAvatarUpload"
@@ -50,6 +51,8 @@ const headers = {
 
 const emit = defineEmits(['setImg', 'setImgs'])
 
+const source =  JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+
 const props = defineProps({
 	multiple: {
 		type: Boolean,
@@ -91,8 +94,7 @@ const fileList = ref<any[]>([
 const updateImg = () => {
 	const list = fileList.value.map((item) => {
 		if (item.response) {
-			return getOrigin(import.meta.env.VITE_SERVER_URL + '/' + item.response?.data?.path)
-			// return item.response?.data?.path;
+			return item.response?.data?.full_path
 		} else {
 			return item.url
 		}
@@ -103,7 +105,7 @@ const updateImg = () => {
 			emit('setImg', '');
 			return;
 		}
-		emit('setImg', props.widthHost ? img : img.replace(getOrigin(import.meta.env.VITE_SERVER_URL + '/'), ''));
+		emit('setImg', img);
 	} else {
 		emit('setImgs', list)
 		// if(props.keyName) {
@@ -133,8 +135,7 @@ watch(
 	() => props.img,
 	(img) => {
 		if (img) {
-			const theImg = props.widthHost ? img : getOrigin(import.meta.env.VITE_SERVER_URL + '/' + img)
-			fileList.value = [{ name: theImg, url: theImg }]
+			fileList.value = [{ name: img, url: img }]
 			updateImg()
 		} else {
 			fileList.value = []

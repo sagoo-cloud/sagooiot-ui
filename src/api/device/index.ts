@@ -1,14 +1,17 @@
-import { get, post, del, put,file } from '/@/utils/request';
+import { get, post, del, put, file } from '/@/utils/request';
 
 export default {
-  common:{
-    singleImg: (data: object) => post('/common/singleImg', data),
+  common: {
+    singleImg: (data: FormData) => {
+      data.append('source', '0')
+      return post('/common/singleImg', data)
+    },
   },
   product: {
     // 设备属性设置
     propertySet: (data: object) => post('/product/property/set', data),
     // 获取设备接入信息 /product/?id=35
-    connect_intro: (id: string) => get('/product/connect_intro', {id}),
+    connect_intro: (id: string) => get('/product/connect_intro', { id }),
     getList: (params: object) => get('/product/page_list', params),
     getLists: (params: object) => get('/product/list', params),
     add: (data: object) => post('/product/add', data),
@@ -30,13 +33,13 @@ export default {
     // 脚本更新
     script: (data: object) => put('/product/script/update', data),
   },
-  category:{
+  category: {
     getList: (params: object) => get('/product/category/list', params),
     add: (data: object) => post('/product/category/add', data),
     edit: (data: object) => put('/product/category/edit', data),
     del: (id: number) => del('/product/category/del', { id }),
   },
-  instance:{
+  instance: {
     getList: (params: object) => get('/product/device/page_list', params),
     add: (data: object) => post('/product/device/add', data),
     edit: (data: object) => put('/product/device/edit', data),
@@ -63,23 +66,23 @@ export default {
     property: (params: object) => get('/product/tsl/property/list', params),
     propertyadd: (data: object) => post('/product/tsl/property/add', data),
     propertyedit: (data: object) => put('/product/tsl/property/edit', data),
-    propertydel: (productId: number,key:string) => del('/product/tsl/property/del', { productId,key }),
+    propertydel: (productId: number, key: string) => del('/product/tsl/property/del', { productId, key }),
 
     function: (params: object) => get('/product/tsl/function/list', params),
     functionadd: (data: object) => post('/product/tsl/function/add', data),
     functionedit: (data: object) => put('/product/tsl/function/edit', data),
-    functiondel: (productId: number,key:string) => del('/product/tsl/function/del', { productId,key }),
+    functiondel: (productId: number, key: string) => del('/product/tsl/function/del', { productId, key }),
 
 
     event: (params: object) => get('/product/tsl/event/list', params),
     eventadd: (data: object) => post('/product/tsl/event/add', data),
     eventedit: (data: object) => put('/product/tsl/event/edit', data),
-    eventdel: (productId: number,key:string) => del('/product/tsl/event/del', { productId,key }),
+    eventdel: (productId: number, key: string) => del('/product/tsl/event/del', { productId, key }),
 
     tag: (params: object) => get('/product/tsl/tag/list', params),
     tagadd: (data: object) => post('/product/tsl/tag/add', data),
     tagedit: (data: object) => put('/product/tsl/tag/edit', data),
-    tagdel: (productId: number,key:string) => del('/product/tsl/tag/del', { productId,key }),
+    tagdel: (productId: number, key: string) => del('/product/tsl/tag/del', { productId, key }),
   },
   tree: {
     getList: (params: object) => get('/product/device_tree/list', params),
@@ -102,6 +105,6 @@ export default {
     import: (data: object) => post('/product/device/import', data),
     export: (data: object) => file('/product/device/export', data),
   }
-  
-  
+
+
 }

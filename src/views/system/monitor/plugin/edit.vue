@@ -23,8 +23,7 @@
 				<el-input v-model="formData.author" placeholder="输入作者" />
 			</el-form-item>
 			<el-form-item label="插件图标" prop="icon">
-				<!-- <el-input v-model="formData.icon" placeholder="输入插件图标" /> -->
-				<uploadVue :width-host="false" :img="formData.icon" @set-img="setImage"></uploadVue>
+				<uploadVue :img="formData.icon" @set-img="setImage"></uploadVue>
 			</el-form-item>
 			<el-form-item label="插件网址" prop="link">
 				<el-input v-model="formData.link" placeholder="输入插件网址" />

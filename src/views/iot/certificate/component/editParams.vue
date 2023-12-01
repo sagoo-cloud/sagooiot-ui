@@ -13,7 +13,7 @@
 			</el-form-item>
 			<el-form-item label="证书文件" prop="fileContent">
 				<el-input disabled v-if="state.ruleForm.fileContent" size="default" v-model="state.ruleForm.fileContent"></el-input>
-				<uploadFile @update="updateFile" url="/common/singleFile"></uploadFile>
+				<uploadFile @update="updateFile"></uploadFile>
 			</el-form-item>
 			<el-form-item label="证书公钥" prop="publicKeyContent">
 				<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.publicKeyContent"></el-input>
@@ -349,6 +349,7 @@ defineExpose({ openDialog })
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
 :deep(.el-upload-list) {
 	display: none;
 }

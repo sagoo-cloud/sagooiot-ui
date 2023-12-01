@@ -44,7 +44,7 @@
         </el-form-item>
 
         <el-form-item label="选择升级包" prop="url">
-          <el-upload :file-list="fileList" :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+          <el-upload :file-list="fileList" :data="{ source }" :accept="['.doc', '.docx', '.zip', '.xls', '.xlsx', '.rar', '.jpg', '.jpeg', '.gif', '.npm', '.png', '.cert']" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
             <el-button type="Default">上传升级包</el-button>
           </el-upload>
           <div v-if="ruleForm.urlName" style="color: green;margin-left: 10px;">{{ ruleForm.urlName }}，上传成功</div>
@@ -113,6 +113,7 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const headers = { Authorization: 'Bearer ' + localStorage.token, };
     const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile");
+    const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
     const areType = ref([
       {
         label: 'MD5',
@@ -255,6 +256,7 @@ export default defineComponent({
       areType,
       headers,
       uploadUrl,
+      source,
       fileList,
       urlName,
       updateImg,

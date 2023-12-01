@@ -1,6 +1,6 @@
 <template>
   <div class="upload">
-    <el-upload class="hide" :accept="accept" :limit="1" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl" :on-success="updateImg">
+    <el-upload class="hide" :accept="accept" :limit="1" :data="{ source }" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl" :on-success="updateImg">
       <slot></slot>
     </el-upload>
   </div>
@@ -12,6 +12,8 @@ import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin'
 
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/singleImg');
+
+const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
 
 const headers = {
   Authorization: 'Bearer ' + localStorage.token,
@@ -35,7 +37,7 @@ const props = defineProps({
 });
 
 const updateImg = (res: any) => {
-  const url = getOrigin(import.meta.env.VITE_SERVER_URL + '/' + res.data?.path)
+  const url = res?.data?.full_path
   emit('setImg', url, props.name);
 };
 
