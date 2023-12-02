@@ -47,7 +47,7 @@
         </el-form-item>
 
         <el-form-item label="选择升级包" prop="url">
-          <el-upload :file-list="fileList" :accept="fileAccept" :show-file-list="false" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+          <el-upload :file-list="fileList" :accept="fileAccept" :show-file-list="false" :limit="1" :headers="headers" :data="{ source }" :action="uploadUrl" :on-success="updateImg">
             <el-button type="Default">上传升级包</el-button>
           </el-upload>
           <div v-if="ruleForm.urlName" style="color: green;margin-left: 10px;">{{ ruleForm.urlName }}，上传成功</div>
@@ -78,7 +78,7 @@
     </el-dialog>
 
     <!-- 添加模块 -->
-    <EditConfig ref="editDicRef"/>
+    <EditConfig ref="editDicRef" />
   </div>
 </template>
 
@@ -87,7 +87,7 @@ import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/ota';
 import getOrigin from '/@/utils/origin';
-import {checkVersion} from '/@/utils/validator';
+import { checkVersion } from '/@/utils/validator';
 import apiSystem from "/@/api/system";
 import EditConfig from "/@/views/iot/ota-update/module/component/edit.vue";
 
@@ -125,6 +125,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const headers = { Authorization: 'Bearer ' + localStorage.token, };
+    const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
     const editDicRef = ref();
     const areType = ref([
       {
@@ -139,7 +140,7 @@ export default defineComponent({
     const fileList = ref([]);
     const urlName = ref();
     const state = reactive<UpdateState>({
-      uploadUrl: '', // 上传地址
+      uploadUrl: getOrigin(import.meta.env.VITE_API_URL + '/common/singleFile'), // 上传地址
       isShowDialog: false,
       ruleForm: {
         id: 0,
@@ -166,8 +167,8 @@ export default defineComponent({
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
         module: [{ required: true, message: '升级包模块不能为空', trigger: 'change' }],
         version: [
-            { required: true, message: '升级包版本号不能为空', trigger: 'change' },
-            { validator: checkVersion, message: '输入版本号格式错误，示例：（xx.xxx.xxx）', trigger: 'blue' }
+          { required: true, message: '升级包版本号不能为空', trigger: 'change' },
+          { validator: checkVersion, message: '输入版本号格式错误，示例：（xx.xxx.xxx）', trigger: 'blue' }
         ],
         waitVersion: [{ required: true, message: '待升级版本号不能为空', trigger: 'change' }],
         afterVersion: [{ required: true, message: '升级后版本号不能为空', trigger: 'change' }],
@@ -196,11 +197,6 @@ export default defineComponent({
 
       state.isShowDialog = true;
 
-      // 获取上传方式
-      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.way' }).then((res: any) => {
-        state.uploadFileWay = parseInt(res.data.configValue);
-        state.uploadUrl = getOrigin(import.meta.env.VITE_API_URL + "/common/singleFile?Source=" + state.uploadFileWay);
-      });
       // 获取上传格式
       apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
         let fileType = res.data.configValue.split(",");
@@ -295,6 +291,7 @@ export default defineComponent({
       onSubmit,
       formRef,
       areType,
+      source,
       headers,
       fileList,
       urlName,
@@ -303,6 +300,6 @@ export default defineComponent({
       ...toRefs(state),
     };
   },
-  components: {EditConfig},
+  components: { EditConfig },
 });
 </script>
