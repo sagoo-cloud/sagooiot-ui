@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dic-container page-full">
 		<el-card class="page-full-part" shadow="never">
-			<el-form :model="form" ref="queryRef" label-width="140px">
+			<el-form :model="form" ref="queryRef" label-width="155px">
 				<div :style="{ width: '450px' }">
 					<el-descriptions title="安全控制"></el-descriptions>
 					<el-form-item label="是否启用安全控制" prop="security">
@@ -13,6 +13,12 @@
 					<el-descriptions title="登录设置"></el-descriptions>
 					<el-form-item label="是否单一登录" prop="singleLogin">
 						<el-radio-group v-model="form.singleLogin">
+							<el-radio label="0">否</el-radio>
+							<el-radio label="1">是</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="首次登录是否更改密码" prop="changePwdFirstLogin">
+						<el-radio-group v-model="form.changePwdFirstLogin">
 							<el-radio label="0">否</el-radio>
 							<el-radio label="1">是</el-radio>
 						</el-radio-group>
@@ -29,6 +35,12 @@
 						<el-input type="number" v-model="form.againLoginDate" placeholder="请输入">
 							<template #append>分钟</template>
 						</el-input>
+					</el-form-item>
+					<el-form-item label="密码更换周期开关" prop="changePeriodSwitch">
+						<el-radio-group v-model="form.changePeriodSwitch">
+							<el-radio label="0">否</el-radio>
+							<el-radio label="1">是</el-radio>
+						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="密码更换周期" prop="changePeriod">
 						<el-input type="number" v-model="form.changePeriod" placeholder="请输入">
@@ -114,6 +126,8 @@ const form = reactive({
 	column: '',
 	api: '',
 	security: '',
+	changePeriodSwitch: '',
+	changePwdFirstLogin: '',
 })
 
 // 是否包含大写字母
@@ -141,6 +155,8 @@ api.basicConfig.getDetails({ types: 1 }).then((res: any) => {
 	form.changePeriod = emailConfigMap['sys.password.change.period']?.configValue
 	form.changePeriod = emailConfigMap['sys.password.change.period']?.configValue
 	form.changePeriod = emailConfigMap['sys.password.change.period']?.configValue
+	form.changePeriodSwitch = emailConfigMap['sys.password.change.period.switch']?.configValue
+	form.changePwdFirstLogin = emailConfigMap['sys.change.password.for.first.login']?.configValue
 	form.button = emailConfigMap['sys.button.switch']?.configValue
 	form.column = emailConfigMap['sys.column.switch']?.configValue
 	form.api = emailConfigMap['sys.api.switch']?.configValue
@@ -158,6 +174,8 @@ function saveEmailConfig() {
 	emailConfigMap['sys.password.error.num'] && (emailConfigMap['sys.password.error.num'].configValue = form.errorNum)
 	emailConfigMap['sys.again.login.date'] && (emailConfigMap['sys.again.login.date'].configValue = form.againLoginDate)
 	emailConfigMap['sys.password.change.period'] && (emailConfigMap['sys.password.change.period'].configValue = form.changePeriod)
+	emailConfigMap['sys.password.change.period.switch'] && (emailConfigMap['sys.password.change.period.switch'].configValue = form.changePeriodSwitch)
+	emailConfigMap['sys.change.password.for.first.login'] && (emailConfigMap['sys.change.password.for.first.login'].configValue = form.changePwdFirstLogin)
 	emailConfigMap['sys.button.switch'] && (emailConfigMap['sys.button.switch'].configValue = form.button)
 	emailConfigMap['sys.column.switch'] && (emailConfigMap['sys.column.switch'].configValue = form.column)
 	emailConfigMap['sys.api.switch'] && (emailConfigMap['sys.api.switch'].configValue = form.api)
