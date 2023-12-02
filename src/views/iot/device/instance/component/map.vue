@@ -39,13 +39,11 @@
 <script lang="ts" setup>
 import { defineEmits, defineExpose, nextTick, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
-import editDic from "/@/views/system/dict/component/editDic.vue";
 
 const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
 const lng = ref('');
 const lat = ref('');
-const editMap = ref(false);
 const oldAddress = ref('');
 
 const searchKeyword = ref(''); // 搜索输入框的值
@@ -57,12 +55,24 @@ let map: BMapGL.Map | null = null;
 const openDialog = (row: any) => {
   oldAddress.value = '';
   isShowDialog.value = true;
-  editMap.value = false;
   nextTick(() => {
     map = new BMapGL.Map(mapContainer.value!);
-    map.centerAndZoom('沈阳市', 10);
+
+    // 如果添加了经纬度则进入地图后还原上次地址
+    if (row.lng && row.lat) {
+      lng.value = row.lng;
+      lat.value = row.lat;
+      searchByCoordinate();
+    } else {
+      map.centerAndZoom('沈阳市', 10);
+    }
     map.enableScrollWheelZoom(true);
-    searchByCoordinate();
+
+    const scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
+    map.addControl(scaleCtrl);
+    const zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
+    map.addControl(zoomCtrl);
+
     map.addEventListener('click', (e: any) => {
       lng.value = e.latlng.lng.toFixed(5);
       lat.value = e.latlng.lat.toFixed(5);
@@ -79,14 +89,6 @@ const openDialog = (row: any) => {
       const position = marker.getPosition();
       map?.setCenter(position); // 将标点设置为地图中心
     });
-
-    // 如果添加了经纬度则进入地图后还原上次地址
-    if (row.lng && row.lat) {
-      lng.value = row.lng;
-      lat.value = row.lat;
-      editMap.value = true;
-      searchByCoordinate();
-    }
 
     if (row.address) {
       oldAddress.value = row.address;
@@ -111,31 +113,45 @@ const setMarker = (lng: string, lat: string) => {
   // 创建新的标记
   const point = new BMapGL.Point(lng, lat);
   marker.value = new BMapGL.Marker(point);
-  map?.addOverlay(marker.value);
+  map?.addOverlay(new BMapGL.Marker(point));
   // 移动地图中心到选点位置
   map?.setCenter(point);
-  if (editMap.value == true) {
-    map?.centerAndZoom();
-  }
+  map?.centerAndZoom(point, 10);
 };
 
 const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
-  const point = new BMapGL.Point(lng, lat);
-  const geocoder = new BMapGL.Geocoder();
-  geocoder.getPoint(point, (pointResult: any) => {
-    if (pointResult) {
-      const locationPoint = new BMapGL.Point(pointResult.lng, pointResult.lat);
-      geocoder.getLocation(locationPoint, (result: any) => {
-        if (result) {
-          const formattedAddress = result.address;
-          address.value = formattedAddress;
-          if (oldAddress.value) {
-            address.value = oldAddress.value;
-          }
-        }
-      });
+  // 新查询经纬度方法
+  map?.centerAndZoom(new BMapGL.Point(lng, lat), 18);
+  // 创建地理编码实例, 并配置参数获取乡镇级数据
+  const myGeo = new BMapGL.Geocoder({extensions_town: true});
+  // 根据坐标得到地址描述
+  myGeo.getLocation(new BMapGL.Point(lng, lat), function(result){
+    if (result){
+      address.value = result.content.poi_desc;
+      if (oldAddress.value) {
+        address.value = oldAddress.value;
+      }
     }
   });
+
+  // TODO旧查询经纬度方法
+  // const point = new BMapGL.Point(lng, lat);
+  // const geocoder = new BMapGL.Geocoder();
+  // geocoder.getPoint(point, (pointResult: any) => {
+  //   if (pointResult) {
+  //     const locationPoint = new BMapGL.Point(pointResult.lng, pointResult.lat);
+  //     geocoder.getLocation(locationPoint, (result: any) => {
+  //       if (result) {
+  //         // console.log(result);
+  //         // const formattedAddress = result.address;
+  //         // address.value = formattedAddress;
+  //         if (oldAddress.value) {
+  //           address.value = oldAddress.value;
+  //         }
+  //       }
+  //     });
+  //   }
+  // });
 };
 
 const searchByCoordinate = () => {
@@ -163,6 +179,7 @@ const searchByKeyword = (keyword?: string) => {
         }
       }
     });
+    address.value = keyword;
     localSearch.search(keyword ? keyword : searchKeyword.value);
   }
 };
