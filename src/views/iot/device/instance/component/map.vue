@@ -13,13 +13,13 @@
           <el-input v-model="lng" placeholder="经度" />
           <div>-</div>
           <el-input v-model="lat" placeholder="纬度" />
-           <el-button @click="searchByCoordinate" type="primary">搜索</el-button>
+          <el-button @click="searchByCoordinate" type="primary">搜索</el-button>
         </div>
 
         <div class="map" ref="mapContainer"></div>
         <!-- 地址解析结果 -->
         <div class="address-result" v-if="address">
-<!--          解析到地址：{{ address }}-->
+          <!--          解析到地址：{{ address }}-->
           <el-form-item label="经度" class="input-item">
             <el-input v-model="lng" />
           </el-form-item>
@@ -39,6 +39,7 @@
 <script lang="ts" setup>
 import { defineEmits, defineExpose, nextTick, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
+
 
 const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
@@ -64,7 +65,13 @@ const openDialog = (row: any) => {
       lat.value = row.lat;
       searchByCoordinate();
     } else {
-      map.centerAndZoom('沈阳市', 10);
+      const mapLngAndLat = JSON.parse(localStorage.sysinfo || '{"mapLngAndLat": null}').mapLngAndLat
+      if (mapLngAndLat) {
+        const [lng, lat] = mapLngAndLat.split(',')
+        map.centerAndZoom(new BMapGL.Point(lng.trim(), lat.trim()), 10)
+      } else {
+        map.centerAndZoom('北京', 10);
+      }
     }
     map.enableScrollWheelZoom(true);
 
@@ -123,10 +130,10 @@ const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
   // 新查询经纬度方法
   map?.centerAndZoom(new BMapGL.Point(lng, lat), 18);
   // 创建地理编码实例, 并配置参数获取乡镇级数据
-  const myGeo = new BMapGL.Geocoder({extensions_town: true});
+  const myGeo = new BMapGL.Geocoder({ extensions_town: true });
   // 根据坐标得到地址描述
-  myGeo.getLocation(new BMapGL.Point(lng, lat), function(result){
-    if (result){
+  myGeo.getLocation(new BMapGL.Point(lng, lat), function (result) {
+    if (result) {
       address.value = result.content.poi_desc;
       if (oldAddress.value) {
         address.value = oldAddress.value;

@@ -23,10 +23,8 @@ import pagination from '/@/components/pagination/index.vue'
 //引入json数据展示
 import JsonViewer from "vue3-json-viewer"
 
-
 import VForm3 from 'vform3-builds'  //引入VForm3库
 import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
-
 
 const app = createApp(App);
 
