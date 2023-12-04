@@ -93,7 +93,6 @@ import tagVue from './tag.vue';
 import Map from './map.vue';
 import UploadVue from '/@/components/upload/index.vue';
 import certApi from '/@/api/certificateManagement';
-import { json } from 'stream/consumers';
 
 interface RuleFormState {
   id: number;

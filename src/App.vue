@@ -29,13 +29,6 @@ export default defineComponent({
 			localStorage.setItem('sysinfo', JSON.stringify(res));
 			sessionStorage.setItem('btnNoAuth', res.sysButtonSwitch ? '' : '1');
 			sessionStorage.setItem('colNoAuth', res.sysColumnSwitch ? '' : '1');
-			// 增加map配置
-			const script = document.createElement('script');
-			script.type = 'text/javascript';
-			script.src = `//api.map.baidu.com/api?v=1.0&type=webgl&ak=${res.mapAccessKey}&callback=onBMapCallback`
-			document.head.appendChild(script);
-			// 加上callback才会加载成功
-			window.onBMapCallback = () => {}
 		});
 	},
 	setup() {

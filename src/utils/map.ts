@@ -1,81 +1,40 @@
+import apiSystem from '/@/api/system';
+import { ElMessageBox } from 'element-plus';
 
-let BMapGL = (window as any).BMapGL;
+let centerPoint: any
 
-export function setMarker(markers: any[], map: any) {
-  const points: any = []
-  markers.forEach((item) => {
-    const { lat, lnt: lng } = item;
-    const point = new BMapGL.Point(lng, lat);
-    point.data = item
-    points.push(point)
+// 增加map配置
+export function initMap(): any {
+  return new Promise((resolve, reject) => {
+    if (window.BMapGL) {
+      console.log('已经初始化了...');
+      return resolve({ BMapGL: window.BMapGL, centerPoint })
+    }
 
-    const marker = new BMapGL.Marker(point);
+    Promise.all([apiSystem.getInfoByKey({ ConfigKey: 'sys.map.access.key' }), apiSystem.getInfoByKey({ ConfigKey: 'sys.map.lngAndLat' })]).then(([res1, res2]) => {
+      const ak = res1.data.configValue
+      const centerStr = res2.data.configValue
 
-    map.addOverlay(marker);
-
-    marker.addEventListener("click", function () {
-      const infoWindow = new BMapGL.InfoWindow(
-        `
-      <div class="map-hover-box">
-        <div class="map-hover-title">换热站名称：${item.name}</div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-label">换热站编号：</div>
-          <div class="map-hover-value">${item.code}</div>
-        </div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-label">位置：</div>
-          <div class="map-hover-value">${item.position}</div>
-        </div>
-      </div>
-    `,
-        {
-          width: 200, // 信息窗口宽度
-          height: 100, // 信息窗口高度
-          title: item.stationName,
+      // 百度地图异步加载回调处理
+      window.onBMapCallback = () => {
+        console.log('百度地图脚本初始化成功...');
+        if (centerStr) {
+          const [lng, lat] = centerStr.split(',')
+          centerPoint = new window.BMapGL.Point(lng.trim(), lat.trim())
+        } else {
+          centerPoint = '北京'
         }
-      );
-      map.openInfoWindow(infoWindow, point); //开启信息窗口
-    });
-  });
-  return points
-}
+        resolve({ BMapGL: window.BMapGL, centerPoint })
+      }
 
-export function setLine(lines: any[], map: any) {
-  lines.forEach((item) => {
-    const polyline = new BMapGL.Polyline(item.loopViaPointInfo.map((item: any) => {
-      return new BMapGL.Point(item.lnt, item.lat)
-    }), { strokeColor: "blue", strokeWeight: 10, strokeOpacity: 0.5 });   //创建折线
-
-    map.addOverlay(polyline);
-
-    polyline.addEventListener("click", function (e: any) {
-      const infoWindow = new BMapGL.InfoWindow(
-        `
-      <div class="map-hover-box">
-        <div class="map-hover-title">环路名称：${item.name}</div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-label">环路编号：</div>
-          <div class="map-hover-value">${item.code}</div>
-        </div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-label">所属换热站：</div>
-          <div class="map-hover-value">${item.stationInfo.name}</div>
-        </div>
-        <div class="map-hover-row-item">
-          <div class="map-hover-btn" onclick="window.mapToDetail('${item.code}')">去详情页</div>
-        </div>
-      </div>
-    `,
-        {
-          width: 200, // 信息窗口宽度
-          height: 100, // 信息窗口高度
-          title: item.name,
-        }
-      );
-      // map.closeInfoWindow()
-      setTimeout(() => {
-        map.openInfoWindow(infoWindow, e.latLng); //开启信息窗口
-      }, 100)
-    });
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      // 加上callback才会加载成功
+      script.src = `//api.map.baidu.com/api?v=1.0&type=webgl&ak=${ak}&callback=onBMapCallback`
+      document.head.appendChild(script);
+    }).catch(() => {
+      reject(new Error('地图加载失败，请刷新重试或联系开发者'))
+      ElMessageBox.alert('地图加载失败，请刷新重试或联系开发者', '提示', { type: 'error' })
+    })
   });
 }

@@ -39,7 +39,9 @@
 <script lang="ts" setup>
 import { defineEmits, defineExpose, nextTick, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
+import { initMap } from '/@/utils/map';
 
+initMap()
 
 const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
@@ -50,13 +52,19 @@ const oldAddress = ref('');
 const searchKeyword = ref(''); // 搜索输入框的值
 
 const isShowDialog = ref(false);
-const marker = ref<BMapGL.Marker | null>(null);
-let map: BMapGL.Map | null = null;
+const marker = ref<any>(null);
+let BMapGL: any = null;
+let map: any = null;
 
 const openDialog = (row: any) => {
   oldAddress.value = '';
   isShowDialog.value = true;
-  nextTick(() => {
+  nextTick(async () => {
+
+    const { BMapGL: theBMapGL, centerPoint } = await initMap()
+
+    BMapGL = theBMapGL
+    
     map = new BMapGL.Map(mapContainer.value!);
 
     // 如果添加了经纬度则进入地图后还原上次地址
@@ -65,13 +73,7 @@ const openDialog = (row: any) => {
       lat.value = row.lat;
       searchByCoordinate();
     } else {
-      const mapLngAndLat = JSON.parse(localStorage.sysinfo || '{"mapLngAndLat": null}').mapLngAndLat
-      if (mapLngAndLat) {
-        const [lng, lat] = mapLngAndLat.split(',')
-        map.centerAndZoom(new BMapGL.Point(lng.trim(), lat.trim()), 10)
-      } else {
-        map.centerAndZoom('北京', 10);
-      }
+      map.centerAndZoom(centerPoint, 10);
     }
     map.enableScrollWheelZoom(true);
 
