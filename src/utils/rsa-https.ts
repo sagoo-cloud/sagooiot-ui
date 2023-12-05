@@ -37,15 +37,6 @@ async function setPrivateKey() {
 setPublicKey()
 // setPrivateKey()
 
-// setTimeout(() => {
-//   // encrypt('asdfasdf').then(res => {
-//   //   console.log(res)
-//   // })
-//   decrypt('uts03JfyTGh/l8ivwQX/n9a6UpaVpfGgLaelrPfyMMdbslJmj79UNnv30NqktM7E6LhOyp4Ebt+EoJ8ss1FPyMlKpxwPHCFIanaClyR/aTCzeQGxVH2kZKJuZu02vrX1m2qXjn0Z1aV43GV5bNB40qPHzUZsMzMBHOqCAvqYO2zZwGpmFRFRu/93CPgpxgbhsbH7dCwOqJt9I7DMx9KaiiJmnPlbDSI4HG/wP/J2L1GHnZPK9zq+ccHm7WUYeVhf2xVYvma+hSzLWSiuwT1n5vRMIUKwjlT66usKJkEVhIiLTPmR6KLqEmWN21a/p6Dus/MCkFlA5hAURBalDqlnMQ==').then(res => {
-//     console.log(res)
-//   })
-// }, 300)
-
 export function encrypt(str: string) {
   const enc = new TextEncoder()
   const data = enc.encode(str) // 这边将要加密的字符串转为utf-8的Uint8Array

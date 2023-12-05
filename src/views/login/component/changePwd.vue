@@ -52,8 +52,15 @@ const formRules = computed(() => ({
 async function onSubmit() {
 	await formRef.value.validate()
 
-	const oldUserPassword = await encrypt(ruleForm.oldUserPassword)
-	const userPassword = await encrypt(ruleForm.userPassword)
+	let oldUserPassword: string
+	let userPassword: string
+	if (sessionStorage.isRsaEnabled) {
+		oldUserPassword = await encrypt(ruleForm.oldUserPassword)
+		userPassword = await encrypt(ruleForm.userPassword)
+	} else {
+		oldUserPassword = ruleForm.oldUserPassword
+		userPassword = ruleForm.userPassword
+	}
 
 	api.login.editPassword({
 		userName: ruleForm.userName,

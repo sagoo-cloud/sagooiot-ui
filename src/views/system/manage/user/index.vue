@@ -272,7 +272,14 @@ export default defineComponent({
 						ElMessage.success('密码不能为空');
 						return;
 					}
-					const password = await encrypt(value) as string
+
+					let password: string
+					if (sessionStorage.isRsaEnabled) {
+						password = await encrypt(value)
+					} else {
+						password = value
+					}
+
 					api.user.resetPassword(row.id, password).then(() => {
 						ElMessage.success('修改成功，新密码是：' + value);
 					});

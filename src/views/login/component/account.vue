@@ -117,7 +117,13 @@ export default defineComponent({
 				.validate(async (valid: boolean) => {
 					if (valid) {
 						state.loading.signIn = true;
-						const password = await encrypt(state.ruleForm.password)
+						let password: string
+						console.log(sessionStorage.isRsaEnabled)
+						if (sessionStorage.isRsaEnabled) {
+							password = await encrypt(state.ruleForm.password)
+						} else {
+							password = state.ruleForm.password
+						}
 						api.login
 							.login({
 								...state.ruleForm,

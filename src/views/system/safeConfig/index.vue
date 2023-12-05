@@ -6,21 +6,27 @@
 					<el-descriptions title="安全控制"></el-descriptions>
 					<el-form-item label="是否启用安全控制" prop="security">
 						<el-radio-group v-model="form.security">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="是否启用RSA" prop="rsaEnabled">
+						<el-radio-group v-model="form.rsaEnabled">
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-descriptions title="登录设置"></el-descriptions>
 					<el-form-item label="是否单一登录" prop="singleLogin">
 						<el-radio-group v-model="form.singleLogin">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="首次登录是否更改密码" prop="changePwdFirstLogin">
 						<el-radio-group v-model="form.changePwdFirstLogin">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="TOKEN过期时间" prop="expiryDate">
@@ -38,8 +44,8 @@
 					</el-form-item>
 					<el-form-item label="密码更换周期开关" prop="changePeriodSwitch">
 						<el-radio-group v-model="form.changePeriodSwitch">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="密码更换周期" prop="changePeriod">
@@ -50,26 +56,26 @@
 					<el-descriptions title="密码策略设置"></el-descriptions>
 					<el-form-item label="是否包含大写字母" prop="uppercase">
 						<el-radio-group v-model="form.uppercase">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="是否包含小写字母" prop="lowercase">
 						<el-radio-group v-model="form.lowercase">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="是否包含数字" prop="digit">
 						<el-radio-group v-model="form.digit">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="是否包含复杂字符" prop="complexity">
 						<el-radio-group v-model="form.complexity">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="密码长度" prop="minimum">
@@ -78,20 +84,20 @@
 					<el-descriptions title="权限设置"></el-descriptions>
 					<el-form-item label="按钮开关" prop="button">
 						<el-radio-group v-model="form.button">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="列表开关" prop="column">
 						<el-radio-group v-model="form.column">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="API开关" prop="api">
 						<el-radio-group v-model="form.api">
-							<el-radio label="0">否</el-radio>
-							<el-radio label="1">是</el-radio>
+							<el-radio label="1">启用</el-radio>
+							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item>
@@ -128,6 +134,7 @@ const form = reactive({
 	security: '',
 	changePeriodSwitch: '',
 	changePwdFirstLogin: '',
+	rsaEnabled: '',
 })
 
 // 是否包含大写字母
@@ -161,6 +168,7 @@ api.basicConfig.getDetails({ types: 1 }).then((res: any) => {
 	form.column = emailConfigMap['sys.column.switch']?.configValue
 	form.api = emailConfigMap['sys.api.switch']?.configValue
 	form.security = emailConfigMap['sys.is.security.control.enabled']?.configValue
+	form.rsaEnabled = emailConfigMap['sys.is.rsa.enabled']?.configValue
 });
 
 function saveEmailConfig() {
@@ -180,6 +188,7 @@ function saveEmailConfig() {
 	emailConfigMap['sys.column.switch'] && (emailConfigMap['sys.column.switch'].configValue = form.column)
 	emailConfigMap['sys.api.switch'] && (emailConfigMap['sys.api.switch'].configValue = form.api)
 	emailConfigMap['sys.is.security.control.enabled'] && (emailConfigMap['sys.is.security.control.enabled'].configValue = form.security)
+	emailConfigMap['sys.is.rsa.enabled'] && (emailConfigMap['sys.is.rsa.enabled'].configValue = form.rsaEnabled)
 	api.basicConfig.setDetails({ ConfigInfo: Object.values(emailConfigMap) }).then(() => {
 		ElMessage.success('操作成功');
 	});

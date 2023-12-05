@@ -26,9 +26,13 @@ export default defineComponent({
 	components: { LockScreen, Setings, CloseFull },
 	created() {
 		api.sysinfo().then((res: any) => {
+			// 安全开关是否开启 按钮权限，列表权限，rsa权限在开启安全权限下才使用
+			const isSecurityControlEnabled = res.isSecurityControlEnabled
 			localStorage.setItem('sysinfo', JSON.stringify(res));
-			sessionStorage.setItem('btnNoAuth', res.sysButtonSwitch ? '' : '1');
-			sessionStorage.setItem('colNoAuth', res.sysColumnSwitch ? '' : '1');
+			sessionStorage.setItem('btnNoAuth', (isSecurityControlEnabled && res.sysButtonSwitch) ? '' : '1');
+			sessionStorage.setItem('colNoAuth', (isSecurityControlEnabled && res.sysColumnSwitch) ? '' : '1');
+			sessionStorage.setItem('isSecurityControlEnabled', isSecurityControlEnabled ? '1' : '');
+			sessionStorage.setItem('isRsaEnabled', (isSecurityControlEnabled && res.isRsaEnabled) ? '1' : '');
 		});
 	},
 	setup() {
