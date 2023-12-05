@@ -4,97 +4,97 @@
 			<el-form :model="form" ref="queryRef" label-width="155px">
 				<div :style="{ width: '450px' }">
 					<el-descriptions title="安全控制"></el-descriptions>
-					<el-form-item label="是否启用安全控制" prop="security">
+					<el-form-item label="是否启用安全控制" prop="security" v-if="form.security">
 						<el-radio-group v-model="form.security">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="是否启用RSA" prop="rsaEnabled">
+					<el-form-item label="是否启用RSA" prop="rsaEnabled" v-if="form.rsaEnabled">
 						<el-radio-group v-model="form.rsaEnabled">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-descriptions title="登录设置"></el-descriptions>
-					<el-form-item label="是否单一登录" prop="singleLogin">
+					<el-form-item label="是否单一登录" prop="singleLogin" v-if="form.singleLogin">
 						<el-radio-group v-model="form.singleLogin">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="首次登录是否更改密码" prop="changePwdFirstLogin">
+					<el-form-item label="首次登录是否更改密码" prop="changePwdFirstLogin" v-if="form.changePwdFirstLogin">
 						<el-radio-group v-model="form.changePwdFirstLogin">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="TOKEN过期时间" prop="expiryDate">
+					<el-form-item label="TOKEN过期时间" prop="expiryDate" v-if="form.expiryDate">
 						<el-input type="number" v-model="form.expiryDate" placeholder="请输入">
 							<template #append>分钟</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="密码输入错误次数" prop="errorNum">
+					<el-form-item label="密码输入错误次数" prop="errorNum" v-if="form.errorNum">
 						<el-input type="number" v-model="form.errorNum" placeholder="请输入"></el-input>
 					</el-form-item>
-					<el-form-item label="允许再次登录时间" prop="againLoginDate">
+					<el-form-item label="允许再次登录时间" prop="againLoginDate" v-if="form.againLoginDate">
 						<el-input type="number" v-model="form.againLoginDate" placeholder="请输入">
 							<template #append>分钟</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="密码更换周期开关" prop="changePeriodSwitch">
+					<el-form-item label="密码更换周期开关" prop="changePeriodSwitch" v-if="form.changePeriodSwitch">
 						<el-radio-group v-model="form.changePeriodSwitch">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="密码更换周期" prop="changePeriod">
+					<el-form-item label="密码更换周期" prop="changePeriod" v-if="form.changePeriod">
 						<el-input type="number" v-model="form.changePeriod" placeholder="请输入">
 							<template #append>天</template>
 						</el-input>
 					</el-form-item>
 					<el-descriptions title="密码策略设置"></el-descriptions>
-					<el-form-item label="是否包含大写字母" prop="uppercase">
+					<el-form-item label="是否包含大写字母" prop="uppercase" v-if="form.uppercase">
 						<el-radio-group v-model="form.uppercase">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="是否包含小写字母" prop="lowercase">
+					<el-form-item label="是否包含小写字母" prop="lowercase" v-if="form.lowercase">
 						<el-radio-group v-model="form.lowercase">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="是否包含数字" prop="digit">
+					<el-form-item label="是否包含数字" prop="digit" v-if="form.digit">
 						<el-radio-group v-model="form.digit">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="是否包含复杂字符" prop="complexity">
+					<el-form-item label="是否包含复杂字符" prop="complexity" v-if="form.complexity">
 						<el-radio-group v-model="form.complexity">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="密码长度" prop="minimum">
+					<el-form-item label="密码长度" prop="minimum" v-if="form.minimum">
 						<el-input type="number" v-model="form.minimum" placeholder="请输入密码长度"></el-input>
 					</el-form-item>
 					<el-descriptions title="权限设置"></el-descriptions>
-					<el-form-item label="按钮开关" prop="button">
+					<el-form-item label="按钮开关" prop="button" v-if="form.button">
 						<el-radio-group v-model="form.button">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="列表开关" prop="column">
+					<el-form-item label="列表开关" prop="column" v-if="form.column">
 						<el-radio-group v-model="form.column">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="API开关" prop="api">
+					<el-form-item label="API开关" prop="api" v-if="form.api">
 						<el-radio-group v-model="form.api">
 							<el-radio label="1">启用</el-radio>
 							<el-radio label="0">禁用</el-radio>
