@@ -23,8 +23,8 @@
           <el-form-item label="状态" prop="status">
             <el-select v-model="tableData.param.status" placeholder="请选择状态" size="default" style="width: 180px">
               <el-option label="全部" :value="-1" />
-              <el-option label="正常" :value="0" />
-              <el-option label="停用" :value="1" />
+              <el-option label="正常" :value="1" />
+              <el-option label="异常" :value="0" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -82,7 +82,7 @@
         <el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="100">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
-            <el-tag type="warning" size="small" v-else-if="scope.row.status === 0">停用</el-tag>
+            <el-tag type="warning" size="small" v-else-if="scope.row.status === 0">异常</el-tag>
             <el-tag type="info" size="small" v-else>-</el-tag>
           </template>
         </el-table-column>
@@ -118,7 +118,7 @@
         </el-form-item>
         <el-form-item label="操作状态" prop="title">
           <el-tag type="success" size="small" v-if="currentRow.status">正常</el-tag>
-          <el-tag type="warning" size="small" v-else>停用</el-tag>
+          <el-tag type="warning" size="small" v-else>异常</el-tag>
         </el-form-item>
         <el-form-item label="操作时间" prop="title">
           {{ currentRow.operTime }}
