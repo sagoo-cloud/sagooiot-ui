@@ -3,7 +3,7 @@
 		<el-card class="page-full-part" shadow="never">
 			<el-form :model="form" ref="queryRef" label-width="155px">
 				<div :style="{ width: '450px' }">
-					<el-descriptions title="安全控制"></el-descriptions>
+					<el-descriptions title="安全控制" v-if="form.security || form.rsaEnabled"></el-descriptions>
 					<el-form-item label="是否启用安全控制" prop="security" v-if="form.security">
 						<el-radio-group v-model="form.security">
 							<el-radio label="1">启用</el-radio>
@@ -16,7 +16,7 @@
 							<el-radio label="0">禁用</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-descriptions title="登录设置"></el-descriptions>
+					<el-descriptions title="登录设置" v-if="form.singleLogin || form.changePwdFirstLogin || form.expiryDate || form.errorNum || form.againLoginDate || form.changePeriodSwitch || form.changePeriod"></el-descriptions>
 					<el-form-item label="是否单一登录" prop="singleLogin" v-if="form.singleLogin">
 						<el-radio-group v-model="form.singleLogin">
 							<el-radio label="1">启用</el-radio>
@@ -53,7 +53,7 @@
 							<template #append>天</template>
 						</el-input>
 					</el-form-item>
-					<el-descriptions title="密码策略设置"></el-descriptions>
+					<el-descriptions title="密码策略设置" v-if="form.uppercase || form.lowercase || form.digit || form.complexity || form.minimum"></el-descriptions>
 					<el-form-item label="是否包含大写字母" prop="uppercase" v-if="form.uppercase">
 						<el-radio-group v-model="form.uppercase">
 							<el-radio label="1">启用</el-radio>
@@ -81,7 +81,7 @@
 					<el-form-item label="密码长度" prop="minimum" v-if="form.minimum">
 						<el-input type="number" v-model="form.minimum" placeholder="请输入密码长度"></el-input>
 					</el-form-item>
-					<el-descriptions title="权限设置"></el-descriptions>
+					<el-descriptions title="权限设置" v-if="form.button || form.column || form.api"></el-descriptions>
 					<el-form-item label="按钮开关" prop="button" v-if="form.button">
 						<el-radio-group v-model="form.button">
 							<el-radio label="1">启用</el-radio>
