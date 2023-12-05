@@ -45,7 +45,7 @@
 							<el-icon>
 								<ele-Download />
 							</el-icon>
-							api导入
+							系统API同步
 						</el-button>
 					</el-form-item>
 				</el-form>
