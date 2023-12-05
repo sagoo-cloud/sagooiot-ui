@@ -1,21 +1,19 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="hover" v-loading="batchLoading">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 240px"
-              @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 240px"
-              @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item>
-    		<el-form-item label="所属产品" prop="productId">
-					<el-select v-model="tableData.param.productId" filterable  placeholder="请选择产品">
-						<el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
-					</el-select>
-				</el-form-item>
+          <el-form-item label="所属产品" prop="productId">
+            <el-select v-model="tableData.param.productId" filterable placeholder="请选择产品">
+              <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
+            </el-select>
+          </el-form-item>
 
           <el-form-item label="状态" prop="status" style="width: 200px;">
             <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 240px">
@@ -26,9 +24,7 @@
           </el-form-item>
 
           <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px"
-              value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期"
-              end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="typeList">
@@ -62,27 +58,25 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item> <el-button size="default" type="success" @click="setDeviceStatus1(null)"
-                     >
+                  <el-dropdown-item> <el-button size="default" type="success" @click="setDeviceStatus1(null)">
                       <el-icon>
                         <ele-Delete />
                       </el-icon>
                       批量启用
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button size="default" type="warning" @click="setDeviceStatus0(null)"
-                     >
+                  <el-dropdown-item><el-button size="default" type="warning" @click="setDeviceStatus0(null)">
                       <el-icon>
                         <ele-Delete />
                       </el-icon>
                       批量禁用
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item> <el-button size="default" @click="onOpenexcelDic('upload')" >
+                  <el-dropdown-item> <el-button size="default" @click="onOpenexcelDic('upload')">
                       <el-icon>
                         <ele-Upload />
                       </el-icon>
                       导入设备
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button size="default" @click="onOpenexcelDic('down')" >
+                  <el-dropdown-item><el-button size="default" @click="onOpenexcelDic('down')">
                       <el-icon>
                         <ele-Download />
                       </el-icon>
@@ -94,8 +88,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange"
-        v-loading="tableData.loading">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
         <el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
@@ -108,27 +101,22 @@
             <el-tag type="info" size="small" v-if="scope.row.status == 0">未启用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" align="center" width="160"
-          v-col="'registryTime'"></el-table-column>
+        <el-table-column prop="createdAt" label="创建时间" align="center" width="160" v-col="'registryTime'"></el-table-column>
         <el-table-column prop="desc" label="说明" show-overflow-tooltip v-col="'desc'"></el-table-column>
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
-            <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type"
-              style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
+            <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status == 0"
-              v-auth="'status'">启用</el-button>
-            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0"
-              v-auth="'status'">停用</el-button>
+            <el-button size="small" text type="success" @click="onActionStatus(scope.row)" v-if="scope.row.status == 0" v-auth="'status'">启用</el-button>
+            <el-button size="small" text type="primary" @click="onActionStatus(scope.row)" v-if="scope.row.status > 0" v-auth="'status'">停用</el-button>
             <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum"
-        v-model:limit="tableData.param.pageSize" @pagination="typeList" />
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
     </el-card>
     <EditDic ref="editDicRef" @typeList="typeList" />
     <ExcelDic ref="excelDicRef" @typeList="typeList" />
@@ -165,12 +153,13 @@ interface TableDataState {
       pageSize: number;
       name: string;
       key: string;
-      productId:string;
+      productId: string;
       status: string;
       dateRange: string[];
     };
   };
 }
+
 export default defineComponent({
   name: 'deviceInstance',
   components: { EditDic, ExcelDic, ArrowDown },
@@ -180,9 +169,10 @@ export default defineComponent({
     const excelDicRef = ref();
     const detailRef = ref();
     const queryRef = ref();
+    const batchLoading = ref(false);
     const state = reactive<TableDataState>({
       ids: [],
-      productData:[],
+      productData: [],
       tableData: {
         data: [],
         total: 0,
@@ -251,10 +241,11 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
+          batchLoading.value = true
           api.device.setDeviceStatus({ ids: ids, status: 1 }).then(() => {
             ElMessage.success('启用成功');
             typeList();
-          });
+          }).finally(() => batchLoading.value = false)
         })
         .catch(() => { });
     }
@@ -277,10 +268,11 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
+          batchLoading.value = true
           api.device.setDeviceStatus({ ids: ids, status: 0 }).then(() => {
             ElMessage.success('禁用成功');
             typeList();
-          });
+          }).finally(() => batchLoading.value = false)
         })
         .catch(() => { });
     }
@@ -347,6 +339,7 @@ export default defineComponent({
       detailRef,
       queryRef,
       onActionStatus,
+      batchLoading,
       setDeviceStatus1,
       setDeviceStatus0,
       onOpenDetail,
