@@ -80,7 +80,7 @@ interface RuleFormState {
   method: string;
   devices: Array;
   stratege: string;
-  devOtaFirewareId: number;
+  devOtaFirmwareId: number;
   push: string;
   pushDisabled: boolean,
   typo: string;
@@ -112,7 +112,7 @@ export default defineComponent({
         method: '1',
         devices: [],
         stratege: '2',
-        devOtaFirewareId: 0,
+        devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
         typo: '1',
@@ -168,9 +168,7 @@ export default defineComponent({
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
       if (row) {
-        // api.manage.detail(row.id).then((res: any) => {
-        state.ruleForm.devOtaFirewareId = row.id;
-        // });
+        state.ruleForm.devOtaFirmwareId = row.id;
         state.ruleForm.productId = row.productId;
       }
       state.isShowDialog = true;
@@ -187,7 +185,7 @@ export default defineComponent({
         method: '1',
         devices: [],
         stratege: '2',
-        devOtaFirewareId: 0,
+        devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
         typo: '1',
@@ -265,7 +263,7 @@ export default defineComponent({
 // 	devices: '',
 // 	stratege: '1',
 // 	waitVersion: '',
-// 	devOtaFirewareId: '',
+// 	devOtaFirmwareId: '',
 // 	productId:'',
 // }
 

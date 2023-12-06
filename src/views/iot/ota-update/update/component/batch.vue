@@ -67,14 +67,17 @@
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
-<!--        <el-table-column label="操作" width="200" align="center">-->
-<!--          <template #default="scope">-->
-<!--            &lt;!&ndash;            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>&ndash;&gt;-->
-<!--            &lt;!&ndash;            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>&ndash;&gt;-->
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <router-link :to="'/iotmanager/operation/ota/update/device/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
+              <span>查看</span>
+            </router-link>
+            <!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
+            <!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
 <!--            <el-button size="small" text type="success" v-if="scope.row.active != 1" @click="activation(scope.row)">激活</el-button>-->
 <!--            <el-button size="small" text type="danger" v-else @click="activation(scope.row)">禁用</el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+          </template>
+        </el-table-column>
       </el-table>
       <!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
       <!--        @pagination="getList()" />-->
@@ -152,10 +155,8 @@ export default defineComponent({
     // 激活操作
     const activation = (row: any) => {
       let active = 0;
-      console.log(row);
       if (row.active === 1) active = 0;
       if (row.active === 0) active = 1;
-      console.log(active);
       api.batch.stop({id: row.id, active: active}).then((res: any) => {
         ElMessage.success('操作成功');
         batchList();

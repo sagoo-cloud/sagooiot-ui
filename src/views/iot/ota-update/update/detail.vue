@@ -55,9 +55,9 @@
         <el-tab-pane label="批次管理" name="tab1">
           <BatchList v-if="detail.id" :detail="detail" />
         </el-tab-pane>
-        <el-tab-pane label="设备列表" name="tab2">
-          <DeviceList v-if="detail.id" :detail="detail" />
-        </el-tab-pane>
+<!--        <el-tab-pane label="设备列表" name="tab2">-->
+<!--          <DeviceList v-if="detail.id" :detail="detail" />-->
+<!--        </el-tab-pane>-->
         <el-tab-pane label="升级包信息" name="tab3">
           <InfoList v-if="detail.id" :detail="detail" />
         </el-tab-pane>
@@ -94,30 +94,23 @@ export default defineComponent({
         checkres: 0,
         productId: 0,
       },
-
-    })
+    });
     const getDetail = () => {
       const id = route.params && route.params.id
       api.manage.detail(Number(id)).then((res: any) => {
         state.detail = res
       })
-    }
+    };
     const addOrEdit = async (row?: any) => {
       editFormRef.value.open(row)
-    }
-
+    };
     onMounted(() => {
       getDetail()
-    })
-    const handleClick = (tab: TabsPaneContext, event: Event) => {
-      // console.log(tab, event)
-    }
-
+    });
     return {
       addOrEdit,
       editFormRef,
       getDetail,
-      handleClick,
       ...toRefs(props),
       ...toRefs(state),
     }
