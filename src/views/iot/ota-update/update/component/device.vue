@@ -3,7 +3,7 @@
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
 				<el-form-item label="设备名称：" prop="name">
-					<el-input v-model="tableData.param.keyWord" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @submit.prevent />
+					<el-input v-model="tableData.param.deviceName" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @submit.prevent />
 				</el-form-item>
 
 				<el-form-item>
@@ -84,7 +84,7 @@ interface TableDataState {
     param: {
       pageNum: number;
       pageSize: number;
-      keyWord: string;
+      deviceName: string;
       devOtaFirmwareId: number;
     };
   };
@@ -102,7 +102,7 @@ export default defineComponent({
         param: {
           pageNum: 1,
           pageSize: 10,
-          keyWord: '',
+          deviceName: '',
           devOtaFirmwareId: 0,
         },
       },
