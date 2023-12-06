@@ -138,6 +138,7 @@ export default defineComponent({
     const getFormType = () => {
       // 如果是验证类型，设备信息必填项
       if (state.ruleForm.typo === '1') {
+        state.deviceShow = true;
         state.rules.devices = [{
           required: true,
           message: '所属设备不能为空',
