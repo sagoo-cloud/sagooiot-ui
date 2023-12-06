@@ -21,9 +21,9 @@
           <el-input v-model="ruleForm.name" placeholder="请输入批次名称" />
         </el-form-item>
 
-<!--        <el-form-item label="待升级版本号" prop="waitVersion">-->
-<!--          <el-input v-model="ruleForm.waitVersion" placeholder="请输入待升级版本号" />-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="待升级版本号" prop="waitVersion">-->
+        <!--          <el-input v-model="ruleForm.waitVersion" placeholder="请输入待升级版本号" />-->
+        <!--        </el-form-item>-->
 
         <el-form-item label="协议方式" prop="method">
           <el-radio-group v-model="ruleForm.method" @change="getMethod">
@@ -34,13 +34,16 @@
         </el-form-item>
 
         <el-form-item label="所属设备" prop="devices" v-if="deviceShow">
-<!--            <el-select v-model="ruleForm.devices" placeholder="请选择设备" >-->
-<!--              <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />-->
-<!--            </el-select>-->
+<!--          <el-select v-model="ruleForm.devices" filterable multiple placeholder="请选择设备" class="width100">-->
+<!--            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />-->
+<!--          </el-select>-->
 
-          <el-select v-model="ruleForm.devices" filterable multiple placeholder="请选择设备" class="width100">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />
-          </el-select>
+          <!-- 回显已选设备 -->
+          <template v-if="deviceNameShow">
+            <el-tag v-for="item in deviceNameList" style="margin-right: 10px;">{{ item }}</el-tag>
+          </template>
+
+          <el-button type="primary" @click="onOpenDevice()" style="margin-left: 5px; margin-top: 10px;">选择设备</el-button>
         </el-form-item>
 
         <el-form-item label="升级方式" prop="stratege">
@@ -64,6 +67,9 @@
 				</span>
       </template>
     </el-dialog>
+
+    <!-- 设备绑定弹窗 -->
+    <DeviceBind ref="deviceRef" @bindSuccess="getDeviceTableData" />
   </div>
 </template>
 
@@ -72,6 +78,8 @@ import { reactive, toRefs, defineComponent, onMounted, ref, unref} from 'vue';
 import { ElMessage } from 'element-plus';
 import api from '/@/api/ota';
 import rule from "/@/api/rule";
+import Device from "/@/views/iot/device/instance/index.vue";
+import DeviceBind from "/@/views/iot/ota-update/update/component/deviceBind.vue";
 
 interface RuleFormState {
   id: number;
@@ -92,16 +100,20 @@ interface UpdateState {
   productData: [];
   rules: {};
   deviceShow: boolean;
+  deviceNameShow: boolean;
+  deviceNameList: [];
 }
 
 export default defineComponent({
   name: 'otaEditUpdateData',
+  components: {DeviceBind},
   computed: {
     rule() {
       return rule
     }
   },
   setup(prop, { emit }) {
+    const deviceRef = ref();
     const formRef = ref<HTMLElement | null>(null);
     const state = reactive<UpdateState>({
       isShowDialog: false,
@@ -125,9 +137,10 @@ export default defineComponent({
         stratege: [{ required: true, message: '升级方式不能为空', trigger: 'blur' }],
         push: [{ required: true, message: '推送方式不能为空', trigger: 'blur' }],
         typo: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
-        // devices: [{required: true, message: '所属设备不能为空', trigger: 'blur'}],
       },
       deviceShow: false, // 所属设备是否显示
+      deviceNameShow: false, // 回显设备名称状态
+      deviceNameList: [], // 回显设备名称
     });
     // 页面加载时
     onMounted(() => {
@@ -168,6 +181,8 @@ export default defineComponent({
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
+      state.deviceNameList = [];
+      state.deviceNameShow = false;
       if (row) {
         state.ruleForm.devOtaFirmwareId = row.id;
         state.ruleForm.productId = row.productId;
@@ -196,6 +211,8 @@ export default defineComponent({
     // 关闭弹窗
     const closeDialog = () => {
       state.isShowDialog = false;
+      state.deviceNameList = [];
+      state.deviceNameShow = false;
     };
     // 取消
     const onCancel = () => {
@@ -225,13 +242,26 @@ export default defineComponent({
         }
       });
     };
+    // 获取设备列表
+    const getDeviceTableData = (deviceIdList: any, deviceNameList: any) => {
+      state.ruleForm.devices = deviceIdList;
+      state.deviceNameList = deviceNameList;
+      state.deviceNameShow = true;
+    };
+    // 打开设备列表
+    const onOpenDevice = () => {
+      deviceRef.value.openDialog(state.ruleForm.devices);
+    };
     return {
+      deviceRef,
       openDialog,
       closeDialog,
       onCancel,
       onSubmit,
       getMethod,
       getFormType,
+      onOpenDevice,
+      getDeviceTableData,
       formRef,
       ...toRefs(state),
     };

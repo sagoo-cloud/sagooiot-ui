@@ -69,9 +69,10 @@
         <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
         <el-table-column label="操作" width="200" align="center">
           <template #default="scope">
-            <router-link :to="'/iotmanager/operation/ota/update/device/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
-              <span>查看</span>
-            </router-link>
+<!--            <router-link :to="'/iotmanager/operation/ota/update/device/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">-->
+<!--              <span>查看</span>-->
+<!--            </router-link>-->
+            <el-button size="small" text type="primary" @click="getDeviceList(scope.row)">查看</el-button>
             <!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
             <!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
 <!--            <el-button size="small" text type="success" v-if="scope.row.active != 1" @click="activation(scope.row)">激活</el-button>-->
@@ -79,11 +80,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize"-->
-      <!--        @pagination="getList()" />-->
-      <!--      <CheckForm ref="checkFormRef" @getList="getList()"></CheckForm>-->
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
       <CheckConfig ref="checkRef" @getList="getList(1)" />
+      <DeviceList ref="deviceRef" />
     </el-card>
   </div>
 </template>
@@ -93,6 +92,7 @@ import api from '/@/api/ota';
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus'
 import CheckConfig from '/@/views/iot/ota-update/update/component/check.vue';
+import DeviceList from '/@/views/iot/ota-update/update/component/deviceList.vue';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -121,7 +121,7 @@ interface TableDataState {
   };
 }
 export default defineComponent({
-  components: { CheckConfig },
+  components: { CheckConfig, DeviceList },
   props: {
     detail: {
       type: Object,
@@ -129,6 +129,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const deviceRef = ref();
     const checkRef = ref();
     const queryRef = ref();
     const tabDataList = ref([{ dictLabel: '全部', dictValue: '' }]);
@@ -222,7 +223,11 @@ export default defineComponent({
     const batchList = () => {
       getList();
     };
+    const getDeviceList = (row: any) => {
+      deviceRef.value.openDialog(row);
+    };
     return {
+      deviceRef,
       checkRef,
       queryRef,
       tabDataList,
@@ -232,57 +237,10 @@ export default defineComponent({
       activation,
       resetQuery,
       handleSelectionChange,
+      getDeviceList,
       ...toRefs(props),
       ...toRefs(state),
     };
   },
 });
-// import api from '/@/api/ota';
-// import { useSearch } from '/@/hooks/useCommon';
-// import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-// // import CheckForm from '../check.vue';
-// import CheckForm from '/@/views/iot/ota-update/update/component/check.vue';
-//
-// import { ref } from 'vue';
-// import { useRouter } from 'vue-router';
-// const props = defineProps({
-// 	detail: {
-// 		type: Object,
-// 		default: () => { }
-// 	},
-// })
-// const queryRef = ref();
-// const router = useRouter();
-//
-// const checkFormRef = ref();
-//
-// const { params, tableData, getList, loading } = useSearch<any[]>(api.batch.getList, 'Data', { devOtaFirewareId: props.detail.id });
-//
-// getList();
-//
-// const CheckUpdate = async (row?: any) => {
-// 	if (row) {
-// 		checkFormRef.value.open(row);
-// 		return;
-// 	} else {
-// 		let array = {
-// 			productId: props.detail.productId,
-// 			devOtaFirewareId: props.detail.id
-// 		}
-// 		checkFormRef.value.open(array);
-// 	}
-// };
-//
-//
-// const del = (row: any) => {
-// 	ElMessageBox.confirm(`此操作将删除图形：“${row.name}”，是否继续?`, '提示', {
-// 		confirmButtonText: '确认',
-// 		cancelButtonText: '取消',
-// 		type: 'warning',
-// 	}).then(async () => {
-// 		await api.manage.del(row.id);
-// 		ElMessage.success('删除成功');
-// 		getList();
-// 	});
-// };
 </script>
