@@ -1,4 +1,5 @@
 <template>
+  <div>
 	<el-card shadow="hover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
@@ -54,6 +55,7 @@
     <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getDetail" />
 
 	</el-card>
+</div>
 </template>
 
 <script lang="ts">
