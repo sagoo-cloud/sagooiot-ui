@@ -32,13 +32,18 @@
             <el-tag size="small" v-if="scope.row.status == 5">已取消</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="step" label="升级进度" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="step" label="升级进度" show-overflow-tooltip>
+          <template #default="scope">
+            <el-tag size="small" type="success" v-if="scope.row.step > 0">{{ scope.row.step }}%</el-tag>
+            <el-tag size="small" v-else>{{ scope.row.step }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="fail" label="失败原因" width="100" align="center">
           <template #default="scope">
-            <el-tag size="small" v-if="scope.row.fail == -1">升级失败</el-tag>
-            <el-tag size="small" v-if="scope.row.fail == -2">下载失败</el-tag>
-            <el-tag size="small" v-if="scope.row.fail == -3">校验失败</el-tag>
-            <el-tag size="small" v-if="scope.row.fail == -4">烧写失败</el-tag>
+            <el-tag size="small" type="danger" v-if="scope.row.fail == -1">升级失败</el-tag>
+            <el-tag size="small" type="danger" v-if="scope.row.fail == -2">下载失败</el-tag>
+            <el-tag size="small" type="danger" v-if="scope.row.fail == -3">校验失败</el-tag>
+            <el-tag size="small" type="danger" v-if="scope.row.fail == -4">烧写失败</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="时间" min-width="100" align="center"></el-table-column>
