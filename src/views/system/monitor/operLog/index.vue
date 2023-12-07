@@ -98,7 +98,7 @@
 
     <el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
       <el-form :model="currentRow" ref="formRef" size="default" label-width="90px">
-        <el-form-item label="模块标题" prop="title">
+        <el-form-item label="系统模块" prop="title">
           {{ currentRow.title }}
         </el-form-item>
         <el-form-item label="请求方式" prop="title">
