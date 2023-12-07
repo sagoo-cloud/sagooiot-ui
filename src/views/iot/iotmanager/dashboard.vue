@@ -451,7 +451,7 @@ export default defineComponent({
 		};
 		// 告警信息-更多信息
 		const toMore = () => {
-			router.push({ path: '/monitor/notice' });
+			router.push({ path: '/iotmanager/alarm/log' });
 		};
 		// 页面加载时
 		onMounted(() => {
