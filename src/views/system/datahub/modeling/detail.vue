@@ -15,11 +15,11 @@
       <div class="wu-box">
         <div class="system-user-search mb15">
           <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="130px">
-            <el-form-item label="字段标题" prop="key">
-              <el-input v-model="tableData.param.key" placeholder="请输入字段标题" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-form-item label="字段标题" prop="name">
+              <el-input v-model="tableData.param.name" placeholder="请输入字段标题" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
             </el-form-item>
-            <el-form-item label="字段名称" prop="name">
-              <el-input v-model="tableData.param.name" placeholder="请输入字段名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-form-item label="字段名称" prop="key">
+              <el-input v-model="tableData.param.key" placeholder="请输入字段名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
             </el-form-item>
 
             <el-form-item>
