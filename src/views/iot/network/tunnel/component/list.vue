@@ -1,53 +1,42 @@
 <template>
     <div>
         <el-table v-loading="loading" :data="data" style="width: 100%">
-            <el-table-column align="center" prop="id" v-col="'id'" label="ID" width="80"/>
-            <el-table-column align="center" prop="name" v-col="'name'" label="名称"/>
-            <el-table-column align="center" prop="types" v-col="'type'" label="类型" :formatter="(a:any) => typesFormat(a.types)"/>
-            <el-table-column align="center" prop="addr" v-col="'address'" label="地址"/>
-            <el-table-column show-overflow-tooltip align="center" v-col="'createTime'" prop="createdAt" label="创建时间" width="170"/>
+            <el-table-column align="center" prop="id" v-col="'id'" label="ID" width="80" />
+            <el-table-column align="center" prop="name" v-col="'name'" label="名称" />
+            <el-table-column align="center" prop="types" v-col="'type'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />
+            <el-table-column align="center" prop="addr" v-col="'address'" min-width="120" label="地址" />
+            <el-table-column show-overflow-tooltip align="center" v-col="'createTime'" prop="createdAt" label="创建时间" width="170" />
             <el-table-column align="center" prop="types" v-col="'status'" label="状态">
                 <template #default="scope">
                     <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
                     <el-tag size="medium" v-else class="ml-2" type="success">启动</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" v-col="'auth'" width="200">
+            <el-table-column align="center" label="操作" v-col="'auth'" width="160">
                 <template #default="scope">
                     <el-button @click="toDetail(scope.row.id)" size="small" v-auth="'detail'" type="text">详情</el-button>
                     <el-button size="small" link key="info" type="info" v-auth="'edit'" @click="toEdit(scope.row.id)">编辑</el-button>
                     <el-popover placement="bottom" :width="160" trigger="click">
                         <template #reference>
-                            <el-button  size="small" type="text" v-auth="'more'" class="more-btn" @click="isShowMore = !isShowMore">更多
-                                <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down':'fa fa-angle-up'"></i>
+                            <el-button size="small" type="text" v-auth="'more'" class="more-btn" @click="isShowMore = !isShowMore">更多
+                                <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down' : 'fa fa-angle-up'"></i>
                             </el-button>
                         </template>
-                    <div class="more-opearte-wrap">
-                        <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" v-auth="'on'" link size="small"  key="success" type="success">启 用</el-button>
-                        <el-divider direction="vertical" />
-                        <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" v-auth="'off'" link size="small" key="warning" type="warning">禁 用</el-button>
-                        <el-divider direction="vertical" />
-                        <el-button @click="onRowDel(scope.row)" link size="small" key="danger" v-auth="'off'" type="danger">删 除</el-button>
-                    </div>
+                        <div class="more-opearte-wrap">
+                            <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" v-auth="'on'" link size="small" key="success" type="success">启 用</el-button>
+                            <el-divider direction="vertical" />
+                            <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" v-auth="'off'" link size="small" key="warning" type="warning">禁 用</el-button>
+                            <el-divider direction="vertical" />
+                            <el-button @click="onRowDel(scope.row)" link size="small" key="danger" v-auth="'off'" type="danger">删 除</el-button>
+                        </div>
                     </el-popover>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination
-            @size-change="onHandleSizeChange"
-            @current-change="onHandleCurrentChange"
-            class="mt15"
-            :pager-count="5"
-            :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]"
-            v-model:current-page="param.page"
-            background
-            v-model:page-size="param.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-        >
+        <el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="param.page" background v-model:page-size="param.pageSize"
+            layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
     </div>
-    
 </template>
 
 <script lang="ts">
@@ -59,13 +48,13 @@ import api from '/@/api/network';
 
 // 定义接口来定义对象的类型
 interface TableDataForm {
-	id: number;
+    id: number;
     server: string;
-	name: string;
-	
+    name: string;
+
 }
 interface TableData {
-	data:  Array<TableDataForm>;
+    data: Array<TableDataForm>;
     total: number;
     loading: boolean;
     param: {
@@ -77,12 +66,12 @@ interface TableData {
 
 export default defineComponent({
     name: 'tunnel',
-	props: {
-		// 输入框前置内容
-		keyWord: {
-			type: String,
-			default: '',
-		},
+    props: {
+        // 输入框前置内容
+        keyWord: {
+            type: String,
+            default: '',
+        },
     },
     setup(props, { emit }) {
 
@@ -96,7 +85,7 @@ export default defineComponent({
 
         const router = useRouter();
         const state = reactive<TableData>({
-			data: [],
+            data: [],
             total: 0,
             loading: false,
             param: {
@@ -104,28 +93,28 @@ export default defineComponent({
                 pageSize: 10,
             },
             isShowMore: true
-		});
+        });
         // 改变状态
         const onChangeStatus = (id: number, status: number) => {
-            api.tunnel.changeTunnelStatus({id: id, status: status}).then((res:any) => {
-		        ElMessage.success(status?'已开启':'已关闭');
+            api.tunnel.changeTunnelStatus({ id: id, status: status }).then((res: any) => {
+                ElMessage.success(status ? '已开启' : '已关闭');
                 fetchList();
             })
         };
         // 分页改变
-		const onHandleSizeChange = (val: number) => {
-			state.param.pageSize = val;
+        const onHandleSizeChange = (val: number) => {
+            state.param.pageSize = val;
             fetchList()
-		};
-		// 分页改变
-		const onHandleCurrentChange = (val: number) => {
-			state.param.page = val;
+        };
+        // 分页改变
+        const onHandleCurrentChange = (val: number) => {
+            state.param.page = val;
             fetchList()
-		};
+        };
         // 初始化表格数据
-		const initTableData = () => {
+        const initTableData = () => {
             fetchList()
-		};
+        };
         // 获取数据
         const fetchList = () => {
             state.loading = true
@@ -140,25 +129,25 @@ export default defineComponent({
                 state.total = total
                 state.param.page = page
                 state.loading = false
-			});
+            });
 
 
-		};
+        };
         // 删除
-		const onRowDel = (row: TableDataForm) => {
-			ElMessageBox.confirm(`此操作将永久删除“${row.name}”，是否继续?`, '提示', {
-				confirmButtonText: '确认',
-				cancelButtonText: '取消',
-				type: 'warning',
-			})
-				.then(() => {
-					api.tunnel.deleteItem({ids: [row.id]}).then((res: any) => {
-						fetchList()
-						ElMessage.success('删除成功');
-					});
-				})
-				.catch(() => {});
-		};
+        const onRowDel = (row: TableDataForm) => {
+            ElMessageBox.confirm(`此操作将永久删除“${row.name}”，是否继续?`, '提示', {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                type: 'warning',
+            })
+                .then(() => {
+                    api.tunnel.deleteItem({ ids: [row.id] }).then((res: any) => {
+                        fetchList()
+                        ElMessage.success('删除成功');
+                    });
+                })
+                .catch(() => { });
+        };
         const toDetail = (id: number) => {
             router.push(`/iotmanager/network/tunnel/detail/${id}`)
         };
@@ -166,9 +155,9 @@ export default defineComponent({
             router.push(`/iotmanager/network/tunnel/edit/${id}`)
         };
         // 页面加载时
-		onMounted(() => {
-			initTableData();
-		});
+        onMounted(() => {
+            initTableData();
+        });
         return {
             fetchList,
             toDetail,
@@ -188,11 +177,9 @@ export default defineComponent({
 ::v-deep div.more-opearte-wrap {
     flex-direction: row;
     background-color: pink;
+
     // padding: 4px!important;
-    div {
-       
-    }
-    
+    div {}
+
 }
-    
 </style>

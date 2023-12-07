@@ -208,14 +208,16 @@ export default defineComponent({
                 state.form['types'] = types
                 state.form['addr'] = addr
                 state.form['status'] = status
-                state.form['serial'] = JSON.parse(serial)
-                state.form['retry'] = JSON.parse(retry)
-                state.form['heartbeat'] = JSON.parse(heartbeat)
+                state.form['serial'] = JSON.parse(serial || '{}')
+                state.form['retry'] = JSON.parse(retry || '{}')
+                state.form['heartbeat'] = JSON.parse(heartbeat || '{}')
                 state.form['protoccol'] = protoccol ? JSON.parse(protoccol) : { name: "Modbus RTU", options: {} }
                 state.form['id'] = id
-                let jsonData = JSON.stringify(JSON.parse(protoccol).options);
-                state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData), null, 4);
-                mirrorRef.value.setValue(state.resourceModalPro.content);
+                if (protoccol) {
+                    let jsonData = JSON.stringify(JSON.parse(protoccol).options)
+                    state.resourceModalPro.content = JSON.stringify(JSON.parse(jsonData), null, 4);
+                    mirrorRef.value.setValue(state.resourceModalPro.content);
+                }
             })
         };
         onMounted(() => {

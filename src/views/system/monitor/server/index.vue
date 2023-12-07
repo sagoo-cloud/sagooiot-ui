@@ -1,5 +1,5 @@
 <template>
-  <div class="system-user-container">
+  <div class="system-user-container" v-loading="loading">
     <div class="flex-row gap-3">
       <el-col :xs="24" :sm="12" :md="8" class="marg-b-15">
         <el-card class="box-card-meter">
@@ -225,7 +225,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, getCurrentInstance, defineComponent } from 'vue';
+import { ref, toRefs, reactive, onMounted, getCurrentInstance, defineComponent } from 'vue';
 import * as echarts from 'echarts';
 import 'echarts-wordcloud';
 import dayjs from 'dayjs';
@@ -237,9 +237,10 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance() as any;
     const state: any = reactive({
-      myCharts: [],
       sysInfo: {},
     });
+
+    const loading = ref(true)
 
     let myChart1: any;
     let myChart2: any;
@@ -272,11 +273,13 @@ export default defineComponent({
     function goInfo(event: { data: any; }) {
       const data = JSON.parse(event.data);
       Object.assign(goInfoData, data);
+      loading.value = false
     }
 
     function hostInfo(event: { data: any; }) {
       const data = JSON.parse(event.data);
       Object.assign(hostData, data);
+      loading.value = false
     }
 
     const myChart4Data: any = {
@@ -297,14 +300,15 @@ export default defineComponent({
         trigger: 'axis',
       },
       grid: {
-        top: 10,
-        bottom: 20,
-        left: 10,
-        right: 10,
+        top: 5,
+        bottom: 5,
+        left: 5,
+        right: 30,
         containLabel: true
       },
       xAxis: {
         type: 'category',
+        boundaryGap: false,
         splitLine: {
           show: false
         }
@@ -312,6 +316,9 @@ export default defineComponent({
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
+        axisLabel: {
+          formatter: '{value}%'
+        },
         splitLine: {
           show: false
         }
@@ -321,7 +328,12 @@ export default defineComponent({
           name: '使用率',
           type: 'line',
           showSymbol: false,
-          data: []
+          data: [],
+          smooth: true,
+          lineStyle: {
+            width: 0
+          },
+          areaStyle: {}
         }
       ]
     };
@@ -371,6 +383,10 @@ export default defineComponent({
     function setOptChart(myChart: any, myChartData: any, value: number) {
       myChartData.name.push(dayjs().format('HH:mm:ss'));
       myChartData.value.push(value);
+      if (myChartData.name.length > 20) {
+        myChartData.name.shift()
+        myChartData.value.shift()
+      }
       myChart.setOption({
         xAxis: {
           data: myChartData.name
@@ -402,8 +418,9 @@ export default defineComponent({
               offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
             },
             axisLine: {
-              show: true,
               lineStyle: {
+                show: true,
+                with: 25,
                 // 属性lineStyle控制线条样式
                 color: [
                   [0.3, '#4dabf7'],
@@ -412,6 +429,27 @@ export default defineComponent({
                   [1, '#ff6b6b'],
                 ],
               },
+            },
+            axisTick: {
+              distance: 0,
+              length: 4,
+              lineStyle: {
+                color: 'auto',
+                width: 1
+              }
+            },
+            axisLabel: {
+              distance: 12,
+              color: '#000',
+              fontSize: 12
+            },
+            splitLine: { // 分割线
+              length: 5,
+              distance: 2,
+              lineStyle: {
+                width: 1,
+                color: 'auto'
+              }
             },
             splitNumber: 5, //分割线之间的刻度
 
@@ -434,7 +472,6 @@ export default defineComponent({
         ],
       };
       myChart1.setOption(option);
-      state.myCharts.push(myChart1);
     };
     //内存
     const initChartRAM = () => {
@@ -455,8 +492,9 @@ export default defineComponent({
               offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
             },
             axisLine: {
-              show: true,
               lineStyle: {
+                show: true,
+                with: 25,
                 // 属性lineStyle控制线条样式
                 color: [
                   [0.3, '#4dabf7'],
@@ -465,6 +503,27 @@ export default defineComponent({
                   [1, '#ff6b6b'],
                 ],
               },
+            },
+            axisTick: {
+              distance: 0,
+              length: 4,
+              lineStyle: {
+                color: 'auto',
+                width: 1
+              }
+            },
+            axisLabel: {
+              distance: 12,
+              color: '#000',
+              fontSize: 12
+            },
+            splitLine: { // 分割线
+              length: 5,
+              distance: 2,
+              lineStyle: {
+                width: 1,
+                color: 'auto'
+              }
             },
             splitNumber: 5, //分割线之间的刻度
 
@@ -487,7 +546,6 @@ export default defineComponent({
         ],
       };
       myChart2.setOption(option);
-      state.myCharts.push(myChart2);
     };
     //磁盘
     const initChartDISK = () => {
@@ -508,8 +566,9 @@ export default defineComponent({
               offsetCenter: [-2, '30%'], //设置表盘title(今日预计用电量)位置
             },
             axisLine: {
-              show: true,
               lineStyle: {
+                show: true,
+                with: 25,
                 // 属性lineStyle控制线条样式
                 color: [
                   [0.3, '#4dabf7'],
@@ -518,6 +577,27 @@ export default defineComponent({
                   [1, '#ff6b6b'],
                 ],
               },
+            },
+            axisTick: {
+              distance: 0,
+              length: 4,
+              lineStyle: {
+                color: 'auto',
+                width: 1
+              }
+            },
+            axisLabel: {
+              distance: 12,
+              color: '#000',
+              fontSize: 12
+            },
+            splitLine: { // 分割线
+              length: 5,
+              distance: 2,
+              lineStyle: {
+                width: 1,
+                color: 'auto'
+              }
             },
             splitNumber: 5, //分割线之间的刻度
 
@@ -540,28 +620,63 @@ export default defineComponent({
         ],
       };
       myChart3.setOption(option);
-      state.myCharts.push(myChart3);
     };
 
     //cpu运行状态
     const initChartCPURun = () => {
       myChart4 = echarts.init(proxy.$refs.chartsWarningRef4);
-      myChart4.setOption({ ...moveOption });
-      state.myCharts.push(myChart4);
+      moveOption.series[0].areaStyle = {
+        opacity: 0.8,
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 0,
+            color: 'rgb(128, 255, 165)'
+          },
+          {
+            offset: 1,
+            color: 'rgb(1, 191, 236)'
+          }
+        ])
+      }
+      myChart4.setOption(moveOption);
     };
 
     //内存运行状态
     const initChartRAMRun = () => {
       myChart5 = echarts.init(proxy.$refs.chartsWarningRef5);
-      myChart5.setOption({ ...moveOption });
-      state.myCharts.push(myChart5);
+      moveOption.series[0].areaStyle = {
+        opacity: 0.8,
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 0,
+            color: 'rgb(0, 221, 255)'
+          },
+          {
+            offset: 1,
+            color: 'rgb(77, 119, 255)'
+          }
+        ])
+      }
+      myChart5.setOption(moveOption);
     };
 
     //磁盘运行状态
     const initChartDISKRun = () => {
       myChart6 = echarts.init(proxy.$refs.chartsWarningRef6);
-      myChart6.setOption({ ...moveOption });
-      state.myCharts.push(myChart6);
+      moveOption.series[0].areaStyle = {
+        opacity: 0.8,
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 0,
+            color: 'rgb(55, 162, 255)'
+          },
+          {
+            offset: 1,
+            color: 'rgb(116, 21, 219)'
+          }
+        ])
+      }
+      myChart6.setOption(moveOption);
     };
 
     // 页面加载时
@@ -575,17 +690,6 @@ export default defineComponent({
     });
 
     function startWs() {
-      // ws = null;
-      // ws = new WebSocket(import.meta.env.VITE_WS_URL + '/monitorServer/ws');
-      // ws.onopen = () => {};
-      // ws.onmessage = ({ data: dataStr }) => {
-      // 	const data = JSON.parse(dataStr);
-      // 	state.sysInfo = data;
-      // 	setOptChart1(data.cpuUsed);
-      // 	setOptChart2(data.memUsage);
-      //   setOptChart3(data.diskUsedPercent);
-      // };
-
       const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "/subscribe/sysenv"));
 
       es.addEventListener("host", displayHost);
@@ -606,6 +710,7 @@ export default defineComponent({
       state.sysInfo.sysComputerName = data.hostname
       state.sysInfo.goStartTime = data.bootTime
       state.sysInfo.goRunTime = data.uptime
+      loading.value = false
     }
 
     function displayMem(event: { data: any; }) {
@@ -617,23 +722,27 @@ export default defineComponent({
       state.sysInfo.goUsed = data.goUsed
       state.sysInfo.memUsage = data.usedPercent.toFixed(2)
       setOptChart(myChart5, myChart5Data, state.sysInfo.memUsage);
-
+      loading.value = false
     }
 
     function displayCpu(event: { data: any; }) {
       const data = JSON.parse(event.data);
+      // console.log(dayjs().format('HH:mm:ss'))
+      // console.log(data)
+
       state.sysInfo.cpuNum = data.Number
       state.sysInfo.cpuCores = data.Cores
       state.sysInfo.cpuUsed = data.UsedPercent[0].toFixed(2)
       setOptChart1(data.UsedPercent[0].toFixed(2));
       setOptChart(myChart4, myChart4Data, state.sysInfo.cpuUsed);
+      loading.value = false
     }
 
     function displaySysLoad(event: { data: any; }) {
       const data = JSON.parse(event.data)
       state.sysInfo.cpuAvg5 = data.load5.toFixed(2)
       state.sysInfo.cpuAvg15 = data.load15.toFixed(2)
-
+      loading.value = false
     }
 
     function displayDisk(event: { data: any; }) {
@@ -643,7 +752,7 @@ export default defineComponent({
       state.sysInfo.diskUsedPercent = data.usedPercent.toFixed(2)
       setOptChart3(data.usedPercent.toFixed(2));
       setOptChart(myChart6, myChart6Data, state.sysInfo.diskUsedPercent);
-
+      loading.value = false
     }
 
 
@@ -661,6 +770,7 @@ export default defineComponent({
       ...toRefs(state),
       goInfoData,
       hostData,
+      loading,
       setOptChart1,
       setOptChart2,
       setOptChart3,
@@ -690,6 +800,7 @@ export default defineComponent({
   },
   methods: {
     memorySizeFormat(size: any) {
+      if (size === null || size === undefined) return ''
       size = parseFloat(size);
       let rank = 0;
       let rankchar = 'Bytes';
