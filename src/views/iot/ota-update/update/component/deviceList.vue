@@ -72,7 +72,7 @@ interface TableDataState {
       pageNum: number;
       pageSize: number;
       deviceName: string;
-      devOtaFirmwareId: number;
+      devOtaStrategy: number;
     };
   };
   isShowDialog: boolean;
@@ -90,7 +90,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           deviceName: '',
-          devOtaFirmwareId: 0,
+          devOtaStrategy: 0,
         },
       },
       isShowDialog: false,
@@ -98,7 +98,7 @@ export default defineComponent({
     // 打开弹窗
     const openDialog = (row: any) => {
       state.tableData.loading = true;
-      state.tableData.param.devOtaFirmwareId = Number(row.id);
+      state.tableData.param.devOtaStrategy = Number(row.id);
       api.device.getList(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;

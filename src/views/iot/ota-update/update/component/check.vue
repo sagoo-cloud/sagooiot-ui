@@ -144,7 +144,7 @@ export default defineComponent({
     });
     // 页面加载时
     onMounted(() => {
-      getProductList();
+      // getProductList();
       getFormType();
     });
     // 获取操作升级包类型
