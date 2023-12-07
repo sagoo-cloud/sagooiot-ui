@@ -141,7 +141,7 @@ export default defineComponent({
 						let item = state.ruleForm.ranges[state.ruleForm.ranges.length-1]
 						const { start_value, end_value, base_value } = item
 						if(!start_value || !end_value || !base_value.toString()) {
-							ElMessage.error('请完善表单');
+							ElMessage.error('取值范围不能为空');
 							return
 						}
 						if(start_value >= end_value) {
