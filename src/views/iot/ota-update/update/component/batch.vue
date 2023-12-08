@@ -73,10 +73,8 @@
 <!--              <span>查看</span>-->
 <!--            </router-link>-->
             <el-button size="small" text type="primary" @click="getDeviceList(scope.row)">查看</el-button>
-            <!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
-            <!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
-<!--            <el-button size="small" text type="success" v-if="scope.row.active != 1" @click="activation(scope.row)">激活</el-button>-->
-<!--            <el-button size="small" text type="danger" v-else @click="activation(scope.row)">禁用</el-button>-->
+<!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
+<!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>

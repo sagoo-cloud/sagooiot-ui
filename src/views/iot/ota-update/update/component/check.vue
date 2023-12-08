@@ -165,13 +165,18 @@ export default defineComponent({
     // 获取协议方式
     const getMethod = () => {
       // 如果是http、https协议则主动推送为否
-      if (state.ruleForm.method === '1' || state.ruleForm.method === '2') {
+      // if (state.ruleForm.method === '1') {
         state.ruleForm.push = '2';
         state.ruleForm.pushDisabled = true;
-      } else {
-        state.ruleForm.pushDisabled = false;
-        state.ruleForm.push = '';
-      }
+      // }
+      // if (state.ruleForm.method === '2') {
+      //   state.ruleForm.push = '2';
+      //   state.ruleForm.pushDisabled = true;
+      // }
+      // if (state.ruleForm.method === '3'){
+      //   state.ruleForm.pushDisabled = false;
+      //   state.ruleForm.push = '1';
+      // }
     };
     const getProductList = () => {
       api.batch.getDeviceList({ productId: state.ruleForm.productId}).then((res: any) => {
