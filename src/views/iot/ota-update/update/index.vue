@@ -36,7 +36,7 @@
       </div>
 
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-        <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="60" />
+        <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />
         <el-table-column label="升级包名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
         <el-table-column prop="typo" label="类型" show-overflow-tooltip v-col="'typo'">
           <template #default="scope">

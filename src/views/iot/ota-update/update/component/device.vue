@@ -20,7 +20,7 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData.data" style="width: 100%" row-key="id" v-loading="tableData.loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="deviceName" label="设备名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="status" label="状态" show-overflow-tooltip>
 				<template #default="scope">

@@ -24,7 +24,7 @@
     </div>
     <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
       <!-- <el-table-column type="index" label="序号" width="60" align="center" /> -->
-      <el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
       <el-table-column prop="name" label="组态图名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
       <el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>

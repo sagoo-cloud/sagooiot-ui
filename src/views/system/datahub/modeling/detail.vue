@@ -52,7 +52,7 @@
         </div>
 
         <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-          <el-table-column label="ID" align="center" prop="id" width="60" v-col="'id'" />
+          <el-table-column label="ID" align="center" prop="id" width="100" v-col="'id'" />
           <el-table-column label="字段名称" prop="key" width="120" :show-overflow-tooltip="true" v-col="'key'" />
           <el-table-column label="字段标题" prop="name" width="120" :show-overflow-tooltip="true" v-col="'name'" />
           <el-table-column label="类型" prop="dataType" width="85" :show-overflow-tooltip="true" v-col="'dataType'" />

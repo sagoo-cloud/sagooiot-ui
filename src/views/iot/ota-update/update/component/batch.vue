@@ -31,7 +31,7 @@
         </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-        <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column prop="id" label="ID" width="100" />
         <el-table-column prop="name" label="名称" />
 <!--        <el-table-column prop="waitVersion" label="待升级版本号" width="120" />-->
         <el-table-column label="类型" prop="typo" width="120" align="center">

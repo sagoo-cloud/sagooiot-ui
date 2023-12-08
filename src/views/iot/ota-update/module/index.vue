@@ -35,7 +35,7 @@
       </div>
 
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-        <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="60" />
+        <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />
         <el-table-column label="模块名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
         <el-table-column label="模块别名" v-col="'nameAs'" prop="nameAs" :show-overflow-tooltip="true" />
         <el-table-column label="所属产品" v-col="'ProductName'" prop="ProductName" width="260" />

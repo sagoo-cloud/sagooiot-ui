@@ -74,7 +74,6 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
 import { validateNoSpace } from '/@/utils/validator';

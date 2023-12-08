@@ -28,7 +28,7 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip v-col="'id'"></el-table-column>
+			<el-table-column prop="id" label="ID" width="100" show-overflow-tooltip v-col="'id'"></el-table-column>
 			<el-table-column prop="appId" label="应用标识" show-overflow-tooltip v-col="'appId'"></el-table-column>
 			<el-table-column prop="name" label="应用名称" show-overflow-tooltip v-col="'name'"></el-table-column>
 			<el-table-column prop="desc" label="描述" show-overflow-tooltip v-col="'desc'"></el-table-column>

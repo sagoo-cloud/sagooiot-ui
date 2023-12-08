@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table v-loading="loading" :data="data" style="width: 100%">
-      <el-table-column align="center" prop="id" label="ID" width="80" v-col="'id'" />
+      <el-table-column align="center" prop="id" label="ID" width="100" v-col="'id'" />
       <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
       <el-table-column align="center" prop="name" label="名称" v-col="'name'" />
       <el-table-column align="center" prop="types" v-col="'types'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />

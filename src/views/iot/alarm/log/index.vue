@@ -39,7 +39,7 @@
 				</el-form>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
+				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'ID'" />
 				<el-table-column label="告警类型" prop="type" :show-overflow-tooltip="true" v-col="'type'">
 					<template #default="scope">
 						<span v-if="scope.row.type == 1">规则告警</span>

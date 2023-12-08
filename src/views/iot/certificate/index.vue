@@ -31,7 +31,7 @@
 			<!--  -->
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<!-- <el-table-column type="selection" width="55" align="center" /> -->
-				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="60" />
+				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="100" />
 				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" :show-overflow-tooltip="true" />
 				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" :show-overflow-tooltip="true">
 					<template #default="scope">

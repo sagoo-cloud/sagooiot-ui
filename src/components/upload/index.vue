@@ -1,20 +1,7 @@
 <template>
 	<div class="upload">
-		<el-upload
-			v-model:file-list="fileList"
-			:class="{ hide: fileList.length >= limit }"
-			:accept="accept"
-			list-type="picture-card"
-			:limit="limit"
-			:data="{ source }"
-			:multiple="multiple"
-			:headers="headers"
-			:before-upload="beforeAvatarUpload"
-			:action="uploadUrl"
-			:on-success="updateImg"
-			:on-preview="handlePictureCardPreview"
-			:on-remove="updateImg"
-		>
+		<el-upload v-model:file-list="fileList" :class="{ hide: fileList.length >= limit }" :accept="accept" list-type="picture-card" :limit="limit" :data="{ source }" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl"
+			:on-success="updateImg" :on-preview="handlePictureCardPreview" :on-remove="updateImg">
 			<el-icon>
 				<ele-Plus />
 			</el-icon>
@@ -51,7 +38,7 @@ const headers = {
 
 const emit = defineEmits(['setImg', 'setImgs'])
 
-const source =  JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
 
 const props = defineProps({
 	multiple: {
@@ -91,7 +78,11 @@ const fileList = ref<any[]>([
 	// },
 ])
 
-const updateImg = () => {
+const updateImg = (res?: any) => {
+	if (res && res.code !== undefined && res.code !== 0) {
+		return ElMessage.error(res.message)
+	}
+
 	const list = fileList.value.map((item) => {
 		if (item.response) {
 			return item.response?.data?.full_path
@@ -101,7 +92,7 @@ const updateImg = () => {
 	})
 	if (props.limit === 1) {
 		const img = list[0]
-		if(!img) {
+		if (!img) {
 			emit('setImg', '');
 			return;
 		}

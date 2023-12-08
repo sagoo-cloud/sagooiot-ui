@@ -28,7 +28,7 @@
 			</el-form>
 		</div>
 		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="60" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="场景类型" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="name" label="执行状态" width="100" align="center">

@@ -48,7 +48,7 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="60" />
+        <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="100" />
         <el-table-column label="任务名称" v-col="'jobName'" prop="jobName" :show-overflow-tooltip="true" />
         <el-table-column label="任务描述" v-col="'remark'" prop="remark" show-overflow-tooltip />
         <el-table-column label="任务分组" v-col="'jobGroup'" prop="jobGroup" width="120" :formatter="jobGroupFormat" />

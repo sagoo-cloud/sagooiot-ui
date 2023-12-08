@@ -140,7 +140,7 @@
 						</div>
 
 						<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-							<el-table-column label="ID" align="center" prop="nodeId" width="80" v-col="'id'" />
+							<el-table-column label="ID" align="center" prop="nodeId" width="100" v-col="'id'" />
 							<el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" />
 							<el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
 							<el-table-column label="数据类型" prop="dataType" :show-overflow-tooltip="true" v-col="'dataType'" />

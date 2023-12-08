@@ -42,7 +42,7 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
+        <!--        <el-table-column label="ID" align="center" prop="id" width="100"  v-col="'id'"/>-->
         <!-- <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" /> -->
         <el-table-column label="IP" prop="ip" v-col="'ip'"/>
         <!-- <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" /> -->

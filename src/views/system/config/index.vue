@@ -50,7 +50,7 @@
 				<el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
-            <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="60" />
+            <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="100" />
             <el-table-column label="参数名称" v-col="'configName'" prop="configName" :show-overflow-tooltip="true" />
             <el-table-column label="参数键名" v-col="'configKey'" prop="configKey" :show-overflow-tooltip="true" />
             <el-table-column label="参数键值" v-col="'configValue'" prop="configValue" />
