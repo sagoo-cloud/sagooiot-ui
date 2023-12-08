@@ -212,7 +212,11 @@ export default defineComponent({
                 delete state.form.serial.rs485
             }
             if (mirrorRef.value.getValue()) {
-                state.form.protoccol.options = eval("(" + mirrorRef.value.getValue() + ")")
+                try {
+                    state.form.protoccol.options = eval("(" + mirrorRef.value.getValue() + ")")
+                } catch (error) {
+                    return ElMessage('协议参数解析错误')
+                }
             }
             // return
             api.tunnel.addItem({ ...state.form }).then((res: any) => {

@@ -3,7 +3,7 @@
 		<div class="wrapper">
 			<el-form class="form" ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="width: 400px">
 				<el-form-item label="模板名称" prop="title">
-					<el-input v-model="temp.title" placeholder="请输入模板名称" />
+					<el-input v-model.trim="temp.title" placeholder="请输入模板名称" />
 				</el-form-item>
 				<el-form-item label="读取模式" prop="mode">
 					<el-select v-model="temp.mode" placeholder="请选择模式" class="filter-item" style="width: 100%" @change="handleModeChange">

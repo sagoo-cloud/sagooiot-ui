@@ -7,7 +7,7 @@
             <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable size="default" style="width: 200px;" />
           </el-form-item>
           <el-form-item label="所属产品" prop="productId">
-            <el-select v-model="tableData.param.productId" filterable placeholder="请选择产品">
+            <el-select v-model="tableData.param.productId" clearable filterable placeholder="请选择产品">
               <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
             </el-select>
           </el-form-item>

@@ -9,7 +9,7 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="证书名称" prop="name">
-				<el-input size="default" v-model="state.ruleForm.name"></el-input>
+				<el-input size="default" v-model.trim="state.ruleForm.name"></el-input>
 			</el-form-item>
 			<el-form-item label="证书文件" prop="fileContent">
 				<el-input disabled v-if="state.ruleForm.fileContent" size="default" v-model="state.ruleForm.fileContent"></el-input>

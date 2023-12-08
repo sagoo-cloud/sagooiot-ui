@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '告警'" v-model="isShowDialog" width="50%">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" v-if="isShowDialog" label-width="110px">
 				<el-form-item label="名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入名称" />
 				</el-form-item>
