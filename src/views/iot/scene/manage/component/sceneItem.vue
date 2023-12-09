@@ -12,7 +12,7 @@
       </div>
       <div class="product flex flex-warp">
         <el-form-item label="产品：" prop="productKey">
-          <el-select v-model="item.productKey" filterable placeholder="请选择产品"
+          <el-select v-model="item.productKey" filterable clearable placeholder="请选择产品"
             @change="seletChange(index, item.productKey!)">
             <el-option v-for="it in sourceData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备：" prop="deviceKey">
-          <el-select v-model="item.deviceKey" filterable placeholder="请选择设备" @change="EditPen(index)">
+          <el-select v-model="item.deviceKey" filterable clearable placeholder="请选择设备" @change="EditPen(index)">
             <el-option v-for="it in deviceListData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>
               <span style="float: right; margin-left: 8px;font-size: 13px">{{ it.key }}</span>
@@ -29,7 +29,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="触发类型：" prop="triggerType">
-          <el-select v-model="item.triggerType" filterable placeholder="请选择触发类型"
+          <el-select v-model="item.triggerType" clearable filterable placeholder="请选择触发类型"
             @change="getSelectcolumns(index, item.triggerType!)">
             <el-option v-for="it in sourceTypeData" :key="it.key" :label="it.name" :value="it.key">
               <span style="float: left">{{ it.name }}</span>

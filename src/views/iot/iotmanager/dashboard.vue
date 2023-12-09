@@ -200,6 +200,7 @@ export default defineComponent({
 			lineChartMsgTotalData: [],
 			lineChartAlarmTotalData: [],
 			pieChartLegend: [],
+			pieChartLevel: [],
 			pieChartData: []
 		});
 		// 折线图
@@ -302,11 +303,16 @@ export default defineComponent({
 			var getname = state.pieChartLegend;
 			var getvalue = state.pieChartData;
 			var data = [];
+
 			for (var i = 0; i < getname.length; i++) {
 				data.push({ name: getname[i], value: getvalue[i] });
 			}
+
 			const colorList = ['#FF0000', '#FEC279', '#968AF5', '#51A3FC', '#36C78B',];
+			const color = state.pieChartLevel.map(level => colorList[level - 1])
+
 			const option = {
+				color,
 				backgroundColor: state.charts.bgColor,
 				title: {
 					text: '预警类型',
@@ -360,9 +366,10 @@ export default defineComponent({
 						radius: ['70', '90'],
 						center: ['32%', '50%'],
 						itemStyle: {
-							color: function (params: any) {
-								return colorList[params.dataIndex];
-							},
+							// color: function (params: any) {
+							// 	console.log(params)
+							// 	return colorList[params.dataIndex];
+							// },
 						},
 						label: { show: false },
 						labelLine: { show: false },
@@ -429,9 +436,11 @@ export default defineComponent({
 				// "num": 43, //该级别日志数量
 				// "ratio": 100 //该级别日志数量占比(百分比)
 				state.pieChartLegend = [];
+				state.pieChartLevel = [];
 				alarmLevel && alarmLevel.map((item: any) => {
 					state.pieChartLegend.push(item.name)
 					state.pieChartData.push(item.ratio)
+					state.pieChartLevel.push(item.level)
 				})
 			})
 		};

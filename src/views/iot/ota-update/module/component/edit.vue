@@ -8,7 +8,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="模块名称" prop="name">
-					<el-input v-model="ruleForm.name" placeholder="请输入模块名称" />
+					<el-input v-model.trim="ruleForm.name" placeholder="请输入模块名称" />
 				</el-form-item>
 				<el-form-item label="模块别名" prop="nameAs">
 					<el-input v-model.trim="ruleForm.nameAs" placeholder="请输入模块别名" />

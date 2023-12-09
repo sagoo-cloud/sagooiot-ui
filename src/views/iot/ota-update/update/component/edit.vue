@@ -1,7 +1,7 @@
 <template>
   <div class="ota-edit-module-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '升级包'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="160px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" v-if="isShowDialog" label-width="160px">
         <el-form-item label="升级包类型" prop="typo">
           <el-radio-group v-model="ruleForm.typo">
             <el-radio label="1">整包</el-radio>

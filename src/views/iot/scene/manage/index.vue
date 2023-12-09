@@ -61,7 +61,7 @@
 			</el-table-column>
 			<el-table-column prop="description" label="场景描述" show-overflow-tooltip v-col="'description'"></el-table-column>
 
-			<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'"></el-table-column>
+			<el-table-column prop="createdAt" label="创建时间" width="160" align="center" v-col="'createdAt'"></el-table-column>
 			<el-table-column label="操作" width="200" align="center">
 				<template #default="scope">
 					<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="toDetail(scope.row.id)">详情</el-button>

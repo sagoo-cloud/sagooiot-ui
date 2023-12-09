@@ -38,7 +38,7 @@
 				<el-table-column label="说明" v-col="'description'" show-overflow-tooltip align="left" prop="description" />
 				<el-table-column label="作者" v-col="'author'" align="center" prop="author">
 					<template #default="scope">
-						{{JSON.parse(scope.row.author).join(" ")}}
+						{{ JSON.parse(scope.row.author).join(" ") }}
 					</template>
 				</el-table-column>
 				<el-table-column label="状态" v-col="'status'" align="center" prop="status" width="80">
@@ -92,6 +92,7 @@ const addOrEdit = (row?: any) => {
 		editFormRef.value.open(row)
 	} else {
 		uploadFile = null
+		let fileCache: any
 		// add
 		ElMessageBox({
 			title: '上传插件',
@@ -99,6 +100,7 @@ const addOrEdit = (row?: any) => {
 				type: 'file',
 				accept: '.zip',
 				onchange: function (file: any) {
+					fileCache = file
 					uploadFile = file.target.files[0]
 					// console.log(uploadFile)
 				},
@@ -122,6 +124,9 @@ const addOrEdit = (row?: any) => {
 							ElMessage.success('上传成功')
 							getList(1)
 							done()
+						}).catch(() => {
+							console.log(fileCache)
+							fileCache.target.value = null
 						}).finally(() => {
 							instance.confirmButtonLoading = false
 							instance.confirmButtonText = '上传'

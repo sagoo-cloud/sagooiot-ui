@@ -19,7 +19,7 @@
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button size="default" @click="resetQuery">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
@@ -136,7 +136,7 @@ export default defineComponent({
     const initTableData = () => {
       manageList();
     };
-    const getList = (pageNum: number) => {
+    const getList = (pageNum?: number) => {
       typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       api.manage
@@ -193,10 +193,10 @@ export default defineComponent({
           .catch(() => { });
     };
     /** 重置按钮操作 */
-    const resetQuery = (formEl: FormInstance | undefined) => {
-      if (!formEl) return;
-      formEl.resetFields();
-      getList();
+    const resetQuery = () => {
+      if (!queryRef.value) return;
+      queryRef.value.resetFields();
+      getList(1);
     };
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
