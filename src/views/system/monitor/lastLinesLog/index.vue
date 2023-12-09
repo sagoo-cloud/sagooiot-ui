@@ -83,14 +83,14 @@ const errorMessage = ref([]);
 const runMessage = ref([]);
 const topMsg = ref([]);
 const activeName = '1';
-const typo = ref('service');
+const types = ref('service');
 const runLoading = ref(false);
 const { proxy } = getCurrentInstance() as any;
 const isScrolling = ref(false);
 const chatContent: any = ref(null);
 const runButtonShow = ref(false);
 
-const {params, tableData, getList, loading} = useSearch<any[]>(api.lastLinesLog.getList, 'list', {typo: typo.value});
+const {params, tableData, getList, loading} = useSearch<any[]>(api.lastLinesLog.getList, 'list', {types: types.value});
 
 getList();
 
@@ -111,24 +111,24 @@ const scrollBottom = () => {
 }
 
 const view = (row: any) => {
-  const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "/subscribe/logInfo?name=" + row.name + '&typo=' + typo.value));
+  const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "/subscribe/logInfo?name=" + row.name + '&types=' + types.value));
   es.addEventListener('log', ({data}) => {
     topMsg.value.unshift(data);
   });
-  api.lastLinesLog.detail({name: row.name, typo: typo.value}).then((res: any) => {
+  api.lastLinesLog.detail({name: row.name, types: types.value}).then((res: any) => {
     errorMessage.value = res.list;
     dialogVisible.value = true;
   });
 };
 const down = (row: any) => {
-  if (typo.value == 'run') {
+  if (types.value == 'run') {
     row.name = 'sagoo-admin.log'
   }
-  api.lastLinesLog.down({name: row.name, typo: typo.value}).then((res: any) => downloadFile(res, row.name))
+  api.lastLinesLog.down({name: row.name, types: types.value}).then((res: any) => downloadFile(res, types.value +"-"+ row.name))
 };
 
 const onRowDel = (row: any) => {
-  if (typo.value == 'run') {
+  if (types.value == 'run') {
     row.name = 'sagoo-admin.log'
   }
   let msg = '你确定要删除所选数据？';
@@ -137,9 +137,9 @@ const onRowDel = (row: any) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    api.lastLinesLog.delete({name: row.name, typo: typo.value}).then(() => {
-      params.typo = typo.value;
-      if (typo.value == 'run') {
+    api.lastLinesLog.delete({name: row.name, types: types.value}).then(() => {
+      params.types = types.value;
+      if (types.value == 'run') {
         runButtonShow.value = false;
       } else {
         getList()
@@ -152,19 +152,19 @@ const onRowDel = (row: any) => {
 // 切换tab
 const handleClick = (tab: any, event: Event) => {
   if (tab.props.name == 1) {
-    typo.value = 'service';
+    types.value = 'service';
     // 获取日志列表
-    params.typo = typo.value;
+    params.types = types.value;
     getList()
   } else if (tab.props.name == 2) {
-    typo.value = 'mysql'
-    params.typo = typo.value;
+    types.value = 'sql'
+    params.types = types.value;
     getList();
   } else if (tab.props.name == 3) {
     runLoading.value = true;
-    typo.value = 'run'
-    params.type = typo.value
-    api.lastLinesLog.detail({name: 'sagoo-admin.log', typo: typo.value}).then((res: any) => {
+    types.value = 'run'
+    params.type = types.value
+    api.lastLinesLog.detail({name: 'sagoo-admin.log', types: types.value}).then((res: any) => {
       if (res.list.length > 0) {
         runButtonShow.value = true;
         runMessage.value = res.list;
