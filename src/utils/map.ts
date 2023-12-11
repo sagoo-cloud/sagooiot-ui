@@ -11,7 +11,7 @@ export function initMap(): any {
       return resolve({ BMapGL: window.BMapGL, centerPoint })
     }
 
-    Promise.all([apiSystem.getInfoByKey({ ConfigKey: 'sys.map.access.key' }), apiSystem.getInfoByKey({ ConfigKey: 'sys.map.lngAndLat' })]).then(([res1, res2]) => {
+    Promise.all([apiSystem.getInfoByKey('sys.map.access.key'), apiSystem.getInfoByKey('sys.map.lngAndLat')]).then(([res1, res2]) => {
       const ak = res1.data.configValue
       const centerStr = res2.data.configValue
 

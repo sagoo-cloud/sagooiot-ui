@@ -118,7 +118,6 @@ export default defineComponent({
 					if (valid) {
 						state.loading.signIn = true;
 						let password: string
-						console.log(sessionStorage.isRsaEnabled)
 						if (sessionStorage.isRsaEnabled) {
 							password = await encrypt(state.ruleForm.password)
 						} else {
@@ -142,13 +141,23 @@ export default defineComponent({
 									})
 								}
 
+								localStorage.setItem('token', res.token);
 								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
-								localStorage.setItem('token', res.token);
 								Local.set('userInfo', userInfos);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);
+
+
+								// 获取权限配置，上传文件类型等
+								const [columnRes, buttonRes, uploadFileRes] = await Promise.all([api.getInfoByKey('sys.column.switch'), api.getInfoByKey('sys.button.switch'), api.getInfoByKey('sys.uploadFile.way')])
+
+								const isSecurityControlEnabled = sessionStorage.isSecurityControlEnabled
+								localStorage.setItem('btnNoAuth', (isSecurityControlEnabled && Number(buttonRes.data.configValue)) ? '' : '1');
+								localStorage.setItem('colNoAuth', (isSecurityControlEnabled && Number(columnRes.data.configValue)) ? '' : '1');
+								localStorage.setItem('uploadFileWay', uploadFileRes.data.configValue);
+
 								await store.dispatch('userInfos/setUserInfos', userInfos);
 
 								currentUser();

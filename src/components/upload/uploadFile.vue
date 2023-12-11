@@ -13,7 +13,7 @@ import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin';
 
-const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+const source = localStorage.uploadFileWay
 
 const headers = {
 	Authorization: 'Bearer ' + localStorage.token,

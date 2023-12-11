@@ -38,7 +38,7 @@ const headers = {
 
 const emit = defineEmits(['setImg', 'setImgs'])
 
-const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+const source = localStorage.uploadFileWay
 
 const props = defineProps({
 	multiple: {

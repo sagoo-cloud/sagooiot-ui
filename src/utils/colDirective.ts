@@ -13,7 +13,7 @@ export function colDirective(app: App) {
 	// 单个权限验证（v-col="xxx"）
 	app.directive('col', {
 		mounted(el, binding) {
-			if (sessionStorage.colNoAuth) return
+			if (localStorage.colNoAuth) return
 			const columns = <string[]>router.currentRoute.value.meta.columns
 			if (columns.includes(allPermissions)) return
 			if (!columns.includes(binding.value)) el.parentNode.removeChild(el)
@@ -22,7 +22,7 @@ export function colDirective(app: App) {
 	// 多个权限验证，满足一个则显示（v-cols="[xxx,xxx]"）
 	app.directive('cols', {
 		mounted(el, binding) {
-			if (sessionStorage.colNoAuth) return
+			if (localStorage.colNoAuth) return
 			const columns = <string[]>router.currentRoute.value.meta.columns
 			if (columns.includes(allPermissions)) return
 			let flag = false;
@@ -37,7 +37,7 @@ export function colDirective(app: App) {
 	// 多个权限验证，全部满足则显示（v-col-all="[xxx,xxx]"）
 	app.directive('col-all', {
 		mounted(el, binding) {
-			if (sessionStorage.colNoAuth) return
+			if (localStorage.colNoAuth) return
 			const columns = <string[]>router.currentRoute.value.meta.columns
 			if (columns.includes(allPermissions)) return
 			!smallInBig(columns, binding.value) && el.parentNode.removeChild(el)

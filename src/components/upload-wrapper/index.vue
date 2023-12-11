@@ -13,7 +13,7 @@ import getOrigin from '/@/utils/origin'
 
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/singleImg');
 
-const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+const source = localStorage.uploadFileWay
 
 const headers = {
   Authorization: 'Bearer ' + localStorage.token,

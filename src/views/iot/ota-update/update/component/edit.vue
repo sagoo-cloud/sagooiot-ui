@@ -125,7 +125,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const headers = { Authorization: 'Bearer ' + localStorage.token, };
-    const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+    const source = localStorage.uploadFileWay
     const editDicRef = ref();
     const areType = ref([
       {
@@ -198,7 +198,7 @@ export default defineComponent({
       state.isShowDialog = true;
 
       // 获取上传格式
-      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
+      apiSystem.getInfoByKey('sys.uploadFile.fileType').then((res: any) => {
         let fileType = res.data.configValue.split(",");
         for (let i = 0; i < fileType.length; i++) {
           fileType[i] = '.' + fileType[i];

@@ -306,10 +306,10 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      apiSystem.getInfoByKey({ ConfigKey: 'sys.device.phone.limit' }).then((res: any) => {
+      apiSystem.getInfoByKey('sys.device.phone.limit').then((res: any) => {
         state.deviceImgLimit = parseInt(res.data.configValue);
       });
-      apiSystem.getInfoByKey({ ConfigKey: 'sys.device.certificate.limit' }).then((res: any) => {
+      apiSystem.getInfoByKey('sys.device.certificate.limit').then((res: any) => {
         state.certificateLimit = parseInt(res.data.configValue);
       });
     })

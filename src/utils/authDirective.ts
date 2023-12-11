@@ -13,7 +13,7 @@ export function authDirective(app: App) {
 	// 单个权限验证（v-auth="xxx"）
 	app.directive('auth', {
 		mounted(el, binding) {
-			if (sessionStorage.btnNoAuth) return
+			if (localStorage.btnNoAuth) return
 			const buttons = <string[]>router.currentRoute.value.meta.buttons
 			if (buttons.includes(allPermissions)) return
 
@@ -32,7 +32,7 @@ export function authDirective(app: App) {
 	// 多个权限验证，满足一个则显示（v-auths="[xxx,xxx]"）
 	app.directive('auths', {
 		mounted(el, binding) {
-			if (sessionStorage.btnNoAuth) return
+			if (localStorage.btnNoAuth) return
 			const buttons = <string[]>router.currentRoute.value.meta.buttons
 			if (buttons.includes(allPermissions)) return
 			let flag = false;
@@ -48,7 +48,7 @@ export function authDirective(app: App) {
 	// 多个权限验证，全部满足则显示（v-auth-all="[xxx,xxx]"）
 	app.directive('auth-all', {
 		mounted(el, binding) {
-			if (sessionStorage.btnNoAuth) return
+			if (localStorage.btnNoAuth) return
 			const buttons = <string[]>router.currentRoute.value.meta.buttons
 			if (buttons.includes(allPermissions)) return
 			!smallInBig(buttons, binding.value) && el.parentNode.removeChild(el)

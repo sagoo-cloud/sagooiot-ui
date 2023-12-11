@@ -187,5 +187,5 @@ export default {
     down: (params: object) => file('/system/monitor/downloadLog', params),
     delete: (params: object) => del('/system/monitor/lastLinesLog/delete', params),
   },
-  getInfoByKey: (params: object) => get('/common/config/getInfoByKey', params)
+  getInfoByKey: (ConfigKey: string) => get('/common/config/getInfoByKey', { ConfigKey })
 }
