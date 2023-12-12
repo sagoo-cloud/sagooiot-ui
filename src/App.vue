@@ -26,11 +26,15 @@ export default defineComponent({
 	components: { LockScreen, Setings, CloseFull },
 	async created() {
 		api.sysinfo().then((res: any) => {
-			// 安全开关是否开启 按钮权限，列表权限，rsa权限在开启安全权限下才使用
-			const isSecurityControlEnabled = res.isSecurityControlEnabled
 			localStorage.setItem('sysinfo', JSON.stringify(res));
-			sessionStorage.setItem('isSecurityControlEnabled', isSecurityControlEnabled ? '1' : '');
-			sessionStorage.setItem('isRsaEnabled', (isSecurityControlEnabled && res.isRsaEnabled) ? '1' : '');
+			// 使用的事base64加密的，解决之后的值  sysPasswordChangePeriod + "|" + isSecurityControlEnabled + "|" + isRsaEnabled
+			// 顺序是，密码变更周期，是否启动安全控制，是否启用rsa，中间你需要根据 | 切割一下
+			const [sysPasswordChangePeriod, isSecurityControlEnabled, isRsaEnabled] = window.atob(res.target).split('|')
+
+			// 安全开关是否开启 按钮权限，列表权限，rsa权限在开启安全权限下才使用
+			sessionStorage.setItem('isSecurityControlEnabled', Number(isSecurityControlEnabled) ? '1' : '');
+			sessionStorage.setItem('isRsaEnabled', (Number(isSecurityControlEnabled) && Number(isRsaEnabled)) ? '1' : '');
+			sessionStorage.setItem('sysPasswordChangePeriod', sysPasswordChangePeriod);
 		});
 	},
 	setup() {

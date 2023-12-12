@@ -131,8 +131,7 @@ export default defineComponent({
 							.then(async (res: any) => {
 								// 检查是否需要更换密码
 								if (res.isChangePwd) {
-									const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
-									ElMessage.error(`密码已超过${sysinfo.passwordChangePeriod}天未修改，请先修改密码再登录`)
+									ElMessage.error(`密码已超过${sessionStorage.sysPasswordChangePeriod}天未修改，请先修改密码再登录`)
 									state.loading.signIn = false;
 									getCaptcha();
 									return changePwdRef.value.toShow({
