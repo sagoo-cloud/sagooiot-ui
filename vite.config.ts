@@ -19,7 +19,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			vue(),
 			viteCompression({
 				threshold: 1024 * 20, // 对大于 20k 的文件进行压缩
-	      // filter: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, // 需要压缩的文件
+				// filter: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, // 需要压缩的文件
 				algorithm: 'gzip', // 压缩方式
 				ext: 'gz', // 后缀名
 				deleteOriginFile: false, // 压缩后是否删除压缩源文件
@@ -61,6 +61,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					},
 				},
 			},
+			minify: 'terser', // 使用terser进行压缩
 			terserOptions: {
 				compress: {
 					drop_console: true,
