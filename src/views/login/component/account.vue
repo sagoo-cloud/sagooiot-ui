@@ -152,10 +152,10 @@ export default defineComponent({
 								// 获取权限配置，上传文件类型等
 								const [columnRes, buttonRes, uploadFileRes] = await Promise.all([api.getInfoByKey('sys.column.switch'), api.getInfoByKey('sys.button.switch'), api.getInfoByKey('sys.uploadFile.way')])
 
-								const isSecurityControlEnabled = sessionStorage.isSecurityControlEnabled
-								localStorage.setItem('btnNoAuth', (isSecurityControlEnabled && Number(buttonRes.data.configValue)) ? '' : '1');
-								localStorage.setItem('colNoAuth', (isSecurityControlEnabled && Number(columnRes.data.configValue)) ? '' : '1');
-								localStorage.setItem('uploadFileWay', uploadFileRes.data.configValue);
+								const isSecurityControlEnabled = sessionStorage.isSecurityControlEnabled || null
+								localStorage.setItem('btnNoAuth', (isSecurityControlEnabled && Number(buttonRes?.data?.configValue)) ? '' : '1');
+								localStorage.setItem('colNoAuth', (isSecurityControlEnabled && Number(columnRes?.data?.configValue)) ? '' : '1');
+								localStorage.setItem('uploadFileWay', uploadFileRes?.data?.configValue || '0');
 
 								await store.dispatch('userInfos/setUserInfos', userInfos);
 
