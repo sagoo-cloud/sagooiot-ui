@@ -146,9 +146,7 @@ export default defineComponent({
 					ElMessage.success('分类修改成功');
 					closeDialog(); // 关闭弹窗
 					emit('getCateList');
-					} catch (error) {
-					ElMessage.error('分类修改失败');
-					}
+					} catch (error) {}
 				}
 				// 启用按钮
 				loading.value = false;
