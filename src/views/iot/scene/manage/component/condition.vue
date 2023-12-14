@@ -156,15 +156,18 @@ const delScene = (index: number) => {
 onMounted(() => {
   props.condition.forEach((item) => {
     item.forEach((vo: any) => {
-      let operator = vo.operator;
-      let matchedColumn = props.columnList.find((column: any) =>
-        column.termTypes.some((term: any) => term.Key === operator)
-      );
-      if (matchedColumn) {
-        vo.operatorList = matchedColumn.termTypes;
-      } else {
+      if (!vo.parameter) {
         vo.operatorList = []; // 如果没有匹配的列，设置为空数组
       }
+      // let operator = vo.operator;
+      // let matchedColumn = props.columnList.find((column: any) =>
+      //   column.termTypes.some((term: any) => term.Key === operator)
+      // );
+      // if (matchedColumn) {
+      //   vo.operatorList = matchedColumn.termTypes;
+      // } else {
+      //   vo.operatorList = []; // 如果没有匹配的列，设置为空数组
+      // }
     });
   });
 });
