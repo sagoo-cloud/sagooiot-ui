@@ -111,15 +111,15 @@ export default defineComponent({
             //修改
             api.module.edit(state.ruleForm).then(() => {
               ElMessage.success('模块修改成功');
-              closeDialog(); // 关闭弹窗
               emit('getList');
+              closeDialog(); // 关闭弹窗
             });
           } else {
             //添加
             api.module.add(state.ruleForm).then(() => {
               ElMessage.success('模块添加成功');
-              closeDialog(); // 关闭弹窗
               emit('getList');
+              closeDialog(); // 关闭弹窗
             });
           }
         }

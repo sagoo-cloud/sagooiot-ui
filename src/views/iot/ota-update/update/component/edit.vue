@@ -2,8 +2,8 @@
   <div class="ota-edit-module-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '升级包'" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" v-if="isShowDialog" label-width="160px">
-        <el-form-item label="升级包类型" prop="typo">
-          <el-radio-group v-model="ruleForm.typo">
+        <el-form-item label="升级包类型" prop="types">
+          <el-radio-group v-model="ruleForm.types">
             <el-radio label="1">整包</el-radio>
             <el-radio label="2" disabled>差分</el-radio>
           </el-radio-group>
@@ -14,9 +14,16 @@
         </el-form-item>
 
         <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" placeholder="请选择产品" @change="seletChange">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />
-          </el-select>
+          <!--          <el-select v-model="ruleForm.productId" placeholder="请选择产品" @change="selectChange">-->
+          <!--            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />-->
+          <!--          </el-select>-->
+
+          <!-- 回显已选产品 -->
+          <template v-if="productNameShow">
+            <el-tag style="margin-right: 10px;">{{ productName }}</el-tag>
+          </template>
+
+          <el-button type="primary" @click="onOpenProduct()">选择产品</el-button>
         </el-form-item>
 
         <el-form-item label="升级包模块" prop="module">
@@ -28,15 +35,15 @@
           <el-button type="success" @click="onOpenAddDic()" style="margin-left: 5px;">添加升级包模块</el-button>
         </el-form-item>
 
-        <el-form-item label="升级包版本号" prop="version" v-if="ruleForm.typo == '1'">
+        <el-form-item label="升级包版本号" prop="version" v-if="ruleForm.types == '1'">
           <el-input v-model="ruleForm.version" placeholder="请输入待升级包版本号" />
         </el-form-item>
 
-        <el-form-item label="待升级版本号" prop="waitVersion" v-if="ruleForm.typo == '2'">
+        <el-form-item label="待升级版本号" prop="waitVersion" v-if="ruleForm.types == '2'">
           <el-input v-model="ruleForm.waitVersion" placeholder="请输入待升级版本号" />
         </el-form-item>
 
-        <el-form-item label="升级后版本号" prop="afterVersion" v-if="ruleForm.typo == '2'">
+        <el-form-item label="升级后版本号" prop="afterVersion" v-if="ruleForm.types == '2'">
           <el-input v-model="ruleForm.afterVersion" placeholder="请输入升级后版本号" />
         </el-form-item>
 
@@ -78,7 +85,10 @@
     </el-dialog>
 
     <!-- 添加模块 -->
-    <EditConfig ref="editDicRef" />
+    <EditConfig ref="editDicRef" @getList="getList" />
+
+    <!-- 产品绑定弹窗 -->
+    <ProductBind ref="productRef" @bindSuccess="getProductTableData" />
   </div>
 </template>
 
@@ -90,10 +100,11 @@ import getOrigin from '/@/utils/origin';
 import { checkVersion } from '/@/utils/validator';
 import apiSystem from "/@/api/system";
 import EditConfig from "/@/views/iot/ota-update/module/component/edit.vue";
+import ProductBind from "/@/views/iot/ota-update/update/component/productBind.vue";
 
 interface RuleFormState {
   id: number;
-  typo: string;
+  types: string;
   name: string;
   productId: '';
   module: string;
@@ -118,6 +129,8 @@ interface UpdateState {
   rules: {};
   uploadFileWay: number;
   fileAccept: [];
+  productNameShow: boolean;
+  productName: string;
 }
 
 export default defineComponent({
@@ -125,8 +138,11 @@ export default defineComponent({
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const headers = { Authorization: 'Bearer ' + localStorage.token, };
-    const source = localStorage.uploadFileWay
+    const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
+    const productRef = ref();
     const editDicRef = ref();
+    const fileList = ref([]);
+    const urlName = ref();
     const areType = ref([
       {
         label: 'MD5',
@@ -137,14 +153,12 @@ export default defineComponent({
         value: 'SHA256',
       },
     ]);
-    const fileList = ref([]);
-    const urlName = ref();
     const state = reactive<UpdateState>({
       uploadUrl: getOrigin(import.meta.env.VITE_API_URL + '/common/singleFile'), // 上传地址
       isShowDialog: false,
       ruleForm: {
         id: 0,
-        typo: '1',
+        types: '1',
         name: '',
         productId: '',
         module: '',
@@ -162,7 +176,7 @@ export default defineComponent({
       productData: [],
       moduleData: [],
       rules: {
-        typo: [{ required: true, message: '升级包类型不能为空', trigger: 'change' }],
+        types: [{ required: true, message: '升级包类型不能为空', trigger: 'change' }],
         name: [{ required: true, message: '升级包名称不能为空', trigger: 'change' }],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
         module: [{ required: true, message: '升级包模块不能为空', trigger: 'change' }],
@@ -177,6 +191,8 @@ export default defineComponent({
       },
       uploadFileWay: 0,// 上传方式
       fileAccept: [], // 上传格式
+      productNameShow: false, // 回显产品名称状态
+      productName: '', // 回显产品名称
     });
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
@@ -186,7 +202,7 @@ export default defineComponent({
           const data: RuleFormState = res;
           state.ruleForm = data;
         });
-        seletChange(row.productId);
+        selectChange(row.productId);
         state.ruleForm = row;
       }
 
@@ -196,9 +212,10 @@ export default defineComponent({
       });
 
       state.isShowDialog = true;
+      state.productNameShow = false;
 
       // 获取上传格式
-      apiSystem.getInfoByKey('sys.uploadFile.fileType').then((res: any) => {
+      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
         let fileType = res.data.configValue.split(",");
         for (let i = 0; i < fileType.length; i++) {
           fileType[i] = '.' + fileType[i];
@@ -209,7 +226,7 @@ export default defineComponent({
     const resetForm = () => {
       state.ruleForm = {
         id: 0,
-        typo: '1',
+        types: '1',
         name: '',
         productId: '',
         module: '',
@@ -236,11 +253,14 @@ export default defineComponent({
         ElMessage.error(res.message);
       }
     };
-    const seletChange = (val: Number) => {
+    const selectChange = (val: Number) => {
       getModuleList(val);
     };
     const getModuleList = (productID: Number) => {
       state.ruleForm.module = '';
+      if (!productID) {
+        productID = Number(state.ruleForm.productId)
+      }
       api.module.getList({ productID: productID }).then((res: any) => {
         state.moduleData = res.Data;
       });
@@ -248,6 +268,7 @@ export default defineComponent({
     // 关闭弹窗
     const closeDialog = () => {
       state.isShowDialog = false;
+      state.productNameShow = false;
     };
     // 取消
     const onCancel = () => {
@@ -282,13 +303,27 @@ export default defineComponent({
     const onOpenAddDic = () => {
       editDicRef.value.openDialog();
     };
+    // 添加升级包模块后回调方法
+    const getList = () => {
+      getModuleList()
+    }
+    const onOpenProduct = () => {
+      productRef.value.openDialog();
+    }
+    // 获取产品回显数据
+    const getProductTableData = (deviceIdList: any, deviceNameList: any) => {
+      state.ruleForm.productId = deviceIdList[0];
+      state.productName = deviceNameList[0];
+      state.productNameShow = true;
+    }
     return {
       editDicRef,
       openDialog,
       closeDialog,
-      seletChange,
+      selectChange,
       onCancel,
       onSubmit,
+      productRef,
       formRef,
       areType,
       source,
@@ -297,9 +332,13 @@ export default defineComponent({
       urlName,
       updateImg,
       onOpenAddDic,
+      getList,
+      onOpenProduct,
+      getModuleList,
+      getProductTableData,
       ...toRefs(state),
     };
   },
-  components: { EditConfig },
+  components: {ProductBind, EditConfig },
 });
 </script>

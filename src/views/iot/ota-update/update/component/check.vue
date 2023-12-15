@@ -11,7 +11,7 @@
     <el-dialog :title="'操作升级包'" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="160px">
         <el-form-item label="类型" prop="formType" @change="getFormType">
-          <el-radio-group v-model="ruleForm.typo">
+          <el-radio-group v-model="ruleForm.types">
             <el-radio label="1">验证</el-radio>
             <el-radio label="2">升级</el-radio>
           </el-radio-group>
@@ -91,7 +91,7 @@ interface RuleFormState {
   devOtaFirmwareId: number;
   push: string;
   pushDisabled: boolean,
-  typo: string;
+  types: string;
   productId: string;
 }
 interface UpdateState {
@@ -127,7 +127,7 @@ export default defineComponent({
         devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
-        typo: '1',
+        types: '1',
         productId: '',
       },
       productData: [],
@@ -136,7 +136,7 @@ export default defineComponent({
         method: [{ required: true, message: '协议方式不能为空', trigger: 'blur' }],
         stratege: [{ required: true, message: '升级方式不能为空', trigger: 'blur' }],
         push: [{ required: true, message: '推送方式不能为空', trigger: 'blur' }],
-        typo: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+        types: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
       },
       deviceShow: false, // 所属设备是否显示
       deviceNameShow: false, // 回显设备名称状态
@@ -150,7 +150,7 @@ export default defineComponent({
     // 获取操作升级包类型
     const getFormType = () => {
       // 如果是验证类型，设备信息必填项
-      if (state.ruleForm.typo === '1') {
+      if (state.ruleForm.types === '1') {
         state.deviceShow = true;
         state.rules.devices = [{
           required: true,
@@ -194,7 +194,7 @@ export default defineComponent({
       }
       state.isShowDialog = true;
 
-      if (state.ruleForm.typo == '1') {
+      if (state.ruleForm.types == '1') {
         state.deviceShow = true;
       }
     };
@@ -209,7 +209,7 @@ export default defineComponent({
         devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
-        typo: '1',
+        types: '1',
         productId: '',
       };
     };

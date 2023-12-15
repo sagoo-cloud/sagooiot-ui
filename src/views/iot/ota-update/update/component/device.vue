@@ -71,7 +71,7 @@ import BatchList from "/@/views/iot/ota-update/update/component/batch.vue";
 interface TableDataRow {
   id: number;
   name: string;
-  typo: string;
+  types: string;
   productName: number;
   moduleName: string;
   checkres: string;

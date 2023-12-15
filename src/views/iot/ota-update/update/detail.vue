@@ -8,7 +8,7 @@
         </div>
         <div class="mt20"></div>
         <div class="container">
-          <div class="item">升级包类型：{{detail.typo==1?'整包':'差分'}}</div>
+          <div class="item">升级包类型：{{detail.types==1?'整包':'差分'}}</div>
           <div class="item">升级包签名：d52b637c5eaf2bc9c24008bc4b723600</div>
         </div>
         <div class="container">
@@ -88,7 +88,7 @@ export default defineComponent({
       detail: {
         id: '',
         name: '',
-        typo: 1,
+        types: 1,
         are: '',
         moduleName: '',
         checkres: 0,

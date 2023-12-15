@@ -34,9 +34,9 @@
         <el-table-column prop="id" label="ID" width="100" />
         <el-table-column prop="name" label="名称" />
 <!--        <el-table-column prop="waitVersion" label="待升级版本号" width="120" />-->
-        <el-table-column label="类型" prop="typo" width="120" align="center">
+        <el-table-column label="类型" prop="types" width="120" align="center">
           <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.typo == 0">验证</el-tag>
+            <el-tag type="success" size="small" v-if="scope.row.types == 0">验证</el-tag>
             <el-tag type="info" size="small" v-else>升级</el-tag>
           </template>
         </el-table-column>

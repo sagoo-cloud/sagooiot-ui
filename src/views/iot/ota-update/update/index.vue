@@ -38,10 +38,10 @@
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />
         <el-table-column label="升级包名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column prop="typo" label="类型" show-overflow-tooltip v-col="'typo'">
+        <el-table-column prop="types" label="类型" show-overflow-tooltip v-col="'types'">
           <template #default="scope">
-            <el-tag  size="small" v-if="scope.row.typo == 1">整包</el-tag>
-            <el-tag  type="info" size="small" v-if="scope.row.typo == 2">差分</el-tag>
+            <el-tag  size="small" v-if="scope.row.types == 1">整包</el-tag>
+            <el-tag  type="info" size="small" v-if="scope.row.types == 2">差分</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="所属产品" v-col="'productName'" prop="productName" :show-overflow-tooltip="true" />
@@ -83,7 +83,7 @@ import { useRouter } from 'vue-router';
 interface TableDataRow {
   id: number;
   name: string;
-  typo: string;
+  types: string;
   productName: number;
   moduleName: string;
   checkres: string;

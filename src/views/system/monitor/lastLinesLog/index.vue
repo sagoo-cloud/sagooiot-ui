@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="content-box chatdoom">
+    <div class="content-box chatdoom page">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 
         <!-- 日志列表 -->
@@ -15,14 +15,14 @@
                   <el-button size="small" text type="primary" v-if="!scope.row.folderName"
                              @click="view(scope.row)">详情
                   </el-button>
-                  <el-button size="small" text type="info" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-                  <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+                  <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+                  <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </el-card>
 
-          <el-dialog v-model="dialogVisible" title="查看详情">
+          <el-dialog header="123" v-model="dialogVisible" title="查看详情">
             <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
             <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
           </el-dialog>
@@ -40,8 +40,8 @@
                   <el-button size="small" text type="primary" v-if="!scope.row.folderName"
                              @click="view(scope.row)">详情
                   </el-button>
-                  <el-button size="small" text type="info" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-                  <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+                  <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+                  <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -57,11 +57,12 @@
         <!-- 运行日志 -->
         <el-tab-pane label="运行日志" name="3" class="runMessage">
           <!-- 运行日志 -->
+          <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
           <div v-if="runButtonShow" v-loading="runLoading" v-for="line in runMessage" :key="line" class="error-line">{{ line }}</div>
           <div v-else class="error-line">暂无数据</div>
 
           <div class="run-button" v-if="runButtonShow">
-            <el-button size="small" text type="info" v-auth="'download'" @click="down">下载</el-button>
+            <el-button size="small" text type="warning" v-auth="'download'" @click="down">下载</el-button>
             <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel">删除</el-button>
           </div>
         </el-tab-pane>
@@ -89,6 +90,7 @@ const { proxy } = getCurrentInstance() as any;
 const isScrolling = ref(false);
 const chatContent: any = ref(null);
 const runButtonShow = ref(false);
+const runLogName = ref('');
 
 const {params, tableData, getList, loading} = useSearch<any[]>(api.lastLinesLog.getList, 'list', {types: types.value});
 
@@ -111,25 +113,34 @@ const scrollBottom = () => {
 }
 
 const view = (row: any) => {
+  if (types.value == 'run') {
+    row.name = row.value;
+  }
   const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "/subscribe/logInfo?name=" + row.name + '&types=' + types.value));
   es.addEventListener('log', ({data}) => {
     topMsg.value.unshift(data);
   });
   api.lastLinesLog.detail({name: row.name, types: types.value}).then((res: any) => {
-    errorMessage.value = res.list;
-    dialogVisible.value = true;
+    if (types.value == 'run') {
+        runButtonShow.value = true;
+        runMessage.value = res.list;
+        runLoading.value = false;
+    } else {
+      errorMessage.value = res.list;
+      dialogVisible.value = true;
+    }
   });
 };
 const down = (row: any) => {
   if (types.value == 'run') {
-    row.name = 'sagoo-admin.log'
+    row.name = runLogName.value
   }
   api.lastLinesLog.down({name: row.name, types: types.value}).then((res: any) => downloadFile(res, types.value +"-"+ row.name))
 };
 
 const onRowDel = (row: any) => {
   if (types.value == 'run') {
-    row.name = 'sagoo-admin.log'
+    row.name = runLogName.value
   }
   let msg = '你确定要删除所选数据？';
   ElMessageBox.confirm(msg, '提示', {
@@ -163,28 +174,22 @@ const handleClick = (tab: any, event: Event) => {
   } else if (tab.props.name == 3) {
     runLoading.value = true;
     types.value = 'run'
+    runLogName.value = 'sagoo-admin.log'
     params.type = types.value
-    api.lastLinesLog.detail({name: 'sagoo-admin.log', types: types.value}).then((res: any) => {
-      if (res.list.length > 0) {
-        runButtonShow.value = true;
-        runMessage.value = res.list;
-      }
-      runLoading.value = false;
-    });
+    view(runLogName)
   }
 }
 </script>
 <style scoped>
 .run-button {
   position: fixed;
-  bottom: 150px;
-  right: 60px;
+  bottom: 50px;
+  right: 80px;
 }
 .runMessage {
   height: 500px;
 }
 .content-box {
-  background: #fff;
   width: 100%;
   padding: 5px 20px 20px 20px;
 }
@@ -197,7 +202,7 @@ const handleClick = (tab: any, event: Event) => {
 }
 .el-tab-pane {
   position: relative;
-  //height: calc(100vh - 110px);
+  height: calc(100vh - 110px);
   overflow-y: auto;
 }
 </style>

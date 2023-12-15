@@ -60,7 +60,7 @@ import {defineComponent, reactive, toRefs} from 'vue';
 interface TableDataRow {
   id: number;
   name: string;
-  typo: string;
+  types: string;
   productName: number;
   moduleName: string;
   checkres: string;
