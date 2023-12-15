@@ -4,7 +4,7 @@
 		<p class="tips">说明：请上传文件，支持格式.XLS|.XLSX</p>
 		<input type="file" ref="upload" style="display: none" accept=".xls,.xlsx" class="outputlist_upload" />
 		<div class="file-box" @click="handleUpload">
-			<img :src="equiUploadImg" />
+			<el-image :src="equiUploadImg" />
 			<span>上传文件</span>
 		</div>
 		<div v-if="fileName" class="file-content">

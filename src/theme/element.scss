@@ -22,6 +22,19 @@
 	margin-right: 5px;
 }
 
+.image-slot {
+  display: flex;
+	flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+	gap:2px
+}
+
 .el-button.el-button--text.el-button--small{
 	padding: 0;
 }

@@ -6,9 +6,9 @@
 				<el-card shadow="hover" header="个人信息" v-loading="!info.userName">
 					<div class="personal-user">
 						<div class="personal-user-left">
-							<img v-if="isEditStatus && info.avatar" style="width: 140px; height: 140px" :src="info.avatar" />
+							<el-image v-if="isEditStatus && info.avatar" style="width: 140px; height: 140px" :src="info.avatar" />
 							<uploadVue v-else @set-img="setImg">
-								<img style="width: 140px; height: 140px" :src="info.avatar" />
+								<el-image style="width: 140px; height: 140px" :src="info.avatar" />
 								<div class="tips">点击上方照片，即可更改头像</div>
 							</uploadVue>
 						</div>

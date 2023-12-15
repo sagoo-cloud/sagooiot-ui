@@ -364,10 +364,10 @@
         <el-tab-pane label="设备扩展属性信息" name="7">
           <el-form size="default" label-width="110px">
             <el-form-item label="设备图片">
-              <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
+              <el-image class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
             </el-form-item>
             <el-form-item label="证书图片">
-              <img class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in certificate" :key="index" />
+              <el-image class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in certificate" :key="index" />
             </el-form-item>
             <el-form-item label="设备说明">
               <el-input disabled v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>

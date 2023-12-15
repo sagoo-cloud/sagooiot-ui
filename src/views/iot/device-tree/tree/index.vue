@@ -80,7 +80,7 @@
                     <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
                     <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
                     <td class="ant-descriptions-item-content" colspan="1">
-                      <img :src="treeDetail.image" v-if="treeDetail.image">
+                      <el-image :src="treeDetail.image" v-if="treeDetail.image" />
                     </td>
                   </tr>
                   <tr class="ant-descriptions-row">

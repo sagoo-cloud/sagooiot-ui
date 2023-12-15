@@ -12,17 +12,15 @@
 		></el-switch>
 		<div class="part left">
 			<div class="flex logo">
-				<img v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
-				<img v-else class="logoimg" src="/imgs/logo.png" />
+				<el-image v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
+				<el-image v-else class="logoimg" src="/imgs/logo.png" />
 				{{ sysinfo.systemName }}</div>
-			<img class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
-			<img class="img" v-else src="/imgs/login-box-bg.svg" />
+			<el-image class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
+			<el-image class="img" v-else src="/imgs/login-box-bg.svg" />
 			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
 			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
 		<div class="part">
-			<!-- <img :src="logoMini" />
-							<div class="login-icongroup-title-text font25">{{ getThemeConfig.globalViceTitle }}</div> -->
 			<div class="title">登录</div>
 			<Account />
 		</div>

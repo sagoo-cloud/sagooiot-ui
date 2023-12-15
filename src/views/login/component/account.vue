@@ -35,7 +35,7 @@
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
 				<div class="login-content-code">
-					<img class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
+					<el-image class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
 				</div>
 			</el-col>
 		</el-form-item>

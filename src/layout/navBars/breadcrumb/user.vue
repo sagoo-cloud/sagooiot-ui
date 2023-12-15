@@ -49,7 +49,13 @@
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
       <span class="layout-navbars-breadcrumb-user-link">
-        <img :src="getUserInfos.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+        <el-image :src="getUserInfos.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" fit="cover">
+          <template #error>
+            <div class="image-slot">
+              <ele-Picture style="width: 16px;" />
+            </div>
+          </template>
+        </el-image>
         {{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
         <el-icon class="el-icon--right">
           <ele-ArrowDown />
@@ -97,8 +103,8 @@ export default defineComponent({
       popoverVisible: false
     });
     // 获取用户信息 vuex
-    
-    const getUserInfos = ref(Local.get('userInfo') || {}) 
+
+    const getUserInfos = ref(Local.get('userInfo') || {})
 
     // 获取布局配置信息
     const getThemeConfig = computed(() => {
@@ -257,47 +263,56 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb-user {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	&-link {
-		height: 100%;
-		display: flex;
-		align-items: center;
-		white-space: nowrap;
-		&-photo {
-			width: 25px;
-			height: 25px;
-			border-radius: 100%;
-		}
-	}
-	&-icon {
-		padding: 0 10px;
-		cursor: pointer;
-		color: var(--next-bg-topBarColor);
-		height: 50px;
-		line-height: 50px;
-		display: flex;
-		align-items: center;
-		&:hover {
-			background: var(--next-color-user-hover);
-			i {
-				display: inline-block;
-				animation: logoAnimation 0.3s ease-in-out;
-			}
-		}
-	}
-	::v-deep(.el-dropdown) {
-		color: var(--next-bg-topBarColor);
-	}
-	::v-deep(.el-badge) {
-		height: 40px;
-		line-height: 40px;
-		display: flex;
-		align-items: center;
-	}
-	::v-deep(.el-badge__content.is-fixed) {
-		top: 12px;
-	}
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &-link {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+    &-photo {
+      width: 25px;
+      height: 25px;
+      border-radius: 100%;
+    }
+  }
+
+  &-icon {
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--next-bg-topBarColor);
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: var(--next-color-user-hover);
+
+      i {
+        display: inline-block;
+        animation: logoAnimation 0.3s ease-in-out;
+      }
+    }
+  }
+
+  ::v-deep(.el-dropdown) {
+    color: var(--next-bg-topBarColor);
+  }
+
+  ::v-deep(.el-badge) {
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  ::v-deep(.el-badge__content.is-fixed) {
+    top: 12px;
+  }
 }
+
 </style>

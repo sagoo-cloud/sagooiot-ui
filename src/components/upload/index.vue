@@ -7,7 +7,7 @@
 			</el-icon>
 		</el-upload>
 		<el-dialog v-model="dialogVisible">
-			<img class="preview" :src="dialogImageUrl" alt="Preview Image" />
+			<el-image class="preview" :src="dialogImageUrl" alt="Preview Image" />
 		</el-dialog>
 
 		<!-- 上传单张图片 -->

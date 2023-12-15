@@ -15,8 +15,7 @@
 				<el-tab-pane label="产品信息" name="1">
 					<div class="pro-box">
 						<div class="protitle">产品信息</div>
-						<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'"
-							@click="onOpenEditDic(detail)">编辑</el-button>
+						<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
 					</div>
 
 					<div class="ant-descriptions-view">
@@ -31,10 +30,19 @@
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
-								</tr> 
+								</tr>
 								<tr class="ant-descriptions-row">
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品图片</th>
-									<td class="ant-descriptions-item-content" colspan="1"><img :src="detail.icon" style="height: 80px;width: 80px;"></td>
+									<td class="ant-descriptions-item-content" colspan="1">
+										<el-image style="width: 80px; height: 80px" :src="detail.icon" :previewSrcList="[detail.icon]" fit="contain">
+											<template #error>
+												<div class="image-slot">
+													<ele-Picture style="width: 30px;" />
+													加载失败
+												</div>
+											</template>
+										</el-image>
+									</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
 									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
 									<th class="ant-descriptions-item-label ant-descriptions-item-colon">接入方式</th>
@@ -48,7 +56,7 @@
 								</tr>
 							</tbody>
 						</table>
-					</div> 
+					</div>
 				</el-tab-pane>
 				<el-tab-pane label="物模型" name="2">
 					<div class="wu-box">
@@ -87,10 +95,8 @@
 									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'"
-												@click="onEditAttr(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'"
-												@click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -109,10 +115,8 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'"
-												@click="onEditFun(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'"
-												@click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -138,10 +142,8 @@
 
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'"
-												@click="onEditEvent(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'"
-												@click="onRowDel(scope.row.key, 'event')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -170,23 +172,16 @@
 									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'"
-												@click="onEditTag(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'"
-												@click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
+											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-
-
-
-
 						</el-tabs>
 						<div class="import">
 							<div class="row_bet">
-								<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }"
-									:headers="headers" :action="uploadUrl" :on-success="updateImg">
+								<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
 									<el-button>
 										<el-icon> <ele-Upload /> </el-icon>
 										导入物模型
@@ -202,9 +197,7 @@
 
 						</div>
 
-						<pagination v-show="tableData.total > 0" :total="tableData.total"
-							v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize"
-							@pagination="getList()" />
+						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 					</div>
 				</el-tab-pane>
 				<el-tab-pane label="设备接入" name="3">
@@ -225,7 +218,7 @@
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
+import { Edit } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import downloadFile from '/@/utils/download';
 import getOrigin from '/@/utils/origin';
@@ -712,6 +705,7 @@ tr {
 
 .wu-box .wu-title .title {
 	font-size: 18px;
-}</style>
+}
+</style>
 
 
