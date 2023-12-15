@@ -90,11 +90,11 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
-        <el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
-        <el-table-column label="设备类型" prop="product.deviceType" show-overflow-tooltip v-col="'deviceType'" />
-        <el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
-        <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
+        <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="设备名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />
+        <el-table-column label="设备类型" prop="product.deviceType" min-width="120" align="center" show-overflow-tooltip v-col="'deviceType'" />
+        <el-table-column label="产品名称" prop="productName" min-width="120" align="center" show-overflow-tooltip v-col="'productName'" />
+        <el-table-column prop="status" label="状态" min-width="80" align="center" v-col="'status'">
           <template #default="scope">
             <el-tag type="info" size="small" v-if="scope.row.status == 1">离线</el-tag>
             <el-tag type="success" size="small" v-if="scope.row.status == 2">在线</el-tag>
@@ -104,7 +104,7 @@
         <el-table-column prop="createdAt" label="创建时间" align="center" width="160" v-col="'registryTime'"></el-table-column>
         <el-table-column prop="desc" label="说明" show-overflow-tooltip v-col="'desc'"></el-table-column>
 
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="scope">
             <router-link :to="'/iotmanager/device/instance/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;" v-auth="'detail'">
               <span>详情</span>

@@ -83,8 +83,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .pagination-container {
-  background: #fff;
-  padding: 32px 16px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0 0 !important
 }
 
 .pagination-container.hidden {

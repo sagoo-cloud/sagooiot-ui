@@ -1,6 +1,6 @@
 <template>
 	<div class="system-edit-dic-container">
-		<el-dialog v-model="isShowDialog" :show-close="false" width="75%" :fullscreen="dialogFullScreen">
+		<el-dialog v-model="isShowDialog" :show-close="false" width="850" :fullscreen="dialogFullScreen">
 			<template #header="{ close, titleId, titleClass }">
 				<div class="my-header">
 					<h4 :id="titleId" :class="titleClass">数据记录</h4>
