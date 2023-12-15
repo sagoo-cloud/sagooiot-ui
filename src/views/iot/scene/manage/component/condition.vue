@@ -4,9 +4,7 @@
 
       <div v-if="index > 0"><el-divider>或满足以下条件</el-divider></div>
       <div class="type-item">
-        <div class="conicon"
-          style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red"
-          v-if="index > 0">
+        <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red" v-if="index > 0">
           <el-icon @click="delScene(index)">
             <CircleClose />
           </el-icon>
@@ -17,9 +15,7 @@
           <div v-for="(vo, i) in item" :key="i">
 
             <div class="items">
-              <el-button
-                style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;"
-                v-if="(i as number)  > 0">并且</el-button>
+              <el-button style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;" v-if="(i as number) > 0">并且</el-button>
 
               <el-popover placement="bottom" trigger="click" ref="popoverRef" v-model:visible="vo.isPopoverVisible">
                 <template #reference>
@@ -29,7 +25,7 @@
                 </template>
                 <div class="popover-content">
                   <ul>
-                    <li v-for="(option, d) in columnList" :key="d" @click="setParameter(vo, option)" >
+                    <li v-for="(option, d) in columnList" :key="d" @click="setParameter(vo, option)">
                       {{ option.name }}
                     </li>
                   </ul>
@@ -43,9 +39,9 @@
                     '操作符' }}</el-button>
                 </template>
                 <div class="popover-content">
-                  <ul>
-                    <li v-for="option in vo.operatorList" :key="option.Key"
-                      @click="vo.operator = option.Key; vo.operator_text = option.Name; vo.isPopoverVisible1 = false; saveData();">
+                  <template v-if="!vo.operatorList?.length">请先选择参数</template>
+                  <ul v-else>
+                    <li v-for="option in (vo.operatorList || [])" :key="option.Key" @click="vo.operator = option.Key; vo.operator_text = option.Name; vo.isPopoverVisible1 = false; saveData();">
                       {{ option.Name }}</li>
                   </ul>
                 </div>
@@ -62,7 +58,7 @@
                 </div>
               </el-popover>
 
-              <el-icon size="16" v-if="(i as number)>0" @click="DelSceneItem(i as number, index)" style="position: relative;top: -13px;">
+              <el-icon size="16" v-if="(i as number) > 0" @click="DelSceneItem(i as number, index)" style="position: relative;top: -13px;">
                 <CircleClose />
               </el-icon>
 
@@ -85,15 +81,11 @@
 
     <div class="mt15"><el-button @click="addScene()">增加或条件</el-button></div>
 
-
-
-
-
   </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref,onMounted } from 'vue'
+import { PropType, ref, onMounted } from 'vue'
 import { CirclePlus, CircleClose, Right } from '@element-plus/icons-vue';
 const emit = defineEmits(['EditPen']);
 interface IConditionItem {
@@ -105,7 +97,7 @@ interface IConditionItem {
 
 interface Column {
   name: string;
-  termTypes: any[]; 
+  termTypes: any[];
 }
 const props = defineProps({
   condition: {
@@ -149,7 +141,6 @@ const addSceneItem = (index: number) => {
 const DelSceneItem = (index: number, parentIndex: number) => {
   props.condition[parentIndex].splice(index, 1);
   saveData();
-
 }
 
 const addScene = () => {
@@ -164,16 +155,19 @@ const delScene = (index: number) => {
 }
 onMounted(() => {
   props.condition.forEach((item) => {
-    item.forEach((vo:any) => {
-      let operator = vo.operator;
-      let matchedColumn = props.columnList.find((column:any) =>
-        column.termTypes.some((term:any) => term.Key === operator)
-      );
-      if (matchedColumn) {
-        vo.operatorList = matchedColumn.termTypes;
-      } else {
+    item.forEach((vo: any) => {
+      if (!vo.parameter) {
         vo.operatorList = []; // 如果没有匹配的列，设置为空数组
       }
+      // let operator = vo.operator;
+      // let matchedColumn = props.columnList.find((column: any) =>
+      //   column.termTypes.some((term: any) => term.Key === operator)
+      // );
+      // if (matchedColumn) {
+      //   vo.operatorList = matchedColumn.termTypes;
+      // } else {
+      //   vo.operatorList = []; // 如果没有匹配的列，设置为空数组
+      // }
     });
   });
 });
@@ -181,7 +175,6 @@ onMounted(() => {
 
 </script>
 <style scoped lang="scss">
-
 .popover-content {
   padding: 0px;
 }
@@ -261,5 +254,6 @@ onMounted(() => {
     }
   }
 
-}</style>
+}
+</style>
 
