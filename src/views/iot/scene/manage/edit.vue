@@ -1,10 +1,3 @@
-<!--
- * @Author: yukai
- * @Date: 2023-09-18 13:15:34
- * @LastEditors: 
- * @LastEditTime: 2023-11-02 10:36:07
- * @Description: 请填写简介
--->
 <template>
 	<el-dialog
 		class="api-edit"
