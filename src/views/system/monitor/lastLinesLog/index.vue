@@ -122,9 +122,11 @@ const view = (row: any) => {
   });
   api.lastLinesLog.detail({name: row.name, types: types.value}).then((res: any) => {
     if (types.value == 'run') {
-        runButtonShow.value = true;
         runMessage.value = res.list;
         runLoading.value = false;
+        if (res.list.length > 0) {
+          runButtonShow.value = true;
+        }
     } else {
       errorMessage.value = res.list;
       dialogVisible.value = true;
