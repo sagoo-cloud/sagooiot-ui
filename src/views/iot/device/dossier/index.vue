@@ -2,17 +2,11 @@
 	<el-card shadow="hover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
-				<el-form-item label="场景名称：" prop="keyWord">
-					<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable size="default" style="width: 240px" />
+				<el-form-item label="名称：" prop="keyWord">
+					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable size="default" style="width: 240px" />
 				</el-form-item>
 
-				<el-form-item label="触发方式" prop="sceneType" style="width: 200px;">
-					<el-select v-model="params.sceneType" placeholder="触发方式" clearable size="default" style="width: 240px">
-						<el-option label="设备触发" value="device" />
-						<el-option label="手动触发" value="manual" />
-						<el-option label="定时触发" value="timer" />
-					</el-select>
-				</el-form-item>
+		
 
 				<el-form-item label="运行状态" prop="status" style="width: 200px;">
 					<el-select v-model="params.status" placeholder="运行状态" clearable size="default" style="width: 240px">
@@ -140,7 +134,7 @@ const onActionStatus = (item: any) => {
 	}
 }
 const del = (row: any) => {
-	ElMessageBox.confirm('是否确认删除场景名称为："' + row.name + '"的数据项?', '提示', {
+	ElMessageBox.confirm('是否确认删除名称为："' + row.name + '"的数据项?', '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
