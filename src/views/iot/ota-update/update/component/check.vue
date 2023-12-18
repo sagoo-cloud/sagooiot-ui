@@ -173,10 +173,10 @@ export default defineComponent({
       //   state.ruleForm.push = '2';
       //   state.ruleForm.pushDisabled = true;
       // }
-      // if (state.ruleForm.method === '3'){
-      //   state.ruleForm.pushDisabled = false;
-      //   state.ruleForm.push = '1';
-      // }
+      if (state.ruleForm.method === '3'){
+        state.ruleForm.pushDisabled = false;
+        state.ruleForm.push = '1';
+      }
     };
     const getProductList = () => {
       api.batch.getDeviceList({ productId: state.ruleForm.productId}).then((res: any) => {

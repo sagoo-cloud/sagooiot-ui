@@ -6,14 +6,6 @@
 					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable size="default" style="width: 240px" />
 				</el-form-item>
 
-				<el-form-item label="运行状态" prop="status" style="width: 200px">
-					<el-select v-model="params.status" placeholder="运行状态" clearable size="default" style="width: 240px">
-						<el-option label="全部" :value="-1" />
-						<el-option label="启用" :value="1" />
-						<el-option label="禁用" :value="0" />
-					</el-select>
-				</el-form-item>
-
 				<el-form-item>
 					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
