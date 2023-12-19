@@ -41,8 +41,6 @@ import { defineEmits, defineExpose, nextTick, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import { initMap } from '/@/utils/map';
 
-initMap()
-
 const mapContainer = ref<HTMLElement | null>(null);
 const address = ref('');
 const lng = ref('');
