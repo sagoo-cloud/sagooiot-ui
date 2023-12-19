@@ -9,7 +9,7 @@
 	>
 		<el-form class="inline-form" ref="formRef" :model="formData" :rules="ruleForm" label-width="120px">
 			<el-form-item label="所属产品" prop="productKey">
-				<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" clearable>
+				<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" disabled>
 					<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
 						<span style="float: left">{{ item.name }}</span>
 						<span style="float: right; font-size: 13px">{{ item.key }}</span>
