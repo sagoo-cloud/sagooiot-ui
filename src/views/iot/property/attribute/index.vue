@@ -15,26 +15,21 @@
 					</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="success" @click="addOrEdit()">
+					<el-button type="success" @click="addOrEdit()" v-if="productIno">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
-						新增档案
+						新增属性
 					</el-button>
 
-					<el-button type="primary" @click="addOrEdit()">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						批量添加
-					</el-button>
+				
 
-					<el-button type="danger" @click="addOrEdit()">
+					<!-- <el-button type="danger" @click="addOrEdit()">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
-						批量删除
-					</el-button>
+						删除
+					</el-button> -->
 				</el-form-item>
 			</el-form>
 		</div>
@@ -50,38 +45,20 @@
 					</el-tree>
 			</el-col>
 			<el-col :span="18"><el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-					<el-table-column prop="id" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="设备ID" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="sceneType" label="设备编码" align="center">
-						<template #default="scope">
-							<el-tag size="small" v-if="scope.row.sceneType == 'device'">设备触发</el-tag>
-							<el-tag size="small" v-if="scope.row.sceneType == 'manual'">手动触发</el-tag>
-							<el-tag size="small" v-if="scope.row.sceneType == 'timer'">定时触发</el-tag>
-						</template>
-					</el-table-column>
-
-					<el-table-column prop="name" label="所属区域" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="管理单位" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="建设单位" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="维护单位" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="设备类型" show-overflow-tooltip></el-table-column>
-
-					<el-table-column prop="status" label="状态" align="center">
-						<template #default="scope">
-							<el-tag size="small" type="success" v-if="scope.row.status == 1">启用</el-tag>
-							<el-tag size="small" type="info" v-if="scope.row.status == 0">禁用</el-tag>
-						</template>
-					</el-table-column>
+					<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="name" label="字段名称" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="title" label="字段标题" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="types" label="字段类型" show-overflow-tooltip></el-table-column>
+					
 
 					<el-table-column prop="createdAt" label="创建时间" width="160" align="center"></el-table-column>
 					<el-table-column label="操作" width="200" align="center">
 						<template #default="scope">
-							<el-button size="small" text type="primary" v-if="!scope.row.folderName"
-								@click="toDetail(scope.row.id)">属性</el-button>
-							<el-button size="small" text type="warning" v-auth="'edit'"
+						
+							<el-button size="small" text type="warning" 
 								@click="addOrEdit(scope.row)">编辑</el-button>
 
-							<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+							<el-button size="small" text type="info"  @click="del(scope.row)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -96,11 +73,10 @@
 
 <script lang="ts" setup>
 import device from '/@/api/device'
-import api from '/@/api/scene'
 import { useSearch } from '/@/hooks/useCommon'
 import {  Expand } from '@element-plus/icons-vue';
 
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import EditForm from './edit.vue'
 interface Tree {
   label: string
@@ -112,15 +88,17 @@ const defaultProps = {
   children: 'children',
   label: 'label',
 }
+
 const queryRef = ref()
 const router = useRouter()
 const productData = ref([])
 const mergedData = ref()
 const cateData = ref()
 const editFormRef = ref()
+const productIno=ref();
 
 
-const { params, tableData, getList, loading } = useSearch<any[]>(api.manage.getList, 'Data', { keyWord: '' })
+const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset_metadata.getList, 'Data', { keyWord: '' })
 getList()
 const toDetail = (id: number) => {
 	router.push(`/device/dossier/manage/${id}`)
@@ -131,10 +109,10 @@ onMounted(() => {
 });
 const addOrEdit = async (row?: any) => {
 	if (row) {
-		editFormRef.value.open(row)
+		editFormRef.value.open(row,productIno.value)
 		return
 	} else {
-		editFormRef.value.open()
+		editFormRef.value.open({},productIno.value)
 	}
 }
 
@@ -146,15 +124,18 @@ const getCateList = () => {
 		device.product.getLists({}).then((res: any) => {
 			productData.value = res.product;
 			mergedData.value = matchProductsToCategories(productData.value, cateData.value);
-			console.log(mergedData.value); // 打印生成的树形数据
-			// 将treeData绑定到el-tree的data属性上
 		})
 
 	})
 }
 
-const handleNodeClick = (data: Tree) => {
-  console.log(data)
+const handleNodeClick = (data: any) => {
+	if(data.is_type==='2'){
+		productIno.value=data;
+	}else{
+		productIno.value='';
+
+	}
 }
 
 const matchProductsToCategories = (productData:any, cateData:any) => {
@@ -170,6 +151,7 @@ const buildTree = (category:any, productData:any) => {
   const treeNode = {
     id: category.id,
     label: category.name,
+	key: category.key,
     is_type: '1', // 1是分类
     children: [],
   }
@@ -185,6 +167,7 @@ const buildTree = (category:any, productData:any) => {
       const productNode = {
         id: product.id,
         label: product.name,
+        key: product.key,
         is_type: '2', // 2是产品
       }
       treeNode.children.push(productNode)
@@ -200,7 +183,7 @@ const del = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.manage.del(row.id)
+		await device.dev_asset_metadata.delete(row.id)
 		ElMessage.success('删除成功')
 		getList()
 	})

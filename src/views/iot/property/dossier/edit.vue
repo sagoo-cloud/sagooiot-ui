@@ -5,28 +5,32 @@
 
 			<el-row>
 				<el-col :span="12">
-					<el-form-item label="选择产品" prop="name">
-						<el-select v-model="formData.name" placeholder="请选择产品" class="w100" clearable>
-							<el-option label="Zone one" value="shanghai" />
-							<el-option label="Zone two" value="beijing" />
+					<el-form-item label="选择产品" prop="productKey">
+						<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" clearable>
+							<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
+							<span style="float: left">{{ item.name }}</span>
+							<span style="float: right; font-size: 13px">{{ item.key }}</span>
+						</el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12">
-					<el-form-item label="选择设备" prop="name">
-						<el-select v-model="formData.name" placeholder="请选择设备" class="w100" clearable>
-							<el-option label="Zone one" value="shanghai" />
-							<el-option label="Zone two" value="beijing" />
-						</el-select>
+					<el-form-item label="选择设备" prop="deviceKey">
+						<el-select v-model="formData.deviceKey" placeholder="请选择设备" class="w100" clearable @change="handleSelectionChange">
+							<el-option v-for="item in deviceList" :key="item.key" :label="item.name" :value="item.key">
+							<span style="float: left">{{ item.name }}</span>
+							<span style="float: right; font-size: 13px">{{ item.key }}</span>
+						</el-option>
+					</el-select>
 					</el-form-item>
 				</el-col>
 			</el-row>
 
 			<el-row>
 				<el-col :span="12">
-					<el-form-item label="设备ID" prop="name">
-						<el-input v-model.trim="formData.name" placeholder="请输入场景名称" />
+					<el-form-item label="设备名称" prop="deviceName">
+						<el-input v-model.trim="formData.deviceName" placeholder="请输入设备名称" />
 					</el-form-item>
 				</el-col>
 
@@ -43,7 +47,7 @@
 					<el-form-item label="所属区域" prop="area">
 						<el-cascader :options="orgData"
 							:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }"
-							placeholder="请选择区域" clearable class="w100" v-model="ruleForm.area">
+							placeholder="请选择区域" clearable class="w100" v-model="formData.area">
 							<template #default="{ node, data }">
 								<span>{{ data.name }}</span>
 								<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -174,7 +178,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, nextTick } from 'vue';
-import api from '/@/api/scene';
+import api from '/@/api/device'
 import system from '/@/api/system';
 
 import { ruleRequired } from '/@/utils/validator';
@@ -185,11 +189,14 @@ const emit = defineEmits(['getList']);
 const showDialog = ref(false);
 const formRef = ref();
 const orgData = ref();
-
+const deviceList=ref();
+const productData=ref();
 const baseForm = {
 	id: undefined,
-	name: '',
-	sceneType: "device",
+	productKey: '',
+	deviceKey:'',
+	deviceName:'',
+	area: "",
 	description: '',
 
 };
@@ -201,11 +208,19 @@ const formData = reactive({
 const ruleForm = {
 	name: [ruleRequired('场景名称不能为空')],
 };
+const handleSelectionChange=(value:any)=> {
+      const selectedOption = deviceList.value.find(option => option.key === value);
+      if (selectedOption) {
+        formData.deviceName = selectedOption.name;
+      } else {
+        formData.deviceName = '';
+      }
+ }
 
 const onSubmit = async () => {
 	await formRef.value.validate();
 
-	const theApi = formData.id ? api.manage.edit : api.manage.add;
+	const theApi = formData.id ? api.dev_asset.edit : api.dev_asset.add;
 
 	await theApi(formData);
 
@@ -220,14 +235,23 @@ const resetForm = async () => {
 	formRef.value && formRef.value.resetFields();
 };
 
-const open = async (row: any) => {
+const open = async (row: any,productInfo:any) => {
 	resetForm();
-	showDialog.value = true;
+	showDialog.value = true;		
 	nextTick(() => {
 		Object.assign(formData, { ...row });
 		system.org.getList({ status: 1 }).then((res: any) => {
 			orgData.value = res || [];
 		});
+		//获取 所有的产品
+		api.product.getLists({}).then((res: any) => {
+			productData.value = res.product;
+		})
+		//根据产品ID获取设备列表
+		api.device.allList({ productId: productInfo.id }).then((res: any) => {
+			deviceList.value = res.device || [];
+		});
+		formData.productKey=productInfo.key
 	});
 };
 
