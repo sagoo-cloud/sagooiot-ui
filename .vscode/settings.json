@@ -1,0 +1,166 @@
+{
+  "files.autoSave": "onFocusChange",
+  "git.enableSmartCommit": true,
+  "editor.tabSize": 2,
+  "extensions.ignoreRecommendations": true,
+  "editor.formatOnPaste": true,
+  "explorer.confirmDelete": false,
+  "emmet.triggerExpansionOnTab": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.prettier": "explicit"
+  },
+  "files.associations": {
+    "*.vue": "vue",
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript",
+    "*.tsx": "typescriptreact",
+    "*.wpy": "vue",
+    "*.scss": "scss",
+    "*.html": "html",
+    "*.wxml": "wxml",
+    "*.ts": "typescript"
+  },
+  "editor.minimap.enabled": false,
+  "html.format.wrapLineLength": 260,
+  "html.format.wrapAttributes": "auto",
+  "git.autofetch": true,
+  "typescript.locale": "zh-CN",
+  "git.confirmSync": false,
+  "workbench.iconTheme": "vscode-icons",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[css]": {
+    "editor.defaultFormatter": "aeschli.vscode-css-formatter"
+  },
+  "editor.formatOnType": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "vsicons.dontShowNewVersionMessage": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[wxml]": {
+    "editor.defaultFormatter": "qiu8310.minapp-vscode"
+  },
+  "emmet.includeLanguages": {
+    "wxml": "html"
+  },
+  "minapp-vscode.disableAutoConfig": true,
+  "editor.suggestSelection": "first",
+  "[vue]": {
+  },
+  "git.ignoreMissingGitWarning": true,
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
+  "minapp-vscode.sass": {},
+  "wxmlConfig.format": {
+    "brace_style": "collapse",
+    "disable_automatic_closing_labels": true,
+    "end_with_newline": false,
+    "indent_char": " ",
+    "indent_handlebars": false,
+    "indent_inner_html": false,
+    "indent_scripts": "keep",
+    "indent_size": 2,
+    "indent_with_tabs": false,
+    "max_preserve_newlines": 1,
+    "preserve_newlines": false,
+    "unformatted": "['text']",
+    "wrap_attributes": "auto",
+    "wrap_attributes_count": 3
+  },
+  "minapp-vscode.formatMaxLineCharacters": 200,
+  "minapp-vscode.prettier": {
+    "useTabs": false,
+    "tabWidth": 2,
+    "printWidth": 200,
+    "singleQuote": false
+  },
+  "wxmlConfig.tagNoActiveArr": [
+    "view",
+    "button",
+    "text",
+    "icon",
+    "image",
+    "navigator",
+    "block",
+    "input",
+    "label",
+    "template",
+    "form",
+    "camera",
+    "textarea"
+  ],
+  "wxmlConfig.activeColor": {
+    "color": "#e5c07b"
+  },
+  "editor.autoClosingDelete": "always",
+  "html.autoClosingTags": false,
+  "typescript.autoClosingTags": false,
+  "auto-close-tag.enableAutoCloseSelfClosingTag": false,
+  "search.followSymlinks": false,
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "opacity": 10,
+    "gutterIcon": true
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "type": "line",
+      "background": "#fff",
+      "foreground": "#92ff7c",
+      "iconColour": "#0f0"
+    },
+    "FIXME": {
+      "background": "#fff",
+      "foreground": "#dffd33",
+      "iconColour": "#ff0"
+    }
+  },
+  "svg.preview.mode": "svg",
+  "[less]": {
+    "editor.defaultFormatter": "michelemelluso.code-beautifier"
+  },
+  "editor.wordWrapColumn": 200,
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "npm.exclude": "**/{dist_electron,vendor}",
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/bower_components": true,
+    "**/CVS": true,
+    "**/jspm_packages": true,
+    "**/tmp": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/bower_components/**": true,
+    "**/dist/**": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "editor.inlineSuggest.enabled": true,
+  "git.openRepositoryInParentFolders": "always",
+  "prettier.semi": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.editor.empty.hint": "hidden"
+}
