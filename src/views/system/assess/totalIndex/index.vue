@@ -1,6 +1,6 @@
 <template>
   <div class="assess-total-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <!-- <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="success" class="ml10">

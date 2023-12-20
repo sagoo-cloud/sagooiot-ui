@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="字典类型" prop="dictType">
@@ -44,7 +44,7 @@
         <el-table-column label="字典标签" v-col="'dictLabel'" align="center" prop="dictLabel" />
         <el-table-column label="字典键值" v-col="'dictValue'" align="center" prop="dictValue" />
         <el-table-column label="字典排序" v-col="'dictSort'" width="100" align="center" prop="dictSort" />
-        <el-table-column label="备注" v-col="'remark'" align="center" prop="remark" :show-overflow-tooltip="true" />
+        <el-table-column label="备注" v-col="'remark'" align="center" prop="remark" show-overflow-tooltip />
         <!-- <el-table-column label="创建时间" align="center" prop="createdAt" width="180" /> -->
         <el-table-column prop="status" label="字典状态" v-col="'status'" width="120" align="center">
           <template #default="scope">

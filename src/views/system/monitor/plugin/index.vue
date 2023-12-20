@@ -1,6 +1,6 @@
 <template>
 	<div class="system-plugin-container page-full">
-		<el-card shadow="hover" class="page-full-part">
+		<el-card shadow="nover" class="page-full-part">
 			<div class="system-user-search mb15">
 				<el-form :model="params" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="关键字" prop="keyWord">

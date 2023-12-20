@@ -1,5 +1,5 @@
 <template>
-	<el-card shadow="hover">
+	<el-card shadow="nover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
 				<el-form-item label="场景名称：" prop="keyWord">

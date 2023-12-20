@@ -3,7 +3,7 @@
 		<el-row>
 			<!-- 个人信息 -->
 			<el-col :xs="24" :sm="24">
-				<el-card shadow="hover" header="个人信息" v-loading="!info.userName">
+				<el-card shadow="nover" header="个人信息" v-loading="!info.userName">
 					<div class="personal-user">
 						<div class="personal-user-left">
 							<el-image v-if="isEditStatus && info.avatar" style="width: 140px; height: 140px" :src="info.avatar" />

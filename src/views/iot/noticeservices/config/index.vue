@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div>
         <el-row>
           <el-col :span="12"   v-for="item in notice_send_gateway"  >

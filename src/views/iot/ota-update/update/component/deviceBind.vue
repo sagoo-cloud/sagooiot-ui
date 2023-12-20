@@ -11,9 +11,9 @@
       </el-form>
       <el-table ref="multipleTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
-        <el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-        <el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
+        <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
+        <el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">

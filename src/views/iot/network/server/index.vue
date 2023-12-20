@@ -1,5 +1,5 @@
 <template>
-    <el-card shadow="hover">
+    <el-card shadow="nover">
         <el-form :inline="true" label-width="82px" @keyup.enter="searchData">
             <el-form-item label="服务器名称">
                 <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>

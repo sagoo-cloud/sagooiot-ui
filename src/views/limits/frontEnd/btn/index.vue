@@ -2,7 +2,7 @@
 	<div>
 		<LimitsFrontEndPage />
 		<!-- 演示1：组件方式 -->
-		<el-card shadow="hover" header="演示1：组件方式" class="mt15">
+		<el-card shadow="nover" header="演示1：组件方式" class="mt15">
 			<el-row class="mb10" style="color: #808080">单个权限验证（:value="xxx"）：</el-row>
 			<div class="flex-warp">
 				<Auth :value="'btn.add'">
@@ -161,7 +161,7 @@
 		</el-card>
 
 		<!-- 演示2：指令方式 -->
-		<el-card shadow="hover" header="演示2：指令方式（页面初始化时执行）" class="mt15">
+		<el-card shadow="nover" header="演示2：指令方式（页面初始化时执行）" class="mt15">
 			<el-row class="mb10" style="color: #808080">单个权限验证（v-auth="xxx"）：</el-row>
 			<div class="flex-warp">
 				<div class="flex-warp-item" v-auth="'btn.add'">
@@ -296,7 +296,7 @@
 		</el-card>
 
 		<!-- 演示3：函数方式 -->
-		<el-card shadow="hover" header="演示3：函数方式（点击按钮查看有无权限，用于判断）" class="mt15">
+		<el-card shadow="nover" header="演示3：函数方式（点击按钮查看有无权限，用于判断）" class="mt15">
 			<el-row class="mb10" style="color: #808080">auth('xxx')、auths(['xxx','xxx'])、authAll(['xxx','xxx'])：</el-row>
 			<div class="flex-warp">
 				<div class="flex-warp-item">

@@ -1,5 +1,5 @@
 <template>
-	<el-card shadow="hover">
+	<el-card shadow="nover">
 		<div class="search">
 			<el-form :model="params" :inline="true" ref="queryRef">
 				<el-form-item label="应用名称：" prop="keyWord" @submit.prevent>

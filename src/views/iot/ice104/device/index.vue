@@ -8,7 +8,7 @@
 -->
 <template>
 	<div class="page page-full">
-		<el-card shadow="hover" class="page-full-part">
+		<el-card shadow="nover" class="page-full-part">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef" @submit.prevent>
 					<el-form-item label="设备名称" prop="title">

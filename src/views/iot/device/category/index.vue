@@ -1,10 +1,10 @@
 <template>
   <div class="system-dept-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-dept-search mb15">
         <el-form :inline="true">
           <el-form-item label="分类名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称"  @keyup.enter.native="getCateList"  class="w-50" clearable />
+            <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称" @keyup.enter.native="getCateList" class="w-50" clearable />
           </el-form-item>
           <el-form-item>
             <el-button size="default" type="primary" class="ml10" @click="getCateList">
@@ -22,10 +22,10 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
+      <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading" max-height="calc(100vh - 230px)">
         <el-table-column prop="name" label="分类名称" v-col="'name'" show-overflow-tooltip> </el-table-column>
-        <el-table-column prop="sort" v-col="'sort'" label="排序" width="60" align="center"></el-table-column>
-        <el-table-column prop="desc" label="描述" align="center" min-width="180" v-col="'desc'"></el-table-column>
+        <el-table-column prop="desc" label="描述" align="center" v-col="'desc'"></el-table-column>
+        <el-table-column prop="sort" v-col="'sort'" label="排序" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenAdd(scope.row)" v-auth="'add'">新增</el-button>

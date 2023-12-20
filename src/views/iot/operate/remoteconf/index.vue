@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <h2>远程配置</h2>
       <div class="container">
         <div class="selectContainer">

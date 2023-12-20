@@ -1,13 +1,12 @@
 <template>
-  <div class="system-dic-container">
-    <el-row :gutter="10">
-      <el-col :span="5">
-        <el-card shadow="hover">
+  <el-card shadow="nover" class="page-full">
+    <el-row :gutter="10" class="h-full">
+      <el-col :span="6" class="h-full">
+        <el-card shadow="nover" class="h-full">
           <el-scrollbar v-loading="treeLoading">
-            <el-input :prefix-icon="search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
-
+            <el-input :prefix-icon="Search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
             <el-button v-if="!treeLoading && !treeData.length" type="primary" v-auth="'add'" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
-            <el-tree ref="zlTreeSearchRef" v-if="!treeLoading" :data="treeData" :props="{
+            <el-tree ref="zlTreeSearchRef" class="mt-4" v-if="!treeLoading" :data="treeData" :props="{
               children: 'children',
               label: 'name'
             }" :filter-node-method="filterNode" :default-expand-all="true" :node-key="'id'" highlight-current @node-click="nodeClick">
@@ -51,8 +50,8 @@
           </el-scrollbar>
         </el-card>
       </el-col>
-      <el-col :span="19">
-        <el-card shadow="hover" v-if="treeDetail.name">
+      <el-col :span="18" class="h-full">
+        <el-card shadow="nover" class="h-full" v-if="treeDetail.name">
           <el-tabs v-model="tabName" @tab-click="onTabClick">
             <el-tab-pane label="设备树信息" name="1">
               <table>
@@ -138,9 +137,8 @@
         </el-card>
       </el-col>
     </el-row>
-
     <AddOrUpdate ref="addOrUpdateRef" @finish="onFinish" />
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -148,7 +146,7 @@ import { toRefs, reactive, onMounted, ref, defineComponent, watch } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import AddOrUpdate from './component/edit.vue';
 import api from '/@/api/device';
-import { More, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { More, Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
@@ -346,6 +344,7 @@ export default defineComponent({
       nodeClick,
       ...toRefs(state),
       ruleForm,
+      Search,
       onSaveTime,
       filterNode,
       onFinish,
@@ -356,6 +355,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.el-card ::v-deep(.el-card__body) {
+  height: 100%;
+}
+
 .el-tree ::v-deep(.el-tree-node__label) {
   width: 100%;
   overflow: hidden;
@@ -418,6 +421,7 @@ table {
   border-collapse: collapse;
   text-indent: initial;
   border-spacing: 2px;
+  border: 1px solid #e8e8e8;
 }
 
 tbody {

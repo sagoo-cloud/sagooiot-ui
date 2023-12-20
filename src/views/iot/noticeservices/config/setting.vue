@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" @keyup.enter.native="dataList">
 					<el-form-item label="配置名称" prop="keyWord">

@@ -1,22 +1,22 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover" v-loading="batchLoading">
+    <el-card shadow="nover" v-loading="batchLoading">
       <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+        <el-form :model="tableData.param" ref="queryRef" :inline="true">
           <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 180px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 180px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="所属产品" prop="productId">
-            <el-select v-model="tableData.param.productId" filterable placeholder="请选择产品">
+            <el-select v-model="tableData.param.productId" style="width: 150px" filterable placeholder="请选择产品">
               <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label="状态" prop="status" style="width: 200px;">
-            <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 240px">
+          <el-form-item label="状态" prop="status">
+            <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 100px">
               <el-option label="在线" :value="2" />
               <el-option label="离线" :value="1" />
               <el-option label="未启用" :value="0" />
@@ -88,7 +88,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading" max-height="calc(100vh - 320px)">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'" />
         <el-table-column label="设备名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />

@@ -1,6 +1,6 @@
 <template>
   <div class="system-post-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" :inline="true" ref="queryRef">
           <el-form-item label="岗位名称" prop="postName">

@@ -8,7 +8,7 @@
 -->
 <template>
 	<div class="page page-full">
-		<el-card shadow="hover" class="page-full-part">
+		<el-card shadow="nover" class="page-full-part">
 			<el-tabs v-model="activeName" class="demo-tabs">
 				<el-tab-pane label="设备详情" name="detail">
 					<EditDeviceForm ref="editFormRef" />

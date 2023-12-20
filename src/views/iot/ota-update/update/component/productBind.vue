@@ -11,12 +11,12 @@
       </el-form>
       <el-table ref="productTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAll" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" />
-        <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-        <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'" />
-        <el-table-column label="消息协议" prop="messageProtocol" :show-overflow-tooltip="true" v-col="'messageProtocol'" />
-        <el-table-column label="接入方式" prop="transportProtocol" :show-overflow-tooltip="true" v-col="'transportProtocol'" />
-        <el-table-column label="类型" prop="deviceType" :show-overflow-tooltip="true" v-col="'deviceType'" />
+        <el-table-column label="标识" prop="key" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="名称" prop="name" show-overflow-tooltip v-col="'name'" />
+        <el-table-column label="分类" prop="categoryName" show-overflow-tooltip v-col="'categoryName'" />
+        <el-table-column label="消息协议" prop="messageProtocol" show-overflow-tooltip v-col="'messageProtocol'" />
+        <el-table-column label="接入方式" prop="transportProtocol" show-overflow-tooltip v-col="'transportProtocol'" />
+        <el-table-column label="类型" prop="deviceType" show-overflow-tooltip v-col="'deviceType'" />
 
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">

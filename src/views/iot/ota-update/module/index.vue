@@ -1,6 +1,6 @@
 <template>
   <div class="ota-module-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="ota-module-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px" @keyup.enter.native="getList(1)">
           <el-form-item label="模块名称" prop="name">
@@ -36,8 +36,8 @@
 
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />
-        <el-table-column label="模块名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="模块别名" v-col="'nameAs'" prop="nameAs" :show-overflow-tooltip="true" />
+        <el-table-column label="模块名称" v-col="'name'" prop="name" show-overflow-tooltip />
+        <el-table-column label="模块别名" v-col="'nameAs'" prop="nameAs" show-overflow-tooltip />
         <el-table-column label="所属产品" v-col="'ProductName'" prop="ProductName" width="260" />
         <el-table-column label="创建时间" prop="createdAt" align="center" />
         <el-table-column label="操作" width="100" v-col="'handle'" align="center" fixed="right">

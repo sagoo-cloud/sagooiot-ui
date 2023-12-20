@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="IP地址" prop="keyWord">
@@ -43,11 +43,11 @@
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <!--        <el-table-column label="ID" align="center" prop="id" width="100"  v-col="'id'"/>-->
-        <!-- <el-table-column label="标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" /> -->
+        <!-- <el-table-column label="标识" prop="key" show-overflow-tooltip v-col="'key'" /> -->
         <el-table-column label="IP" prop="ip" v-col="'ip'"/>
-        <!-- <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" /> -->
-         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" v-col="'remark'"/>
-        <!-- <el-table-column label="分类" prop="categoryName" :show-overflow-tooltip="true" v-col="'categoryName'" /> -->
+        <!-- <el-table-column label="名称" prop="name" show-overflow-tooltip v-col="'name'" /> -->
+         <el-table-column label="备注" prop="remark" show-overflow-tooltip v-col="'remark'"/>
+        <!-- <el-table-column label="分类" prop="categoryName" show-overflow-tooltip v-col="'categoryName'" /> -->
         <el-table-column
           align="center"
           prop="status"

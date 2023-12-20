@@ -1,6 +1,6 @@
 <template>
   <div>
-	<el-card shadow="hover">
+	<el-card shadow="nover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef">
 				<el-form-item label="设备名称：" prop="name">

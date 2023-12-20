@@ -8,7 +8,7 @@
 -->
 <template>
 	<div class="page">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef" @keyup.enter.native="getList(1)">
 					<el-form-item label="通道名称" prop="title">

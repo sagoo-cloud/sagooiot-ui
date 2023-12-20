@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover">
+  <el-card shadow="nover">
     <div class="search">
       <el-form :inline="true">
         <el-form-item>

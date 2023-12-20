@@ -1,6 +1,6 @@
 <template>
   <div class="system-dept-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-dept-search mb15">
         <el-form :model="tableData.param" :inline="true" ref="queryRef">
           <el-form-item label="区域名称" prop="name">

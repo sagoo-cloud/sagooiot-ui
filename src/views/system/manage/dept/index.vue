@@ -1,6 +1,6 @@
 <template>
   <div class="system-dept-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-dept-search mb15">
         <el-form :model="tableData.param" :inline="true" ref="queryRef" @keyup.enter="deptList">
           <el-form-item label="组织名称" prop="deptName">

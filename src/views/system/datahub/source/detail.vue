@@ -141,10 +141,10 @@
 
 						<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
 							<el-table-column label="ID" align="center" prop="nodeId" width="100" v-col="'id'" />
-							<el-table-column label="数据标识" prop="key" :show-overflow-tooltip="true" v-col="'key'" />
-							<el-table-column label="数据名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-							<el-table-column label="数据类型" prop="dataType" :show-overflow-tooltip="true" v-col="'dataType'" />
-							<el-table-column label="数据取值项" prop="value" :show-overflow-tooltip="true" v-col="'value'" />
+							<el-table-column label="数据标识" prop="key" show-overflow-tooltip v-col="'key'" />
+							<el-table-column label="数据名称" prop="name" show-overflow-tooltip v-col="'name'" />
+							<el-table-column label="数据类型" prop="dataType" show-overflow-tooltip v-col="'dataType'" />
+							<el-table-column label="数据取值项" prop="value" show-overflow-tooltip v-col="'value'" />
 
 							<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'" width="180"></el-table-column>
 

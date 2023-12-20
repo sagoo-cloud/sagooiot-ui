@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="字典名称" prop="dictName">
@@ -52,8 +52,8 @@
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="字典ID" v-col="'dictId'" align="center" prop="dictId" width="80" />
-            <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" :show-overflow-tooltip="true" />
-            <el-table-column label="字典类型" v-col="'dictType'" align="center" :show-overflow-tooltip="true">
+            <el-table-column label="字典名称" v-col="'dictName'" prop="dictName" show-overflow-tooltip />
+            <el-table-column label="字典类型" v-col="'dictType'" align="center" show-overflow-tooltip>
               <template #default="scope">
                 <router-link :to="'/config/dict/' + scope.row.dictType" class="link-type">
                   <span>{{ scope.row.dictType }}</span>

@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="产品名称" prop="name">
@@ -46,14 +46,12 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading" max-height="calc(100vh - 320px)">
         <el-table-column type="selection" width="55" align="center" />
-        <!--        <el-table-column label="ID" align="center" prop="id" width="60"  v-col="'id'"/>-->
-        <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="标识" prop="key" min-width="130" show-overflow-tooltip v-col="'key'" />
         <el-table-column label="名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />
-        <el-table-column label="分类" prop="categoryName" align="center" width="160" show-overflow-tooltip v-col="'categoryName'" />
-        <!-- <el-table-column label="组织" prop="deptName" show-overflow-tooltip v-col="'deptName'"/> -->
-        <el-table-column label="消息协议" prop="messageProtocol" align="center" min-width="160" show-overflow-tooltip v-col="'messageProtocol'" />
+        <el-table-column label="分类" prop="categoryName" align="center" width="140" show-overflow-tooltip v-col="'categoryName'" />
+        <el-table-column label="消息协议" prop="messageProtocol" align="center" min-width="150" show-overflow-tooltip v-col="'messageProtocol'" />
         <el-table-column label="接入方式" prop="transportProtocol" min-width="120" align="center" show-overflow-tooltip v-col="'transportProtocol'" />
         <el-table-column label="类型" prop="deviceType" min-width="90" align="center" show-overflow-tooltip v-col="'deviceType'" />
         <el-table-column prop="status" label="状态" min-width="90" align="center" v-col="'status'">
@@ -62,7 +60,6 @@
             <el-tag type="info" size="small" v-else>未发布</el-tag>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="createdAt" label="创建时间" align="center" width="180"></el-table-column> -->
         <el-table-column label="操作" width="130" align="center" fixed="right">
           <template #default="scope">
             <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">

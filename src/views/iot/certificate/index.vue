@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="system-user-search mb15">
 				<el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="60px">
 					<el-form-item label="关键字" prop="keyWord">
@@ -32,15 +32,15 @@
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<!-- <el-table-column type="selection" width="55" align="center" /> -->
 				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="100" />
-				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" :show-overflow-tooltip="true" />
-				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" :show-overflow-tooltip="true">
+				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" show-overflow-tooltip />
+				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" show-overflow-tooltip>
 					<template #default="scope">
 						{{ filterStandard(scope.row.standard) }}
 						<!-- <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button> -->
 						<!-- <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button> -->
 					</template>
 				</el-table-column>
-				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" :show-overflow-tooltip="true" />
+				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" show-overflow-tooltip />
 				<el-table-column label="状态" width="120" align="center">
 					<template #default="scope">
 						<el-switch v-auth="'startOrStop'" v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>

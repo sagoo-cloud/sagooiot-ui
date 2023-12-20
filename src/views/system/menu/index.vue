@@ -1,6 +1,6 @@
 <template>
   <div class="system-user-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-menu-search">
         <el-form :model="state.queryParams" :inline="true" ref="queryRef" @keyup.enter="handleQuery()">
           <el-form-item label="菜单名称" prop="title">

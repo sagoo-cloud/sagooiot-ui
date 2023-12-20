@@ -53,17 +53,17 @@
 
         <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
           <el-table-column label="ID" align="center" prop="id" width="100" v-col="'id'" />
-          <el-table-column label="字段名称" prop="key" width="120" :show-overflow-tooltip="true" v-col="'key'" />
-          <el-table-column label="字段标题" prop="name" width="120" :show-overflow-tooltip="true" v-col="'name'" />
-          <el-table-column label="类型" prop="dataType" width="85" :show-overflow-tooltip="true" v-col="'dataType'" />
+          <el-table-column label="字段名称" prop="key" width="120" show-overflow-tooltip v-col="'key'" />
+          <el-table-column label="字段标题" prop="name" width="120" show-overflow-tooltip v-col="'name'" />
+          <el-table-column label="类型" prop="dataType" width="85" show-overflow-tooltip v-col="'dataType'" />
 
           <el-table-column label="数据源名称" align="center" v-col="'from'">
             <template #default="scope">
               <span v-if="scope.row.from == 2">{{ scope.row.source.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="默认值" prop="default" width="80" :show-overflow-tooltip="true" v-col="'default'" />
-          <el-table-column label="备注说明" prop="desc" width="100" :show-overflow-tooltip="true" v-col="'value'" />
+          <el-table-column label="默认值" prop="default" width="80" show-overflow-tooltip v-col="'default'" />
+          <el-table-column label="备注说明" prop="desc" width="100" show-overflow-tooltip v-col="'value'" />
           <el-table-column prop="createdAt" label="创建时间" align="center" width="160" v-col="'createdAt'"></el-table-column>
 
           <el-table-column label="操作" width="100" align="center" fixed="right">

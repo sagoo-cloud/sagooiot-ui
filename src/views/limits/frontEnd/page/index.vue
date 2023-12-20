@@ -13,7 +13,7 @@
 			:closable="false"
 			class="mt15"
 		></el-alert>
-		<el-card shadow="hover" header="切换用户演示，前端控制不同用户显示不同页面、按钮权限" class="mt15">
+		<el-card shadow="nover" header="切换用户演示，前端控制不同用户显示不同页面、按钮权限" class="mt15">
 			<el-radio-group v-model="userAuth" size="default" @change="onRadioChange">
 				<el-radio-button label="admin"></el-radio-button>
 				<el-radio-button label="common"></el-radio-button>

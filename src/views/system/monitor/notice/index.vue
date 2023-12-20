@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="MessageInfo.title" label="标题" show-overflow-tooltip></el-table-column>

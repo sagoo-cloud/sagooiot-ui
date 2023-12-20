@@ -5,7 +5,7 @@
 
         <!-- 日志列表 -->
         <el-tab-pane label="服务日志" name="1">
-          <el-card shadow="hover">
+          <el-card shadow="nover">
             <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
               <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
               <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
@@ -30,7 +30,7 @@
 
         <!-- 数据库日志 -->
         <el-tab-pane label="数据库日志" name="2">
-          <el-card shadow="hover">
+          <el-card shadow="nover">
             <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
               <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
               <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
