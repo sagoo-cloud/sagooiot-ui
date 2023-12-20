@@ -1,6 +1,6 @@
 <template>
   <div class="ota-module-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="ota-module-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="90px" @keyup.enter.native="getList(1)">
           <el-form-item label="批次名称：" prop="name">

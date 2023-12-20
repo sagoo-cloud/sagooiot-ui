@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="系统模块" prop="title">
@@ -74,7 +74,7 @@
             <span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" :show-overflow-tooltip="true" />
+        <el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" show-overflow-tooltip />
         <el-table-column label="组织名称" align="center" prop="deptName" />
         <el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" />
         <el-table-column label="操作地点" v-col="'operLocation'" show-overflow-tooltip align="center" prop="operLocation" />

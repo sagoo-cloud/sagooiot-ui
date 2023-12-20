@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="search">
 				<el-form :model="params" :inline="true" ref="queryRef">
 					<el-form-item label="接口名称" prop="name">

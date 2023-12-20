@@ -1,5 +1,5 @@
 <template>
-	<el-card shadow="hover">
+	<el-card shadow="nover">
 		<el-tabs v-model="activeTab">
 				<el-tab-pane label="版本分布" name="tab1">
 					<div class="flex">

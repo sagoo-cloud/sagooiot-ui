@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="参数名称" prop="configName">
@@ -51,10 +51,10 @@
           <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="ID" v-col="'configId'" align="center" prop="configId" width="100" />
-            <el-table-column label="参数名称" v-col="'configName'" prop="configName" :show-overflow-tooltip="true" />
-            <el-table-column label="参数键名" v-col="'configKey'" prop="configKey" :show-overflow-tooltip="true" />
+            <el-table-column label="参数名称" v-col="'configName'" prop="configName" show-overflow-tooltip />
+            <el-table-column label="参数键名" v-col="'configKey'" prop="configKey" show-overflow-tooltip />
             <el-table-column label="参数键值" v-col="'configValue'" prop="configValue" />
-            <el-table-column label="备注" prop="remark" v-col="'remark'" :show-overflow-tooltip="true" />
+            <el-table-column label="备注" prop="remark" v-col="'remark'" show-overflow-tooltip />
             <!-- <el-table-column label="创建时间" prop="createdAt" width="180" align="center" /> -->
             <el-table-column label="系统内置" v-col="'configType'" align="center" prop="configType" width="100">
               <template #default="{ row }">

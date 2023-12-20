@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
           <el-form-item label="城市名称" prop="name">
@@ -33,15 +33,15 @@
       </div>
 
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-        <el-table-column label="城市名称" v-col="'name'" prop="name" :show-overflow-tooltip="true" />
-        <el-table-column label="城市编号" v-col="'code'" prop="code" :show-overflow-tooltip="true" />
+        <el-table-column label="城市名称" v-col="'name'" prop="name" show-overflow-tooltip />
+        <el-table-column label="城市编号" v-col="'code'" prop="code" show-overflow-tooltip />
         <el-table-column label="状态" v-col="'status'" prop="status" width="80">
           <template #default="scope">
             {{ scope.row.status === 1 ? '在线' : '不在线' }}
           </template>
         </el-table-column>
         <el-table-column label="排序" v-col="'sort'" prop="sort" align="center" />
-        <el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" :show-overflow-tooltip="true" />
+        <el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" show-overflow-tooltip />
         <el-table-column label="操作" width="200" align="center" v-col="'handle'">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>

@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-container">
-    <el-card shadow="hover">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
           <el-form-item label="登录IP" prop="ipaddr">
@@ -65,8 +65,8 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="编号" align="center" width="60" prop="infoId" />
         <el-table-column label="登录名称" align="center" prop="loginName" />
-        <el-table-column label="登录地址" align="center" prop="ipaddr" width="150" :show-overflow-tooltip="true" />
-        <el-table-column label="登录地点" v-col="'loginLocation'" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+        <el-table-column label="登录地址" align="center" prop="ipaddr" width="150" show-overflow-tooltip />
+        <el-table-column label="登录地点" v-col="'loginLocation'" align="center" prop="loginLocation" show-overflow-tooltip />
         <el-table-column label="浏览器" align="center" prop="browser" />
         <el-table-column label="操作系统" show-overflow-tooltip align="center" prop="os" />
         <el-table-column label="登录状态" v-col="'status'" align="center" prop="status" width="90">

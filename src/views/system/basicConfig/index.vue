@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<el-form :model="state.tableData.param" label-position="top" ref="queryRef" :inline="true" label-width="100px">
 				<div class="form-inner-wrap">
 					<div class="left-wrap">

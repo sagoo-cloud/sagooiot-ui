@@ -111,7 +111,7 @@
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
 									<el-table-column label="属性标识" align="center" prop="key" />
-									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
 									<el-table-column prop="valueType" label="数据类型" width="100" align="center">
 										<template #default="scope">
 											<span>{{ scope.row.valueType.type }}</span>
@@ -133,7 +133,7 @@
 											<el-tag type="success" size="small" v-else>读写</el-tag>
 										</template>
 									</el-table-column>
-									<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
+									<el-table-column label="说明" prop="desc" show-overflow-tooltip />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
@@ -152,9 +152,9 @@
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
 									<el-table-column label="功能标识" align="center" prop="key" />
-									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="名称" prop="name" show-overflow-tooltip />
 
-									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
@@ -173,7 +173,7 @@
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
 									<el-table-column label="事件标识" align="center" prop="key" />
-									<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="名称" prop="name" show-overflow-tooltip />
 									<el-table-column prop="level" label="事件级别" width="120" align="center">
 										<template #default="scope">
 											<el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
@@ -181,7 +181,7 @@
 											<el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
 										</template>
 									</el-table-column>
-									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
@@ -201,7 +201,7 @@
 
 								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
 									<el-table-column label="属性标识" align="center" prop="key" />
-									<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+									<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
 									<el-table-column prop="valueType" label="数据类型" width="120" align="center">
 										<template #default="scope">
 											<span>{{ scope.row.valueType.type }}</span>
@@ -213,7 +213,7 @@
 											<el-tag type="success" size="small" v-else>读写</el-tag>
 										</template>
 									</el-table-column>
-									<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 									<el-table-column label="操作" width="300" align="center" fixed="right">
 										<template #default="scope">
 											<el-button size="small" text type="warning" @click="onEditTag(scope.row)">修改</el-button>
@@ -257,9 +257,9 @@
 					</div>
 					<el-table style="width: 100%" :data="logtableData.data">
 						<el-table-column label="类型" align="center" prop="type" />
-						<el-table-column label="时间" prop="ts" :show-overflow-tooltip="true" />
+						<el-table-column label="时间" prop="ts" show-overflow-tooltip />
 
-						<el-table-column label="内容" prop="content" :show-overflow-tooltip="true" />
+						<el-table-column label="内容" prop="content" show-overflow-tooltip />
 						<el-table-column label="操作" width="300" align="center" fixed="right">
 							<template #default="scope">
 								<el-button size="small" text type="warning" @click="onLogDetail(scope.row)">查看</el-button>

@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true">
 					<!-- <el-form-item label="模型标识" prop="key">
@@ -52,11 +52,11 @@
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'id'" />
-				<!-- <el-table-column label="模型标识" prop="key" :show-overflow-tooltip="true" v-col="'key'"/> -->
-				<el-table-column label="模型名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-				<el-table-column label="类型" prop="typeName" :show-overflow-tooltip="true" v-col="'typeName'" />
+				<!-- <el-table-column label="模型标识" prop="key" show-overflow-tooltip v-col="'key'"/> -->
+				<el-table-column label="模型名称" prop="name" show-overflow-tooltip v-col="'name'" />
+				<el-table-column label="类型" prop="typeName" show-overflow-tooltip v-col="'typeName'" />
 
-				<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" v-col="'desc'" />
+				<el-table-column label="描述" prop="desc" show-overflow-tooltip v-col="'desc'" />
 				<el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status == 1">已发布</el-tag>

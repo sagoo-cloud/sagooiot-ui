@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
-    <el-dialog title="日志详情" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+    <el-dialog title="日志详情" v-model="isShowDialog" width="700">
+      <el-form label-width="90px" label-position="left">
         <el-form-item label="规则名称">
           {{ ruleForm.ruleName }}
         </el-form-item>
@@ -45,16 +45,9 @@ import { reactive, toRefs, defineComponent, ref } from 'vue';
 import api from '/@/api/alarm';
 import 'vue3-json-viewer/dist/index.css';
 
-interface RuleFormState {
-  id?: number;
-  name: string;
-  interval: string;
-  key: string;
-  desc: string;
-}
 interface DicState {
   isShowDialog: boolean;
-  ruleForm: RuleFormState;
+  ruleForm: any;
   product_name: '';
   devcie_name: '';
   alarmLevel_name: '';
@@ -65,7 +58,6 @@ export default defineComponent({
   name: 'Edit',
 
   setup() {
-    const formRef = ref<HTMLElement | null>(null);
     const state = reactive<DicState>({
       isShowDialog: false,
       product_name: '',
@@ -76,7 +68,7 @@ export default defineComponent({
     });
 
     // 打开弹窗
-    const openDialog = (row: RuleFormState | null) => {
+    const openDialog = (row: any) => {
       //resetForm();
       api.log.detail(row.id).then((res: any) => {
         state.ruleForm = res.data;
@@ -105,10 +97,14 @@ export default defineComponent({
       openDialog,
       closeDialog,
       onCancel,
-      formRef,
       ...toRefs(state),
     };
   },
 });
 </script>
 
+<style scoped lang="scss">
+.el-form-item {
+  margin-bottom: 0;
+}
+</style>

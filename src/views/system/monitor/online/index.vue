@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="system-user-search mb15" v-if="false">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="登录时间" prop="dateRange">
@@ -27,9 +27,9 @@
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="编号" align="center" width="60" prop="id" />
 				<el-table-column label="用户名" v-col="'userName'" align="center" prop="userName" />
-				<el-table-column label="token" align="center" prop="token" :show-overflow-tooltip="true" />
-				<el-table-column label="登录地址" v-col="'ip'" align="center" prop="ip" :show-overflow-tooltip="true" />
-				<el-table-column label="登录时间" align="createdAt" prop="createdAt" :show-overflow-tooltip="true" />
+				<el-table-column label="token" align="center" prop="token" show-overflow-tooltip />
+				<el-table-column label="登录地址" v-col="'ip'" align="center" prop="ip" show-overflow-tooltip />
+				<el-table-column label="登录时间" align="createdAt" prop="createdAt" show-overflow-tooltip />
 				<el-table-column label="浏览器" align="center" prop="explorer" />
 				<el-table-column label="操作系统" v-col="'os'" show-overflow-tooltip align="center" prop="os" />
 				<el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-col="'handle'">

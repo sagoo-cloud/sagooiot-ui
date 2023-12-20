@@ -1,6 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-card shadow="hover">
+		<el-card shadow="nover">
 			<div class="system-user-search mb15">
 				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
 					<el-form-item label="创建时间" prop="dateRange">
@@ -33,8 +33,8 @@
 
 				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'ID'" />
 
-				<el-table-column label="标题" prop="title" align="center" :show-overflow-tooltip="true" v-col="'title'" />
-				<el-table-column label="发送方式" prop="gateway" align="center" :show-overflow-tooltip="true" v-col="'title'" />
+				<el-table-column label="标题" prop="title" align="center" show-overflow-tooltip v-col="'title'" />
+				<el-table-column label="发送方式" prop="gateway" align="center" show-overflow-tooltip v-col="'title'" />
 				<el-table-column prop="status" label="发送状态" align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status">发送成功</el-tag>
