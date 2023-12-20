@@ -375,9 +375,7 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="设备档案管理" name="8">
-          <Dossier></Dossier>
-        </el-tab-pane>
+  
 
       </el-tabs>
     </div>
@@ -411,7 +409,6 @@ import 'vue3-json-viewer/dist/index.css';
 import EditDic from './component/edit.vue';
 // import EditDic from '../product/component/editPro.vue';
 import EditAttr from '../product/component/editAttr.vue';
-import Dossier from '../dossier/index.vue';
 import EditFun from '../product/component/editFun.vue';
 import EditEvent from '../product/component/editEvent.vue';
 import EditTab from '../product/component/editTab.vue';
@@ -472,7 +469,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr,Dossier },
+  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
   setup(prop, context) {
     const logqueryRef = ref();
