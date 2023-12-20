@@ -6,7 +6,7 @@
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="选择产品" prop="productKey">
-						<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" clearable>
+						<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" disabled>
 							<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key">
 							<span style="float: left">{{ item.name }}</span>
 							<span style="float: right; font-size: 13px">{{ item.key }}</span>
@@ -30,13 +30,13 @@
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="设备名称" prop="deviceName">
-						<el-input v-model.trim="formData.deviceName" placeholder="请输入设备名称" />
+						<el-input v-model.trim="formData.deviceName" placeholder="请输入设备名称" disabled />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12">
-					<el-form-item label="设备编码" prop="name">
-						<el-input v-model.trim="formData.name" placeholder="请输入场景名称" />
+					<el-form-item label="设备编码" prop="deviceNumber">
+						<el-input v-model.trim="formData.deviceNumber" placeholder="请输入设备编码" />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -58,108 +58,35 @@
 
 				<el-col :span="12">
 					<el-form-item label="安装时间">
-						<el-date-picker v-model="formData.date" type="date" placeholder="请选择时间" class="w100" clearable />
+						<el-date-picker v-model="formData.installTime" type="date" value-format="YYYY-MM-DD"
+ placeholder="请选择时间" class="w100" clearable />
 					</el-form-item>
 				</el-col>
 			</el-row>
 
 
+	<el-row>
+				<el-col :span="12">
+					<el-form-item label="所属部门" prop="deptId">
+          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="formData.deptId">
+            <template #default="{ node, data }">
+              <span>{{ data.deptName }}</span>
+              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+            </template>
+          </el-cascader>
+        </el-form-item>
+				</el-col>
 
+				<el-col :span="12">
+					<el-form-item label="设备类型">
+						<el-input v-model.trim="formData.deviceCategory" placeholder="请输入设备类型"  />
+					</el-form-item>
+				</el-col>
+			</el-row>
 
+    <el-divider content-position="left">自定义属性</el-divider>
 
-
-
-			<el-form-item label="详细地址">
-				<el-input v-model.trim="formData.name" placeholder="请输入详细地址" />
-			</el-form-item>
-
-
-			<el-form-item label="地图坐标">
-				<el-row>
-					<el-col :span="7" class="mr10">
-						<el-select v-model="formData.name" placeholder="请选择坐标系" class="w100 " clearable>
-							<el-option label="Zone one" value="shanghai" />
-							<el-option label="Zone two" value="beijing" />
-						</el-select>
-					</el-col>
-
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="经度" class="w100" />
-
-					</el-col>
-					<el-col :span="8">
-						<el-input v-model.trim="formData.name" placeholder="纬度" class="w100" />
-
-					</el-col>
-				</el-row>
-			</el-form-item>
-
-			<el-form-item label="建设单位">
-				<el-row>
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位名称" class="w100" />
-
-					</el-col>
-
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位联系人" class="w100" />
-
-					</el-col>
-					<el-col :span="8">
-						<el-input v-model.trim="formData.name" placeholder="联系电话" class="w100" />
-
-					</el-col>
-				</el-row>
-			</el-form-item>
-
-			<el-form-item label="管理单位">
-				<el-row>
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位名称" class="w100" />
-
-					</el-col>
-
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位联系人" class="w100" />
-
-					</el-col>
-					<el-col :span="8">
-						<el-input v-model.trim="formData.name" placeholder="联系电话" class="w100" />
-
-					</el-col>
-				</el-row>
-			</el-form-item>
-
-			<el-form-item label="维护单位">
-				<el-row>
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位名称" class="w100" />
-
-					</el-col>
-
-					<el-col :span="7" class="mr10">
-						<el-input v-model.trim="formData.name" placeholder="单位联系人" class="w100" />
-
-					</el-col>
-					<el-col :span="8">
-						<el-input v-model.trim="formData.name" placeholder="联系电话" class="w100" />
-
-					</el-col>
-				</el-row>
-			</el-form-item>
-
-			<el-form-item label="设备类型">
-				<el-select v-model="formData.name" placeholder="请选择设备类型" class="w100 " clearable>
-							<el-option label="Zone one" value="shanghai" />
-							<el-option label="Zone two" value="beijing" />
-						</el-select>
-				</el-form-item>
-
-			
-			<el-form-item label="备注">
-				<el-input v-model.trim="formData.name" placeholder="备注" />
-			</el-form-item>
-
+			<FromData :Datalist="Datalist" @SetSaveData="SetSaveData"></FromData>
 
 
 		</el-form>
@@ -180,6 +107,7 @@
 import { ref, reactive, nextTick } from 'vue';
 import api from '/@/api/device'
 import system from '/@/api/system';
+import FromData from './component/from.vue';
 
 import { ruleRequired } from '/@/utils/validator';
 import { ElMessage } from 'element-plus';
@@ -191,22 +119,35 @@ const formRef = ref();
 const orgData = ref();
 const deviceList=ref();
 const productData=ref();
+const deptData=ref();
+const Datalist=ref();
 const baseForm = {
 	id: undefined,
 	productKey: '',
 	deviceKey:'',
 	deviceName:'',
 	area: "",
-	description: '',
+	deviceNumber: '',
+	deviceCategory: '',
+	installTime: '',
+	deptId: '',
+	data:[],
 
 };
+
+
+const SetSaveData = (data:any) => {
+	formData.data=data;
+}
 
 const formData = reactive({
 	...baseForm,
 });
 
 const ruleForm = {
-	name: [ruleRequired('场景名称不能为空')],
+	productKey: [ruleRequired('所属产品不能为空')],
+	deviceName: [ruleRequired('设备名称不能为空')],
+	deviceKey: [ruleRequired('设备不能为空')],
 };
 const handleSelectionChange=(value:any)=> {
       const selectedOption = deviceList.value.find(option => option.key === value);
@@ -251,6 +192,16 @@ const open = async (row: any,productInfo:any) => {
 		api.device.allList({ productId: productInfo.id }).then((res: any) => {
 			deviceList.value = res.device || [];
 		});
+		//获取部门
+		api.dept.getList({ status: -1 }).then((res: any) => {
+        deptData.value = res || [];
+      });
+
+			api.dev_asset_metadata.getList({ productKey: productInfo.key,pageSize:50,pageNum:1,status:-1,total:0 }).then((res: any) => {
+        Datalist.value = res.Data || [];
+      });
+
+			//获取档案属性
 		formData.productKey=productInfo.key
 	});
 };

@@ -2,8 +2,8 @@
 	<el-card shadow="hover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
-				<el-form-item label="名称：" prop="keyWord">
-					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable size="default" style="width: 240px" />
+				<el-form-item label="关键字：" prop="keyWord">
+					<el-input v-model="params.keyWord" placeholder="请输入关键字" clearable size="default" style="width: 240px" />
 				</el-form-item>
 
 				<el-form-item>
@@ -45,6 +45,8 @@
 					</el-tree>
 			</el-col>
 			<el-col :span="18"><el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+					<el-table-column type="selection" width="55" align="center" />
+
 					<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
 					<el-table-column prop="name" label="字段名称" show-overflow-tooltip></el-table-column>
 					<el-table-column prop="title" label="字段标题" show-overflow-tooltip></el-table-column>
@@ -98,7 +100,7 @@ const editFormRef = ref()
 const productIno=ref();
 
 
-const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset_metadata.getList, 'Data', { keyWord: '' })
+const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset_metadata.getList, 'Data', { keyWord: ''})
 getList()
 const toDetail = (id: number) => {
 	router.push(`/device/dossier/manage/${id}`)
@@ -183,7 +185,7 @@ const del = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await device.dev_asset_metadata.delete(row.id)
+		await device.dev_asset_metadata.delete({ids:row.id})
 		ElMessage.success('删除成功')
 		getList()
 	})
