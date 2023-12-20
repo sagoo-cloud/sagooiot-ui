@@ -85,7 +85,10 @@
 			</el-row>
 
     <el-divider content-position="left">自定义属性</el-divider>
-			<FromData :Datalist="Datalist" @SetSaveData="SetSaveData"></FromData>
+		    <div v-for="(item, index) in Datalist" :key="index">
+						<FromData :info="item" :index="index" @SetSaveData="SetSaveData"></FromData>
+			  </div>
+
 		</el-form>
 
 
@@ -118,6 +121,7 @@ const deviceList=ref();
 const productData=ref();
 const deptData=ref();
 const Datalist=ref();
+const newData = ref([]); 
 const baseForm = {
 	id: undefined,
 	productKey: '',
@@ -133,10 +137,9 @@ const baseForm = {
 };
 
 
-const SetSaveData = (data:any) => {
-	const jsonArray = [data];
-	const jsonString = JSON.stringify(jsonArray);
-	formData.data=jsonString;
+const SetSaveData = (data: any) => {
+		newData.value[data.index] = data.data;
+		formData.data= newData;
 }
 
 const formData = reactive({
@@ -188,13 +191,17 @@ const open = async (row: any,productInfo:any) => {
 	resetForm();
 	showDialog.value = true;		
 	nextTick(() => {
-
+		//获取区域
 		system.org.getList({ status: 1 }).then((res: any) => {
+			res.forEach((item) => {
+				item.id = item.id.toString();
+			});
 			orgData.value = res || [];
 		});
+		
 		//获取 所有的产品
-		api.product.getLists({}).then((res: any) => {
-			productData.value = res.product;
+		api.product.getLists({}).then((resp: any) => {
+			productData.value = resp.product;
 			if(row.id){
 				productInfo={
 					id:getIdByKey(row.productKey),
@@ -202,17 +209,18 @@ const open = async (row: any,productInfo:any) => {
 				}
 			}
 			//根据产品ID获取设备列表
-			api.device.allList({ productId: productInfo.id }).then((res: any) => {
-				deviceList.value = res.device || [];
+			api.device.allList({ productId: productInfo.id }).then((resd: any) => {
+				deviceList.value = resd.device || [];
 			});
 				api.dev_asset_metadata.getList({ productKey: productInfo.key,pageSize:50,pageNum:1,status:-1,total:0 }).then((res: any) => {
-        Datalist.value = res.Data || [];
-      });
+					Datalist.value = res.Data || [];
+				});
 
 			//获取档案属性
 		})
 
-		
+
+
 		//获取部门
 		api.dept.getList({ status: -1 }).then((res: any) => {
 				res.forEach((item) => {
@@ -221,7 +229,6 @@ const open = async (row: any,productInfo:any) => {
         deptData.value = res || [];
     });
 
-		console.log(row);
 		Object.assign(formData, { ...row });
 		formData.productKey=productInfo.key
 

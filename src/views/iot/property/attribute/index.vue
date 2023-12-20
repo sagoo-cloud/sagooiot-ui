@@ -133,7 +133,10 @@ const getCateList = () => {
 
 const handleNodeClick = (data: any) => {
 	if(data.is_type==='2'){
-		productIno.value=data;
+		productIno.value = data;
+		params.productKey = data.key
+		getList()
+
 	}else{
 		productIno.value='';
 
