@@ -184,7 +184,7 @@ const buildTree = (category: any, productData: any) => {
 }
 
 const del = (row: any) => {
-	ElMessageBox.confirm('是否确认删除名称为："' + row.name + '"的数据项?', '提示', {
+	ElMessageBox.confirm('是否确认删除名称为："' + row.deviceName + '"的数据项?', '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
