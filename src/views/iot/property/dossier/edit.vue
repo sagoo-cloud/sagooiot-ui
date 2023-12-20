@@ -85,10 +85,7 @@
 			</el-row>
 
     <el-divider content-position="left">自定义属性</el-divider>
-
 			<FromData :Datalist="Datalist" @SetSaveData="SetSaveData"></FromData>
-
-
 		</el-form>
 
 
@@ -131,13 +128,15 @@ const baseForm = {
 	deviceCategory: '',
 	installTime: '',
 	deptId: '',
-	data:[],
+	data:'',
 
 };
 
 
 const SetSaveData = (data:any) => {
-	formData.data=data;
+	const jsonArray = [data];
+	const jsonString = JSON.stringify(jsonArray);
+	formData.data=jsonString;
 }
 
 const formData = reactive({
@@ -176,33 +175,55 @@ const resetForm = async () => {
 	formRef.value && formRef.value.resetFields();
 };
 
+	const getIdByKey=(key:string) =>{
+			for (let i = 0; i < productData.value.length; i++) {
+				if (productData.value[i].key === key) {
+					return productData.value[i].id;
+				}
+			}
+			return null; // 如果没有找到匹配的key，则返回null（或者其他合适的值）
+		}
+
 const open = async (row: any,productInfo:any) => {
 	resetForm();
 	showDialog.value = true;		
 	nextTick(() => {
-		Object.assign(formData, { ...row });
+
 		system.org.getList({ status: 1 }).then((res: any) => {
 			orgData.value = res || [];
 		});
 		//获取 所有的产品
 		api.product.getLists({}).then((res: any) => {
 			productData.value = res.product;
+			if(row.id){
+				productInfo={
+					id:getIdByKey(row.productKey),
+					key:row.productKey,
+				}
+			
+			}
+			//根据产品ID获取设备列表
+			api.device.allList({ productId: productInfo.id }).then((res: any) => {
+				deviceList.value = res.device || [];
+			});
+				api.dev_asset_metadata.getList({ productKey: productInfo.key,pageSize:50,pageNum:1,status:-1,total:0 }).then((res: any) => {
+        Datalist.value = res.Data || [];
+      });
+
+			//获取档案属性
 		})
-		//根据产品ID获取设备列表
-		api.device.allList({ productId: productInfo.id }).then((res: any) => {
-			deviceList.value = res.device || [];
-		});
+
+		
 		//获取部门
 		api.dept.getList({ status: -1 }).then((res: any) => {
         deptData.value = res || [];
       });
 
-			api.dev_asset_metadata.getList({ productKey: productInfo.key,pageSize:50,pageNum:1,status:-1,total:0 }).then((res: any) => {
-        Datalist.value = res.Data || [];
-      });
-
-			//获取档案属性
+		console.log(row);
+		Object.assign(formData, { ...row });
 		formData.productKey=productInfo.key
+
+
 	});
 };
 

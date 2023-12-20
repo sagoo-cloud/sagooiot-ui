@@ -96,14 +96,12 @@ interface Tree {
 	children?: Tree[]
 }
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 const defaultProps = {
 	children: 'children',
 	label: 'label',
 }
 
 const queryRef = ref()
-const router = useRouter()
 const productData = ref([])
 const mergedData = ref()
 const cateData = ref()
@@ -112,9 +110,7 @@ const productIno = ref()
 
 const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset.getList, 'Data', { keyWord: '' })
 getList()
-const toDetail = (id: number) => {
-	router.push(`/device/dossier/manage/${id}`)
-}
+
 onMounted(() => {
 	getCateList()
 })
