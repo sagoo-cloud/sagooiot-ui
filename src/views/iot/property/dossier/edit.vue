@@ -200,7 +200,6 @@ const open = async (row: any,productInfo:any) => {
 					id:getIdByKey(row.productKey),
 					key:row.productKey,
 				}
-			
 			}
 			//根据产品ID获取设备列表
 			api.device.allList({ productId: productInfo.id }).then((res: any) => {
@@ -216,8 +215,11 @@ const open = async (row: any,productInfo:any) => {
 		
 		//获取部门
 		api.dept.getList({ status: -1 }).then((res: any) => {
+				res.forEach((item) => {
+					item.deptId = item.deptId.toString();
+				});
         deptData.value = res || [];
-      });
+    });
 
 		console.log(row);
 		Object.assign(formData, { ...row });
