@@ -1,12 +1,5 @@
 <template>
-	<el-dialog
-		class="api-edit"
-		v-model="showDialog"
-		:title="`${formData.id ? '编辑设备档案属性' : '新增设备档案属性'}`"
-		width="800px"
-		:close-on-click-modal="false"
-		:close-on-press-escape="false"
-	>
+	<el-dialog class="api-edit" v-model="showDialog" :title="`${formData.id ? '编辑设备档案属性' : '新增设备档案属性'}`" width="800px" :close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form class="inline-form" ref="formRef" :model="formData" :rules="ruleForm" label-width="120px">
 			<el-form-item label="所属产品" prop="productKey">
 				<el-select v-model="formData.productKey" placeholder="请选择产品" class="w100" disabled>
@@ -23,11 +16,11 @@
 				<el-input v-model.trim="formData.title" placeholder="请输入字段标题" />
 			</el-form-item>
 			<el-form-item label="字段类型" prop="types">
-						<el-select v-model="formData.types" placeholder="请字段类型" class="w100" clearable>
-							<el-option v-for="item in typesData" :key="item.value" :label="item.name" :value="item.value">
-						</el-option>
-						</el-select>
-					</el-form-item>
+				<el-select v-model="formData.types" placeholder="请字段类型" class="w100" clearable>
+					<el-option v-for="item in typesData" :key="item.value" :label="item.name" :value="item.value">
+					</el-option>
+				</el-select>
+			</el-form-item>
 
 			<el-form-item label="字段描述" prop="desc">
 				<el-input v-model.trim="formData.desc" placeholder="请输入字段描述" />
@@ -53,19 +46,19 @@ const emit = defineEmits(['getList'])
 
 const showDialog = ref(false)
 const formRef = ref()
-const productData=ref();
+const productData = ref();
 const typesData = ref([{
-	value:'input',
-	name:'输入框',
-},{
-	value:'textarea',
-	name:'文本框',
-},{
-	value:'date',
-	name:'日期',
-},{
-	value:'file',
-	name:'上传图片',
+	value: 'input',
+	name: '输入框',
+}, {
+	value: 'textarea',
+	name: '文本框',
+}, {
+	value: 'date',
+	name: '日期',
+}, {
+	value: 'file',
+	name: '上传图片',
 }])
 const baseForm = {
 	id: undefined,
@@ -116,7 +109,7 @@ const open = async (row: any, productInfo: any) => {
 		api.product.getLists({}).then((res: any) => {
 			productData.value = res.product
 		})
-	
+
 		formData.productKey = productInfo.key
 	})
 }

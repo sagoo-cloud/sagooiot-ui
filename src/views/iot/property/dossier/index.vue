@@ -15,7 +15,7 @@
 					</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="success" @click="addOrEdit()" v-if="productIno">
+					<el-button type="success" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
@@ -29,45 +29,39 @@
 						批量添加
 					</el-button> -->
 
-					<!-- <el-button type="danger" @click="addOrEdit()">
+					<el-button type="danger" @click="batchdel()" v-auth="'batchdel'">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
 						批量删除
-					</el-button> -->
+					</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
 		<el-row>
 			<el-col :span="6">
-				<el-tree
-					:data="mergedData"
-					:props="defaultProps"
-					accordion
-					default-expand-all
-					@node-click="handleNodeClick"
-					style="border: 1px solid #eee; padding: 10px; margin-right: 10px"
-				>
+				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee; padding: 10px; margin-right: 10px">
 					<template #default="{ node, data }">
 						<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-							<el-icon v-if="data.is_type == '2'"><Check /></el-icon>
+							<el-icon v-if="data.is_type == '2'">
+								<Check />
+							</el-icon>
 							{{ node.label }}
 						</span>
 					</template>
 				</el-tree>
 			</el-col>
-			<el-col :span="18"
-				><el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+			<el-col :span="18"><el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
 					<el-table-column type="selection" width="55" align="center" />
 
-					<el-table-column prop="deviceName" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="deviceKey" label="设备KEY" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="deviceName" v-col="'deviceName'" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="deviceKey" v-col="'deviceKey'" label="设备KEY" show-overflow-tooltip></el-table-column>
 
-					<el-table-column prop="deviceNumber" label="设备编码" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="deviceNumber" v-col="'deviceNumber'" label="设备编码" show-overflow-tooltip></el-table-column>
 
-					<el-table-column prop="deviceCategory" label="设备类型" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="deviceCategory" v-col="'deviceCategory'" label="设备类型" show-overflow-tooltip></el-table-column>
 
-					<el-table-column prop="installTime" label="安装时间" width="160" align="center"></el-table-column>
+					<el-table-column prop="installTime" v-col="'installTime'" label="安装时间" width="160" align="center"></el-table-column>
 					<el-table-column label="操作" width="200" align="center">
 						<template #default="scope">
 							<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
@@ -107,10 +101,13 @@ const mergedData = ref()
 const cateData = ref()
 const editFormRef = ref()
 const productIno = ref()
+const ids = ref<number[]>([])
 
 const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset.getList, 'Data', { keyWord: '' })
 getList()
-
+const handleSelectionChange = (selection: any[]) => {
+	ids.value = selection.map((item) => item.id);
+};
 onMounted(() => {
 	getCateList()
 })
@@ -183,13 +180,25 @@ const buildTree = (category: any, productData: any) => {
 	return treeNode
 }
 
+const batchdel = () => {
+	ElMessageBox.confirm('是否确认要批量删除这些数据吗?', '提示', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		type: 'warning',
+	}).then(async () => {
+		await device.dev_asset.delete({ ids: ids.value })
+		ElMessage.success('删除成功')
+		getList()
+	})
+}
+
 const del = (row: any) => {
 	ElMessageBox.confirm('是否确认删除名称为："' + row.deviceName + '"的数据项?', '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await device.dev_asset.delete({ids:row.id})
+		await device.dev_asset.delete({ ids: row.id })
 		ElMessage.success('删除成功')
 		getList()
 	})

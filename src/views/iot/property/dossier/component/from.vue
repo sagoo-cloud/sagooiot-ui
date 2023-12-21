@@ -10,32 +10,19 @@
 			</el-form-item>
 
 			<el-form-item v-if="item.types === 'date'" :label="item.title + '：'">
-				<el-date-picker
-					v-model="formData[item.name]"
-					:default-value="item.value"
-					type="date"
-					value-format="YYYY-MM-DD"
-					placeholder="请选择时间"
-					class="w100"
-					clearable
-					@change="saveData()"
-				/>
+				<el-date-picker v-model="formData[item.name]" :default-value="item.value" type="date" value-format="YYYY-MM-DD" placeholder="请选择时间" class="w100" clearable @change="saveData()" />
 			</el-form-item>
 
 			<el-form-item :label="item.title + '：'" prop="path" v-if="item.types === 'file'">
 
-		
 
-			<el-upload
-				class="avatar-uploader"
-				:action="uploadUrl"
-				:headers="headers"
-				:show-file-list="false"
-				:on-success="customCallback(item.name)"
-			>
-				<img v-if="formData[item.name]" :src="formData[item.name]" class="avatar" />
-				<el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-			</el-upload>
+
+				<el-upload class="avatar-uploader" :action="uploadUrl" :headers="headers" :show-file-list="false" :on-success="customCallback(item.name)">
+					<img v-if="formData[item.name]" :src="formData[item.name]" class="avatar" />
+					<el-icon v-else class="avatar-uploader-icon">
+						<Plus />
+					</el-icon>
+				</el-upload>
 
 
 			</el-form-item>
@@ -97,10 +84,11 @@ const saveData = () => {
 .form-item {
 	flex: 0 0 25%;
 }
+
 .avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
+	width: 178px;
+	height: 178px;
+	display: block;
 }
 </style>
 <style>

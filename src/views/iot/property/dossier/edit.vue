@@ -81,7 +81,7 @@
       </el-row>
 
       <el-divider content-position="left">自定义属性</el-divider>
-      <FromData :Datalist="Datalist"  @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length>0"></FromData>
+      <FromData :Datalist="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
     </el-form>
 
 
@@ -97,155 +97,155 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive, nextTick } from 'vue';
-  import api from '/@/api/device'
-  import system from '/@/api/system';
-  import FromData from './component/from.vue';
+import { ref, reactive, nextTick } from 'vue';
+import api from '/@/api/device'
+import system from '/@/api/system';
+import FromData from './component/from.vue';
 
-  import { ruleRequired } from '/@/utils/validator';
-  import { ElMessage } from 'element-plus';
+import { ruleRequired } from '/@/utils/validator';
+import { ElMessage } from 'element-plus';
 
-  const emit = defineEmits(['getList']);
+const emit = defineEmits(['getList']);
 
-  const showDialog = ref(false);
-  const formRef = ref();
-  const orgData = ref();
-  const deviceList = ref();
-  const productData = ref();
-  const deptData = ref();
-  const Datalist = ref();
-  const newData = ref([]);
-  const baseForm = {
-    id: undefined,
-    productKey: '',
-    deviceKey: '',
-    deviceName: '',
-    area: "",
-    deviceNumber: '',
-    deviceCategory: '',
-    installTime: '',
-    deptId: '',
-    data: [],
+const showDialog = ref(false);
+const formRef = ref();
+const orgData = ref();
+const deviceList = ref();
+const productData = ref();
+const deptData = ref();
+const Datalist = ref();
+const newData = ref([]);
+const baseForm = {
+  id: undefined,
+  productKey: '',
+  deviceKey: '',
+  deviceName: '',
+  area: "",
+  deviceNumber: '',
+  deviceCategory: '',
+  installTime: '',
+  deptId: '',
+  data: [],
 
-  };
+};
 
 
-  const SetSaveData = (data: any) => {
-    formData.data = data;
+const SetSaveData = (data: any) => {
+  formData.data = data;
+}
+const formData = reactive({
+  ...baseForm,
+});
+
+const ruleForm = {
+  productKey: [ruleRequired('所属产品不能为空')],
+  deviceName: [ruleRequired('设备名称不能为空')],
+  deviceKey: [ruleRequired('设备不能为空')],
+};
+const handleSelectionChange = (value: any) => {
+  const selectedOption = deviceList.value.find(option => option.key === value);
+  if (selectedOption) {
+    formData.deviceName = selectedOption.name;
+  } else {
+    formData.deviceName = '';
   }
-  const formData = reactive({
-    ...baseForm,
-  });
+}
 
-  const ruleForm = {
-    productKey: [ruleRequired('所属产品不能为空')],
-    deviceName: [ruleRequired('设备名称不能为空')],
-    deviceKey: [ruleRequired('设备不能为空')],
-  };
-  const handleSelectionChange = (value: any) => {
-    const selectedOption = deviceList.value.find(option => option.key === value);
-    if (selectedOption) {
-      formData.deviceName = selectedOption.name;
-    } else {
-      formData.deviceName = '';
+const onSubmit = async () => {
+  await formRef.value.validate();
+
+  const theApi = formData.id ? api.dev_asset.edit : api.dev_asset.add;
+
+  await theApi(formData);
+
+  ElMessage.success('操作成功');
+  resetForm();
+  showDialog.value = false;
+  emit('getList');
+};
+
+const resetForm = async () => {
+  Object.assign(formData, { ...baseForm });
+  Datalist.value = ''
+  formRef.value && formRef.value.resetFields();
+};
+
+const getIdByKey = (key: string) => {
+  for (let i = 0; i < productData.value.length; i++) {
+    if (productData.value[i].key === key) {
+      return productData.value[i].id;
     }
   }
+  return null; // 如果没有找到匹配的key，则返回null（或者其他合适的值）
+}
 
-  const onSubmit = async () => {
-    await formRef.value.validate();
-
-    const theApi = formData.id ? api.dev_asset.edit : api.dev_asset.add;
-
-    await theApi(formData);
-
-    ElMessage.success('操作成功');
-    resetForm();
-    showDialog.value = false;
-    emit('getList');
-  };
-
-  const resetForm = async () => {
-    Object.assign(formData, { ...baseForm });
-    Datalist.value=''
-    formRef.value && formRef.value.resetFields();
-  };
-
-  const getIdByKey = (key: string) => {
-    for (let i = 0; i < productData.value.length; i++) {
-      if (productData.value[i].key === key) {
-        return productData.value[i].id;
-      }
-    }
-    return null; // 如果没有找到匹配的key，则返回null（或者其他合适的值）
-  }
-
-  const open = async (row: any, productInfo: any) => {
-    resetForm();
-    showDialog.value = true;
-    nextTick(() => {
-      //获取区域
-      system.org.getList({ status: 1 }).then((res: any) => {
-        res.forEach((item) => {
-          item.id = item.id.toString();
-        });
-        orgData.value = res || [];
+const open = async (row: any, productInfo: any) => {
+  resetForm();
+  showDialog.value = true;
+  nextTick(() => {
+    //获取区域
+    system.org.getList({ status: 1 }).then((res: any) => {
+      res.forEach((item) => {
+        item.id = item.id.toString();
       });
-
-      //获取 所有的产品
-      api.product.getLists({}).then((resp: any) => {
-        productData.value = resp.product;
-        if (row.id) {
-          productInfo = {
-            id: getIdByKey(row.productKey),
-            key: row.productKey,
-          }
-
-
-        }
-        //根据产品ID获取设备列表
-        api.device.allList({ productId: productInfo.id }).then((resd: any) => {
-          deviceList.value = resd.device || [];
-        });
-
-      })
-
-
-
-      //获取部门
-      api.dept.getList({ status: -1 }).then((res: any) => {
-        res.forEach((item) => {
-          item.deptId = item.deptId.toString();
-        });
-        deptData.value = res || [];
-      });
-
-
-      if (row.id) {
-        api.dev_asset.detail({ deviceKey: row.deviceKey }).then((resde: any) => {
-          Object.assign(formData, { ...resde });
-          formData.productKey = row.productKey
-          const newArray = resde.data.map(obj => {
-            const { name, value, ...rest } = obj;
-            const newObj = { name, value, ...rest };
-            newObj[name] = value?value:'';
-            return newObj;
-          });
-          Datalist.value = newArray
-        });
-      } else {
-        //获取档案属性
-        api.dev_asset_metadata.getList({ productKey: productInfo.key, pageSize: 50, pageNum: 1, status: -1, total: 0 }).then((res: any) => {
-          Datalist.value = res.Data || [];
-          formData.productKey = productInfo.key
-        });
-      }
+      orgData.value = res || [];
     });
-  };
 
-  defineExpose({ open });
+    //获取 所有的产品
+    api.product.getLists({}).then((resp: any) => {
+      productData.value = resp.product;
+      if (row.id) {
+        productInfo = {
+          id: getIdByKey(row.productKey),
+          key: row.productKey,
+        }
+
+
+      }
+      //根据产品ID获取设备列表
+      api.device.allList({ productId: productInfo.id }).then((resd: any) => {
+        deviceList.value = resd.device || [];
+      });
+
+    })
+
+
+
+    //获取部门
+    api.dept.getList({ status: -1 }).then((res: any) => {
+      res.forEach((item) => {
+        item.deptId = item.deptId.toString();
+      });
+      deptData.value = res || [];
+    });
+
+
+    if (row.id) {
+      api.dev_asset.detail({ deviceKey: row.deviceKey }).then((resde: any) => {
+        Object.assign(formData, { ...resde });
+        formData.productKey = row.productKey
+        const newArray = resde.data.map(obj => {
+          const { name, value, ...rest } = obj;
+          const newObj = { name, value, ...rest };
+          newObj[name] = value ? value : '';
+          return newObj;
+        });
+        Datalist.value = newArray
+      });
+    } else {
+      //获取档案属性
+      api.dev_asset_metadata.getList({ productKey: productInfo.key, pageSize: 50, pageNum: 1, status: -1, total: 0 }).then((res: any) => {
+        Datalist.value = res.Data || [];
+        formData.productKey = productInfo.key
+      });
+    }
+  });
+};
+
+defineExpose({ open });
 </script>
 <style scoped lang="scss">
-  .demo-form-inline .el-input {
-    --el-input-width: 320px;
-  }
+.demo-form-inline .el-input {
+  --el-input-width: 320px;
+}
 </style>

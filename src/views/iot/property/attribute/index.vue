@@ -15,57 +15,57 @@
 					</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="success" @click="addOrEdit()" v-if="productIno">
+					<el-button type="success" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
 						新增属性
 					</el-button>
 
-				
 
-					<!-- <el-button type="danger" @click="addOrEdit()">
+
+					<el-button type="danger" @click="batchdel()" v-auth="'batchdel'">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
-						删除
-					</el-button> -->
+						批量删除
+					</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
 		<el-row>
 			<el-col :span="6">
-				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all	 @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;">
+				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;">
 					<template #default="{ node, data }">
 						<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-							<el-icon  v-if="data.is_type == '2'"><Expand /></el-icon>
-						{{ node.label }}
+							<el-icon v-if="data.is_type == '2'">
+								<Expand />
+							</el-icon>
+							{{ node.label }}
 						</span>
 					</template>
-					</el-tree>
+				</el-tree>
 			</el-col>
-			<el-col :span="18"><el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+			<el-col :span="18"><el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" row-key="id" v-loading="loading">
 					<el-table-column type="selection" width="55" align="center" />
 
-					<el-table-column prop="id" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" label="字段名称" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="title" label="字段标题" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="types" label="字段类型" show-overflow-tooltip></el-table-column>
-					
+					<el-table-column prop="id" v-col="'id'" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="name" v-col="'name'" label="字段名称" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="title" v-col="'title'" label="字段标题" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="types" v-col="'types'" label="字段类型" show-overflow-tooltip></el-table-column>
 
-					<el-table-column prop="createdAt" label="创建时间" width="160" align="center"></el-table-column>
+
+					<el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="160" align="center"></el-table-column>
 					<el-table-column label="操作" width="200" align="center">
 						<template #default="scope">
-						
-							<el-button size="small" text type="warning" 
-								@click="addOrEdit(scope.row)">编辑</el-button>
 
-							<el-button size="small" text type="info"  @click="del(scope.row)">删除</el-button>
+							<el-button size="small" text v-auth="'edit'" type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+
+							<el-button size="small" text v-auth="'del'" type="info" @click="del(scope.row)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
-				<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum"
-					v-model:limit="params.pageSize" @pagination="getList()" />
+				<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 			</el-col>
 		</el-row>
 
@@ -76,19 +76,19 @@
 <script lang="ts" setup>
 import device from '/@/api/device'
 import { useSearch } from '/@/hooks/useCommon'
-import {  Expand } from '@element-plus/icons-vue';
+import { Expand } from '@element-plus/icons-vue';
 
 import { ElMessageBox, ElMessage } from 'element-plus'
 import EditForm from './edit.vue'
 interface Tree {
-  label: string
-  children?: Tree[]
+	label: string
+	children?: Tree[]
 }
-import { ref,onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 const defaultProps = {
-  children: 'children',
-  label: 'label',
+	children: 'children',
+	label: 'label',
 }
 
 const queryRef = ref()
@@ -97,24 +97,22 @@ const productData = ref([])
 const mergedData = ref()
 const cateData = ref()
 const editFormRef = ref()
-const productIno=ref();
+const productIno = ref();
+const ids = ref<number[]>([])
 
-
-const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset_metadata.getList, 'Data', { keyWord: ''})
-getList()
-const toDetail = (id: number) => {
-	router.push(`/device/dossier/manage/${id}`)
-}
+const { params, tableData, getList, loading } = useSearch<any[]>(device.dev_asset_metadata.getList, 'Data', { keyWord: '' })
 onMounted(() => {
 	getCateList()
-
 });
+const handleSelectionChange = (selection: any[]) => {
+	ids.value = selection.map((item) => item.id);
+};
 const addOrEdit = async (row?: any) => {
 	if (row) {
-		editFormRef.value.open(row,productIno.value)
+		editFormRef.value.open(row, productIno.value)
 		return
 	} else {
-		editFormRef.value.open({},productIno.value)
+		editFormRef.value.open({}, productIno.value)
 	}
 }
 
@@ -125,6 +123,8 @@ const getCateList = () => {
 
 		device.product.getLists({}).then((res: any) => {
 			productData.value = res.product;
+			params.productKey = res.product[0].key
+			getList()
 			mergedData.value = matchProductsToCategories(productData.value, cateData.value);
 		})
 
@@ -132,63 +132,73 @@ const getCateList = () => {
 }
 
 const handleNodeClick = (data: any) => {
-	if(data.is_type==='2'){
+	if (data.is_type === '2') {
 		productIno.value = data;
 		params.productKey = data.key
 		getList()
 
-	}else{
-		productIno.value='';
+	} else {
+		productIno.value = '';
 
 	}
 }
 
-const matchProductsToCategories = (productData:any, cateData:any) => {
-  const treeData = []
-  for (let category of cateData) {
-    const treeNode = buildTree(category, productData)
-    treeData.push(treeNode)
-  }
-  return treeData
+const matchProductsToCategories = (productData: any, cateData: any) => {
+	const treeData = []
+	for (let category of cateData) {
+		const treeNode = buildTree(category, productData)
+		treeData.push(treeNode)
+	}
+	return treeData
 }
 
-const buildTree = (category:any, productData:any) => {
-  const treeNode = {
-    id: category.id,
-    label: category.name,
-	key: category.key,
-    is_type: '1', // 1是分类
-    children: [],
-  }
+const buildTree = (category: any, productData: any) => {
+	const treeNode = {
+		id: category.id,
+		label: category.name,
+		key: category.key,
+		is_type: '1', // 1是分类
+		children: [],
+	}
 
-  if (category.children && category.children.length > 0) {
-    for (let child of category.children) {
-      const childNode = buildTree(child, productData)
-      treeNode.children.push(childNode)
-    }
-  } else {
-    const products = productData.filter((product:any) => product.categoryId === category.id)
-    for (let product of products) {
-      const productNode = {
-        id: product.id,
-        label: product.name,
-        key: product.key,
-        is_type: '2', // 2是产品
-      }
-      treeNode.children.push(productNode)
-    }
-  }
+	if (category.children && category.children.length > 0) {
+		for (let child of category.children) {
+			const childNode = buildTree(child, productData)
+			treeNode.children.push(childNode)
+		}
+	} else {
+		const products = productData.filter((product: any) => product.categoryId === category.id)
+		for (let product of products) {
+			const productNode = {
+				id: product.id,
+				label: product.name,
+				key: product.key,
+				is_type: '2', // 2是产品
+			}
+			treeNode.children.push(productNode)
+		}
+	}
 
-  return treeNode
+	return treeNode
 }
-
+const batchdel = () => {
+	ElMessageBox.confirm('是否确认要批量删除这些数据吗?', '提示', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		type: 'warning',
+	}).then(async () => {
+		await device.dev_asset_metadata.delete({ ids: ids.value })
+		ElMessage.success('删除成功')
+		getList()
+	})
+}
 const del = (row: any) => {
 	ElMessageBox.confirm('是否确认删除名称为："' + row.name + '"的数据项?', '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await device.dev_asset_metadata.delete({ids:row.id})
+		await device.dev_asset_metadata.delete({ ids: row.id })
 		ElMessage.success('删除成功')
 		getList()
 	})
