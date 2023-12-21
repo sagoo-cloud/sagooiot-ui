@@ -80,13 +80,9 @@
         </el-col>
       </el-row>
 
-      <el-divider content-position="left">自定义属性</el-divider>
-      <FromData :Datalist="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
+      <el-divider content-position="left" v-if="Datalist && Datalist.length > 0">自定义属性</el-divider>
+        <FromData :Datalist="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
     </el-form>
-
-
-
-
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="showDialog = false">取消</el-button>
@@ -153,11 +149,8 @@ const handleSelectionChange = (value: any) => {
 
 const onSubmit = async () => {
   await formRef.value.validate();
-
   const theApi = formData.id ? api.dev_asset.edit : api.dev_asset.add;
-
   await theApi(formData);
-
   ElMessage.success('操作成功');
   resetForm();
   showDialog.value = false;
@@ -183,7 +176,6 @@ const open = async (row: any, productInfo: any) => {
   resetForm();
   showDialog.value = true;
   nextTick(() => {
-    //获取区域
     system.org.getList({ status: 1 }).then((res: any) => {
       res.forEach((item) => {
         item.id = item.id.toString();
@@ -199,17 +191,12 @@ const open = async (row: any, productInfo: any) => {
           id: getIdByKey(row.productKey),
           key: row.productKey,
         }
-
-
       }
       //根据产品ID获取设备列表
       api.device.allList({ productId: productInfo.id }).then((resd: any) => {
         deviceList.value = resd.device || [];
       });
-
     })
-
-
 
     //获取部门
     api.dept.getList({ status: -1 }).then((res: any) => {
@@ -218,7 +205,6 @@ const open = async (row: any, productInfo: any) => {
       });
       deptData.value = res || [];
     });
-
 
     if (row.id) {
       api.dev_asset.detail({ deviceKey: row.deviceKey }).then((resde: any) => {
