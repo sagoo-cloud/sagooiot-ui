@@ -1,4 +1,5 @@
 <template>
+	<div>
 	<el-card shadow="nover">
 		<div class="search">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
@@ -76,6 +77,7 @@
 
 		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</el-card>
+	</div>
 </template>
 
 <script lang="ts" setup>
