@@ -235,7 +235,10 @@ const open = async (row: any, productInfo: any) => {
     } else {
       //获取档案属性
       api.dev_asset_metadata.getList({ productKey: productInfo.key, pageSize: 50, pageNum: 1, status: -1, total: 0 }).then((res: any) => {
-        Datalist.value = res.Data || [];
+        const sortedArray = res.Data.sort((a, b) => a.id - b.id);
+
+				
+				Datalist.value = sortedArray || [];
         formData.productKey = productInfo.key
       });
     }
