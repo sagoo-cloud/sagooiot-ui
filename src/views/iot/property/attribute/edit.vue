@@ -65,7 +65,7 @@ const typesData = ref([{
 	name:'日期',
 },{
 	value:'file',
-	name:'上传文件',
+	name:'上传图片',
 }])
 const baseForm = {
 	id: undefined,

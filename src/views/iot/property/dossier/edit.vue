@@ -125,7 +125,7 @@
     deviceCategory: '',
     installTime: '',
     deptId: '',
-    data: '',
+    data: [],
 
   };
 
@@ -166,6 +166,7 @@
 
   const resetForm = async () => {
     Object.assign(formData, { ...baseForm });
+    Datalist.value=''
     formRef.value && formRef.value.resetFields();
   };
 
