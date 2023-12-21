@@ -193,6 +193,13 @@ export default defineComponent({
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
 
+      apiSystem.getInfoByKey('sys.device.phone.limit').then((res: any) => {
+        state.deviceImgLimit = parseInt(res.data.configValue);
+      });
+      apiSystem.getInfoByKey('sys.device.certificate.limit').then((res: any) => {
+        state.certificateLimit = parseInt(res.data.configValue);
+      });
+
       // 证书列表
       certApi.certificateManagement.getAll().then((res: any) => {
         certList.value = res.Info || []
@@ -304,15 +311,6 @@ export default defineComponent({
       state.ruleForm.lat = data.lat;
       state.ruleForm.address = data.address;
     }
-
-    onMounted(() => {
-      apiSystem.getInfoByKey('sys.device.phone.limit').then((res: any) => {
-        state.deviceImgLimit = parseInt(res.data.configValue);
-      });
-      apiSystem.getInfoByKey('sys.device.certificate.limit').then((res: any) => {
-        state.certificateLimit = parseInt(res.data.configValue);
-      });
-    })
 
     return {
       certList,

@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="nover">
+  <el-card shadow="nover" class="page-full">
     <div class="search">
       <el-form :inline="true">
         <el-form-item>
@@ -12,7 +12,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" style="width: 100%" v-loading="loading">
+    <el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
       <el-table-column type="index" label="序号" width="60" align="center" />
       <el-table-column prop="id" label="ID" show-overflow-tooltip></el-table-column>
       <el-table-column prop="projectName" label="大屏名称" show-overflow-tooltip></el-table-column>

@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="nover">
+  <el-card shadow="nover" class="page-full">
     <div class="search">
       <el-form :inline="true">
         <el-form-item>
@@ -22,7 +22,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+    <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading" max-height="calc(100vh - 255px)">
       <!-- <el-table-column type="index" label="序号" width="60" align="center" /> -->
       <el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
       <el-table-column prop="name" label="组态图名称" show-overflow-tooltip></el-table-column>

@@ -52,53 +52,75 @@
       </el-col>
       <el-col :span="18" class="h-full">
         <el-card shadow="nover" class="h-full" v-if="treeDetail.name">
-          <el-tabs v-model="tabName" @tab-click="onTabClick">
-            <el-tab-pane label="设备树信息" name="1">
-              <table>
-                <tbody>
-                  <tr class="ant-descriptions-row">
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">名称</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.name }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">地址</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.address }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">经度</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lng }}</td>
-                  </tr>
-                  <tr class="ant-descriptions-row">
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">纬度</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lat }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系人</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
-                  </tr>
-                  <tr class="ant-descriptions-row">
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
-                    <td class="ant-descriptions-item-content" colspan="1">
-                      <el-image :src="treeDetail.image" v-if="treeDetail.image" />
-                    </td>
-                  </tr>
-                  <tr class="ant-descriptions-row">
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
-                    <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
-                  </tr>
-                  <tr class="ant-descriptions-row">
-                    <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
-                    <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </el-tab-pane>
-            <el-tab-pane label="时间周期" name="2">
-              <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
+          <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
+            <el-tabs v-model="tabName" @tab-click="onTabClick">
+              <el-tab-pane label="设备树信息" name="1">
+                <el-descriptions class="margin-top" :column="3" size="default" border>
+                  <el-descriptions-item label="名称">{{ treeDetail.name }}</el-descriptions-item>
+                  <el-descriptions-item label="设备标识">{{ treeDetail.deviceKey }}</el-descriptions-item>
+                  <el-descriptions-item label="联系人">{{ treeDetail.contact }}</el-descriptions-item>
+                  <el-descriptions-item label="经纬度">{{ treeDetail.lng }}, {{ treeDetail.lat }}</el-descriptions-item>
+                  <el-descriptions-item label="联系电话">{{ treeDetail.phone }}</el-descriptions-item>
+                  <el-descriptions-item label="类型">{{ treeDetail.types }}</el-descriptions-item>
+                  <el-descriptions-item label="服务周期" span="2">{{ treeDetail.startDate }} - {{ treeDetail.endDate }}</el-descriptions-item>
+                  <el-descriptions-item label="图片">
+                    <el-image :src="treeDetail.image" :previewSrcList="[treeDetail.image]" style="width: 60px;height: 60px;">
+                      <template #error>
+                        <div class="image-slot">
+                          <ele-Picture style="width: 30px;" />
+                          加载失败
+                        </div>
+                      </template>
+                    </el-image>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="地址">{{ treeDetail.address }}</el-descriptions-item>
+                  <el-descriptions-item label="所属公司">{{ treeDetail.company }}</el-descriptions-item>
+                  <el-descriptions-item label="设备所属区域">{{ treeDetail.area }}</el-descriptions-item>
+                </el-descriptions>
+                <!-- <table>
+                  <tbody>
+                    <tr class="ant-descriptions-row">
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">名称</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.name }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">地址</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.address }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">经度</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lng }}</td>
+                    </tr>
+                    <tr class="ant-descriptions-row">
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">纬度</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.lat }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系人</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.contact }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">联系电话</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.phone }}</td>
+                    </tr>
+                    <tr class="ant-descriptions-row">
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：开始日期</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.startDate }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">服务周期：截止日期</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.endDate }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">图片</th>
+                      <td class="ant-descriptions-item-content" colspan="1">
+                        <el-image :src="treeDetail.image" v-if="treeDetail.image" />
+                      </td>
+                    </tr>
+                    <tr class="ant-descriptions-row">
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备标识</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.deviceKey }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">设备所属区域</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.area }}</td>
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属公司</th>
+                      <td class="ant-descriptions-item-content" colspan="1">{{ treeDetail.company }}</td>
+                    </tr>
+                    <tr class="ant-descriptions-row">
+                      <th class="ant-descriptions-item-label ant-descriptions-item-colon">类型</th>
+                      <td class="ant-descriptions-item-content" colspan="5">{{ treeDetail.types }}</td>
+                    </tr>
+                  </tbody>
+                </table> -->
+              </el-tab-pane>
+              <el-tab-pane label="时间周期" name="2">
                 <el-form-item label="开始日期" prop="startDate">
                   <el-date-picker v-model="ruleForm.startDate" type="date" placeholder="选择开始日期" class="w-35" :size="'default'" />
                 </el-form-item>
@@ -118,22 +140,22 @@
                 <el-form-item label=" " prop="category">
                   <el-button type="primary" v-auth="'save'" @click="onSaveTime">保存</el-button>
                 </el-form-item>
-              </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="绑定实际设备" name="3">
-              <el-form-item label="选择设备" prop="deviceKey">
-                <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
-                  <el-option v-for="item in deviceList" :key="item.key" :label="item.name" :value="item.key">
-                    <span style="float: left">{{ item.name }}</span>
-                    <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label=" " prop="category">
-                <el-button type="primary" v-auth="'save'" @click="onSaveTime">保存</el-button>
-              </el-form-item>
-            </el-tab-pane>
-          </el-tabs>
+              </el-tab-pane>
+              <el-tab-pane label="绑定实际设备" name="3">
+                <el-form-item label="选择设备" prop="deviceKey">
+                  <el-select v-model="ruleForm.deviceKey" filterable placeholder="请选择设备">
+                    <el-option v-for="item in deviceList" :key="item.key" :label="item.name" :value="item.key">
+                      <span style="float: left">{{ item.name }}</span>
+                      <!-- <span style="float: right; font-size: 13px">{{ item.key }}</span> -->
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label=" " prop="category">
+                  <el-button type="primary" v-auth="'save'" @click="onSaveTime">保存</el-button>
+                </el-form-item>
+              </el-tab-pane>
+            </el-tabs>
+          </el-form>
         </el-card>
       </el-col>
     </el-row>
@@ -281,9 +303,9 @@ export default defineComponent({
       getTreeDetail(state.currentTree)
     }
     const onTabClick = () => {
-      ruleForm.value.startDate = ''
-      ruleForm.value.endDate = ''
-      ruleForm.value.deviceKey = ''
+      // ruleForm.value.startDate = ''
+      // ruleForm.value.endDate = ''
+      // ruleForm.value.deviceKey = ''
     }
     const onSaveTime = () => {
       if (!state.treeDetail.id) {
