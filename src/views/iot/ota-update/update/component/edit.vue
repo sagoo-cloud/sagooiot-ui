@@ -99,6 +99,7 @@ import api from '/@/api/ota';
 import getOrigin from '/@/utils/origin';
 import { checkVersion } from '/@/utils/validator';
 import apiSystem from "/@/api/system";
+import apiProduct from "/@/api/device"
 import EditConfig from "/@/views/iot/ota-update/module/component/edit.vue";
 import ProductBind from "/@/views/iot/ota-update/update/component/productBind.vue";
 
@@ -204,6 +205,13 @@ export default defineComponent({
         });
         selectChange(row.productId);
         state.ruleForm = row;
+        // 获取产品名称
+        apiProduct.product.detail(state.ruleForm.productId).then((res: any) => {
+          if (res.data) {
+            state.productNameShow = true;
+            state.productName = res.data.name;
+          }
+        })
       }
 
       // 获取产品列表
