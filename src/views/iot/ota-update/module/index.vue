@@ -38,7 +38,13 @@
         <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />
         <el-table-column label="模块名称" v-col="'name'" prop="name" show-overflow-tooltip />
         <el-table-column label="模块别名" v-col="'nameAs'" prop="nameAs" show-overflow-tooltip />
-        <el-table-column label="所属产品" v-col="'ProductName'" prop="ProductName" width="260" />
+        <el-table-column label="所属产品" v-col="'ProductName'" align="center" show-overflow-tooltip>
+          <template #default="scope">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productId" class="link-type">
+              <span>{{ scope.row.ProductName }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createdAt" align="center" />
         <el-table-column label="操作" width="100" v-col="'handle'" align="center" fixed="right">
           <template #default="scope">

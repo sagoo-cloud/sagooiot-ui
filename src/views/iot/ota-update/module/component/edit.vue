@@ -3,7 +3,7 @@
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'模块'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
 				<el-form-item label="所属产品" prop="productId">
-					<el-select v-model="ruleForm.productId" placeholder="请选择产品">
+					<el-select v-model="ruleForm.productId" filterable placeholder="请选择产品">
 						<el-option v-for="item in productData" :key="item.name" :label="item.name" :value="item.id.toString()" />
 					</el-select>
 				</el-form-item>
@@ -70,7 +70,7 @@ export default defineComponent({
       resetForm();
       if (row) {
         api.module.detail(row.id).then((res: any) => {
-          const data: RuleFormState = res.data.data;
+          const data: RuleFormState = res;
           state.ruleForm = data;
         });
 		

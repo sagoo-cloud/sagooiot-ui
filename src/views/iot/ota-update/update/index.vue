@@ -44,7 +44,13 @@
             <el-tag  type="info" size="small" v-if="scope.row.types == 2">差分</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="所属产品" v-col="'productName'" prop="productName" show-overflow-tooltip />
+        <el-table-column label="所属产品" v-col="'productName'" align="center" show-overflow-tooltip>
+          <template #default="scope">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productId" class="link-type">
+              <span>{{ scope.row.productName }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
         <el-table-column label="模块名称" v-col="'moduleName'" prop="moduleName" show-overflow-tooltip />
         <el-table-column label="状态" prop="checkres" v-col="'checkres'" width="120" align="center">
           <template #default="scope">

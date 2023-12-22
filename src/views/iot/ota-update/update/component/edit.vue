@@ -27,7 +27,7 @@
         </el-form-item>
 
         <el-form-item label="升级包模块" prop="module">
-          <el-select v-model="ruleForm.module" placeholder="请选择升级包模块">
+          <el-select v-model="ruleForm.module" filterable placeholder="请选择升级包模块">
             <el-option v-for="item in moduleData" :key="item.id" :label="item.name" :value="item.id.toString()" />
           </el-select>
 
@@ -224,11 +224,13 @@ export default defineComponent({
 
       // 获取上传格式
       apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
-        let fileType = res.data.configValue.split(",");
-        for (let i = 0; i < fileType.length; i++) {
-          fileType[i] = '.' + fileType[i];
+        if (res.data) {
+          let fileType = res.data.configValue.split(",");
+          for (let i = 0; i < fileType.length; i++) {
+            fileType[i] = '.' + fileType[i];
+          }
+          state.fileAccept = fileType;
         }
-        state.fileAccept = fileType;
       });
     };
     const resetForm = () => {

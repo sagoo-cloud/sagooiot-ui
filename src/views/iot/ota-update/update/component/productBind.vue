@@ -131,10 +131,12 @@ export default defineComponent({
     const changeSelect = () => {
       nextTick(() => {
         state.tableData.data.forEach((item) => {
-          if (state.checkIdList.includes(item.id)) {
-            proxy.$refs.multipleTable.toggleRowSelection(item, true);
+          if (state.checkIdList) {
+            if (state.checkIdList.includes(item.id)) {
+              proxy.$refs.multipleTable.toggleRowSelection(item, true);
+            }
           }
-        })
+        });
       });
     };
 
