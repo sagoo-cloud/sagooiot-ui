@@ -51,7 +51,13 @@
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column label="模块名称" v-col="'moduleName'" prop="moduleName" show-overflow-tooltip />
+        <el-table-column label="模块名称" v-col="'moduleName'" align="center" show-overflow-tooltip>
+          <template #default="scope">
+            <router-link :to="'/iotmanager/operation/ota/module'" class="link-type">
+              <span>{{ scope.row.moduleName }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
         <el-table-column label="状态" prop="checkres" v-col="'checkres'" width="120" align="center">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.checkres == 1">验证</el-tag>

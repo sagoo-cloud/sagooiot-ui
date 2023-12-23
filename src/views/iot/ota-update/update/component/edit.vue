@@ -323,6 +323,7 @@ export default defineComponent({
     // 获取产品回显数据
     const getProductTableData = (deviceIdList: any, deviceNameList: any) => {
       state.ruleForm.productId = deviceIdList[0];
+      selectChange(deviceIdList[0]);
       state.productName = deviceNameList[0];
       state.productNameShow = true;
     }
