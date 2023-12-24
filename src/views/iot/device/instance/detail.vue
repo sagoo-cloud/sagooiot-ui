@@ -54,7 +54,7 @@
 
                   {{getValueText(item.key,item.value)}}
                   <!-- {{ item.value }}{{ item.unit }} -->
-                  
+
                 </div>
                 <div v-else>
                   <div class="oblist" v-for="(vare, name) in item.value">
@@ -375,7 +375,7 @@
           </el-form>
         </el-tab-pane>
 
-  
+
 
       </el-tabs>
     </div>
@@ -543,7 +543,7 @@ export default defineComponent({
     });
 
     function initData() {
-      
+
       const ids = route.params && route.params.id;
       api.instance.detail(ids).then((res: any) => {
         state.detail = res.data;
@@ -811,7 +811,7 @@ export default defineComponent({
         getrunData();
       }
     };
- 
+
     const getValueText=(key, value)=>{
       let data =array_list.value;
       for (let i = 0; i < data.length; i++) {
@@ -867,15 +867,15 @@ export default defineComponent({
     }
 
     const getrunData = () => {
-      
-      api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
+
+      api.instance.getrun_status({ deviceKey: state.detail.key }).then((res: any) => {
         state.areaData = res
         let properties = state.areaData.properties || [];
 
         var temp = new Array();
 
         properties.forEach(function (item, index) {
-          
+
           let datalist = item.list || [];
           temp[index] = [];
           var temps = new Array();

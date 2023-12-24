@@ -25,7 +25,7 @@
 		</el-dialog>
 	</div>
 </template>
- 
+
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import { Close } from '@element-plus/icons-vue';
@@ -54,7 +54,7 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-			id: number;
+      deviceKey: string;
 		};
 	};
 }
@@ -73,16 +73,16 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					id: 0,
+          deviceKey: '',
 					propertyKey: '',
 				},
 			},
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, devid) => {
+		const openDialog = (row: RuleFormState | null, deviceKey) => {
 			resetForm();
 			if (row) {
-				state.tableData.param.id = devid;
+				state.tableData.param.deviceKey = deviceKey;
 				state.tableData.param.propertyKey = row.key
 				typeList();
 

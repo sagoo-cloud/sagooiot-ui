@@ -578,7 +578,7 @@ export default defineComponent({
 		};
 
 		const getrunData = () => {
-			api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
+			api.instance.getrun_status({ deviceKey: state.detail.key }).then((res: any) => {
 				state.areaData = res;
 				let properties = state.areaData.properties || [];
 
@@ -621,12 +621,12 @@ export default defineComponent({
 
 		const CkOption = () => {
 			if (state.developer_status == 2) {
-				api.instance.devoffline({ id: state.detail.id }).then((res: any) => {
+				api.instance.devoffline({ deviceKey: state.detail.key }).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 1;
 				});
 			} else {
-				api.instance.devonline({ id: state.detail.id }).then((res: any) => {
+				api.instance.devonline({ deviceKey: state.detail.key }).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 2;
 				});
