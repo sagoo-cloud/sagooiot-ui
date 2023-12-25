@@ -685,7 +685,7 @@ export default defineComponent({
 
     //查看日志列表
     const onOpenListDetail = (row: TableDataRow) => {
-      listDicRef.value.openDialog(row, state.detail.id);
+      listDicRef.value.openDialog(row, state.detail.key);
     };
 
     // 打开修改产品弹窗
