@@ -304,7 +304,7 @@ export default defineComponent({
 				data.push({ name: getname[i], value: getvalue[i] });
 			}
 
-			const colorList = ['#FF0000', '#FEC279', '#968AF5', '#51A3FC', '#36C78B',];
+			const colorList = ['#FF0000', '#FEC279', '#968AF5', '#51A3FC', '#669',];
 			const color = state.pieChartLevel.map(level => colorList[level - 1])
 
 			const option = {
