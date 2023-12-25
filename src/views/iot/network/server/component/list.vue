@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table v-loading="loading" :data="data" style="width: 100%" max-height="calc(100vh - 255px)">
+    <el-table v-loading="loading" :data="data" style="width: 100%" max-height="calc(100vh - 270px)">
       <el-table-column align="center" prop="id" label="ID" width="100" v-col="'id'" />
       <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
       <el-table-column align="center" prop="name" label="名称" v-col="'name'" />
