@@ -1,53 +1,37 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div>
-        <el-row>
-          <el-col :span="12"   v-for="item in notice_send_gateway"  >
-            <div class="ant-cards " v-if="item.status==1">
-              <div class="ant-card-body line">
-                <div class="content">
-                  <div class="left">
-                    <img
-                      :src="'/imgs/notice/'+item.value+'.svg'"
-                      alt="dingding"
-                      style="height: 100px;width: 100px;"
-                      v-col="'image'"
-                    />
-                    <div class="context">
-                      <div class="title" v-col="'title'">{{item.label}}</div>
-                      <div class="desc" v-col="'desc'">
-                        {{item.remark}}
-                      </div>
+      <el-row>
+        <el-col :span="12" v-for="item in notice_send_gateway">
+          <div class="ant-cards " v-if="item.status == 1">
+            <div class="ant-card-body line">
+              <div class="content">
+                <div class="left">
+                  <img :src="'/imgs/notice/' + item.value + '.svg'" alt="dingding" style="height: 100px;width: 100px;" v-col="'image'" />
+                  <div class="context">
+                    <div class="title" v-col="'title'">{{ item.label }}</div>
+                    <div class="desc" v-col="'desc'">
+                      {{ item.remark }}
                     </div>
                   </div>
-                   <div class="right"  v-col="'handle'">
-                    <div
-                      class="ant-space ant-space-horizontal ant-space-align-center"
-                      style="gap: 8px;"
-                    >
-                      <div class="ant-space-item" style="" v-auth="'setting'">
-                        <router-link :to="'/iotmanager/noticeservices/config/setting/'+item.value" class="link-type" >
+                </div>
+                <div class="right" v-col="'handle'">
+                  <div class="ant-space ant-space-horizontal ant-space-align-center" style="gap: 8px;">
+                    <div class="ant-space-item" style="" v-auth="'setting'">
+                      <router-link :to="'/iotmanager/noticeservices/config/setting/' + item.value" class="link-type">
                         <div class="action">
-                            <div class="btn">
-                              <img
-                                src="/imgs/notice/icon_m.png"
-                                style="height: 40px;width: 40px;"
-                              />
-                              <div>管理</div>
-                            </div>
+                          <div class="btn">
+                            <img src="/imgs/notice/icon_m.png" style="height: 40px;width: 40px;" />
+                            <div>管理</div>
+                          </div>
                         </div>
-                        </router-link>
-                      </div>
-                      <div class="ant-space-item" v-auth="'edit'">
-                        <div class="action" @click="onOpenEdit(item)">
-                            <div class="btn">
-                              <img
-                              src="/imgs/notice/icon_c.png"
-                                style="height: 40px;width: 40px;"
-                              />
-                              <div>配置</div>
-                            </div>
+                      </router-link>
+                    </div>
+                    <div class="ant-space-item" v-auth="'edit'">
+                      <div class="action" @click="onOpenEdit(item)">
+                        <div class="btn">
+                          <img src="/imgs/notice/icon_c.png" style="height: 40px;width: 40px;" />
+                          <div>配置</div>
                         </div>
                       </div>
                     </div>
@@ -55,19 +39,18 @@
                 </div>
               </div>
             </div>
-          </el-col>
-
-        </el-row>
-      </div>
+          </div>
+        </el-col>
+      </el-row>
     </el-card>
 
-   <EditDic ref="editDicRef" @dataList="dataList" />
-	 <!--<LevelDic ref="levelDicRef" @dataList="dataList" />-->
+    <EditDic ref="editDicRef" @dataList="dataList" />
+    <!--<LevelDic ref="levelDicRef" @dataList="dataList" />-->
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent,getCurrentInstance } from "vue";
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from "vue";
 import { ElMessageBox, ElMessage, FormInstance } from "element-plus";
 import EditDic from './component/edit.vue';
 // import LevelDic from './component/level.vue';
@@ -99,7 +82,7 @@ interface TableDataState {
 
 export default defineComponent({
   name: "setlist",
-   components: { EditDic },
+  components: { EditDic },
 
   setup() {
     const addDicRef = ref();
@@ -178,7 +161,7 @@ export default defineComponent({
             dataList();
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     };
 
     // 页面加载时
@@ -225,10 +208,12 @@ export default defineComponent({
 </script>
 
 <style>
-.line{
-  border: 1px solid var(--next-border-color-light);;
+.line {
+  border: 1px solid var(--next-border-color-light);
+  ;
 
 }
+
 .ant-cards {
   box-sizing: border-box;
   margin: 0;
@@ -243,6 +228,7 @@ export default defineComponent({
   border-radius: 2px;
   padding: 10px;
 }
+
 .ant-card-body {
   padding: 24px;
 
@@ -251,9 +237,11 @@ export default defineComponent({
 .ant-space {
   display: inline-flex;
 }
+
 .ant-space-align-center {
   align-items: center;
 }
+
 .ant-btn {
   line-height: 1.5715;
   position: relative;
@@ -275,12 +263,14 @@ export default defineComponent({
   border-radius: 2px;
 
 }
+
 .ant-btn-link {
   color: #5b8fd9;
   border-color: transparent;
   background: transparent;
   box-shadow: none;
 }
+
 .context {
   display: flex;
   flex-direction: column;
@@ -288,9 +278,11 @@ export default defineComponent({
   height: 100px;
   margin-left: 15px;
 }
+
 .context .title {
   font-size: 24px;
 }
+
 .context .desc {
   font-size: 14px;
 }
@@ -300,9 +292,11 @@ export default defineComponent({
   align-items: center;
   justify-content: space-between;
 }
+
 .content .left {
   display: flex;
 }
+
 .content .right .action {
   display: flex;
   justify-content: center;
@@ -310,6 +304,7 @@ export default defineComponent({
   height: 100px;
   border: 1px solid #5b8fd9;
 }
+
 .content .right .action .btn {
   display: flex;
   flex-direction: column;

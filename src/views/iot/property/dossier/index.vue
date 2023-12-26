@@ -1,7 +1,6 @@
 <template>
-	<div>
-	<el-card shadow="nover">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
 				<el-form-item label="名称：" prop="keyWord">
 					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable size="default" style="width: 240px" />
@@ -38,45 +37,44 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<el-row>
-			<el-col :span="6">
-				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee; padding: 10px; margin-right: 10px">
-					<template #default="{ node, data }">
-						<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-							<el-icon v-if="data.is_type == '2'">
-								<Check />
-							</el-icon>
-							{{ node.label }}
-						</span>
-					</template>
-				</el-tree>
-			</el-col>
-			<el-col :span="18"><el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
-					<el-table-column type="selection" width="55" align="center" />
-
-					<el-table-column prop="deviceName" v-col="'deviceName'" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="deviceKey" v-col="'deviceKey'" label="设备KEY" show-overflow-tooltip></el-table-column>
-
-					<el-table-column prop="deviceNumber" v-col="'deviceNumber'" label="设备编码" show-overflow-tooltip></el-table-column>
-
-					<el-table-column prop="deviceCategory" v-col="'deviceCategory'" label="设备类型" show-overflow-tooltip></el-table-column>
-
-					<el-table-column prop="installTime" v-col="'installTime'" label="安装时间" width="160" align="center"></el-table-column>
-					<el-table-column label="操作" width="200" align="center">
-						<template #default="scope">
-							<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-
-							<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+			<el-row :gutter="16">
+				<el-col :span="6">
+					<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee; padding: 10px; margin-right: 10px">
+						<template #default="{ node, data }">
+							<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
+								<el-icon v-if="data.is_type == '2'">
+									<Check />
+								</el-icon>
+								{{ node.label }}
+							</span>
 						</template>
-					</el-table-column>
-				</el-table>
-				<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-			</el-col>
-		</el-row>
+					</el-tree>
+				</el-col>
+				<el-col :span="18"><el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
+						<el-table-column type="selection" width="55" align="center" />
 
-		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-	</el-card>
+						<el-table-column prop="deviceName" v-col="'deviceName'" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="deviceKey" v-col="'deviceKey'" label="设备KEY" show-overflow-tooltip></el-table-column>
+
+						<el-table-column prop="deviceNumber" v-col="'deviceNumber'" label="设备编码" show-overflow-tooltip></el-table-column>
+
+						<el-table-column prop="deviceCategory" v-col="'deviceCategory'" label="设备类型" show-overflow-tooltip></el-table-column>
+
+						<el-table-column prop="installTime" v-col="'installTime'" label="安装时间" width="160" align="center"></el-table-column>
+						<el-table-column label="操作" width="200" align="center">
+							<template #default="scope">
+								<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
+
+								<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+				</el-col>
+			</el-row>
+
+			<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
+		</el-card>
 	</div>
 </template>
 

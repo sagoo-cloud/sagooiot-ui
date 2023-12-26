@@ -7,8 +7,8 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-	<div class="page page-full">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :model="params" :inline="true" ref="queryRef" @submit.prevent>
 				<el-form-item label="设备名称" prop="title">
 					<el-input v-model="params.title" placeholder="请输入设备名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
@@ -34,27 +34,27 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
-			<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
-			<el-table-column v-col="'title'" prop="title" label="设备名称" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'commonAddr'" prop="commonAddr" label="设备通用地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'subCode'" prop="subCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'templateNumber'" prop="templateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'productKey'" prop="productKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'deviceKey'" prop="deviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'number'" prop="number" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" min-width="160" align="center"></el-table-column>
-			<el-table-column v-col="'updatedAt'" prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
-			<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
-				<template #default="scope">
-					<el-button size="small" v-auth="'del'" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
-					<el-button size="small" v-auth="'detail'" text type="info" @click="onDel(scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-		<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
+			<el-table :data="tableData" style="width: 100%" v-loading="loading">
+				<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
+				<el-table-column v-col="'title'" prop="title" label="设备名称" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'commonAddr'" prop="commonAddr" label="设备通用地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'subCode'" prop="subCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'templateNumber'" prop="templateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'productKey'" prop="productKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'deviceKey'" prop="deviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'number'" prop="number" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" min-width="160" align="center"></el-table-column>
+				<el-table-column v-col="'updatedAt'" prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
+				<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
+					<template #default="scope">
+						<el-button size="small" v-auth="'del'" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
+						<el-button size="small" v-auth="'detail'" text type="info" @click="onDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+			<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
+		</el-card>
 	</div>
 </template>
 

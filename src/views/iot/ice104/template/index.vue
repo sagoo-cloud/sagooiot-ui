@@ -7,8 +7,8 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-	<div class="page page-full">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :model="params" :inline="true" ref="queryRef">
 				<el-form-item label="模版名称" prop="title">
 					<el-input v-model="params.title" placeholder="请输入模版名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
@@ -34,27 +34,27 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<el-table :data="tableData" style="width: 100%" v-loading="loading">
-			<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
-			<el-table-column v-col="'title'" prop="title" label="模版名称" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'number'" prop="number" label="模版编码" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'status'" prop="status" label="状态" align="center" show-overflow-tooltip>
-				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status == 1">启用</el-tag>
-					<el-tag type="info" size="small" v-if="scope.row.status == 0">停用</el-tag>
-				</template>
-			</el-table-column>
-			<el-table-column v-col="'remarks'" prop="remarks" label="备注" align="center" show-overflow-tooltip></el-table-column>
-			<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
-				<template #default="scope">
-					<el-button v-auth="'detail'" size="small" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
-					<el-button v-auth="'del'" size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
-		<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
+			<el-table :data="tableData" style="width: 100%" v-loading="loading">
+				<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
+				<el-table-column v-col="'title'" prop="title" label="模版名称" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'number'" prop="number" label="模版编码" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'status'" prop="status" label="状态" align="center" show-overflow-tooltip>
+					<template #default="scope">
+						<el-tag type="success" size="small" v-if="scope.row.status == 1">启用</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.status == 0">停用</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column v-col="'remarks'" prop="remarks" label="备注" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
+					<template #default="scope">
+						<el-button v-auth="'detail'" size="small" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
+						<el-button v-auth="'del'" size="small" text type="info" @click="onDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
+			<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
+		</el-card>
 	</div>
 </template>
 

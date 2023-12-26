@@ -1,5 +1,5 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover" v-loading="batchLoading">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" :inline="true">
@@ -88,7 +88,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading" max-height="calc(100vh - 320px)">
+      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'" />
         <el-table-column label="设备名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />

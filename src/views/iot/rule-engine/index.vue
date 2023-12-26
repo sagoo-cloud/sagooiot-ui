@@ -1,6 +1,6 @@
 <template>
-	<el-card shadow="nover" class="page-full">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :inline="true">
 				<el-form-item>
 					<el-button type="primary" v-auth="'add'" @click="addOrEdit()">
@@ -11,31 +11,31 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
-			<el-table-column type="index" label="序号" width="80" align="center" />
-			<el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="expound" label="说明" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
-			<el-table-column prop="status" label="状态" width="100" align="center">
-				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status == 1">已启动</el-tag>
-					<el-tag type="info" size="small" v-else>已停止</el-tag>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" width="200" align="center">
-				<template #default="scope">
-					<el-button size="small" text type="info" v-auth="'startOrStop'" v-if="scope.row.status" @click="setStatus(scope.row, 0)">停止</el-button>
-					<el-button size="small" text type="primary" v-auth="'startOrStop'" v-else @click="setStatus(scope.row, 1)">启动</el-button>
-					<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-					<el-button size="small" text type="warning" @click="edit(scope.row)">规则编辑</el-button>
-					<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-		<EditForm ref="editFormRef" @getList="getList(1)" :types="0"></EditForm>
-	</el-card>
+			<el-table :data="tableData" style="width: 100%" v-loading="loading">
+				<el-table-column type="index" label="序号" width="80" align="center" />
+				<el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="expound" label="说明" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
+				<el-table-column prop="status" label="状态" width="100" align="center">
+					<template #default="scope">
+						<el-tag type="success" size="small" v-if="scope.row.status == 1">已启动</el-tag>
+						<el-tag type="info" size="small" v-else>已停止</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" width="200" align="center">
+					<template #default="scope">
+						<el-button size="small" text type="info" v-auth="'startOrStop'" v-if="scope.row.status" @click="setStatus(scope.row, 0)">停止</el-button>
+						<el-button size="small" text type="primary" v-auth="'startOrStop'" v-else @click="setStatus(scope.row, 1)">启动</el-button>
+						<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
+						<el-button size="small" text type="warning" @click="edit(scope.row)">规则编辑</el-button>
+						<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+			<EditForm ref="editFormRef" @getList="getList(1)" :types="0"></EditForm>
+		</el-card>
+	</div>
 </template>
 
 <script lang="ts" setup>

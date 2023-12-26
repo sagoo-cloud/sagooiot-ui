@@ -1,5 +1,5 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover">
       <h2>远程配置</h2>
       <div class="container">

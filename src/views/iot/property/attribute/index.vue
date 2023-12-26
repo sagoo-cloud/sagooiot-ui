@@ -1,12 +1,10 @@
 <template>
-	<div>
-	<el-card shadow="nover">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
 				<el-form-item label="关键字：" prop="keyWord">
 					<el-input v-model="params.keyWord" placeholder="请输入关键字" clearable size="default" style="width: 240px" />
 				</el-form-item>
-
 				<el-form-item>
 					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
@@ -22,9 +20,6 @@
 						</el-icon>
 						新增属性
 					</el-button>
-
-
-
 					<el-button type="danger" @click="batchdel()" v-auth="'batchdel'">
 						<el-icon>
 							<ele-FolderAdd />
@@ -33,45 +28,44 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<el-row>
-			<el-col :span="6">
-				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;">
-					<template #default="{ node, data }">
-						<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-							<el-icon v-if="data.is_type == '2'">
-								<Expand />
-							</el-icon>
-							{{ node.label }}
-						</span>
-					</template>
-				</el-tree>
-			</el-col>
-			<el-col :span="18"><el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" row-key="id" v-loading="loading">
-					<el-table-column type="selection" width="55" align="center" />
-
-					<el-table-column prop="id" v-col="'id'" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="name" v-col="'name'" label="字段名称" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="title" v-col="'title'" label="字段标题" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="types" v-col="'types'" label="字段类型" show-overflow-tooltip></el-table-column>
-
-
-					<el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="160" align="center"></el-table-column>
-					<el-table-column label="操作" width="200" align="center">
-						<template #default="scope">
-
-							<el-button size="small" text v-auth="'edit'" type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
-
-							<el-button size="small" text v-auth="'del'" type="info" @click="del(scope.row)">删除</el-button>
+			<el-row :gutter="16">
+				<el-col :span="6">
+					<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;">
+						<template #default="{ node, data }">
+							<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
+								<el-icon v-if="data.is_type == '2'">
+									<Expand />
+								</el-icon>
+								{{ node.label }}
+							</span>
 						</template>
-					</el-table-column>
-				</el-table>
-				<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-			</el-col>
-		</el-row>
+					</el-tree>
+				</el-col>
+				<el-col :span="18"><el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" row-key="id" v-loading="loading">
+						<el-table-column type="selection" width="55" align="center" />
 
-		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-	</el-card>
+						<el-table-column prop="id" v-col="'id'" label="ID" min-width="100" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="name" v-col="'name'" label="字段名称" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="title" v-col="'title'" label="字段标题" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="types" v-col="'types'" label="字段类型" show-overflow-tooltip></el-table-column>
+
+
+						<el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="160" align="center"></el-table-column>
+						<el-table-column label="操作" width="200" align="center">
+							<template #default="scope">
+
+								<el-button size="small" text v-auth="'edit'" type="warning" @click="addOrEdit(scope.row)">编辑</el-button>
+
+								<el-button size="small" text v-auth="'del'" type="info" @click="del(scope.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+				</el-col>
+			</el-row>
+
+			<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
+		</el-card>
 	</div>
 </template>
 

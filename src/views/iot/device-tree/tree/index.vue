@@ -1,6 +1,6 @@
 <template>
-  <el-card shadow="nover" class="page-full">
-    <el-row :gutter="10" class="h-full">
+  <div class="page page-full">
+    <el-row :gutter="16" class="h-full">
       <el-col :span="6" class="h-full">
         <el-card shadow="nover" class="h-full">
           <el-scrollbar v-loading="treeLoading">
@@ -160,7 +160,7 @@
       </el-col>
     </el-row>
     <AddOrUpdate ref="addOrUpdateRef" @finish="onFinish" />
-  </el-card>
+  </div>
 </template>
 
 <script lang="ts">
