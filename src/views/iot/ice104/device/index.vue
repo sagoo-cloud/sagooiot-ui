@@ -8,55 +8,52 @@
 -->
 <template>
 	<div class="page page-full">
-		<el-card shadow="nover" class="page-full-part">
-			<div class="search">
-				<el-form :model="params" :inline="true" ref="queryRef" @submit.prevent>
-					<el-form-item label="设备名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入设备名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
-					</el-form-item>
-					<el-form-item>
-						<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button v-auth="'reset'" size="default" @click="resetQuery()">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button v-auth="'add'" type="primary" @click="addOrEdit()">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增设备
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<el-table :data="tableData" style="width: 100%" v-loading="loading">
-				<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
-				<el-table-column v-col="'title'" prop="title" label="设备名称"  align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'commonAddr'" prop="commonAddr" label="设备通用地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'subCode'" prop="subCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'templateNumber'" prop="templateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'productKey'" prop="productKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'deviceKey'" prop="deviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
-
-				<el-table-column v-col="'number'" prop="number" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" min-width="160" align="center"></el-table-column>
-				<el-table-column v-col="'updatedAt'" prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
-				<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
-					<template #default="scope">
-						<el-button size="small" v-auth="'del'" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
-						<el-button size="small" v-auth="'detail'" text type="info" @click="onDel(scope.row)">删除</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
-			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-		</el-card>
+		<div class="search">
+			<el-form :model="params" :inline="true" ref="queryRef" @submit.prevent>
+				<el-form-item label="设备名称" prop="title">
+					<el-input v-model="params.title" placeholder="请输入设备名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
+				</el-form-item>
+				<el-form-item>
+					<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button v-auth="'reset'" size="default" @click="resetQuery()">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button v-auth="'add'" type="primary" @click="addOrEdit()">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增设备
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		<el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
+			<el-table-column v-col="'index'" type="index" label="序号" width="80" align="center" />
+			<el-table-column v-col="'title'" prop="title" label="设备名称" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'commonAddr'" prop="commonAddr" label="设备通用地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'subCode'" prop="subCode" label="mac地址" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'templateNumber'" prop="templateNumber" label="模版编号" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'productKey'" prop="productKey" label="产品key" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'deviceKey'" prop="deviceKey" label="设备key" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'number'" prop="number" label="设备编码" min-width="120" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" min-width="160" align="center"></el-table-column>
+			<el-table-column v-col="'updatedAt'" prop="updatedAt" label="更新时间" min-width="160" align="center"></el-table-column>
+			<el-table-column v-col="'handle'" fixed="right" label="操作" width="100" align="center">
+				<template #default="scope">
+					<el-button size="small" v-auth="'del'" text type="primary" @click="toDetailPage(scope.row)">详情</el-button>
+					<el-button size="small" v-auth="'detail'" text type="info" @click="onDel(scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
 		<EditForm ref="editFormRef" @updateList="getList(1)"></EditForm>
 	</div>
 </template>
@@ -107,7 +104,7 @@ const onDel = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.device.deleteItem({number: row.number});
+		await api.device.deleteItem({ number: row.number });
 		ElMessage.success('删除成功');
 		getList();
 	});
