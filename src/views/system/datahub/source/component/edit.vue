@@ -11,7 +11,7 @@
 				<el-input v-model="formData.desc" type="textarea" placeholder="请输入内容"></el-input>
 			</el-form-item>
 
-			<el-form-item label="数据来源" prop="from">
+			<el-form-item label="数据来源" prop="from" v-if="!formData.sourceId">
 				<el-radio-group v-model="formData.from">
 					<el-radio :label="1">api导入</el-radio>
 					<el-radio :label="4">设备</el-radio>
@@ -402,14 +402,14 @@ const onSubmit = async () => {
 
 	} else if (formData.from == 4) {
 		let form = {
-						sourceId: sourceId.value ? sourceId.value : '',
+						sourceId: formData.sourceId ? formData.sourceId : '',
 						key: formData.key,
 						name: formData.name,
 						desc: formData.desc,
 						from: formData.from,
 						config: formData.devconfig
 			};
-				const theApi = sourceId.value ? api.common.devedit : api.common.devadd
+				const theApi = formData.sourceId ? api.common.devedit : api.common.devadd
 				await theApi(form)
 				ElMessage.success('操作成功')
 				resetForm()
@@ -417,14 +417,14 @@ const onSubmit = async () => {
 				emit('typeList')
 	} else if (formData.from == 2) {
 		let form = {
-			sourceId: sourceId.value ? sourceId.value : '',
+			sourceId: formData.sourceId ? formData.sourceId : '',
 			key: formData.key,
 			name: formData.name,
 			desc: formData.desc,
 			from: formData.from,
 			config: formData.tabconfig
 		};
-		const theApi = sourceId.value ? api.common.dbedit : api.common.dbadd
+		const theApi = formData.sourceId ? api.common.dbedit : api.common.dbadd
 		await theApi(form)
 		ElMessage.success('操作成功')
 		resetForm()
@@ -441,6 +441,17 @@ const onSubmit = async () => {
 const resetForm = async () => {
 	Object.assign(formData, { ...baseForm })
 	formRef.value && formRef.value.resetFields()
+	requestParams.value = [
+		[
+			{
+				type: '',
+				key: '',
+				name: '',
+				value: '',
+			},
+		],
+	]
+
 }
 
 const openDialog = async (row: any) => {
