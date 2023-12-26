@@ -180,6 +180,7 @@
 import { ref, reactive, nextTick } from 'vue'
 import api from '/@/api/datahub';
 import { ruleRequired } from '/@/utils/validator'
+import 'vue3-json-viewer/dist/index.css';
 import vue3cron from '/@/components/vue3cron/vue3cron.vue';
 
 import { ElMessage } from 'element-plus'
