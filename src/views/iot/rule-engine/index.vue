@@ -1,14 +1,8 @@
 <template>
-	<el-card shadow="nover">
+	<el-card shadow="nover" class="page-full">
 		<div class="search">
 			<el-form :inline="true">
 				<el-form-item>
-					<!-- <el-button size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button> -->
 					<el-button type="primary" v-auth="'add'" @click="addOrEdit()">
 						<el-icon>
 							<ele-FolderAdd />
@@ -18,7 +12,7 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-table :data="tableData" style="width: 100%" v-loading="loading">
+		<el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
 			<el-table-column type="index" label="序号" width="80" align="center" />
 			<el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="expound" label="说明" show-overflow-tooltip></el-table-column>

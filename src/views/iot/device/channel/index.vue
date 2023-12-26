@@ -7,55 +7,54 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-	<div class="page">
-		<el-card shadow="nover">
-			<div class="search">
-				<el-form :model="params" :inline="true" ref="queryRef" @keyup.enter.native="getList(1)">
-					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="params.title" placeholder="请输入通道名称" clearable style="width: 240px" />
-					</el-form-item>
-					<el-form-item label="注册码" prop="number">
-						<el-input v-model="params.number" placeholder="请输入注册码" clearable style="width: 240px" />
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery()">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button type="primary" @click="addOrEdit()" v-auth="'add'">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增通道
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<el-table :data="tableData" style="width: 100%" v-loading="loading">
-				<el-table-column type="index" label="序号" width="80" align="center" />
-				<el-table-column prop="title" label="通道名称" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="number" label="注册码" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100" align="center">
-					<template #default="scope">
-						<el-button size="small" text type="primary" v-auth="'detail'" @click="viewDetail(scope.row)">详情</el-button>
-						<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
-			<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
-		</el-card>
+	<el-card shadow="nover" class="page-full">
+		<div class="search">
+			<el-form :model="params" :inline="true" ref="queryRef" @keyup.enter.native="getList(1)">
+				<el-form-item label="通道名称" prop="title">
+					<el-input v-model="params.title" placeholder="请输入通道名称" clearable style="width: 240px" />
+				</el-form-item>
+				<el-form-item label="注册码" prop="number">
+					<el-input v-model="params.number" placeholder="请输入注册码" clearable style="width: 240px" />
+				</el-form-item>
+				<el-form-item>
+					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button size="default" @click="resetQuery()">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="primary" @click="addOrEdit()" v-auth="'add'">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增通道
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		<el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
+			<el-table-column type="index" label="序号" width="80" align="center" />
+			<el-table-column prop="title" label="通道名称" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="number" label="注册码" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="slaveId" label="设备地址" align="center" show-overflow-tooltip></el-table-column>
+			<el-table-column label="操作" width="100" align="center">
+				<template #default="scope">
+					<el-button size="small" text type="primary" v-auth="'detail'" @click="viewDetail(scope.row)">详情</el-button>
+					<el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<pagination v-if="params.total" :total="params.total" v-model:page="params.page" v-model:limit="params.size" @pagination="getList()" />
+
 		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 		<detailForm ref="detailFormRef" @getList="getList(1)"></detailForm>
-	</div>
+	</el-card>
 </template>
 
 <script lang="ts" setup>

@@ -1,119 +1,104 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="nover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true">
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增告警
-						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
-							<el-icon>
-								<ele-Setting />
-							</el-icon>
-							级别设置
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<div>
-				<div style="border: 1px solid var(--next-border-color-light)"></div>
-				<el-row>
-					<el-col :span="6" v-for="(item, index) in tableData.data" :key="index">
-						<div class="grid-content card">
-							<div class="ant-card">
-								<div class="ant-card-body">
-									<div class="pro-table-card-item">
-										<div class="card-item-avatar" v-col="'image'">
-											<img width="88" height="88" src="/src/assets/img/alarm.svg" alt="" />
-										</div>
-										<div class="card-item-body">
-											<div class="card-item-header">
-												<div class="" v-col="'name'">
-													<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.name }}</div>
-													<div class="card-item-header-name" style="display: none"></div>
-												</div>
-											</div>
-											<div class="card-item-content" v-col="'alarm'">
-												<div>
-													<label>触发：</label>
-													<div class="">
-														<div>级别：</div>
-													</div>
-												</div>
-												<div>
-													<label>{{ item.triggerTypeName }}</label>
-													<div class="">
-														<div>{{ item.alarmLevel.name }}</div>
-													</div>
-												</div>
-											</div>
+	<div class="page page-full">
+		<div class="">
+			<el-form :model="tableData.param" ref="queryRef" :inline="true">
+				<el-form-item class="mb-0">
+					<el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增告警
+					</el-button>
+					<el-button size="default" type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
+						<el-icon>
+							<ele-Setting />
+						</el-icon>
+						级别设置
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		<el-divider />
+		<el-row class="page-full-part">
+			<el-col :span="6" v-for="(item, index) in tableData.data" :key="index">
+				<div class="card">
+					<div class="ant-card">
+						<div class="ant-card-body">
+							<div class="pro-table-card-item">
+								<div class="card-item-avatar" v-col="'image'">
+									<img width="88" height="88" src="/src/assets/img/alarm.svg" />
+								</div>
+								<div class="card-item-body">
+									<div class="card-item-header">
+										<div class="" v-col="'name'">
+											<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.name }}</div>
 										</div>
 									</div>
-
-									<div class="card-state success" v-if="item.status == 1" v-col="'liststatus'">
-										<div class="card-state-content">
-											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper">
-												<span class="ant-badge-status-dot ant-badge-status-success"></span>
-												<span class="ant-badge-status-text">已启用</span>
-											</span>
+									<div class="card-item-content" v-col="'alarm'">
+										<div>
+											<label>触发：</label>
+											<div class="">
+												<div>级别：</div>
+											</div>
 										</div>
-									</div>
-									<div class="card-state error" v-if="item.status == 0" v-col="'liststatus'">
-										<div class="card-state-content">
-											<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper"><span class="ant-badge-status-dot ant-badge-status-error"></span><span class="ant-badge-status-text">未启用</span></span>
+										<div>
+											<label>{{ item.triggerTypeName }}</label>
+											<div class="">
+												<div>{{ item.alarmLevel.name }}</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="card-tools">
-								<div class="card-button" @click="onOpenEdit(item)" v-auth="'edit'">
-									<el-button size="default" type="primary" class="ml10" text bg>
-										<el-icon>
-											<ele-Edit />
-										</el-icon>
-										修改
-									</el-button>
+
+							<div class="card-state success" v-if="item.status == 1" v-col="'liststatus'">
+								<div class="card-state-content">
+									<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper">
+										<span class="ant-badge-status-dot ant-badge-status-success"></span>
+										<span class="ant-badge-status-text">已启用</span>
+									</span>
 								</div>
-
-
-								<div class="card-button" v-if="item.status == 0" v-auth="'status'">
-									<el-button size="default" type="warning" text bg @click="onActionStatus(item)">
-										<el-icon>
-											<ele-Check />
-										</el-icon>
-										启用
-									</el-button>
-								</div>
-
-								<div class="card-button" v-if="item.status == 1" v-auth="'status'">
-									<el-button size="default" type="info" text bg @click="onActionStatus(item)">
-										<el-icon>
-											<ele-Close />
-										</el-icon>
-										禁用
-									</el-button>
-								</div>
-
-								<div class="card-button" @click="onRowDel(item)" v-auth="'del'">
-									<el-button size="default" type="info" text bg>
-										<el-icon>
-											<ele-Delete />
-										</el-icon>
-										删除
-									</el-button>
+							</div>
+							<div class="card-state error" v-if="item.status == 0" v-col="'liststatus'">
+								<div class="card-state-content">
+									<span class="ant-badge ant-badge-status ant-badge-not-a-wrapper"><span class="ant-badge-status-dot ant-badge-status-error"></span><span class="ant-badge-status-text">未启用</span></span>
 								</div>
 							</div>
 						</div>
-					</el-col>
-				</el-row>
-			</div>
-			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-		</el-card>
+					</div>
+					<div class="card-tools">
+						<el-button size="default" type="primary" text bg @click="onOpenEdit(item)" v-auth="'edit'">
+							<el-icon>
+								<ele-Edit />
+							</el-icon>
+							修改
+						</el-button>
 
+						<el-button size="default" type="warning" text bg @click="onActionStatus(item)" v-if="item.status == 0" v-auth="'status'">
+							<el-icon>
+								<ele-Check />
+							</el-icon>
+							启用
+						</el-button>
+
+						<el-button size="default" type="info" text bg @click="onActionStatus(item)" v-if="item.status == 1" v-auth="'status'">
+							<el-icon>
+								<ele-Close />
+							</el-icon>
+							禁用
+						</el-button>
+
+						<el-button size="default" type="info" text bg @click="onRowDel(item)" v-auth="'del'">
+							<el-icon>
+								<ele-Delete />
+							</el-icon>
+							删除
+						</el-button>
+					</div>
+				</div>
+			</el-col>
+		</el-row>
+		<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		<EditDic ref="editDicRef" @dataList="dataList" />
 		<LevelDic ref="levelDicRef" @dataList="dataList" />
 	</div>
@@ -276,13 +261,11 @@ export default defineComponent({
 }
 
 .card {
-	padding: 10px;
+	margin: 0 10px 20px;
 }
 
 .ant-card {
 	box-sizing: border-box;
-	margin: 10px;
-	width: 97%;
 	font-size: 14px;
 	font-variant: tabular-nums;
 	border: 1px solid var(--next-border-color-light);
@@ -297,13 +280,18 @@ export default defineComponent({
 }
 
 .ant-card-body {
-	padding: 24px;
+	padding: 12px;
 	zoom: 1;
 	overflow: hidden;
 }
 
 .pro-table-card-item {
 	display: flex;
+	justify-content: stretch;
+	.card-item-avatar{
+		display: flex;
+		align-items: center;
+	}
 }
 
 .pro-table-card-item .card-item-avatar {
@@ -388,12 +376,20 @@ export default defineComponent({
 
 .card-tools {
 	display: flex;
-	margin-top: 2px;
+	margin-top: 8px;
+	justify-content: space-between;
+	overflow: hidden;
+	gap: 8px;
+
+	.el-button {
+		flex: 1;
+		margin-left: 0;
+	}
 }
 
-.card-tools .card-button:not(:last-child) {
+/* /* .card-tools .card-button:not(:last-child) {
 	margin-right: 8px;
-}
+} */
 
 .card-tools .card-button {
 	display: flex;
@@ -406,7 +402,7 @@ export default defineComponent({
 	border-radius: 0;
 }
 
-.ant-btn-link {
+*/ .ant-btn-link {
 	color: #1d39c4;
 	border-color: transparent;
 	background: transparent;
@@ -466,4 +462,5 @@ export default defineComponent({
 	margin-top: 20px;
 	height: 30px;
 	line-height: 30px;
-}</style>
+}
+</style>
