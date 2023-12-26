@@ -12,7 +12,7 @@ export const phoneValidate = (rule: any, value: any, callback: any) => {
 }
 
 
-export const ruleRequired = (message = '不能为空', trigger = 'blur') => {
+export const ruleRequired = (message = '不能为空', trigger = 'change') => {
   return { required: true, message, trigger }
 }
 
