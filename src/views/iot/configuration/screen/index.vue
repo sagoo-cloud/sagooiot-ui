@@ -1,36 +1,38 @@
 <template>
-  <el-card shadow="nover" class="page-full">
-    <div class="search">
-      <el-form :inline="true">
-        <el-form-item>
-          <el-button type="primary" v-auth="'add'" @click="addOrEdit()">
-            <el-icon>
-              <ele-FolderAdd />
-            </el-icon>
-            新增大屏
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <el-table :data="tableData" style="width: 100%" v-loading="loading" max-height="calc(100vh - 255px)">
-      <el-table-column type="index" label="序号" width="60" align="center" />
-      <el-table-column prop="id" label="ID" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="projectName" label="大屏名称" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="remarks" label="描述" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
-      <el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>
-      <el-table-column label="操作" width="200" align="center">
-        <template #default="scope">
-          <el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
-          <el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-          <el-button size="small" text type="warning" @click="edit(scope.row)">设计大屏</el-button>
-          <el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-    <EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-  </el-card>
+  <div class="page">
+    <el-card shadow="nover">
+      <div class="search">
+        <el-form :inline="true">
+          <el-form-item>
+            <el-button type="primary" v-auth="'add'" @click="addOrEdit()">
+              <el-icon>
+                <ele-FolderAdd />
+              </el-icon>
+              新增大屏
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <el-table :data="tableData" style="width: 100%" v-loading="loading">
+        <el-table-column type="index" label="序号" width="60" align="center" />
+        <el-table-column prop="id" label="ID" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="projectName" label="大屏名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="remarks" label="描述" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center"></el-table-column>
+        <el-table-column prop="updatedAt" label="更新时间" min-width="100" align="center"></el-table-column>
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button size="small" text type="primary" @click="preview(scope.row)">预览</el-button>
+            <el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
+            <el-button size="small" text type="warning" @click="edit(scope.row)">设计大屏</el-button>
+            <el-button size="small" text type="info" v-auth="'del'" @click="onDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+      <EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
+    </el-card>
+  </div>
 </template>
 
 <script lang="ts" setup>

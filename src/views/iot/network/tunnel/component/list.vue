@@ -1,42 +1,40 @@
 <template>
-  <div>
-    <el-table v-loading="loading" :data="data" style="width: 100%" max-height="calc(100vh - 255px)">
-      <el-table-column align="center" prop="id" v-col="'id'" label="ID" width="100" />
-      <el-table-column align="center" prop="name" v-col="'name'" label="名称" />
-      <el-table-column align="center" prop="types" v-col="'type'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />
-      <el-table-column align="center" prop="addr" v-col="'address'" min-width="120" label="地址" />
-      <el-table-column show-overflow-tooltip align="center" v-col="'createTime'" prop="createdAt" label="创建时间" width="170" />
-      <el-table-column align="center" prop="types" v-col="'status'" label="状态">
-        <template #default="scope">
-          <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
-          <el-tag size="medium" v-else class="ml-2" type="success">启动</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" v-col="'auth'" width="160">
-        <template #default="scope">
-          <el-button @click="toDetail(scope.row.id)" size="small" v-auth="'detail'" type="text">详情</el-button>
-          <el-button size="small" link key="info" type="info" v-auth="'edit'" @click="toEdit(scope.row.id)">编辑</el-button>
-          <el-popover placement="bottom" :width="160" trigger="click">
-            <template #reference>
-              <el-button size="small" type="text" v-auth="'more'" class="more-btn" @click="isShowMore = !isShowMore">更多
-                <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down' : 'fa fa-angle-up'"></i>
-              </el-button>
-            </template>
-            <div class="more-opearte-wrap">
-              <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" v-auth="'on'" link size="small" key="success" type="success">启 用</el-button>
-              <el-divider direction="vertical" />
-              <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" v-auth="'off'" link size="small" key="warning" type="warning">禁 用</el-button>
-              <el-divider direction="vertical" />
-              <el-button @click="onRowDel(scope.row)" link size="small" key="danger" v-auth="'off'" type="danger">删 除</el-button>
-            </div>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="param.page" background v-model:page-size="param.pageSize"
-      layout="total, sizes, prev, pager, next, jumper" :total="total">
-    </el-pagination>
-  </div>
+  <el-table v-loading="loading" :data="data" style="width: 100%">
+    <el-table-column align="center" prop="id" v-col="'id'" label="ID" width="100" />
+    <el-table-column align="center" prop="name" v-col="'name'" label="名称" />
+    <el-table-column align="center" prop="types" v-col="'type'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />
+    <el-table-column align="center" prop="addr" v-col="'address'" min-width="120" label="地址" />
+    <el-table-column show-overflow-tooltip align="center" v-col="'createTime'" prop="createdAt" label="创建时间" width="170" />
+    <el-table-column align="center" prop="types" v-col="'status'" label="状态">
+      <template #default="scope">
+        <el-tag size="medium" v-if="!scope.row.status" class="ml-2" type="info">未启动</el-tag>
+        <el-tag size="medium" v-else class="ml-2" type="success">启动</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="操作" v-col="'auth'" width="160">
+      <template #default="scope">
+        <el-button @click="toDetail(scope.row.id)" size="small" v-auth="'detail'" type="text">详情</el-button>
+        <el-button size="small" link key="info" type="info" v-auth="'edit'" @click="toEdit(scope.row.id)">编辑</el-button>
+        <el-popover placement="bottom" :width="160" trigger="click">
+          <template #reference>
+            <el-button size="small" type="text" v-auth="'more'" class="more-btn" @click="isShowMore = !isShowMore">更多
+              <i style="margin-left: 2px;" :class="isShowMore ? 'fa fa-angle-down' : 'fa fa-angle-up'"></i>
+            </el-button>
+          </template>
+          <div class="more-opearte-wrap">
+            <el-button @click="onChangeStatus(scope.row.id, 1)" :disabled="scope.row.status" v-auth="'on'" link size="small" key="success" type="success">启 用</el-button>
+            <el-divider direction="vertical" />
+            <el-button @click="onChangeStatus(scope.row.id, 0)" :disabled="!scope.row.status" v-auth="'off'" link size="small" key="warning" type="warning">禁 用</el-button>
+            <el-divider direction="vertical" />
+            <el-button @click="onRowDel(scope.row)" link size="small" key="danger" v-auth="'off'" type="danger">删 除</el-button>
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="param.page" background v-model:page-size="param.pageSize"
+    layout="total, sizes, prev, pager, next, jumper" :total="total">
+  </el-pagination>
 </template>
 
 <script lang="ts">

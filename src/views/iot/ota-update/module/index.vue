@@ -1,38 +1,36 @@
 <template>
-  <div class="ota-module-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="ota-module-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px" @keyup.enter.native="getList(1)">
-          <el-form-item label="模块名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable size="default" style="width: 200px;" />
-          </el-form-item>
-          <el-form-item label="所属产品" prop="productId">
-            <el-select v-model="tableData.param.productId" clearable filterable placeholder="请选择产品">
-              <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button type="primary" v-auth="'add'" @click="onOpenAddDic()">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              添加模块
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px" @keyup.enter.native="getList(1)">
+        <el-form-item label="模块名称" prop="name">
+          <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable size="default" style="width: 200px;" />
+        </el-form-item>
+        <el-form-item label="所属产品" prop="productId">
+          <el-select v-model="tableData.param.productId" clearable filterable placeholder="请选择产品">
+            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button size="default" @click="resetQuery(queryRef)">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button>
+          <el-button type="primary" v-auth="'add'" @click="onOpenAddDic()">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            添加模块
+          </el-button>
+        </el-form-item>
+      </el-form>
 
       <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column label="ID" v-col="'id'" align="center" prop="id" width="100" />

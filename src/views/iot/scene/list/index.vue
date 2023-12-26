@@ -1,12 +1,12 @@
 <template>
-	<el-card shadow="nover">
-		<div class="search">
+	<div class="page">
+		<el-card shadow="nover">
 			<el-form :inline="true" ref="queryRef">
 				<el-form-item label="场景名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="getList(1)" />
+					<el-input v-model="params.keyWord" placeholder="场景名称" clearable size="default" style="width: 220px" @keyup.enter.native="getList(1)" />
 				</el-form-item>
-				<el-form-item label="状态" prop="status" style="width: 200px;">
-					<el-select v-model="params.status" placeholder="发布状态" clearable size="default" style="width: 240px">
+				<el-form-item label="状态" prop="status">
+					<el-select v-model="params.status" placeholder="发布状态" clearable size="default" style="width: 160px">
 						<el-option label="全部" :value="-1" />
 						<el-option label="成功" :value="1" />
 						<el-option label="失败" :value="0" />
@@ -24,29 +24,28 @@
 						查询
 					</el-button>
 				</el-form-item>
-
 			</el-form>
-		</div>
-		<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-			<el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="场景类型" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="name" label="执行状态" width="100" align="center">
-				<template #default="scope">
-					<el-tag type="success" size="small" v-if="scope.row.status">成功</el-tag>
-					<el-tag type="info" size="small" v-else>失败</el-tag>
-				</template>
-			</el-table-column>
-			<el-table-column prop="createdAt" label="执行时间" min-width="100" align="center"></el-table-column>
-			<el-table-column label="操作" width="200" align="center">
-				<template #default="scope">
-					<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情</el-button>
-					<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-	</el-card>
+			<el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+				<el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" label="场景名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" label="场景类型" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" label="执行状态" width="100" align="center">
+					<template #default="scope">
+						<el-tag type="success" size="small" v-if="scope.row.status">成功</el-tag>
+						<el-tag type="info" size="small" v-else>失败</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="createdAt" label="执行时间" min-width="100" align="center"></el-table-column>
+				<el-table-column label="操作" width="200" align="center">
+					<template #default="scope">
+						<el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情</el-button>
+						<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
+		</el-card>
+	</div>
 </template>
 
 <script lang="ts" setup>

@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<div class="system-user-search">
+		<el-card shadow="nover">
 			<el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="60px">
 				<el-form-item label="关键字" prop="keyWord">
 					<el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable size="default" @keyup.enter="queryList" />
@@ -26,35 +26,34 @@
 					</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
-		<!--  -->
-		<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" max-height="calc(100vh - 255px)">>
-			<!-- <el-table-column type="selection" width="55" align="center" /> -->
-			<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="100" />
-			<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" show-overflow-tooltip />
-			<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" show-overflow-tooltip>
-				<template #default="scope">
-					{{ filterStandard(scope.row.standard) }}
-					<!-- <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button> -->
-					<!-- <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button> -->
-				</template>
-			</el-table-column>
-			<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" show-overflow-tooltip />
-			<el-table-column label="状态" width="120" align="center">
-				<template #default="scope">
-					<el-switch v-auth="'startOrStop'" v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
-					<span v-noauth="'startOrStop'">{{ scope.row.status ? '正常' : '暂停' }}</span>
-				</template>
-			</el-table-column>
-			<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">
-				<template #default="scope">
-					<el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
-					<el-button size="small" v-auth="'del'" text type="info" @click="operate('delete', scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<pagination v-show="state.tableData.total > 0" :total="state.tableData.total" v-model:page="state.tableData.param.pageNum" v-model:limit="state.tableData.param.pageSize" @pagination="queryList" />
-		<EditParams ref="editParamsRef" @update="queryList" />
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+				<!-- <el-table-column type="selection" width="55" align="center" /> -->
+				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="100" />
+				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" show-overflow-tooltip />
+				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" show-overflow-tooltip>
+					<template #default="scope">
+						{{ filterStandard(scope.row.standard) }}
+						<!-- <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button> -->
+						<!-- <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button> -->
+					</template>
+				</el-table-column>
+				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" show-overflow-tooltip />
+				<el-table-column label="状态" width="120" align="center">
+					<template #default="scope">
+						<el-switch v-auth="'startOrStop'" v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
+						<span v-noauth="'startOrStop'">{{ scope.row.status ? '正常' : '暂停' }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">
+					<template #default="scope">
+						<el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
+						<el-button size="small" v-auth="'del'" text type="info" @click="operate('delete', scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-show="state.tableData.total > 0" :total="state.tableData.total" v-model:page="state.tableData.param.pageNum" v-model:limit="state.tableData.param.pageSize" @pagination="queryList" />
+			<EditParams ref="editParamsRef" @update="queryList" />
+		</el-card>
 	</div>
 </template>
 

@@ -1,38 +1,34 @@
 <template>
-	<div class="system-dic-container">
+	<div class="page">
 		<el-card shadow="nover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-					<el-form-item label="创建时间" prop="dateRange">
-						<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="typeList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-							<el-icon>
-								<ele-Delete />
-							</el-icon>
-							删除
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+			<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+				<el-form-item label="创建时间" prop="dateRange">
+					<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button size="default" type="primary" class="ml10" @click="typeList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button size="default" @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+						<el-icon>
+							<ele-Delete />
+						</el-icon>
+						删除
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-
 				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'ID'" />
-
 				<el-table-column label="标题" prop="title" align="center" show-overflow-tooltip v-col="'title'" />
 				<el-table-column label="发送方式" prop="gateway" align="center" show-overflow-tooltip v-col="'title'" />
 				<el-table-column prop="status" label="发送状态" align="center" v-col="'status'">
