@@ -1,14 +1,14 @@
 <template>
-  <div class="system-cache-container">
-    <div class="flex-row gap-3">
+  <div class="page">
+    <el-row :gutter="15">
       <el-col :span="12" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>客户端信息</span>
             </div>
           </template>
-          <table cellspacing="0" style="height: 230px;width: 100%">
+          <table cellspacing="0" style=";width: 100%">
             <tbody v-if="sysInfo.clients">
               <tr>
                 <td>
@@ -48,13 +48,13 @@
         </el-card>
       </el-col>
       <el-col :span="12" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>CPU 信息</span>
             </div>
           </template>
-          <table cellspacing="0" style="height: 230px;width: 100%">
+          <table cellspacing="0" style="width: 100%">
             <tbody v-if="sysInfo.cpu">
               <tr>
                 <td>
@@ -93,16 +93,16 @@
           </table>
         </el-card>
       </el-col>
-    </div>
-    <div class="flex-row gap-3">
+    </el-row>
+    <el-row :gutter="15">
       <el-col :span="12" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>服务信息</span>
             </div>
           </template>
-          <table cellspacing="0" style="height: 300px;width: 100%">
+          <table cellspacing="0" style="width: 100%">
             <tbody v-if="sysInfo.clients">
               <tr>
                 <td>
@@ -174,13 +174,13 @@
         </el-card>
       </el-col>
       <el-col :span="12" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>内存信息</span>
             </div>
           </template>
-          <table v-if='sysInfo.memory' cellspacing="0" style="height: 300px;width: 100%">
+          <table v-if='sysInfo.memory' cellspacing="0" style="width: 100%">
             <tbody>
               <tr>
                 <td>
@@ -256,10 +256,10 @@
           </table>
         </el-card>
       </el-col>
-    </div>
+    </el-row>
     <div class="flex-row gap-3">
       <el-col :xs="24" :sm="24" :md="24" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>基础统计信息</span>
@@ -301,8 +301,8 @@
       </el-col>
     </div>
     <div class="flex-row gap-3">
-      <el-col :xs="24" :sm="24" :md="24" class="marg-b-15">
-        <el-card class="box-card-height" style="height:auto">
+      <el-col :xs="24" :sm="24" :md="24">
+        <el-card shadow="nover" class="box-card-height" style="height:auto">
           <template #header>
             <div class="card-header">
               <span>info Keyspace统计信息</span>
@@ -473,7 +473,8 @@ export default defineComponent({
   text-overflow: ellipsis;
   white-space: normal;
   word-break: break-all;
-  line-height: 36px;
+  line-height: 1.2;
+  margin: 10px 0;
 }
 
 .box-card {
@@ -484,5 +485,8 @@ export default defineComponent({
   height: 230px;
 
   min-height: 180px;
+}
+.el-form-item{
+  margin-bottom: 5px;
 }
 </style>

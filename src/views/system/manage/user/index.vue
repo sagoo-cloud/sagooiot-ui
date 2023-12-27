@@ -1,97 +1,89 @@
 <template>
-	<div class="system-user-container">
-		<el-row :gutter="10">
-			<el-col :span="5">
-				<el-card shadow="nover">
-					<el-scrollbar>
-						<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable size="default" style="width: 100%;" />
-						<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick">
-							<template #default="{ node, data }">
-								<div class="custom-tree-node" :title="node.label">
-									{{ node.label }}
-								</div>
-							</template></el-tree>
-					</el-scrollbar>
-				</el-card>
-			</el-col>
-			<el-col :span="19">
-				<el-card shadow="nover">
-					<div class="system-user-search mb15">
-						<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-							<el-form-item label="关键字" prop="keyWords">
-								<el-input v-model="tableData.param.keyWords" placeholder="请输入用户名或姓名" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />
-							</el-form-item>
-							<!--							<el-form-item label="手机号码" prop="mobile">-->
-							<!--								<el-input v-model="tableData.param.mobile" placeholder="请输入手机号码" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />-->
-							<!--							</el-form-item>-->
-							<el-form-item label="状态" prop="status" style="width: 200px;">
-								<el-select v-model="tableData.param.status" placeholder="用户状态" size="default" style="width: 240px">
-									<el-option label="全部" :value="-1" />
-									<el-option label="启用" :value="1" />
-									<el-option label="禁用" :value="0" />
-									<!-- <el-option label="未验证" :value="2" /> -->
-								</el-select>
-							</el-form-item>
-							<el-form-item label="创建时间" prop="dateRange">
-								<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-							</el-form-item>
-							<el-form-item>
-								<el-button size="default" type="primary" class="ml10" @click="userList">
-									<el-icon>
-										<ele-Search />
-									</el-icon>
-									查询
-								</el-button>
-								<el-button size="default" @click="resetQuery(queryRef)">
-									<el-icon>
-										<ele-Refresh />
-									</el-icon>
-									重置
-								</el-button>
-								<el-button size="default" type="primary" class="ml10" @click="onOpenAddUser" v-auth="'add'">
-									<el-icon>
-										<ele-FolderAdd />
-									</el-icon>
-									新增用户
-								</el-button>
-								<!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
+	<div class="page flex-row gap-5">
+		<el-card shadow="nover">
+			<el-scrollbar>
+				<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable size="default" style="width: 100%;" />
+				<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick">
+					<template #default="{ node, data }">
+						<div class="custom-tree-node" :title="node.label">
+							{{ node.label }}
+						</div>
+					</template></el-tree>
+			</el-scrollbar>
+		</el-card>
+		<el-card shadow="nover">
+			<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+				<el-form-item label="关键字" prop="keyWords">
+					<el-input v-model="tableData.param.keyWords" placeholder="请输入用户名或姓名" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />
+				</el-form-item>
+				<!--							<el-form-item label="手机号码" prop="mobile">-->
+				<!--								<el-input v-model="tableData.param.mobile" placeholder="请输入手机号码" clearable size="default" style="width: 240px" @keyup.enter.native="userList" />-->
+				<!--							</el-form-item>-->
+				<el-form-item label="状态" prop="status" style="width: 200px;">
+					<el-select v-model="tableData.param.status" placeholder="用户状态" size="default" style="width: 240px">
+						<el-option label="全部" :value="-1" />
+						<el-option label="启用" :value="1" />
+						<el-option label="禁用" :value="0" />
+						<!-- <el-option label="未验证" :value="2" /> -->
+					</el-select>
+				</el-form-item>
+				<el-form-item label="创建时间" prop="dateRange">
+					<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button size="default" type="primary" class="ml10" @click="userList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button size="default" @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button size="default" type="primary" class="ml10" @click="onOpenAddUser" v-auth="'add'">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增用户
+					</el-button>
+					<!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
 									<el-icon>
 										<ele-Delete />
 									</el-icon>
 									删除用户
 								</el-button> -->
-							</el-form-item>
-						</el-form>
-					</div>
-					<el-table :data="tableData.data" style="width: 100%" v-loading="loading" @selection-change="handleSelectionChange">
-						<!-- <el-table-column type="selection" width="55" align="center" /> -->
-						<el-table-column type="index" label="序号" width="60" align="center" />
-						<el-table-column prop="userName" label="用户名" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="userNickname" label="姓名" v-col="'userNickname'" width="160" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="dept.deptName" label="组织" v-col="'deptName'" show-overflow-tooltip></el-table-column>
-						<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>
-						<el-table-column prop="status" label="用户状态" width="120" v-col="'status'" align="center">
-							<template #default="scope">
-								<el-switch v-model="scope.row.status" :disabled="scope.row.id === 1" v-auth="'change-status'" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
-								</el-switch>
-							</template>
-						</el-table-column>
-						<el-table-column prop="createdAt" label="创建时间" width="180" v-col="'createdAt'" align="center"></el-table-column>
-						<el-table-column label="操作" width="180" align="center" v-col="'handle'" fixed="right">
-							<template #default="scope">
-								<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
+				</el-form-item>
+			</el-form>
+			<el-table :data="tableData.data" style="width: 100%" v-loading="loading" @selection-change="handleSelectionChange">
+				<!-- <el-table-column type="selection" width="55" align="center" /> -->
+				<el-table-column type="index" label="序号" width="60" align="center" />
+				<el-table-column prop="userName" label="用户名" v-col="'userName'" min-width="120" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="userNickname" label="姓名" v-col="'userNickname'" width="160" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="dept.deptName" label="组织" v-col="'deptName'" show-overflow-tooltip></el-table-column>
+				<el-table-column label="角色" min-width="120" prop="rolesNames" v-col="'rolesNames'" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="mobile" label="手机号" v-col="'mobile'" width="120" align="center"></el-table-column>
+				<el-table-column prop="status" label="用户状态" width="120" v-col="'status'" align="center">
+					<template #default="scope">
+						<el-switch v-model="scope.row.status" :disabled="scope.row.id === 1" v-auth="'change-status'" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+						</el-switch>
+					</template>
+				</el-table-column>
+				<el-table-column prop="createdAt" label="创建时间" width="180" v-col="'createdAt'" align="center"></el-table-column>
+				<el-table-column label="操作" width="180" align="center" v-col="'handle'" fixed="right">
+					<template #default="scope">
+						<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
                 <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth-all="['edit','del']">修改</el-button> -->
-								<el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth="'edit'">修改</el-button>
-								<el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.id !== 1" v-auth="'del'">删除</el-button>
-								<el-button size="small" text type="success" @click="handleResetPwd(scope.row)" v-auth="'reset'">重置</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-					<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="userList" />
-				</el-card>
-			</el-col>
-		</el-row>
+						<el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth="'edit'">修改</el-button>
+						<el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.id !== 1" v-auth="'del'">删除</el-button>
+						<el-button size="small" text type="success" @click="handleResetPwd(scope.row)" v-auth="'reset'">重置</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="userList" />
+		</el-card>
 		<EditUser ref="editUserRef" :dept-data="deptData" :post-data="postData" :role-data="roleData" @getUserList="userList" />
 		<EditPer ref="editPerRef" @getUserList="userList" />
 	</div>

@@ -1,40 +1,38 @@
 <template>
-  <div class="system-role-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
-          <el-form-item label="角色名称" prop="name">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="roleList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery()">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddRole" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增角色
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-form :model="tableData.param" :inline="true" ref="queryRef">
+        <el-form-item label="角色名称" prop="name">
+          <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
+            <el-option label="全部" :value="-1" />
+            <el-option label="启用" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="default" type="primary" class="ml10" @click="roleList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button size="default" @click="resetQuery()">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button>
+          <el-button size="default" type="primary" class="ml10" @click="onOpenAddRole" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增角色
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="name" v-col="'name'" label="角色名称" show-overflow-tooltip></el-table-column>

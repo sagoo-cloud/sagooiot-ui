@@ -1,49 +1,47 @@
 <template>
-  <div class="system-post-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
-          <el-form-item label="岗位名称" prop="postName">
-            <el-input size="default" v-model="tableData.param.postName" placeholder="请输入岗位名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="岗位编码" prop="postCode">
-            <el-input size="default" v-model="tableData.param.postCode" placeholder="请输入岗位编码" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="postList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery()">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddPost" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增岗位
-            </el-button>
-            <!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
+      <el-form :model="tableData.param" :inline="true" ref="queryRef">
+        <el-form-item label="岗位名称" prop="postName">
+          <el-input size="default" v-model="tableData.param.postName" placeholder="请输入岗位名称" class="w-50" clearable />
+        </el-form-item>
+        <el-form-item label="岗位编码" prop="postCode">
+          <el-input size="default" v-model="tableData.param.postCode" placeholder="请输入岗位编码" class="w-50" clearable />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
+            <el-option label="全部" :value="-1" />
+            <el-option label="启用" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="default" type="primary" class="ml10" @click="postList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button size="default" @click="resetQuery()">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button>
+          <el-button size="default" type="primary" class="ml10" @click="onOpenAddPost" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增岗位
+          </el-button>
+          <!-- <el-button size="default" type="info" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               删除岗位
             </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="60" align="center" />
