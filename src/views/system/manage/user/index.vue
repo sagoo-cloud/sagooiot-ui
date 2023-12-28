@@ -1,5 +1,5 @@
 <template>
-	<div class="page flex-row gap-5">
+	<div class="page padding flex-row gap-5">
 		<el-card shadow="nover">
 			<el-scrollbar>
 				<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable size="default" style="width: 100%;" />
@@ -83,9 +83,10 @@
 				</el-table-column>
 			</el-table>
 			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="userList" />
+
+			<EditUser ref="editUserRef" :dept-data="deptData" :post-data="postData" :role-data="roleData" @getUserList="userList" />
+			<EditPer ref="editPerRef" @getUserList="userList" />
 		</el-card>
-		<EditUser ref="editUserRef" :dept-data="deptData" :post-data="postData" :role-data="roleData" @getUserList="userList" />
-		<EditPer ref="editPerRef" @getUserList="userList" />
 	</div>
 </template>
 
