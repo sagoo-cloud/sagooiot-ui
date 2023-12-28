@@ -1,25 +1,25 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+			<el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
 				<el-form-item label="创建时间" prop="dateRange">
-					<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+					<el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="告警状态" prop="status" style="width: 200px;">
-					<el-select v-model="tableData.param.status" placeholder="告警状态" clearable size="default" style="width: 240px">
+					<el-select v-model="tableData.param.status" placeholder="告警状态" clearable style="width: 240px">
 						<el-option label="未处理" :value="0" />
 						<el-option label="已处理" :value="1" />
 						<el-option label="已忽略" :value="2" />
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button size="default" type="primary" class="ml10" @click="typeList">
+					<el-button type="primary" class="ml10" @click="typeList">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
 						查询
 					</el-button>
-					<el-button size="default" @click="resetQuery(queryRef)">
+					<el-button @click="resetQuery(queryRef)">
 						<el-icon>
 							<ele-Refresh />
 						</el-icon>

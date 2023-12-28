@@ -1,7 +1,7 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :inline="true">
+			<el-form inline>
 				<el-form-item>
 					<el-button type="primary" v-auth="'add'" @click="addOrEdit()">
 						<el-icon>

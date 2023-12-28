@@ -2,12 +2,12 @@
   <div class="page">
     <el-card shadow="nover" v-loading="batchLoading">
       <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true">
+        <el-form :model="tableData.param" ref="queryRef" inline>
           <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 180px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable style="width: 180px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable size="default" style="width: 180px" @keyup.enter.native="typeList" />
+            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable style="width: 180px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="所属产品" prop="productId">
             <el-select v-model="tableData.param.productId" style="width: 150px" filterable placeholder="请选择产品">
@@ -16,7 +16,7 @@
           </el-form-item>
 
           <el-form-item label="状态" prop="status">
-            <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 100px">
+            <el-select v-model="tableData.param.status" placeholder="状态" clearable style="width: 100px">
               <el-option label="在线" :value="2" />
               <el-option label="离线" :value="1" />
               <el-option label="未启用" :value="0" />
@@ -24,28 +24,28 @@
           </el-form-item>
 
           <el-form-item label="创建时间" prop="dateRange">
-            <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="typeList">
+            <el-button type="primary" class="ml10" @click="typeList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
+            <el-button @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+            <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增设备
             </el-button>
-            <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -58,25 +58,25 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item> <el-button size="default" type="success" @click="setDeviceStatus1(null)">
+                  <el-dropdown-item> <el-button type="success" @click="setDeviceStatus1(null)">
                       <el-icon>
                         <ele-Delete />
                       </el-icon>
                       批量启用
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button size="default" type="warning" @click="setDeviceStatus0(null)">
+                  <el-dropdown-item><el-button type="warning" @click="setDeviceStatus0(null)">
                       <el-icon>
                         <ele-Delete />
                       </el-icon>
                       批量禁用
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item> <el-button size="default" @click="onOpenexcelDic('upload')">
+                  <el-dropdown-item> <el-button @click="onOpenexcelDic('upload')">
                       <el-icon>
                         <ele-Upload />
                       </el-icon>
                       导入设备
                     </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button size="default" @click="onOpenexcelDic('down')">
+                  <el-dropdown-item><el-button @click="onOpenexcelDic('down')">
                       <el-icon>
                         <ele-Download />
                       </el-icon>

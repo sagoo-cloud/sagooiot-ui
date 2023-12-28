@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="数据节点标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey == 1 && ruleForm.nodeId !== 0" />
 				</el-form-item>
@@ -72,8 +72,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.nodeId !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.nodeId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

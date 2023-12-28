@@ -1,15 +1,15 @@
 <template>
-  <div class="assess-total-container">
+  <div class="page">
     <el-card shadow="nover">
       <div class="system-user-search mb15">
-        <!-- <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="success" class="ml10">
+        <!-- <el-input placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
+				<el-button type="success" class="ml10">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
 					查询
 				</el-button> -->
-        <el-button size="default" type="primary" class="ml10" @click="onOpenAddItem" v-auth="'add'">
+        <el-button type="primary" class="ml10" @click="onOpenAddItem" v-auth="'add'">
           <el-icon>
             <ele-FolderAdd />
           </el-icon>
@@ -30,7 +30,6 @@
     </el-card>
     <EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
     <DetailItem ref="detailItemRef" />
-
   </div>
 </template>
 

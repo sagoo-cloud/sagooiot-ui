@@ -21,7 +21,7 @@
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button type="primary" @click="onSubmit" size="default">更 换</el-button>
+			<el-button type="primary" @click="onSubmit">更 换</el-button>
 		</template>
 	</el-dialog>
 </template>

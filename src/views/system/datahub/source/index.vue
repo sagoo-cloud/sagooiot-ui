@@ -1,46 +1,39 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :inline="true" ref="queryRef">
+			<el-form inline ref="queryRef">
 				<el-form-item label="数据源标识" prop="name">
-					<el-input v-model="params.key" placeholder="数据源标识" clearable size="default" style="width: 160px" @keyup.enter.native="getList" />
+					<el-input v-model="params.key" placeholder="请输入" clearable style="width: 140px" @keyup.enter.native="getList" />
 				</el-form-item>
 				<el-form-item label="数据源名称" prop="name">
-					<el-input
-						v-model="params.name"
-						placeholder="请输入数据源名称"
-						clearable
-						size="default"
-						style="width: 160px"
-						@keyup.enter.native="getList"
-					/>
+					<el-input v-model="params.name" placeholder="请输入" clearable style="width: 140px" @keyup.enter.native="getList" />
 				</el-form-item>
-				<el-form-item label="数据源类型" prop="from">
-					<el-select v-model="params.from" placeholder="请选择数据源类型" @keyup.enter.native="getList">
+				<el-form-item label="" prop="from">
+					<el-select v-model="params.from" placeholder="数据源类型" @keyup.enter.native="getList" style="width: 120px;">
 						<el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 				</el-form-item>
 
 				<el-form-item>
-					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+					<el-button type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
 						查询
 					</el-button>
-					<el-button v-auth="'reset'" size="default" @click="resetQuery()">
+					<!-- <el-button v-auth="'reset'" @click="resetQuery()">
 						<el-icon>
 							<ele-Refresh />
 						</el-icon>
 						重置
-					</el-button>
-					<el-button v-auth="'add'" size="default" type="primary" class="ml10" @click="onOpenAdd">
+					</el-button> -->
+					<el-button v-auth="'add'" type="primary" class="ml10" @click="onOpenAdd">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
 						新增数据源
 					</el-button>
-					<el-button size="default" type="info" class="ml10" @click="batchdel()" v-auth="'del'">
+					<el-button type="info" class="ml10" @click="batchdel()" v-auth="'del'">
 						<el-icon>
 							<ele-Delete />
 						</el-icon>
@@ -70,17 +63,10 @@
 
 				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
-						<router-link
-							:to="'/config/datahub/source/' + scope.row.sourceId"
-							class="link-type"
-							style="padding-right: 12px; font-size: 12px; color: #409eff"
-							v-auth="'detail'"
-						>
+						<router-link :to="'/config/datahub/source/' + scope.row.sourceId" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
 							<span>详情</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenList(scope.row)" v-if="scope.row.status == 1" v-auth="'detail'"
-							>数据记录</el-button
-						>
+						<el-button size="small" text type="success" @click="onOpenList(scope.row)" v-if="scope.row.status == 1" v-auth="'detail'">数据记录</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status == 0" v-auth="'edit'">修改</el-button>
 						<el-button size="small" text type="info" @click="del(scope.row)" v-if="scope.row.status == 0" v-auth="'del'">删除</el-button>
 						<el-button size="small" text type="primary" @click="copy(scope.row)" v-auth="'copy'">复制</el-button>
@@ -100,7 +86,7 @@ import { useSearch } from '/@/hooks/useCommon'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import EditDic from './component/edit.vue'
 import ListDic from './component/list.vue'
-import { ref,onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 const queryRef = ref()
 const editDicRef = ref()
 const listDicRef = ref()
@@ -162,7 +148,7 @@ const copy = (row: any) => {
 				getList()
 			})
 		})
-		.catch(() => {})
+		.catch(() => { })
 }
 const handleSelectionChange = (selection: any[]) => {
 	ids.value = selection.map((item) => item.sourceId)

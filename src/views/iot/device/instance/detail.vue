@@ -276,25 +276,25 @@
         </el-tab-pane>
         <el-tab-pane label="日志管理" name="4">
           <div class="system-user-search mb15">
-            <el-form :model="logtableData.param" ref="logqueryRef" :inline="true" label-width="68px">
+            <el-form :model="logtableData.param" ref="logqueryRef" inline label-width="68px">
               <el-form-item label="日志类型" prop="types">
-                <el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
+                <el-select v-model="logtableData.param.types" placeholder="日志类型" clearable>
                   <el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
                 </el-select>
               </el-form-item>
 
               <el-form-item label="创建时间" prop="dateRange">
-                <el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD"
+                <el-date-picker v-model="logtableData.param.dateRange" value-format="YYYY-MM-DD"
                   type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button size="default" type="primary" class="ml10" @click="getlog">
+                <el-button type="primary" class="ml10" @click="getlog">
                   <el-icon>
                     <ele-Search />
                   </el-icon>
                   查询
                 </el-button>
-                <el-button size="default" @click="resetQuery(logqueryRef)">
+                <el-button @click="resetQuery(logqueryRef)">
                   <el-icon>
                     <ele-Refresh />
                   </el-icon>
@@ -362,7 +362,7 @@
 
         </el-tab-pane>
         <el-tab-pane label="设备扩展属性信息" name="7">
-          <el-form size="default" label-width="110px">
+          <el-form label-width="110px">
             <el-form-item label="设备图片">
               <el-image class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
             </el-form-item>

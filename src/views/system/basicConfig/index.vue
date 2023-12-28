@@ -1,5 +1,5 @@
 <template>
-	<div class="page">
+	<div class="page padding">
 		<el-card shadow="nover">
 			<el-menu :default-active="activeName" @select="menuChange" class="el-menu-vertical-demo" size="small">
 				<el-menu-item index="1">基础配置</el-menu-item>

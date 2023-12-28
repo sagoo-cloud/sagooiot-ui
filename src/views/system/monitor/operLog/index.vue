@@ -1,17 +1,17 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+      <el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
         <el-form-item label="系统模块" prop="title">
-          <el-input v-model="tableData.param.title" placeholder="请输入系统模块" clearable style="width: 180px" size="default" @keyup.enter="dataList" />
+          <el-input v-model="tableData.param.title" placeholder="请输入系统模块" clearable style="width: 180px" @keyup.enter="dataList" />
         </el-form-item>
 
         <el-form-item label="操作人员" prop="operName">
-          <el-input v-model="tableData.param.operName" placeholder="请输入操作人员" clearable style="width: 180px" size="default" @keyup.enter="dataList" />
+          <el-input v-model="tableData.param.operName" placeholder="请输入操作人员" clearable style="width: 180px" @keyup.enter="dataList" />
         </el-form-item>
 
         <el-form-item label="业务类型" prop="businessType">
-          <el-select v-model="tableData.param.businessType" placeholder="请选择类型" clearable size="default" style="width: 180px">
+          <el-select v-model="tableData.param.businessType" placeholder="请选择类型" clearable style="width: 180px">
             <el-option label="新增" :value="1" />
             <el-option label="修改" :value="2" />
             <el-option label="删除" :value="3" />
@@ -20,32 +20,32 @@
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-select v-model="tableData.param.status" placeholder="请选择状态" size="default" style="width: 180px">
+          <el-select v-model="tableData.param.status" placeholder="请选择状态" style="width: 180px">
             <el-option label="全部" :value="-1" />
             <el-option label="正常" :value="1" />
             <el-option label="异常" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" @click="dataList">
+          <el-button type="primary" class="ml10" @click="dataList">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button size="default" @click="resetQuery(queryRef)">
+          <el-button @click="resetQuery(queryRef)">
             <el-icon>
               <ele-Refresh />
             </el-icon>
             重置
           </el-button>
-          <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
             <el-icon>
               <ele-Delete />
             </el-icon>
             删除日志
           </el-button>
-          <!-- <el-button size="default" type="info" class="ml10" @click="onRowClear()">
+          <!-- <el-button type="info" class="ml10" @click="onRowClear()">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -95,7 +95,7 @@
     </el-card>
 
     <el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
-      <el-form :model="currentRow" ref="formRef" size="default" label-width="90px">
+      <el-form :model="currentRow" ref="formRef" label-width="90px">
         <el-form-item label="系统模块" prop="title">
           {{ currentRow.title }}
         </el-form-item>
@@ -124,7 +124,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" size="default">关 闭</el-button>
+          <el-button @click="dialogVisible = false">关 闭</el-button>
         </span>
       </template>
     </el-dialog>

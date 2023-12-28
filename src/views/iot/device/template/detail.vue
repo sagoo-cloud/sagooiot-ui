@@ -229,24 +229,24 @@
 
 				<el-tab-pane label="日志管理" name="4">
 					<div class="system-user-search mb15">
-						<el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
+						<el-form :model="logtableData.param" ref="queryRef" inline label-width="68px">
 							<el-form-item label="日志类型" prop="types">
-								<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
+								<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable>
 									<el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
 								</el-select>
 							</el-form-item>
 
 							<el-form-item label="创建时间" prop="dateRange">
-								<el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+								<el-date-picker v-model="logtableData.param.dateRange" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 							</el-form-item>
 							<el-form-item>
-								<el-button size="default" type="primary" class="ml10" @click="getlog">
+								<el-button type="primary" class="ml10" @click="getlog">
 									<el-icon>
 										<ele-Search />
 									</el-icon>
 									查询
 								</el-button>
-								<el-button size="default" @click="resetQuery(queryRef)">
+								<el-button @click="resetQuery(queryRef)">
 									<el-icon>
 										<ele-Refresh />
 									</el-icon>

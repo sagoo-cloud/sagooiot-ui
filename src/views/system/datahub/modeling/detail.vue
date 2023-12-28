@@ -14,34 +14,34 @@
     <div class="content-box">
       <div class="wu-box">
         <div class="system-user-search mb15">
-          <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="130px">
+          <el-form :model="tableData.param" ref="queryRef" inline label-width="130px">
             <el-form-item label="字段标题" prop="name">
-              <el-input v-model="tableData.param.name" placeholder="请输入字段标题" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+              <el-input v-model="tableData.param.name" placeholder="请输入字段标题" clearable style="width: 240px" @keyup.enter.native="typeList" />
             </el-form-item>
             <el-form-item label="字段名称" prop="key">
-              <el-input v-model="tableData.param.key" placeholder="请输入字段名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+              <el-input v-model="tableData.param.key" placeholder="请输入字段名称" clearable style="width: 240px" @keyup.enter.native="typeList" />
             </el-form-item>
 
             <el-form-item>
-              <el-button size="default" type="primary" class="ml10" @click="typeList">
+              <el-button type="primary" class="ml10" @click="typeList">
                 <el-icon>
                   <ele-Search />
                 </el-icon>
                 查询
               </el-button>
-              <el-button size="default" @click="resetQuery()">
+              <el-button @click="resetQuery()">
                 <el-icon>
                   <ele-Refresh />
                 </el-icon>
                 重置
               </el-button>
-              <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'" v-if="developer_status == 0">
+              <el-button type="success" class="ml10" @click="onOpenAdd" v-auth="'add'" v-if="developer_status == 0">
                 <el-icon>
                   <ele-FolderAdd />
                 </el-icon>
                 新增字段节点
               </el-button>
-              <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+              <!-- <el-button type="danger" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
               </el-icon>

@@ -2,31 +2,31 @@
   <div class="system-dept-container">
     <el-card shadow="nover">
       <div class="system-dept-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
+        <el-form :model="tableData.param" inline ref="queryRef">
           <el-form-item label="区域名称" prop="name">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入区域名称" class="w-50" clearable />
+            <el-input v-model="tableData.param.name" placeholder="请输入区域名称" class="w-50" clearable />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
+            <el-select placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
               <el-option label="全部" :value="-1" />
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="deptList">
+            <el-button type="primary" class="ml10" @click="deptList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery()">
+            <el-button @click="resetQuery()">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
             </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddDept" v-auth="'add'">
+            <el-button type="primary" class="ml10" @click="onOpenAddDept" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>

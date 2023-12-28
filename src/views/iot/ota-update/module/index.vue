@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px" @keyup.enter.native="getList(1)">
+      <el-form :model="tableData.param" ref="queryRef" inline label-width="68px" @keyup.enter.native="getList(1)">
         <el-form-item label="模块名称" prop="name">
-          <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable size="default" style="width: 200px;" />
+          <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable style="width: 200px;" />
         </el-form-item>
         <el-form-item label="所属产品" prop="productId">
           <el-select v-model="tableData.param.productId" clearable filterable placeholder="请选择产品">
@@ -11,13 +11,13 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+          <el-button type="primary" class="ml10" @click="getList(1)">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button size="default" @click="resetQuery(queryRef)">
+          <el-button @click="resetQuery(queryRef)">
             <el-icon>
               <ele-Refresh />
             </el-icon>

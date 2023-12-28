@@ -9,7 +9,7 @@
     <el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="160px"> -->
   <div class="ota-edit-module-container">
     <el-dialog :title="'操作升级包'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="160px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="160px">
         <el-form-item label="类型" prop="formType" @change="getFormType">
           <el-radio-group v-model="ruleForm.types">
             <el-radio label="1">验证</el-radio>
@@ -62,8 +62,8 @@
       </el-form>
       <template #footer>
 				<span class="dialog-footer">
-				<el-button @click="onCancel" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit" size="default">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
+				<el-button @click="onCancel">取 消</el-button>
+				<el-button type="primary" @click="onSubmit">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
 				</span>
       </template>
     </el-dialog>

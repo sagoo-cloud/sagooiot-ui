@@ -3,7 +3,7 @@
     <el-dialog title="选择设备" v-model="isShowDialog" width="90%">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" size="small" label-width="110px">
         <el-form-item label="设备名称" prop="name">
-          <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @keyup.enter.native="getDeviceList" />
+          <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable style="width: 240px" @keyup.enter.native="getDeviceList" />
           <el-button style="margin-left: 20px;" type="primary" @click="getDeviceList()">查询</el-button>
 
           <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()">确定选择</el-button>

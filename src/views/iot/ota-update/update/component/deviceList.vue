@@ -2,14 +2,14 @@
   <div class="ota-edit-module-container">
     <el-dialog :title="'设备详情'" v-model="isShowDialog" width="769px">
       <div class="search">
-        <el-form :inline="true" ref="queryRef">
+        <el-form inline ref="queryRef">
           <el-form-item label="设备名称：" prop="name">
-            <el-input v-model="tableData.param.deviceName" placeholder="请输入设备名称" clearable size="default" style="width: 240px" @submit.prevent />
+            <el-input v-model="tableData.param.deviceName" placeholder="请输入设备名称" clearable style="width: 240px" @submit.prevent />
           </el-form-item>
 
           <el-form-item>
 
-            <el-button size="default" type="primary" class="ml10" @click="getDetail">
+            <el-button type="primary" class="ml10" @click="getDetail">
               <el-icon>
                 <ele-Search />
               </el-icon>

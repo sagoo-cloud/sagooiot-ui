@@ -1,42 +1,42 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+      <el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
         <el-form-item label="产品名称" prop="name">
-          <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+          <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable style="width: 240px" @keyup.enter.native="typeList" />
         </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
-          <el-input v-model="tableData.param.deviceType" placeholder="请输入设备类型" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+          <el-input v-model="tableData.param.deviceType" placeholder="请输入设备类型" clearable style="width: 240px" @keyup.enter.native="typeList" />
         </el-form-item>
         <el-form-item label="发布状态" prop="status" style="width: 200px;">
-          <el-select v-model="tableData.param.status" placeholder="发布状态" clearable size="default" style="width: 240px">
+          <el-select v-model="tableData.param.status" placeholder="发布状态" clearable style="width: 240px">
             <el-option label="已发布" :value="1" />
             <el-option label="未发布" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间" prop="dateRange">
-          <el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          <el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" @click="typeList">
+          <el-button type="primary" class="ml10" @click="typeList">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button size="default" @click="resetQuery(queryRef)">
+          <el-button @click="resetQuery(queryRef)">
             <el-icon>
               <ele-Refresh />
             </el-icon>
             重置
           </el-button>
-          <el-button size="default" type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+          <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
             新增产品
           </el-button>
-          <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
             <el-icon>
               <ele-Delete />
             </el-icon>

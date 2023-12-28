@@ -1,23 +1,23 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :inline="true" ref="queryRef">
+			<el-form inline ref="queryRef">
 				<el-form-item label="场景名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="场景名称" clearable size="default" style="width: 220px" @keyup.enter.native="getList(1)" />
+					<el-input v-model="params.keyWord" placeholder="场景名称" clearable style="width: 220px" @keyup.enter.native="getList(1)" />
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-select v-model="params.status" placeholder="发布状态" clearable size="default" style="width: 160px">
+					<el-select v-model="params.status" placeholder="发布状态" clearable style="width: 160px">
 						<el-option label="全部" :value="-1" />
 						<el-option label="成功" :value="1" />
 						<el-option label="失败" :value="0" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="执行时间" prop="dateRange">
-					<el-date-picker v-model="params.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+					<el-date-picker v-model="params.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 				</el-form-item>
 				<el-form-item>
 
-					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+					<el-button type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>

@@ -1,24 +1,24 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="60px">
+			<el-form :model="state.tableData.param" ref="queryRef" inline label-width="60px">
 				<el-form-item label="关键字" prop="keyWord">
-					<el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable size="default" @keyup.enter="queryList" />
+					<el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable @keyup.enter="queryList" />
 				</el-form-item>
 				<el-form-item>
-					<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="queryList">
+					<el-button v-auth="'query'" type="primary" class="ml10" @click="queryList">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
 						查询
 					</el-button>
-					<el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
+					<el-button v-auth="'reset'" @click="resetQuery(queryRef)">
 						<el-icon>
 							<ele-Refresh />
 						</el-icon>
 						重置
 					</el-button>
-					<el-button v-auth="'add'" size="default" type="primary" class="ml10" @click="operate('add')">
+					<el-button v-auth="'add'" type="primary" class="ml10" @click="operate('add')">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>

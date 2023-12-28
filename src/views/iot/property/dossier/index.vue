@@ -1,13 +1,13 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :inline="true" ref="queryRef" @keyup.enter="getList(1)">
+			<el-form inline ref="queryRef" @keyup.enter="getList(1)">
 				<el-form-item label="名称：" prop="keyWord">
-					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable size="default" style="width: 240px" />
+					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable style="width: 240px" />
 				</el-form-item>
 
 				<el-form-item>
-					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+					<el-button type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>

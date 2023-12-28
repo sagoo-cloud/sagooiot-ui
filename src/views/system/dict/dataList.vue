@@ -1,43 +1,41 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="字典类型" prop="dictType">
-            <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
-          <el-form-item label="字典标签" prop="dictLabel">
-            <el-input v-model="tableData.param.dictLabel" placeholder="请输入字典标签" clearable size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
-          <el-form-item label="状态" prop="status" style="width: 200px;">
-            <el-select v-model="tableData.param.status" placeholder="字典状态" size="default" style="width: 240px">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增字典
-            </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel()" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除字典
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-form :model="tableData.param" ref="queryRef" inline>
+        <el-form-item label="字典类型" prop="dictType">
+          <el-input v-model="tableData.param.dictType" placeholder="请输入字典类型" clearable @keyup.enter.native="dataList" />
+        </el-form-item>
+        <el-form-item label="字典标签" prop="dictLabel">
+          <el-input v-model="tableData.param.dictLabel" placeholder="请输入字典标签" style="width: 150px" clearable @keyup.enter.native="dataList" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="tableData.param.status" placeholder="字典状态" style="width: 120px">
+            <el-option label="全部" :value="-1" />
+            <el-option label="启用" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" class="ml10" @click="dataList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增字典
+          </el-button>
+          <el-button type="danger" class="ml10" @click="onRowDel()" v-auth="'del'">
+            <el-icon>
+              <ele-Delete />
+            </el-icon>
+            删除字典
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="字典编码" v-col="'dictCode'" width="90" align="center" prop="dictCode" />
@@ -59,7 +57,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
     </el-card>
     <EditDic ref="editDicRef" @dataList="dataList" :dict-type="tableData.param.dictType" />
   </div>

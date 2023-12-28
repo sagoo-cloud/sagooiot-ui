@@ -1,12 +1,12 @@
 <template>
-	<el-form :model="state.tableData.param" label-position="top" ref="queryRef" :inline="true" label-width="100px">
+	<el-form :model="state.tableData.param" label-position="top" ref="queryRef" inline label-width="100px">
 		<div class="form-inner-wrap">
 			<div class="left-wrap">
 				<el-form-item label="系统名称" prop="keyWord">
-					<el-input v-model="state.info.name" placeholder="请输入系统名称" clearable size="default" />
+					<el-input v-model="state.info.name" placeholder="请输入系统名称" clearable />
 				</el-form-item>
 				<el-form-item label="系统版权" prop="keyWord">
-					<el-input v-model="state.info.copyright" placeholder="请输入系统版权" clearable size="default" />
+					<el-input v-model="state.info.copyright" placeholder="请输入系统版权" clearable />
 				</el-form-item>
 				<el-row>
 					<el-col :span="12">
@@ -28,7 +28,7 @@
 					</el-col>
 				</el-row>
 				<el-form-item>
-					<el-button v-auth="'save'" size="default" type="primary" class="ml10" @click="setDetails">保存</el-button>
+					<el-button v-auth="'save'" type="primary" class="ml10" @click="setDetails">保存</el-button>
 				</el-form-item>
 			</div>
 			<div class="right-wrap">

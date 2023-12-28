@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :inline="true">
+      <el-form inline>
         <el-form-item>
-          <!-- <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+          <!-- <el-button type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>

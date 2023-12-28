@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="告警处理" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="处理状态" prop="status">
 					<el-radio-group v-model="ruleForm.status">
 						<el-radio :label="1">已处理</el-radio>
@@ -14,8 +14,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">确定</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">确定</el-button>
 				</span>
 			</template>
 		</el-dialog>

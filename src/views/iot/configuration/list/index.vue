@@ -2,11 +2,11 @@
   <div class="page">
     <el-card shadow="nover">
       <div class="search">
-        <el-form :inline="true">
+        <el-form inline>
           <el-form-item>
-            <el-input size="default" v-model="params.keyWord" style="width: 200px; margin-left: 20px" class="search-input" placeholder="请输入搜索关键字" @keyup.enter.native="getList(1)" clearable>
+            <el-input v-model="params.keyWord" style="width: 200px; margin-left: 20px" class="search-input" placeholder="请输入搜索关键字" @keyup.enter.native="getList(1)" clearable>
             </el-input>
-            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+            <el-button type="primary" class="ml10" @click="getList(1)">
               <el-icon>
                 <ele-Search />
               </el-icon>

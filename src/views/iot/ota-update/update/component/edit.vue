@@ -1,7 +1,7 @@
 <template>
   <div class="ota-edit-module-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '升级包'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" v-if="isShowDialog" label-width="160px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" v-if="isShowDialog" label-width="160px">
         <el-form-item label="升级包类型" prop="types">
           <el-radio-group v-model="ruleForm.types">
             <el-radio label="1">整包</el-radio>
@@ -78,8 +78,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>

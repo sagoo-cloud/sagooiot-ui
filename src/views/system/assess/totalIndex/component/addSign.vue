@@ -1,7 +1,7 @@
 <template>
 	<div class="add-or-edit-assess">
 		<el-dialog :title="isEdit?'编辑标识项':'新建标识项'" v-model="isShowDialog" width="569px">
-			<el-form class="add-flag-container" ref="ruleTagRef" :rules="rules" :model="ruleForm" size="default" label-width="100px">
+			<el-form class="add-flag-container" ref="ruleTagRef" :rules="rules" :model="ruleForm" label-width="100px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="标识" prop="name">
@@ -49,8 +49,8 @@
 			</div>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit(ruleTagRef)" size="default">保 存</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit(ruleTagRef)">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>

@@ -1,7 +1,7 @@
 <template>
   <el-drawer v-model="drawer" :title="title" direction="rtl" size="700px">
     <div class="p-3">
-      <el-button size="default" type="success" class="mr-3" @click="onAddRow">
+      <el-button type="success" class="mr-3" @click="onAddRow">
         <el-icon>
           <ele-FolderAdd />
         </el-icon>

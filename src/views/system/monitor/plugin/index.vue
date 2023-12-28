@@ -1,33 +1,31 @@
 <template>
-	<div class="system-plugin-container page-full">
+	<div class="page">
 		<el-card shadow="nover" class="page-full-part">
-			<div class="system-user-search mb15">
-				<el-form :model="params" ref="queryRef" :inline="true" label-width="68px">
-					<el-form-item label="关键字" prop="keyWord">
-						<el-input v-model="params.keyWord" placeholder="请输入关键字" clearable style="width: 180px" size="default" @keyup.enter="getList(1)" />
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery()">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button size="default" type="primary" v-auth="'upload'" @click="addOrEdit()">
-							<el-icon>
-								<ele-Plus />
-							</el-icon>
-							上传插件ZIP
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+			<el-form :model="params" ref="queryRef" inline label-width="68px">
+				<el-form-item label="关键字" prop="keyWord">
+					<el-input v-model="params.keyWord" placeholder="请输入关键字" clearable style="width: 180px" @keyup.enter="getList(1)" />
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="getList(1)">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery()">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="primary" v-auth="'upload'" @click="addOrEdit()">
+						<el-icon>
+							<ele-Plus />
+						</el-icon>
+						上传插件ZIP
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="tableData" style="width: 100%" v-loading="loading">
 				<el-table-column label="序号" align="center" width="80">
 					<template #default="{ $index }">{{ params.pageSize * (params.pageNum - 1) + ($index + 1) }} </template>

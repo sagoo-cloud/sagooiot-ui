@@ -3,7 +3,7 @@
     <el-dialog title="选择产品" v-model="isShowDialog" width="90%">
       <el-form ref="formRef" size="small" label-width="110px">
         <el-form-item label="设备名称" prop="name">
-          <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable size="default" style="width: 240px" @keyup.enter.native="getProductList" />
+          <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable style="width: 240px" @keyup.enter.native="getProductList" />
           <el-button style="margin-left: 20px;" type="primary" @click="getProductList()">查询</el-button>
 
           <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()">确定选择</el-button>

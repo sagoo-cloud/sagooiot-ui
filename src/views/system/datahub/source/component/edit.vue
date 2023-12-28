@@ -154,7 +154,7 @@
 
 		<template #footer>
 			<div class="dialog-footer">
-				<el-button @click="onTest" type="warning" size="default" v-if="sourceId > 0">测试</el-button>
+				<el-button @click="onTest" type="warning" v-if="sourceId > 0">测试</el-button>
 
 				<el-button @click="showDialog = false">取消</el-button>
 				<el-button type="primary" @click="onSubmit">确定</el-button>

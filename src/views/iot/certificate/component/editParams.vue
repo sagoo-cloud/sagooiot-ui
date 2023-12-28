@@ -9,26 +9,26 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="证书名称" prop="name">
-				<el-input size="default" v-model.trim="state.ruleForm.name"></el-input>
+				<el-input v-model.trim="state.ruleForm.name"></el-input>
 			</el-form-item>
 			<el-form-item label="证书文件" prop="fileContent">
-				<el-input disabled v-if="state.ruleForm.fileContent" size="default" v-model="state.ruleForm.fileContent"></el-input>
+				<el-input disabled v-if="state.ruleForm.fileContent" v-model="state.ruleForm.fileContent"></el-input>
 				<uploadFile @update="updateFile"></uploadFile>
 			</el-form-item>
 			<el-form-item label="证书公钥" prop="publicKeyContent">
-				<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.publicKeyContent"></el-input>
+				<el-input disabled type="textarea" :rows="6" v-model="state.ruleForm.publicKeyContent"></el-input>
 				<el-upload class="upload-demo" action="" accept=".txt" :on-change="beforePublicUpload" :auto-upload="false">
 					<el-button size="small" type="primary">上传</el-button>
 				</el-upload>
 			</el-form-item>
 			<el-form-item label="证书私钥" prop="privateKeyContent">
-				<el-input size="default" disabled type="textarea" :rows="6" v-model="state.ruleForm.privateKeyContent"></el-input>
+				<el-input disabled type="textarea" :rows="6" v-model="state.ruleForm.privateKeyContent"></el-input>
 				<el-upload class="upload-demo" action="" accept=".txt" :on-change="beforePrivateUpload" :auto-upload="false">
 					<el-button size="small" type="primary">上传</el-button>
 				</el-upload>
 			</el-form-item>
 			<el-form-item label="说明">
-				<el-input size="default" type="textarea" :rows="6" v-model="state.ruleForm.description"></el-input>
+				<el-input type="textarea" :rows="6" v-model="state.ruleForm.description"></el-input>
 			</el-form-item>
 		</el-form>
 
