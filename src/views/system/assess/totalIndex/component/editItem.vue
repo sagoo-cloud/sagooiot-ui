@@ -1,7 +1,7 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog :title="ruleForm.item_code ? '编辑指标' : '新增指标'" v-model="isShowDialog" width="769px">
-			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
+			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" label-width="90px">
 				<el-form-item label="评价名称" prop="title" class="mb20">
 					<el-input size="small" v-model="ruleForm.title" placeholder="请输入评价名称" clearable></el-input>
 				</el-form-item>
@@ -9,7 +9,7 @@
 					<el-input width="400" size="small" v-model="ruleForm.explain" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
 				</el-form-item>
 			</el-form>
-			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
+			<el-button type="primary" class="mb10 mt10" @click="onOpenAddSign">
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
@@ -36,8 +36,8 @@
 
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit(ruleFormRef)" size="default">保 存</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit(ruleFormRef)">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>

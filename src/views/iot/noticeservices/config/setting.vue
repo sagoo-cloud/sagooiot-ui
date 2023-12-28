@@ -2,9 +2,9 @@
 	<div class="system-dic-container">
 		<el-card shadow="nover">
 			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" @keyup.enter.native="dataList">
+				<el-form :model="tableData.param" ref="queryRef" inline @keyup.enter.native="dataList">
 					<el-form-item label="配置名称" prop="keyWord">
-						<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable size="default" style="width: 240px" />
+						<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable style="width: 240px" />
 					</el-form-item>
 					<!-- <el-form-item label="通知方式" prop="name">
 						<el-input
@@ -18,19 +18,19 @@
 					</el-form-item> -->
 
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="dataList">
+						<el-button type="primary" class="ml10" @click="dataList">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
+						<el-button @click="resetQuery(queryRef)">
 							<el-icon>
 								<ele-Refresh />
 							</el-icon>
 							重置
 						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenAdd">
+						<el-button type="primary" class="ml10" @click="onOpenAdd">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
@@ -72,7 +72,7 @@
 							</div>
 							<div class="card-tools">
 								<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="primary" class="ml10" text bg>
+									<el-button type="primary" class="ml10" text bg>
 										<el-icon>
 											<ele-Edit />
 										</el-icon>
@@ -80,7 +80,7 @@
 									</el-button>
 								</div>
 								<div class="card-button" @click="onOpenEditTem(item)">
-									<el-button size="default" type="primary" text bg>
+									<el-button type="primary" text bg>
 										<el-icon>
 											<ele-Wallet />
 										</el-icon>
@@ -88,7 +88,7 @@
 									</el-button>
 								</div>
 								<!--<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="primary" text bg>
+									<el-button type="primary" text bg>
 										<el-icon>
 											<ele-View />
 										</el-icon>
@@ -97,7 +97,7 @@
 								</div>
 
 							 	<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="info" text bg>
+									<el-button type="info" text bg>
 										<el-icon>
 											<ele-Document />
 										</el-icon>
@@ -106,7 +106,7 @@
 								</div> -->
 
 								<div class="card-button" @click="onRowDel(item)">
-									<el-button size="default" type="danger" text bg>
+									<el-button type="danger" text bg>
 										<el-icon>
 											<ele-Delete />
 										</el-icon>

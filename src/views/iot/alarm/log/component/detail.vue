@@ -33,7 +33,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
+          <el-button @click="onCancel">取 消</el-button>
         </span>
       </template>
     </el-dialog>

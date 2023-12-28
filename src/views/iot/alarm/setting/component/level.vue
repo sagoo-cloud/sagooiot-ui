@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dept-container">
 		<el-dialog title="设置告警级别" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
+			<el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20" v-for="(item, index) in levelData" :key="index">
 						<el-form-item :label="'级别' + item.level" prop="name" required>
@@ -12,8 +12,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">设置</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">设置</el-button>
 				</span>
 			</template>
 		</el-dialog>

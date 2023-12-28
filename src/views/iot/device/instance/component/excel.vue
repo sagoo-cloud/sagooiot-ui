@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(open_type === 'upload' ? '导入' : '导出') + '设备'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 
         <el-form-item label="所属产品" prop="productId">
           <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
@@ -29,8 +29,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default" v-if="open_type !== 'upload'">{{ open_type === 'upload' ? '导入设备' : '导出设备'
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit" v-if="open_type !== 'upload'">{{ open_type === 'upload' ? '导入设备' : '导出设备'
           }}</el-button>
         </span>
       </template>

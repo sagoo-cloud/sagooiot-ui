@@ -1,51 +1,49 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="任务名称" prop="jobName">
-            <el-input v-model="tableData.param.jobName" placeholder="请输入任务名称" clearable size="default" @keyup.enter="dataList" />
-          </el-form-item>
-          <el-form-item label="任务组名" prop="jobGroup">
-            <el-select v-model="tableData.param.jobGroup" size="mini" placeholder="请选择">
-              <el-option v-for="dict in sys_job_group" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="任务状态" prop="status" style="width: 200px">
-            <el-select v-model="tableData.param.status" size="mini" placeholder="请选择">
-              <el-option label="启用" :value="0" />
-              <el-option label="禁用" :value="1" />
-            </el-select>
-          </el-form-item>
+      <el-form :model="tableData.param" ref="queryRef" inline>
+        <el-form-item label="任务名称" prop="jobName">
+          <el-input v-model="tableData.param.jobName" placeholder="请输入" clearable style="width: 150px;" @keyup.enter="dataList" />
+        </el-form-item>
+        <el-form-item label="任务组名" prop="jobGroup">
+          <el-select v-model="tableData.param.jobGroup" placeholder="请选择" style="width: 150px;">
+            <el-option v-for="dict in sys_job_group" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="任务状态" prop="status">
+          <el-select v-model="tableData.param.status" style="width: 100px" placeholder="请选择">
+            <el-option label="启用" :value="0" />
+            <el-option label="禁用" :value="1" />
+          </el-select>
+        </el-form-item>
 
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增任务
-            </el-button>
-            <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除任务
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+        <el-form-item>
+          <el-button type="primary" class="ml10" @click="dataList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <!-- <el-button @click="resetQuery(queryRef)">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button> -->
+          <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增任务
+          </el-button>
+          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-icon>
+              <ele-Delete />
+            </el-icon>
+            删除任务
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="100" />

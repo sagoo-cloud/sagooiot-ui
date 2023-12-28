@@ -1,7 +1,7 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog title="数据源配置接口" v-model="isShowDialog" width="650px">
-			<el-form :model="ruleForm" ref="ruleFormRef" :rules="rules" size="default" label-width="90px">
+			<el-form :model="ruleForm" ref="ruleFormRef" :rules="rules" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="指标名称:">
@@ -139,8 +139,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit(ruleFormRef)" size="default">保 存</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit(ruleFormRef)">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>

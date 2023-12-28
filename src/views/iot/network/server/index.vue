@@ -1,19 +1,19 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :inline="true" label-width="82px" @keyup.enter="searchData">
+      <el-form inline label-width="82px" @keyup.enter="searchData">
         <el-form-item label="服务器名称">
-          <el-input size="default" style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
+          <el-input style="width: 200px;margin-left: 20px;" class="search-input" v-model="key" placeholder="请输入搜索关键字" clearable>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" v-auth="'query'" @click="searchData">
+          <el-button type="primary" class="ml10" v-auth="'query'" @click="searchData">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button @click="toPage" size="default" type="primary" v-auth="'add'" class="ml10">
+          <el-button @click="toPage" type="primary" v-auth="'add'" class="ml10">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>

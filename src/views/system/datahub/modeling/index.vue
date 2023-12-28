@@ -1,54 +1,45 @@
 <template>
-	<div class="system-dic-container">
+	<div class="page">
 		<el-card shadow="nover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true">
-					<!-- <el-form-item label="模型标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入模型标识" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+			<el-form :model="tableData.param" ref="queryRef" inline>
+				<!-- <el-form-item label="模型标识" prop="key">
+            <el-input v-model="tableData.param.key" placeholder="请输入模型标识" clearable style="width: 240px" @keyup.enter.native="typeList" />
           </el-form-item> -->
-					<el-form-item label="模型名称" prop="name">
-						<el-input
-							v-model="tableData.param.name"
-							placeholder="请输入模型名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="typeList"
-						/>
-					</el-form-item>
-					<el-form-item label="模型类型" prop="type">
-						<el-select v-model="tableData.param.type" placeholder="请选择模型类型" class="w100">
-							<el-option v-for="item in datahub_model_type" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="typeList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增模型
-						</el-button>
-						<el-button size="default" type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
-							<el-icon>
-								<ele-Delete />
-							</el-icon>
-							删除
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+				<el-form-item label="模型名称" prop="name">
+					<el-input v-model="tableData.param.name" placeholder="请输入" clearable style="width: 240px" @keyup.enter.native="typeList" />
+				</el-form-item>
+				<el-form-item label="模型类型" prop="type">
+					<el-select v-model="tableData.param.type" placeholder="请选择" class="w100">
+						<el-option v-for="item in datahub_model_type" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="typeList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增模型
+					</el-button>
+					<el-button type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
+						<el-icon>
+							<ele-Delete />
+						</el-icon>
+						删除
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'id'" />
@@ -67,17 +58,10 @@
 
 				<el-table-column label="操作" width="280" align="center" fixed="right">
 					<template #default="scope">
-						<router-link
-							:to="'/config/datahub/modeling/' + scope.row.id"
-							class="link-type"
-							style="padding-right: 12px; font-size: 12px; color: #409eff"
-							v-auth="'detail'"
-						>
+						<router-link :to="'/config/datahub/modeling/' + scope.row.id" class="link-type" style="padding-right: 12px; font-size: 12px; color: #409eff" v-auth="'detail'">
 							<span>字段管理</span>
 						</router-link>
-						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)" v-if="scope.row.status == 1" v-auth="'record'"
-							>数据记录</el-button
-						>
+						<el-button size="small" text type="success" @click="onOpenRecord(scope.row)" v-if="scope.row.status == 1" v-auth="'record'">数据记录</el-button>
 						<el-button size="small" text type="info" :disabled="scope.row.status" @click="onOpenJuhe(scope.row)" v-auth="'juhe'">聚合设置</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-if="scope.row.status == 0" v-auth="'edit'">修改</el-button>
 						<el-button size="small" text type="info" @click="onRowDel(scope.row)" v-if="scope.row.status == 0" v-auth="'del'">删除</el-button>
@@ -85,13 +69,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="typeList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
 		</el-card>
 		<EditDic ref="editDicRef" @typeList="typeList" />
 		<Detail ref="detailRef" />
@@ -211,7 +189,7 @@ export default defineComponent({
 						typeList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 
 		//复制数据
@@ -227,7 +205,7 @@ export default defineComponent({
 						typeList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 
 		// 页面加载时

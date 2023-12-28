@@ -1,36 +1,36 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
+      <el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
         <el-form-item label="IP地址" prop="keyWord">
-          <el-input v-model="tableData.param.keyWord" placeholder="请输入IP地址" clearable size="default" style="width: 240px" @keyup.enter.native="typeList" />
+          <el-input v-model="tableData.param.keyWord" placeholder="请输入IP地址" clearable style="width: 240px" @keyup.enter.native="typeList" />
         </el-form-item>
         <!-- <el-form-item label="状态" prop="status" style="width: 200px;">
-            <el-select v-model="tableData.param.status" placeholder="状态" clearable size="default" style="width: 240px">
+            <el-select v-model="tableData.param.status" placeholder="状态" clearable style="width: 240px">
               <el-option label="正常" :value="1" />
               <el-option label="停用" :value="0" />
             </el-select>
           </el-form-item> -->
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" @click="typeList">
+          <el-button type="primary" class="ml10" @click="typeList">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button size="default" @click="resetQuery(queryRef)">
+          <el-button @click="resetQuery(queryRef)">
             <el-icon>
               <ele-Refresh />
             </el-icon>
             重置
           </el-button>
-          <el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+          <el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>
             新建
           </el-button>
-          <el-button size="default" type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
             <el-icon>
               <ele-Delete />
             </el-icon>

@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.id ? '修改' : '添加')" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
         <el-form-item label="IP地址" prop="ip">
           <el-input type="textarea" v-model.trim="ruleForm.ip" placeholder="请输入IP地址" />
           <div style="color: #a4a4a4;line-height: 20px;">
@@ -23,8 +23,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>

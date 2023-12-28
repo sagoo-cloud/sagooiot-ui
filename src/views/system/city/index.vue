@@ -1,37 +1,34 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page">
     <el-card shadow="nover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="100px">
-          <el-form-item label="城市名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入城市名称" clearable size="default" @keyup.enter="queryList" />
-          </el-form-item>
-          <el-form-item label="城市编号" prop="code">
-            <el-input v-model="tableData.param.code" placeholder="请输入城市编号" clearable size="default" @keyup.enter="queryList" />
-          </el-form-item>
-          <el-form-item>
-            <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="queryList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button v-auth="'add'" size="default" type="primary" class="ml10" @click="onOpenAddDic">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
+      <el-form :model="tableData.param" ref="queryRef" inline>
+        <el-form-item label="城市名称" prop="name">
+          <el-input v-model="tableData.param.name" placeholder="请输入城市名称" clearable @keyup.enter="queryList" />
+        </el-form-item>
+        <el-form-item label="城市编号" prop="code">
+          <el-input v-model="tableData.param.code" placeholder="请输入城市编号" clearable @keyup.enter="queryList" />
+        </el-form-item>
+        <el-form-item>
+          <el-button v-auth="'query'" type="primary" class="ml10" @click="queryList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button v-auth="'reset'" @click="resetQuery(queryRef)">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button>
+          <el-button v-auth="'add'" type="primary" class="ml10" @click="onOpenAddDic">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" v-loading="tableData.loading" style="width: 100%" row-key="id" default-expand-all :indent="16" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column label="城市名称" v-col="'name'" prop="name" show-overflow-tooltip />
         <el-table-column label="城市编号" v-col="'code'" prop="code" show-overflow-tooltip />
@@ -42,14 +39,14 @@
         </el-table-column>
         <el-table-column label="排序" v-col="'sort'" prop="sort" align="center" />
         <el-table-column label="创建时间" prop="createdAt" v-col="'createdAt'" show-overflow-tooltip />
-        <el-table-column label="操作" width="200" align="center" v-col="'handle'">
+        <el-table-column label="操作" width="150" align="center" v-col="'handle'">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
             <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
+      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="queryList" />
     </el-card>
     <EditDic ref="editDicRef" :treeData="tableData.data" @queryList="queryList" />
     <!-- <Detail ref="detailRef"  /> -->

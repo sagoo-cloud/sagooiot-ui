@@ -1,18 +1,18 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-form :inline="true">
+      <el-form inline>
         <el-form-item label="分类名称">
-          <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称" @keyup.enter.native="getCateList" class="w-50" clearable />
+          <el-input v-model="tableData.param.name" placeholder="请输入分类名称" @keyup.enter.native="getCateList" class="w-50" clearable />
         </el-form-item>
         <el-form-item>
-          <el-button size="default" type="primary" class="ml10" @click="getCateList">
+          <el-button type="primary" class="ml10" @click="getCateList">
             <el-icon>
               <ele-Search />
             </el-icon>
             查询
           </el-button>
-          <el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+          <el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
             <el-icon>
               <ele-FolderAdd />
             </el-icon>

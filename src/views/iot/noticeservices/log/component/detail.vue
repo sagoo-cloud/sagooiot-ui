@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="日志详情" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" size="default" label-width="110px">
+			<el-form ref="formRef" label-width="110px">
 				<el-form-item label="内容">
 					<div v-html="content"></div>
 
@@ -13,7 +13,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
+					<el-button @click="onCancel">取 消</el-button>
 				</span>
 			</template>
 		</el-dialog>

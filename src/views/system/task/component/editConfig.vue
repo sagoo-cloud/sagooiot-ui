@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.jobId ? '修改' : '添加' ) + '任务'" v-model="isShowDialog" width="650px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="100px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="100px">
 				<el-form-item label="任务名称" prop="jobName">
 					<el-input v-model.trim="ruleForm.jobName" placeholder="请输入任务名称" />
 				</el-form-item>
@@ -99,8 +99,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.jobId ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.jobId ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

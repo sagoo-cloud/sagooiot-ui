@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置配置模板" v-model="isShowDialog" width="50%">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
         <el-form-item label="模版代码" prop="code">
           <el-input v-model.trim="ruleForm.code" placeholder="请输入代码" />
         </el-form-item>
@@ -15,8 +15,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">设置</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">设置</el-button>
 				</span>
 			</template>
 		</el-dialog>

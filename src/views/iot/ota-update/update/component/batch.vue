@@ -2,19 +2,19 @@
   <div class="ota-module-container">
     <el-card shadow="nover">
       <div class="ota-module-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="90px" @keyup.enter.native="getList(1)">
+        <el-form :model="tableData.param" ref="queryRef" inline label-width="90px" @keyup.enter.native="getList(1)">
           <el-form-item label="批次名称：" prop="name">
-            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable size="default" style="width: 240px" />
+            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable style="width: 240px" />
           </el-form-item>
 
           <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="getList(1)">
+            <el-button type="primary" class="ml10" @click="getList(1)">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" @click="resetQuery()">
+            <el-button @click="resetQuery()">
               <el-icon>
                 <ele-Refresh />
               </el-icon>

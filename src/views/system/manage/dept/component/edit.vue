@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dept-container">
 		<el-dialog :title="(ruleForm.deptId ? '修改' : '添加') + '组织'" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
+			<el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="90px">
 				<el-row :gutter="35">
 					<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="所属区域" prop="organizationId">
@@ -57,8 +57,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.deptId ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.deptId ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

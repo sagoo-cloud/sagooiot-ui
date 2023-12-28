@@ -4,7 +4,7 @@
       <el-col :span="6" class="h-full">
         <el-card shadow="nover" class="h-full">
           <el-scrollbar v-loading="treeLoading">
-            <el-input :prefix-icon="Search" v-model="searchVal" placeholder="请输入设备树名称" clearable size="default" style="width: 100%;" />
+            <el-input :prefix-icon="Search" v-model="searchVal" placeholder="请输入设备树名称" clearable style="width: 100%;" />
             <el-button v-if="!treeLoading && !treeData.length" type="primary" v-auth="'add'" class="mt-2" @click="operateCmd('add', {})" style="width: 100%">新建节点</el-button>
             <el-tree ref="zlTreeSearchRef" class="mt-4" v-if="!treeLoading" :data="treeData" :props="{
               children: 'children',
@@ -52,10 +52,10 @@
       </el-col>
       <el-col :span="18" class="h-full">
         <el-card shadow="nover" class="h-full" v-if="treeDetail.name">
-          <el-form :model="ruleForm" ref="formRef" size="default" label-width="80px">
+          <el-form :model="ruleForm" ref="formRef" label-width="80px">
             <el-tabs v-model="tabName" @tab-click="onTabClick">
               <el-tab-pane label="设备树信息" name="1">
-                <el-descriptions class="margin-top" :column="3" size="default" border>
+                <el-descriptions class="margin-top" :column="3" border>
                   <el-descriptions-item label="名称">{{ treeDetail.name }}</el-descriptions-item>
                   <el-descriptions-item label="设备标识">{{ treeDetail.deviceKey }}</el-descriptions-item>
                   <el-descriptions-item label="联系人">{{ treeDetail.contact }}</el-descriptions-item>

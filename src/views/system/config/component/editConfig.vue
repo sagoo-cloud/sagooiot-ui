@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.configId!==0?'修改':'添加')+'参数'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
         <el-form-item label="参数名称" prop="configName">
           <el-input v-model="ruleForm.configName" placeholder="请输入参数名称" />
         </el-form-item>
@@ -10,7 +10,7 @@
         </el-form-item>
         <!-- 字典类型下拉框 -->
         <el-form-item label="字典分类" prop="moduleClassify">
-          <el-select v-model="ruleForm.moduleClassify" placeholder="字典分类" clearable size="default" style="width: 240px">
+          <el-select v-model="ruleForm.moduleClassify" placeholder="字典分类" clearable style="width: 240px">
             <el-option v-for="dict in param_class_type" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
@@ -28,8 +28,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ruleForm.configId!==0?'修 改':'添 加'}}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ruleForm.configId!==0?'修 改':'添 加'}}</el-button>
         </span>
       </template>
     </el-dialog>

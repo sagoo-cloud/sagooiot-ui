@@ -1,17 +1,17 @@
 <template>
     <div>
-        <el-form :model="params" :inline="true" ref="queryRef">
+        <el-form :model="params" inline ref="queryRef">
             <el-form-item label="点位名称" prop="title">
                 <el-input v-model="params.title" placeholder="请输入点位名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
             </el-form-item>
             <el-form-item>
-                <el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="getList(1)">
+                <el-button v-auth="'query'" type="primary" class="ml10" @click="getList(1)">
                     <el-icon>
                         <ele-Search />
                     </el-icon>
                     查询
                 </el-button>
-                <el-button v-auth="'reset'" size="default" @click="resetQuery()">
+                <el-button v-auth="'reset'" @click="resetQuery()">
                     <el-icon>
                         <ele-Refresh />
                     </el-icon>

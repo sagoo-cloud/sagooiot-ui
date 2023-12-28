@@ -1,18 +1,18 @@
 <template>
-	<el-card shadow="nover">
+	<el-card shadow="nover" class="page">
 		<div class="search">
-			<el-form :model="params" :inline="true" ref="queryRef">
+			<el-form :model="params" inline ref="queryRef">
 				<el-form-item label="应用名称：" prop="keyWord" @submit.prevent>
-					<el-input v-model="params.keyWord" placeholder="请输入应用名称" clearable size="default" style="width: 240px" @keyup.enter.native="getList(1)" />
+					<el-input v-model="params.keyWord" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
 				</el-form-item>
 				<el-form-item>
-					<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+					<el-button type="primary" class="ml10" @click="getList(1)">
 						<el-icon>
 							<ele-Search />
 						</el-icon>
 						查询
 					</el-button>
-					<el-button size="default" @click="resetQuery(queryRef)">
+					<el-button @click="resetQuery(queryRef)">
 						<el-icon>
 							<ele-Refresh />
 						</el-icon>

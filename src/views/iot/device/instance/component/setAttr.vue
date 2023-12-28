@@ -34,8 +34,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="visiable = false" size="default">取 消</el-button>
-        <el-button type="primary" @click="onSubmit" size="default" :loading="loading">设 置</el-button>
+        <el-button @click="visiable = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="loading">设 置</el-button>
       </span>
     </template>
   </el-dialog>

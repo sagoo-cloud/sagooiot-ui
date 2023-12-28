@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(typeof ruleForm.valueType !== 'undefined' ? '修改' : '添加') + '参数'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
 				<el-form-item label="参数标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入参数标识"  />
 				</el-form-item>
@@ -37,8 +37,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ typeof ruleForm.valueType !== 'undefined' ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ typeof ruleForm.valueType !== 'undefined' ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

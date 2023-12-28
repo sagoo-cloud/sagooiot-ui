@@ -2,18 +2,18 @@
 	<div class="page">
 		<el-card shadow="nover">
 			<div class="search">
-				<el-form :model="params" :inline="true" ref="queryRef">
+				<el-form :model="params" inline ref="queryRef">
 					<el-form-item label="模板名称" prop="title">
 						<el-input v-model="params.title" placeholder="请输入模板名称" clearable style="width: 240px" @keyup.enter.native="getList(1)" />
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="getList(1)">
+						<el-button type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							查询
 						</el-button>
-						<el-button size="default" @click="resetQuery()">
+						<el-button @click="resetQuery()">
 							<el-icon>
 								<ele-Refresh />
 							</el-icon>

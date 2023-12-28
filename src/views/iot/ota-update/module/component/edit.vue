@@ -1,7 +1,7 @@
 <template>
 	<div class="ota-edit-module-container">
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'模块'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
 				<el-form-item label="所属产品" prop="productId">
 					<el-select v-model="ruleForm.productId" filterable placeholder="请选择产品">
 						<el-option v-for="item in productData" :key="item.name" :label="item.name" :value="item.id.toString()" />
@@ -19,8 +19,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-				<el-button @click="onCancel" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit" size="default">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
+				<el-button @click="onCancel">取 消</el-button>
+				<el-button type="primary" @click="onSubmit">{{ruleForm.id!==0?'修 改':'添 加'}}</el-button>
 				</span>
 			</template>
 		</el-dialog>

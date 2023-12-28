@@ -1,15 +1,15 @@
 <template>
 	<div class="page page-full">
 		<div class="">
-			<el-form :model="tableData.param" ref="queryRef" :inline="true">
+			<el-form :model="tableData.param" ref="queryRef" inline>
 				<el-form-item class="mb-0">
-					<el-button size="default" type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+					<el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
 						<el-icon>
 							<ele-FolderAdd />
 						</el-icon>
 						新增告警
 					</el-button>
-					<el-button size="default" type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
+					<el-button type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
 						<el-icon>
 							<ele-Setting />
 						</el-icon>
@@ -67,28 +67,28 @@
 						</div>
 					</div>
 					<div class="card-tools">
-						<el-button size="default" type="primary" text bg @click="onOpenEdit(item)" v-auth="'edit'">
+						<el-button type="primary" text bg @click="onOpenEdit(item)" v-auth="'edit'">
 							<el-icon>
 								<ele-Edit />
 							</el-icon>
 							修改
 						</el-button>
 
-						<el-button size="default" type="warning" text bg @click="onActionStatus(item)" v-if="item.status == 0" v-auth="'status'">
+						<el-button type="warning" text bg @click="onActionStatus(item)" v-if="item.status == 0" v-auth="'status'">
 							<el-icon>
 								<ele-Check />
 							</el-icon>
 							启用
 						</el-button>
 
-						<el-button size="default" type="info" text bg @click="onActionStatus(item)" v-if="item.status == 1" v-auth="'status'">
+						<el-button type="info" text bg @click="onActionStatus(item)" v-if="item.status == 1" v-auth="'status'">
 							<el-icon>
 								<ele-Close />
 							</el-icon>
 							禁用
 						</el-button>
 
-						<el-button size="default" type="info" text bg @click="onRowDel(item)" v-auth="'del'">
+						<el-button type="info" text bg @click="onRowDel(item)" v-auth="'del'">
 							<el-icon>
 								<ele-Delete />
 							</el-icon>

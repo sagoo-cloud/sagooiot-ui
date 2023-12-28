@@ -187,7 +187,7 @@
 										导入物模型
 									</el-button>
 								</el-upload>
-								<el-button size="default" type="default" class="ml10" @click="onRowExport()">
+								<el-button type="default" class="ml10" @click="onRowExport()">
 									<el-icon>
 										<ele-Download />
 									</el-icon>
