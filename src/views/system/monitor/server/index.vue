@@ -1,5 +1,5 @@
 <template>
-  <div class="page" v-loading="loading">
+  <div class="" v-loading="loading">
     <el-row :gutter="15">
       <el-col :xs="24" :sm="12" :md="8" class="mb-4">
         <el-card shadow="nover" class="box-card-meter">
