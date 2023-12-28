@@ -1,43 +1,52 @@
 // 全局页面，适配双色
 .page {
-	height: 100%;
-	overflow-y: auto;
-	background: var(--el-color-white);
-	color: var(--el-text-color-primary);
-	border: 1px solid var(--next-border-color-light);
-	padding: 20px;
+	height       : 100%;
+	overflow-y   : auto;
+	overflow-x   : hidden;
+	background   : var(--el-color-white);
+	color        : var(--el-text-color-primary);
+	border-radius: var(--el-card-border-radius);
+
+	&.padding {
+		padding: 20px;
+	}
+
+	&.border {
+		border: 1px solid var(--next-border-color-light);
+	}
 
 	&:hover {
 		box-shadow: 0 2px 12px var(--next-color-dark-hover);
 		transition: all ease 0.3s;
 	}
-	> .el-card {
+
+	>.el-card {
 		height: 100%;
 
-		> .el-card__body {
-			height: 100%;
-			display: flex;
+		>.el-card__body {
+			height        : 100%;
+			display       : flex;
 			flex-direction: column;
-			overflow-x: hidden;
-			overflow-y: auto;
+			overflow-x    : hidden;
+			overflow-y    : auto;
 		}
 	}
 }
 
 .page-full {
-	height: 100%;
-	display: flex;
+	height   : 100%;
+	display  : flex;
 	flex-flow: column nowrap;
 }
 
 .page-full-part {
-	flex: 1;
+	flex      : 1;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
 
 .full-part {
-	flex: 1;
+	flex      : 1;
 	overflow-y: auto;
 }
 
@@ -66,12 +75,12 @@ image {
 }
 
 .box34 {
-	width: 34px;
+	width : 34px;
 	height: 34px;
 }
 
 .box40 {
-	width: 40px;
+	width : 40px;
 	height: 40px;
 }
 
@@ -80,43 +89,43 @@ image {
 }
 
 .flex-row {
-	display: flex;
+	display        : flex;
 	justify-content: space-between;
-	align-items: center;
-	overflow: hidden;
+	align-items    : center;
+	overflow       : hidden;
 }
 
 .flex-center {
-	display: flex;
+	display        : flex;
 	justify-content: center;
-	align-items: center;
+	align-items    : center;
 }
 
 .flex-around {
-	display: flex;
+	display        : flex;
 	justify-content: space-around;
-	align-items: center;
-	overflow: hidden;
+	align-items    : center;
+	overflow       : hidden;
 }
 
 .flex-column {
-	display: flex;
-	flex-flow: column nowrap;
+	display        : flex;
+	flex-flow      : column nowrap;
 	justify-content: space-between;
 }
 
 .flex {
-	display: flex;
+	display    : flex;
 	align-items: center;
 }
 
 .flex1 {
-	flex: 1;
+	flex    : 1;
 	overflow: hidden;
 }
 
 .flex2 {
-	flex: 2;
+	flex    : 2;
 	overflow: hidden;
 }
 
@@ -142,14 +151,14 @@ image {
 
 .bg-primary {
 	background-color: var(--main-color);
-	border-color: var(--main-color);
+	border-color    : var(--main-color);
 }
 
 .absolute {
 	position: absolute;
-	width: 100%;
-	left: 0;
-	top: 0;
+	width   : 100%;
+	left    : 0;
+	top     : 0;
 }
 
 .z-index1 {
@@ -238,24 +247,24 @@ image {
 }
 
 .h-full-h {
-	height: 100%;
+	height    : 100%;
 	max-height: 100%;
-	overflow: hidden;
+	overflow  : hidden;
 }
 
 .flex-column {
-	display: flex;
+	display  : flex;
 	flex-flow: column nowrap;
 }
 
 .flex-end {
-	display: flex;
-	align-items: center;
+	display        : flex;
+	align-items    : center;
 	justify-content: flex-end;
 }
 
 .flex-column-part {
-	flex: 1;
+	flex      : 1;
 	overflow-y: auto;
 }
 
@@ -272,57 +281,57 @@ image {
 }
 
 .w-30 {
-	width: 30%;
+	width  : 30%;
 	display: block;
 }
 
 .w-35 {
-	width: 35%;
+	width    : 35%;
 	min-width: 35%;
-	display: block;
+	display  : block;
 }
 
 /* 按钮 */
 
 .btn-plain {
 	background: #100f15 !important;
-	color: var(--primary) !important;
-	border: 1px solid #f2a900;
+	color     : var(--primary) !important;
+	border    : 1px solid #f2a900;
 }
 
 .btn-cancel {
-	background: #3b3a3f !important;
-	color: #57565b !important;
+	background    : #3b3a3f !important;
+	color         : #57565b !important;
 	pointer-events: none;
 }
 
 .btn[disabled] {
-	background: #666 !important;
-	color: #ccc !important;
+	background    : #666 !important;
+	color         : #ccc !important;
 	pointer-events: none;
 }
 
 .small-btn {
-	width: 65px;
-	height: 24px;
-	border-radius: 2px;
-	background: #43434d;
-	color: #fff;
-	font-size: 14px;
-	display: flex;
-	align-items: center;
+	width          : 65px;
+	height         : 24px;
+	border-radius  : 2px;
+	background     : #43434d;
+	color          : #fff;
+	font-size      : 14px;
+	display        : flex;
+	align-items    : center;
 	justify-content: center;
 }
 
 .btn {
-	text-align: center;
+	text-align   : center;
 	border-radius: 4px;
-	height: 40px;
-	line-height: 40px;
-	font-size: 16px;
-	display: inline-block;
-	padding: 0 1.6em;
-	cursor: pointer;
+	height       : 40px;
+	line-height  : 40px;
+	font-size    : 16px;
+	display      : inline-block;
+	padding      : 0 1.6em;
+	cursor       : pointer;
 }
 
 .pointer {
@@ -431,7 +440,7 @@ image {
 }
 
 .font-underline {
-	border-bottom: 1px dashed var(--primary);
+	border-bottom : 1px dashed var(--primary);
 	padding-bottom: 2px;
 }
 
@@ -484,42 +493,42 @@ image {
 }
 
 .box20 {
-	width: 20px;
+	width : 20px;
 	height: 20px;
 }
 
 .box22 {
-	width: 22px;
+	width : 22px;
 	height: 22px;
 }
 
 .box24 {
-	width: 24px;
+	width : 24px;
 	height: 24px;
 }
 
 .box80 {
-	width: 80px;
+	width : 80px;
 	height: 80px;
 }
 
 .box120 {
-	width: 120px;
+	width : 120px;
 	height: 120px;
 }
 
 .box160 {
-	width: 160px;
+	width : 160px;
 	height: 160px;
 }
 
 .box168 {
-	width: 168px;
+	width : 168px;
 	height: 168px;
 }
 
 .box200 {
-	width: 200px;
+	width : 200px;
 	height: 200px;
 }
 
@@ -654,12 +663,12 @@ console.log(list.join('\n'))
 }
 
 .px-0 {
-	padding-left: 0rem;
+	padding-left : 0rem;
 	padding-right: 0rem;
 }
 
 .py-0 {
-	padding-top: 0rem;
+	padding-top   : 0rem;
 	padding-bottom: 0rem;
 }
 
@@ -684,12 +693,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-0 {
-	padding-left: 0rem !important;
+	padding-left : 0rem !important;
 	padding-right: 0rem !important;
 }
 
 .Ipy-0 {
-	padding-top: 0rem !important;
+	padding-top   : 0rem !important;
 	padding-bottom: 0rem !important;
 }
 
@@ -714,12 +723,12 @@ console.log(list.join('\n'))
 }
 
 .mx-0 {
-	margin-left: 0rem;
+	margin-left : 0rem;
 	margin-right: 0rem;
 }
 
 .my-0 {
-	margin-top: 0rem;
+	margin-top   : 0rem;
 	margin-bottom: 0rem;
 }
 
@@ -744,12 +753,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-0 {
-	margin-left: 0rem !important;
+	margin-left : 0rem !important;
 	margin-right: 0rem !important;
 }
 
 .Imy-0 {
-	margin-top: 0rem !important;
+	margin-top   : 0rem !important;
 	margin-bottom: 0rem !important;
 }
 
@@ -774,12 +783,12 @@ console.log(list.join('\n'))
 }
 
 .px-1 {
-	padding-left: 0.25rem;
+	padding-left : 0.25rem;
 	padding-right: 0.25rem;
 }
 
 .py-1 {
-	padding-top: 0.25rem;
+	padding-top   : 0.25rem;
 	padding-bottom: 0.25rem;
 }
 
@@ -804,12 +813,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-1 {
-	padding-left: 0.25rem !important;
+	padding-left : 0.25rem !important;
 	padding-right: 0.25rem !important;
 }
 
 .Ipy-1 {
-	padding-top: 0.25rem !important;
+	padding-top   : 0.25rem !important;
 	padding-bottom: 0.25rem !important;
 }
 
@@ -834,12 +843,12 @@ console.log(list.join('\n'))
 }
 
 .mx-1 {
-	margin-left: 0.25rem;
+	margin-left : 0.25rem;
 	margin-right: 0.25rem;
 }
 
 .my-1 {
-	margin-top: 0.25rem;
+	margin-top   : 0.25rem;
 	margin-bottom: 0.25rem;
 }
 
@@ -864,12 +873,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-1 {
-	margin-left: 0.25rem !important;
+	margin-left : 0.25rem !important;
 	margin-right: 0.25rem !important;
 }
 
 .Imy-1 {
-	margin-top: 0.25rem !important;
+	margin-top   : 0.25rem !important;
 	margin-bottom: 0.25rem !important;
 }
 
@@ -894,12 +903,12 @@ console.log(list.join('\n'))
 }
 
 .px-2 {
-	padding-left: 0.5rem;
+	padding-left : 0.5rem;
 	padding-right: 0.5rem;
 }
 
 .py-2 {
-	padding-top: 0.5rem;
+	padding-top   : 0.5rem;
 	padding-bottom: 0.5rem;
 }
 
@@ -924,12 +933,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-2 {
-	padding-left: 0.5rem !important;
+	padding-left : 0.5rem !important;
 	padding-right: 0.5rem !important;
 }
 
 .Ipy-2 {
-	padding-top: 0.5rem !important;
+	padding-top   : 0.5rem !important;
 	padding-bottom: 0.5rem !important;
 }
 
@@ -954,12 +963,12 @@ console.log(list.join('\n'))
 }
 
 .mx-2 {
-	margin-left: 0.5rem;
+	margin-left : 0.5rem;
 	margin-right: 0.5rem;
 }
 
 .my-2 {
-	margin-top: 0.5rem;
+	margin-top   : 0.5rem;
 	margin-bottom: 0.5rem;
 }
 
@@ -984,12 +993,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-2 {
-	margin-left: 0.5rem !important;
+	margin-left : 0.5rem !important;
 	margin-right: 0.5rem !important;
 }
 
 .Imy-2 {
-	margin-top: 0.5rem !important;
+	margin-top   : 0.5rem !important;
 	margin-bottom: 0.5rem !important;
 }
 
@@ -1014,12 +1023,12 @@ console.log(list.join('\n'))
 }
 
 .px-3 {
-	padding-left: 0.75rem;
+	padding-left : 0.75rem;
 	padding-right: 0.75rem;
 }
 
 .py-3 {
-	padding-top: 0.75rem;
+	padding-top   : 0.75rem;
 	padding-bottom: 0.75rem;
 }
 
@@ -1044,12 +1053,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-3 {
-	padding-left: 0.75rem !important;
+	padding-left : 0.75rem !important;
 	padding-right: 0.75rem !important;
 }
 
 .Ipy-3 {
-	padding-top: 0.75rem !important;
+	padding-top   : 0.75rem !important;
 	padding-bottom: 0.75rem !important;
 }
 
@@ -1074,12 +1083,12 @@ console.log(list.join('\n'))
 }
 
 .mx-3 {
-	margin-left: 0.75rem;
+	margin-left : 0.75rem;
 	margin-right: 0.75rem;
 }
 
 .my-3 {
-	margin-top: 0.75rem;
+	margin-top   : 0.75rem;
 	margin-bottom: 0.75rem;
 }
 
@@ -1104,12 +1113,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-3 {
-	margin-left: 0.75rem !important;
+	margin-left : 0.75rem !important;
 	margin-right: 0.75rem !important;
 }
 
 .Imy-3 {
-	margin-top: 0.75rem !important;
+	margin-top   : 0.75rem !important;
 	margin-bottom: 0.75rem !important;
 }
 
@@ -1134,12 +1143,12 @@ console.log(list.join('\n'))
 }
 
 .px-4 {
-	padding-left: 1rem;
+	padding-left : 1rem;
 	padding-right: 1rem;
 }
 
 .py-4 {
-	padding-top: 1rem;
+	padding-top   : 1rem;
 	padding-bottom: 1rem;
 }
 
@@ -1164,12 +1173,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-4 {
-	padding-left: 1rem !important;
+	padding-left : 1rem !important;
 	padding-right: 1rem !important;
 }
 
 .Ipy-4 {
-	padding-top: 1rem !important;
+	padding-top   : 1rem !important;
 	padding-bottom: 1rem !important;
 }
 
@@ -1194,12 +1203,12 @@ console.log(list.join('\n'))
 }
 
 .mx-4 {
-	margin-left: 1rem;
+	margin-left : 1rem;
 	margin-right: 1rem;
 }
 
 .my-4 {
-	margin-top: 1rem;
+	margin-top   : 1rem;
 	margin-bottom: 1rem;
 }
 
@@ -1224,12 +1233,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-4 {
-	margin-left: 1rem !important;
+	margin-left : 1rem !important;
 	margin-right: 1rem !important;
 }
 
 .Imy-4 {
-	margin-top: 1rem !important;
+	margin-top   : 1rem !important;
 	margin-bottom: 1rem !important;
 }
 
@@ -1254,12 +1263,12 @@ console.log(list.join('\n'))
 }
 
 .px-5 {
-	padding-left: 1.25rem;
+	padding-left : 1.25rem;
 	padding-right: 1.25rem;
 }
 
 .py-5 {
-	padding-top: 1.25rem;
+	padding-top   : 1.25rem;
 	padding-bottom: 1.25rem;
 }
 
@@ -1284,12 +1293,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-5 {
-	padding-left: 1.25rem !important;
+	padding-left : 1.25rem !important;
 	padding-right: 1.25rem !important;
 }
 
 .Ipy-5 {
-	padding-top: 1.25rem !important;
+	padding-top   : 1.25rem !important;
 	padding-bottom: 1.25rem !important;
 }
 
@@ -1314,12 +1323,12 @@ console.log(list.join('\n'))
 }
 
 .mx-5 {
-	margin-left: 1.25rem;
+	margin-left : 1.25rem;
 	margin-right: 1.25rem;
 }
 
 .my-5 {
-	margin-top: 1.25rem;
+	margin-top   : 1.25rem;
 	margin-bottom: 1.25rem;
 }
 
@@ -1344,12 +1353,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-5 {
-	margin-left: 1.25rem !important;
+	margin-left : 1.25rem !important;
 	margin-right: 1.25rem !important;
 }
 
 .Imy-5 {
-	margin-top: 1.25rem !important;
+	margin-top   : 1.25rem !important;
 	margin-bottom: 1.25rem !important;
 }
 
@@ -1374,12 +1383,12 @@ console.log(list.join('\n'))
 }
 
 .px-6 {
-	padding-left: 1.5rem;
+	padding-left : 1.5rem;
 	padding-right: 1.5rem;
 }
 
 .py-6 {
-	padding-top: 1.5rem;
+	padding-top   : 1.5rem;
 	padding-bottom: 1.5rem;
 }
 
@@ -1404,12 +1413,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-6 {
-	padding-left: 1.5rem !important;
+	padding-left : 1.5rem !important;
 	padding-right: 1.5rem !important;
 }
 
 .Ipy-6 {
-	padding-top: 1.5rem !important;
+	padding-top   : 1.5rem !important;
 	padding-bottom: 1.5rem !important;
 }
 
@@ -1434,12 +1443,12 @@ console.log(list.join('\n'))
 }
 
 .mx-6 {
-	margin-left: 1.5rem;
+	margin-left : 1.5rem;
 	margin-right: 1.5rem;
 }
 
 .my-6 {
-	margin-top: 1.5rem;
+	margin-top   : 1.5rem;
 	margin-bottom: 1.5rem;
 }
 
@@ -1464,12 +1473,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-6 {
-	margin-left: 1.5rem !important;
+	margin-left : 1.5rem !important;
 	margin-right: 1.5rem !important;
 }
 
 .Imy-6 {
-	margin-top: 1.5rem !important;
+	margin-top   : 1.5rem !important;
 	margin-bottom: 1.5rem !important;
 }
 
@@ -1494,12 +1503,12 @@ console.log(list.join('\n'))
 }
 
 .px-7 {
-	padding-left: 1.75rem;
+	padding-left : 1.75rem;
 	padding-right: 1.75rem;
 }
 
 .py-7 {
-	padding-top: 1.75rem;
+	padding-top   : 1.75rem;
 	padding-bottom: 1.75rem;
 }
 
@@ -1524,12 +1533,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-7 {
-	padding-left: 1.75rem !important;
+	padding-left : 1.75rem !important;
 	padding-right: 1.75rem !important;
 }
 
 .Ipy-7 {
-	padding-top: 1.75rem !important;
+	padding-top   : 1.75rem !important;
 	padding-bottom: 1.75rem !important;
 }
 
@@ -1554,12 +1563,12 @@ console.log(list.join('\n'))
 }
 
 .mx-7 {
-	margin-left: 1.75rem;
+	margin-left : 1.75rem;
 	margin-right: 1.75rem;
 }
 
 .my-7 {
-	margin-top: 1.75rem;
+	margin-top   : 1.75rem;
 	margin-bottom: 1.75rem;
 }
 
@@ -1584,12 +1593,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-7 {
-	margin-left: 1.75rem !important;
+	margin-left : 1.75rem !important;
 	margin-right: 1.75rem !important;
 }
 
 .Imy-7 {
-	margin-top: 1.75rem !important;
+	margin-top   : 1.75rem !important;
 	margin-bottom: 1.75rem !important;
 }
 
@@ -1614,12 +1623,12 @@ console.log(list.join('\n'))
 }
 
 .px-8 {
-	padding-left: 2rem;
+	padding-left : 2rem;
 	padding-right: 2rem;
 }
 
 .py-8 {
-	padding-top: 2rem;
+	padding-top   : 2rem;
 	padding-bottom: 2rem;
 }
 
@@ -1644,12 +1653,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-8 {
-	padding-left: 2rem !important;
+	padding-left : 2rem !important;
 	padding-right: 2rem !important;
 }
 
 .Ipy-8 {
-	padding-top: 2rem !important;
+	padding-top   : 2rem !important;
 	padding-bottom: 2rem !important;
 }
 
@@ -1674,12 +1683,12 @@ console.log(list.join('\n'))
 }
 
 .mx-8 {
-	margin-left: 2rem;
+	margin-left : 2rem;
 	margin-right: 2rem;
 }
 
 .my-8 {
-	margin-top: 2rem;
+	margin-top   : 2rem;
 	margin-bottom: 2rem;
 }
 
@@ -1704,12 +1713,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-8 {
-	margin-left: 2rem !important;
+	margin-left : 2rem !important;
 	margin-right: 2rem !important;
 }
 
 .Imy-8 {
-	margin-top: 2rem !important;
+	margin-top   : 2rem !important;
 	margin-bottom: 2rem !important;
 }
 
@@ -1734,12 +1743,12 @@ console.log(list.join('\n'))
 }
 
 .px-9 {
-	padding-left: 2.25rem;
+	padding-left : 2.25rem;
 	padding-right: 2.25rem;
 }
 
 .py-9 {
-	padding-top: 2.25rem;
+	padding-top   : 2.25rem;
 	padding-bottom: 2.25rem;
 }
 
@@ -1764,12 +1773,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-9 {
-	padding-left: 2.25rem !important;
+	padding-left : 2.25rem !important;
 	padding-right: 2.25rem !important;
 }
 
 .Ipy-9 {
-	padding-top: 2.25rem !important;
+	padding-top   : 2.25rem !important;
 	padding-bottom: 2.25rem !important;
 }
 
@@ -1794,12 +1803,12 @@ console.log(list.join('\n'))
 }
 
 .mx-9 {
-	margin-left: 2.25rem;
+	margin-left : 2.25rem;
 	margin-right: 2.25rem;
 }
 
 .my-9 {
-	margin-top: 2.25rem;
+	margin-top   : 2.25rem;
 	margin-bottom: 2.25rem;
 }
 
@@ -1824,12 +1833,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-9 {
-	margin-left: 2.25rem !important;
+	margin-left : 2.25rem !important;
 	margin-right: 2.25rem !important;
 }
 
 .Imy-9 {
-	margin-top: 2.25rem !important;
+	margin-top   : 2.25rem !important;
 	margin-bottom: 2.25rem !important;
 }
 
@@ -1854,12 +1863,12 @@ console.log(list.join('\n'))
 }
 
 .px-10 {
-	padding-left: 2.5rem;
+	padding-left : 2.5rem;
 	padding-right: 2.5rem;
 }
 
 .py-10 {
-	padding-top: 2.5rem;
+	padding-top   : 2.5rem;
 	padding-bottom: 2.5rem;
 }
 
@@ -1884,12 +1893,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-10 {
-	padding-left: 2.5rem !important;
+	padding-left : 2.5rem !important;
 	padding-right: 2.5rem !important;
 }
 
 .Ipy-10 {
-	padding-top: 2.5rem !important;
+	padding-top   : 2.5rem !important;
 	padding-bottom: 2.5rem !important;
 }
 
@@ -1914,12 +1923,12 @@ console.log(list.join('\n'))
 }
 
 .mx-10 {
-	margin-left: 2.5rem;
+	margin-left : 2.5rem;
 	margin-right: 2.5rem;
 }
 
 .my-10 {
-	margin-top: 2.5rem;
+	margin-top   : 2.5rem;
 	margin-bottom: 2.5rem;
 }
 
@@ -1944,12 +1953,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-10 {
-	margin-left: 2.5rem !important;
+	margin-left : 2.5rem !important;
 	margin-right: 2.5rem !important;
 }
 
 .Imy-10 {
-	margin-top: 2.5rem !important;
+	margin-top   : 2.5rem !important;
 	margin-bottom: 2.5rem !important;
 }
 
@@ -1974,12 +1983,12 @@ console.log(list.join('\n'))
 }
 
 .px-11 {
-	padding-left: 2.75rem;
+	padding-left : 2.75rem;
 	padding-right: 2.75rem;
 }
 
 .py-11 {
-	padding-top: 2.75rem;
+	padding-top   : 2.75rem;
 	padding-bottom: 2.75rem;
 }
 
@@ -2004,12 +2013,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-11 {
-	padding-left: 2.75rem !important;
+	padding-left : 2.75rem !important;
 	padding-right: 2.75rem !important;
 }
 
 .Ipy-11 {
-	padding-top: 2.75rem !important;
+	padding-top   : 2.75rem !important;
 	padding-bottom: 2.75rem !important;
 }
 
@@ -2034,12 +2043,12 @@ console.log(list.join('\n'))
 }
 
 .mx-11 {
-	margin-left: 2.75rem;
+	margin-left : 2.75rem;
 	margin-right: 2.75rem;
 }
 
 .my-11 {
-	margin-top: 2.75rem;
+	margin-top   : 2.75rem;
 	margin-bottom: 2.75rem;
 }
 
@@ -2064,12 +2073,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-11 {
-	margin-left: 2.75rem !important;
+	margin-left : 2.75rem !important;
 	margin-right: 2.75rem !important;
 }
 
 .Imy-11 {
-	margin-top: 2.75rem !important;
+	margin-top   : 2.75rem !important;
 	margin-bottom: 2.75rem !important;
 }
 
@@ -2094,12 +2103,12 @@ console.log(list.join('\n'))
 }
 
 .px-12 {
-	padding-left: 3rem;
+	padding-left : 3rem;
 	padding-right: 3rem;
 }
 
 .py-12 {
-	padding-top: 3rem;
+	padding-top   : 3rem;
 	padding-bottom: 3rem;
 }
 
@@ -2124,12 +2133,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-12 {
-	padding-left: 3rem !important;
+	padding-left : 3rem !important;
 	padding-right: 3rem !important;
 }
 
 .Ipy-12 {
-	padding-top: 3rem !important;
+	padding-top   : 3rem !important;
 	padding-bottom: 3rem !important;
 }
 
@@ -2154,12 +2163,12 @@ console.log(list.join('\n'))
 }
 
 .mx-12 {
-	margin-left: 3rem;
+	margin-left : 3rem;
 	margin-right: 3rem;
 }
 
 .my-12 {
-	margin-top: 3rem;
+	margin-top   : 3rem;
 	margin-bottom: 3rem;
 }
 
@@ -2184,12 +2193,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-12 {
-	margin-left: 3rem !important;
+	margin-left : 3rem !important;
 	margin-right: 3rem !important;
 }
 
 .Imy-12 {
-	margin-top: 3rem !important;
+	margin-top   : 3rem !important;
 	margin-bottom: 3rem !important;
 }
 
@@ -2214,12 +2223,12 @@ console.log(list.join('\n'))
 }
 
 .px-13 {
-	padding-left: 3.25rem;
+	padding-left : 3.25rem;
 	padding-right: 3.25rem;
 }
 
 .py-13 {
-	padding-top: 3.25rem;
+	padding-top   : 3.25rem;
 	padding-bottom: 3.25rem;
 }
 
@@ -2244,12 +2253,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-13 {
-	padding-left: 3.25rem !important;
+	padding-left : 3.25rem !important;
 	padding-right: 3.25rem !important;
 }
 
 .Ipy-13 {
-	padding-top: 3.25rem !important;
+	padding-top   : 3.25rem !important;
 	padding-bottom: 3.25rem !important;
 }
 
@@ -2274,12 +2283,12 @@ console.log(list.join('\n'))
 }
 
 .mx-13 {
-	margin-left: 3.25rem;
+	margin-left : 3.25rem;
 	margin-right: 3.25rem;
 }
 
 .my-13 {
-	margin-top: 3.25rem;
+	margin-top   : 3.25rem;
 	margin-bottom: 3.25rem;
 }
 
@@ -2304,12 +2313,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-13 {
-	margin-left: 3.25rem !important;
+	margin-left : 3.25rem !important;
 	margin-right: 3.25rem !important;
 }
 
 .Imy-13 {
-	margin-top: 3.25rem !important;
+	margin-top   : 3.25rem !important;
 	margin-bottom: 3.25rem !important;
 }
 
@@ -2334,12 +2343,12 @@ console.log(list.join('\n'))
 }
 
 .px-14 {
-	padding-left: 3.5rem;
+	padding-left : 3.5rem;
 	padding-right: 3.5rem;
 }
 
 .py-14 {
-	padding-top: 3.5rem;
+	padding-top   : 3.5rem;
 	padding-bottom: 3.5rem;
 }
 
@@ -2364,12 +2373,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-14 {
-	padding-left: 3.5rem !important;
+	padding-left : 3.5rem !important;
 	padding-right: 3.5rem !important;
 }
 
 .Ipy-14 {
-	padding-top: 3.5rem !important;
+	padding-top   : 3.5rem !important;
 	padding-bottom: 3.5rem !important;
 }
 
@@ -2394,12 +2403,12 @@ console.log(list.join('\n'))
 }
 
 .mx-14 {
-	margin-left: 3.5rem;
+	margin-left : 3.5rem;
 	margin-right: 3.5rem;
 }
 
 .my-14 {
-	margin-top: 3.5rem;
+	margin-top   : 3.5rem;
 	margin-bottom: 3.5rem;
 }
 
@@ -2424,12 +2433,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-14 {
-	margin-left: 3.5rem !important;
+	margin-left : 3.5rem !important;
 	margin-right: 3.5rem !important;
 }
 
 .Imy-14 {
-	margin-top: 3.5rem !important;
+	margin-top   : 3.5rem !important;
 	margin-bottom: 3.5rem !important;
 }
 
@@ -2454,12 +2463,12 @@ console.log(list.join('\n'))
 }
 
 .px-15 {
-	padding-left: 3.75rem;
+	padding-left : 3.75rem;
 	padding-right: 3.75rem;
 }
 
 .py-15 {
-	padding-top: 3.75rem;
+	padding-top   : 3.75rem;
 	padding-bottom: 3.75rem;
 }
 
@@ -2484,12 +2493,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-15 {
-	padding-left: 3.75rem !important;
+	padding-left : 3.75rem !important;
 	padding-right: 3.75rem !important;
 }
 
 .Ipy-15 {
-	padding-top: 3.75rem !important;
+	padding-top   : 3.75rem !important;
 	padding-bottom: 3.75rem !important;
 }
 
@@ -2514,12 +2523,12 @@ console.log(list.join('\n'))
 }
 
 .mx-15 {
-	margin-left: 3.75rem;
+	margin-left : 3.75rem;
 	margin-right: 3.75rem;
 }
 
 .my-15 {
-	margin-top: 3.75rem;
+	margin-top   : 3.75rem;
 	margin-bottom: 3.75rem;
 }
 
@@ -2544,12 +2553,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-15 {
-	margin-left: 3.75rem !important;
+	margin-left : 3.75rem !important;
 	margin-right: 3.75rem !important;
 }
 
 .Imy-15 {
-	margin-top: 3.75rem !important;
+	margin-top   : 3.75rem !important;
 	margin-bottom: 3.75rem !important;
 }
 
@@ -2574,12 +2583,12 @@ console.log(list.join('\n'))
 }
 
 .px-16 {
-	padding-left: 4rem;
+	padding-left : 4rem;
 	padding-right: 4rem;
 }
 
 .py-16 {
-	padding-top: 4rem;
+	padding-top   : 4rem;
 	padding-bottom: 4rem;
 }
 
@@ -2604,12 +2613,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-16 {
-	padding-left: 4rem !important;
+	padding-left : 4rem !important;
 	padding-right: 4rem !important;
 }
 
 .Ipy-16 {
-	padding-top: 4rem !important;
+	padding-top   : 4rem !important;
 	padding-bottom: 4rem !important;
 }
 
@@ -2634,12 +2643,12 @@ console.log(list.join('\n'))
 }
 
 .mx-16 {
-	margin-left: 4rem;
+	margin-left : 4rem;
 	margin-right: 4rem;
 }
 
 .my-16 {
-	margin-top: 4rem;
+	margin-top   : 4rem;
 	margin-bottom: 4rem;
 }
 
@@ -2664,12 +2673,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-16 {
-	margin-left: 4rem !important;
+	margin-left : 4rem !important;
 	margin-right: 4rem !important;
 }
 
 .Imy-16 {
-	margin-top: 4rem !important;
+	margin-top   : 4rem !important;
 	margin-bottom: 4rem !important;
 }
 
@@ -2694,12 +2703,12 @@ console.log(list.join('\n'))
 }
 
 .px-17 {
-	padding-left: 4.25rem;
+	padding-left : 4.25rem;
 	padding-right: 4.25rem;
 }
 
 .py-17 {
-	padding-top: 4.25rem;
+	padding-top   : 4.25rem;
 	padding-bottom: 4.25rem;
 }
 
@@ -2724,12 +2733,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-17 {
-	padding-left: 4.25rem !important;
+	padding-left : 4.25rem !important;
 	padding-right: 4.25rem !important;
 }
 
 .Ipy-17 {
-	padding-top: 4.25rem !important;
+	padding-top   : 4.25rem !important;
 	padding-bottom: 4.25rem !important;
 }
 
@@ -2754,12 +2763,12 @@ console.log(list.join('\n'))
 }
 
 .mx-17 {
-	margin-left: 4.25rem;
+	margin-left : 4.25rem;
 	margin-right: 4.25rem;
 }
 
 .my-17 {
-	margin-top: 4.25rem;
+	margin-top   : 4.25rem;
 	margin-bottom: 4.25rem;
 }
 
@@ -2784,12 +2793,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-17 {
-	margin-left: 4.25rem !important;
+	margin-left : 4.25rem !important;
 	margin-right: 4.25rem !important;
 }
 
 .Imy-17 {
-	margin-top: 4.25rem !important;
+	margin-top   : 4.25rem !important;
 	margin-bottom: 4.25rem !important;
 }
 
@@ -2814,12 +2823,12 @@ console.log(list.join('\n'))
 }
 
 .px-18 {
-	padding-left: 4.5rem;
+	padding-left : 4.5rem;
 	padding-right: 4.5rem;
 }
 
 .py-18 {
-	padding-top: 4.5rem;
+	padding-top   : 4.5rem;
 	padding-bottom: 4.5rem;
 }
 
@@ -2844,12 +2853,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-18 {
-	padding-left: 4.5rem !important;
+	padding-left : 4.5rem !important;
 	padding-right: 4.5rem !important;
 }
 
 .Ipy-18 {
-	padding-top: 4.5rem !important;
+	padding-top   : 4.5rem !important;
 	padding-bottom: 4.5rem !important;
 }
 
@@ -2874,12 +2883,12 @@ console.log(list.join('\n'))
 }
 
 .mx-18 {
-	margin-left: 4.5rem;
+	margin-left : 4.5rem;
 	margin-right: 4.5rem;
 }
 
 .my-18 {
-	margin-top: 4.5rem;
+	margin-top   : 4.5rem;
 	margin-bottom: 4.5rem;
 }
 
@@ -2904,12 +2913,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-18 {
-	margin-left: 4.5rem !important;
+	margin-left : 4.5rem !important;
 	margin-right: 4.5rem !important;
 }
 
 .Imy-18 {
-	margin-top: 4.5rem !important;
+	margin-top   : 4.5rem !important;
 	margin-bottom: 4.5rem !important;
 }
 
@@ -2934,12 +2943,12 @@ console.log(list.join('\n'))
 }
 
 .px-19 {
-	padding-left: 4.75rem;
+	padding-left : 4.75rem;
 	padding-right: 4.75rem;
 }
 
 .py-19 {
-	padding-top: 4.75rem;
+	padding-top   : 4.75rem;
 	padding-bottom: 4.75rem;
 }
 
@@ -2964,12 +2973,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-19 {
-	padding-left: 4.75rem !important;
+	padding-left : 4.75rem !important;
 	padding-right: 4.75rem !important;
 }
 
 .Ipy-19 {
-	padding-top: 4.75rem !important;
+	padding-top   : 4.75rem !important;
 	padding-bottom: 4.75rem !important;
 }
 
@@ -2994,12 +3003,12 @@ console.log(list.join('\n'))
 }
 
 .mx-19 {
-	margin-left: 4.75rem;
+	margin-left : 4.75rem;
 	margin-right: 4.75rem;
 }
 
 .my-19 {
-	margin-top: 4.75rem;
+	margin-top   : 4.75rem;
 	margin-bottom: 4.75rem;
 }
 
@@ -3024,12 +3033,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-19 {
-	margin-left: 4.75rem !important;
+	margin-left : 4.75rem !important;
 	margin-right: 4.75rem !important;
 }
 
 .Imy-19 {
-	margin-top: 4.75rem !important;
+	margin-top   : 4.75rem !important;
 	margin-bottom: 4.75rem !important;
 }
 
@@ -3054,12 +3063,12 @@ console.log(list.join('\n'))
 }
 
 .px-20 {
-	padding-left: 5rem;
+	padding-left : 5rem;
 	padding-right: 5rem;
 }
 
 .py-20 {
-	padding-top: 5rem;
+	padding-top   : 5rem;
 	padding-bottom: 5rem;
 }
 
@@ -3084,12 +3093,12 @@ console.log(list.join('\n'))
 }
 
 .Ipx-20 {
-	padding-left: 5rem !important;
+	padding-left : 5rem !important;
 	padding-right: 5rem !important;
 }
 
 .Ipy-20 {
-	padding-top: 5rem !important;
+	padding-top   : 5rem !important;
 	padding-bottom: 5rem !important;
 }
 
@@ -3114,12 +3123,12 @@ console.log(list.join('\n'))
 }
 
 .mx-20 {
-	margin-left: 5rem;
+	margin-left : 5rem;
 	margin-right: 5rem;
 }
 
 .my-20 {
-	margin-top: 5rem;
+	margin-top   : 5rem;
 	margin-bottom: 5rem;
 }
 
@@ -3144,12 +3153,12 @@ console.log(list.join('\n'))
 }
 
 .Imx-20 {
-	margin-left: 5rem !important;
+	margin-left : 5rem !important;
 	margin-right: 5rem !important;
 }
 
 .Imy-20 {
-	margin-top: 5rem !important;
+	margin-top   : 5rem !important;
 	margin-bottom: 5rem !important;
 }
 

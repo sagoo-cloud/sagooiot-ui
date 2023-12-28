@@ -1,98 +1,85 @@
 <template>
-  <div>
-    <div class="content-box chatdoom page">
+  <div class="page">
+    <el-card shadow="nover">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="服务日志" name="1"> </el-tab-pane>
+        <el-tab-pane label="数据库日志" name="2"> </el-tab-pane>
+        <el-tab-pane label="运行日志" name="3"> </el-tab-pane>
+      </el-tabs>
+      <!-- 日志列表 -->
+      <el-table ref="table" v-if="activeName === '1'" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+        <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
+            </el-button>
+            <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+            <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-        <!-- 日志列表 -->
-        <el-tab-pane label="服务日志" name="1">
-          <el-card shadow="nover">
-            <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-              <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
-              <el-table-column label="操作" width="200" align="center">
-                <template #default="scope">
-                  <el-button size="small" text type="primary" v-if="!scope.row.folderName"
-                             @click="view(scope.row)">详情
-                  </el-button>
-                  <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-                  <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-
-          <el-dialog header="123" v-model="dialogVisible" title="查看详情">
-            <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
-            <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
-          </el-dialog>
-        </el-tab-pane>
-
-        <!-- 数据库日志 -->
-        <el-tab-pane label="数据库日志" name="2">
-          <el-card shadow="nover">
-            <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-              <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
-              <el-table-column label="操作" width="200" align="center">
-                <template #default="scope">
-                  <el-button size="small" text type="primary" v-if="!scope.row.folderName"
-                             @click="view(scope.row)">详情
-                  </el-button>
-                  <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-                  <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-
-          <el-dialog v-model="dialogVisible" title="查看详情">
-            <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
-
-            <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
-          </el-dialog>
-        </el-tab-pane>
+      <!-- 数据库日志 -->
+      <el-table v-else-if="activeName === '2'" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+        <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
+            </el-button>
+            <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+            <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <template v-else>
 
         <!-- 运行日志 -->
-        <el-tab-pane label="运行日志" name="3" class="runMessage">
-          <!-- 运行日志 -->
-          <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
-          <div v-if="runButtonShow" v-loading="runLoading" v-for="line in runMessage" :key="line" class="error-line">{{ line }}</div>
-          <div v-else class="error-line">暂无数据</div>
+        <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
+        <div v-if="runButtonShow" v-loading="runLoading" v-for="line in runMessage" :key="line" class="error-line">{{ line }}</div>
+        <div v-else class="error-line">暂无数据</div>
+        <div class="run-button" v-if="runButtonShow">
+          <el-button size="small" text type="warning" v-auth="'download'" @click="down">下载</el-button>
+          <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel">删除</el-button>
+        </div>
+      </template>
 
-          <div class="run-button" v-if="runButtonShow">
-            <el-button size="small" text type="warning" v-auth="'download'" @click="down">下载</el-button>
-            <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel">删除</el-button>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+      <el-dialog v-model="dialogVisible" title="查看详情">
+        <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
+        <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
+      </el-dialog>
+      <el-dialog v-model="dialogVisible" title="查看详情">
+        <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
+        <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
+      </el-dialog>
+    </el-card>
   </div>
 </template>
 
 <script lang="ts" setup>
 import api from '/@/api/system';
-import {useSearch} from '/@/hooks/useCommon';
+import { useSearch } from '/@/hooks/useCommon';
 import getOrigin from '/@/utils/origin'
 import downloadFile from '/@/utils/download';
-import {ref, getCurrentInstance, nextTick, onMounted} from 'vue';
-import {ElMessage, ElMessageBox} from "element-plus";
+import { ref, getCurrentInstance, nextTick, onMounted } from 'vue';
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const dialogVisible = ref(false);
 const errorMessage = ref([]);
 const runMessage = ref([]);
 const topMsg = ref([]);
-const activeName = '1';
+const activeName = ref('1');
 const types = ref('service');
 const runLoading = ref(false);
-const { proxy } = getCurrentInstance() as any;
 const isScrolling = ref(false);
 const chatContent: any = ref(null);
 const runButtonShow = ref(false);
 const runLogName = ref('');
 
-const {params, tableData, getList, loading} = useSearch<any[]>(api.lastLinesLog.getList, 'list', {types: types.value});
+const { params, tableData, getList, loading } = useSearch<any[]>(api.lastLinesLog.getList, 'list', { types: types.value });
 
 getList();
 
@@ -117,16 +104,16 @@ const view = (row: any) => {
     row.name = row.value;
   }
   const es = new EventSource(getOrigin(import.meta.env.VITE_SERVER_URL + "/subscribe/logInfo?name=" + row.name + '&types=' + types.value));
-  es.addEventListener('log', ({data}) => {
+  es.addEventListener('log', ({ data }) => {
     topMsg.value.unshift(data);
   });
-  api.lastLinesLog.detail({name: row.name, types: types.value}).then((res: any) => {
+  api.lastLinesLog.detail({ name: row.name, types: types.value }).then((res: any) => {
     if (types.value == 'run') {
-        runMessage.value = res.list;
-        runLoading.value = false;
-        if (res.list.length > 0) {
-          runButtonShow.value = true;
-        }
+      runMessage.value = res.list;
+      runLoading.value = false;
+      if (res.list.length > 0) {
+        runButtonShow.value = true;
+      }
     } else {
       errorMessage.value = res.list;
       dialogVisible.value = true;
@@ -137,7 +124,7 @@ const down = (row: any) => {
   if (types.value == 'run') {
     row.name = runLogName.value
   }
-  api.lastLinesLog.down({name: row.name, types: types.value}).then((res: any) => downloadFile(res, types.value +"-"+ row.name))
+  api.lastLinesLog.down({ name: row.name, types: types.value }).then((res: any) => downloadFile(res, types.value + "-" + row.name))
 };
 
 const onRowDel = (row: any) => {
@@ -150,7 +137,7 @@ const onRowDel = (row: any) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    api.lastLinesLog.delete({name: row.name, types: types.value}).then(() => {
+    api.lastLinesLog.delete({ name: row.name, types: types.value }).then(() => {
       params.types = types.value;
       if (types.value == 'run') {
         runButtonShow.value = false;
@@ -188,23 +175,24 @@ const handleClick = (tab: any, event: Event) => {
   bottom: 50px;
   right: 80px;
 }
+
 .runMessage {
   height: 500px;
 }
+
 .content-box {
   width: 100%;
   padding: 5px 20px 20px 20px;
 }
+
 .error-line {
-  white-space: pre-line; /* 保留换行符 */
+  white-space: pre-line;
+  /* 保留换行符 */
 }
+
 .el-tabs--card {
   height: calc(100vh - 110px);
   overflow-y: auto;
 }
-.el-tab-pane {
-  position: relative;
-  height: calc(100vh - 110px);
-  overflow-y: auto;
-}
+
 </style>
