@@ -224,6 +224,8 @@ const open = async (row: any, productInfo: any) => {
         const sortedArray = res.Data.sort((a, b) => a.id - b.id);
 				Datalist.value = sortedArray || [];
       });
+      formData.productKey = productInfo.key
+
     }
   });
 };
