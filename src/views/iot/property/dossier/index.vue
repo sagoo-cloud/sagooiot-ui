@@ -39,16 +39,18 @@
 			</el-form>
 			<el-row :gutter="16">
 				<el-col :span="6">
-					<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee; padding: 10px; margin-right: 10px">
-						<template #default="{ node, data }">
-							<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-								<el-icon v-if="data.is_type == '2'">
-									<Check />
-								</el-icon>
-								{{ node.label }}
-							</span>
-						</template>
-					</el-tree>
+          <el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;" class="mt-4" :default-expand-all="true" :node-key="'id'" highlight-current>
+            <template #default="{ node, data }">
+              <div class="custom-tree-node">
+                  <span class="tree-label">
+                    <el-icon v-if="data.is_type == '2'">
+                      <Check />
+                    </el-icon>
+                    {{ node.label }}
+                  </span>
+              </div>
+            </template>
+          </el-tree>
 				</el-col>
 				<el-col :span="18"><el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
 						<el-table-column type="selection" width="55" align="center" />
@@ -205,5 +207,30 @@ const del = (row: any) => {
 }
 
 
-getCateList()
+// getCateList()
 </script>
+<style scoped lang="scss">
+.custom-tree-node {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+  overflow: hidden;
+
+  .tree-label {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  &:hover {
+    .tree-options {
+      display: block;
+    }
+  }
+}
+</style>
