@@ -56,6 +56,7 @@ interface TableDataState {
       pageNum: number
       pageSize: number
       name: string
+      productId: number
     }
   },
   ruleForm: {
@@ -84,6 +85,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           name: '',
+          productId: 0,
         },
       },
       ruleForm: {
@@ -119,8 +121,9 @@ export default defineComponent({
       });
     };
 
-    const openDialog = (checkIdData: any) => {
+    const openDialog = (checkIdData: any, productId: any) => {
       state.checkIdList = checkIdData;
+      state.tableData.param.productId = productId;
       getDeviceList()
     };
 

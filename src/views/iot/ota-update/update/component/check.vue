@@ -255,7 +255,7 @@ export default defineComponent({
     };
     // 打开设备列表
     const onOpenDevice = () => {
-      deviceRef.value.openDialog(state.ruleForm.devices);
+      deviceRef.value.openDialog(state.ruleForm.devices, state.ruleForm.productId);
     };
     return {
       deviceRef,

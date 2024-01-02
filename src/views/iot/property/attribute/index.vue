@@ -30,14 +30,16 @@
 			</el-form>
 			<el-row :gutter="16">
 				<el-col :span="6">
-					<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;">
+					<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;" class="mt-4" :default-expand-all="true" :node-key="'id'" highlight-current>
 						<template #default="{ node, data }">
-							<span :style="data.is_type === '2' ? { color: '#409eff' } : {}">
-								<el-icon v-if="data.is_type == '2'">
-									<Expand />
-								</el-icon>
-								{{ node.label }}
-							</span>
+              <div class="custom-tree-node">
+                  <span class="tree-label">
+                    <el-icon v-if="data.is_type == '2'">
+                      <Expand />
+                    </el-icon>
+                    {{ node.label }}
+                  </span>
+              </div>
 						</template>
 					</el-tree>
 				</el-col>
@@ -112,7 +114,6 @@ const addOrEdit = async (row?: any) => {
 	}
 }
 
-
 const getCateList = () => {
 	device.category.getList({}).then((res: any) => {
 		cateData.value = res.category;
@@ -122,20 +123,22 @@ const getCateList = () => {
 			params.productKey = res.product[0].key
 			getList()
 			mergedData.value = matchProductsToCategories(productData.value, cateData.value);
-		})
 
+      // 默认加载第一个设备对应属性
+      if (productData.value.length > 0) {
+        handleNodeClick(mergedData.value[0].children[0])
+      }
+    });
 	})
 }
 
 const handleNodeClick = (data: any) => {
-	if (data.is_type === '2') {
+  if (data.is_type === '2') {
 		productIno.value = data;
 		params.productKey = data.key
 		getList()
-
 	} else {
 		productIno.value = '';
-
 	}
 }
 
@@ -199,6 +202,30 @@ const del = (row: any) => {
 		getList()
 	})
 }
-getCateList()
 
 </script>
+<style scoped lang="scss">
+.custom-tree-node {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+  overflow: hidden;
+
+  .tree-label {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  &:hover {
+    .tree-options {
+      display: block;
+    }
+  }
+}
+</style>

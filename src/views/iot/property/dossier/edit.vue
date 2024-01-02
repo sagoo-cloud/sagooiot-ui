@@ -80,7 +80,7 @@
         </el-col>
       </el-row>
 
-      <el-divider content-position="left" v-if="Datalist && Datalist.length > 0">自定义属性</el-divider>
+      <el-divider content-position="left" v-if="Datalist">自定义属性</el-divider>
         <FromData :Datalist="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
     </el-form>
     <template #footer>
