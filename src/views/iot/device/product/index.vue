@@ -24,12 +24,12 @@
             </el-icon>
             查询
           </el-button>
-          <el-button @click="resetQuery(queryRef)">
+          <!-- <el-button @click="resetQuery(queryRef)">
             <el-icon>
               <ele-Refresh />
             </el-icon>
             重置
-          </el-button>
+          </el-button> -->
           <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
             <el-icon>
               <ele-FolderAdd />

@@ -1,5 +1,5 @@
 <template>
-	<div class="system-dic-container">
+	<div class="page page-full">
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">产品：{{ detail.name }}</div>
@@ -10,205 +10,181 @@
 			</div>
 		</div>
 
-		<div class="content-box">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-				<el-tab-pane label="产品信息" name="1">
-					<div class="pro-box">
-						<div class="protitle">产品信息</div>
-						<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
-					</div>
+		<el-tabs v-model="activeName" style="padding: 0 20px;" @tab-click="handleClick">
+			<el-tab-pane label="产品信息" name="1">
+				<div class="pro-box">
+					<div class="protitle">产品信息</div>
+					<el-button type="" :icon="Edit" class="buttonedit" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
+				</div>
 
-					<div class="ant-descriptions-view">
-						<table>
-							<tbody>
-								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品标识</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.key }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品分类</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.categoryName }}</td>
-									<!-- <th class="ant-descriptions-item-label ant-descriptions-item-colon">所属组织</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deptName }}</td> -->
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">设备类型</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.deviceType }}</td>
-								</tr>
-								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">产品图片</th>
-									<td class="ant-descriptions-item-content" colspan="1">
-										<el-image style="width: 80px; height: 80px" :src="detail.icon" :previewSrcList="[detail.icon]" fit="contain">
-											<template #error>
-												<div class="image-slot">
-													<ele-Picture style="width: 30px;" />
-													加载失败
-												</div>
-											</template>
-										</el-image>
-									</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">消息协议</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.messageProtocol }}</td>
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">接入方式</th>
-									<td class="ant-descriptions-item-content" colspan="1">{{ detail.transportProtocol }}
-									</td>
-
-								</tr>
-								<tr class="ant-descriptions-row">
-									<th class="ant-descriptions-item-label ant-descriptions-item-colon">描述</th>
-									<td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</el-tab-pane>
-				<el-tab-pane label="物模型" name="2">
-					<div class="wu-box">
-						<el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
-							<el-tab-pane label="属性定义" name="attr">
-								<div class="wu-title">
-									<div class="title">属性定义</div>
-									<div><el-button type="primary" v-auth="'edit'" @click="onOpenEditAttr()">添加</el-button>
-									</div>
+				<el-descriptions class="margin-top" :column="3" border>
+					<el-descriptions-item label="产品标识">{{ detail.key }}</el-descriptions-item>
+					<el-descriptions-item label="产品分类">{{ detail.categoryName }}</el-descriptions-item>
+					<el-descriptions-item label="设备类型">{{ detail.deviceType }}</el-descriptions-item>
+					<el-descriptions-item label="产品图片">
+						<el-image style="width: 80px; height: 80px" :src="detail.icon" :previewSrcList="[detail.icon]" fit="contain">
+							<template #error>
+								<div class="image-slot">
+									<ele-Picture style="width: 30px;" />
+									加载失败
 								</div>
-
-								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
-									<el-table-column label="属性标识" align="center" prop="key" />
-									<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
-									<el-table-column prop="valueType" label="数据类型" width="100" align="center">
-										<template #default="scope">
-											<span>{{ scope.row.valueType.type }}</span>
-										</template>
-									</el-table-column>
-									<el-table-column prop="decimals" label="精度" width="60" align="center">
-										<template #default="scope">
-											<span>{{ scope.row.valueType.decimals }}</span>
-										</template>
-									</el-table-column>
-									<el-table-column prop="unit" label="单位" width="60" align="center">
-										<template #default="scope">
-											<span>{{ scope.row.valueType.unit }}</span>
-										</template>
-									</el-table-column>
-									<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
-										<template #default="scope">
-											<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
-											<el-tag type="success" size="small" v-else>读写</el-tag>
-										</template>
-									</el-table-column>
-									<el-table-column label="说明" prop="desc" show-overflow-tooltip />
-									<el-table-column label="操作" width="300" align="center" fixed="right">
-										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-tab-pane>
-							<el-tab-pane label="功能定义" name="fun">
-								<div class="wu-title">
-									<div class="title">功能定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
-									</div>
-								</div>
-
-								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
-									<el-table-column label="功能标识" align="center" prop="key" />
-									<el-table-column label="名称" prop="name" show-overflow-tooltip />
-
-									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
-									<el-table-column label="操作" width="300" align="center" fixed="right">
-										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-tab-pane>
-							<el-tab-pane label="事件定义" name="event">
-								<div class="wu-title">
-									<div class="title">事件定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
-									</div>
-								</div>
-
-								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
-									<el-table-column label="事件标识" align="center" prop="key" />
-									<el-table-column label="名称" prop="name" show-overflow-tooltip />
-									<el-table-column prop="level" label="事件级别" width="120" align="center">
-										<template #default="scope">
-											<el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
-											<el-tag type="warning" size="small" v-if="scope.row.level == 1">警告</el-tag>
-											<el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
-										</template>
-									</el-table-column>
-									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
-
-									<el-table-column label="操作" width="300" align="center" fixed="right">
-										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-tab-pane>
-							<el-tab-pane label="标签定义" name="tab">
-								<div class="wu-title">
-									<div class="title">标签定义</div>
-									<div><el-button type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
-									</div>
-								</div>
-
-								<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
-									<el-table-column label="属性标识" align="center" prop="key" />
-									<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
-									<el-table-column prop="valueType" label="数据类型" width="120" align="center">
-										<template #default="scope">
-											<span>{{ scope.row.valueType.type }}</span>
-										</template>
-									</el-table-column>
-									<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
-										<template #default="scope">
-											<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
-											<el-tag type="success" size="small" v-else>读写</el-tag>
-										</template>
-									</el-table-column>
-									<el-table-column label="描述" prop="desc" show-overflow-tooltip />
-									<el-table-column label="操作" width="300" align="center" fixed="right">
-										<template #default="scope">
-											<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
-											<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-tab-pane>
-						</el-tabs>
-						<div class="import">
-							<div class="row_bet">
-								<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
-									<el-button>
-										<el-icon> <ele-Upload /> </el-icon>
-										导入物模型
-									</el-button>
-								</el-upload>
-								<el-button type="default" class="ml10" @click="onRowExport()">
-									<el-icon>
-										<ele-Download />
-									</el-icon>
-									导出物模型
-								</el-button>
+							</template>
+						</el-image>
+					</el-descriptions-item>
+					<el-descriptions-item label="消息协议">{{ detail.messageProtocol }}</el-descriptions-item>
+					<el-descriptions-item label="接入方式">{{ detail.transportProtocol }}</el-descriptions-item>
+					<el-descriptions-item label="描述">{{ detail.desc }}</el-descriptions-item>
+				</el-descriptions>
+			</el-tab-pane>
+			<el-tab-pane label="物模型" name="2">
+				<el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
+					<el-tab-pane label="属性定义" name="attr">
+						<div class="wu-title">
+							<div class="title">属性定义</div>
+							<div><el-button size="small" type="primary" v-auth="'edit'" @click="onOpenEditAttr()">添加</el-button>
 							</div>
-
 						</div>
 
-						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
+						<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
+							<el-table-column label="属性标识" align="center" prop="key" />
+							<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
+							<el-table-column prop="valueType" label="数据类型" width="100" align="center">
+								<template #default="scope">
+									<span>{{ scope.row.valueType.type }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column prop="decimals" label="精度" width="60" align="center">
+								<template #default="scope">
+									<span>{{ scope.row.valueType.decimals }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column prop="unit" label="单位" width="60" align="center">
+								<template #default="scope">
+									<span>{{ scope.row.valueType.unit }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+								<template #default="scope">
+									<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+									<el-tag type="success" size="small" v-else>读写</el-tag>
+								</template>
+							</el-table-column>
+							<el-table-column label="说明" prop="desc" show-overflow-tooltip />
+							<el-table-column label="操作" width="300" align="center" fixed="right">
+								<template #default="scope">
+									<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
+									<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-tab-pane>
+					<el-tab-pane label="功能定义" name="fun">
+						<div class="wu-title">
+							<div class="title">功能定义</div>
+							<div><el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
+							</div>
+						</div>
+
+						<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
+							<el-table-column label="功能标识" align="center" prop="key" />
+							<el-table-column label="名称" prop="name" show-overflow-tooltip />
+
+							<el-table-column label="描述" prop="desc" show-overflow-tooltip />
+							<el-table-column label="操作" width="300" align="center" fixed="right">
+								<template #default="scope">
+									<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
+									<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-tab-pane>
+					<el-tab-pane label="事件定义" name="event">
+						<div class="wu-title">
+							<div class="title">事件定义</div>
+							<div>
+								<el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
+							</div>
+						</div>
+
+						<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
+							<el-table-column label="事件标识" align="center" prop="key" />
+							<el-table-column label="名称" prop="name" show-overflow-tooltip />
+							<el-table-column prop="level" label="事件级别" width="120" align="center">
+								<template #default="scope">
+									<el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
+									<el-tag type="warning" size="small" v-if="scope.row.level == 1">警告</el-tag>
+									<el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
+								</template>
+							</el-table-column>
+							<el-table-column label="描述" prop="desc" show-overflow-tooltip />
+
+							<el-table-column label="操作" width="300" align="center" fixed="right">
+								<template #default="scope">
+									<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
+									<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-tab-pane>
+					<el-tab-pane label="标签定义" name="tab">
+						<div class="wu-title">
+							<div class="title">标签定义</div>
+							<div><el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
+							</div>
+						</div>
+
+						<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
+							<el-table-column label="属性标识" align="center" prop="key" />
+							<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
+							<el-table-column prop="valueType" label="数据类型" width="120" align="center">
+								<template #default="scope">
+									<span>{{ scope.row.valueType.type }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+								<template #default="scope">
+									<el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+									<el-tag type="success" size="small" v-else>读写</el-tag>
+								</template>
+							</el-table-column>
+							<el-table-column label="描述" prop="desc" show-overflow-tooltip />
+							<el-table-column label="操作" width="300" align="center" fixed="right">
+								<template #default="scope">
+									<el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
+									<el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-tab-pane>
+				</el-tabs>
+				<div class="import">
+					<div class="row_bet">
+						<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+							<el-button size="small">
+								<el-icon> <ele-Upload /> </el-icon>
+								导入物模型
+							</el-button>
+						</el-upload>
+						<el-button size="small" type="default" class="ml10" @click="onRowExport()">
+							<el-icon>
+								<ele-Download />
+							</el-icon>
+							导出物模型
+						</el-button>
 					</div>
-				</el-tab-pane>
-				<el-tab-pane label="设备接入" name="3">
-					<deviceIn></deviceIn>
-				</el-tab-pane>
-				<el-tab-pane label="数据解析" name="4" lazy>
-					<dataParse v-if="activeName === '4'" :script="detail.scriptInfo" @updateScript="updateScript">
-					</dataParse>
-				</el-tab-pane>
-			</el-tabs>
-		</div>
+
+				</div>
+
+				<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
+			</el-tab-pane>
+			<el-tab-pane label="设备接入" name="3">
+				<deviceIn></deviceIn>
+			</el-tab-pane>
+			<el-tab-pane label="数据解析" name="4" lazy>
+				<dataParse v-if="activeName === '4'" :script="detail.scriptInfo" @updateScript="updateScript">
+				</dataParse>
+			</el-tab-pane>
+		</el-tabs>
 		<EditDic ref="editDicRef" @typeList="typeList" />
 		<EditAttr ref="editAttrRef" @typeList="getproperty" />
 		<EditFun ref="editFunRef" @typeList="getfunction" />
@@ -542,29 +518,20 @@ export default defineComponent({
 <style scoped>
 .import {
 	position: absolute;
-	top: 26px;
-	right: 35px;
+	top: 8px;
+	right: 12px;
 }
 
 .import .row_bet {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding-right: 5px;
 	flex: 1;
 }
 
 .content {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
-}
-
-.content-box {
-	background: #fff;
-	width: 100%;
-	padding: 20px;
-	margin-top: 20px;
 }
 
 .cont_box {
@@ -606,96 +573,24 @@ export default defineComponent({
 	cursor: pointer;
 }
 
-.content-box .pro-box {
+.pro-box {
 	display: flex;
 	padding: 10px;
+	align-items: center;
 }
 
-.content-box .pro-box .protitle {
+.pro-box .protitle {
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 35px;
 }
 
-.content-box .pro-box .buttonedit {
+.pro-box .buttonedit {
 	border: 0px;
 	color: #1890ff;
 }
 
-table {
-	border-collapse: collapse;
-	text-indent: initial;
-	border-spacing: 2px;
-}
-
-tbody {
-	box-sizing: border-box;
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
-}
-
-tr {
-	display: table-row;
-	vertical-align: inherit;
-	border-color: inherit;
-}
-
-.ant-descriptions-view {
-	width: 100%;
-	overflow: hidden;
-	border-radius: 4px;
-}
-
-.ant-descriptions-view {
-	border: 1px solid #e8e8e8;
-}
-
-.ant-descriptions-view table {
-	width: 100%;
-	table-layout: fixed;
-}
-
-.ant-descriptions-view>table {
-	table-layout: auto;
-}
-
-.ant-descriptions-row {
-	border-bottom: 1px solid #e8e8e8;
-}
-
-.ant-descriptions-item-label {
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 1.5;
-}
-
-.ant-descriptions-item-label {
-	padding: 16px 24px;
-	border-right: 1px solid #e8e8e8;
-}
-
-.ant-descriptions-item-label {
-	background-color: #fafafa;
-}
-
-.ant-descriptions-item-content {
-	padding: 16px 24px;
-	border-right: 1px solid #e8e8e8;
-	display: table-cell;
-	color: rgba(0, 0, 0, 0.65);
-	font-size: 14px;
-	line-height: 1.5;
-}
-
-.wu-box {
-	border: #e8e8e8 solid 1px;
-	padding: 20px;
-	width: 100%;
-}
-
-.wu-box .wu-title {
+.wu-title {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -703,7 +598,7 @@ tr {
 	border-bottom: #e8e8e8 1px solid;
 }
 
-.wu-box .wu-title .title {
+.wu-title .title {
 	font-size: 18px;
 }
 </style>

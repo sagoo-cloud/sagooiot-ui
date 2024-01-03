@@ -16,7 +16,7 @@
 
         <el-col :span="12">
           <el-form-item label="选择设备" prop="deviceKey">
-            <el-select v-model="formData.deviceKey" placeholder="请选择设备" class="w100" clearable @change="handleSelectionChange">
+            <el-select v-model="formData.deviceKey" placeholder="请选择设备" class="w100" filterable clearable @change="handleSelectionChange">
               <el-option v-for="item in deviceList" :key="item.key" :label="item.name" :value="item.key">
                 <span style="float: left">{{ item.name }}</span>
                 <span style="float: right; font-size: 13px">{{ item.key }}</span>
@@ -224,6 +224,8 @@ const open = async (row: any, productInfo: any) => {
         const sortedArray = res.Data.sort((a, b) => a.id - b.id);
 				Datalist.value = sortedArray || [];
       });
+      formData.productKey = productInfo.key
+
     }
   });
 };

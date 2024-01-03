@@ -131,7 +131,7 @@
   },
   "editor.wordWrapColumn": 200,
   "[scss]": {
-    "editor.defaultFormatter": "MikeBovenlander.formate"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "npm.exclude": "**/{dist_electron,vendor}",
   "files.exclude": {

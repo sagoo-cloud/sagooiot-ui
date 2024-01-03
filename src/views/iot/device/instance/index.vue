@@ -3,14 +3,14 @@
     <el-card shadow="nover" v-loading="batchLoading">
       <div class="system-user-search mb15">
         <el-form :model="tableData.param" ref="queryRef" inline>
-          <el-form-item label="设备名称" prop="name">
-            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable style="width: 180px" @keyup.enter.native="typeList" />
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="tableData.param.name" placeholder="请输入设备名称" clearable style="width: 170px" @keyup.enter.native="typeList" />
           </el-form-item>
-          <el-form-item label="设备标识" prop="key">
-            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable style="width: 180px" @keyup.enter.native="typeList" />
+          <el-form-item label="标识" prop="key">
+            <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable style="width: 165px" @keyup.enter.native="typeList" />
           </el-form-item>
           <el-form-item label="所属产品" prop="productId">
-            <el-select v-model="tableData.param.productId" style="width: 150px" filterable placeholder="请选择产品">
+            <el-select v-model="tableData.param.productId" style="width: 140px" filterable placeholder="请选择产品">
               <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
             </el-select>
           </el-form-item>
@@ -33,19 +33,19 @@
               </el-icon>
               查询
             </el-button>
-            <el-button @click="resetQuery(queryRef)">
+            <!-- <el-button @click="resetQuery(queryRef)">
               <el-icon>
                 <ele-Refresh />
               </el-icon>
               重置
-            </el-button>
+            </el-button> -->
             <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
-              新增设备
+              新增
             </el-button>
-            <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-button type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
               <el-icon>
                 <ele-Delete />
               </el-icon>
@@ -54,34 +54,43 @@
 
             <el-dropdown>
               <el-button type="danger" class="ml10">
-                更多操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                更多
+                <el-icon class="el-icon--right"><arrow-down /></el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item> <el-button type="success" @click="setDeviceStatus1(null)">
+                  <el-dropdown-item>
+                    <el-button type="success" @click="setDeviceStatus1()">
                       <el-icon>
-                        <ele-Delete />
+                        <ele-Open />
                       </el-icon>
                       批量启用
-                    </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button type="warning" @click="setDeviceStatus0(null)">
+                    </el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="warning" @click="setDeviceStatus0()">
                       <el-icon>
-                        <ele-Delete />
+                        <ele-TurnOff />
                       </el-icon>
                       批量禁用
-                    </el-button></el-dropdown-item>
-                  <el-dropdown-item> <el-button @click="onOpenexcelDic('upload')">
+                    </el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onOpenexcelDic('upload')">
                       <el-icon>
                         <ele-Upload />
                       </el-icon>
                       导入设备
-                    </el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button @click="onOpenexcelDic('down')">
+                    </el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onOpenexcelDic('down')">
                       <el-icon>
                         <ele-Download />
                       </el-icon>
                       导出设备
-                    </el-button></el-dropdown-item>
+                    </el-button>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -224,7 +233,7 @@ export default defineComponent({
     };
 
     //批量启用
-    const setDeviceStatus1 = (row: TableDataRow) => {
+    const setDeviceStatus1 = (row?: TableDataRow) => {
       let ids: number[] = [];
       if (row) {
         ids = [row.id];
@@ -251,7 +260,7 @@ export default defineComponent({
     }
 
     //批量禁用
-    const setDeviceStatus0 = (row: TableDataRow) => {
+    const setDeviceStatus0 = (row?: TableDataRow) => {
       let ids: number[] = [];
       if (row) {
         ids = [row.id];
@@ -277,7 +286,7 @@ export default defineComponent({
         .catch(() => { });
     }
     // 删除产品
-    const onRowDel = (row: TableDataRow) => {
+    const onRowDel = (row?: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
       let ids: number[] = [];
       if (row) {

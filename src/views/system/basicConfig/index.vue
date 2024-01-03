@@ -1,7 +1,7 @@
 <template>
-	<div class="page padding">
+	<div class="page">
 		<el-card shadow="nover">
-			<el-menu :default-active="activeName" @select="menuChange" class="el-menu-vertical-demo" size="small">
+			<el-menu style="--el-menu-bg-color: transparent; --el-menu-hover-bg-color: rgba(0, 0, 0, 0.2); --el-menu-level: 0;" :default-active="activeName" @select="menuChange" class="el-menu-vertical-demo" size="small">
 				<el-menu-item index="1">基础配置</el-menu-item>
 				<el-menu-item index="2">安全配置</el-menu-item>
 			</el-menu>
@@ -43,6 +43,7 @@ function menuChange(index: string) {
 	.el-card:last-child {
 		flex: 1;
 	}
+
 	.el-card ::v-deep(.el-card__body) {
 		flex: 1;
 		height: 100%;
