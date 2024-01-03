@@ -169,7 +169,7 @@
 									<div class="wu-title">
 										<div class="title">事件定义</div>
 										<div>
-											<el-button type="primary" @click="onOpenEditEvent()">添加</el-button>
+											<el-button size="small" type="primary" @click="onOpenEditEvent()">添加</el-button>
 										</div>
 									</div>
 
@@ -756,7 +756,7 @@ export default defineComponent({
 	},
 })
 </script>
-  <style>
+  <style scoped>
 .content {
 	background: #fff;
 	width: 100%;
@@ -766,7 +766,6 @@ export default defineComponent({
 	background: #fff;
 	width: 100%;
 	padding: 20px;
-	margin-top: 20px;
 }
 .cont_box {
 	display: flex;
