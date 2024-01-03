@@ -758,12 +758,10 @@ export default defineComponent({
 </script>
   <style scoped>
 .content {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
 }
 .content-box {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
 }

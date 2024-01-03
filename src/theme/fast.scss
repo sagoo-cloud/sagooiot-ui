@@ -7,9 +7,13 @@
 	height: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background: var(--el-color-white);
 	color: var(--el-text-color-primary);
 	border-radius: var(--el-card-border-radius);
+
+	&.bg {
+		padding: 20px;
+		background: var(--el-color-white);
+	}
 
 	&.padding {
 		padding: 20px;

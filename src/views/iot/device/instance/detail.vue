@@ -979,13 +979,11 @@ export default defineComponent({
 }
 
 .content {
-  background: #fff;
   width: 100%;
   padding: 20px 20px;
 }
 
 .content-box {
-  background: #fff;
   width: 100%;
   padding: 0 20px;
 }

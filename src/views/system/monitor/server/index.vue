@@ -434,7 +434,7 @@ export default defineComponent({
             },
             axisLabel: {
               distance: 12,
-              color: '#000',
+              color: '#888',
               fontSize: 12
             },
             splitLine: { // 分割线
@@ -508,7 +508,7 @@ export default defineComponent({
             },
             axisLabel: {
               distance: 12,
-              color: '#000',
+              color: '#888',
               fontSize: 12
             },
             splitLine: { // 分割线
@@ -582,7 +582,7 @@ export default defineComponent({
             },
             axisLabel: {
               distance: 12,
-              color: '#000',
+              color: '#888',
               fontSize: 12
             },
             splitLine: { // 分割线

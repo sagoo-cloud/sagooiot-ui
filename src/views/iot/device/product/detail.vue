@@ -530,7 +530,6 @@ export default defineComponent({
 }
 
 .content {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
 }
