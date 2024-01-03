@@ -44,7 +44,7 @@
               <div class="custom-tree-node">
                   <span class="tree-label">
                     <el-icon v-if="data.is_type == '2'">
-                      <Check />
+                      <Expand />
                     </el-icon>
                     {{ node.label }}
                   </span>
@@ -83,7 +83,7 @@
 <script lang="ts" setup>
 import device from '/@/api/device'
 import { useSearch } from '/@/hooks/useCommon'
-import { Check } from '@element-plus/icons-vue'
+import { Expand } from '@element-plus/icons-vue'
 
 import { ElMessageBox, ElMessage } from 'element-plus'
 import EditForm from './edit.vue'
@@ -129,6 +129,11 @@ const getCateList = () => {
 		device.product.getLists({}).then((res: any) => {
 			productData.value = res.product
 			mergedData.value = matchProductsToCategories(productData.value, cateData.value)
+
+      // 默认加载第一个设备对应属性
+      if (productData.value.length > 0) {
+        handleNodeClick(mergedData.value[0].children[0])
+      }
 		})
 	})
 }
