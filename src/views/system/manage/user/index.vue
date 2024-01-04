@@ -1,5 +1,5 @@
 <template>
-	<div class="page padding flex-row gap-5">
+	<div class="page flex-row gap-5">
 		<el-card shadow="nover">
 			<el-scrollbar>
 				<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable style="width: 100%;" />
