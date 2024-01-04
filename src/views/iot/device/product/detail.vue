@@ -1,5 +1,5 @@
 <template>
-	<div class="page page-full">
+	<div class="page bg page-full">
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">产品：{{ detail.name }}</div>

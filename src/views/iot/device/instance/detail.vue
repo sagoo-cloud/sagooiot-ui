@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page bg">
     <div class="content">
       <div class="cont_box">
         <div class="title">设备：{{ detail.name }}</div>
@@ -103,134 +103,132 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="物模型" name="2">
-          <div class="wu-box">
-            <el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
-              <el-tab-pane label="属性定义" name="attr">
-                <div class="wu-title">
-                  <div class="title">属性定义</div>
-                  <div>
-                    <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditAttr()">添加</el-button>
-                  </div>
+          <el-tabs type="border-card" v-model="activetab" @tab-click="wuhandleClick">
+            <el-tab-pane label="属性定义" name="attr">
+              <div class="wu-title">
+                <div class="title">属性定义</div>
+                <div>
+                  <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditAttr()">添加</el-button>
                 </div>
+              </div>
 
-                <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
-                  <el-table-column label="属性标识" align="center" prop="key" />
-                  <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
-                  <el-table-column prop="valueType" label="数据类型" width="100" align="center">
-                    <template #default="scope">
-                      <span>{{ scope.row.valueType.type }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="decimals" label="精度" width="60" align="center">
-                    <template #default="scope">
-                      <span>{{ scope.row.valueType.decimals }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="unit" label="单位" width="60" align="center">
-                    <template #default="scope">
-                      <span>{{ scope.row.valueType.unit }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="accessMode" label="是否只读" width="120" align="center">
-                    <template #default="scope">
-                      <el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
-                      <el-tag type="success" size="small" v-else>读写</el-tag>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="说明" prop="desc" show-overflow-tooltip />
-                  <el-table-column label="操作" width="300" align="center" fixed="right">
-                    <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
-                      <el-button size="small" text type="primary" v-auth="'edit'" @click="setAttr(scope.row)">设置属性</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-tab-pane>
-              <el-tab-pane label="功能定义" name="fun">
-                <div class="wu-title">
-                  <div class="title">功能定义</div>
-                  <div>
-                    <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
-                  </div>
+              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
+                <el-table-column label="属性标识" align="center" prop="key" />
+                <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
+                <el-table-column prop="valueType" label="数据类型" width="100" align="center">
+                  <template #default="scope">
+                    <span>{{ scope.row.valueType.type }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="decimals" label="精度" width="60" align="center">
+                  <template #default="scope">
+                    <span>{{ scope.row.valueType.decimals }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="unit" label="单位" width="60" align="center">
+                  <template #default="scope">
+                    <span>{{ scope.row.valueType.unit }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+                  <template #default="scope">
+                    <el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+                    <el-tag type="success" size="small" v-else>读写</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="说明" prop="desc" show-overflow-tooltip />
+                <el-table-column label="操作" width="300" align="center" fixed="right">
+                  <template #default="scope">
+                    <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditAttr(scope.row)">修改</el-button>
+                    <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'attr')">删除</el-button>
+                    <el-button size="small" text type="primary" v-auth="'edit'" @click="setAttr(scope.row)">设置属性</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="功能定义" name="fun">
+              <div class="wu-title">
+                <div class="title">功能定义</div>
+                <div>
+                  <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditFun()">添加</el-button>
                 </div>
+              </div>
 
-                <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
-                  <el-table-column label="功能标识" align="center" prop="key" />
-                  <el-table-column label="名称" prop="name" show-overflow-tooltip />
+              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
+                <el-table-column label="功能标识" align="center" prop="key" />
+                <el-table-column label="名称" prop="name" show-overflow-tooltip />
 
-                  <el-table-column label="描述" prop="desc" show-overflow-tooltip />
-                  <el-table-column label="操作" width="300" align="center" fixed="right">
-                    <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-tab-pane>
-              <el-tab-pane label="事件定义" name="event">
-                <div class="wu-title">
-                  <div class="title">事件定义</div>
-                  <div>
-                    <el-button type="primary" size="small" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
-                  </div>
+                <el-table-column label="描述" prop="desc" show-overflow-tooltip />
+                <el-table-column label="操作" width="300" align="center" fixed="right">
+                  <template #default="scope">
+                    <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditFun(scope.row)">修改</el-button>
+                    <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'fun')">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="事件定义" name="event">
+              <div class="wu-title">
+                <div class="title">事件定义</div>
+                <div>
+                  <el-button type="primary" size="small" v-auth="'add'" @click="onOpenEditEvent()">添加</el-button>
                 </div>
+              </div>
 
-                <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
-                  <el-table-column label="事件标识" align="center" prop="key" />
-                  <el-table-column label="名称" prop="name" show-overflow-tooltip />
-                  <el-table-column prop="level" label="事件级别" width="120" align="center">
-                    <template #default="scope">
-                      <el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
-                      <el-tag type="warning" size="small" v-if="scope.row.level == 1">警告</el-tag>
-                      <el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="描述" prop="desc" show-overflow-tooltip />
+              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
+                <el-table-column label="事件标识" align="center" prop="key" />
+                <el-table-column label="名称" prop="name" show-overflow-tooltip />
+                <el-table-column prop="level" label="事件级别" width="120" align="center">
+                  <template #default="scope">
+                    <el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
+                    <el-tag type="warning" size="small" v-if="scope.row.level == 1">警告</el-tag>
+                    <el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="描述" prop="desc" show-overflow-tooltip />
 
-                  <el-table-column label="操作" width="300" align="center" fixed="right">
-                    <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-tab-pane>
-              <el-tab-pane label="标签定义" name="tab">
-                <div class="wu-title">
-                  <div class="title">标签定义</div>
-                  <div>
-                    <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
-                  </div>
+                <el-table-column label="操作" width="300" align="center" fixed="right">
+                  <template #default="scope">
+                    <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditEvent(scope.row)">修改</el-button>
+                    <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'event')">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="标签定义" name="tab">
+              <div class="wu-title">
+                <div class="title">标签定义</div>
+                <div>
+                  <el-button size="small" type="primary" v-auth="'add'" @click="onOpenEditTab()">添加</el-button>
                 </div>
+              </div>
 
 
-                <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
-                  <el-table-column label="属性标识" align="center" prop="key" />
-                  <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
-                  <el-table-column prop="valueType" label="数据类型" width="120" align="center">
-                    <template #default="scope">
-                      <span>{{ scope.row.valueType.type }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="accessMode" label="是否只读" width="120" align="center">
-                    <template #default="scope">
-                      <el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
-                      <el-tag type="success" size="small" v-else>读写</el-tag>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="描述" prop="desc" show-overflow-tooltip />
-                  <el-table-column label="操作" width="300" align="center" fixed="right">
-                    <template #default="scope">
-                      <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
-                      <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-tab-pane>
-            </el-tabs>
-            <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
-          </div>
+              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
+                <el-table-column label="属性标识" align="center" prop="key" />
+                <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
+                <el-table-column prop="valueType" label="数据类型" width="120" align="center">
+                  <template #default="scope">
+                    <span>{{ scope.row.valueType.type }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="accessMode" label="是否只读" width="120" align="center">
+                  <template #default="scope">
+                    <el-tag type="info" size="small" v-if="scope.row.accessMode">只读</el-tag>
+                    <el-tag type="success" size="small" v-else>读写</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="描述" prop="desc" show-overflow-tooltip />
+                <el-table-column label="操作" width="300" align="center" fixed="right">
+                  <template #default="scope">
+                    <el-button size="small" text type="warning" v-auth="'edit'" @click="onEditTag(scope.row)">修改</el-button>
+                    <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel(scope.row.key, 'tab')">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+          <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
         </el-tab-pane>
         <el-tab-pane label="设备功能" name="5">
           <functionCom :device-key="detail.key" :product-key="prodetail.key" v-if="detail.key && prodetail.key && activeName === '5'"></functionCom>
