@@ -115,7 +115,7 @@ onMounted(() => {
 })
 const addOrEdit = async (row?: any) => {
 	if (row) {
-		editFormRef.value.open(row, productIno.value)
+    editFormRef.value.open(row, productIno.value)
 		return
 	} else {
 		editFormRef.value.open({}, productIno.value)
