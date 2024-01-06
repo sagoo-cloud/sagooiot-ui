@@ -120,7 +120,7 @@ const open = async (row: any) => {
 
 defineExpose({ open });
 </script>
-<style>
+<style scoped>
 .vertical-form-item {
 	display: block;
 	margin-bottom: 10px;

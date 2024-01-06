@@ -312,17 +312,65 @@
           </div>
 
         </el-tab-pane>
-        <el-tab-pane label="设备扩展属性信息" name="7">
+        <el-tab-pane label="设备档案" name="7">
           <el-form label-width="110px">
-            <el-form-item label="设备图片">
-              <el-image class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in phone" :key="index" />
-            </el-form-item>
-            <el-form-item label="证书图片">
-              <el-image class="mr20" style="border: 1px solid #e5e5e5;border-radius: 8px;width: 100px;height: 100px;object-fit: contain;" :src="item" v-for="(item, index) in certificate" :key="index" />
-            </el-form-item>
-            <el-form-item label="设备说明">
-              <el-input disabled v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
-            </el-form-item>
+
+            <!--            <FromData :DataList="Datalist" v-if="Datalist && Datalist.length > 0" disable="true"></FromData>-->
+<!--            <div class="pro-box">-->
+<!--              <div class="protitle">设备档案</div>-->
+<!--              <div>-->
+<!--                <el-button type="primary" v-auth="'edit'" @click="onOpenEditAsset">编辑</el-button>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="ant-descriptions-view">-->
+<!--              <table>-->
+<!--                <tbody>-->
+<!--                <tr class="ant-descriptions-row" v-for="(item, index) in dataList" :key="index">-->
+<!--                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">{{ item.title }}</th>-->
+<!--                  <td class="ant-descriptions-item-content" colspan="1">-->
+<!--                    <view v-if="item.types === 'file'">-->
+<!--                      <img :src="deviceAssetMetadata[item.name]" class="avatar" />-->
+<!--                    </view>-->
+<!--                    <view v-else>-->
+<!--                      <view v-if="item.pattern">-->
+<!--                        <el-link :href="deviceAssetMetadata[item.name]" type="primary" target="_blank">{{ deviceAssetMetadata[item.name] }}</el-link>-->
+<!--                      </view>-->
+<!--                      <view v-else>-->
+<!--                        {{ deviceAssetMetadata[item.name] }}-->
+<!--                      </view>-->
+<!--                    </view>-->
+<!--                  </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </div>-->
+
+            <div class="pro-box">
+              <div class="protitle">设备档案</div>
+              <div>
+                <el-button size="small" type="primary" v-auth="'edit'" @click="onOpenEditAsset">编辑</el-button>
+              </div>
+            </div>
+
+            <el-descriptions class="margin-top" :column="3" border>
+              <view v-for="(item, index) in dataList" :key="index">
+                <el-descriptions-item :label="item.title">
+                  <view v-if="item.types === 'file'">
+                    <img :src="deviceAssetMetadata[item.name]" class="avatar" />
+                  </view>
+                  <view v-else>
+                    <view v-if="item.pattern">
+                      <el-link :href="deviceAssetMetadata[item.name]" type="primary" target="_blank">{{ deviceAssetMetadata[item.name] }}</el-link>
+                    </view>
+                    <view v-else>
+                      {{ deviceAssetMetadata[item.name] }}
+                    </view>
+                  </view>
+                </el-descriptions-item>
+              </view>
+            </el-descriptions>
+
           </el-form>
         </el-tab-pane>
 
@@ -340,6 +388,8 @@
     <setAttr :device-key="detail.key" ref="setAttrRef" />
     <!-- 子设备-批量绑定弹窗 -->
     <SubDeviceMutipleBind ref="mutipleBindRef" @bindSuccess="getDeviceTableData" />
+    <!-- 编辑设备档案 -->
+    <EditAssetRef ref="editAssetRef" @getList="getDeviceAssetMetadata"></EditAssetRef>
 
     <el-dialog v-model="dialogVisible" title="日志数据内容" width="30%">
       <JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
@@ -353,7 +403,7 @@
   </div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, nextTick } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import functionCom from './component/function.vue';
 import 'vue3-json-viewer/dist/index.css';
@@ -370,6 +420,8 @@ import setAttr from './component/setAttr.vue';
 import SubDeviceMutipleBind from './component/subDeviceMutipleBind.vue';
 import api from '/@/api/device';
 import datahub from '/@/api/datahub';
+import FromData from "/@/views/iot/property/dossier/component/from.vue";
+import EditAssetRef from "/@/views/iot/property/dossier/edit.vue";
 
 import { useRoute } from 'vue-router';
 
@@ -420,7 +472,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
+  components: {EditAssetRef, FromData, SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
   setup(prop, context) {
     const logqueryRef = ref();
@@ -436,6 +488,10 @@ export default defineComponent({
     const editTabRef = ref();
     const subDeviceRef = ref();
     const mutipleBindRef = ref();
+    const editAssetRef = ref();
+    const dataList = ref();
+    const deviceAssetData = ref();
+    const deviceAssetMetadata = ref({});
     const state = reactive<TableDataState>({
       certificate: [],
       phone: [],
@@ -520,9 +576,42 @@ export default defineComponent({
           state.tableData.data = res.Data;
           state.tableData.total = res.Total;
         });
+
+        // 加载对应设备档案
+        getDeviceAssetMetadata()
+
         getrunData();
 
         getDeviceTableData()
+      });
+    }
+
+    const getDeviceAssetMetadata = () => {
+      nextTick(() => {
+        const urlRegex = /^(http-s-?:\/\/)?(a-zA\.)?[a-zA-Z0-9@:%._\+~#?&//=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._\+~#?&//=]*)$/;
+        //获取设备档案
+        api.dev_asset.detail({ deviceKey: state.detail.key }).then((resde: any) => {
+          // 存储设备档案信息
+          deviceAssetData.value = resde;
+          const newArray = resde.data.map(obj => {
+            const { name, value, ...rest } = obj;
+            const newObj = { name, value, ...rest };
+            newObj[name] = value ? value : '';
+            return newObj;
+          });
+          dataList.value = newArray
+
+          for (const item of dataList.value) {
+            item.pattern = false;
+            if (item.types == 'input' || item.types == 'textarea') {
+              if (urlRegex.test(item.value)) {
+                item.pattern = true;
+              }
+            }
+            // 根据属性返回键获取对应档案对应的内容
+            deviceAssetMetadata.value[item.name] = item.value ? item.value : ''
+          }
+        });
       });
     }
 
@@ -644,6 +733,11 @@ export default defineComponent({
       editDicRef.value.openDialog(row);
     };
 
+    // 打开修改设备档案弹窗
+    const onOpenEditAsset = () => {
+      editAssetRef.value.open(deviceAssetData.value, state.detail.product)
+    };
+
     // 删除产品
     const onRowDel = (key, type) => {
       let msg = `此操作将永久删除该数据，是否继续?`;
@@ -760,6 +854,8 @@ export default defineComponent({
         getList();
       } else if (tab.props.name == 3) {
         getrunData();
+      } else if (tab.props.name == 7) {
+        getDeviceAssetMetadata();
       }
     };
 
@@ -931,6 +1027,9 @@ export default defineComponent({
       editTabRef,
       subDeviceRef,
       mutipleBindRef,
+      editAssetRef,
+      dataList,
+      deviceAssetMetadata,
       onOpenListDetail,
       getrunData,
       getlog,
@@ -949,6 +1048,7 @@ export default defineComponent({
       getfunction,
       getevent,
       gettab,
+      getDeviceAssetMetadata,
       wuhandleClick,
       onOpenEditTab,
       onOpenEditEvent,
@@ -960,6 +1060,7 @@ export default defineComponent({
       handleClick,
       onOpenMutipleBind,
       mutipleUnbind,
+      onOpenEditAsset,
       ...toRefs(state),
     };
   },

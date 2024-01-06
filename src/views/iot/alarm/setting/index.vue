@@ -1,23 +1,21 @@
 <template>
 	<div class="page page-full">
-		<div class="">
-			<el-form :model="tableData.param" ref="queryRef" inline>
-				<el-form-item class="mb-0">
-					<el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						新增告警
-					</el-button>
-					<el-button type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
-						<el-icon>
-							<ele-Setting />
-						</el-icon>
-						级别设置
-					</el-button>
-				</el-form-item>
-			</el-form>
-		</div>
+		<el-form :model="tableData.param" ref="queryRef" inline>
+			<el-form-item class="mb-0">
+				<el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+					<el-icon>
+						<ele-FolderAdd />
+					</el-icon>
+					新增告警
+				</el-button>
+				<el-button type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
+					<el-icon>
+						<ele-Setting />
+					</el-icon>
+					级别设置
+				</el-button>
+			</el-form-item>
+		</el-form>
 		<el-divider />
 		<el-row class="page-full-part">
 			<el-col :span="6" v-for="(item, index) in tableData.data" :key="index">
@@ -109,7 +107,6 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
 import LevelDic from './component/level.vue';
-
 import alarm from '/@/api/alarm';
 
 // 定义接口来定义对象的类型
@@ -255,7 +252,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped lang="scss">
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }
@@ -288,7 +285,8 @@ export default defineComponent({
 .pro-table-card-item {
 	display: flex;
 	justify-content: stretch;
-	.card-item-avatar{
+
+	.card-item-avatar {
 		display: flex;
 		align-items: center;
 	}
@@ -402,7 +400,7 @@ export default defineComponent({
 	border-radius: 0;
 }
 
-*/ .ant-btn-link {
+.ant-btn-link {
 	color: #1d39c4;
 	border-color: transparent;
 	background: transparent;

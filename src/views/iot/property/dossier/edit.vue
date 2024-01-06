@@ -40,7 +40,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="所属区域" prop="area">
@@ -59,7 +58,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
       <el-row>
         <el-col :span="12">
@@ -81,7 +79,8 @@
       </el-row>
 
       <el-divider content-position="left" v-if="Datalist">自定义属性</el-divider>
-        <FromData :Datalist="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
+      <FromData :DataList="Datalist" @SetSaveData="SetSaveData" v-if="Datalist && Datalist.length > 0"></FromData>
+
     </el-form>
     <template #footer>
       <div class="dialog-footer">
@@ -207,6 +206,7 @@ const open = async (row: any, productInfo: any) => {
     });
 
     if (row.id) {
+
       api.dev_asset.detail({ deviceKey: row.deviceKey }).then((resde: any) => {
         Object.assign(formData, { ...resde });
         formData.productKey = row.productKey

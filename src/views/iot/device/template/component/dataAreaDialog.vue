@@ -42,8 +42,8 @@
 			</el-table-column>
 			<el-table-column label="操作" align="center" width="180px">
 				<template #default="{ row, $index }">
-					<el-button type="primary" size="mini" @click="handleSubmit(row, $index)"> 保存 </el-button>
-					<el-button type="danger" size="mini" @click="handleDelete(row, $index)"> 删除 </el-button>
+					<el-button type="primary" size="small" @click="handleSubmit(row, $index)"> 保存 </el-button>
+					<el-button type="danger" size="small" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
 			</el-table-column>
 		</el-table>

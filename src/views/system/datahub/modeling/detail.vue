@@ -223,7 +223,7 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+<style scoped>
 .content {
   background: #fff;
   width: 100%;
