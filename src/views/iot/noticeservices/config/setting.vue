@@ -287,7 +287,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-col-12 {
 	padding: 10px;
 }

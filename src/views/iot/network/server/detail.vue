@@ -87,7 +87,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .CodeMirror {
   width: 100%;
   height: 600px;

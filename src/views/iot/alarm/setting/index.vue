@@ -255,7 +255,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }

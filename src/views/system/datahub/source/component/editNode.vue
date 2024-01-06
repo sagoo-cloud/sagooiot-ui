@@ -457,7 +457,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-input__wrapper {
 	width: 98%;
 }

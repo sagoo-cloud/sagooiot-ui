@@ -120,7 +120,7 @@ export default defineComponent({
 	display: block;
 }
 </style>
-<style>
+<style scoped>
 .avatar-uploader .el-upload {
 	border: 1px dashed var(--el-border-color);
 	border-radius: 6px;
