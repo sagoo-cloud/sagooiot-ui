@@ -1,6 +1,6 @@
 <template>
-	<div class="page flex-row gap-5">
-		<el-card shadow="nover">
+	<div class="page flex-row gap-4">
+		<el-card shadow="nover" style="width:270px">
 			<el-scrollbar>
 				<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable style="width: 100%;" />
 				<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick">
@@ -8,10 +8,11 @@
 						<div class="custom-tree-node" :title="node.label">
 							{{ node.label }}
 						</div>
-					</template></el-tree>
+					</template>
+				</el-tree>
 			</el-scrollbar>
 		</el-card>
-		<el-card shadow="nover">
+		<el-card shadow="nover" class="flex1">
 			<el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
 				<el-form-item label="关键字" prop="keyWords">
 					<el-input v-model="tableData.param.keyWords" placeholder="请输入用户名或姓名" clearable style="width: 240px" @keyup.enter.native="userList" />

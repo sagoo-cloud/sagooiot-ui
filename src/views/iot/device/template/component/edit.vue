@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" :width="dialogWidth" :before-close="clsoeDialog" :close-on-click-modal="false">
-		<div class="wrapper">
+		<div class="page-full" style="height: 65vh;">
 			<el-form class="form" ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="width: 400px">
 				<el-form-item label="模板名称" prop="title">
 					<el-input v-model.trim="temp.title" placeholder="请输入模板名称" />

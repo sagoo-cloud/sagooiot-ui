@@ -12,8 +12,8 @@
 			<el-table-column label="存盘周期" prop="saveCycle" align="center" />
 			<el-table-column label="操作" align="center" width="180">
 				<template #default="{ row, $index }">
-					<el-button type="primary" size="mini" @click="handleUpdate(row)"> 修改 </el-button>
-					<el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
+					<el-button type="primary" size="small" @click="handleUpdate(row)"> 修改 </el-button>
+					<el-button v-if="row.status != 'deleted'" size="small" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
 			</el-table-column>
 		</el-table>

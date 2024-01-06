@@ -1,64 +1,66 @@
 <template>
 	<el-dialog title="设备通道详情" v-model="dialogVisible" width="900px" :before-close="clsoeDialog" :close-on-click-modal="false">
-		<el-tabs v-model="activeName">
-			<el-tab-pane label="通道信息" name="1">
-				<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
-					<el-form-item label="通道名称" prop="title">
-						<el-input v-model="temp.title" disabled placeholder="请输入通道名称" />
-					</el-form-item>
-					<el-form-item label="注册码" prop="number">
-						<el-input v-model="temp.number" disabled placeholder="请输入注册码" />
-					</el-form-item>
-					<el-form-item label="设备地址" prop="slaveId">
-						<el-input v-model.number="temp.slaveId" disabled placeholder="请输入设备地址" />
-					</el-form-item>
-					<!-- <el-form-item label="调度周期(秒)" prop="interval">
+		<div class="page-full" style="height: 60vh;">
+			<el-tabs v-model="activeName">
+				<el-tab-pane label="通道信息" name="1">
+					<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
+						<el-form-item label="通道名称" prop="title">
+							<el-input v-model="temp.title" disabled placeholder="请输入通道名称" />
+						</el-form-item>
+						<el-form-item label="注册码" prop="number">
+							<el-input v-model="temp.number" disabled placeholder="请输入注册码" />
+						</el-form-item>
+						<el-form-item label="设备地址" prop="slaveId">
+							<el-input v-model.number="temp.slaveId" disabled placeholder="请输入设备地址" />
+						</el-form-item>
+						<!-- <el-form-item label="调度周期(秒)" prop="interval">
             <el-input v-model="temp.interval" placeholder="请输入调度周期" />
           </el-form-item> -->
-					<el-form-item label="" prop="">
-						<div align="right">
-							<el-button @click="clsoeDialog"> 取 消 </el-button>
-							<!-- <el-button type="primary" @click="updateData()"> 保 存 </el-button> -->
-						</div>
-					</el-form-item>
-				</el-form>
-			</el-tab-pane>
-			<el-tab-pane label="任务" name="2">
-				<div class="filter-container">
-					<el-button class="filter-item" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate"> 添加任务 </el-button>
-				</div>
+						<el-form-item label="" prop="">
+							<div align="right">
+								<el-button @click="clsoeDialog"> 取 消 </el-button>
+								<!-- <el-button type="primary" @click="updateData()"> 保 存 </el-button> -->
+							</div>
+						</el-form-item>
+					</el-form>
+				</el-tab-pane>
+				<el-tab-pane label="任务" name="2">
+					<div class="filter-container">
+						<el-button class="filter-item" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate"> 添加任务 </el-button>
+					</div>
 
-				<el-table :key="tableKey" v-loading="listLoading" :data="taskList" border fit highlight-current-row style="width: 100%">
-					<el-table-column label="标题" prop="Job.title" align="center"></el-table-column>
-					<el-table-column label="调度周期" prop="Job.interval" align="center"></el-table-column>
-					<el-table-column label="转发格式" prop="encoding" align="center">
-						<template #default="{ row }">
-							{{ getCodingLabel(row) }}
-						</template>
-					</el-table-column>
-					<el-table-column label="mqtt主题" prop="Job.publishTopic" align="center"></el-table-column>
-					<el-table-column label="模板" prop="Template.title" align="center"></el-table-column>
-					<el-table-column label="操作" align="center" width="200">
-						<template #default="{ row, $index }">
-							<el-button type="primary" size="mini" @click="handleUpdate(row)"> 详情 </el-button>
-							<el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+					<el-table :key="tableKey" v-loading="listLoading" :data="taskList" border fit highlight-current-row style="width: 100%">
+						<el-table-column label="标题" prop="Job.title" align="center"></el-table-column>
+						<el-table-column label="调度周期" prop="Job.interval" align="center"></el-table-column>
+						<el-table-column label="转发格式" prop="encoding" align="center">
+							<template #default="{ row }">
+								{{ getCodingLabel(row) }}
+							</template>
+						</el-table-column>
+						<el-table-column label="mqtt主题" prop="Job.publishTopic" align="center"></el-table-column>
+						<el-table-column label="模板" prop="Template.title" align="center"></el-table-column>
+						<el-table-column label="操作" align="center" width="200">
+							<template #default="{ row, $index }">
+								<el-button type="primary" size="small" @click="handleUpdate(row)"> 详情 </el-button>
+								<el-button v-if="row.status != 'deleted'" size="small" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
+							</template>
+						</el-table-column>
+					</el-table>
 
-				<pagination v-if="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" />
-				<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList(1)" />
-			</el-tab-pane>
-			<el-tab-pane label="通道码流" name="3">
-				<div>
-					<el-button :type="evsrc ? 'info' : 'primary'" @click="openEv()">开始</el-button>
-					<el-button :type="evsrc ? 'primary' : 'info'" :disabled="!evsrc" @click="closeEv()">停止</el-button>
-					<el-button type="defualt" @click="clearLog()">清空</el-button>
-					<el-button type="info" style="margin-left: 150px" @click="downloadLog()">下载报文</el-button>
-					<ul id="logContainer" ref="logContainer"></ul>
-				</div>
-			</el-tab-pane>
-		</el-tabs>
+					<pagination v-if="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" />
+					<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList(1)" />
+				</el-tab-pane>
+				<el-tab-pane label="通道码流" name="3">
+					<div>
+						<el-button :type="evsrc ? 'info' : 'primary'" @click="openEv()">开始</el-button>
+						<el-button :type="evsrc ? 'primary' : 'info'" :disabled="!evsrc" @click="closeEv()">停止</el-button>
+						<el-button type="defualt" @click="clearLog()">清空</el-button>
+						<el-button type="info" style="margin-left: 150px" @click="downloadLog()">下载报文</el-button>
+						<ul id="logContainer" ref="logContainer"></ul>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
+		</div>
 	</el-dialog>
 </template>
 
@@ -213,8 +215,8 @@ export default {
 				}
 			};
 			// this.evsrc.onerror = function (_ev: any) {
-				// @ts-ignore
-				// console.log('readyState = ' + ev.currentTarget.readyState);
+			// @ts-ignore
+			// console.log('readyState = ' + ev.currentTarget.readyState);
 			// };
 		},
 		openEv() {
