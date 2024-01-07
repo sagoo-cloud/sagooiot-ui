@@ -7,17 +7,15 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-	<div class="page page-full">
-		<el-card shadow="nover" class="page-full-part">
-			<el-tabs v-model="activeName">
-				<el-tab-pane label="模版详情" name="detail">
-					<EditTemplateForm ref="editFormRef" />
-				</el-tab-pane>
-				<el-tab-pane label="模版点位" name="point">
-					<TemplateTaskTable />
-				</el-tab-pane>
-			</el-tabs>
-		</el-card>
+	<div class="page bg padding Ipt-2 page-full">
+		<el-tabs v-model="activeName">
+			<el-tab-pane label="模版详情" name="detail">
+				<EditTemplateForm ref="editFormRef" />
+			</el-tab-pane>
+			<el-tab-pane label="模版点位" name="point">
+				<TemplateTaskTable />
+			</el-tab-pane>
+		</el-tabs>
 	</div>
 </template>
 
@@ -50,7 +48,7 @@ const onDel = (row: any) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	}).then(async () => {
-		await api.device.deleteItem({number: row.number});
+		await api.device.deleteItem({ number: row.number });
 		ElMessage.success('删除成功');
 		getList();
 	});

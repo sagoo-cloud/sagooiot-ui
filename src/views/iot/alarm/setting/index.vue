@@ -1,14 +1,14 @@
 <template>
-	<div class="page page-full">
+	<div class="page padding bg page-full">
 		<el-form :model="tableData.param" ref="queryRef" inline>
 			<el-form-item class="mb-0">
-				<el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+				<el-button type="primary" @click="onOpenAdd" v-auth="'add'">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
 					新增告警
 				</el-button>
-				<el-button type="primary" class="ml10" @click="onOpenLevel" v-auth="'level'">
+				<el-button type="primary" @click="onOpenLevel" v-auth="'level'">
 					<el-icon>
 						<ele-Setting />
 					</el-icon>
@@ -16,7 +16,7 @@
 				</el-button>
 			</el-form-item>
 		</el-form>
-		<el-divider />
+		<el-divider class="my-5" />
 		<el-row class="page-full-part">
 			<el-col :span="6" v-for="(item, index) in tableData.data" :key="index">
 				<div class="card">
@@ -28,20 +28,20 @@
 								</div>
 								<div class="card-item-body">
 									<div class="card-item-header">
-										<div class="" v-col="'name'">
+										<div v-col="'name'">
 											<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.name }}</div>
 										</div>
 									</div>
 									<div class="card-item-content" v-col="'alarm'">
 										<div>
 											<label>触发：</label>
-											<div class="">
+											<div>
 												<div>级别：</div>
 											</div>
 										</div>
 										<div>
 											<label>{{ item.triggerTypeName }}</label>
-											<div class="">
+											<div>
 												<div>{{ item.alarmLevel.name }}</div>
 											</div>
 										</div>

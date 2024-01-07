@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <el-card shadow="nover">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="服务日志" name="1"> </el-tab-pane>
         <el-tab-pane label="数据库日志" name="2"> </el-tab-pane>
         <el-tab-pane label="运行日志" name="3"> </el-tab-pane>

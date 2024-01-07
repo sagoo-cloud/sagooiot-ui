@@ -39,7 +39,7 @@
         </el-form-item>
       </el-form>
       <!-- 字典切换 -->
-      <el-tabs v-model="tableData.param.moduleClassify" class="demo-tabs" @tab-change="typeList">
+      <el-tabs v-model="tableData.param.moduleClassify" @tab-change="typeList">
         <el-tab-pane v-for="dict in tabDataList" :label="dict.dictLabel" :name="dict.dictValue">
         </el-tab-pane>
       </el-tabs>

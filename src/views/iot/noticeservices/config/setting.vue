@@ -1,131 +1,90 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="nover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" inline @keyup.enter.native="dataList">
-					<el-form-item label="配置名称" prop="keyWord">
-						<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable style="width: 240px" />
-					</el-form-item>
-					<!-- <el-form-item label="通知方式" prop="name">
-						<el-input
-							v-model="tableData.param.sendGateway"
-							placeholder="请输入通知方式"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item> -->
-
-					<el-form-item>
-						<el-button type="primary" class="ml10" @click="dataList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button type="primary" class="ml10" @click="onOpenAdd">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增通知
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<div>
-				<div style="border: 1px solid var(--next-border-color-light)"></div>
-				<el-row>
-					<el-col :span="8" v-for="(item, index) in tableData.data" :key="index">
-						<div class="grid-content card">
-							<div class="ant-card">
-								<div class="ant-card-body">
-									<div class="pro-table-card-item">
-										<div class="card-item-avatar">
-											<img width="88" height="88" :src="'/imgs/notice/' + tableData.param.sendGateway + '.svg'" alt="" />
+	<el-card shadow="nover" class="page">
+		<div class="system-user-search">
+			<el-form :model="tableData.param" ref="queryRef" inline @keyup.enter.native="dataList">
+				<el-form-item label="配置名称" prop="keyWord">
+					<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable style="width: 240px" />
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="dataList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="primary" class="ml10" @click="onOpenAdd">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增通知
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		<el-row class="flex1">
+			<el-col :span="8" v-for="(item, index) in tableData.data" :key="index">
+				<div class="grid-content card">
+					<div class="ant-card">
+						<div class="ant-card-body">
+							<div class="pro-table-card-item">
+								<div class="card-item-avatar">
+									<img width="88" height="88" :src="'/imgs/notice/' + tableData.param.sendGateway + '.svg'" alt="" />
+								</div>
+								<div class="card-item-body">
+									<div class="card-item-header">
+										<div class="ellipsis">
+											<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.title }}</div>
+											<div class="card-item-header-name" style="display: none"></div>
 										</div>
-										<div class="card-item-body">
-											<div class="card-item-header">
-												<div class="ellipsis">
-													<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.title }}</div>
-													<div class="card-item-header-name" style="display: none"></div>
-												</div>
-											</div>
-											<div class="card-item-content">
-												通知方式：<el-tag>{{ item.types == 1 ? '即时发送' : '预约发送' }}</el-tag>
-												<!-- <div>
-													<label>说明</label>
-													<div class="ellipsis">
-														<div style="width: 100%"></div>
-													</div>
-												</div> -->
-											</div>
-										</div>
+									</div>
+									<div class="card-item-content">
+										通知方式：<el-tag>{{ item.types == 1 ? '即时发送' : '预约发送' }}</el-tag>
 									</div>
 								</div>
 							</div>
-							<div class="card-tools">
-								<div class="card-button" @click="onOpenEdit(item)">
-									<el-button type="primary" class="ml10" text bg>
-										<el-icon>
-											<ele-Edit />
-										</el-icon>
-										修改
-									</el-button>
-								</div>
-								<div class="card-button" @click="onOpenEditTem(item)">
-									<el-button type="primary" text bg>
-										<el-icon>
-											<ele-Wallet />
-										</el-icon>
-										模板配置
-									</el-button>
-								</div>
-								<!--<div class="card-button" @click="onOpenEdit(item)">
-									<el-button type="primary" text bg>
-										<el-icon>
-											<ele-View />
-										</el-icon>
-										调试
-									</el-button>
-								</div>
-
-							 	<div class="card-button" @click="onOpenEdit(item)">
-									<el-button type="info" text bg>
-										<el-icon>
-											<ele-Document />
-										</el-icon>
-										通知记录
-									</el-button>
-								</div> -->
-
-								<div class="card-button" @click="onRowDel(item)">
-									<el-button type="danger" text bg>
-										<el-icon>
-											<ele-Delete />
-										</el-icon>
-										删除
-									</el-button>
-								</div>
-							</div>
 						</div>
-					</el-col>
-				</el-row>
-			</div>
-			<div style="text-align: center;padding: 28px;" v-if="(tableData.total == 0)">暂无数据</div>
-			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-		</el-card>
+					</div>
+					<div class="card-tools">
+						<div class="card-button" @click="onOpenEdit(item)">
+							<el-button type="primary" class="ml10" text bg>
+								<el-icon>
+									<ele-Edit />
+								</el-icon>
+								修改
+							</el-button>
+						</div>
+						<div class="card-button" @click="onOpenEditTem(item)">
+							<el-button type="primary" text bg>
+								<el-icon>
+									<ele-Wallet />
+								</el-icon>
+								模板配置
+							</el-button>
+						</div>
 
+						<div class="card-button" @click="onRowDel(item)">
+							<el-button type="danger" text bg>
+								<el-icon>
+									<ele-Delete />
+								</el-icon>
+								删除
+							</el-button>
+						</div>
+					</div>
+				</div>
+			</el-col>
+		</el-row>
+		<div style="text-align: center;padding: 28px;" v-if="(tableData.total == 0)">暂无数据</div>
+		<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		<EditDic ref="editDicRef" @dataList="dataList" />
 		<EditTemDic ref="temeditDicRef" @dataList="dataList" />
-		<!-- 	<LevelDic ref="levelDicRef" @dataList="dataList" /> -->
-	</div>
+	</el-card>
 </template>
 
 <script lang="ts">
@@ -133,7 +92,6 @@ import { toRefs, reactive, onMounted, ref, getCurrentInstance, defineComponent }
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/setEdit.vue';
 import EditTemDic from './component/temEdit.vue';
-//import LevelDic from './component/level.vue';
 
 import api from '/@/api/notice';
 import { useRoute } from 'vue-router';

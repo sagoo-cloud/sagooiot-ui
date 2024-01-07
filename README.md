@@ -22,3 +22,6 @@
 **.env.development.local**
 
 | 可在本地添加此文件进行配置，会覆盖默认配置及【.env.development】的配置，并且git会忽略这个文件，不会对其他的开发者的环境造成影响
+
+
+<el-form :model="params" inline ref="queryRef" @submit.prevent @keyup.enter="queryList">

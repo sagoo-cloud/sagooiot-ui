@@ -1,6 +1,6 @@
 <template>
     <el-card class="system-dic-container" style="position: relative;">
-        <el-tabs v-model="activeName" class="demo-tabs">
+        <el-tabs v-model="activeName">
             <el-tab-pane label="编辑通道" name="first">
                 <el-collapse v-model="activeViewName">
                     <el-collapse-item title="基本信息" name="1">

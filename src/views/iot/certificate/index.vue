@@ -1,9 +1,9 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form :model="state.tableData.param" ref="queryRef" inline label-width="60px">
-				<el-form-item label="关键字" prop="keyWord">
-					<el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable @keyup.enter="queryList" />
+			<el-form :model="state.tableData.param" ref="queryRef" inline @submit.prevent @keyup.enter="queryList">
+				<el-form-item label="证书名称" prop="keyWord">
+					<el-input v-model="state.tableData.param.name" placeholder="请输入证书名称" clearable />
 				</el-form-item>
 				<el-form-item>
 					<el-button v-auth="'query'" type="primary" class="ml10" @click="queryList">
@@ -44,7 +44,7 @@
 						<span v-noauth="'startOrStop'">{{ scope.row.status ? '正常' : '暂停' }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">
+				<el-table-column v-col="'handle'" label="操作" width="100" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
 						<el-button size="small" v-auth="'del'" text type="info" @click="operate('delete', scope.row)">删除</el-button>

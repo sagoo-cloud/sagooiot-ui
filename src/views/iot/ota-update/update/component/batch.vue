@@ -1,87 +1,81 @@
 <template>
-  <div class="ota-module-container">
-    <el-card shadow="nover">
-      <div class="ota-module-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" inline label-width="90px" @keyup.enter.native="getList(1)">
-          <el-form-item label="批次名称：" prop="name">
-            <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable style="width: 240px" />
-          </el-form-item>
+  <div class="page page-full">
+    <el-form :model="tableData.param" ref="queryRef" inline label-width="90px" @keyup.enter.native="getList(1)">
+      <el-form-item label="批次名称：" prop="name">
+        <el-input v-model="tableData.param.keyWord" placeholder="请输入批次名称" clearable style="width: 240px" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="ml10" @click="getList(1)">
+          <el-icon>
+            <ele-Search />
+          </el-icon>
+          查询
+        </el-button>
+        <el-button @click="resetQuery()">
+          <el-icon>
+            <ele-Refresh />
+          </el-icon>
+          重置
+        </el-button>
+        <el-button type="primary" v-auth="'add'" @click="onOpenAdd()">
+          <el-icon>
+            <ele-FolderAdd />
+          </el-icon>
+          添加批次
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+      <el-table-column prop="id" label="ID" width="100" />
+      <el-table-column prop="name" label="名称" />
+      <!--        <el-table-column prop="waitVersion" label="待升级版本号" width="120" />-->
+      <el-table-column label="类型" prop="types" width="120" align="center">
+        <template #default="scope">
+          <el-tag type="success" size="small" v-if="scope.row.types == 0">验证</el-tag>
+          <el-tag type="info" size="small" v-else>升级</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="active" width="120" align="center">
+        <template #default="scope">
+          <el-tag type="success" size="small" v-if="scope.row.active == 1">是</el-tag>
+          <el-tag type="info" size="small" v-else>否</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="method" label="协议方式" show-overflow-tooltip>
+        <template #default="scope">
+          <el-tag size="small" v-if="scope.row.method == 1">http</el-tag>
+          <el-tag size="small" v-if="scope.row.method == 2">https</el-tag>
+          <el-tag size="small" v-if="scope.row.method == 3">mqtt</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="stratege" label="升级方式" show-overflow-tooltip>
+        <template #default="scope">
+          <el-tag size="small" v-if="scope.row.stratege == 1">静态升级 </el-tag>
+          <el-tag size="small" v-if="scope.row.stratege == 2">动态升级</el-tag>
+        </template>
+      </el-table-column>
 
-          <el-form-item>
-            <el-button type="primary" class="ml10" @click="getList(1)">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button @click="resetQuery()">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button type="primary" v-auth="'add'" @click="onOpenAdd()">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              添加批次
-            </el-button>
-          </el-form-item>
-
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-        <el-table-column prop="id" label="ID" width="100" />
-        <el-table-column prop="name" label="名称" />
-<!--        <el-table-column prop="waitVersion" label="待升级版本号" width="120" />-->
-        <el-table-column label="类型" prop="types" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.types == 0">验证</el-tag>
-            <el-tag type="info" size="small" v-else>升级</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" prop="active" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.active == 1">是</el-tag>
-            <el-tag type="info" size="small" v-else>否</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="method" label="协议方式" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag size="small" v-if="scope.row.method == 1">http</el-tag>
-            <el-tag size="small" v-if="scope.row.method == 2">https</el-tag>
-            <el-tag size="small" v-if="scope.row.method == 3">mqtt</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="stratege" label="升级方式" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag size="small" v-if="scope.row.stratege == 1">静态升级 </el-tag>
-            <el-tag size="small" v-if="scope.row.stratege == 2">动态升级</el-tag>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="push" label="主动推送" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag size="small" v-if="scope.row.push == 1">是 </el-tag>
-            <el-tag size="small" v-if="scope.row.push == 2">否</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-<!--            <router-link :to="'/iotmanager/operation/ota/update/device/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">-->
-<!--              <span>查看</span>-->
-<!--            </router-link>-->
-            <el-button size="small" text type="primary" @click="getDeviceList(scope.row)">查看</el-button>
-<!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
-<!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
-      <CheckConfig ref="checkRef" @getList="getList(1)" />
-      <DeviceList ref="deviceRef" />
-    </el-card>
+      <el-table-column prop="push" label="主动推送" show-overflow-tooltip>
+        <template #default="scope">
+          <el-tag size="small" v-if="scope.row.push == 1">是 </el-tag>
+          <el-tag size="small" v-if="scope.row.push == 2">否</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdAt" label="创建时间" min-width="100" align="center" />
+      <el-table-column label="操作" width="200" align="center">
+        <template #default="scope">
+          <!--            <router-link :to="'/iotmanager/operation/ota/update/device/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">-->
+          <!--              <span>查看</span>-->
+          <!--            </router-link>-->
+          <el-button size="small" text type="primary" @click="getDeviceList(scope.row)">查看</el-button>
+          <!--            <el-button size="small" text type="warning" v-auth="'edit'" @click="CheckUpdate(scope.row)">编辑</el-button>-->
+          <!--            <el-button size="small" text type="danger" v-auth="'del'" @click="del(scope.row)">删除</el-button>-->
+        </template>
+      </el-table-column>
+    </el-table>
+    <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList" />
+    <CheckConfig ref="checkRef" @getList="getList(1)" />
+    <DeviceList ref="deviceRef" />
   </div>
 </template>
 
@@ -156,7 +150,7 @@ export default defineComponent({
       let active = 0;
       if (row.active === 1) active = 0;
       if (row.active === 0) active = 1;
-      api.batch.stop({id: row.id, active: active}).then((res: any) => {
+      api.batch.stop({ id: row.id, active: active }).then((res: any) => {
         ElMessage.success('操作成功');
         batchList();
       });
@@ -170,12 +164,12 @@ export default defineComponent({
       state.tableData.loading = true;
       state.tableData.param.devOtaFirmwareId = props.detail.id;
       api.batch
-          .getList(state.tableData.param)
-          .then((res: any) => {
-            state.tableData.data = res.Data;
-            state.tableData.total = res.Total;
-          })
-          .finally(() => (state.tableData.loading = false));
+        .getList(state.tableData.param)
+        .then((res: any) => {
+          state.tableData.data = res.Data;
+          state.tableData.total = res.Total;
+        })
+        .finally(() => (state.tableData.loading = false));
     };
     // 打开新增弹窗
     const onOpenAdd = () => {
@@ -206,7 +200,7 @@ export default defineComponent({
           getList();
         });
       })
-          .catch(() => { });
+        .catch(() => { });
     };
     /** 重置按钮操作 */
     const resetQuery = () => {
