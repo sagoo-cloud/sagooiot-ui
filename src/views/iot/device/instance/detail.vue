@@ -312,7 +312,7 @@
           </div>
 
         </el-tab-pane>
-        <el-tab-pane label="设备档案" name="7">
+        <el-tab-pane label="设备档案" name="7" v-if="deviceAssetData">
           <el-form label-width="110px">
 
             <!--            <FromData :DataList="Datalist" v-if="Datalist && Datalist.length > 0" disable="true"></FromData>-->
@@ -1030,6 +1030,7 @@ export default defineComponent({
       editAssetRef,
       dataList,
       deviceAssetMetadata,
+      deviceAssetData,
       onOpenListDetail,
       getrunData,
       getlog,
