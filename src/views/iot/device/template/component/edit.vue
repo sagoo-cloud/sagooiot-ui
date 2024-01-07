@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" :width="dialogWidth" :before-close="clsoeDialog" :close-on-click-modal="false">
+	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" :width="dialogWidth" :before-close="closeDialog" :close-on-click-modal="false">
 		<div class="page-full" style="height: 65vh;">
 			<el-form class="form" ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="width: 400px">
 				<el-form-item label="模板名称" prop="title">
@@ -25,7 +25,7 @@
 			</el-tabs>
 		</div>
 		<template #footer class="dialog-footer">
-			<el-button @click="clsoeDialog"> 取 消 </el-button>
+			<el-button @click="closeDialog"> 取 消 </el-button>
 			<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 		</template>
 	</el-dialog>
@@ -85,7 +85,7 @@ export default {
 				this.getDataId();
 			}
 		},
-		clsoeDialog() {
+		closeDialog() {
 			this.activeName = '1';
 			this.temp = {
 				title: '',
@@ -107,7 +107,7 @@ export default {
 				if (valid) {
 					api.template.addTemplate(this.temp).then(() => {
 						this.$emit('getList');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}
@@ -118,7 +118,7 @@ export default {
 				if (valid) {
 					api.template.editTemplate(this.temp).then(() => {
 						this.$emit('getList');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}

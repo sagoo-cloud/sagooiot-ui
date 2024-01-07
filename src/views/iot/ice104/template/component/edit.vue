@@ -1,12 +1,6 @@
 <template>
-	<el-dialog
-		:title="isEdit ? '修改模版' : '添加模版'"
-		v-model="dialogVisible"
-		width="600px"
-		:before-close="clsoeDialog"
-		:close-on-click-modal="false"
-	>
-		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="80px" style="width: 90%; margin: 0 auto">
+	<el-dialog :title="isEdit ? '修改模版' : '添加模版'" v-model="dialogVisible" width="600px" :before-close="closeDialog" :close-on-click-modal="false">
+		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-width="80px" style="width: 90%; margin: 0 auto">
 			<el-form-item label="模版编码" prop="number">
 				<el-input :disabled="isEdit" v-model="ruleForm.number" placeholder="请输入模版编码" />
 			</el-form-item>
@@ -14,31 +8,22 @@
 				<el-input v-model="ruleForm.title" placeholder="请输入模版名称" />
 			</el-form-item>
 			<el-form-item label="状态">
-				<el-switch
-					v-model="ruleForm.status"
-					inline-prompt
-					active-text="开"
-					inactive-text="关"
-					:active-value="1"
-					:inactive-value="0"
-					width="80"
-				/>
+				<el-switch v-model="ruleForm.status" inline-prompt active-text="开" inactive-text="关" :active-value="1" :inactive-value="0" width="80" />
 			</el-form-item>
-			
+
 			<el-form-item label="备注">
 				<el-input type="textarea" v-model="ruleForm.remarks" placeholder="请输入备注信息" />
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button v-auth="'canceSaveTemplate'" @click="clsoeDialog()"> 取 消 </el-button>
+			<el-button v-auth="'canceSaveTemplate'" @click="closeDialog()"> 取 消 </el-button>
 			<el-button v-auth="'saveTemplate'" :loading="btnLoading" type="primary" @click="submitData"> 保 存 </el-button>
 		</template>
 	</el-dialog>
 </template>
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, ref } from 'vue';
 import api from '/@/api/ice104/index';
-import { useI18n } from 'vue-i18n';
 import { ElMessage } from 'element-plus';
 
 const dialogVisible = ref(false);
@@ -67,46 +52,46 @@ const submitData = async () => {
 			api.template.editItem({
 				...ruleForm.value,
 			})
-			.then(() => {
-				ElMessage({ type: 'success', message: '修改成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '修改成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		} else {
 			// 新增
 			api.template.addItem(ruleForm.value)
-			.then(() => {
-				ElMessage({ type: 'success', message: '添加成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '添加成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		}
 	})
 }
+
 
 /**
  * 关闭弹窗
  */
 const closeDialog = () => {
-  dialogVisible.value = false;
-  ruleForm.value = {
-	number: '',
-	title: '',
-	status: 1,
-	remarks: "",
-	mode: 0
-  }
+	dialogVisible.value = false;
+	ruleForm.value = {
+		number: '',
+		title: '',
+		status: 1,
+		remarks: "",
+		mode: 0
+	}
 }
-
 
 const open = async (row: any) => {
 	dialogVisible.value = true
 	if (row && row.number.toString()) {
 		ruleForm.value = row;
 		isEdit.value = true;
-	}else {
+	} else {
 		isEdit.value = false;
 	}
 }

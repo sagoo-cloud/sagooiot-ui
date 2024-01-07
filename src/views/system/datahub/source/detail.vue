@@ -10,7 +10,7 @@
 		</div>
 
 		<div class="content-box">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-tab-pane label="数据源信息" name="1">
 					<el-form label-width="110px" inline>
 						<el-divider content-position="left">基本信息</el-divider>

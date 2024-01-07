@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="设备通道详情" v-model="dialogVisible" width="900px" :before-close="clsoeDialog" :close-on-click-modal="false">
+	<el-dialog title="设备通道详情" v-model="dialogVisible" width="900px" :before-close="closeDialog" :close-on-click-modal="false">
 		<div class="page-full" style="height: 60vh;">
 			<el-tabs v-model="activeName">
 				<el-tab-pane label="通道信息" name="1">
@@ -18,7 +18,7 @@
           </el-form-item> -->
 						<el-form-item label="" prop="">
 							<div align="right">
-								<el-button @click="clsoeDialog"> 取 消 </el-button>
+								<el-button @click="closeDialog"> 取 消 </el-button>
 								<!-- <el-button type="primary" @click="updateData()"> 保 存 </el-button> -->
 							</div>
 						</el-form-item>
@@ -116,7 +116,7 @@ export default {
 		downloadLog() {
 			window.open(getOrigin(import.meta.env.VITE_MODBUS_API) + '/debug/export_message?number=' + this.temp.number);
 		},
-		clsoeDialog() {
+		closeDialog() {
 			this.dialogVisible = false;
 			this.activeName = '1';
 			(this.$refs['dataForm'] as any).resetFields();
@@ -128,7 +128,7 @@ export default {
 					const tempData = Object.assign({}, this.temp);
 					api.channel.editDevice(tempData).then(() => {
 						this.$emit('getList');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}

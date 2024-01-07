@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="500px" :before-close="clsoeDialog" append-to-body :close-on-click-modal="false">
+	<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="500px" :before-close="closeDialog" append-to-body :close-on-click-modal="false">
 		<el-form ref="dataForm" :rules="rules" :model="temp" label-width="80px">
 			<el-form-item label="标题" prop="title">
 				<el-input v-model="temp.title" placeholder="请输入标题" />
@@ -22,7 +22,7 @@
 			</el-form-item>
 		</el-form>
 		<template #footer class="dialog-footer">
-			<el-button @click="clsoeDialog"> 取 消 </el-button>
+			<el-button @click="closeDialog"> 取 消 </el-button>
 			<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 		</template>
 	</el-dialog>
@@ -83,7 +83,7 @@ export default {
 			this.getTemplateList();
 			this.dialogVisible = true;
 		},
-		clsoeDialog() {
+		closeDialog() {
 			this.dialogVisible = false;
 			this.temp = {
 				title: '',
@@ -113,7 +113,7 @@ export default {
 				if (valid) {
 					api.task.addDeviceJob(this.temp).then(() => {
 						this.$emit('finish');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}
@@ -124,7 +124,7 @@ export default {
 				if (valid) {
 					api.task.editDeviceJob(this.temp).then(() => {
 						this.$emit('finish');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}

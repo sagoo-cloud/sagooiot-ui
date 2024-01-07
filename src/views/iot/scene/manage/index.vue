@@ -3,43 +3,36 @@
 		<el-card shadow="nover">
 			<div class="search">
 				<el-form inline ref="queryRef" @keyup.enter="getList(1)">
-					<el-form-item label="场景名称：" prop="keyWord">
-						<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable style="width: 240px" />
+					<el-form-item label="场景名称" prop="keyWord">
+						<el-input v-model="params.keyWord" placeholder="请输入场景名称" clearable style="width: 200px" />
 					</el-form-item>
-
-					<el-form-item label="触发方式" prop="sceneType" style="width: 200px;">
-						<el-select v-model="params.sceneType" placeholder="触发方式" clearable style="width: 240px">
+					<el-form-item label="触发方式" prop="sceneType">
+						<el-select v-model="params.sceneType" placeholder="触发方式" clearable style="width: 140px">
 							<el-option label="设备触发" value="device" />
 							<el-option label="手动触发" value="manual" />
 							<el-option label="定时触发" value="timer" />
 						</el-select>
 					</el-form-item>
-
-					<el-form-item label="运行状态" prop="status" style="width: 200px;">
-						<el-select v-model="params.status" placeholder="运行状态" clearable style="width: 240px">
+					<el-form-item label="运行状态" prop="status">
+						<el-select v-model="params.status" placeholder="运行状态" clearable style="width: 140px">
 							<el-option label="全部" :value="-1" />
 							<el-option label="启用" :value="1" />
 							<el-option label="禁用" :value="0" />
 						</el-select>
 					</el-form-item>
-
 					<el-form-item>
-
 						<el-button type="primary" class="ml10" @click="getList(1)">
 							<el-icon>
 								<ele-Search />
 							</el-icon>
 							查询
 						</el-button>
-					</el-form-item>
-					<el-form-item>
 						<el-button type="success" v-auth="'add'" @click="addOrEdit()">
 							<el-icon>
 								<ele-FolderAdd />
 							</el-icon>
 							新增场景
 						</el-button>
-
 					</el-form-item>
 				</el-form>
 			</div>
@@ -82,8 +75,7 @@
 <script lang="ts" setup>
 import api from '/@/api/scene';
 import { useSearch } from '/@/hooks/useCommon';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
-import getOrigin from '/@/utils/origin'
+import { ElMessageBox, ElMessage } from 'element-plus';
 import EditForm from './edit.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';

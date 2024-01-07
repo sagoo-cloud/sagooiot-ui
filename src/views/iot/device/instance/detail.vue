@@ -10,7 +10,7 @@
     </div>
 
     <div class="content-box">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
 
         <el-tab-pane label="运行状态" name="3">
           <div style=" display: flex; padding: 10px;flex-wrap: wrap;">
@@ -62,7 +62,7 @@
                     <div class="name">{{ vare }}</div> -->
                   </div>
                 </div>
-                <div class="">
+                <div>
                   <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
                 </div>
               </div>
@@ -312,7 +312,7 @@
           </div>
 
         </el-tab-pane>
-        <el-tab-pane label="设备档案" name="7">
+        <el-tab-pane label="设备档案" name="7" v-if="deviceAssetData">
           <el-form label-width="110px">
 
             <!--            <FromData :DataList="Datalist" v-if="Datalist && Datalist.length > 0" disable="true"></FromData>-->
@@ -1030,6 +1030,7 @@ export default defineComponent({
       editAssetRef,
       dataList,
       deviceAssetMetadata,
+      deviceAssetData,
       onOpenListDetail,
       getrunData,
       getlog,

@@ -1,6 +1,6 @@
 <template>
   <div class="page bg padding page-full Ipt-2" style="position: relative;">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="新建服务器" name="first">
         <el-collapse v-model="activeViewName">
           <el-collapse-item title="基本信息" name="1">
