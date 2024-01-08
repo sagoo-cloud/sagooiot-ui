@@ -1,98 +1,96 @@
 <template>
-  <div class="page">
-    <el-card shadow="nover">
-      <el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
-        <el-form-item label="系统模块" prop="title">
-          <el-input v-model="tableData.param.title" placeholder="请输入系统模块" clearable style="width: 180px" @keyup.enter="dataList" />
-        </el-form-item>
+  <el-card shadow="nover" class="page">
+    <el-form :model="tableData.param" ref="queryRef" inline>
+      <el-form-item label="" prop="title">
+        <el-input v-model="tableData.param.title" placeholder="系统模块" clearable style="width: 220px" @keyup.enter="dataList" />
+      </el-form-item>
 
-        <el-form-item label="操作人员" prop="operName">
-          <el-input v-model="tableData.param.operName" placeholder="请输入操作人员" clearable style="width: 180px" @keyup.enter="dataList" />
-        </el-form-item>
+      <el-form-item label="" prop="operName">
+        <el-input v-model="tableData.param.operName" placeholder="操作人员" clearable style="width: 220px" @keyup.enter="dataList" />
+      </el-form-item>
 
-        <el-form-item label="业务类型" prop="businessType">
-          <el-select v-model="tableData.param.businessType" placeholder="请选择类型" clearable style="width: 180px">
-            <el-option label="新增" :value="1" />
-            <el-option label="修改" :value="2" />
-            <el-option label="删除" :value="3" />
-            <el-option label="其它" :value="0" />
-          </el-select>
-        </el-form-item>
+      <el-form-item label="" prop="businessType">
+        <el-select v-model="tableData.param.businessType" placeholder="业务类型" clearable style="width: 120px">
+          <el-option label="新增" :value="1" />
+          <el-option label="修改" :value="2" />
+          <el-option label="删除" :value="3" />
+          <el-option label="其它" :value="0" />
+        </el-select>
+      </el-form-item>
 
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="tableData.param.status" placeholder="请选择状态" style="width: 180px">
-            <el-option label="全部" :value="-1" />
-            <el-option label="正常" :value="1" />
-            <el-option label="异常" :value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" class="ml10" @click="dataList">
-            <el-icon>
-              <ele-Search />
-            </el-icon>
-            查询
-          </el-button>
-          <el-button @click="resetQuery(queryRef)">
-            <el-icon>
-              <ele-Refresh />
-            </el-icon>
-            重置
-          </el-button>
-          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-            <el-icon>
-              <ele-Delete />
-            </el-icon>
-            删除日志
-          </el-button>
-          <!-- <el-button type="info" class="ml10" @click="onRowClear()">
+      <el-form-item label="" prop="status">
+        <el-select v-model="tableData.param.status" placeholder="请选择状态" style="width: 100px">
+          <el-option label="全部状态" :value="-1" />
+          <el-option label="正常" :value="1" />
+          <el-option label="异常" :value="0" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="ml10" @click="dataList">
+          <el-icon>
+            <ele-Search />
+          </el-icon>
+          查询
+        </el-button>
+        <!-- <el-button @click="resetQuery(queryRef)">
+          <el-icon>
+            <ele-Refresh />
+          </el-icon>
+          重置
+        </el-button> -->
+        <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+          <el-icon>
+            <ele-Delete />
+          </el-icon>
+          删除日志
+        </el-button>
+        <!-- <el-button type="info" class="ml10" @click="onRowClear()">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               清空日志
             </el-button> -->
-        </el-form-item>
-      </el-form>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="编号" align="center" width="100" prop="operId" />
-        <el-table-column label="系统模块" align="center" prop="title" min-width="120" show-overflow-tooltip />
-        <el-table-column label="业务类型" align="center" prop="businessType" width="130">
-          <template #default="scope">
-            <span size="small" v-if="scope.row.businessType === 0">其他</span>
-            <span size="small" v-else-if="scope.row.businessType === 1">新增</span>
-            <span size="small" v-else-if="scope.row.businessType === 2">修改</span>
-            <span size="small" v-else-if="scope.row.businessType === 3">删除</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作类型" v-col="'operatorType'" align="center" prop="operatorType" width="130">
-          <template #default="scope">
-            <span size="small" v-if="scope.row.operatorType === 0">其他</span>
-            <span size="small" v-else-if="scope.row.operatorType === 1">后台用户</span>
-            <span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" show-overflow-tooltip />
-        <el-table-column label="组织名称" align="center" prop="deptName" />
-        <el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" width="160" />
-        <el-table-column label="操作地点" v-col="'operLocation'" show-overflow-tooltip align="center" prop="operLocation" width="130" />
-        <el-table-column label="操作时间" v-col="'operTime'" align="center" prop="operTime" width="160" />
-        <el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="100">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
-            <el-tag type="warning" size="small" v-else-if="scope.row.status === 0">异常</el-tag>
-            <el-tag type="info" size="small" v-else>-</el-tag>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column label="操作信息" show-overflow-tooltip prop="msg" /> -->
-        <el-table-column label="操作" v-col="'handle'" width="80" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenDetail(scope.row)" v-auth="'detail'">详细</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
-    </el-card>
+      </el-form-item>
+    </el-form>
+    <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
+      <el-table-column type="selection" width="55" align="center" fixed="left" />
+      <el-table-column label="编号" align="center" width="100" prop="operId" />
+      <el-table-column label="系统模块" align="center" prop="title" min-width="120" show-overflow-tooltip />
+      <el-table-column label="业务类型" align="center" prop="businessType" width="130">
+        <template #default="scope">
+          <span size="small" v-if="scope.row.businessType === 0">其他</span>
+          <span size="small" v-else-if="scope.row.businessType === 1">新增</span>
+          <span size="small" v-else-if="scope.row.businessType === 2">修改</span>
+          <span size="small" v-else-if="scope.row.businessType === 3">删除</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作类型" v-col="'operatorType'" align="center" prop="operatorType" width="130">
+        <template #default="scope">
+          <span size="small" v-if="scope.row.operatorType === 0">其他</span>
+          <span size="small" v-else-if="scope.row.operatorType === 1">后台用户</span>
+          <span size="small" v-else-if="scope.row.operatorType === 2">手机端用户</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作人员" v-col="'operName'" align="center" prop="operName" show-overflow-tooltip />
+      <el-table-column label="组织名称" align="center" prop="deptName" />
+      <el-table-column label="主机" show-overflow-tooltip align="center" prop="operIp" width="160" />
+      <el-table-column label="操作地点" v-col="'operLocation'" show-overflow-tooltip align="center" prop="operLocation" width="130" />
+      <el-table-column label="操作时间" v-col="'operTime'" align="center" prop="operTime" width="160" />
+      <el-table-column label="操作状态" v-col="'status'" align="center" prop="status" width="100">
+        <template #default="scope">
+          <el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
+          <el-tag type="warning" size="small" v-else-if="scope.row.status === 0">异常</el-tag>
+          <el-tag type="info" size="small" v-else>-</el-tag>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="操作信息" show-overflow-tooltip prop="msg" /> -->
+      <el-table-column label="操作" v-col="'handle'" width="80" align="center" fixed="right">
+        <template #default="scope">
+          <el-button size="small" type="text" @click="onOpenDetail(scope.row)" v-auth="'detail'">详细</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 
     <el-dialog :title="currentRow.title + '详情'" v-model="dialogVisible" width="550px">
       <el-form :model="currentRow" ref="formRef" label-width="90px">
@@ -128,7 +126,7 @@
         </span>
       </template>
     </el-dialog>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">
