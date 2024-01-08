@@ -1,43 +1,37 @@
 <template>
-  <div class="page">
-    <el-card shadow="nover">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="服务日志" name="1"> </el-tab-pane>
-        <el-tab-pane label="数据库日志" name="2"> </el-tab-pane>
-        <el-tab-pane label="运行日志" name="3"> </el-tab-pane>
-      </el-tabs>
-      <!-- 日志列表 -->
-      <el-table ref="table" v-if="activeName === '1'" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-        <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-            <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
-            </el-button>
-            <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-            <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <!-- 数据库日志 -->
-      <el-table v-else-if="activeName === '2'" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
-        <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
-        <el-table-column label="操作" width="200" align="center">
-          <template #default="scope">
-            <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
-            </el-button>
-            <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
-            <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <template v-else>
-
-        <!-- 运行日志 -->
+  <div class="page bg page-full padding border Ipt-2">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="服务日志" name="1">
+        <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+          <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
+          <el-table-column label="操作" width="200" align="center">
+            <template #default="scope">
+              <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
+              </el-button>
+              <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+              <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="数据库日志" name="2">
+        <el-table :data="tableData" style="width: 100%" row-key="id" v-loading="loading">
+          <el-table-column prop="name" label="文件名" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="changeAt" label="修改时间" min-width="100" align="center"></el-table-column>
+          <el-table-column label="操作" width="200" align="center">
+            <template #default="scope">
+              <el-button size="small" text type="primary" v-if="!scope.row.folderName" @click="view(scope.row)">详情
+              </el-button>
+              <el-button size="small" text type="warning" v-auth="'download'" @click="down(scope.row)">下载</el-button>
+              <el-button size="small" text type="info" v-auth="'del'" @click="onRowDel(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="运行日志" name="3">
         <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
         <div v-if="runButtonShow" v-loading="runLoading" v-for="line in runMessage" :key="line" class="error-line">{{ line }}</div>
         <div v-else class="error-line">暂无数据</div>
@@ -45,17 +39,16 @@
           <el-button size="small" text type="warning" v-auth="'download'" @click="down">下载</el-button>
           <el-button size="small" text type="danger" v-auth="'del'" @click="onRowDel">删除</el-button>
         </div>
-      </template>
-
-      <el-dialog v-model="dialogVisible" title="查看详情">
-        <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
-        <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
-      </el-dialog>
-      <el-dialog v-model="dialogVisible" title="查看详情">
-        <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
-        <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
-      </el-dialog>
-    </el-card>
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog v-model="dialogVisible" title="查看详情">
+      <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
+      <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
+    </el-dialog>
+    <el-dialog v-model="dialogVisible" title="查看详情">
+      <div v-for="line in topMsg" :key="line" class="error-line">{{ line }}</div>
+      <div v-for="line in errorMessage" :key="line" class="error-line">{{ line }}</div>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,5 +187,4 @@ const handleClick = (tab: any, event: Event) => {
   height: calc(100vh - 110px);
   overflow-y: auto;
 }
-
 </style>
