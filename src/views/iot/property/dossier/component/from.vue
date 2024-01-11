@@ -3,7 +3,7 @@
 	<div>
 		<div v-for="(item, index) in dataList" :key="index">
 
-      <el-form-item :label="item.title + ':'" :prop="item.name" class="form-item" v-if="item.types === 'input'">
+      <el-form-item :label="item.title + '：'" :prop="item.name" class="form-item" v-if="item.types === 'input'">
         <el-input v-model="formData[item.name]" :placeholder="'请输入' + item.title" @input="saveData()" :readonly="disable" />
       </el-form-item>
 
