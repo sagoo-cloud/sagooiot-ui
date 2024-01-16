@@ -1,48 +1,47 @@
 <template>
 	<div>
-	<el-card class="system-dic-container" style="position: relative;">
-		<div class="content">
-			<div class="flex cont_box">
-				<div class="font26">场景名称：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="detail.status == 1 ? 'on' : 'off'"></span>{{ detail.status == 1
-					? '启用' : '未启用' }}</div>
+		<el-card class="system-dic-container" shadow="nover" style="position: relative;">
+			<div class="content">
+				<div class="flex cont_box">
+					<div class="font26">场景名称：{{ detail.name }}</div>
+					<div class="pro-status"><span :class="detail.status == 1 ? 'on' : 'off'"></span>{{ detail.status == 1
+						? '启用' : '未启用' }}</div>
+				</div>
+				<div class="flex">
+					<div class="desc" style="margin-right: 20px;">场景类型：{{ typeList[detail.sceneType] }}</div>
+					<div class="desc">场景描述：{{ detail.description }}</div>
+					<div class="edit" @click="addOrEdit(detail)"><el-link type="primary"> <el-icon>
+								<EditPen color="#409eff" />
+							</el-icon>修改</el-link></div>
+				</div>
 			</div>
-			<div class="flex">
-				<div class="desc" style="margin-right: 20px;">场景类型：{{typeList[detail.sceneType]}}</div>
-				<div class="desc">场景描述：{{ detail.description }}</div>
-				<div class="edit" @click="addOrEdit(detail)"><el-link type="primary"> <el-icon>
-							<EditPen color="#409eff" />
-						</el-icon>修改</el-link></div>
-			</div>
-		</div>
-	</el-card>
-	<el-card style="  margin-top: 15px;" v-if="detail.sceneType==='device'">
-		<div class="font20">场景定义</div>
-		<SceneItem v-if="showstatus && sourceData.length>0" :sceneList="sceneList" :sourceData="sourceData" :sceneType="detail.sceneType" @addScenesDetail="addScenesDetail"
-			@delScenesDetail="delScenesDetail" @editScenesDetail="editScenesDetail"></SceneItem>
-	</el-card>
-	<el-card style="  margin-top: 15px;" v-if="detail.sceneType==='timer'">
-		<el-form-item label="定时触发">
-          <div style="display:flex">
-            <el-input v-model="timerData.timer" placeholder="请输入cron表达式" />
-            <el-dialog v-model="dialogVisible" title="选择Cron规则" width="60%">
-              <vue3cron @handlelisten="handlelisten"  @close="cronclose"></vue3cron>
-            </el-dialog>
-            <el-button type="success" @click="showCron()" style="margin-left: 5px;">设置</el-button>
+		</el-card>
+		<el-card shadow="nover" style="margin-top: 15px;" v-if="detail.sceneType === 'device'">
+			<div class="font20">场景定义</div>
+			<SceneItem v-if="showstatus && sourceData.length > 0" :sceneList="sceneList" :sourceData="sourceData" :sceneType="detail.sceneType" @addScenesDetail="addScenesDetail" @delScenesDetail="delScenesDetail" @editScenesDetail="editScenesDetail"></SceneItem>
+		</el-card>
+		<el-card style="  margin-top: 15px;" v-if="detail.sceneType === 'timer'">
+			<el-form-item label="定时触发">
+				<div style="display:flex">
+					<el-input v-model="timerData.timer" placeholder="请输入cron表达式" />
+					<el-dialog v-model="dialogVisible" title="选择Cron规则" width="60%">
+						<vue3cron @handlelisten="handlelisten" @close="cronclose"></vue3cron>
+					</el-dialog>
+					<el-button type="success" @click="showCron()" style="margin-left: 5px;">设置</el-button>
 
-          </div>
-        </el-form-item>
-	</el-card>
-	<el-card style="  margin-top: 15px;">
-		<div class="font20">场景动作</div>
-		<ActionItem v-if="detail.id && sourceData.length>0" :scene_id="detail.id"  :sourceData="sourceData"></ActionItem>
-	</el-card>
+				</div>
+			</el-form-item>
+		</el-card>
+		<el-card shadow="nover" style="margin-top: 15px;">
+			<div class="font20">场景动作</div>
+			<ActionItem v-if="detail.id && sourceData.length > 0" :scene_id="detail.id" :sourceData="sourceData"></ActionItem>
+		</el-card>
 
-	<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
-</div>
+		<EditForm ref="editFormRef" @getList="getDetail()"></EditForm>
+	</div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, ref, defineComponent,onMounted } from 'vue';
+import { toRefs, reactive, ref, defineComponent, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { EditPen, DocumentAdd } from '@element-plus/icons-vue';
 import ActionItem from './component/actionItem.vue';
@@ -71,26 +70,26 @@ const originalSceneList = ref([{
 	id: 0
 }]);
 export default defineComponent({
-	components: { EditPen, EditForm, DocumentAdd, SceneItem, ActionItem,vue3cron},
+	components: { EditPen, EditForm, DocumentAdd, SceneItem, ActionItem, vue3cron },
 	setup(props, context) {
 		const route = useRoute();
 		const router = useRouter();
 		const state = reactive({
-			timer:'',
-			timer_id:0,
-			dialogVisible:false,
+			timer: '',
+			timer_id: 0,
+			dialogVisible: false,
 			developer_status: 2,
 			showstatus: false,
-			typeList:{
-				'device':'设备触发',
-				'manual':'手动触发',
-				'timer':'定时触发',
+			typeList: {
+				'device': '设备触发',
+				'manual': '手动触发',
+				'timer': '定时触发',
 			} as any,
 			sourceData: [],
 			timerData: {
-					triggerType:'timer',
-					timer:'',
-				},
+				triggerType: 'timer',
+				timer: '',
+			},
 			detail: {
 				id: '',
 				name: '',
@@ -123,7 +122,7 @@ export default defineComponent({
 		});
 
 		const handlelisten = (e: any) => {
-			state.timerData.timer=e.cron
+			state.timerData.timer = e.cron
 			api.manage.editDetail({ id: state.timer_id, bodyjson: state.timerData })
 		};
 		const showCron = () => {
@@ -150,7 +149,7 @@ export default defineComponent({
 		const getOneDetail = () => {
 
 			const id = route.params && route.params.id;
-			if(state.detail.sceneType=='device'){
+			if (state.detail.sceneType == 'device') {
 				api.manage.getOneDetail({ "sceneId": id, 'group': 'definition' }).then((res: any) => {
 					if (!res) {
 						addScenesDetail('definition');
@@ -168,21 +167,21 @@ export default defineComponent({
 				})
 			}
 			//定时触发
-			if(state.detail.sceneType=='timer'){
+			if (state.detail.sceneType == 'timer') {
 				api.manage.getOneDetail({ "sceneId": id, 'group': 'timer' }).then((res: any) => {
 					if (!res) {
 						let data = {
 							sceneId: id,
 							group: 'timer',
-							bodyjson:state.timerData,
+							bodyjson: state.timerData,
 						}
 						api.manage.addDetail(data).then((res: any) => {
 							getOneDetail();
 						});
 					}
 
-					state.timer_id=res[0].id
-					state.timerData=JSON.parse(res[0].bodyjson);
+					state.timer_id = res[0].id
+					state.timerData = JSON.parse(res[0].bodyjson);
 
 				})
 			}

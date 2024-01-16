@@ -207,7 +207,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .line {
   border: 1px solid var(--next-border-color-light);
   ;
@@ -218,7 +218,6 @@ export default defineComponent({
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
   font-variant: tabular-nums;
   line-height: 1.5715;

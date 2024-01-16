@@ -10,7 +10,7 @@
 		</div>
 
 		<div class="content-box">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-tab-pane label="运行状态" name="3">
 					<div style="display: flex; padding: 10px; flex-wrap: wrap">
 						<div class="ant-card">
@@ -49,7 +49,7 @@
 								</div>
 
 								<div class="statusname">{{ item.value }}{{ item.unit }}</div>
-								<div class="">
+								<div>
 									<devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float'" />
 								</div>
 							</div>

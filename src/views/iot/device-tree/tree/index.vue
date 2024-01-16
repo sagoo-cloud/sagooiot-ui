@@ -1,6 +1,6 @@
 <template>
   <div class="page page-full">
-    <el-row :gutter="16" class="h-full">
+    <el-row :gutter="15" class="h-full">
       <el-col :span="6" class="h-full">
         <el-card shadow="nover" class="h-full">
           <el-scrollbar v-loading="treeLoading">

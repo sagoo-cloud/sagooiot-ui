@@ -11,7 +11,6 @@
 	border-radius: var(--el-card-border-radius);
 
 	&.bg {
-		padding: 20px;
 		background: var(--el-color-white);
 	}
 
@@ -21,11 +20,6 @@
 
 	&.border {
 		border: 1px solid var(--next-border-color-light);
-	}
-
-	&:hover {
-		box-shadow: 0 2px 12px var(--next-color-dark-hover);
-		transition: all ease 0.3s;
 	}
 
 	> .el-card,

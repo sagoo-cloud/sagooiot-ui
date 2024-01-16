@@ -1,12 +1,6 @@
 <template>
-	<el-dialog
-		:title="isEdit ? '修改设备' : '添加设备'"
-		v-model="dialogVisible"
-		width="600px"
-		:before-close="closeDialog"
-		:close-on-click-modal="false"
-	>
-		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
+	<el-dialog :title="isEdit ? '修改设备' : '添加设备'" v-model="dialogVisible" width="600px" :before-close="closeDialog" :close-on-click-modal="false">
+		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="right" label-width="120px">
 			<el-form-item label="设备编码" prop="number">
 				<el-input :disabled="isEdit" v-model="ruleForm.number" placeholder="请输入设备编码" />
 			</el-form-item>
@@ -82,33 +76,33 @@ const submitData = async () => {
 			api.device.editItem({
 				...ruleForm.value,
 			})
-			.then(() => {
-				ElMessage({ type: 'success', message: '修改成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '修改成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		} else {
 			// 新增
 			api.device.addItem(ruleForm.value)
-			.then(() => {
-				ElMessage({ type: 'success', message: '添加成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '添加成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		}
 	})
 }
 
-const handleProductChange = (data:any) => {
+const handleProductChange = (data: any) => {
 	ruleForm.value.deviceKey = "";
-	let findItem:any = productList.value.find((v: any) => v.key === data);
+	let findItem: any = productList.value.find((v: any) => v.key === data);
 	getDeviceList(findItem.id)
 }
 
-const getDeviceList = (id:number) => {
-	apiDevice.device.allList({productId: id}).then((res: any) => {
+const getDeviceList = (id: number) => {
+	apiDevice.device.allList({ productId: id }).then((res: any) => {
 		deviceList.value = res.device
 	})
 }
@@ -117,16 +111,16 @@ const getDeviceList = (id:number) => {
  * 关闭弹窗
  */
 const closeDialog = () => {
-  dialogVisible.value = false;
-  ruleForm.value = {
-	number: '',
-	title: '',
-	commonAddr: '',
-	subCode: '',
-	templateNumber: '',
-	productKey: '',
-	deviceKey: ''
-  }
+	dialogVisible.value = false;
+	ruleForm.value = {
+		number: '',
+		title: '',
+		commonAddr: '',
+		subCode: '',
+		templateNumber: '',
+		productKey: '',
+		deviceKey: ''
+	}
 }
 
 
@@ -135,7 +129,7 @@ const open = async (row: any) => {
 	if (row && row.number.toString()) {
 		ruleForm.value = row;
 		isEdit.value = true;
-	}else {
+	} else {
 		isEdit.value = false;
 	}
 }

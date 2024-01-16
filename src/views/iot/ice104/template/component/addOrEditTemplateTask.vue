@@ -1,13 +1,7 @@
 <!-- 添加或者修改设备 -->
 <template>
-	<el-dialog
-		:title="isEdit ? '修改模版点位' : '添加模版点位'"
-		v-model="dialogVisible"
-		width="600px"
-		:before-close="closeDialog"
-		:close-on-click-modal="false"
-	>
-		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
+	<el-dialog :title="isEdit ? '修改模版点位' : '添加模版点位'" v-model="dialogVisible" width="600px" :before-close="closeDialog" :close-on-click-modal="false">
+		<el-form ref="formRef" :rules="formRules" :model="ruleForm" label-position="right" label-width="120px" style="width: 90%; margin: 0 auto">
 			<el-form-item label="点位名称" prop="title">
 				<el-input v-model="ruleForm.title" placeholder="请输入点位名称" />
 			</el-form-item>
@@ -43,7 +37,7 @@ const emit = defineEmits(['updateList']);
 
 const formRef = ref();
 const ruleForm = ref({
-    dtId: 0,
+	dtId: 0,
 	title: '',
 	templateNumber: route.params && route.params.id,
 	dataAttribName: '',
@@ -58,8 +52,8 @@ const formRules = computed(() => ({
 	dataAddress: [{ required: true, trigger: 'blur', message: '请输入数据项点位' }],
 	dataCoef: [{ required: true, trigger: 'blur', message: '请输入倍率' }],
 }));
-const getRandom = (num:number) =>{
-    return Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,num-1));
+const getRandom = (num: number) => {
+	return Math.floor((Math.random() + Math.floor(Math.random() * 9 + 1)) * Math.pow(10, num - 1));
 }
 const submitData = async () => {
 	formRef.value.validate((valid: boolean) => {
@@ -70,22 +64,22 @@ const submitData = async () => {
 			api.deviceTemplate.editItem({
 				...ruleForm.value,
 			})
-			.then(() => {
-				ElMessage({ type: 'success', message: '修改成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '修改成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		} else {
 			// 新增
-            ruleForm.value.dtId = getRandom(10);
+			ruleForm.value.dtId = getRandom(10);
 			api.deviceTemplate.addItem(ruleForm.value)
-			.then(() => {
-				ElMessage({ type: 'success', message: '添加成功' })
-				emit('updateList')
-				closeDialog()
-			})
-			.finally(() => (btnLoading.value = false))
+				.then(() => {
+					ElMessage({ type: 'success', message: '添加成功' })
+					emit('updateList')
+					closeDialog()
+				})
+				.finally(() => (btnLoading.value = false))
 		}
 	})
 }
@@ -94,16 +88,16 @@ const submitData = async () => {
  * 关闭弹窗
  */
 const closeDialog = () => {
-  dialogVisible.value = false;
-  isEdit.value = false;
-  ruleForm.value = {
-    dtId: 0,
-	title: '',
-	templateNumber: route.params && route.params.id,
-	dataAttribName: '',
-	dataAddress: 0,
-	DataCoef: ''
-  }
+	dialogVisible.value = false;
+	isEdit.value = false;
+	ruleForm.value = {
+		dtId: 0,
+		title: '',
+		templateNumber: route.params && route.params.id,
+		dataAttribName: '',
+		dataAddress: 0,
+		DataCoef: ''
+	}
 }
 
 
@@ -113,7 +107,7 @@ const open = async (row: any) => {
 		row.DataCoef = row.dataCoef
 		ruleForm.value = row;
 		isEdit.value = true;
-	}else {
+	} else {
 		isEdit.value = false;
 	}
 }

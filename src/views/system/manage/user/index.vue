@@ -1,6 +1,6 @@
 <template>
-	<div class="page padding flex-row gap-5">
-		<el-card shadow="nover">
+	<div class="page flex-row gap-4">
+		<el-card shadow="nover" style="width:260px">
 			<el-scrollbar>
 				<el-input :prefix-icon="search" v-model="filterText" placeholder="请输入组织名称" clearable style="width: 100%;" />
 				<el-tree ref="treeRef" class="filter-tree mt-4" :data="deptData" :props="deptProps" default-expand-all :filter-node-method="deptFilterNode" @node-click="handleNodeClick">
@@ -8,27 +8,24 @@
 						<div class="custom-tree-node" :title="node.label">
 							{{ node.label }}
 						</div>
-					</template></el-tree>
+					</template>
+				</el-tree>
 			</el-scrollbar>
 		</el-card>
-		<el-card shadow="nover">
-			<el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
-				<el-form-item label="关键字" prop="keyWords">
-					<el-input v-model="tableData.param.keyWords" placeholder="请输入用户名或姓名" clearable style="width: 240px" @keyup.enter.native="userList" />
+		<el-card shadow="nover" class="flex1">
+			<el-form :model="tableData.param" ref="queryRef" inline>
+				<el-form-item label="" prop="keyWords">
+					<el-input v-model="tableData.param.keyWords" placeholder="用户名或姓名搜索" clearable style="width: 165px" @keyup.enter.native="userList" />
 				</el-form-item>
-				<!--							<el-form-item label="手机号码" prop="mobile">-->
-				<!--								<el-input v-model="tableData.param.mobile" placeholder="请输入手机号码" clearable style="width: 240px" @keyup.enter.native="userList" />-->
-				<!--							</el-form-item>-->
-				<el-form-item label="状态" prop="status" style="width: 200px;">
-					<el-select v-model="tableData.param.status" placeholder="用户状态" style="width: 240px">
+				<el-form-item label="" prop="status">
+					<el-select v-model="tableData.param.status" placeholder="用户状态" style="width: 80px">
 						<el-option label="全部" :value="-1" />
 						<el-option label="启用" :value="1" />
 						<el-option label="禁用" :value="0" />
-						<!-- <el-option label="未验证" :value="2" /> -->
 					</el-select>
 				</el-form-item>
-				<el-form-item label="创建时间" prop="dateRange">
-					<el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+				<el-form-item label="" prop="dateRange">
+					<el-date-picker v-model="tableData.param.dateRange" style="width: 220px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="创建时间" end-placeholder="时间范围"></el-date-picker>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" class="ml10" @click="userList">
@@ -37,12 +34,12 @@
 						</el-icon>
 						查询
 					</el-button>
-					<el-button @click="resetQuery(queryRef)">
+					<!-- <el-button @click="resetQuery(queryRef)">
 						<el-icon>
 							<ele-Refresh />
 						</el-icon>
 						重置
-					</el-button>
+					</el-button> -->
 					<el-button type="primary" class="ml10" @click="onOpenAddUser" v-auth="'add'">
 						<el-icon>
 							<ele-FolderAdd />
@@ -72,7 +69,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="createdAt" label="创建时间" width="180" v-col="'createdAt'" align="center"></el-table-column>
-				<el-table-column label="操作" width="180" align="center" v-col="'handle'" fixed="right">
+				<el-table-column label="操作" width="130" align="center" v-col="'handle'" fixed="right">
 					<template #default="scope">
 						<!-- <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auths="['edit','del']">修改</el-button>
                 <el-button size="small" text type="warning" @click="onOpenEditUser(scope.row)" v-auth-all="['edit','del']">修改</el-button> -->

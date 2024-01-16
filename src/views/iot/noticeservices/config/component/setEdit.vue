@@ -143,7 +143,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .inline {
 	display: inline-flex;
 }

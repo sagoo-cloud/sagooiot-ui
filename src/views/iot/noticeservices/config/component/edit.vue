@@ -131,7 +131,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-textarea__inner{
 	min-height: 420px !important;
 }
