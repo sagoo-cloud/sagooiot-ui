@@ -6,9 +6,7 @@
           <el-form-item label="设备名称：" prop="name">
             <el-input v-model="tableData.param.deviceName" placeholder="请输入设备名称" clearable style="width: 240px" @submit.prevent />
           </el-form-item>
-
           <el-form-item>
-
             <el-button type="primary" class="ml10" @click="getDetail">
               <el-icon>
                 <ele-Search />
@@ -16,7 +14,6 @@
               查询
             </el-button>
           </el-form-item>
-
         </el-form>
       </div>
       <el-table :data="tableData.data" style="width: 100%" row-key="id" v-loading="tableData.loading">
@@ -47,6 +44,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="时间" min-width="100" align="center"></el-table-column>
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button size="small" text type="primary" @click="distribute(scope.row)">手动下发</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getDetail" />
     </el-dialog>
@@ -56,6 +58,7 @@
 <script lang="ts">
 import api from '/@/api/ota';
 import {defineComponent, reactive, toRefs} from 'vue';
+import {ElMessage} from "element-plus";
 
 interface TableDataRow {
   id: number;
@@ -84,7 +87,7 @@ interface TableDataState {
 }
 
 export default defineComponent({
-  setup(prop) {
+  setup() {
     const state = reactive<TableDataState>({
       ids: [],
       tableData: {
@@ -125,11 +128,24 @@ export default defineComponent({
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
     };
+    // 手动下发
+    const distribute = (row: any) => {
+      const deviceId = row.deviceId;
+      const strategyId = row.strategyId;
+      api.batch.distribute({deviceId: deviceId, strategyId: strategyId}).then(() => {
+        ElMessage.success('操作成功');
+      })
+      // 因列表更新数据不是实时更新，需设置定时后在请求列表
+      setTimeout(() => {
+        getDetail();
+      }, 500);
+    }
     return {
       getDetail,
       openDialog,
       closeDialog,
       onCancel,
+      distribute,
       ...toRefs(state),
     };
   },
