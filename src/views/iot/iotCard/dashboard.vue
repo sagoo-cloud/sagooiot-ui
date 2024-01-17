@@ -89,7 +89,7 @@
 						<div class="rank-item" v-for="(item, index) in rankList" :key="index">
 							<div :class="`number-item-${++index}`" class="number">{{index++}}</div>
 							<div class="card-num">{{item.accessNumber}}</div>
-							<el-progress class="progress-wrap" :text-inside="true" :stroke-width="16" :percentage="(item.value / totalNum * 100).toFixed(2)" />
+							<el-progress class="progress-wrap" :text-inside="true" :stroke-width="16" :percentage="totalNum ? (item.value / totalNum * 100).toFixed(2) : 0" />
 							<div class="flow-num">{{formatSize(item.value * 1024 * 1024)}}</div>
 						</div>
 					</div>
@@ -284,7 +284,7 @@ const typeChange = (value:any) => {
 	getMonthFlowData();
 	getYearFlowData();
 	getFlowData();
-
+	getTop10Data();
 }
 
 const getTop10Data = async () => {
@@ -293,9 +293,9 @@ const getTop10Data = async () => {
     edate: dayjs(dateRange.value[1]).format('YYYY-MM-DD'),
     types: types.value
   })
-	if(!top10Res.data) return;
-	rankList.value = top10Res.data;
-	totalNum.value = top10Res.data[0].value;
+	// if(!top10Res.data) return;
+	rankList.value = top10Res.data || [];
+	totalNum.value = top10Res.data ? top10Res.data[0].value : 0;
 }
 const getFlowAllData = async () => {
   const res = await api.dashboard.getFlowData({
