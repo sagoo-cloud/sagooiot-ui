@@ -130,9 +130,9 @@ export default defineComponent({
     };
     // 手动下发
     const distribute = (row: any) => {
-      const deviceId = row.deviceId;
+      const deviceKey = row.deviceKey;
       const strategyId = row.strategyId;
-      api.batch.distribute({deviceId: deviceId, strategyId: strategyId}).then(() => {
+      api.batch.distribute({deviceKey: deviceKey, strategyId: strategyId}).then(() => {
         ElMessage.success('操作成功');
       })
       // 因列表更新数据不是实时更新，需设置定时后在请求列表
