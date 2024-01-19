@@ -23,5 +23,8 @@ export default {
     getFlowDataByDateRange: (data: object) => post('/sim_history_traffic/date', data),
     getTop10Data: (data: object) => post('/sim_traffic_statis/top_flow', data),
     getFlowData: (data: object) => get('/sim_traffic_statis/get', data)
+  },
+  platform: {
+    getList: (params: object) => get('/sim_factory/list', params),
   }
 }
