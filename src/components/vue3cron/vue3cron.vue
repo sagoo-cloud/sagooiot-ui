@@ -1,9 +1,8 @@
 
 <template>
   <div class="vue3-cron-div">
-    <!-- <el-button class="language" type="text" @click="state.language = state.language === 'en' ? 'cn' : 'en'">{{
-            state.language === 'en' ? 'cn' : 'en'
-        }}</el-button> -->
+    <el-button class="language" type="text" >
+  </el-button>
     <el-tabs type="border-card">
       <el-tab-pane>
         <template #label>
@@ -255,7 +254,7 @@
         <span> cron预览: </span>
         <el-tag type="primary">
           {{ state.cron }}
-        </el-tag>
+        </el-tag> <span>{秒数} {分钟} {小时} {日期} {月份} {?} {年份}</span>
       </div>
       <div class="buttonDiv" style="text-align: right;">
         <el-button type="primary" size="mini" @click.stop="handleChange">{{ state.text.Save }}</el-button>
