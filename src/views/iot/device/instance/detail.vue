@@ -88,7 +88,7 @@
             <el-descriptions-item label="链接协议">{{ prodetail.transportProtocol }}</el-descriptions-item>
             <el-descriptions-item label="设备类型">{{ prodetail.deviceType }}</el-descriptions-item>
             <el-descriptions-item label="固件版本">{{ detail.version }}</el-descriptions-item>
-            <el-descriptions-item label="注册时间">{{ detail.updatedAt }}</el-descriptions-item>
+            <el-descriptions-item label="注册时间">{{ detail.registryTime }}</el-descriptions-item>
             <el-descriptions-item label="最后上线时间">{{ detail.lastOnlineTime || '' }}</el-descriptions-item>
             <el-descriptions-item label="详细地址">{{ detail.address }}</el-descriptions-item>
             <el-descriptions-item label="说明">{{ detail.desc }}</el-descriptions-item>
