@@ -23,6 +23,7 @@ export default {
     del: (ids: number) => del('/operate/ota_strategy/delete', {ids}),
     add: (data: any) => post('/operate/ota_strategy/add', data),
     edit: (data: any) => put('/operate/ota_strategy/edit', data),
+    distribute: (data: any) => post('/operate/ota_strategy/distribute', data)
   },
   device: {
     getList: (data: any) => get('/operate/ota_detail/list', data),

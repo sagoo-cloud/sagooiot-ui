@@ -59,3 +59,13 @@ export function selectDictLabel(data: any[], value: string): string {
     })
     return actions.join('');
 }
+
+export function formatSize(kb:number) {
+    if (kb <= 0) {
+        return "0 B";
+    }
+
+    const units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(kb) / Math.log(1024));
+    return (kb / Math.pow(1024, i)).toFixed(2) + " " + units[i];
+}

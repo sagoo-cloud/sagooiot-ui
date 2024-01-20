@@ -32,7 +32,7 @@
       <el-table-column label="类型" prop="types" width="120" align="center">
         <template #default="scope">
           <el-tag type="success" size="small" v-if="scope.row.types == 0">验证</el-tag>
-          <el-tag type="info" size="small" v-else>升级</el-tag>
+          <el-tag type="primary" size="small" v-else>升级</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="active" width="120" align="center">

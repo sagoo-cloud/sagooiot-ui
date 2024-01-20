@@ -33,9 +33,10 @@
 					<template #default="{ node, data }">
 						<div class="custom-tree-node">
 							<span class="tree-label">
-								<el-icon v-if="data.is_type == '2'">
-									<Expand />
+								<el-icon v-if="data.is_type != '2'">
+									<Folder />
 								</el-icon>
+                <SvgIcon name="iconfont icon-siweidaotu" v-if="data.is_type == '2'"></SvgIcon>
 								{{ node.label }}
 							</span>
 						</div>
@@ -69,7 +70,7 @@
 <script lang="ts" setup>
 import device from '/@/api/device'
 import { useSearch } from '/@/hooks/useCommon'
-import { Expand } from '@element-plus/icons-vue';
+import { Folder } from '@element-plus/icons-vue';
 
 import { ElMessageBox, ElMessage } from 'element-plus'
 import EditForm from './edit.vue'

@@ -86,7 +86,7 @@ interface RuleFormState {
   name: string;
   waitVersion: string;
   method: string;
-  devices: Array;
+  devices: [];
   stratege: string;
   devOtaFirmwareId: number;
   push: string;
@@ -127,7 +127,7 @@ export default defineComponent({
         devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
-        types: '1',
+        types: "1",
         productId: '',
       },
       productData: [],
@@ -137,6 +137,7 @@ export default defineComponent({
         stratege: [{ required: true, message: '升级方式不能为空', trigger: 'blur' }],
         push: [{ required: true, message: '推送方式不能为空', trigger: 'blur' }],
         types: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+        devices: [{ required: true, message: '所属设备不能为空', trigger: 'blue'}],
       },
       deviceShow: false, // 所属设备是否显示
       deviceNameShow: false, // 回显设备名称状态
@@ -150,13 +151,8 @@ export default defineComponent({
     // 获取操作升级包类型
     const getFormType = () => {
       // 如果是验证类型，设备信息必填项
-      if (state.ruleForm.types === '1') {
+      if (state.ruleForm.types === "1") {
         state.deviceShow = true;
-        state.rules.devices = [{
-          required: true,
-          message: '所属设备不能为空',
-          trigger: 'blur'
-        }];
       } else { // 如果是升级类型，设备可选可不选
         delete (state.rules.devices);
         state.deviceShow = false;
@@ -194,7 +190,7 @@ export default defineComponent({
       }
       state.isShowDialog = true;
 
-      if (state.ruleForm.types == '1') {
+      if (state.ruleForm.types == "1") {
         state.deviceShow = true;
       }
     };
@@ -209,7 +205,7 @@ export default defineComponent({
         devOtaFirmwareId: 0,
         push: '2',
         pushDisabled: true,
-        types: '1',
+        types: "1",
         productId: '',
       };
     };
