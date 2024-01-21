@@ -51,7 +51,7 @@ function saveCode() {
 
 function toSave(data: string) {
 	api.product.script({
-		id: route.params.id,
+		key: route.params.id,
 		scriptInfo: data
 	}).then(() => {
 		ElMessage.success('保存成功')

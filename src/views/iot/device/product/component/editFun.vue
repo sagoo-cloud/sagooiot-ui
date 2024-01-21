@@ -82,7 +82,7 @@ import { ElMessage, UploadProps } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
-	productId: number;
+	productKey: string;
 	name: string;
 	dictType: string;
 	valueType: Object;
@@ -110,7 +110,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: '',
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -135,7 +135,7 @@ export default defineComponent({
 			outputsdata: [],
 
 			ruleForm: {
-				productId: 0,
+				productKey: '',
 				name: '',
 				key: '',
 				inputs: [],
@@ -158,10 +158,10 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState | null, productKey: number | null) => {
 			resetForm();
 			state.ruleForm = row;
-			state.productId = productId;
+			state.productKey = productKey;
 			state.inputsdata = row.inputs || [];
 			state.outputsdata = row.outputs || [];
 			state.isShowDialog = true;
@@ -236,11 +236,11 @@ export default defineComponent({
 		}
 
 		const addJson = (type) => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
+			editOptionRef.value.openDialog({ productKey: 0, id: 0, type_data: type });
 		};
 
 		const addJsonOut = (type) => {
-			editOptionOutRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
+			editOptionOutRef.value.openDialog({ productKey: 0, id: 0, type_data: type });
 		};
 
 		const getOptionData = (data, type_data) => {
@@ -279,7 +279,7 @@ export default defineComponent({
 					state.ruleForm.inputs = state.inputsdata;
 					state.ruleForm.outputs = state.outputsdata;
 					if (state.ruleForm.id !== 0) {
-						state.ruleForm.productId = state.productId;
+						state.ruleForm.productKey = state.productKey;
 						api.model.functionedit(state.ruleForm).then(() => {
 							ElMessage.success('功能定义类型修改成功');
 							closeDialog(); // 关闭弹窗

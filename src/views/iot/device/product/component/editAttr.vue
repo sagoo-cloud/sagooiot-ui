@@ -199,7 +199,7 @@ import { validateNoSpace } from '/@/utils/validator';
 
 interface RuleFormState {
 	id: number;
-	productId: number;
+	productKey: string;
 	name: string;
 	dictType: string;
 	valueType: Object;
@@ -224,7 +224,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: '',
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -248,7 +248,7 @@ export default defineComponent({
 
 			ruleForm: {
 				id: 0,
-				productId: 0,
+				productKey: '',
 				name: '',
 				key: '',
 				transportProtocol: '',
@@ -273,7 +273,7 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState | null, productKey: string | null) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
@@ -293,7 +293,7 @@ export default defineComponent({
 			if (row.valueType) {
 				state.ruleForm = row;
 
-				state.productId = productId;
+				state.productKey = productKey;
 				state.valueType = row.valueType;
 				state.ruleForm.valueType.type = row.valueType.type;
 				state.ruleForm.type = row.valueType.type;
@@ -377,7 +377,7 @@ export default defineComponent({
 		}
 
 		const addJson = () => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0 });
+			editOptionRef.value.openDialog({ productKey: 0, id: 0 });
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
@@ -425,7 +425,7 @@ export default defineComponent({
 						}
 
 						state.ruleForm.valueType = state.valueType;
-						state.ruleForm.productId = state.productId
+						state.ruleForm.productKey = state.productKey
 						api.model.propertyedit(state.ruleForm).then(() => {
 							ElMessage.success('属性定义类型修改成功');
 							closeDialog(); // 关闭弹窗

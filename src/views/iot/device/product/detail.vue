@@ -224,6 +224,7 @@ interface TableDataState {
 			pageNum: number;
 			pageSize: number;
 			name: string;
+			productKey: string;
 			deviceType: string;
 			status: string;
 			dateRange: string[];
@@ -258,7 +259,7 @@ export default defineComponent({
 				loading: false,
 				param: {
 					pageNum: 1,
-					productId: route.params && route.params.id,
+					productKey: route.params && route.params.id,
 					pageSize: 10,
 					status: '',
 					dateRange: [],
@@ -303,21 +304,21 @@ export default defineComponent({
 
 		//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0, accessMode: 1 });
+			editAttrRef.value.openDialog({ productKey: route.params.id, id: 0, accessMode: 1 });
 		};
 
 		//打开添加功能弹窗
 		const onOpenEditFun = () => {
-			editFunRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editFunRef.value.openDialog({ productKey: route.params.id, id: 0 });
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({ product_id: route.params.id, id: 0, level: 0 });
+			editEventRef.value.openDialog({ productKey: route.params.id, id: 0, level: 0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({ product_id: route.params.id, id: 0, accessMode: 1 });
+			editTabRef.value.openDialog({ productKey: route.params.id, id: 0, accessMode: 1 });
 		};
 
 		// 打开修改产品弹窗
@@ -457,7 +458,7 @@ export default defineComponent({
 		// 导出
 		const onRowExport = () => {
 
-			api.product.export({ key: state.detail.key }).then((res: any) => downloadFile(res, "TSL-" + state.detail.key + "-" + getCurrentTime() + ".json"))
+			api.product.export({ productKey: state.detail.key }).then((res: any) => downloadFile(res, "TSL-" + state.detail.key + "-" + getCurrentTime() + ".json"))
 		};
 
 

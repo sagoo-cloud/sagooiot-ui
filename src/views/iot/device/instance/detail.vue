@@ -81,7 +81,7 @@
             <el-descriptions-item label="设备标识">{{ detail.key }}</el-descriptions-item>
             <el-descriptions-item label="设备名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="所属产品">
-              <router-link :to="'/iotmanager/device/product/detail/' + prodetail.id" class="link-type">{{
+              <router-link :to="'/iotmanager/device/product/detail/' + prodetail.key" class="link-type">{{
                 detail.productName }} </router-link>
             </el-descriptions-item>
             <el-descriptions-item label="消息协议">{{ prodetail.messageProtocol }}</el-descriptions-item>
