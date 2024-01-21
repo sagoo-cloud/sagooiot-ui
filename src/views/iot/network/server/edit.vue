@@ -234,7 +234,7 @@ export default defineComponent({
         },
         // 协议适配
         protocol: {
-          name: "ModbusTCP",
+          name: "SagooMqtt",
           options: {}
         },
         // 心跳包
