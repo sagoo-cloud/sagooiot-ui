@@ -509,7 +509,7 @@ export default defineComponent({
       activetab: 'attr', // 分类数据
       detail: {},
       prodetail: [],
-      product_id: 0,
+      productKey: '',
       developer_status: 0,
       deviceTableData: {
         data: [],
@@ -528,7 +528,7 @@ export default defineComponent({
         loading: false,
         param: {
           pageNum: 1,
-          productId: 0,
+          productKey: '',
           pageSize: 10,
           status: '',
           dateRange: [],
@@ -540,7 +540,7 @@ export default defineComponent({
         loading: false,
         param: {
           pageNum: 1,
-          productId: 0,
+          productKey: '',
           pageSize: 10,
           status: '',
           dateRange: [],
@@ -558,9 +558,9 @@ export default defineComponent({
       api.instance.detail(ids).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
-        state.tableData.param.productId = res.data.product.id;
-        state.product_id = res.data.product.id;
-        api.product.detail(res.data.product.id).then((res: any) => {
+        state.tableData.param.productKey = res.data.product.key;
+        state.productKey = res.data.product.key;
+        api.product.detail(res.data.product.key).then((res: any) => {
           state.prodetail = res.data;
         });
 
@@ -570,7 +570,7 @@ export default defineComponent({
         state.intro = intro
 
         //加载全部属性
-        datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
+        datahub.node.getpropertyList({ productKey: state.detail.product.key }).then((re: any) => {
           array_list.value = re;
           re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
@@ -684,41 +684,41 @@ export default defineComponent({
 
     //编辑属性
     const onEditAttr = (row: TableDataRow) => {
-      editAttrRef.value.openDialog(row, state.product_id);
+      editAttrRef.value.openDialog(row, state.productKey);
     };
 
     //编辑功能
     const onEditFun = (row: TableDataRow) => {
-      editFunRef.value.openDialog(row, state.product_id);
+      editFunRef.value.openDialog(row, state.productKey);
     };
 
     //编辑事件
     const onEditEvent = (row: TableDataRow) => {
-      editEventRef.value.openDialog(row, state.product_id);
+      editEventRef.value.openDialog(row, state.productKey);
     };
 
     //编辑标签
     const onEditTag = (row: TableDataRow) => {
-      editTabRef.value.openDialog(row, state.product_id);
+      editTabRef.value.openDialog(row, state.productKey);
     };
 
     //打开添加属性弹窗
     const onOpenEditAttr = () => {
-      editAttrRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
+      editAttrRef.value.openDialog({ productKey: state.productKey, id: 0, accessMode: 0 });
     };
 
     //打开添加功能弹窗
     const onOpenEditFun = () => {
-      editFunRef.value.openDialog({ product_id: state.product_id, id: 0 });
+      editFunRef.value.openDialog({ productKey: state.productKey, id: 0 });
     };
     //打开添加事件弹窗
     const onOpenEditEvent = () => {
-      editEventRef.value.openDialog({ product_id: state.product_id, id: 0, level: 0 });
+      editEventRef.value.openDialog({ productKey: state.productKey, id: 0, level: 0 });
     };
 
     //打开添加事件弹窗
     const onOpenEditTab = () => {
-      editTabRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
+      editTabRef.value.openDialog({ productKey: state.productKey, id: 0, accessMode: 0 });
     };
 
     //查看日志列表
@@ -751,25 +751,25 @@ export default defineComponent({
       })
         .then(() => {
           if (type == 'attr') {
-            api.model.propertydel(state.product_id, key).then(() => {
+            api.model.propertydel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getproperty();
             });
           }
           if (type == 'fun') {
-            api.model.functiondel(state.product_id, key).then(() => {
+            api.model.functiondel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getfunction();
             });
           }
           if (type == 'event') {
-            api.model.eventdel(state.product_id, key).then(() => {
+            api.model.eventdel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getevent();
             });
           }
           if (type == 'tab') {
-            api.model.tagdel(state.product_id, key).then(() => {
+            api.model.tagdel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               tagdel();
             });

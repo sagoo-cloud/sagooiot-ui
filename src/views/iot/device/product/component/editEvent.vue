@@ -197,7 +197,7 @@ export default defineComponent({
 		}
 
 		const addJson = (type) => {
-			editOptionRef.value.openDialog({ productKey: 0, id: 0, type_data: type });
+			editOptionRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
 		const getOptionData = (data, type_data) => {
 			if (type_data == 'fun') {

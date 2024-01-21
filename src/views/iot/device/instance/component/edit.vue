@@ -8,9 +8,9 @@
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
-        <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" @change="productIdChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
+        <el-form-item label="所属产品" prop="productKey">
+          <el-select v-model="ruleForm.productKey" @change="productIdChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
+            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="设备坐标" prop="lng">
@@ -99,7 +99,7 @@ interface RuleFormState {
   key: string;
   name: string;
   version: string;
-  productId: number | string;
+  productKey: string | string;
   tags: Tag[];
   lng: string;
   lat: string;
@@ -117,7 +117,7 @@ const form: RuleFormState = {
   id: 0,
   key: '',
   name: '',
-  productId: '',
+  productKey: '',
   tags: [],
   lng: '',
   lat: '',
@@ -176,7 +176,7 @@ export default defineComponent({
         key: [
           { required: true, message: "设备标识不能为空", trigger: "blur" }
         ],
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       },
       deviceImgLimit: 0,
       certificateLimit: 0,
@@ -216,7 +216,7 @@ export default defineComponent({
         state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
         state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
         state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
-        productIdChange(row.productId as number)
+        productKeyChange(row.productKey as string)
       }
       state.isShowDialog = true;
     };
@@ -293,8 +293,8 @@ export default defineComponent({
     }
 
     // 所属产品变化的时候，更新产品详情
-    const productIdChange = (productId: number) => {
-      api.product.detail(productId).then((res: any) => {
+    const productIdChange = (productKey: string) => {
+      api.product.detail(productKey).then((res: any) => {
         const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
         state.ruleForm.authType = authType

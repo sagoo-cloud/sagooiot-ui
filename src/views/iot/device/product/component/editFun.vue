@@ -158,7 +158,7 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productKey: number | null) => {
+		const openDialog = (row: RuleFormState | null, productKey: string | null) => {
 			resetForm();
 			state.ruleForm = row;
 			state.productKey = productKey;
@@ -236,11 +236,11 @@ export default defineComponent({
 		}
 
 		const addJson = (type) => {
-			editOptionRef.value.openDialog({ productKey: 0, id: 0, type_data: type });
+			editOptionRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
 
 		const addJsonOut = (type) => {
-			editOptionOutRef.value.openDialog({ productKey: 0, id: 0, type_data: type });
+			editOptionOutRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
 
 		const getOptionData = (data, type_data) => {

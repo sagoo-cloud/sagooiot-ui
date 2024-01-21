@@ -54,7 +54,7 @@ getData()
 
 function getData() {
 	loading.value = true
-	api.tabDeviceFucntion.getList({ key: props.productKey }).then((res: IListItem[]) => {
+	api.tabDeviceFucntion.getList({ productKey: props.productKey }).then((res: IListItem[]) => {
 		if (!res) return
 		res.forEach((item) => (item.result = ''))
 		list.value = res

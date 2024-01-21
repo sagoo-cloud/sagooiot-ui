@@ -371,7 +371,7 @@ export default defineComponent({
 		};
 
 		const addJson = () => {
-			editOptionRef.value.openDialog({ productKey: 0, id: 0 });
+			editOptionRef.value.openDialog({ productKey: '', id: 0 });
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
