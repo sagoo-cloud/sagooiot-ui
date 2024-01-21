@@ -92,19 +92,9 @@
             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
               <el-form-item label="协议">
                 <el-select v-model="form.protocol.name" placeholder="请选择协议适配">
-                  <el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value">
-                  </el-option>
-                  <!-- <el-option label="Modbus RTU" value="Modbus RTU" />
-                                    <el-option label="Modbus TCP" value="Modbus TCP" />
-                                    <el-option label="Omron Hostlink" value="Omron Hostlink" />
-                                    <el-option label="Omron FINS UDP" value="Omron FINS UDP" />
-                                    <el-option label="Omron FINS TCP" value="Omron FINS TCP" />
-                                    <el-option label="Simatic S7-200 Smart" value="Simatic S7-200 Smart" />
-                                    <el-option label="Simatic S7-200" value="Simatic S7-200" />
-                                    <el-option label="Simatic S7-300" value="Simatic S7-300" />
-                                    <el-option label="Simatic S7-400" value="Simatic S7-400" />
-                                    <el-option label="Simatic S7-1200" value="Simatic S7-1200" />
-                                    <el-option label="Simatic S7-1500" value="Simatic S7-1500" /> -->
+                  <el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.name"></el-option>
+                  <!-- 增加系统默认的mqtt选项 -->
+                  <el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="协议参数">
@@ -135,6 +125,7 @@ import { useRoute } from 'vue-router';
 
 import api from '/@/api/network';
 import api2 from '/@/api/system';
+import deviceApi from '/@/api/device'
 
 interface TableDataState {
   // ids: number[];
@@ -148,6 +139,7 @@ interface TableDataState {
   detail: object,
   form: object,
   certificateList: object[];
+  messageData: object[];
   stick: {
     // 分隔符
     "delimit,omitempty": string,
@@ -218,6 +210,7 @@ export default defineComponent({
       detail: {},
       activeViewName: ['1', '2', '3'],
       certificateList: [],
+      messageData: [],
       form: {
         id: "",
         // AccessToken
@@ -260,6 +253,11 @@ export default defineComponent({
         devices: []
       }
     });
+
+    deviceApi.product.getTypesAll({ types: 'protocol' }).then((res: any) => {
+      state.messageData = res || [];
+    });
+
     const mirrorRef = ref('mirrorRef')
     const activeName = ref('first')
     const getDetail = () => {
