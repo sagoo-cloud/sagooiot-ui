@@ -119,6 +119,7 @@ interface RuleFormState {
   url: string;
   ossurl: string,
   urlName: string;
+  size: string;
 }
 
 interface UpdateState {
@@ -173,6 +174,7 @@ export default defineComponent({
         url: '',
         ossurl: '',
         urlName: '',
+        size: '',
       },
       productData: [],
       moduleData: [],
@@ -250,6 +252,7 @@ export default defineComponent({
         url: '',
         ossurl: '',
         urlName: '',
+        size: '',
       };
     };
     const updateImg = (res: any) => {
@@ -257,6 +260,7 @@ export default defineComponent({
         state.ruleForm.url = res.data.full_path
         state.ruleForm.urlName = res.data.name
         state.ruleForm.ossurl = res.data.full_path
+        state.ruleForm.size = res.data.size;
         fileList.value = []
         ElMessage.success('上传成功');
       } else {

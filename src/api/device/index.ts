@@ -114,10 +114,9 @@ export default {
   },
   dev_asset_metadata:{
     getList: (params: object) => get('/product/dev_asset_metadata/list', params),
-    getProKey: (params: object) => get('/product/dev_asset_metadata/key', params),
     add: (params: object) => post('/product/dev_asset_metadata/add', params),
     edit: (params: object) => put('/product/dev_asset_metadata/edit', params),
-    detail: (params: object) => get('/product/dev_asset_metadata/get', params),
+    detail: (params: object) => get('/product/dev_asset_metadata/key', params),
     delete: (params: object) => del('/product/dev_asset_metadata/delete', params),
   }
 

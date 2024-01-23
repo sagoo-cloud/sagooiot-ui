@@ -13,12 +13,15 @@
 				</el-form-item>
 
 				<el-form-item label="产品分类" prop="categoryId">
-					<el-cascader :options="cateData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.categoryId">
+					<el-cascader :options="cateData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" class="w" clearable v-model="ruleForm.categoryId">
 						<template #default="{ node, data }">
 							<span>{{ data.name }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
 						</template>
 					</el-cascader>
+
+          <!-- 添加产品分类 -->
+          <el-button type="success" @click="onOpenAddCategory()" style="margin-left: 5px;">添加产品分类</el-button>
 				</el-form-item>
 
 				<el-form-item label="消息协议" prop="messageProtocol">
@@ -93,6 +96,7 @@
 				</span>
 			</template>
 		</el-dialog>
+    <EditCategory ref="editCategoryRef" @getCateList="getCategoryList" />
 	</div>
 </template>
 
@@ -105,6 +109,7 @@ import { validateNoSpace } from '/@/utils/validator';
 
 import { ElMessage, UploadProps } from 'element-plus'
 import getOrigin from '/@/utils/origin'
+import EditCategory from "/@/views/iot/device/category/component/edit.vue";
 
 interface RuleFormState {
 	id: number
@@ -151,7 +156,7 @@ const form = {
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { uploadVue },
+	components: {EditCategory, uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null)
 		const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
@@ -161,6 +166,7 @@ export default defineComponent({
 
 		const certList = ref([])
 		const submitLoading = ref(false)
+    const editCategoryRef = ref();
 
 		const state = reactive<DicState | any>({
 			isShowDialog: false,
@@ -279,20 +285,31 @@ export default defineComponent({
 				}
 			})
 		}
-
-
+    // 打开新增产品分类弹窗
+    const onOpenAddCategory = () => {
+      editCategoryRef.value.openDialog();
+    };
+    // 获取产品分类列表
+    const getCategoryList = () => {
+      api.category.getList({ status: 1 }).then((res: any) => {
+        state.cateData = res.category || []
+      })
+    }
 
 		return {
 			transportProtocolChange,
 			submitLoading,
 			certList,
 			openDialog,
+      onOpenAddCategory,
 			handleAvatarSuccess,
 			closeDialog,
 			onCancel,
 			onSubmit,
 			network_server_type,
+      getCategoryList,
 			formRef,
+      editCategoryRef,
 			...toRefs(state),
 		}
 	},
