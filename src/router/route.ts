@@ -103,6 +103,14 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		meta: {
 			title: '登录',
 		},
+	},
+	{
+		path: '/sso/:type',
+		name: 'sso',
+		component: () => import('/@/views/sso/index.vue'),
+		meta: {
+			title: 'sso登录',
+		},
 	}
 	/**
 	 * 提示：写在这里的为全屏界面，不建议写在这里
