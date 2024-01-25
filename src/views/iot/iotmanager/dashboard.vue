@@ -105,7 +105,6 @@ export default defineComponent({
 		const { proxy } = getCurrentInstance() as any;
 		const { alarm_type } = proxy.useDict('alarm_type');
 		const alarmTypeMap: any = {}
-		let alarmTypeMapHasSet = false
 
 		// 监听告警类型是否获取成功
 		watch(() => alarm_type.value, (list) => {
@@ -113,18 +112,9 @@ export default defineComponent({
 			list.forEach((item: any) => {
 				alarmTypeMap[item.value] = item.label
 			});
-			alarmTypeMapHasSet = true
 
-			// 按告警级别统计 绘制饼图
-			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
-				const list = (res.data || [])
+			getChartData()
 
-				if (alarmTypeMapHasSet) {
-					state.pieChartLegend = list.map((item: any) => alarmTypeMap[item.Title])
-					state.pieChartLevel = list.map((item: any) => item.Title)
-					state.pieChartData = list.map((item: any) => item.Value)
-				}
-			})
 		}, {
 			immediate: true
 		})
@@ -451,18 +441,8 @@ export default defineComponent({
 			})
 		}
 
-		// 每隔3秒更新数据 route
-		setInterval(() => {
-			// 避免到其他页面也加载
-			if (route.path === '/iotmanager/dashboard') {
-				getLoopData()
-			}
-		}, 3000)
-
-		const getOverviewData = () => {
-
-			getLoopData()
-
+		// 获取告警告警数量和消息数量绘图
+		function getChartData() {
 			// 获取年度消息，年度告警数量
 			Promise.all([api.iotManage.deviceDataCount('year'), api.iotManage.deviceAlertCountByYearMonth(dayjs().format('YYYY'))]).then(([msg, alarm]: any) => {
 				const msgArr = msg?.data || []
@@ -472,6 +452,35 @@ export default defineComponent({
 				state.lineChartXAxisData = msgArr.map((item: any) => item.Title)
 				state.lineChartAlarmTotalData = alarmArr.map((item: any) => item.Value)
 			})
+			// 按告警级别统计 绘制饼图
+			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
+				const list = (res.data || [])
+				state.pieChartLegend = list.map((item: any) => alarmTypeMap[item.Title])
+				state.pieChartLevel = list.map((item: any) => item.Title)
+				state.pieChartData = list.map((item: any) => item.Value)
+			})
+		}
+
+		// 每隔3秒更新数据
+		setInterval(() => {
+			// 避免到其他页面也加载
+			if (route.path === '/iotmanager/dashboard') {
+				getLoopData()
+			}
+		}, 3000)
+
+		// 每隔一分钟秒更新图形
+		setInterval(() => {
+			// 避免到其他页面也加载
+			if (route.path === '/iotmanager/dashboard') {
+				getChartData()
+			}
+		}, 60000)
+
+		const getOverviewData = () => {
+
+			getLoopData()
+
 
 			api.iotManage.getOverviewData().then((res: any) => {
 				const { overview } = res;
