@@ -88,6 +88,8 @@ export default {
       deviceOnlineOfflineCount: () => get('/analysis/deviceOnlineOfflineCount'),
       // 本年度每月设备消息量统计 
       deviceDataCount: (dateType: 'year' | 'month') => get('/analysis/deviceDataCount', { dateType }),
+      // 按年度每月设备告警数统计
+      deviceAlertCountByYearMonth: (year = '2023') => get('/analysis/deviceAlertCountByYearMonth', { year }),
       // 按告警级别统计
       deviceAlarmLevelCount: (dateType: 'year' | 'month' | 'day', date: string) => get('/analysis/deviceAlarmLevelCount', { dateType, date }),
    }

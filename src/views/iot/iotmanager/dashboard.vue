@@ -79,9 +79,9 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated } from 'vue';
+import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated, getCurrentInstance } from 'vue';
 import * as echarts from 'echarts';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from '/@/store/index';
 
 import api from '/@/api/datahub';
@@ -101,6 +101,34 @@ export default defineComponent({
 	name: 'home',
 	components: { EditDic, DetailDic },
 	setup() {
+
+		const { proxy } = getCurrentInstance() as any;
+		const { alarm_type } = proxy.useDict('alarm_type');
+		const alarmTypeMap: any = {}
+		let alarmTypeMapHasSet = false
+
+		// 监听告警类型是否获取成功
+		watch(() => alarm_type.value, (list) => {
+			if (!list.length) return
+			list.forEach((item: any) => {
+				alarmTypeMap[item.value] = item.label
+			});
+			alarmTypeMapHasSet = true
+
+			// 按告警级别统计 绘制饼图
+			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
+				const list = (res.data || [])
+
+				if (alarmTypeMapHasSet) {
+					state.pieChartLegend = list.map((item: any) => alarmTypeMap[item.Title])
+					state.pieChartLevel = list.map((item: any) => item.Title)
+					state.pieChartData = list.map((item: any) => item.Value)
+				}
+			})
+		}, {
+			immediate: true
+		})
+
 		const editDicRef = ref();
 		const detailRef = ref();
 		const homeLineRef = ref();
@@ -108,6 +136,7 @@ export default defineComponent({
 		const homeBarRef = ref();
 		const store = useStore();
 		const router = useRouter();
+		const route = useRoute();
 		const state = reactive({
 			loading: false,
 			tableData: {
@@ -190,7 +219,7 @@ export default defineComponent({
 				bgColor: '',
 				color: '#303133',
 			},
-			lineChartXAxisDat: [],
+			lineChartXAxisData: [],
 			lineChartMsgTotalData: [],
 			lineChartAlarmTotalData: [],
 			pieChartLegend: [],
@@ -408,7 +437,8 @@ export default defineComponent({
 			})
 			// 按告警级别统计
 			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
-				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				const list = (res.data || [])
+				const total = list.reduce((a: any, b: any) => a + b.Value, 0)
 				state.homeOne[3].allnum = total;
 			})
 			api.iotManage.deviceAlarmLevelCount('month', dayjs().format('M')).then((res: any) => {
@@ -421,42 +451,33 @@ export default defineComponent({
 			})
 		}
 
-		// 每隔3秒更新数据
-		setInterval(getLoopData, 3000)
+		// 每隔3秒更新数据 route
+		setInterval(() => {
+			// 避免到其他页面也加载
+			if (route.path === '/iotmanager/dashboard') {
+				getLoopData()
+			}
+		}, 3000)
 
 		const getOverviewData = () => {
 
 			getLoopData()
 
+			// 获取年度消息，年度告警数量
+			Promise.all([api.iotManage.deviceDataCount('year'), api.iotManage.deviceAlertCountByYearMonth(dayjs().format('YYYY'))]).then(([msg, alarm]: any) => {
+				const msgArr = msg?.data || []
+				const alarmArr = alarm?.data || []
+				// console.log(alarmArr)
+				state.lineChartMsgTotalData = msgArr.map((item: any) => item.Value)
+				state.lineChartXAxisData = msgArr.map((item: any) => item.Title)
+				state.lineChartAlarmTotalData = alarmArr.map((item: any) => item.Value)
+			})
+
 			api.iotManage.getOverviewData().then((res: any) => {
-				const { overview, device, alarmLevel } = res;
+				const { overview } = res;
 				state.homeOne[0].allnum = overview.productTotal;
 				state.homeOne[0].num1 = overview.productActivation
 				state.homeOne[0].num2 = overview.productDeactivation
-
-				// device
-				// msgTotal 设备消息量月度统计
-				// alarmTotal 设备告警量月度统计
-				state.lineChartMsgTotalData = [];
-				state.lineChartAlarmTotalData = [];
-				state.lineChartXAxisData = Object.keys(device.msgTotal).map((item: any) => {
-					state.lineChartMsgTotalData.push(device.msgTotal[item]);
-					state.lineChartAlarmTotalData.push(device.alarmTotal[item]);
-					return `${item}月`
-				})
-
-				// alarmLevel
-				// "level": 4, //级别
-				// "name": "一般", //级别名称
-				// "num": 43, //该级别日志数量
-				// "ratio": 100 //该级别日志数量占比(百分比)
-				state.pieChartLegend = [];
-				state.pieChartLevel = [];
-				alarmLevel && alarmLevel.map((item: any) => {
-					state.pieChartLegend.push(item.name)
-					state.pieChartData.push(item.ratio)
-					state.pieChartLevel.push(item.level)
-				})
 			})
 		};
 		const getAlarmList = () => {
@@ -513,6 +534,18 @@ export default defineComponent({
 			{
 				deep: true,
 				immediate: true,
+			}
+		);
+		watch(
+			() => state.lineChartMsgTotalData,
+			() => {
+				initLineChart();
+			}
+		);
+		watch(
+			() => state.pieChartData,
+			() => {
+				initPieChart();
 			}
 		);
 		return {
