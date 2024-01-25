@@ -6,12 +6,10 @@
 					<div>{{ v.num3 }}</div>
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
-
 							<span class="font30">{{ v.allnum }}</span>
 						</div>
 						<div class="home-card-item-icon flex">
 							<img :src="'/imgs/' + v.icoimg" class="icoimg">
-
 						</div>
 					</div>
 					<div class="flex" style="font-weight: bold;">
@@ -87,6 +85,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
 
 import api from '/@/api/datahub';
+import dayjs from 'dayjs';
 
 import EditDic from '../alarm/log/component/edit.vue';
 import DetailDic from '../alarm/log/component/detail.vue';
@@ -124,9 +123,9 @@ export default defineComponent({
 			},
 			homeOne: [
 				{
-					allnum: '0',
-					num1: '0',
-					num2: '0',
+					allnum: 0,
+					num1: 0,
+					num2: 0,
 					num3: '产品',
 					num4: 'icon-zidingyibuju',
 					color1: '#6690F9',
@@ -140,47 +139,47 @@ export default defineComponent({
 
 				},
 				{
-					allnum: '0',
-					num1: '0',
-					num2: '0',
-					num3: '设备',
+					allnum: 0,
+					num1: 0,
+					num2: 0,
+					num3: '在线设备',
 					num4: 'icon-putong',
 					color1: '#FF6462',
 					color2: '--next-color-primary-lighter',
 					color3: '--el-color-primary',
 					icoimg: 'index_device.svg',
-					title1: '在线',
-					title2: '离线',
+					title1: '启用',
+					title2: '禁用',
 					title1_bgcolor: '#3cd357',
 					title2_bgcolor: '#c1bbbb',
 				},
 				{
-					allnum: '0',
-					num1: '0',
-					num2: '0',
+					allnum: 0,
+					num1: 0,
+					num2: 0,
 					num3: '设备消息',
 					num4: 'icon-shidu',
 					color1: '#6690F9',
 					color2: '--el-color-success-lighter',
 					color3: '--el-color-success',
 					icoimg: 'index_sensor.svg',
-					title1: '总量',
+					title1: '本月',
 					title2: '今日',
 					title1_bgcolor: '#c1bbbb',
 					title2_bgcolor: '#18f3ff',
 				},
 				{
-					allnum: '0',
-					num1: '0',
-					num2: '0',
+					allnum: 0,
+					num1: 0,
+					num2: 0,
 					num3: '设备告警',
 					num4: 'icon-zaosheng',
 					color1: '#6690F9',
 					color2: '--el-color-warning-lighter',
 					color3: '--el-color-warning',
 					icoimg: 'index_alarm.svg',
-					title1: '总量',
-					title2: '新增',
+					title1: '本月',
+					title2: '今日',
 					title1_bgcolor: '#c1bbbb',
 					title2_bgcolor: '#ff1818',
 				},
@@ -389,30 +388,51 @@ export default defineComponent({
 		const initEchartsResize = () => {
 			window.addEventListener('resize', initEchartsResizeFun);
 		};
+
+		// 定时获取设备，在线信息，告警数量更新
+		function getLoopData() {
+			api.iotManage.deviceDataTotalCount('year').then((res: any) => {
+				state.homeOne[2].allnum = res.number;
+			})
+			api.iotManage.deviceDataTotalCount('month').then((res: any) => {
+				state.homeOne[2].num1 = res.number;
+			})
+			api.iotManage.deviceDataTotalCount('day').then((res: any) => {
+				state.homeOne[2].num2 = res.number;
+			})
+			api.iotManage.deviceOnlineOfflineCount().then((res: any) => {
+				// console.log(res)
+				state.homeOne[1].allnum = res.online;
+				state.homeOne[1].num1 = res.total - res.disable
+				state.homeOne[1].num2 = res.disable
+			})
+			// 按告警级别统计
+			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
+				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].allnum = total;
+			})
+			api.iotManage.deviceAlarmLevelCount('month', dayjs().format('M')).then((res: any) => {
+				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].num1 = total;
+			})
+			api.iotManage.deviceAlarmLevelCount('day', dayjs().format('D')).then((res: any) => {
+				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].num2 = total;
+			})
+		}
+
+		// 每隔3秒更新数据
+		setInterval(getLoopData, 3000)
+
 		const getOverviewData = () => {
+
+			getLoopData()
+
 			api.iotManage.getOverviewData().then((res: any) => {
 				const { overview, device, alarmLevel } = res;
-				// overview
-				// "deviceTotal": 8, //设备总量
-				// "deviceOffline": 4, //离线设备数量
-				// "productTotal": 6, //产品总量
-				// "productAdded": 0, //今日产品增量
-				// "msgTotal": 107246, //设备消息总量
-				// "msgAdded": 7391, //今日设备消息增量
-				// "alarmTotal": 43, //设备报警总量
-				// "alarmAdded": 0 //今日设备报警增量
 				state.homeOne[0].allnum = overview.productTotal;
-				state.homeOne[0].num1 = `${overview.productActivation}`;
-				state.homeOne[0].num2 = `${overview.productDeactivation}`;
-				state.homeOne[1].allnum = overview.deviceTotal;
-				state.homeOne[1].num1 = `${overview.deviceTotal - overview.deviceOffline}`;
-				state.homeOne[1].num2 = `${overview.deviceOffline}`;
-				state.homeOne[2].allnum = overview.msgTotal;
-				state.homeOne[2].num1 = overview.msgTotal;
-				state.homeOne[2].num2 = `${overview.msgAdded}`;
-				state.homeOne[3].allnum = overview.alarmTotal;
-				state.homeOne[3].num1 = overview.alarmTotal;
-				state.homeOne[3].num2 = `${overview.alarmAdded}`;
+				state.homeOne[0].num1 = overview.productActivation
+				state.homeOne[0].num2 = overview.productDeactivation
 
 				// device
 				// msgTotal 设备消息量月度统计
