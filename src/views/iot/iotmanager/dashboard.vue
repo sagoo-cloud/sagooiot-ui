@@ -410,6 +410,13 @@ export default defineComponent({
 
 		// 定时获取设备，在线信息，告警数量更新
 		function getLoopData() {
+			// 产品数量
+			api.iotManage.productCount().then((res: any) => {
+				state.homeOne[0].allnum = res.total;
+				state.homeOne[0].num1 = res.enable
+				state.homeOne[0].num2 = res.disable
+			})
+
 			api.iotManage.deviceDataTotalCount('year').then((res: any) => {
 				state.homeOne[2].allnum = res.number;
 			})
@@ -425,6 +432,7 @@ export default defineComponent({
 				state.homeOne[1].num1 = res.total - res.disable
 				state.homeOne[1].num2 = res.disable
 			})
+			
 			// 按告警级别统计
 			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
 				const list = (res.data || [])
@@ -478,16 +486,7 @@ export default defineComponent({
 		}, 60000)
 
 		const getOverviewData = () => {
-
 			getLoopData()
-
-
-			api.iotManage.getOverviewData().then((res: any) => {
-				const { overview } = res;
-				state.homeOne[0].allnum = overview.productTotal;
-				state.homeOne[0].num1 = overview.productActivation
-				state.homeOne[0].num2 = overview.productDeactivation
-			})
 		};
 		const getAlarmList = () => {
 			api.iotManage.getAlarmList(state.tableData.param).then((res: any) => {

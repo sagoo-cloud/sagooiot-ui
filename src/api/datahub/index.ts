@@ -92,5 +92,7 @@ export default {
       deviceAlertCountByYearMonth: (year = '2023') => get('/analysis/deviceAlertCountByYearMonth', { year }),
       // 按告警级别统计
       deviceAlarmLevelCount: (dateType: 'year' | 'month' | 'day', date: string) => get('/analysis/deviceAlarmLevelCount', { dateType, date }),
+      // 产品数量统计
+      productCount: () => get('/analysis/productCount'),
    }
 }
