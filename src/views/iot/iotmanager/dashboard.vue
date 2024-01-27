@@ -168,7 +168,7 @@ export default defineComponent({
 					color3: '--el-color-primary',
 					icoimg: 'index_device.svg',
 					title1: '启用',
-					title2: '禁用',
+					title2: '停用',
 					title1_bgcolor: '#3cd357',
 					title2_bgcolor: '#c1bbbb',
 				},
