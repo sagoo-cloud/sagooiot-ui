@@ -51,7 +51,6 @@
 <script lang="ts">
 import { ref, toRefs, reactive, defineComponent, computed, onMounted, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import changePwd from './changePwd.vue';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
@@ -67,9 +66,6 @@ const ISOPEN = import.meta.env.VITE_ISOPEN
 
 export default defineComponent({
 	name: 'loginAccount',
-	components: {
-		changePwd
-	},
 	setup() {
 		const changePwdRef = ref();
 		const { t } = useI18n();
