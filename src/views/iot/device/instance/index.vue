@@ -151,7 +151,7 @@ interface TableDataRow {
   createBy: string;
 }
 interface TableDataState {
-  ids: number[];
+  ids: string[];
   productData: Array<TableDataRow>;
   tableData: {
     data: Array<TableDataRow>;
@@ -234,9 +234,9 @@ export default defineComponent({
 
     //批量启用
     const setDeviceStatus1 = (row?: TableDataRow) => {
-      let ids: number[] = [];
+      let ids: string[] = [];
       if (row) {
-        ids = [row.id];
+        ids = [row.key];
       } else {
         ids = state.ids;
       }
@@ -261,9 +261,9 @@ export default defineComponent({
 
     //批量禁用
     const setDeviceStatus0 = (row?: TableDataRow) => {
-      let ids: number[] = [];
+      let ids: string[] = [];
       if (row) {
-        ids = [row.id];
+        ids = [row.key];
       } else {
         ids = state.ids;
       }
@@ -288,10 +288,10 @@ export default defineComponent({
     // 删除产品
     const onRowDel = (row?: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
-      let ids: number[] = [];
+      let ids: string[] = [];
       if (row) {
         msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
-        ids = [row.id];
+        ids = [row.key];
       } else {
         ids = state.ids;
       }
@@ -324,16 +324,16 @@ export default defineComponent({
     };
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
-      state.ids = selection.map((item) => item.id);
+      state.ids = selection.map((item) => item.key);
     };
     const onActionStatus = (item: TableDataRow[]) => {
       if (item.status == 0) {
-        api.instance.devdeploy({ id: item.id }).then((res: any) => {
+        api.instance.devdeploy({ id: item.key }).then((res: any) => {
           typeList();
           ElMessage.success(res.message || '操作成功');
         });
       } else {
-        api.instance.devundeploy({ id: item.id }).then((res: any) => {
+        api.instance.devundeploy({ id: item.key }).then((res: any) => {
           typeList();
           ElMessage.success(res.message || '操作成功');
         });
