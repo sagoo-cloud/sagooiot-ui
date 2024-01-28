@@ -2,9 +2,9 @@
 	<div class="mutiple-bind-dialog-wrap">
 		<el-dialog title="批量绑定子设备" v-model="isShowDialog" width="90%">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="small" label-width="110px">
-				<el-form-item label="所属产品" prop="productId">
-					<el-select @change="handleChange" v-model="ruleForm.productId" placeholder="请选择所属产品" style="width: 300px;">
-						<el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
+				<el-form-item label="所属产品" prop="productKey">
+					<el-select @change="handleChange" v-model="ruleForm.productKey" placeholder="请选择所属产品" style="width: 300px;">
+						<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" />
 					</el-select>
 					<el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" v-auth="'mutipleBind'" type="primary" @click="confirmBind()">批量绑定</el-button>
 
@@ -54,13 +54,13 @@ interface TableDataState {
 		param: {
 			pageNum: number
 			pageSize: number
-			productId: number
+			productKey: number
 			status: string
 			dateRange: string[]
 		}
 	},
 	ruleForm: {
-		productId: string | number
+		productKey: string | number
 	},
 	rules: {}
 }
@@ -81,21 +81,21 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-					productId: 0,
+					productKey: 0,
 					status: '',
 					dateRange: [],
 				},
 			},
 			ruleForm: {
-				productId: ''
+				productKey: ''
 			},
 			rules: {
-				productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+				productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
 			}
 		})
 
 		const getDeviceList = () => {
-			if (!state.ruleForm.productId) {
+			if (!state.ruleForm.productKey) {
 				state.tableData.data = [];
 				state.tableData.total = 0;
 				return;
@@ -103,7 +103,7 @@ export default defineComponent({
 
 			state.tableData.loading = true;
 			api.device.getSubList({
-				"productId": state.ruleForm.productId,
+				"productKey": state.ruleForm.productKey,
 				"pageSize": state.tableData.param.pageSize,
 				"pageNum": state.tableData.param.pageNum
 			}).then((res: any) => {
@@ -117,7 +117,7 @@ export default defineComponent({
 			api.product.getSubList().then((res: any) => {
 				let productDataList = res.product
 				state.productData = productDataList;
-				state.ruleForm.productId = state.productData[0].id
+				state.ruleForm.productKey = state.productData[0].key
 				getDeviceList()
 				state.isShowDialog = true;
 			});
@@ -156,8 +156,8 @@ export default defineComponent({
 				})
 		};
 
-		const handleChange = (productId: number) => {
-			state.ruleForm.productId = productId;
+		const handleChange = (productKey: number) => {
+			state.ruleForm.productKey = productKey;
 			getDeviceList()
 		}
 

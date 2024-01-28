@@ -225,13 +225,7 @@
 									</el-table>
 								</el-tab-pane>
 							</el-tabs>
-							<pagination
-								v-show="tableData.total > 0"
-								:total="tableData.total"
-								v-model:page="tableData.param.pageNum"
-								v-model:limit="tableData.param.pageSize"
-								@pagination="getList()"
-							/>
+							<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="设备功能" name="5">
@@ -247,15 +241,7 @@
 								</el-form-item>
 
 								<el-form-item label="创建时间" prop="dateRange">
-									<el-date-picker
-										v-model="logtableData.param.dateRange"
-										size="default"
-										value-format="YYYY-MM-DD"
-										type="daterange"
-										range-separator="-"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期"
-									></el-date-picker>
+									<el-date-picker v-model="logtableData.param.dateRange" size="default" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 								</el-form-item>
 								<el-form-item>
 									<el-button type="primary" class="ml10" @click="getlog">
@@ -285,13 +271,7 @@
 							</el-table-column>
 						</el-table>
 
-						<pagination
-							v-show="logtableData.total > 0"
-							:total="logtableData.total"
-							v-model:page="logtableData.param.pageNum"
-							v-model:limit="logtableData.param.pageSize"
-							@pagination="getlog"
-						/>
+						<pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
 					</el-tab-pane>
 				</el-tabs>
 			</div>
@@ -316,8 +296,8 @@
 	</div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue'
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
+import { toRefs, reactive, ref, defineComponent } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import functionCom from './function.vue'
 
 import 'vue3-json-viewer/dist/index.css'
@@ -337,8 +317,8 @@ import api from '/@/api/device'
 interface TableDataState {
 	ids: number[]
 	deviceIds: number[]
-    detail: object[]
-    isShowSubDeviceDialog: boolean
+	detail: object[]
+	isShowSubDeviceDialog: boolean
 	deviceTableData: {
 		data: []
 		total: number
@@ -395,7 +375,7 @@ export default defineComponent({
 			areaData: [],
 			isShowDialog: false,
 			dialogVisible: false,
-            isShowSubDeviceDialog: false,
+			isShowSubDeviceDialog: false,
 			logTypeData: [],
 			jsonData: '',
 			activeName: '3', // 分类数据
@@ -456,25 +436,25 @@ export default defineComponent({
 		// 打开弹窗
 		const openDialog = (row: any | null) => {
 			if (row) {
-                const ids = row.id;
-                api.instance.detail(ids).then((res: any) => {
-                    state.detail = res.data;
-                    state.developer_status = res.data.status;
-                    state.tableData.param.productKey = res.data.product.key;
-                    state.productKey = res.data.product.key;
-                    getrunData();
-                    api.product.detail(res.data.product.key).then((productRes: any) => {
-                        state.prodetail = productRes.data;
-                    });
-                    //第一次加载
-                    api.model.property(state.tableData.param).then((modelRes: any) => {
-                        state.tableData.data = modelRes.Data;
-                        state.tableData.total = modelRes.Total;
-                    });
-                    getDeviceTableData()
-                });
+				const ids = row.key;
+				api.instance.detail(ids).then((res: any) => {
+					state.detail = res.data;
+					state.developer_status = res.data.status;
+					state.tableData.param.productKey = res.data.product.key;
+					state.productKey = res.data.product.key;
+					getrunData();
+					api.product.detail(res.data.product.key).then((productRes: any) => {
+						state.prodetail = productRes.data;
+					});
+					//第一次加载
+					api.model.property(state.tableData.param).then((modelRes: any) => {
+						state.tableData.data = modelRes.Data;
+						state.tableData.total = modelRes.Total;
+					});
+					getDeviceTableData()
+				});
 			}
-			  state.isShowSubDeviceDialog = true;
+			state.isShowSubDeviceDialog = true;
 		}
 
 		const onLogDetail = (row: TableDataRow) => {
@@ -570,7 +550,7 @@ export default defineComponent({
 						})
 					}
 				})
-				.catch(() => {})
+				.catch(() => { })
 		}
 
 		//根据不同类型获取列表
@@ -649,7 +629,7 @@ export default defineComponent({
 		}
 
 		const getrunData = () => {
-			api.instance.getrun_status({ id: state.detail.id }).then((res: any) => {
+			api.instance.getrun_status({ deviceKey: state.detail.key }).then((res: any) => {
 				state.areaData = res
 				let properties = state.areaData.properties || []
 
@@ -744,7 +724,7 @@ export default defineComponent({
 			getevent,
 			gettab,
 			wuhandleClick,
-            openDialog,
+			openDialog,
 			onOpenEditTab,
 			onOpenEditEvent,
 			onOpenEditAttr,
@@ -756,31 +736,38 @@ export default defineComponent({
 	},
 })
 </script>
-  <style scoped>
+<style scoped>
 .content {
 	width: 100%;
 	padding: 20px;
 }
+
 .content-box {
 	width: 100%;
 	padding: 20px;
 }
+
 .cont_box {
 	display: flex;
 }
+
 .cont_box .title {
 	font-size: 24px;
 }
+
 .cont_box .pro-status {
 	line-height: 40px;
 	margin-left: 30px;
 }
+
 .cont_box .pro-status .on {
 	background: #52c41a;
 }
+
 .cont_box .pro-status .off {
 	background: #c41a1a;
 }
+
 .cont_box .pro-status span {
 	position: relative;
 	top: -1px;
@@ -791,31 +778,37 @@ export default defineComponent({
 	border-radius: 50%;
 	margin-right: 5px;
 }
+
 .cont_box .pro-option {
 	line-height: 40px;
 	margin-left: 10px;
 	color: #1890ff;
 	cursor: pointer;
 }
+
 .content-box .pro-box {
 	display: flex;
 	padding: 10px;
 	justify-content: space-between;
 }
+
 .content-box .pro-box .protitle {
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 35px;
 }
+
 .content-box .pro-box .buttonedit {
 	border: 0px;
 	color: #1890ff;
 }
+
 table {
 	border-collapse: collapse;
 	text-indent: initial;
 	border-spacing: 2px;
 }
+
 tbody {
 	box-sizing: border-box;
 	display: table-row-group;
@@ -828,37 +821,46 @@ tr {
 	vertical-align: inherit;
 	border-color: inherit;
 }
+
 .ant-descriptions-view {
 	width: 100%;
 	overflow: hidden;
 	border-radius: 4px;
 }
+
 .ant-descriptions-view {
 	border: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-view table {
 	width: 100%;
 	table-layout: fixed;
 }
-.ant-descriptions-view > table {
+
+.ant-descriptions-view>table {
 	table-layout: auto;
 }
+
 .ant-descriptions-row {
 	border-bottom: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
 	color: rgba(0, 0, 0, 0.85);
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 1.5;
 }
+
 .ant-descriptions-item-label {
 	padding: 16px 24px;
 	border-right: 1px solid #e8e8e8;
 }
+
 .ant-descriptions-item-label {
 	background-color: #fafafa;
 }
+
 .ant-descriptions-item-content {
 	padding: 16px 24px;
 	border-right: 1px solid #e8e8e8;
@@ -867,11 +869,13 @@ tr {
 	font-size: 14px;
 	line-height: 1.5;
 }
+
 .wu-box {
 	border: #e8e8e8 solid 1px;
 	padding: 20px;
 	width: 100%;
 }
+
 .wu-box .wu-title {
 	display: flex;
 	flex-direction: row;
@@ -879,9 +883,11 @@ tr {
 	padding: 20px;
 	border-bottom: #e8e8e8 1px solid;
 }
+
 .wu-box .wu-title .title {
 	font-size: 18px;
 }
+
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
@@ -897,24 +903,27 @@ tr {
 	border-radius: 2px;
 	transition: all 0.3s;
 }
+
 .ant-card-body {
 	padding: 24px;
 	zoom: 1;
 }
+
 .cardflex {
 	display: flex;
 	justify-content: space-between;
 }
+
 .statusname {
 	font-size: 30px;
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
+
 .comtest {
 	margin-top: 20px;
 	height: 30px;
 	line-height: 30px;
-}
-</style>
+}</style>
 
 

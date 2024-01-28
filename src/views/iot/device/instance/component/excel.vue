@@ -4,15 +4,13 @@
       <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 
         <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" placeholder="请选择所属产品" class="w100">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
+          <el-select v-model="ruleForm.productKey" placeholder="请选择所属产品" class="w100">
+            <el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="导入文件" prop="path" v-if="open_type === 'upload'">
-          <el-upload accept="xls,xlsx,csv" :show-file-list="true" 
-  :data="{ productId:ruleForm.productId }"  :limit="1" :headers="headers" :action="uploadUrl"
-            :on-success="updateImg" :before-upload="beforeAvatarUpload">
+          <el-upload accept="xls,xlsx,csv" :show-file-list="true" :data="{ productKey: ruleForm.productKey }" :limit="1" :headers="headers" :action="uploadUrl" :on-success="updateImg" :before-upload="beforeAvatarUpload">
             <el-button>
               <el-icon> <ele-Upload /> </el-icon>
               上传文件
@@ -21,10 +19,10 @@
           <div>{{ ruleForm.path }}</div>
         </el-form-item>
         <el-form-item label="样表下载" v-if="open_type === 'upload'">
-          <el-button  @click="down" type="primary" text="primary">
-              <el-icon> <ele-Download /> </el-icon>
-              下载文件
-            </el-button>
+          <el-button @click="down" type="primary" text="primary">
+            <el-icon> <ele-Download /> </el-icon>
+            下载文件
+          </el-button>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -41,18 +39,18 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
 import api from '/@/api/device';
-import { ElMessage,UploadProps } from "element-plus";
+import { ElMessage, UploadProps } from "element-plus";
 import downloadFile from '/@/utils/download';
 import getOrigin from '/@/utils/origin';
 
 
 interface RuleFormState {
-  productId: number | string;
+  productKey: number | string;
   path: string;
 }
 
 const form: RuleFormState = {
-  productId: '',
+  productKey: '',
   path: '',
 }
 
@@ -76,7 +74,7 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
     const state = reactive<DicState>({
-      sproductId:0,
+      sproductId: 0,
       isShowDialog: false,
       open_type: '',
       productData: [], // 分类数据
@@ -84,13 +82,13 @@ export default defineComponent({
         ...form
       },
       rules: {
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       }
     });
 
 
     const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-      if (!state.ruleForm.productId) {
+      if (!state.ruleForm.productKey) {
         ElMessage.error('请先选择所属产品!');
         return false;
       }
@@ -104,8 +102,8 @@ export default defineComponent({
     const updateImg = (res: any) => {
       if (res.code === 0) {
         ElMessage.success('导入成功');
-       closeDialog(); // 关闭弹窗
-       emit('typeList')
+        closeDialog(); // 关闭弹窗
+        emit('typeList')
 
       } else {
         ElMessage.error(res.message);
@@ -153,13 +151,10 @@ export default defineComponent({
               ElMessage.success('导入成功');
               closeDialog(); // 关闭弹窗
             });
-
-
           } else {
-            const selectedProduct = state.productData.find((item) => item.id === state.ruleForm.productId);
+            const selectedProduct = state.productData.find((item) => item.key === state.ruleForm.productKey);
             if (selectedProduct) {
-
-              api.device.export({ productId: state.ruleForm.productId }).then((res: any) => downloadFile(res, selectedProduct.name + "-" + getCurrentTime() + ".xlsx"))
+              api.device.export({ productKey: state.ruleForm.productKey }).then((res: any) => downloadFile(res, selectedProduct.name + "-" + getCurrentTime() + ".xlsx"))
               closeDialog(); // 关闭弹窗
             }
 
@@ -168,7 +163,7 @@ export default defineComponent({
         }
       });
     };
-    const down=()=>{
+    const down = () => {
       const fileURL = '/deviceImportExample.xlsx';
       // 创建下载链接
       const link = document.createElement('a');

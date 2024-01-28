@@ -197,7 +197,7 @@ import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
-	productId: number;
+	productKey: number;
 	accessMode: number;
 	name: string;
 	dictType: string;
@@ -223,7 +223,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: 0,
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -247,7 +247,7 @@ export default defineComponent({
 
 			ruleForm: {
 				id: 0,
-				productId: 0,
+				productKey: 0,
 				name: '',
 				key: '',
 				transportProtocol: '',
@@ -272,7 +272,7 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState | null, productKey: number | null) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
@@ -293,7 +293,7 @@ export default defineComponent({
 			if (row.valueType) {
 				state.ruleForm = row;
 
-				state.productId = productId;
+				state.productKey = productKey;
 				state.valueType = row.valueType;
 				state.ruleForm.valueType.type = row.valueType.type;
 				state.ruleForm.type = row.valueType.type;
@@ -418,7 +418,7 @@ export default defineComponent({
 							}
 						}
 						state.ruleForm.valueType = state.valueType;
-						state.ruleForm.productId = state.productId;
+						state.ruleForm.productKey = state.productKey;
 
 						api.model.tagedit(state.ruleForm).then(() => {
 							ElMessage.success('标签定义类型修改成功');

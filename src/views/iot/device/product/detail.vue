@@ -362,7 +362,7 @@ export default defineComponent({
 					if (type == 'tab') {
 						api.model.tagdel(route.params.id, key).then(() => {
 							ElMessage.success('删除成功');
-							tagdel();
+							gettab();
 						});
 					}
 				})

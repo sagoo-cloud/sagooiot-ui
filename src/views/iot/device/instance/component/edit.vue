@@ -216,7 +216,7 @@ export default defineComponent({
         state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
         state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
         state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
-        productKeyChange(row.productKey as string)
+        productIdChange(row.productKey as string)
       }
       state.isShowDialog = true;
     };
