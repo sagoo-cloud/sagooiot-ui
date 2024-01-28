@@ -9,9 +9,9 @@
           <el-form-item label="标识" prop="key">
             <el-input v-model="tableData.param.key" placeholder="请输入设备标识" clearable style="width: 165px" @keyup.enter.native="typeList" />
           </el-form-item>
-          <el-form-item label="所属产品" prop="productId">
-            <el-select v-model="tableData.param.productId" style="width: 140px" filterable placeholder="请选择产品">
-              <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
+          <el-form-item label="所属产品" prop="productKey">
+            <el-select v-model="tableData.param.productKey" style="width: 140px" filterable placeholder="请选择产品">
+              <el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" value-key="id"> </el-option>
             </el-select>
           </el-form-item>
 
@@ -151,7 +151,7 @@ interface TableDataRow {
   createBy: string;
 }
 interface TableDataState {
-  ids: string[];
+  keys: string[];
   productData: Array<TableDataRow>;
   tableData: {
     data: Array<TableDataRow>;
@@ -162,7 +162,7 @@ interface TableDataState {
       pageSize: number;
       name: string;
       key: string;
-      productId: string;
+      productKey: string;
       status: string;
       dateRange: string[];
     };
@@ -180,7 +180,7 @@ export default defineComponent({
     const queryRef = ref();
     const batchLoading = ref(false);
     const state = reactive<TableDataState>({
-      ids: [],
+      keys: [],
       productData: [],
       tableData: {
         data: [],
@@ -191,6 +191,7 @@ export default defineComponent({
           pageSize: 10,
           name: '',
           key: '',
+          productKey: '',
           status: '',
           dateRange: [],
         },
@@ -234,13 +235,13 @@ export default defineComponent({
 
     //批量启用
     const setDeviceStatus1 = (row?: TableDataRow) => {
-      let ids: string[] = [];
+      let keys: string[] = [];
       if (row) {
-        ids = [row.key];
+        keys = [row.key];
       } else {
-        ids = state.ids;
+        keys = state.keys;
       }
-      if (ids.length === 0) {
+      if (keys.length === 0) {
         ElMessage.error('请选择要操作的数据。');
         return;
       }
@@ -251,7 +252,7 @@ export default defineComponent({
       })
         .then(() => {
           batchLoading.value = true
-          api.device.setDeviceStatus({ ids: ids, status: 1 }).then(() => {
+          api.device.setDeviceStatus({ ids: keys, status: 1 }).then(() => {
             ElMessage.success('启用成功');
             typeList();
           }).finally(() => batchLoading.value = false)
@@ -261,13 +262,13 @@ export default defineComponent({
 
     //批量禁用
     const setDeviceStatus0 = (row?: TableDataRow) => {
-      let ids: string[] = [];
+      let keys: string[] = [];
       if (row) {
-        ids = [row.key];
+        keys = [row.key];
       } else {
-        ids = state.ids;
+        keys = state.keys;
       }
-      if (ids.length === 0) {
+      if (keys.length === 0) {
         ElMessage.error('请选择要操作的数据。');
         return;
       }
@@ -278,7 +279,7 @@ export default defineComponent({
       })
         .then(() => {
           batchLoading.value = true
-          api.device.setDeviceStatus({ ids: ids, status: 0 }).then(() => {
+          api.device.setDeviceStatus({ ids: keys, status: 0 }).then(() => {
             ElMessage.success('禁用成功');
             typeList();
           }).finally(() => batchLoading.value = false)
@@ -288,14 +289,14 @@ export default defineComponent({
     // 删除产品
     const onRowDel = (row?: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
-      let ids: string[] = [];
+      let keys: string[] = [];
       if (row) {
         msg = `此操作将永久删除设备：“${row.name}”，是否继续?`;
-        ids = [row.key];
+        keys = [row.key];
       } else {
-        ids = state.ids;
+        keys = state.keys;
       }
-      if (ids.length === 0) {
+      if (keys.length === 0) {
         ElMessage.error('请选择要删除的数据。');
         return;
       }
@@ -305,7 +306,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.instance.del(ids).then(() => {
+          api.instance.del(keys).then(() => {
             ElMessage.success('删除成功');
             typeList();
           });
@@ -324,16 +325,17 @@ export default defineComponent({
     };
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
-      state.ids = selection.map((item) => item.key);
+      state.keys = selection.map((item) => item.key);
     };
-    const onActionStatus = (item: TableDataRow[]) => {
+
+    const onActionStatus = (item: TableDataRow) => {
       if (item.status == 0) {
-        api.instance.devdeploy({ id: item.key }).then((res: any) => {
+        api.instance.devdeploy(item.key).then((res: any) => {
           typeList();
           ElMessage.success(res.message || '操作成功');
         });
       } else {
-        api.instance.devundeploy({ id: item.key }).then((res: any) => {
+        api.instance.devundeploy(item.key).then((res: any) => {
           typeList();
           ElMessage.success(res.message || '操作成功');
         });

@@ -37,28 +37,6 @@ interface DicState {
 	isShowDialog: boolean;
 }
 
-// 定义接口来定义对象的类型
-interface TableDataRow {
-	id: number;
-	name: string;
-	key: string;
-
-	createBy: string;
-}
-interface TableDataState {
-	ids: number[];
-	tableData: {
-		data: Array<TableDataRow>;
-		total: number;
-		loading: boolean;
-		param: {
-			pageNum: number;
-			pageSize: number;
-      deviceKey: string;
-		};
-	};
-}
-
 export default defineComponent({
 	name: 'deviceEditPro',
 	setup(prop, { emit }) {

@@ -1,8 +1,6 @@
 <template>
 	<div class="system-dic-container">
-		<el-dialog title="子设备详情" v-model="isShowSubDeviceDialog" width="80%">
-			<div class="dialog-wrapper" style="height: 80vh;overflow: auto;">
-
+		<el-dialog title="子设备详情" v-model="isShowSubDeviceDialog" fullscreen width="80%">
 				<div class="content">
 					<div class="cont_box">
 						<div class="title">设备：{{ detail.name }}</div>
@@ -277,7 +275,6 @@
 						</el-tab-pane>
 					</el-tabs>
 				</div>
-			</div>
 		</el-dialog>
 
 		<EditDic ref="editDicRef" @typeList="typeList" />
