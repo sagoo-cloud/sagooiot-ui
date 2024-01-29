@@ -425,7 +425,11 @@ export default defineComponent({
   name: 'deviceEditPro',
   components: { EditAssetRef, FromData, SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
-  setup(prop, context) {
+  props: {
+    deviceKey: String
+  },
+  setup(props, context) {
+
     const logqueryRef = ref();
 
     // 属性列表，查询保留小数位使用
@@ -504,7 +508,8 @@ export default defineComponent({
     });
 
     function initData() {
-      api.instance.detail(route.params?.id).then((res: any) => {
+      // 如果是嵌入的就是子设备，看子设备详情，否则看页面参数
+      api.instance.detail(props.deviceKey ||  route.params?.id).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
         state.tableData.param.productKey = res.data.product.key;
@@ -540,7 +545,7 @@ export default defineComponent({
         api.dev_asset.detail({ deviceKey: state.detail.key }).then((resde: any) => {
           // 存储设备档案信息
           deviceAssetData.value = resde;
-          const newArray = resde.data.map((obj: any) => {
+          const newArray = (resde?.data || []).map((obj: any) => {
             const { name, value, ...rest } = obj;
             const newObj = { name, value, ...rest };
             newObj[name] = value ? value : '';
@@ -686,7 +691,7 @@ export default defineComponent({
     };
 
     // 删除产品
-    const onRowDel = (key:string, type: string) => {
+    const onRowDel = (key: string, type: string) => {
       let msg = `此操作将永久删除该数据，是否继续?`;
 
       if (key.length === 0) {

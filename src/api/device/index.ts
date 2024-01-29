@@ -10,7 +10,7 @@ export default {
   product: {
     // 设备属性设置
     propertySet: (data: object) => post('/product/property/set', data),
-    // 获取设备接入信息 /product/?id=35
+    // 获取设备接入信息
     connect_intro: (productKey: string) => get('/product/connect_intro', { productKey }),
     getList: (params: object) => get('/product/page_list', params),
     getLists: (params?: object) => get('/product/list', params),
@@ -27,7 +27,7 @@ export default {
     getSubList: () => get('/product/sub_list'),
     export: (params: object) => file('/product/tsl/export', params),
 
-    deleteSubDevice: (id: number) => del('/product/device/del_sub', { id }),
+    deleteSubDevice: (deviceKey: number) => del('/product/device/del_sub', { deviceKey }),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
     // 脚本更新

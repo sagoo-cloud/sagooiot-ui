@@ -60,7 +60,6 @@ interface DicState {
   ruleForm: RuleFormState;
   rules: {}
   open_type: string;
-  sproductId: number;
 }
 
 
@@ -74,7 +73,6 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
     const state = reactive<DicState>({
-      sproductId: 0,
       isShowDialog: false,
       open_type: '',
       productData: [], // 分类数据
