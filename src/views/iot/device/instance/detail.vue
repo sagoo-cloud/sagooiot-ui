@@ -363,7 +363,7 @@
   </div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, nextTick } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, nextTick, onUnmounted } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import functionCom from './component/function.vue';
 import 'vue3-json-viewer/dist/index.css';
@@ -429,6 +429,10 @@ export default defineComponent({
     deviceKey: String
   },
   setup(props, context) {
+
+    let timer: any
+
+    onUnmounted(() => clearInterval(timer))
 
     const logqueryRef = ref();
 
@@ -509,7 +513,7 @@ export default defineComponent({
 
     function initData() {
       // 如果是嵌入的就是子设备，看子设备详情，否则看页面参数
-      api.instance.detail(props.deviceKey ||  route.params?.id).then((res: any) => {
+      api.instance.detail(props.deviceKey || route.params?.id).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
         state.tableData.param.productKey = res.data.product.key;
@@ -533,6 +537,8 @@ export default defineComponent({
         getDeviceAssetMetadata()
 
         getrunData();
+        
+        timer = setInterval(getrunData, 3000)
 
         getDeviceTableData()
       });

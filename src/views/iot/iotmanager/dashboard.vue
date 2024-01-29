@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated, getCurrentInstance } from 'vue';
+import { toRefs, reactive, defineComponent, onMounted, ref, watch, nextTick, onActivated, getCurrentInstance, onUnmounted } from 'vue';
 import * as echarts from 'echarts';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from '/@/store/index';
@@ -101,6 +101,14 @@ export default defineComponent({
 	name: 'home',
 	components: { EditDic, DetailDic },
 	setup() {
+
+		let timer1: any
+		let timer2: any
+
+		onUnmounted(() => {
+			clearInterval(timer1)
+			clearInterval(timer2)
+		})
 
 		const { proxy } = getCurrentInstance() as any;
 		const { alarm_type } = proxy.useDict('alarm_type');
@@ -432,7 +440,7 @@ export default defineComponent({
 				state.homeOne[1].num1 = res.total - res.disable
 				state.homeOne[1].num2 = res.disable
 			})
-			
+
 			// 按告警级别统计
 			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
 				const list = (res.data || [])
@@ -470,20 +478,10 @@ export default defineComponent({
 		}
 
 		// 每隔3秒更新数据
-		setInterval(() => {
-			// 避免到其他页面也加载
-			if (route.path === '/iotmanager/dashboard') {
-				getLoopData()
-			}
-		}, 3000)
+		timer1 = setInterval(getLoopData, 3000)
 
 		// 每隔一分钟秒更新图形
-		setInterval(() => {
-			// 避免到其他页面也加载
-			if (route.path === '/iotmanager/dashboard') {
-				getChartData()
-			}
-		}, 60000)
+		timer2 = setInterval(getChartData, 60000)
 
 		const getOverviewData = () => {
 			getLoopData()
