@@ -89,7 +89,7 @@ function show(row: any) {
 }
 
 function onSubmit() {
-  if (!data.value) return ElMessage('请先输入属性值！')
+  if (data.value === '' || data.value === null || data.value === undefined) return ElMessage('请先输入属性值！')
   loading.value = true
   api.product.propertySet({
     deviceKey: props.deviceKey,
