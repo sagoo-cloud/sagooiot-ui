@@ -219,7 +219,7 @@ export default defineComponent({
       state.productNameShow = false;
 
       // 获取上传格式
-      apiSystem.getInfoByKey({ ConfigKey: 'sys.uploadFile.fileType' }).then((res: any) => {
+      apiSystem.getInfoByKey('sys.uploadFile.fileType').then((res: any) => {
         if (res.data) {
           let fileType = res.data.configValue.split(",");
           for (let i = 0; i < fileType.length; i++) {
@@ -262,7 +262,7 @@ export default defineComponent({
     const selectChange = (val: string) => {
       getModuleList(val);
     };
-    const getModuleList = (productKey: string) => {
+    const getModuleList = (productKey?: string) => {
       state.ruleForm.module = '';
       if (!productKey) {
         productKey = state.ruleForm.productKey
@@ -317,9 +317,9 @@ export default defineComponent({
       productRef.value.openDialog();
     }
     // 获取产品回显数据
-    const getProductTableData = (deviceIdList: any, deviceNameList: any) => {
-      state.ruleForm.productKey = deviceIdList[0];
-      selectChange(deviceIdList[0]);
+    const getProductTableData = (productKeyList: any, deviceNameList: any) => {
+      state.ruleForm.productKey = productKeyList[0];
+      selectChange(productKeyList[0]);
       state.productName = deviceNameList[0];
       state.productNameShow = true;
     }

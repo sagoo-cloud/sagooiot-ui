@@ -17,24 +17,20 @@
         <el-table-column label="消息协议" prop="messageProtocol" show-overflow-tooltip v-col="'messageProtocol'" />
         <el-table-column label="接入方式" prop="transportProtocol" show-overflow-tooltip v-col="'transportProtocol'" />
         <el-table-column label="类型" prop="deviceType" show-overflow-tooltip v-col="'deviceType'" />
-
         <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
           <template #default="scope">
             <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
             <el-tag type="info" size="small" v-else>未发布</el-tag>
           </template>
         </el-table-column>
-
       </el-table>
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getProductList" />
-
     </el-dialog>
   </div>
 </template>
 <script lang="ts">
 import { toRefs, reactive, defineComponent, nextTick, getCurrentInstance, ref } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import 'vue3-json-viewer/dist/index.css'
 import api from '/@/api/device'
 
 interface TableDataState {
@@ -42,7 +38,7 @@ interface TableDataState {
   productData: object[],
   deviceKeyList: string[];
   deviceNameList: string[];
-  checkIdList: string[];
+  checkKeyList: string[];
   tableData: {
     data: []
     total: number
@@ -65,7 +61,7 @@ export default defineComponent({
       deviceNameList: [],
       isShowDialog: false,
       productData: [],
-      checkIdList: [],
+      checkKeyList: [],
       tableData: {
         data: [],
         total: 0,
@@ -89,8 +85,8 @@ export default defineComponent({
       }).finally(() => (state.tableData.loading = false));
     };
 
-    const openDialog = (checkIdData: any) => {
-      state.checkIdList = checkIdData;
+    const openDialog = (checkKeyList: string[]) => {
+      state.checkKeyList = checkKeyList;
       getProductList()
     };
 
@@ -127,9 +123,9 @@ export default defineComponent({
 
     const changeSelect = () => {
       nextTick(() => {
-        state.tableData.data.forEach((item) => {
-          if (state.checkIdList) {
-            if (state.checkIdList.includes(item.key)) {
+        state.tableData.data.forEach((item: any) => {
+          if (state.checkKeyList) {
+            if (state.checkKeyList.includes(item.key)) {
               proxy.$refs.multipleTable.toggleRowSelection(item, true);
             }
           }

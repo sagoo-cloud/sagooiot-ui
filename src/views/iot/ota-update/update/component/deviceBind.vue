@@ -34,20 +34,14 @@
 <script lang="ts">
 import { toRefs, reactive, defineComponent, nextTick, getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-
-import 'vue3-json-viewer/dist/index.css'
-
-import { useRoute } from 'vue-router'
-
 import api from '/@/api/device'
 
 interface TableDataState {
   isShowDialog: boolean,
   productData: object[],
   deviceKeyList: string[];
-  deviceIdList: string[];
   deviceNameList: string[];
-  checkIdList: string[];
+  checkKeyList: string[];
   tableData: {
     data: []
     total: number
@@ -69,14 +63,12 @@ export default defineComponent({
 
   setup(prop, { emit }) {
     const { proxy } = getCurrentInstance() as any;
-    const route = useRoute()
     const state = reactive<TableDataState>({
       deviceKeyList: [],
-      deviceIdList: [],
       deviceNameList: [],
       isShowDialog: false,
       productData: [],
-      checkIdList: [],
+      checkKeyList: [],
       tableData: {
         data: [],
         total: 0,
@@ -120,8 +112,8 @@ export default defineComponent({
       });
     };
 
-    const openDialog = (checkIdData: any, productKey: any) => {
-      state.checkIdList = checkIdData;
+    const openDialog = (checkKeyList: string[], productKey: any) => {
+      state.checkKeyList = checkKeyList;
       state.tableData.param.productKey = productKey;
       getDeviceList()
     };
@@ -129,7 +121,6 @@ export default defineComponent({
     // 多选框选中数据
     const handleSelectionChange = (selection: any[]) => {
       state.deviceKeyList = selection.map((item) => item.key);
-      state.deviceIdList = selection.map((item) => item.id);
       state.deviceNameList = selection.map((item) => item.name);
     };
 
@@ -144,7 +135,7 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        emit('bindSuccess', state.deviceIdList, state.deviceNameList)
+        emit('bindSuccess', state.deviceKeyList, state.deviceNameList)
         state.isShowDialog = false;
       })
     };
@@ -156,8 +147,8 @@ export default defineComponent({
 
     const changeSelect = () => {
       nextTick(() => {
-        state.tableData.data.forEach((item) => {
-          if (state.checkIdList.includes(item.key)) {
+        state.tableData.data.forEach((item: any) => {
+          if (state.checkKeyList.includes(item.key)) {
             proxy.$refs.multipleTable.toggleRowSelection(item, true);
           }
         })
