@@ -3,7 +3,7 @@
     <el-dialog :title="(open_type === 'upload' ? '导入' : '导出') + '设备'" v-model="isShowDialog" width="769px">
       <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 
-        <el-form-item label="所属产品" prop="productId">
+        <el-form-item label="所属产品" prop="productKey">
           <el-select v-model="ruleForm.productKey" placeholder="请选择所属产品" class="w100">
             <el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>

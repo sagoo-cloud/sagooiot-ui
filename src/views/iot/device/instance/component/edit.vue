@@ -9,7 +9,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
         <el-form-item label="所属产品" prop="productKey">
-          <el-select v-model="ruleForm.productKey" @change="productIdChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
+          <el-select v-model="ruleForm.productKey" @change="productKeyChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
             <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -66,11 +66,11 @@
           <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
         </el-form-item>
         <el-form-item label="设备图片">
-					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
-				</el-form-item>
+          <upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
+        </el-form-item>
         <el-form-item label="证书图片">
-					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>
-				</el-form-item>
+          <upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -216,7 +216,7 @@ export default defineComponent({
         state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
         state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
         state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
-        productIdChange(row.productKey as string)
+        productKeyChange(row.productKey as string)
       }
       state.isShowDialog = true;
     };
@@ -226,11 +226,11 @@ export default defineComponent({
       }
     };
     // 上传设备图
-    const setImgsPhone = (res:any) => {
+    const setImgsPhone = (res: any) => {
       state.phone = res;
     }
     // 上传设备资格证书
-    const setImgsCertificate = (res:any) => {
+    const setImgsCertificate = (res: any) => {
       state.certificate = res;
     }
     // 关闭弹窗
@@ -293,7 +293,7 @@ export default defineComponent({
     }
 
     // 所属产品变化的时候，更新产品详情
-    const productIdChange = (productKey: string) => {
+    const productKeyChange = (productKey: string) => {
       api.product.detail(productKey).then((res: any) => {
         const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
@@ -306,7 +306,7 @@ export default defineComponent({
     }
 
     //回调地图选点
-    const updateMap=(data:any)=>{
+    const updateMap = (data: any) => {
       state.ruleForm.lng = data.lng;
       state.ruleForm.lat = data.lat;
       state.ruleForm.address = data.address;
@@ -314,7 +314,7 @@ export default defineComponent({
 
     return {
       certList,
-      productIdChange,
+      productKeyChange,
       tagRef,
       selectMap,
       mapRef,

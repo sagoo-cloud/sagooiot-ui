@@ -92,7 +92,7 @@ interface RuleFormState {
   push: string;
   pushDisabled: boolean,
   types: string;
-  productId: string;
+  productKey: string;
 }
 interface UpdateState {
   isShowDialog: boolean;
@@ -128,7 +128,7 @@ export default defineComponent({
         push: '2',
         pushDisabled: true,
         types: "1",
-        productId: '',
+        productKey: '',
       },
       productData: [],
       rules: {
@@ -175,7 +175,7 @@ export default defineComponent({
       }
     };
     const getProductList = () => {
-      api.batch.getDeviceList({ productId: state.ruleForm.productId}).then((res: any) => {
+      api.batch.getDeviceList({ productKey: state.ruleForm.productKey}).then((res: any) => {
         state.productData = res.device
       })
     }
@@ -186,7 +186,7 @@ export default defineComponent({
       state.deviceNameShow = false;
       if (row) {
         state.ruleForm.devOtaFirmwareId = row.id;
-        state.ruleForm.productId = row.productId;
+        state.ruleForm.productKey = row.productKey;
       }
       state.isShowDialog = true;
 
@@ -206,7 +206,7 @@ export default defineComponent({
         push: '2',
         pushDisabled: true,
         types: "1",
-        productId: '',
+        productKey: '',
       };
     };
     // 关闭弹窗
@@ -251,7 +251,7 @@ export default defineComponent({
     };
     // 打开设备列表
     const onOpenDevice = () => {
-      deviceRef.value.openDialog(state.ruleForm.devices, state.ruleForm.productId);
+      deviceRef.value.openDialog(state.ruleForm.devices, state.ruleForm.productKey);
     };
     return {
       deviceRef,
@@ -296,7 +296,7 @@ export default defineComponent({
 // 	stratege: '1',
 // 	waitVersion: '',
 // 	devOtaFirmwareId: '',
-// 	productId:'',
+// 	productKey:'',
 // }
 
 // const formData = reactive({
@@ -306,7 +306,7 @@ export default defineComponent({
 // const ruleForm = {
 // 	method: [ruleRequired('请选择批次类型')],
 // 	name: [ruleRequired('批次名称不能为空')],
-// 	productId: [ruleRequired('请选择所属产品')],
+// 	productKey: [ruleRequired('请选择所属产品')],
 // 	devices: [ruleRequired('请选择批次模块')],
 // 	stratege: [ruleRequired('批次版本号不能为空')],
 // 	waitVersion: [ruleRequired('升级后版本号不能为空')],

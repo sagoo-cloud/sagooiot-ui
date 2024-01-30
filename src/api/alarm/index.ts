@@ -2,11 +2,11 @@ import { get, post, del, put } from '/@/utils/request';
 
 export default {
   common: {
-    levelall: (id: number) => get('/alarm/level/all', { id }),
-    trigger_type: (productKey: number) => get('/alarm/rule/trigger_type', { productKey }),
-    trigger_param: (productKey: number) => get('/alarm/rule/trigger_param', { productKey }),
+    levelall: (id?: number) => get('/alarm/level/all', { id }),
+    trigger_type: (productKey: string) => get('/alarm/rule/trigger_type', { productKey }),
+    trigger_param: (productKey: string) => get('/alarm/rule/trigger_param', { productKey }),
     trigger_params: (params: object) => get('/alarm/rule/trigger_param', params),
-    operator: (productKey: number) => get('/alarm/rule/operator', { productKey }),
+    operator: (productKey?: string) => get('/alarm/rule/operator', { productKey }),
     getList: (params: object) => get('/alarm/rule/list', params),
     add: (data: object) => post('/alarm/rule/add', data),
     delete: (id: number) => del('/alarm/rule/del', { id }),
@@ -15,7 +15,7 @@ export default {
     deploy: (data: object) => post('/alarm/rule/deploy', data),
     undeploy: (data: object) => post('/alarm/rule/undeploy', data),
     level_edit: (data: object) => put('/alarm/level/edit', data),
-    level_all: (productKey: number) => get('/alarm/level/all', { productKey }),
+    level_all: (productKey: string) => get('/alarm/level/all', { productKey }),
     },
     log: {
       getList: (params: object) => get('/alarm/log/list', params),

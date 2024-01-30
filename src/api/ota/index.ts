@@ -12,7 +12,7 @@ export default {
   module: {
     getSubList: () => get('/product/list'),
     getList: (data: any) => get('/operate/ota_module/list', data),
-    del: (ids: number) => del('/operate/ota_module/delete', {ids}),
+    del: (ids: number[]) => del('/operate/ota_module/delete', {ids}),
     add: (data: any) => post('/operate/ota_module/add', data),
     edit: (data: any) => put('/operate/ota_module/edit', data),
     detail: (id: number) => get('/operate/ota_module/get', {id}),

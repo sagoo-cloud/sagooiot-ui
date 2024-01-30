@@ -13,11 +13,7 @@
           <el-input v-model.trim="ruleForm.name" placeholder="请输入升级包名称" />
         </el-form-item>
 
-        <el-form-item label="所属产品" prop="productId">
-          <!--          <el-select v-model="ruleForm.productId" placeholder="请选择产品" @change="selectChange">-->
-          <!--            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" />-->
-          <!--          </el-select>-->
-
+        <el-form-item label="所属产品" prop="productKey">
           <!-- 回显已选产品 -->
           <template v-if="productNameShow">
             <el-tag style="margin-right: 10px;">{{ productName }}</el-tag>
@@ -107,7 +103,7 @@ interface RuleFormState {
   id: number;
   types: string;
   name: string;
-  productId: '';
+  productKey: string;
   module: string;
   version: string;
   waitVersion: string;
@@ -161,7 +157,7 @@ export default defineComponent({
         id: 0,
         types: '1',
         name: '',
-        productId: '',
+        productKey: '',
         module: '',
         version: '',
         waitVersion: '',
@@ -179,7 +175,7 @@ export default defineComponent({
       rules: {
         types: [{ required: true, message: '升级包类型不能为空', trigger: 'change' }],
         name: [{ required: true, message: '升级包名称不能为空', trigger: 'change' }],
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'change' }],
         module: [{ required: true, message: '升级包模块不能为空', trigger: 'change' }],
         version: [
           { required: true, message: '升级包版本号不能为空', trigger: 'change' },
@@ -203,10 +199,10 @@ export default defineComponent({
           const data: RuleFormState = res;
           state.ruleForm = data;
         });
-        selectChange(row.productId);
+        selectChange(row.productKey);
         state.ruleForm = row;
         // 获取产品名称
-        apiProduct.product.detail(state.ruleForm.productId).then((res: any) => {
+        apiProduct.product.detail(state.ruleForm.productKey).then((res: any) => {
           if (res.data) {
             state.productNameShow = true;
             state.productName = res.data.name;
@@ -238,7 +234,7 @@ export default defineComponent({
         id: 0,
         types: '1',
         name: '',
-        productId: '',
+        productKey: '',
         module: '',
         version: '',
         waitVersion: '',
@@ -263,15 +259,15 @@ export default defineComponent({
         ElMessage.error(res.message);
       }
     };
-    const selectChange = (val: Number) => {
+    const selectChange = (val: string) => {
       getModuleList(val);
     };
-    const getModuleList = (productID: Number) => {
+    const getModuleList = (productKey: string) => {
       state.ruleForm.module = '';
-      if (!productID) {
-        productID = Number(state.ruleForm.productId)
+      if (!productKey) {
+        productKey = state.ruleForm.productKey
       }
-      api.module.getList({ productID: productID }).then((res: any) => {
+      api.module.getList({ productKey }).then((res: any) => {
         state.moduleData = res.Data;
       });
     };
@@ -322,7 +318,7 @@ export default defineComponent({
     }
     // 获取产品回显数据
     const getProductTableData = (deviceIdList: any, deviceNameList: any) => {
-      state.ruleForm.productId = deviceIdList[0];
+      state.ruleForm.productKey = deviceIdList[0];
       selectChange(deviceIdList[0]);
       state.productName = deviceNameList[0];
       state.productNameShow = true;

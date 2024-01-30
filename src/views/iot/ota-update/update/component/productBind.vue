@@ -41,7 +41,6 @@ interface TableDataState {
   isShowDialog: boolean,
   productData: object[],
   deviceKeyList: string[];
-  deviceIdList: string[];
   deviceNameList: string[];
   checkIdList: string[];
   tableData: {
@@ -63,7 +62,6 @@ export default defineComponent({
     const productTable = ref();
     const state = reactive<TableDataState>({
       deviceKeyList: [],
-      deviceIdList: [],
       deviceNameList: [],
       isShowDialog: false,
       productData: [],
@@ -99,7 +97,6 @@ export default defineComponent({
     // 多选框选中数据
     const handleSelectionChange = (selection: any[]) => {
       state.deviceKeyList = selection.map((item) => item.key);
-      state.deviceIdList = selection.map((item) => item.id);
       state.deviceNameList = selection.map((item) => item.name);
 
       if (selection.length > 1) {
@@ -119,7 +116,7 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        emit('bindSuccess', state.deviceIdList, state.deviceNameList)
+        emit('bindSuccess', state.deviceKeyList, state.deviceNameList)
         state.isShowDialog = false;
       })
     };
@@ -132,7 +129,7 @@ export default defineComponent({
       nextTick(() => {
         state.tableData.data.forEach((item) => {
           if (state.checkIdList) {
-            if (state.checkIdList.includes(item.id)) {
+            if (state.checkIdList.includes(item.key)) {
               proxy.$refs.multipleTable.toggleRowSelection(item, true);
             }
           }

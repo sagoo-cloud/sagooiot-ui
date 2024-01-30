@@ -50,7 +50,6 @@ export default defineComponent({
         are: '',
         moduleName: '',
         checkres: 0,
-        productId: 0,
       },
     });
     const getDetail = () => {

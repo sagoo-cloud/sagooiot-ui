@@ -56,11 +56,11 @@ interface TableDataState {
       pageNum: number
       pageSize: number
       name: string
-      productId: number
+      productKey: string
     }
   },
   ruleForm: {
-    productId: string | number
+    productKey: string
   },
   rules: {}
 }
@@ -85,19 +85,19 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           name: '',
-          productId: 0,
+          productKey: '',
         },
       },
       ruleForm: {
-        productId: ''
+        productKey: ''
       },
       rules: {
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       }
     })
 
     const getDeviceList = () => {
-      // if (!state.ruleForm.productId) {
+      // if (!state.ruleForm.productKey) {
       //   state.tableData.data = [];
       //   state.tableData.total = 0;
       //   return;
@@ -114,16 +114,15 @@ export default defineComponent({
 
     const getProductList = () => {
       api.product.getSubList().then((res: any) => {
-        let productDataList = res.product
-        state.productData = productDataList;
-        state.ruleForm.productId = state.productData[0].id
+        state.productData = res.product;
+        state.ruleForm.productKey = res.product[0].key
         getDeviceList()
       });
     };
 
-    const openDialog = (checkIdData: any, productId: any) => {
+    const openDialog = (checkIdData: any, productKey: any) => {
       state.checkIdList = checkIdData;
-      state.tableData.param.productId = productId;
+      state.tableData.param.productKey = productKey;
       getDeviceList()
     };
 
@@ -150,15 +149,15 @@ export default defineComponent({
       })
     };
 
-    const handleChange = (productId: number) => {
-      state.ruleForm.productId = productId;
+    const handleChange = (productKey: string) => {
+      state.ruleForm.productKey = productKey;
       getDeviceList()
     }
 
     const changeSelect = () => {
       nextTick(() => {
         state.tableData.data.forEach((item) => {
-          if (state.checkIdList.includes(item.id)) {
+          if (state.checkIdList.includes(item.key)) {
             proxy.$refs.multipleTable.toggleRowSelection(item, true);
           }
         })
