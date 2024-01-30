@@ -192,7 +192,7 @@ const open = async (row: any, productInfo: any) => {
         }
       }
       //根据产品ID获取设备列表
-      api.device.allList({ productId: productInfo.id }).then((resd: any) => {
+      api.device.allList({ productKey: productInfo.key }).then((resd: any) => {
         deviceList.value = resd.device || [];
       });
     })
