@@ -159,7 +159,7 @@
 				</el-tabs>
 				<div class="import">
 					<div class="row_bet">
-						<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+						<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ productKey: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
 							<el-button size="small">
 								<el-icon> <ele-Upload /> </el-icon>
 								导入物模型
