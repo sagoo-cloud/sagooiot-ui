@@ -1,12 +1,10 @@
 <template>
 	<div class="page bg page-full">
 		<div class="content">
-			<div class="cont_box">
+			<div class="cont_box" style="align-items: center;">
 				<div class="title">产品：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1
-					? '已发布' : '未发布' }}</div>
-				<div class="pro-option" @click="CkOption" v-auth="'startOrStop'"> {{ developer_status == 1 ? '停用' : '启用' }}
-				</div>
+				<!-- <el-tag :type="developer_status == 1 ? 'success' : 'danger'" style="margin:0 20px;">{{ developer_status == 1 ? '已发布' : '未发布' }}</el-tag> -->
+				<el-switch v-auth="'startOrStop'" style="margin:0 20px;" v-model="developer_status" inline-prompt :active-value="1" :inactive-value="0" active-text="启用" inactive-text="停用" @change="CkOption"></el-switch>
 			</div>
 		</div>
 
@@ -447,17 +445,17 @@ export default defineComponent({
 			state.detail.scriptInfo = scriptInfo
 		};
 
-		const CkOption = () => {
-			if (state.developer_status == 1) {
+		const CkOption = (developer_status: number) => {
+			if (developer_status == 0) {
 				api.product.undeploy(route.params.id).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 0;
-				});
+				}).catch(() => state.developer_status = 1)
 			} else {
 				api.product.deploy(route.params.id).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 1;
-				});
+				}).catch(() => state.developer_status = 0)
 			}
 		}
 

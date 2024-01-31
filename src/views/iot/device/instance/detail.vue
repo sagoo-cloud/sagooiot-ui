@@ -1,10 +1,9 @@
 <template>
   <div class="page bg page-full">
     <div class="content">
-      <div class="cont_box">
+      <div class="cont_box" style="align-items: center;">
         <div class="title">设备：{{ detail.name }}</div>
-        <div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '在线'
-          : '离线' }}</div>
+        <el-tag :type="developer_status == 2 ? 'success' : 'danger'" style="margin-left: 20px;">{{ developer_status == 2 ? '在线' : '离线' }}</el-tag>
       </div>
     </div>
 
@@ -537,7 +536,7 @@ export default defineComponent({
         getDeviceAssetMetadata()
 
         getrunData();
-        
+
         timer = setInterval(getrunData, 3000)
 
         getDeviceTableData()
