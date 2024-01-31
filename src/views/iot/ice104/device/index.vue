@@ -64,7 +64,7 @@ import EditForm from './component/edit.vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
-import { useRouter } from 'vu e-router';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const editFormRef = ref();
