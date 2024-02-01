@@ -134,7 +134,6 @@ export default defineComponent({
 		const homeBarRef = ref();
 		const store = useStore();
 		const router = useRouter();
-		const route = useRoute();
 		const state = reactive({
 			loading: false,
 			tableData: {

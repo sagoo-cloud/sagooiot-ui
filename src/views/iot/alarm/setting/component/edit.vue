@@ -8,7 +8,7 @@
 
 				<el-form-item label="告警级别" prop="level">
 					<el-radio-group v-model="ruleForm.level">
-						<el-radio :label="item.level" v-for="item in levelData" :key="item.level">{{ item.name }}</el-radio>
+						<el-radio :label="Number(item.value)" v-for="item in alarm_type" :key="item.value">{{ item.label }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -210,7 +210,6 @@ interface DicState {
 	typeData: any;
 	triData: any;
 	operData: any;
-	levelData: any;
 	requestParams: any;
 	action: any;
 	tempData: any;
@@ -228,7 +227,8 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const { proxy } = getCurrentInstance() as any;
 
-		const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
+		const { notice_send_gateway, alarm_type } = proxy.useDict('notice_send_gateway', 'alarm_type');
+
 		const state = reactive<DicState>({
 			id: 0,
 			isShowDialog: false,
@@ -312,7 +312,6 @@ export default defineComponent({
 			if (row) {
 				setType(true);
 
-
 				alarm.common.detail(row.id).then((res: any) => {
 
 					state.requestParams = res.data.condition.triggerCondition;
@@ -334,7 +333,7 @@ export default defineComponent({
 							return { phone: p };
 						});
 					});
-					iotapi.product.event({ key: res.data.productKey }).then((ress: any) => {
+					iotapi.product.event({ productKey: res.data.productKey }).then((ress: any) => {
 						state.eventList = ress || []
 						state.ruleForm.eventKey = row.eventKey
 					})
@@ -344,11 +343,8 @@ export default defineComponent({
 						alarm.common.trigger_type(product_key).then((res: any) => {
 							state.typeData = res.list || [];
 						});
-
 					}
 				});
-
-
 			}
 			state.isShowDialog = true;
 		};
@@ -357,9 +353,6 @@ export default defineComponent({
 		const getDevData = () => {
 			iotapi.product.getLists({ status: 1 }).then((res: any) => {
 				state.productData = res.product || [];
-			});
-			alarm.common.levelall().then((res: any) => {
-				state.levelData = res.list || [];
 			});
 			alarm.common.operator().then((res: any) => {
 				state.operData = res.list || [];
@@ -437,12 +430,12 @@ export default defineComponent({
 			gettriData()
 		};
 
-		watch(() => state.ruleForm.productKey, (key) => {
-			if (!key) return
+		watch(() => state.ruleForm.productKey, (productKey) => {
+			if (!productKey) return
 			// 切换产品时候重新获取事件列表，清空之前选中的事件
 			state.ruleForm.eventKey = ''
 
-			iotapi.product.event({ key }).then((res: any) => {
+			iotapi.product.event({ productKey }).then((res: any) => {
 				state.eventList = res || []
 			})
 		})
@@ -608,6 +601,7 @@ export default defineComponent({
 		};
 
 		return {
+			alarm_type,
 			getRadio,
 			gettriData,
 			getTem,

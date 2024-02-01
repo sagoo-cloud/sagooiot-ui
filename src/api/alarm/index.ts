@@ -2,7 +2,6 @@ import { get, post, del, put } from '/@/utils/request';
 
 export default {
   common: {
-    levelall: (id?: number) => get('/alarm/level/all', { id }),
     trigger_type: (productKey: string) => get('/alarm/rule/trigger_type', { productKey }),
     trigger_param: (productKey: string) => get('/alarm/rule/trigger_param', { productKey }),
     trigger_params: (params: object) => get('/alarm/rule/trigger_param', params),
@@ -16,10 +15,10 @@ export default {
     undeploy: (data: object) => post('/alarm/rule/undeploy', data),
     level_edit: (data: object) => put('/alarm/level/edit', data),
     level_all: (productKey: string) => get('/alarm/level/all', { productKey }),
-    },
-    log: {
-      getList: (params: object) => get('/alarm/log/list', params),
-      detail: (id: number) => get('/alarm/log/detail', { id }),
-      handle: (data: object) => post('/alarm/log/handle', data),
-      },
+  },
+  log: {
+    getList: (params: object) => get('/alarm/log/list', params),
+    detail: (id: number) => get('/alarm/log/detail', { id }),
+    handle: (data: object) => post('/alarm/log/handle', data),
+  },
 }
