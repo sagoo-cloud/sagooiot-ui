@@ -118,11 +118,11 @@ function clear(row: IListItem) {
 		flex: 2;
 	}
 
-	::v-deep(.el-textarea__inner) {
+	:deep(.el-textarea__inner) {
 		height: 100%;
 	}
 
-	::v-deep(.el-select) {
+	:deep(.el-select) {
 		width: 100%;
 	}
 }

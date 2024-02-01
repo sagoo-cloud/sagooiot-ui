@@ -357,11 +357,11 @@ export default defineComponent({
 		}
 	}
 }
-::v-deep(.el-input-group__append) {
+:deep(.el-input-group__append) {
 	background: var(--el-color-white);
 	padding: 0px 15px;
 }
-::v-deep(.el-input__inner) {
+:deep(.el-input__inner) {
 	border-right-color: var(--el-border-color-extra-light);
 	&:hover {
 		border-color: var(--el-border-color-extra-light);

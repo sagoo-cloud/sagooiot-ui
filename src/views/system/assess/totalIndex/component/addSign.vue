@@ -198,7 +198,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .has-symbol > .el-form-item__content {
+:deep(.has-symbol) > .el-form-item__content {
 	position: relative;
 	.symbol {
 		position: absolute;
@@ -241,14 +241,14 @@ export default defineComponent({
 				}
 
 			}
-			::v-deep .el-input {
+			:deep(.el-input) {
 				width: 100px;
 				height: 28px;
 			}
 		}
 	}
 }
-::v-deep  .el-dialog__body {
+:deep(.el-dialog__body) {
 	border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 </style>

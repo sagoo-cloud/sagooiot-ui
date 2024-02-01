@@ -309,9 +309,7 @@ export default {
 	margin: 10px;
 }
 
-::v-deep {
-	.el-form-item__label {
-		text-align: right;
-	}
+:deep(.el-form-item__label) {
+	text-align: right;
 }
 </style>

@@ -302,18 +302,18 @@ export default defineComponent({
     }
   }
 
-  ::v-deep(.el-dropdown) {
+  :deep(.el-dropdown) {
     color: var(--next-bg-topBarColor);
   }
 
-  ::v-deep(.el-badge) {
+  :deep(.el-badge) {
     height: 40px;
     line-height: 40px;
     display: flex;
     align-items: center;
   }
 
-  ::v-deep(.el-badge__content.is-fixed) {
+  :deep(.el-badge__content.is-fixed) {
     top: 12px;
   }
 }

@@ -249,7 +249,7 @@ export default defineComponent({
 }
 </style>
 <style lang="scss" scoped>
-::v-deep .el-collapse-item__header {
+:deep(.el-collapse-item__header) {
     position: relative;
     padding-left: 20px;
 
@@ -262,12 +262,12 @@ export default defineComponent({
     }
 }
 
-::v-deep .el-input,
-::v-deep .el-input-number {
+:deep(.el-input),
+:deep(.el-input-number) {
     width: 500px;
 }
 
-::v-deep .params {
+:deep(.params) {
     width: 600px;
 }
 </style>

@@ -54,7 +54,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 </script>
 
 <style scoped>
-.hide ::v-deep(.el-upload-list) {
+.hide :deep(.el-upload-list) {
   display: none;
 }
 

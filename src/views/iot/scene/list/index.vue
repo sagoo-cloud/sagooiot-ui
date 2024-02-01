@@ -51,15 +51,13 @@
 <script lang="ts" setup>
 import api from '/@/api/scene';
 import { useSearch } from '/@/hooks/useCommon';
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import { ref } from 'vue';
 const queryRef = ref();
 const { params, tableData, getList, loading } = useSearch<any[]>(api.log.getList, 'data', { keyWord: '' });
 getList();
 
-
 const view = (row: any) => {
-
 };
 
 const del = (row: any) => {

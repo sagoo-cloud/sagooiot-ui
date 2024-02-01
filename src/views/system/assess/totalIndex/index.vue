@@ -173,7 +173,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
   border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 </style>

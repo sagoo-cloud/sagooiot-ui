@@ -178,11 +178,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep div.more-opearte-wrap {
+:deep(div.more-opearte-wrap) {
   flex-direction: row;
   background-color: pink;
 
   // padding: 4px!important;
-  div {}
 }
 </style>

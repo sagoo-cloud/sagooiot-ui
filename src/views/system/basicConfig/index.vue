@@ -44,7 +44,7 @@ function menuChange(index: string) {
 		flex: 1;
 	}
 
-	.el-card ::v-deep(.el-card__body) {
+	.el-card :deep(.el-card__body) {
 		flex: 1;
 		height: 100%;
 		overflow-y: auto;
@@ -54,7 +54,7 @@ function menuChange(index: string) {
 	.el-menu {
 		width: 200px;
 
-		::v-deep(.el-menu-item) {
+		:deep(.el-menu-item) {
 			height: 40px !important;
 			line-height: 40px !important;
 		}

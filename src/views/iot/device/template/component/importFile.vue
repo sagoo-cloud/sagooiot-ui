@@ -123,20 +123,17 @@ export default {
 				});
 		},
 	},
-
-	mounted() {},
 };
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-	.import-dialog {
-		.el-dialog {
-			width: 575px !important;
-			height: auto;
-		}
+:deep(.import-dialog) {
+	.el-dialog {
+		width: 575px !important;
+		height: auto;
 	}
 }
+
 .title {
 	// color: #000;
 	font-size: 16px;
@@ -156,6 +153,7 @@ export default {
 	padding: 10px;
 	margin-bottom: 20px;
 	border: 2px dashed #ccc;
+
 	img {
 		margin-right: 10px;
 	}
@@ -175,8 +173,8 @@ export default {
 	cursor: pointer;
 	margin-bottom: 20px;
 	padding: 5px 10px;
+
 	&:hover {
 		background-color: #f5f7fa;
 	}
-}
-</style>
+}</style>
