@@ -93,19 +93,13 @@ export default defineComponent({
     };
 
     const confirmBind = () => {
-      let msg = '是否确定选择产品？';
       if (state.deviceKeyList.length === 0) {
         ElMessage.error('请选择要确定绑定的数据。');
         return;
       }
-      ElMessageBox.confirm(msg, '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }).then(() => {
-        emit('bindSuccess', state.deviceKeyList, state.deviceNameList)
-        state.isShowDialog = false;
-      })
+
+      emit('bindSuccess', state.deviceKeyList, state.deviceNameList)
+      state.isShowDialog = false;
     };
 
     const handleChange = () => {
