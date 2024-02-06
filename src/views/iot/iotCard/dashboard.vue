@@ -6,7 +6,7 @@
         <div class="title flex">
           数据统计
           <div class="select-wrap">
-            <el-select v-model="types" placeholder="请选择" style="width: 320px" @change="typeChange()">
+            <el-select v-model="types" placeholder="请选择" style="width: 120px" @change="typeChange()">
               <!-- 1电信,2联通,3移动 -->
               <el-option label="电信" :value="1" />
               <el-option label="联通" :value="2" />
@@ -43,7 +43,7 @@
       </div>
 
 
-			<div class="statistics-wrap gap-3">
+			<div class="statistics-wrap">
 				<el-card shadow="nover" class="left-wrap">
 					<div class="top-title-wrap">
 							<div class="title">流量统计</div>
@@ -663,9 +663,10 @@ watch(
   justify-content: space-between;
   align-items: normal;
   margin-top: 20px;
+  width: 100%;
 
   .left-wrap {
-    width: 67%;
+    width: 66.3%;
     .top-title-wrap {
       display: flex;
       justify-content: space-between;
@@ -683,7 +684,8 @@ watch(
     }
   }
   .right-wrap {
-    width: 33%;
+    width: calc(33.7% - 20px);
+    margin-left: 20px;
 		.top-title-wrap {
       display: flex;
       justify-content: space-between;
