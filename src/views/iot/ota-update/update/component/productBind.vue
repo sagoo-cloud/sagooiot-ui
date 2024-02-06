@@ -2,10 +2,10 @@
   <div class="mutiple-bind-dialog-wrap">
     <el-dialog title="选择产品" v-model="isShowDialog" width="700px">
       <el-form ref="formRef">
-        <el-form-item label="设备名称" prop="name">
-          <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable style="width: 240px" @keyup.enter.native="getProductList" />
+        <el-form-item label="" prop="name">
+          <el-input v-model="tableData.param.name" placeholder="请输入产品标识或名称" clearable style="width: 240px" @keyup.enter.native="getProductList" />
           <el-button style="margin-left: 20px;" type="primary" @click="getProductList()"><el-icon><ele-Search /></el-icon>查询</el-button>
-          <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()"><el-icon><ele-Check /></el-icon>确定选择</el-button>
+          <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()"><el-icon><ele-Finished /></el-icon>确定选择</el-button>
         </el-form-item>
       </el-form>
       <el-table ref="productTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAll" v-loading="tableData.loading">
