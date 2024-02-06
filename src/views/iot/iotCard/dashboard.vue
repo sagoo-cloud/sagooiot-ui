@@ -2,17 +2,18 @@
 <template>
   <div class="page">
 		<el-card shadow="nover" class="page-full-part">
-			<div class="select-wrap">
-				<el-select v-model="types" placeholder="请选择" style="width: 320px" @change="typeChange()">
-					<!-- 1电信,2联通,3移动 -->
-					<el-option label="电信" :value="1" />
-					<el-option label="联通" :value="2" />
-					<el-option label="移动" :value="3" />
-				</el-select>
-			</div>
-
 		  <div shadow="nover" class="top-wrap">
-        <div class="title">数据统计</div>
+        <div class="title flex">
+          数据统计
+          <div class="select-wrap">
+            <el-select v-model="types" placeholder="请选择" style="width: 320px" @change="typeChange()">
+              <!-- 1电信,2联通,3移动 -->
+              <el-option label="电信" :value="1" />
+              <el-option label="联通" :value="2" />
+              <el-option label="移动" :value="3" />
+            </el-select>
+          </div>
+        </div>
 				<div class="top-inner-wrap">
 					<div class="line-wrap flow-line-wrap">
 						<div class="text-wrap">
@@ -67,7 +68,7 @@
 									/>
 							</div>
 					</div>
-					<div style="height: 460px;" ref="flowLine"></div>
+					<div style="height: 508px;" ref="flowLine"></div>
 				</el-card>
 
 				<el-card shadow="nover" class="right-wrap">
@@ -608,6 +609,9 @@ watch(
 }
 .top-wrap {
 	width: 100%;
+  .flex {
+    justify-content: space-between;
+  }
 	.top-inner-wrap {
 		display: flex;
 		margin-top: 10px;
@@ -661,7 +665,7 @@ watch(
   margin-top: 20px;
 
   .left-wrap {
-    width: 66%;
+    width: 67%;
     .top-title-wrap {
       display: flex;
       justify-content: space-between;
@@ -679,7 +683,7 @@ watch(
     }
   }
   .right-wrap {
-    width: 36%;
+    width: 33%;
 		.top-title-wrap {
       display: flex;
       justify-content: space-between;
