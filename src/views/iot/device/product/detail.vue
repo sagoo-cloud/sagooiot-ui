@@ -16,7 +16,7 @@
 				</div>
 
 				<el-descriptions class="margin-top" :column="3" border>
-					<el-descriptions-item label="产品标识">{{ detail.key }}</el-descriptions-item>
+					<el-descriptions-item label="产品标识"><copy :text="detail.key"></copy></el-descriptions-item>
 					<el-descriptions-item label="产品分类">{{ detail.categoryName }}</el-descriptions-item>
 					<el-descriptions-item label="设备类型">{{ detail.deviceType }}</el-descriptions-item>
 					<el-descriptions-item label="产品图片">

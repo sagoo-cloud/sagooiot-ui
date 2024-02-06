@@ -99,7 +99,11 @@
       </div>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="标识" prop="key" min-width="150" show-overflow-tooltip v-col="'key'">
+          <template #default="{ row }">
+            <copy :text="row.key"></copy>
+          </template>
+        </el-table-column>
         <el-table-column label="设备名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />
         <el-table-column label="设备类型" prop="product.deviceType" min-width="120" align="center" show-overflow-tooltip v-col="'deviceType'" />
         <el-table-column label="产品名称" prop="productName" min-width="120" align="center" show-overflow-tooltip v-col="'productName'" />

@@ -10,7 +10,11 @@
       </el-form>
       <el-table ref="productTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAll" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="标识" prop="key" show-overflow-tooltip v-col="'key'">
+          <template #default="{ row }">
+            <copy :text="row.key"></copy>
+          </template>
+        </el-table-column>
         <el-table-column label="名称" prop="name" show-overflow-tooltip v-col="'name'" />
       </el-table>
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getProductList" />

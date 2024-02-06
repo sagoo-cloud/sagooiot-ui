@@ -75,7 +75,9 @@
           </div>
 
           <el-descriptions class="margin-top" :column="3" border>
-            <el-descriptions-item label="设备标识">{{ detail.key }}</el-descriptions-item>
+            <el-descriptions-item label="设备标识">
+              <copy :text="detail.key"></copy>
+            </el-descriptions-item>
             <el-descriptions-item label="设备名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="所属产品">
               <router-link :to="'/iotmanager/device/product/detail/' + prodetail.key" class="link-type">{{
@@ -282,7 +284,11 @@
             </div>
             <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
               <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip />
+              <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip>
+                <template #default="{ row }">
+                  <copy :text="row.key"></copy>
+                </template>
+              </el-table-column>
               <el-table-column label="设备名称" prop="name" show-overflow-tooltip />
               <el-table-column label="产品名称" prop="productName" show-overflow-tooltip />
 

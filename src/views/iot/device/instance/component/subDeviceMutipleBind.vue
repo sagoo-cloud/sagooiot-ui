@@ -12,7 +12,11 @@
 			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-				<el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
+				<el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'">
+					<template #default="{ row }">
+						<copy :text="row.key"></copy>
+					</template>
+				</el-table-column>
 				<el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
 				<el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
 
