@@ -1,6 +1,6 @@
 <template>
   <div class="ota-edit-module-container">
-    <el-dialog :title="'设备详情'" v-model="isShowDialog" width="769px">
+    <el-dialog :title="'设备详情'" :before-close="closeDialog" v-model="isShowDialog" width="769px">
       <div class="search">
         <el-form inline ref="queryRef">
           <el-form-item label="设备名称：" prop="name">
@@ -84,6 +84,7 @@ interface TableDataState {
     };
   };
   isShowDialog: boolean;
+  timeoutTimer: any;
 }
 
 export default defineComponent({
@@ -102,6 +103,7 @@ export default defineComponent({
         },
       },
       isShowDialog: false,
+      timeoutTimer: null,
     });
     // 打开弹窗
     const openDialog = (row: any) => {
@@ -112,9 +114,11 @@ export default defineComponent({
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
       state.isShowDialog = true;
+      timer()
     };
     // 关闭弹窗
     const closeDialog = () => {
+      clearTimeout(state.timeoutTimer);
       state.isShowDialog = false;
     };
     // 取消
@@ -127,6 +131,7 @@ export default defineComponent({
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
+      timer();
     };
     // 手动下发
     const distribute = (row: any) => {
@@ -135,10 +140,13 @@ export default defineComponent({
       api.batch.distribute({deviceKey: deviceKey, strategyId: strategyId}).then(() => {
         ElMessage.success('操作成功');
       })
+    }
+    // 定时请求列表
+    const timer = () => {
       // 因列表更新数据不是实时更新，需设置定时后在请求列表
-      setTimeout(() => {
+      state.timeoutTimer = setTimeout(() => {
         getDetail();
-      }, 500);
+      }, 3000);
     }
     return {
       getDetail,

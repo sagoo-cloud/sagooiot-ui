@@ -26,5 +26,7 @@ export default {
   },
   platform: {
     getList: (params: object) => get('/sim_factory/list', params),
+    addItem: (data: object) => post('/sim_factory/add', data),
+    editItem: (data: object) => put('/sim_factory/edit', data),
   }
 }

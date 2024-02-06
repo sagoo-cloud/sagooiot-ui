@@ -4,7 +4,7 @@
     <el-card shadow="nover" class="page-full-part">
       <el-form :model="params" inline ref="queryRef">
         <el-form-item prop="deptName" class="mr10">
-          <el-input @keyup.enter.native="getList" style="width: 240px;" v-model="params.keyWord" placeholder="请输入ICCID或卡号" clearable />
+          <el-input @keyup.enter.native="getList" style="width: 240px;" v-model="params.keyWord" placeholder="请输入关键字搜索" clearable />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="getList">
@@ -19,6 +19,12 @@
             </el-icon>
             重置
           </el-button>
+          <el-button type="primary" @click="toAddItemPage()">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增
+          </el-button>
         </el-form-item>
       </el-form>
       <el-table
@@ -28,11 +34,14 @@
         style="width: 100%"
       >
         <el-table-column label="名称" prop="name" align="center" />
-        <el-table-column label="平台类型" prop="types" align="center">
+        <!-- <el-table-column label="平台类型" prop="types" align="center">
         	<template #default="scope">{{ formatOperator(scope.row.types) }}</template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="状态" prop="simStatus" align="center">
-        	<template #default="scope">{{ formatStatus(scope.row.simStatus) }}</template>
+        	<template #default="scope">
+            <el-tag type="primary" v-if="scope.row.status">{{ formatStatus(scope.row.status) }}</el-tag>
+            <el-tag type="danger" v-else>{{ formatStatus(scope.row.status) }}</el-tag>
+            </template>
         </el-table-column> 
         <el-table-column label="说明" prop="remark" align="center" />       
 
@@ -52,14 +61,18 @@
       />
     </el-card>
     <!-- <EditDept ref="editDeptRef" @deptList="deptList" /> -->
+    <AddOrEditItem ref="AddOrEditItemRef" @updateList="getList()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import api from '/@/api/iotCard';
+import { defineAsyncComponent, ref, reactive, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from "/@/hooks/useCommon"
 import { useRouter } from 'vue-router';
+const AddOrEditItem = defineAsyncComponent(() => import('./addOrEditItem.vue'));
+
 const { params, tableData, getList, loading } = useSearch<any[]>(
   api.platform.getList,
   "Data"
@@ -68,6 +81,8 @@ const { params, tableData, getList, loading } = useSearch<any[]>(
 getList();
 
 const router = useRouter();
+
+const AddOrEditItemRef = ref();
 
 /** 重置按钮操作 */
 const resetQuery = () => {
@@ -115,23 +130,21 @@ const formatType = (val:any) => {
 }
 
 const formatStatus = (val:any) => {
-  // 1：可激活 2：测试激活 3：测试去激活 4：在用5：停机6：运营商管理状态
+  // 1：开启 0：禁用
   if(val == 1) {
-    return "可激活"
-  }else if(val == 2) {
-    return "测试激活"
-  }else if(val == 3) {
-    return "测试去激活"
-  }else if(val == 4) {
-    return "在用"
-  }else if(val == 5) {
-    return "停机"
-  }else if(val == 6) {
-    return "运营商管理状态"
+    return "开启"
+  }else if(val == 0) {
+    return "禁用"
   }
 }
 
 const onOpenDetail = (item:any) => {
-  router.push('/iotmanager/iotCard/index/detail/'+item.id);
+  // router.push('/iotmanager/iotCard/index/detail/'+item.id);
+  AddOrEditItemRef.value.openDialog(item);
+}
+
+const toAddItemPage = () => {
+  AddOrEditItemRef.value.openDialog();
+  // router.push('/iotmanager/iotCard/platformManage/add');
 }
 </script>

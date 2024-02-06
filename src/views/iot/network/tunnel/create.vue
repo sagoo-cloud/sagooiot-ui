@@ -81,8 +81,9 @@
             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="68px">
               <el-form-item label="协议">
                 <el-select v-model="form.protoccol.name" placeholder="请选择协议适配">
-                  <el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value">
-                  </el-option>
+                  <el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.name"></el-option>
+                  <!-- 增加系统默认的mqtt选项 -->
+                  <el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="协议参数">
@@ -108,9 +109,11 @@ import serverDetail from './component/serverDetail.vue'
 import { useRoute, useRouter } from 'vue-router';
 
 import api from '/@/api/network';
+import deviceApi from '/@/api/device'
 
 interface TableDataState {
   activeViewName: string[];
+  messageData: any[];
   resourceModalPro: {
     mode: string,
     content: string,
@@ -142,6 +145,7 @@ export default defineComponent({
         content: ''
       },
       detail: {},
+      messageData: [],
       activeViewName: ['1', '2', '3', '4', '5'],
       form: {
         // 名称
@@ -167,7 +171,7 @@ export default defineComponent({
         },
         // 协议适配
         protoccol: {
-          name: "ModbusTCP",
+          name: "SagooMqtt",
           options: {}
         },
         // 心跳包
@@ -184,6 +188,10 @@ export default defineComponent({
           { required: true, message: '名称不能为空', trigger: 'change' }
         ]
       }
+    });
+    
+    deviceApi.product.getTypesAll({ types: 'protocol' }).then((res: any) => {
+      state.messageData = res || [];
     });
 
     const mirrorRef = ref('mirrorRef')

@@ -520,6 +520,18 @@ export default defineComponent({
 				initEchartsResizeFun();
 			}
 		);
+		watch(
+			() => state.lineChartAlarmTotalData,
+			() => {
+				initLineChart();
+			}
+		);
+		watch(
+			() => state.pieChartData,
+			() => {
+				initPieChart();
+			}
+		);
 		// 监听 vuex 中是否开启深色主题
 		watch(
 			() => store.state.themeConfig.themeConfig.isIsDark,

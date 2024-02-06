@@ -66,11 +66,13 @@
           <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
         </el-form-item>
         <el-form-item label="设备图片">
-          <upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>
-        </el-form-item>
+<!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
+          <uploadVue :img="phone" @set-imgs="setImgsPhone"></uploadVue>
+				</el-form-item>
         <el-form-item label="证书图片">
-          <upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>
-        </el-form-item>
+<!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
+          <uploadVue :img="certificate" @set-imgs="setImgsCertificate"></uploadVue>
+				</el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -88,7 +90,7 @@
 import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/device';
 import apiSystem from '/@/api/system';
-import { ElMessage } from "element-plus";
+import {ElMessage, UploadProps} from "element-plus";
 import tagVue from './tag.vue';
 import Map from './map.vue';
 import UploadVue from '/@/components/upload/index.vue';
@@ -140,8 +142,8 @@ interface DicState {
   rules: {};
   deviceImgLimit: number;
   certificateLimit: number;
-  phone: any[];
-  certificate: any[];
+  phone: string;
+  certificate: string;
   intro: string;
 }
 interface Tag {
@@ -180,8 +182,8 @@ export default defineComponent({
       },
       deviceImgLimit: 0,
       certificateLimit: 0,
-      phone: [],
-      certificate: [],
+      phone: "",
+      certificate: "",
       intro: ""
     });
 
@@ -226,12 +228,18 @@ export default defineComponent({
       }
     };
     // 上传设备图
-    const setImgsPhone = (res: any) => {
-      state.phone = res;
+    // const setImgsPhone = (res:any) => {
+    //   state.phone = res;
+    // }
+    const setImgsPhone: UploadProps['onSuccess'] = (response) => {
+      state.phone = response
     }
     // 上传设备资格证书
-    const setImgsCertificate = (res: any) => {
-      state.certificate = res;
+    // const setImgsCertificate = (res:any) => {
+    //   state.certificate = res;
+    // }
+    const setImgsCertificate: UploadProps['onSuccess'] = (response) => {
+      state.certificate = response
     }
     // 关闭弹窗
     const closeDialog = () => {
