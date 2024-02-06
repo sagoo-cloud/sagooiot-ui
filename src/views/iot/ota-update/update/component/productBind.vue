@@ -1,28 +1,17 @@
 <template>
   <div class="mutiple-bind-dialog-wrap">
-    <el-dialog title="选择产品" v-model="isShowDialog" width="90%">
-      <el-form ref="formRef" size="small" label-width="110px">
+    <el-dialog title="选择产品" v-model="isShowDialog" width="700px">
+      <el-form ref="formRef">
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="tableData.param.name" placeholder="请输入产品名称" clearable style="width: 240px" @keyup.enter.native="getProductList" />
-          <el-button style="margin-left: 20px;" type="primary" @click="getProductList()">查询</el-button>
-
-          <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()">确定选择</el-button>
+          <el-button style="margin-left: 20px;" type="primary" @click="getProductList()"><el-icon><ele-Search /></el-icon>查询</el-button>
+          <el-button style="margin-left: 20px;" :disabled="!deviceKeyList.length" type="danger" @click="confirmBind()"><el-icon><ele-Check /></el-icon>确定选择</el-button>
         </el-form-item>
       </el-form>
       <el-table ref="productTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAll" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="标识" prop="key" show-overflow-tooltip v-col="'key'" />
         <el-table-column label="名称" prop="name" show-overflow-tooltip v-col="'name'" />
-        <el-table-column label="分类" prop="categoryName" show-overflow-tooltip v-col="'categoryName'" />
-        <el-table-column label="消息协议" prop="messageProtocol" show-overflow-tooltip v-col="'messageProtocol'" />
-        <el-table-column label="接入方式" prop="transportProtocol" show-overflow-tooltip v-col="'transportProtocol'" />
-        <el-table-column label="类型" prop="deviceType" show-overflow-tooltip v-col="'deviceType'" />
-        <el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status">已发布</el-tag>
-            <el-tag type="info" size="small" v-else>未发布</el-tag>
-          </template>
-        </el-table-column>
       </el-table>
       <pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getProductList" />
     </el-dialog>
@@ -44,6 +33,7 @@ interface TableDataState {
     total: number
     loading: boolean
     param: {
+      status: number
       pageNum: number
       pageSize: number
       name: string
@@ -67,6 +57,7 @@ export default defineComponent({
         total: 0,
         loading: false,
         param: {
+          status: 1,
           pageNum: 1,
           pageSize: 10,
           name: '',
