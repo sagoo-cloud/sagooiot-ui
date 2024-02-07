@@ -197,19 +197,46 @@ import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
-	productKey: number;
+	productKey: string;
 	accessMode: number;
 	name: string;
+	key: string;
+	type: string;
+	transportProtocol: string;
 	dictType: string;
-	valueType: Object;
+	valueType: any;
 	status: number;
 	desc: string;
 }
 interface DicState {
 	isShowDialog: boolean;
+	productKey: string;
+	type: string;
+	types: string;
+	valueType: any;
+	elementType: any;
 	ruleForm: RuleFormState;
-	typeData: RuleFormState[];
+	jsondata: any;
+	typeData: any[];
+	enumdata: any[];
 	rules: {};
+}
+
+const ruleForm = {
+	id: 0,
+	productKey: '',
+	name: '',
+	dictType: '',
+	type: '',
+	key: '',
+	transportProtocol: '',
+	accessMode: 1,
+	status: 1,
+	valueType: {
+		type: '',
+		maxLength: '',
+	},
+	desc: '',
 }
 
 export default defineComponent({
@@ -223,7 +250,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productKey: 0,
+			productKey: '',
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -245,26 +272,13 @@ export default defineComponent({
 
 			jsondata: [],
 
-			ruleForm: {
-				id: 0,
-				productKey: 0,
-				name: '',
-				key: '',
-				transportProtocol: '',
-				accessMode: 1,
-				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			},
+			ruleForm: JSON.parse(JSON.stringify(ruleForm)),
 			rules: {
-				name: [ { required: true, message: '标签定义名称不能为空', trigger: 'blur' },
-        				{ max: 32, message: '标签定义名称不能超过32个字符', trigger: 'blur' },
-						{ validator: validateNoSpace, message: '标签定义名称不能包含空格', trigger: 'blur' }
-					],
+				name: [
+					{ required: true, message: '标签定义名称不能为空', trigger: 'blur' },
+					{ max: 32, message: '标签定义名称不能超过32个字符', trigger: 'blur' },
+					{ validator: validateNoSpace, message: '标签定义名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '标签定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
@@ -272,11 +286,11 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productKey: number | null) => {
+		const openDialog = (row: RuleFormState, productKey: string) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
-				const datat = Object.values(res.dataType);
+				const datat = Object.values(res.dataType) as any[];
 				datat.forEach((item, index) => {
 					if (index == 0) {
 						datat[index]['label'] = '基础类型';
@@ -323,19 +337,7 @@ export default defineComponent({
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
-			state.ruleForm = {
-				name: '',
-				key: '',
-				transportProtocol: '',
-				accessMode: 1,
-				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			};
+			state.ruleForm = JSON.parse(JSON.stringify(ruleForm))
 			state.type = '';
 			state.types = '';
 			state.valueType = {};
@@ -347,12 +349,12 @@ export default defineComponent({
 			},];
 		};
 
-		const seletChange = (val) => {
+		const seletChange = (val: string) => {
 			state.type = val;
 			state.ruleForm.type = val;
 
 		};
-		const seletChanges = (val) => {
+		const seletChanges = (val: string) => {
 			state.types = val;
 		};
 
@@ -362,18 +364,18 @@ export default defineComponent({
 				value: '',
 			});
 		};
-		const delEnum = (index) => {
+		const delEnum = (index: number) => {
 			state.enumdata.splice(index, 1);
 		};
 
-		const deljson = (index) => {
+		const deljson = (index: number) => {
 			state.jsondata.splice(index, 1);
 		};
 
 		const addJson = () => {
 			editOptionRef.value.openDialog({ productKey: '', id: 0 });
 		};
-		const getOptionData = (data) => {
+		const getOptionData = (data: any) => {
 			state.jsondata.push(data);
 		};
 		// 关闭弹窗

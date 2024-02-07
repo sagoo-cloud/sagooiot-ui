@@ -20,8 +20,8 @@
 						</template>
 					</el-cascader>
 
-          <!-- 添加产品分类 -->
-          <el-button type="success" @click="onOpenAddCategory()" style="margin-left: 5px;">添加产品分类</el-button>
+					<!-- 添加产品分类 -->
+					<el-button type="success" @click="onOpenAddCategory()" style="margin-left: 5px;">添加产品分类</el-button>
 				</el-form-item>
 
 				<el-form-item label="消息协议" prop="messageProtocol">
@@ -96,7 +96,7 @@
 				</span>
 			</template>
 		</el-dialog>
-    <EditCategory ref="editCategoryRef" @getCateList="getCategoryList" />
+		<EditCategory ref="editCategoryRef" @getCateList="getCategoryList" />
 	</div>
 </template>
 
@@ -118,9 +118,11 @@ interface RuleFormState {
 	transportProtocol: string
 	deviceType: string
 	name: string
-	authType: string
+	key: string
+	authType: number| null
 	status: number
 	desc: string
+	icon: string
 	authUser: string
 	authPasswd: string
 	accessToken: string
@@ -129,24 +131,28 @@ interface RuleFormState {
 interface DicState {
 	isShowDialog: boolean
 	ruleForm: RuleFormState
-	cateData: RuleFormState[]
-	deptData: RuleFormState[]
-	messageData: RuleFormState[]
-	tranData: RuleFormState[]
-	rules: {},
+	cateData: any[]
+	deptData: any[]
+	messageData: any[]
+	network_protocols: any[]
+	tranData: any[]
+	rules: {}
 	imageUrl: string
+	singleImg: string
 }
 
 const form = {
 	id: 0,
 	name: '',
+	key: '',
 	categoryId: '',
 	messageProtocol: '',
 	transportProtocol: '',
 	deviceType: '设备',
 	status: 1,
 	desc: '',
-	authType: '',
+	icon: '',
+	authType: null,
 	authUser: '',
 	authPasswd: '',
 	accessToken: '',
@@ -156,7 +162,7 @@ const form = {
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: {EditCategory, uploadVue },
+	components: { EditCategory, uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null)
 		const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
@@ -164,11 +170,11 @@ export default defineComponent({
 		const { proxy } = getCurrentInstance() as any
 		const { network_server_type } = proxy.useDict('network_server_type')
 
-		const certList = ref([])
+		const certList = ref<any[]>([])
 		const submitLoading = ref(false)
-    const editCategoryRef = ref();
+		const editCategoryRef = ref();
 
-		const state = reactive<DicState | any>({
+		const state = reactive<DicState>({
 			isShowDialog: false,
 			cateData: [], // 分类数据
 			deptData: [], //
@@ -181,12 +187,15 @@ export default defineComponent({
 				...form
 			},
 			rules: {
-				name: [{ required: true, message: '产品名称不能为空', trigger: 'change' },
-				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
-				{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
+				name: [
+					{ required: true, message: '产品名称不能为空', trigger: 'change' },
+					{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
+					{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
 				],
-				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' },
-				{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
+				key: [
+					{ required: true, message: '产品标识不能为空', trigger: 'change' },
+					{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }
+				],
 				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
 				transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'change' }],
 				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],
@@ -200,7 +209,7 @@ export default defineComponent({
 		}
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null) => {
+		const openDialog = (row?: any) => {
 			resetForm()
 			api.category.getList({ status: 1 }).then((res: any) => {
 				state.cateData = res.category || []
@@ -285,31 +294,31 @@ export default defineComponent({
 				}
 			})
 		}
-    // 打开新增产品分类弹窗
-    const onOpenAddCategory = () => {
-      editCategoryRef.value.openDialog();
-    };
-    // 获取产品分类列表
-    const getCategoryList = () => {
-      api.category.getList({ status: 1 }).then((res: any) => {
-        state.cateData = res.category || []
-      })
-    }
+		// 打开新增产品分类弹窗
+		const onOpenAddCategory = () => {
+			editCategoryRef.value.openDialog();
+		};
+		// 获取产品分类列表
+		const getCategoryList = () => {
+			api.category.getList({ status: 1 }).then((res: any) => {
+				state.cateData = res.category || []
+			})
+		}
 
 		return {
 			transportProtocolChange,
 			submitLoading,
 			certList,
 			openDialog,
-      onOpenAddCategory,
+			onOpenAddCategory,
 			handleAvatarSuccess,
 			closeDialog,
 			onCancel,
 			onSubmit,
 			network_server_type,
-      getCategoryList,
+			getCategoryList,
 			formRef,
-      editCategoryRef,
+			editCategoryRef,
 			...toRefs(state),
 		}
 	},

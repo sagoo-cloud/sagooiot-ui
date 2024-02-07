@@ -3,7 +3,7 @@
 		<el-dialog :title="(typeof ruleForm.valueType !== 'undefined' ? '修改' : '添加') + '参数'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
 				<el-form-item label="参数标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入参数标识"  />
+					<el-input v-model="ruleForm.key" placeholder="请输入参数标识" />
 				</el-form-item>
 				<el-form-item label="参数名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入参数名称" />
@@ -12,7 +12,6 @@
 				<el-form-item label="数据类型" prop="type">
 					<el-select v-model="valueType.type" placeholder="请选择数据类型" @change="seletChange">
 						<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
-							<!-- <el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="item.type == 'object'" /> -->
 							<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" />
 						</el-option-group>
 					</el-select>
@@ -24,7 +23,6 @@
 						<el-select v-model="elementType.type" placeholder="请选择元素类型" @change="seletChanges">
 							<el-option-group v-for="group in typeData" :key="group.label" :label="group.label">
 								<el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="['array', 'enum'].includes(item.type)" />
-								<!-- <el-option v-for="item in group.options" :key="item.type" :label="item.title" :value="item.type" :disabled="['array', 'object', 'enum', 'date'].includes(item.type)" /> -->
 							</el-option-group>
 						</el-select>
 					</el-form-item>
@@ -53,10 +51,15 @@ import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { validateNoSpace } from '/@/utils/validator';
 
-interface RuleFormState {
-	id: number;
-	name: string;
-	desc: string;
+interface stateType {
+	isShowDialog: boolean
+	rules: any
+	ruleForm: any
+	valueType: any
+	typeData: any
+	elementType: any
+	type: string
+	[key: string]: any
 }
 
 const valueTypeBase = {
@@ -98,7 +101,7 @@ export default defineComponent({
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
 
-		const state = reactive<any>({
+		const state = reactive<stateType>({
 			isShowDialog: false,
 			typeData: [], //
 			type: '',
@@ -112,7 +115,6 @@ export default defineComponent({
 					'value': '',
 				},
 			],
-
 			ruleForm: {
 				id: 0,
 				name: '',
@@ -120,27 +122,27 @@ export default defineComponent({
 				transportProtocol: '',
 				accessMode: '0',
 				status: 1,
-				valueType: {
-				},
+				valueType: {},
 				desc: '',
 			},
 			rules: {
-				name: [ { required: true, message: '参数名称不能为空', trigger: 'blur' },
-        				{ max: 32, message: '参数名称不能超过32个字符', trigger: 'blur' },
-						{ validator: validateNoSpace, message: '参数名称不能包含空格', trigger: 'blur' }
-					],
+				name: [
+					{ required: true, message: '参数名称不能为空', trigger: 'blur' },
+					{ max: 32, message: '参数名称不能超过32个字符', trigger: 'blur' },
+					{ validator: validateNoSpace, message: '参数名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '参数标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 			},
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null,type='add') => {
+		const openDialog = (row?: any) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
 				const datat: any = Object.values(res.dataType);
-				datat.forEach((item, index) => {
+				datat.forEach((item: any, index: number) => {
 					if (index == 0) {
 						datat[index]['label'] = '基础类型';
 						datat[index]['options'] = item;
@@ -153,17 +155,16 @@ export default defineComponent({
 			});
 
 			if (row) {
-
 				if (typeof row.valueType !== 'undefined') {
-					state.type=row.valueType.type;
+					state.type = row.valueType.type;
 
-					if (typeof row.valueType.elementType !== 'undefined')state.elementType=row.valueType.elementType;
-					if (typeof row.valueType.elements !== 'undefined')state.enumdata=row.valueType.elements;
-					if (typeof row.valueType.properties !== 'undefined')state.properties=row.valueType.properties;
-					if (typeof row.valueType.type !== 'undefined')state.valueType.type=row.valueType.type;
+					if (typeof row.valueType.elementType !== 'undefined') state.elementType = row.valueType.elementType;
+					if (typeof row.valueType.elements !== 'undefined') state.enumdata = row.valueType.elements;
+					if (typeof row.valueType.properties !== 'undefined') state.properties = row.valueType.properties;
+					if (typeof row.valueType.type !== 'undefined') state.valueType.type = row.valueType.type;
 
 					const fieldCount = Object.keys(row.valueType).length;
-					if(fieldCount>1)state.valueType=row.valueType;
+					if (fieldCount > 1) state.valueType = row.valueType;
 				}
 
 				state.ruleForm = row;
@@ -183,11 +184,11 @@ export default defineComponent({
 			state.elementType = JSON.parse(JSON.stringify(valueType));
 		};
 
-		const seletChange = (val) => {
+		const seletChange = (val: string) => {
 
 			state.type = val;
 		};
-		const seletChanges = (val) => {
+		const seletChanges = (val: string) => {
 			state.types = val;
 		};
 
@@ -197,7 +198,7 @@ export default defineComponent({
 				'value': '',
 			});
 		};
-		const delEnum = (index) => {
+		const delEnum = (index: number) => {
 			state.enumdata.splice(index, 1);
 		}
 
@@ -217,7 +218,7 @@ export default defineComponent({
 				if (valid) {
 					if (typeof state.ruleForm.valueType !== 'undefined') {
 						//修改
-				
+
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 						}
@@ -228,11 +229,10 @@ export default defineComponent({
 						emit('editTypeList', state.ruleForm, state.ruleForm.type_data);
 					} else {
 						// //添加
-				
+
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 						}
-
 
 						state.ruleForm.valueType = state.valueType;
 						ElMessage.success('参数类型添加成功');

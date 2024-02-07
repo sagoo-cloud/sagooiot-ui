@@ -170,9 +170,7 @@
 							导出物模型
 						</el-button>
 					</div>
-
 				</div>
-
 				<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 			</el-tab-pane>
 			<el-tab-pane label="设备接入" name="3">
