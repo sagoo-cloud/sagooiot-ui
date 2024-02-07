@@ -234,7 +234,7 @@ export default defineComponent({
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
-				grid: { top: 70, right: 20, bottom: 30, left: 30 },
+				grid: { top: 70, right: 20, bottom: 30, left: 50 },
 				tooltip: { trigger: 'axis' },
 				legend: { data: ['消息量', '预警量'], right: 0 },
 				xAxis: {
