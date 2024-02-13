@@ -469,7 +469,7 @@ export default defineComponent({
 			})
 			// 按告警级别统计 绘制饼图
 			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
-				const list = (res.data || [])
+				const list = (res.data || []).sort((a: any, b: any) => b.Title - a.Title)
 				state.pieChartLegend = list.map((item: any) => alarmTypeMap[item.Title])
 				state.pieChartLevel = list.map((item: any) => item.Title)
 				state.pieChartData = list.map((item: any) => item.Value)
