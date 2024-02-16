@@ -83,16 +83,16 @@ import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import TypeItem from './typeItem.vue';
 
 interface IValyeType {
-  type: string;
-  min?: string;
-  max?: string;
-  unit?: string;
-  decimals?: string;
-  trueText?: string;
-  falseText?: string;
-  trueValue?: string;
-  falseValue?: string;
-  maxLength?: string;
+  type: string | null;
+  min?: string | null;
+  max?: string | null;
+  unit?: string | null;
+  decimals?: string | null;
+  trueText?: string | null;
+  falseText?: string | null;
+  trueValue?: string | null;
+  falseValue?: string | null;
+  maxLength?: string | null;
   elements: { text: string, value: string }[];
   elementType?: IValyeType;
   properties: { key: string, name: string, desc: string, valueType: IValyeType }[];

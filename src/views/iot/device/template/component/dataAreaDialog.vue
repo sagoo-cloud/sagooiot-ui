@@ -42,7 +42,7 @@
 			</el-table-column>
 			<el-table-column label="操作" align="center" width="180px">
 				<template #default="{ row, $index }">
-					<el-button type="primary" size="small" @click="handleSubmit(row, $index)"> 保存 </el-button>
+					<el-button type="primary" size="small" @click="handleSubmit(row)"> 保存 </el-button>
 					<el-button type="danger" size="small" @click="handleDelete(row, $index)"> 删除 </el-button>
 				</template>
 			</el-table-column>
@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import api from '/@/api/device/modbus';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 export default {
 	props: {
@@ -99,7 +99,7 @@ export default {
 			});
 		},
 		handleDelete(row: any, index: number) {
-			this.$confirm('是否确认删除数据区名称为"' + row.name + '"的数据项?', '警告', {
+			ElMessageBox.confirm('是否确认删除数据区名称为"' + row.name + '"的数据项?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',

@@ -66,13 +66,13 @@
           <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
         </el-form-item>
         <el-form-item label="设备图片">
-<!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
+          <!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
           <uploadVue :img="phone" @set-imgs="setImgsPhone"></uploadVue>
-				</el-form-item>
+        </el-form-item>
         <el-form-item label="证书图片">
-<!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
+          <!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
           <uploadVue :img="certificate" @set-imgs="setImgsCertificate"></uploadVue>
-				</el-form-item>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -90,7 +90,7 @@
 import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/device';
 import apiSystem from '/@/api/system';
-import {ElMessage, UploadProps} from "element-plus";
+import { ElMessage, UploadProps } from "element-plus";
 import tagVue from './tag.vue';
 import Map from './map.vue';
 import UploadVue from '/@/components/upload/index.vue';
@@ -163,7 +163,7 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
     const mapRef = ref();
-    const certList = ref([])
+    const certList = ref<any[]>([])
     const state = reactive<DicState>({
       isShowDialog: false,
       product: {},

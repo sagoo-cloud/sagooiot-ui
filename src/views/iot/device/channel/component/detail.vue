@@ -42,13 +42,13 @@
 						<el-table-column label="操作" align="center" width="200">
 							<template #default="{ row, $index }">
 								<el-button type="primary" size="small" @click="handleUpdate(row)"> 详情 </el-button>
-								<el-button v-if="row.status != 'deleted'" size="small" type="danger" @click="handleDelete(row, $index)"> 删除 </el-button>
+								<el-button v-if="row.status != 'deleted'" size="small" type="danger" @click="handleDelete(row)"> 删除 </el-button>
 							</template>
 						</el-table-column>
 					</el-table>
 
 					<pagination v-if="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" />
-					<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList(1)" />
+					<TaskDialog ref="taskDialog" :formatOptions="formatOptions" @finish="getList()" />
 				</el-tab-pane>
 				<el-tab-pane label="通道码流" name="3">
 					<div>
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import api from '/@/api/device/modbus';
 import getOrigin from '/@/utils/origin';
 import TaskDialog from './taskDialog.vue';
@@ -168,7 +168,7 @@ export default {
 				});
 		},
 		handleDelete(row: any) {
-			this.$confirm('是否确认删除任务名称为"' + row.Job.title + '"的数据项?', '警告', {
+			ElMessageBox.confirm('是否确认删除任务名称为"' + row.Job.title + '"的数据项?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',

@@ -114,14 +114,12 @@ export default defineComponent({
 				state.tableData.data = res.device;
 				state.tableData.total = res.Total;
 			}).finally(() => (state.tableData.loading = false));
-
 		};
 
 		const getProductList = () => {
 			api.product.getSubList().then((res: any) => {
-				let productDataList = res.product
-				state.productData = productDataList;
-				state.ruleForm.productKey = state.productData[0].key
+				state.productData = res.product;
+				state.ruleForm.productKey = res.product[0].key
 				getDeviceList()
 				state.isShowDialog = true;
 			});

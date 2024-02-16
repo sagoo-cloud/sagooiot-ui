@@ -55,7 +55,7 @@ export default {
 				mode: [{ required: true, message: '请选择模式', trigger: 'change' }],
 			},
 			dialogVisible: false,
-			dialogStatus: '',
+			dialogStatus: 'update' as 'update' | 'create',
 			textMap: {
 				update: '模板详情',
 				create: '添加模板',
@@ -72,7 +72,7 @@ export default {
 	},
 
 	methods: {
-		open(dialogStatus: string, row: any) {
+		open(dialogStatus: 'update' | 'create', row: any) {
 			this.dialogStatus = dialogStatus;
 			this.tabsKey = Date.now();
 			this.dialogVisible = true;

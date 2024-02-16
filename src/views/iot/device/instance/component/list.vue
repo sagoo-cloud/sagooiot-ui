@@ -27,21 +27,15 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import { Close } from '@element-plus/icons-vue';
-
 import api from '/@/api/device';
-import { ElMessage } from 'element-plus';
-
-interface DicState {
-	isShowDialog: boolean;
-}
 
 export default defineComponent({
 	name: 'deviceEditPro',
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
-		const state = reactive<DicState>({
+		const state = reactive({
 			isShowDialog: false,
 			dialogFullScreen: false,
 			tableData: {
@@ -51,13 +45,13 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-          deviceKey: '',
+					deviceKey: '',
 					propertyKey: '',
 				},
 			},
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, deviceKey) => {
+		const openDialog = (row: any, deviceKey: string) => {
 			resetForm();
 			if (row) {
 				state.tableData.param.deviceKey = deviceKey;
@@ -85,6 +79,8 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
+					deviceKey: '',
+					propertyKey: '',
 				},
 			}
 		};
