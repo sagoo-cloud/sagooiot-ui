@@ -2,7 +2,7 @@
 <template>
   <div class="page">
 		<el-card shadow="nover" class="page-full-part">
-		  <div shadow="nover" class="top-wrap">
+      <div shadow="nover" class="top-wrap">
         <div class="title flex">
           数据统计
           <div class="select-wrap">
@@ -14,35 +14,33 @@
             </el-select>
           </div>
         </div>
-				<div class="top-inner-wrap">
-					<div class="line-wrap flow-line-wrap">
-						<div class="text-wrap">
-							<div class="text">昨日流量消耗</div>
-							<div>{{formatSize(statisticsData.yesterdayTotal * 1024 * 1024)}}</div>
-						</div>
-						<div class="line-inner-wrap" ref="yesterdayLine"></div>
-					</div>
-					<div class="line-wrap flow-line-wrap">
-						<div class="text-wrap">
-							<div class="text">当月流量消耗</div>
-							<div>{{formatSize(statisticsData.realMonthTotal * 1024 * 1024)}}</div>
-						</div>
-						<div class="line-inner-wrap" ref="monthLine"></div>
-					</div>
+        <div class="top-inner-wrap">
+          <div class="line-wrap flow-line-wrap">
+            <div class="text-wrap">
+              <div class="text">昨日流量消耗</div>
+              <div>{{formatSize(statisticsData.yesterdayTotal * 1024 * 1024)}}</div>
+            </div>
+            <div class="line-inner-wrap" ref="yesterdayLine"></div>
+          </div>
+          <div class="line-wrap flow-line-wrap">
+            <div class="text-wrap">
+              <div class="text">当月流量消耗</div>
+              <div>{{formatSize(statisticsData.realMonthTotal * 1024 * 1024)}}</div>
+            </div>
+            <div class="line-inner-wrap" ref="monthLine"></div>
+          </div>
 
-					<div class="line-wrap flow-line-wrap">
-						<div class="text-wrap">
-							<div class="text">本年流量消耗</div>
-							<div>{{formatSize(statisticsData.yearTotal * 1024 * 1024)}}</div>
-						</div>
-						<div class="line-inner-wrap" ref="yearLine"></div>
-					</div>
-				</div>
+          <div class="line-wrap flow-line-wrap">
+            <div class="text-wrap">
+              <div class="text">本年流量消耗</div>
+              <div>{{formatSize(statisticsData.yearTotal * 1024 * 1024)}}</div>
+            </div>
+            <div class="line-inner-wrap" ref="yearLine"></div>
+          </div>
+        </div>
 
         
       </div>
-
-
 			<div class="statistics-wrap">
 				<el-card shadow="nover" class="left-wrap">
 					<div class="top-title-wrap">
@@ -105,29 +103,11 @@
 import { ref, reactive, nextTick, watch, markRaw } from "vue"
 import { formatSize } from "/@/utils/common";
 import api from '/@/api/iotCard';
-import { useSearch } from "/@/hooks/useCommon";
 import { useStore } from '/@/store/index';
-import { useRoute } from 'vue-router';
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 
 const store = useStore();
-const route = useRoute();
-const sim = ref({
-  accNumber: "",// 卡号
-  iccid: "",// ICCID
-  bindDeviceName: "",// 绑定设备
-  platName: "",// 平台对接
-  types: "",// 运营商
-  simTypes: "",// 类型
-  totalFlow: "",// 总流量
-  usedFlow: "",// 使用流量
-  leaveFlow: "",// 剩余流量
-  activationTime: "",// 激活日期
-  updatedAt: "",// 更新时间
-  simStatus: "",// 状态
-  remark: ""// 说明
-})
 
 const types = ref(1);
 const statisticsData = ref({
@@ -201,26 +181,26 @@ const getFlowDataByDateRange = async (dateRangeData:any) => {
 }
 
 const getYesterdayFlowData = async () => {
-	  const yesterday = dayjs(new Date()).subtract(1, 'day').format('YYYY-MM-DD')
-		const res = await getFlowDataByDateRange([
-      yesterday + " 00:00:00",
-      yesterday + " 23:59:59"
-    ])
-		yesterdayLineData.value = [res[0].value];
-		initYesterdayLineChart();
+  const yesterday = dayjs(new Date()).subtract(1, 'day').format('YYYY-MM-DD')
+  const res = await getFlowDataByDateRange([
+    yesterday + " 00:00:00",
+    yesterday + " 23:59:59"
+  ])
+  yesterdayLineData.value = [res[0].value];
+  initYesterdayLineChart();
 }
 const getMonthFlowData = async () => {
-		monthLineXAxisData.value = [];
-		monthLineData.value = [];
-	  const monthDay1 = dayjs(new Date()).startOf('month').format('YYYY-MM-DD');
-		const monthDay2 = dayjs(new Date()).endOf('month').format('YYYY-MM-DD');
-		const res = await getFlowDataByDateRange([monthDay1, monthDay2])
-		res.reverse().forEach((item:any) => {
-			monthLineXAxisData.value.push(item.date);
-			monthLineData.value.push(item.value);
-		})
+  monthLineXAxisData.value = [];
+  monthLineData.value = [];
+  const monthDay1 = dayjs(new Date()).startOf('month').format('YYYY-MM-DD');
+  const monthDay2 = dayjs(new Date()).endOf('month').format('YYYY-MM-DD');
+  const res = await getFlowDataByDateRange([monthDay1, monthDay2])
+  res.reverse().forEach((item:any) => {
+    monthLineXAxisData.value.push(item.date);
+    monthLineData.value.push(item.value);
+  })
 
-		initMonthLineChart();
+  initMonthLineChart();
 }
 const getYearFlowData = async () => {
 	yearLineXAxisData.value = [];
@@ -280,7 +260,7 @@ const changeDate = (key:number) => {
   getFlowData();
 }
 
-const typeChange = (value:any) => {
+const typeChange = () => {
 	getYesterdayFlowData();
 	getMonthFlowData();
 	getYearFlowData();
@@ -294,7 +274,6 @@ const getTop10Data = async () => {
     edate: dayjs(dateRange.value[1]).format('YYYY-MM-DD'),
     types: types.value
   })
-	// if(!top10Res.data) return;
 	rankList.value = top10Res.data || [];
 	totalNum.value = top10Res.data ? top10Res.data[0].value : 0;
 }
@@ -303,47 +282,6 @@ const getFlowAllData = async () => {
     types: types.value
   })
 	statisticsData.value = res
-}
-
-const formatOperator = (val:any) => {
-  // 1电信,2联通,3移动
-  if(val == 1) {
-    return "电信"
-  }else if(val == 2) {
-    return "联通"
-  }else if(val == 3) {
-    return "移动"
-  }
-}
-
-const formatType = (val:any) => {
-  // 1月卡，2季卡，3年卡，4其他
-  if(val == 1) {
-    return "月卡"
-  }else if(val == 2) {
-    return "季卡"
-  }else if(val == 3) {
-    return "年卡"
-  }else if(val == 4) {
-    return "其他"
-  }
-}
-
-const formatStatus = (val:any) => {
-  // 1：可激活 2：测试激活 3：测试去激活 4：在用5：停机6：运营商管理状态
-  if(val == 1) {
-    return "可激活"
-  }else if(val == 2) {
-    return "测试激活"
-  }else if(val == 3) {
-    return "测试去激活"
-  }else if(val == 4) {
-    return "在用"
-  }else if(val == 5) {
-    return "停机"
-  }else if(val == 6) {
-    return "运营商管理状态"
-  }
 }
 
 // 折线图 - 昨日流量消耗
@@ -519,7 +457,7 @@ const iniFlowLineChart = async () => {
         splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
         axisLabel: {
           margin: 2,
-          formatter: function (value:any, index:any) {
+          formatter: function (value:any) {
             if (value >= 10000 && value < 10000000) {
               value = value / 10000 + "W";
             } else if (value >= 10000000) {
@@ -704,27 +642,27 @@ watch(
 				align-items: center;
 				margin-bottom: 24px;
 
-				.number {
-					flex: 0 0 24px;
-					height: 24px;
-					color: #fff;
-					font-weight: 700;
-					line-height: 24px;
-					text-align: center;
-					background-color: #d1d1d1;
-				}
-				.number-item-1 {
-					color: #e50012;
-    			background-color: #e500121a;
-				}
-				.number-item-2 {
-    			color: #fba500;
-    			background-color: #fba5001a;
-				}
-				.number-item-3 {
-					color: #597ef7;
-    			background-color: #597ef71a;
-				}
+        .number {
+          flex: 0 0 24px;
+          height: 24px;
+          color: #fff;
+          font-weight: 700;
+          line-height: 24px;
+          text-align: center;
+          background-color: #d1d1d1;
+        }
+        .number-item-1 {
+          color: #e50012;
+          background-color: #e500121a;
+        }
+        .number-item-2 {
+          color: #fba500;
+          background-color: #fba5001a;
+        }
+        .number-item-3 {
+          color: #597ef7;
+          background-color: #597ef71a;
+        }
 				.card-num {
 					width: 110px;
 				}

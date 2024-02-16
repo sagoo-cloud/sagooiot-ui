@@ -116,10 +116,8 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
 import { Edit } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import type { TabsPaneContext } from 'element-plus'
-import codeEditor from '/@/components/codeEditor/index.vue'
-
-import serverDetail from './component/serverDetail.vue'
+import type { TabsPaneContext } from 'element-plus';
+import codeEditor from '/@/components/codeEditor/index.vue';
 
 import { useRoute } from 'vue-router';
 
@@ -128,13 +126,10 @@ import api2 from '/@/api/system';
 import deviceApi from '/@/api/device'
 
 interface TableDataState {
-  // ids: number[];
-  // id: string;
   activeViewName: string[];
   resourceModalPro: {
     mode: string,
     content: string,
-    // content: object,
   },
   detail: object,
   form: object,
@@ -160,7 +155,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'serverCreate',
-  components: { codeEditor, serverDetail },
+  components: { codeEditor },
   props: {
     type: {
       type: String,
@@ -168,7 +163,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, context) {
+  setup(props) {
     const { proxy } = getCurrentInstance() as any;
     const route = useRoute();
     const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
@@ -283,10 +278,6 @@ export default defineComponent({
       api.server.addItem(params).then((res: any) => {
         ElMessage.success('添加成功')
         goBack()
-        // const { list, total, page } = res
-        // state.data = list
-        // state.total = total
-        // state.param.page = page
       });
     };
     onMounted(() => {
@@ -328,7 +319,6 @@ export default defineComponent({
       () => state.form.types,
       (value) => {
         getCertificateList()
-        // api.certificate.getList();
       }
     );
 

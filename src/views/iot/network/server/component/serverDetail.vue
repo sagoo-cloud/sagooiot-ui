@@ -8,44 +8,51 @@
 -->
 <!-- 服务器详情页 -->
 <template>
-    <div class="server-detail-wrap">
-        <div class="server-detail-item-wrap">
-            <div class="label">名称</div>
-            <div class="value">{{ detail.name }}</div>
-        </div>
-        <div class="server-detail-item-wrap">
-            <div class="label">类型</div>
-            <div class="value">{{ detail.types }}</div>
-        </div>
-        <div class="server-detail-item-wrap">
-            <div class="label">地址</div>
-            <div class="value">{{ detail.addr }}</div>
-        </div>
-        <div class="server-detail-item-wrap">
-            <div class="label">状态</div>
-            <div class="value">{{ detail.status ? '启动' : '未启动' }}</div>
-        </div>
-        <div class="server-detail-item-wrap">
-            <div class="label">禁用</div>
-            <div class="value">
-                <el-switch :loading="loading" :before-change="onChangeStatus" :disabled="!detail.status" :active-value="0" :inactive-value="1" size="small" v-model="detail.status" />
-            </div>
-        </div>
-        <div class="server-detail-item-wrap">
-            <div class="label">创建时间</div>
-            <div class="value">{{ detail.createdAt }}</div>
-        </div>
-    </div>
+    <el-descriptions :column="2" border>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">名称</div>
+            </template>
+            {{detail.name}}
+        </el-descriptions-item>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">类型</div>
+            </template>
+            {{detail.types}}
+        </el-descriptions-item>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">地址</div>
+            </template>
+            {{detail.addr}}
+        </el-descriptions-item>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">状态</div>
+            </template>
+            {{ detail.status ? '启动' : '未启动' }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">禁用</div>
+            </template>
+            <el-switch :loading="loading" :before-change="onChangeStatus" :disabled="!detail.status" :active-value="0" :inactive-value="1" size="small" v-model="detail.status" />
+        </el-descriptions-item>
+        <el-descriptions-item>
+            <template #label>
+                <div class="cell-item">创建时间</div>
+            </template>
+            {{ detail.createdAt }}
+        </el-descriptions-item>
+    </el-descriptions>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
-
+import { toRefs, reactive, onMounted, defineComponent } from 'vue';
+import { ElMessage } from 'element-plus';
 import api from '/@/api/network';
 
 interface TableDataState {
-    // detail: object,
     loading: boolean
 }
 export default defineComponent({
@@ -53,10 +60,10 @@ export default defineComponent({
     props: {
         detail: {
             type: Object,
-            default: ''
+            default: () => {}
         }
     },
-    setup(props, context) {
+    setup(props) {
         const state = reactive<TableDataState>({
             loading: false
         });
@@ -65,8 +72,8 @@ export default defineComponent({
         // 禁用状态
         const onChangeStatus = () => {
             state.loading = true
-            return new Promise((resolve) => {
-                api.server.changeServerStatus({ id: props.detail.id, status: 0 }).then((res: any) => {
+            return new Promise(() => {
+                api.server.changeServerStatus({ id: props.detail.id, status: 0 }).then(() => {
                     state.loading = false
                     ElMessage.success('已关闭');
                     props.detail.status = 0
@@ -82,21 +89,4 @@ export default defineComponent({
     }
 });
 </script>
-
-<style lang="scss" scoped>
-.server-detail-wrap {
-    .server-detail-item-wrap {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-left: 1px solid var(--el-border-color-light);
-        border-top: 1px solid var(--el-border-color-light);
-        border-right: 1px solid var(--el-border-color-light);
-    }
-
-    .server-detail-item-wrap:last-child {
-        border-bottom: 1px solid var(--el-border-color-light);
-    }
-}
-</style>
 

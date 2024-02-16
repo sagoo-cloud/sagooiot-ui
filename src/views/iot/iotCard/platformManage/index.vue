@@ -34,14 +34,11 @@
         style="width: 100%"
       >
         <el-table-column label="名称" prop="name" align="center" />
-        <!-- <el-table-column label="平台类型" prop="types" align="center">
-        	<template #default="scope">{{ formatOperator(scope.row.types) }}</template>
-        </el-table-column> -->
         <el-table-column label="状态" prop="simStatus" align="center">
-        	<template #default="scope">
+          <template #default="scope">
             <el-tag type="primary" v-if="scope.row.status">{{ formatStatus(scope.row.status) }}</el-tag>
             <el-tag type="danger" v-else>{{ formatStatus(scope.row.status) }}</el-tag>
-            </template>
+          </template>
         </el-table-column> 
         <el-table-column label="说明" prop="remark" align="center" />       
 
@@ -60,27 +57,22 @@
         @pagination="getList()"
       />
     </el-card>
-    <!-- <EditDept ref="editDeptRef" @deptList="deptList" /> -->
     <AddOrEditItem ref="AddOrEditItemRef" @updateList="getList()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import api from '/@/api/iotCard';
-import { defineAsyncComponent, ref, reactive, onMounted } from 'vue';
+import { defineAsyncComponent, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from "/@/hooks/useCommon"
-import { useRouter } from 'vue-router';
 const AddOrEditItem = defineAsyncComponent(() => import('./addOrEditItem.vue'));
 
 const { params, tableData, getList, loading } = useSearch<any[]>(
   api.platform.getList,
   "Data"
 )
-
 getList();
-
-const router = useRouter();
 
 const AddOrEditItemRef = ref();
 
@@ -105,46 +97,16 @@ const onDel = (row: any) => {
 	});
 };
 
-const formatOperator = (val:any) => {
-  // 1电信,2联通,3移动
-  if(val == 1) {
-    return "电信"
-  }else if(val == 2) {
-    return "联通"
-  }else if(val == 3) {
-    return "移动"
-  }
-}
-
-const formatType = (val:any) => {
-  // 1月卡，2季卡，3年卡，4其他
-  if(val == 1) {
-    return "月卡"
-  }else if(val == 2) {
-    return "季卡"
-  }else if(val == 3) {
-    return "年卡"
-  }else if(val == 4) {
-    return "其他"
-  }
-}
-
 const formatStatus = (val:any) => {
   // 1：开启 0：禁用
-  if(val == 1) {
-    return "开启"
-  }else if(val == 0) {
-    return "禁用"
-  }
+  return ['', '开启', '禁用'][val];
 }
 
 const onOpenDetail = (item:any) => {
-  // router.push('/iotmanager/iotCard/index/detail/'+item.id);
   AddOrEditItemRef.value.openDialog(item);
 }
 
 const toAddItemPage = () => {
   AddOrEditItemRef.value.openDialog();
-  // router.push('/iotmanager/iotCard/platformManage/add');
 }
 </script>

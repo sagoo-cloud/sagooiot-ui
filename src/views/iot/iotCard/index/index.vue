@@ -32,7 +32,7 @@
         <el-table-column label="绑定设备" prop="bindDeviceName" align="center" />
         <el-table-column label="平台对接" prop="platName" align="center" />
         <el-table-column label="运营商" prop="types" align="center">
-        	<template #default="scope">{{ formatOperator(scope.row.types) }}</template>
+          <template #default="scope">{{ formatOperator(scope.row.types) }}</template>
         </el-table-column> 
         <el-table-column label="类型" prop="simTypes" align="center">
           <template #default="scope">{{ formatType(scope.row.simTypes) }}</template>
@@ -43,7 +43,7 @@
         <el-table-column width="160" label="激活日期" prop="activationTime" align="center" />     
         <el-table-column width="160" label="更新时间" prop="updatedAt" align="center" />    
         <el-table-column label="状态" prop="simStatus" align="center">
-        	<template #default="scope">{{ formatStatus(scope.row.simStatus) }}</template>
+          <template #default="scope">{{ formatStatus(scope.row.simStatus) }}</template>
         </el-table-column> 
         <el-table-column width="110" label="操作" fixed="right" prop="handle" align="center">
 					<template #default="scope">
@@ -60,7 +60,6 @@
         @pagination="getList()"
       />
     </el-card>
-    <!-- <EditDept ref="editDeptRef" @deptList="deptList" /> -->
   </div>
 </template>
 
@@ -99,45 +98,19 @@ const onDel = (row: any) => {
 	});
 };
 
-const formatOperator = (val:any) => {
+const formatOperator = (val:number) => {
   // 1电信,2联通,3移动
-  if(val == 1) {
-    return "电信"
-  }else if(val == 2) {
-    return "联通"
-  }else if(val == 3) {
-    return "移动"
-  }
+  return ['', '电信', '联通', '移动'][val];
 }
 
-const formatType = (val:any) => {
+const formatType = (val:number) => {
   // 1月卡，2季卡，3年卡，4其他
-  if(val == 1) {
-    return "月卡"
-  }else if(val == 2) {
-    return "季卡"
-  }else if(val == 3) {
-    return "年卡"
-  }else if(val == 4) {
-    return "其他"
-  }
+  return ['', '月卡', '季卡', '年卡', '其他'][val];
 }
 
-const formatStatus = (val:any) => {
+const formatStatus = (val:number) => {
   // 1：可激活 2：测试激活 3：测试去激活 4：在用5：停机6：运营商管理状态
-  if(val == 1) {
-    return "可激活"
-  }else if(val == 2) {
-    return "测试激活"
-  }else if(val == 3) {
-    return "测试去激活"
-  }else if(val == 4) {
-    return "在用"
-  }else if(val == 5) {
-    return "停机"
-  }else if(val == 6) {
-    return "运营商管理状态"
-  }
+  return ['', '可激活', '测试激活', '测试去激活', '在用', '停机', '运营商管理状态'][val];
 }
 
 const onOpenDetail = (item:any) => {

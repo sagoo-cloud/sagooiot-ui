@@ -16,12 +16,9 @@
 </template>
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-// import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import type { TabsPaneContext } from 'element-plus'
-
-import serverDetail from './component/serverDetail.vue'
-
+import type { TabsPaneContext } from 'element-plus';
+import serverDetail from './component/serverDetail.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import api from '/@/api/network';
@@ -43,7 +40,7 @@ export default defineComponent({
 		}
 	},
 
-	setup(props, context) {
+	setup(props) {
 		const route = useRoute();
 		const router = useRouter();
 		const state = reactive<TableDataState>({
