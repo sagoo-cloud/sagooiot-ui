@@ -3,7 +3,7 @@
     <el-table-column align="center" prop="id" label="ID" width="100" v-col="'id'" />
     <!-- <el-table-column align="center" prop="server" label="服务器"/> -->
     <el-table-column align="center" prop="name" label="名称" v-col="'name'" />
-    <el-table-column align="center" prop="types" v-col="'types'" label="类型" :formatter="(a: any) => typesFormat(a.types)" />
+    <el-table-column align="center" prop="types" v-col="'types'" label="类型" :formatter="(a) => typesFormat(a.types)" />
     <el-table-column align="center" prop="addr" label="地址" v-col="'addr'" />
     <el-table-column show-overflow-tooltip align="center" prop="createdAt" label="创建时间" width="170" v-col="'createdAt'" />
     <!-- <el-table-column align="center" prop="last" label="最近上线"/> -->
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, reactive, onMounted, nextTick, getCurrentInstance, unref, defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, getCurrentInstance, unref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -75,7 +75,7 @@ export default defineComponent({
       default: () => { },
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const router = useRouter();
 
     const { proxy } = getCurrentInstance() as any;
@@ -100,7 +100,7 @@ export default defineComponent({
     });
     // 改变状态
     const onChangeStatus = (id: number, status: number) => {
-      api.server.changeServerStatus({ id: id, status: status }).then((res: any) => {
+      api.server.changeServerStatus({ id: id, status: status }).then(() => {
         ElMessage.success(status ? '已开启' : '已关闭');
         fetchList();
       })
@@ -145,7 +145,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.server.deleteItem({ ids: [row.id] }).then((res: any) => {
+          api.server.deleteItem({ ids: [row.id] }).then(() => {
             fetchList()
             ElMessage.success('删除成功');
           });
@@ -181,7 +181,6 @@ export default defineComponent({
 :deep(div.more-opearte-wrap) {
   flex-direction: row;
   background-color: pink;
-
   // padding: 4px!important;
 }
 </style>

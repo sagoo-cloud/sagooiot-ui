@@ -2,16 +2,7 @@
 <template>
   <div>
     <el-card shadow="nover">
-       <el-descriptions
-        class="margin-top"
-        title="基本信息"
-        :column="3"
-        :size="size"
-        border
-      >
-        <!-- <template #extra>
-          <el-button type="primary">编辑</el-button>
-        </template> -->
+       <el-descriptions class="margin-top" title="基本信息" :column="3" :size="size" border>
         <!-- 卡号 -->
         <el-descriptions-item>
           <template #label>
@@ -258,7 +249,6 @@
 import { ref, reactive, nextTick, watch, markRaw } from "vue";
 import { formatSize } from "/@/utils/common";
 import api from '/@/api/iotCard';
-import { useSearch } from "/@/hooks/useCommon";
 import { useStore } from '/@/store/index';
 import { useRoute } from 'vue-router';
 import * as echarts from 'echarts';
@@ -403,45 +393,19 @@ const changeDate = (key:number) => {
 
 }
 
-const formatOperator = (val:any) => {
+const formatOperator = (val:number) => {
   // 1电信,2联通,3移动
-  if(val == 1) {
-    return "电信"
-  }else if(val == 2) {
-    return "联通"
-  }else if(val == 3) {
-    return "移动"
-  }
+  return ['', '电信', '联通', '移动'][val];
 }
 
-const formatType = (val:any) => {
+const formatType = (val:number) => {
   // 1月卡，2季卡，3年卡，4其他
-  if(val == 1) {
-    return "月卡"
-  }else if(val == 2) {
-    return "季卡"
-  }else if(val == 3) {
-    return "年卡"
-  }else if(val == 4) {
-    return "其他"
-  }
+  return ['', '月卡', '季卡', '年卡', '其他'][val];
 }
 
 const formatStatus = (val:any) => {
-  // 1：可激活 2：测试激活 3：测试去激活 4：在用5：停机6：运营商管理状态
-  if(val == 1) {
-    return "可激活"
-  }else if(val == 2) {
-    return "测试激活"
-  }else if(val == 3) {
-    return "测试去激活"
-  }else if(val == 4) {
-    return "在用"
-  }else if(val == 5) {
-    return "停机"
-  }else if(val == 6) {
-    return "运营商管理状态"
-  }
+  // 1：可激活 2：测试激活 3：测试去激活 4：在用 5：停机 6：运营商管理状态
+  return ['', '可激活', '测试激活', '测试去激活', '在用', '停机', '运营商管理状态'][val];
 }
 
 // 折线图 - 昨日流量消耗
@@ -600,7 +564,7 @@ const iniFlowLineChart = async () => {
         splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
         axisLabel: {
           margin: 2,
-          formatter: function (value:any, index:any) {
+          formatter: function (value:any) {
             if (value >= 10000 && value < 10000000) {
               value = value / 10000 + "W";
             } else if (value >= 10000000) {

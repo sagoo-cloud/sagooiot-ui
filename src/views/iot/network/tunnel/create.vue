@@ -102,10 +102,9 @@
   </div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, nextTick } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
 import codeEditor from '/@/components/codeEditor/index.vue'
-import serverDetail from './component/serverDetail.vue'
 import { useRoute, useRouter } from 'vue-router';
 
 import api from '/@/api/network';
@@ -124,7 +123,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'tunnelCreate',
-  components: { codeEditor, serverDetail },
+  components: { codeEditor },
   props: {
     type: {
       type: String,
@@ -132,7 +131,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, context) {
+  setup(props) {
     const { proxy } = getCurrentInstance() as any;
     const route = useRoute();
     const router = useRouter();

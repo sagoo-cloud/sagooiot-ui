@@ -115,10 +115,8 @@
 <script lang="ts">
 import { watch, toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
-import type { TabsPaneContext } from 'element-plus'
-import codeEditor from '/@/components/codeEditor/index.vue'
-
-import serverDetail from './component/serverDetail.vue'
+import type { TabsPaneContext } from 'element-plus';
+import codeEditor from '/@/components/codeEditor/index.vue';
 
 import { useRoute, useRouter } from 'vue-router';
 
@@ -155,7 +153,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'serverCreate',
-  components: { codeEditor, serverDetail },
+  components: { codeEditor },
   props: {
     type: {
       type: String,
@@ -163,7 +161,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, context) {
+  setup(props) {
     const { proxy } = getCurrentInstance() as any;
     const route = useRoute();
     const router = useRouter();
@@ -259,7 +257,6 @@ export default defineComponent({
     const getDetail = () => {
       const id = route.params && route.params.id;
       api.server.getDetail({ "id": id }).then((res: any) => {
-
         const { id, isTls, authType, certificateId, authUser, authPasswd, accessToken, name, types, status, addr, register, protocol, heartbeat, devices, stick } = res
         state.form["id"] = id
         state.form["name"] = name

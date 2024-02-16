@@ -46,12 +46,8 @@
 
 <script lang="ts" setup>
 import api from '/@/api/iotCard';
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
-import { useSearch } from "/@/hooks/useCommon"
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { ref, unref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const isShowDialog = ref(false);
 const formRef = ref<HTMLElement | null>(null);
@@ -90,7 +86,6 @@ const onSubmit = () => {
   formWrap.validate(async (valid: boolean) => {
     if (!valid) return
     btnLoading.value = true
-    console.log(ruleForm.value)
     if(ruleForm.value.id) {
       // 修改
       api.platform.editItem(ruleForm.value)
@@ -125,12 +120,13 @@ const resetForm = () => {
     appSecret: "",
     remark: "",
     appKey: "",
-    restUrl: ""
+    restUrl: "",
+    status: 1
   }
 }
 
 /**
- * 取消
+ * 点击取消按钮
  */
 const onCancel = () => {
   closeDialog();
@@ -143,51 +139,7 @@ const closeDialog = () => {
   isShowDialog.value = false;
 };
 
-
-const formatOperator = (val:any) => {
-  // 1电信,2联通,3移动
-  if(val == 1) {
-    return "电信"
-  }else if(val == 2) {
-    return "联通"
-  }else if(val == 3) {
-    return "移动"
-  }
-}
-
-const formatType = (val:any) => {
-  // 1月卡，2季卡，3年卡，4其他
-  if(val == 1) {
-    return "月卡"
-  }else if(val == 2) {
-    return "季卡"
-  }else if(val == 3) {
-    return "年卡"
-  }else if(val == 4) {
-    return "其他"
-  }
-}
-
-const formatStatus = (val:any) => {
-  // 1：可激活 2：测试激活 3：测试去激活 4：在用5：停机6：运营商管理状态
-  if(val == 1) {
-    return "可激活"
-  }else if(val == 2) {
-    return "测试激活"
-  }else if(val == 3) {
-    return "测试去激活"
-  }else if(val == 4) {
-    return "在用"
-  }else if(val == 5) {
-    return "停机"
-  }else if(val == 6) {
-    return "运营商管理状态"
-  }
-}
-
 const openDialog = (item:any) => {
-  console.log(item)
-  // router.push('/iotmanager/iotCard/index/detail/'+item.id);
   if(item) {
     // 修改
     ruleForm.value = { ...item };

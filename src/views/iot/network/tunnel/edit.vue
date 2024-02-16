@@ -106,8 +106,6 @@ import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance }
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import codeEditor from '/@/components/codeEditor/index.vue'
 
-import serverDetail from './component/serverDetail.vue'
-
 import { useRoute, useRouter } from 'vue-router';
 
 import api from '/@/api/network';
@@ -125,7 +123,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'tunnelCreate',
-  components: { codeEditor, serverDetail },
+  components: { codeEditor },
   props: {
     type: {
       type: String,
@@ -133,7 +131,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, context) {
+  setup(props) {
     const { proxy } = getCurrentInstance() as any;
     const route = useRoute();
     const router = useRouter();

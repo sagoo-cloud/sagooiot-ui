@@ -247,7 +247,7 @@ export default defineComponent({
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 						axisLabel: {
 							margin: 2,
-							formatter: function (value, index) {
+							formatter: function (value:any) {
 								if (value >= 10000 && value < 10000000) {
 									value = value / 10000 + "W";
 								} else if (value >= 10000000) {
