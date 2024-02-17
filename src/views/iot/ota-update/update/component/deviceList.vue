@@ -114,7 +114,6 @@ export default defineComponent({
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
       state.isShowDialog = true;
-      timer()
     };
     // 关闭弹窗
     const closeDialog = () => {
@@ -131,7 +130,6 @@ export default defineComponent({
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
       }).finally(() => (state.tableData.loading = false));
-      timer();
     };
     // 手动下发
     const distribute = (row: any) => {
@@ -139,10 +137,13 @@ export default defineComponent({
       const strategyId = row.strategyId;
       api.batch.distribute({deviceKey: deviceKey, strategyId: strategyId}).then(() => {
         ElMessage.success('操作成功');
-      })
+      });
+      // 定时请求列表数据
+      timer();
     }
     // 定时请求列表
     const timer = () => {
+      console.log(11);
       // 因列表更新数据不是实时更新，需设置定时后在请求列表
       state.timeoutTimer = setTimeout(() => {
         getDetail();

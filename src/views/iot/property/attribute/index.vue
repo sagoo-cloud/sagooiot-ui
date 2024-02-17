@@ -13,17 +13,17 @@
 				</el-button>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="success" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
+				<el-button type="primary" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
 					新增属性
 				</el-button>
-				<el-button type="danger" @click="batchdel()" v-auth="'batchdel'">
+				<el-button type="info" @click="batchdel()" v-auth="'batchdel'">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-					批量删除
+					删除
 				</el-button>
 			</el-form-item>
 		</el-form>
