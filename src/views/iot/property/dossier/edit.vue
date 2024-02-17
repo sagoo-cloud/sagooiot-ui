@@ -176,7 +176,7 @@ const open = async (row: any, productInfo: any) => {
   showDialog.value = true;
   nextTick(() => {
     system.org.getList({ status: 1 }).then((res: any) => {
-      res.forEach((item:any) => {
+      res.forEach((item: any) => {
         item.id = item.id.toString();
       });
       orgData.value = res || [];
@@ -199,7 +199,7 @@ const open = async (row: any, productInfo: any) => {
 
     //获取部门
     api.dept.getList({ status: -1 }).then((res: any) => {
-      res.forEach((item:any) => {
+      res.forEach((item: any) => {
         item.deptId = item.deptId.toString();
       });
       deptData.value = res || [];
@@ -222,7 +222,7 @@ const open = async (row: any, productInfo: any) => {
       //获取档案属性
       api.dev_asset_metadata.getList({ productKey: productInfo.key, pageSize: 50, pageNum: 1, status: -1, total: 0 }).then((res: any) => {
         const sortedArray = res.Data.sort((a, b) => a.id - b.id);
-				Datalist.value = sortedArray || [];
+        Datalist.value = sortedArray || [];
       });
       formData.productKey = productInfo.key
 

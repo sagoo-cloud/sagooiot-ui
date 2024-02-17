@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="添加设备通道" v-model="dialogVisible" width="600px" :before-close="clsoeDialog" :close-on-click-modal="false">
+	<el-dialog title="添加设备通道" v-model="dialogVisible" width="600px" :before-close="closeDialog" :close-on-click-modal="false">
 		<el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 90%; margin: 0 auto">
 			<el-form-item label="通道名称" prop="title">
 				<el-input v-model.trim="temp.title" placeholder="请输入通道名称" />
@@ -12,7 +12,7 @@
 			</el-form-item>
 		</el-form>
 		<template #footer class="dialog-footer">
-			<el-button @click="clsoeDialog()"> 取 消 </el-button>
+			<el-button @click="closeDialog()"> 取 消 </el-button>
 			<el-button type="primary" @click="createData()"> 保 存 </el-button>
 		</template>
 	</el-dialog>
@@ -46,7 +46,7 @@ export default {
 			// this.getList();
 			this.dialogVisible = true;
 		},
-		clsoeDialog() {
+		closeDialog() {
 			(this.$refs.dataForm as any).resetFields();
 			this.dialogVisible = false;
 		},
@@ -67,7 +67,7 @@ export default {
 				if (valid) {
 					api.channel.addDevice(this.temp).then(() => {
 						this.$emit('getList');
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}

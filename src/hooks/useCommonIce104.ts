@@ -53,9 +53,7 @@ export function useSearch<T>(api: any, resKey: string, expandParams?: any) {
     loading.value = true;
     params.total = 0;
     let res = await api(params).finally(() => loading.value = false)
-    console.log(res)
     tableData.value = (resKey ? (res[resKey]) : (res)) || [];
-    console.log(tableData.value)
     params.total = res.total;
   };
 

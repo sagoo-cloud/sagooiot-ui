@@ -1,6 +1,6 @@
 <template>
   <div class="page bg padding page-full Ipt-2" style="position: relative;">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="新建服务器" name="first">
         <el-collapse v-model="activeViewName">
           <el-collapse-item title="基本信息" name="1">
@@ -92,19 +92,9 @@
             <el-form style="width: 600px;margin: 0 auto;" :model="form" label-width="98px">
               <el-form-item label="协议">
                 <el-select v-model="form.protocol.name" placeholder="请选择协议适配">
-                  <el-option v-for="dict in network_protocols" :key="dict.value" :label="dict.label" :value="dict.value">
-                  </el-option>
-                  <!-- <el-option label="Modbus RTU" value="Modbus RTU" />
-                                    <el-option label="Modbus TCP" value="Modbus TCP" />
-                                    <el-option label="Omron Hostlink" value="Omron Hostlink" />
-                                    <el-option label="Omron FINS UDP" value="Omron FINS UDP" />
-                                    <el-option label="Omron FINS TCP" value="Omron FINS TCP" />
-                                    <el-option label="Simatic S7-200 Smart" value="Simatic S7-200 Smart" />
-                                    <el-option label="Simatic S7-200" value="Simatic S7-200" />
-                                    <el-option label="Simatic S7-300" value="Simatic S7-300" />
-                                    <el-option label="Simatic S7-400" value="Simatic S7-400" />
-                                    <el-option label="Simatic S7-1200" value="Simatic S7-1200" />
-                                    <el-option label="Simatic S7-1500" value="Simatic S7-1500" /> -->
+                  <el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.name"></el-option>
+                  <!-- 增加系统默认的mqtt选项 -->
+                  <el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="协议参数">
@@ -126,28 +116,25 @@
 import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance, watch } from 'vue';
 import { Edit } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import type { TabsPaneContext } from 'element-plus'
-import codeEditor from '/@/components/codeEditor/index.vue'
-
-import serverDetail from './component/serverDetail.vue'
+import type { TabsPaneContext } from 'element-plus';
+import codeEditor from '/@/components/codeEditor/index.vue';
 
 import { useRoute } from 'vue-router';
 
 import api from '/@/api/network';
 import api2 from '/@/api/system';
+import deviceApi from '/@/api/device'
 
 interface TableDataState {
-  // ids: number[];
-  // id: string;
   activeViewName: string[];
   resourceModalPro: {
     mode: string,
     content: string,
-    // content: object,
   },
   detail: object,
   form: object,
   certificateList: object[];
+  messageData: object[];
   stick: {
     // 分隔符
     "delimit,omitempty": string,
@@ -168,7 +155,7 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'serverCreate',
-  components: { codeEditor, serverDetail },
+  components: { codeEditor },
   props: {
     type: {
       type: String,
@@ -176,7 +163,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, context) {
+  setup(props) {
     const { proxy } = getCurrentInstance() as any;
     const route = useRoute();
     const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
@@ -218,6 +205,7 @@ export default defineComponent({
       detail: {},
       activeViewName: ['1', '2', '3'],
       certificateList: [],
+      messageData: [],
       form: {
         id: "",
         // AccessToken
@@ -245,7 +233,7 @@ export default defineComponent({
         },
         // 协议适配
         protocol: {
-          name: "ModbusTCP",
+          name: "SagooMqtt",
           options: {}
         },
         // 心跳包
@@ -260,6 +248,11 @@ export default defineComponent({
         devices: []
       }
     });
+
+    deviceApi.product.getTypesAll({ types: 'protocol' }).then((res: any) => {
+      state.messageData = res || [];
+    });
+
     const mirrorRef = ref('mirrorRef')
     const activeName = ref('first')
     const getDetail = () => {
@@ -285,10 +278,6 @@ export default defineComponent({
       api.server.addItem(params).then((res: any) => {
         ElMessage.success('添加成功')
         goBack()
-        // const { list, total, page } = res
-        // state.data = list
-        // state.total = total
-        // state.param.page = page
       });
     };
     onMounted(() => {
@@ -330,7 +319,6 @@ export default defineComponent({
       () => state.form.types,
       (value) => {
         getCertificateList()
-        // api.certificate.getList();
       }
     );
 

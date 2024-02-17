@@ -3,7 +3,7 @@
 		<el-row :gutter="15" class="home-card-one mb15">
 			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in homeOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item ">
-					<div class="">{{ v.num3 }}</div>
+					<div>{{ v.num3 }}</div>
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
 
@@ -222,7 +222,7 @@ export default defineComponent({
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 						axisLabel: {
 							margin: 2,
-							formatter: function (value, index) {
+							formatter: function (value:any) {
 								if (value >= 10000 && value < 10000000) {
 									value = value / 10000 + "W";
 								} else if (value >= 10000000) {
@@ -472,6 +472,18 @@ export default defineComponent({
 			() => store.state.tagsViewRoutes.isTagsViewCurrenFull,
 			() => {
 				initEchartsResizeFun();
+			}
+		);
+		watch(
+			() => state.lineChartAlarmTotalData,
+			() => {
+				initLineChart();
+			}
+		);
+		watch(
+			() => state.pieChartData,
+			() => {
+				initPieChart();
 			}
 		);
 		// 监听 vuex 中是否开启深色主题

@@ -176,16 +176,18 @@ export default defineComponent({
     // 页面加载时
     onMounted(() => {
       api.remoteconf.getProductList({ status: '1', name: '' }).then((res: any) => {
-        productOptions.value = res.product.map((item: any) => {
-          return {
-            value: item.key,
-            label: item.name,
-            status: item.status,
+        if (res.product) {
+          productOptions.value = res.product.map((item: any) => {
+            return {
+              value: item.key,
+              label: item.name,
+              status: item.status,
+            }
+          })
+          if (productOptions.value.length > 0) {
+            product.value = productOptions.value[0].value
+            selectProduct.value = productOptions.value[0].label
           }
-        })
-        if (productOptions.value.length > 0) {
-          product.value = productOptions.value[0].value
-          selectProduct.value = productOptions.value[0].label
         }
       })
     })

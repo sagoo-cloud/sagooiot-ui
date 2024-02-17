@@ -19,7 +19,7 @@
 		</el-table>
 		<pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.size" @pagination="getList()" style="padding: 20px 0 0 !important" />
 
-		<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="850px" :before-close="clsoeDialog" close="var-dialog" append-to-body :close-on-click-modal="false">
+		<el-dialog :title="textMap[dialogStatus]" v-model="dialogVisible" width="850px" :before-close="closeDialog" close="var-dialog" append-to-body :close-on-click-modal="false">
 			<el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="95px">
 				<el-row>
 					<el-col :span="8">
@@ -94,7 +94,7 @@
 				</el-row>
 			</el-form>
 			<template #footer class="dialog-footer">
-				<el-button @click="clsoeDialog"> 取 消 </el-button>
+				<el-button @click="closeDialog"> 取 消 </el-button>
 				<el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()"> 保 存 </el-button>
 			</template>
 		</el-dialog>
@@ -224,7 +224,7 @@ export default {
 				this.$refs['dataForm'].clearValidate();
 			});
 		},
-		clsoeDialog() {
+		closeDialog() {
 			this.dialogVisible = false;
 			// this.$refs.dataForm.resetFields()
 			this.temp = {
@@ -248,7 +248,7 @@ export default {
 					const tempData = Object.assign({}, this.temp);
 					api.data.addDeviceTemplate(tempData).then(() => {
 						this.handleFilter();
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('添加成功！');
 					});
 				}
@@ -264,7 +264,7 @@ export default {
 					const tempData = Object.assign({}, this.temp);
 					api.data.editDeviceTemplate(tempData).then(() => {
 						this.handleFilter();
-						this.clsoeDialog();
+						this.closeDialog();
 						ElMessage.success('操作成功！');
 					});
 				}

@@ -1,12 +1,12 @@
 <template>
 	<div class="page">
 		<el-card shadow="nover">
-			<el-form inline ref="queryRef">
-				<el-form-item label="场景名称：" prop="name">
-					<el-input v-model="params.keyWord" placeholder="场景名称" clearable style="width: 220px" @keyup.enter.native="getList(1)" />
+			<el-form inline ref="queryRef" @submit.prevent @keyup.enter.native="getList(1)">
+				<el-form-item label="场景名称" prop="name">
+					<el-input v-model="params.keyWord" placeholder="请输入" clearable style="width: 220px" />
 				</el-form-item>
 				<el-form-item label="状态" prop="status">
-					<el-select v-model="params.status" placeholder="发布状态" clearable style="width: 160px">
+					<el-select v-model="params.status" placeholder="" clearable style="width: 120px">
 						<el-option label="全部" :value="-1" />
 						<el-option label="成功" :value="1" />
 						<el-option label="失败" :value="0" />

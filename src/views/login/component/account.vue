@@ -44,6 +44,9 @@
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
+		<!-- <el-form-item class="login-animation4">
+			<img src="/@/assets/gitee.svg" alt="" class="gitee" @click="authLogin('gitee')">
+		</el-form-item> -->
 		<changePwd ref="changePwdRef"></changePwd>
 	</el-form>
 </template>
@@ -97,6 +100,7 @@ export default defineComponent({
 		});
 		onMounted(() => {
 			getCaptcha();
+			// api.login.ssoList()
 		});
 		// 时间获取
 		const currentTime = computed(() => {
@@ -109,6 +113,15 @@ export default defineComponent({
 				state.ruleForm.VerifyKey = res.key;
 			});
 		};
+
+		function authLogin(type: string) {
+			if (type === 'gitee') {
+				const client_id = 'a0585ded445f240f2adc7957989bdd644fa2cdf0db7d98b0a940ec92df6a0934'
+				const redirect_uri = 'http://localhost:8888/#/sso/gitee'
+				window.open(`https://gitee.com/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code`)
+				return
+			}
+		}
 
 		// 登录
 		const onSignIn = () => {
@@ -222,6 +235,7 @@ export default defineComponent({
 			changePwdRef,
 			onSignIn,
 			getCaptcha,
+			authLogin,
 			...toRefs(state),
 		};
 	},

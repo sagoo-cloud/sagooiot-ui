@@ -1,25 +1,23 @@
 <template>
-  <div class="system-dic-container">
+  <div class="page page-full">
     <div class="content">
       <div class="cont_box">
         <div class="title">模型标识：{{ detail.key }}</div>
         <div class="title" style="margin-left: 20px">模型表名：{{ detail.name }}</div>
-
         <div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
-
         <div class="pro-option" v-auth="'startOrStop'" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
       </div>
     </div>
 
-    <div class="content-box">
+    <div class="content-box page page-full-part">
       <div class="wu-box">
         <div class="system-user-search mb15">
-          <el-form :model="tableData.param" ref="queryRef" inline label-width="130px">
+          <el-form :model="tableData.param" ref="queryRef" inline @submit.prevent @keyup.enter="typeList">
             <el-form-item label="字段标题" prop="name">
-              <el-input v-model="tableData.param.name" placeholder="请输入字段标题" clearable style="width: 240px" @keyup.enter.native="typeList" />
+              <el-input v-model="tableData.param.name" placeholder="请输入字段标题" clearable style="width: 220px" />
             </el-form-item>
             <el-form-item label="字段名称" prop="key">
-              <el-input v-model="tableData.param.key" placeholder="请输入字段名称" clearable style="width: 240px" @keyup.enter.native="typeList" />
+              <el-input v-model="tableData.param.key" placeholder="请输入字段名称" clearable style="width: 220px" />
             </el-form-item>
 
             <el-form-item>
@@ -234,7 +232,7 @@ export default defineComponent({
   background: #fff;
   width: 100%;
   padding: 20px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .cont_box {

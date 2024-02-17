@@ -22,11 +22,6 @@
 		border: 1px solid var(--next-border-color-light);
 	}
 
-	&:hover {
-		box-shadow: 0 2px 12px var(--next-color-dark-hover);
-		transition: all ease 0.3s;
-	}
-
 	> .el-card,
 	&.el-card {
 		height: 100%;

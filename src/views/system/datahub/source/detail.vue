@@ -1,16 +1,15 @@
 <template>
-	<div class="system-dic-container">
+	<div class="page page-full">
 		<div class="content">
 			<div class="cont_box">
 				<div class="title">数据源名称：{{ detail.name }}</div>
 				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1 ? '已发布' : '未发布' }}</div>
-
 				<div class="pro-option" v-auth="'startOrStop'" @click="CkOption">{{ developer_status == 1 ? '停用' : '发布' }}</div>
 			</div>
 		</div>
 
-		<div class="content-box">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+		<div class="content-box page-full page-full-part">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-tab-pane label="数据源信息" name="1">
 					<el-form label-width="110px" inline>
 						<el-divider content-position="left">基本信息</el-divider>
@@ -133,35 +132,27 @@
 				</el-tab-pane>
 
 				<el-tab-pane label="数据节点" name="2">
-					<div class="wu-box">
-						<div class="wu-title">
-							<div class="title">数据节点</div>
-							<div v-if="developer_status == 0" v-auth="'add'"><el-button type="primary" @click="onOpenEdit()">添加</el-button></div>
-						</div>
-
-						<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-							<el-table-column label="ID" align="center" prop="nodeId" width="100" v-col="'id'" />
-							<el-table-column label="数据标识" prop="key" show-overflow-tooltip v-col="'key'" />
-							<el-table-column label="数据名称" prop="name" show-overflow-tooltip v-col="'name'" />
-							<el-table-column label="数据类型" prop="dataType" show-overflow-tooltip v-col="'dataType'" />
-							<el-table-column label="数据取值项" prop="value" show-overflow-tooltip v-col="'value'" />
-
-							<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'" width="180"></el-table-column>
-
-							<el-table-column label="操作" width="200" align="center" fixed="right">
-								<template #default="scope">
-									<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)" v-if="developer_status == 0" v-auth="'edit'">修改</el-button>
-									<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status == 0" v-auth="'del'">删除</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-						<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" @pagination="typeList" />
+					<div class="flex-row flex-end">
+						<el-button type="primary" size="small" @click="onOpenEdit()" v-if="developer_status == 0" v-auth="'add'">添加</el-button>
 					</div>
+					<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
+						<el-table-column label="ID" align="center" prop="nodeId" width="100" v-col="'id'" />
+						<el-table-column label="数据标识" prop="key" show-overflow-tooltip v-col="'key'" />
+						<el-table-column label="数据名称" prop="name" show-overflow-tooltip v-col="'name'" />
+						<el-table-column label="数据类型" prop="dataType" show-overflow-tooltip v-col="'dataType'" />
+						<el-table-column label="数据取值项" prop="value" show-overflow-tooltip v-col="'value'" />
+						<el-table-column prop="createdAt" label="创建时间" align="center" v-col="'createdAt'" width="180"></el-table-column>
+						<el-table-column label="操作" width="200" align="center" fixed="right">
+							<template #default="scope">
+								<el-button size="small" text type="warning" @click="onOpenEdit1(scope.row)" v-if="developer_status == 0" v-auth="'edit'">修改</el-button>
+								<el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-if="developer_status == 0" v-auth="'del'">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" @pagination="typeList" />
 				</el-tab-pane>
 				<el-tab-pane label="查看数据" name="3">
-					<div class="wu-box">
-						<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
-					</div>
+					<JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
 				</el-tab-pane>
 			</el-tabs>
 		</div>
@@ -356,8 +347,8 @@ export default defineComponent({
 .content-box {
 	background: #fff;
 	width: 100%;
-	padding: 20px;
-	margin-top: 20px;
+	padding: 10px 20px 20px;
+	margin-top: 15px;
 }
 
 .cont_box {

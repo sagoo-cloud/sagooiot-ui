@@ -1,5 +1,5 @@
 <template>
-  <div class="page bg">
+  <div class="page bg page-full">
     <div class="content">
       <div class="cont_box">
         <div class="title">设备：{{ detail.name }}</div>
@@ -9,11 +9,11 @@
       </div>
     </div>
 
-    <div class="content-box">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <div class="content-box page-full-part page-full">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
 
         <el-tab-pane label="运行状态" name="3">
-          <div style=" display: flex; padding: 10px;flex-wrap: wrap;">
+          <div style=" display: flex;flex-wrap: wrap;">
             <div class="ant-card">
               <div class="ant-card-body">
                 <div class="cardflex">
@@ -62,7 +62,7 @@
                     <div class="name">{{ vare }}</div> -->
                   </div>
                 </div>
-                <div class="">
+                <div>
                   <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
                 </div>
               </div>
@@ -88,7 +88,7 @@
             <el-descriptions-item label="链接协议">{{ prodetail.transportProtocol }}</el-descriptions-item>
             <el-descriptions-item label="设备类型">{{ prodetail.deviceType }}</el-descriptions-item>
             <el-descriptions-item label="固件版本">{{ detail.version }}</el-descriptions-item>
-            <el-descriptions-item label="注册时间">{{ detail.updatedAt }}</el-descriptions-item>
+            <el-descriptions-item label="注册时间">{{ detail.registryTime }}</el-descriptions-item>
             <el-descriptions-item label="最后上线时间">{{ detail.lastOnlineTime || '' }}</el-descriptions-item>
             <el-descriptions-item label="详细地址">{{ detail.address }}</el-descriptions-item>
             <el-descriptions-item label="说明">{{ detail.desc }}</el-descriptions-item>
@@ -312,39 +312,39 @@
           </div>
 
         </el-tab-pane>
-        <el-tab-pane label="设备档案" name="7">
+        <el-tab-pane label="设备档案" name="7" v-if="deviceAssetData">
           <el-form label-width="110px">
 
             <!--            <FromData :DataList="Datalist" v-if="Datalist && Datalist.length > 0" disable="true"></FromData>-->
-<!--            <div class="pro-box">-->
-<!--              <div class="protitle">设备档案</div>-->
-<!--              <div>-->
-<!--                <el-button type="primary" v-auth="'edit'" @click="onOpenEditAsset">编辑</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="pro-box">-->
+            <!--              <div class="protitle">设备档案</div>-->
+            <!--              <div>-->
+            <!--                <el-button type="primary" v-auth="'edit'" @click="onOpenEditAsset">编辑</el-button>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
-<!--            <div class="ant-descriptions-view">-->
-<!--              <table>-->
-<!--                <tbody>-->
-<!--                <tr class="ant-descriptions-row" v-for="(item, index) in dataList" :key="index">-->
-<!--                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">{{ item.title }}</th>-->
-<!--                  <td class="ant-descriptions-item-content" colspan="1">-->
-<!--                    <view v-if="item.types === 'file'">-->
-<!--                      <img :src="deviceAssetMetadata[item.name]" class="avatar" />-->
-<!--                    </view>-->
-<!--                    <view v-else>-->
-<!--                      <view v-if="item.pattern">-->
-<!--                        <el-link :href="deviceAssetMetadata[item.name]" type="primary" target="_blank">{{ deviceAssetMetadata[item.name] }}</el-link>-->
-<!--                      </view>-->
-<!--                      <view v-else>-->
-<!--                        {{ deviceAssetMetadata[item.name] }}-->
-<!--                      </view>-->
-<!--                    </view>-->
-<!--                  </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--              </table>-->
-<!--            </div>-->
+            <!--            <div class="ant-descriptions-view">-->
+            <!--              <table>-->
+            <!--                <tbody>-->
+            <!--                <tr class="ant-descriptions-row" v-for="(item, index) in dataList" :key="index">-->
+            <!--                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">{{ item.title }}</th>-->
+            <!--                  <td class="ant-descriptions-item-content" colspan="1">-->
+            <!--                    <view v-if="item.types === 'file'">-->
+            <!--                      <img :src="deviceAssetMetadata[item.name]" class="avatar" />-->
+            <!--                    </view>-->
+            <!--                    <view v-else>-->
+            <!--                      <view v-if="item.pattern">-->
+            <!--                        <el-link :href="deviceAssetMetadata[item.name]" type="primary" target="_blank">{{ deviceAssetMetadata[item.name] }}</el-link>-->
+            <!--                      </view>-->
+            <!--                      <view v-else>-->
+            <!--                        {{ deviceAssetMetadata[item.name] }}-->
+            <!--                      </view>-->
+            <!--                    </view>-->
+            <!--                  </td>-->
+            <!--                </tr>-->
+            <!--                </tbody>-->
+            <!--              </table>-->
+            <!--            </div>-->
 
             <div class="pro-box">
               <div class="protitle">设备档案</div>
@@ -472,10 +472,13 @@ interface TableDataState {
 }
 export default defineComponent({
   name: 'deviceEditPro',
-  components: {EditAssetRef, FromData, SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
+  components: { EditAssetRef, FromData, SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
   setup(prop, context) {
     const logqueryRef = ref();
+
+    // 属性列表，查询保留小数位使用
+    const propertyMap = new Map()
 
     const array_list = ref([]);
     const route = useRoute();
@@ -569,12 +572,7 @@ export default defineComponent({
         //加载全部属性
         datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
           array_list.value = re;
-        });
-
-        //第一次加载
-        api.model.property(state.tableData.param).then((res: any) => {
-          state.tableData.data = res.Data;
-          state.tableData.total = res.Total;
+          re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
 
         // 加载对应设备档案
@@ -859,23 +857,22 @@ export default defineComponent({
       }
     };
 
-    const getValueText = (key, value) => {
-      let data = array_list.value;
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i];
-        if (item.key === key) {
-          if (item.valueType.type === "enum") {
-            const option = item.valueType.elements.find((element) => element.value === value);
-            if (option) {
-              return option.text;
-            }
-          } else {
-            return value;
-          }
-        }
-      }
+    const getValueText = (key: String, value: String) => {
+      const item = propertyMap.get(key)
 
-      return value;
+      if (!item) return value
+
+      if (item.type === "enum") {
+        const option = item.elements.find((element: any) => element.value === value);
+        if (option) {
+          return option.text;
+        }
+      } else if (item?.type === 'float' && item?.decimals) {
+        //  根据属性确定保留小数位数
+        return Number(value).toFixed(item.decimals)
+      } else {
+        return value;
+      }
     }
     const getStatusText = (name, value) => {
       let data = array_list.value;
@@ -1030,6 +1027,7 @@ export default defineComponent({
       editAssetRef,
       dataList,
       deviceAssetMetadata,
+      deviceAssetData,
       onOpenListDetail,
       getrunData,
       getlog,
@@ -1163,13 +1161,7 @@ tr {
   border-color: inherit;
 }
 
-.wu-box {
-  border: #e8e8e8 solid 1px;
-  padding: 20px;
-  width: 100%;
-}
-
-.wu-box .wu-title {
+.wu-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1177,7 +1169,7 @@ tr {
   border-bottom: #e8e8e8 1px solid;
 }
 
-.wu-box .wu-title .title {
+.wu-title .title {
   font-size: 18px;
 }
 
@@ -1198,7 +1190,7 @@ tr {
 }
 
 .ant-card-body {
-  padding: 24px;
+  padding: 12px;
   zoom: 1;
 }
 

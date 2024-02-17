@@ -1,89 +1,77 @@
 <template>
-	<div class="page">
-		<el-card shadow="nover">
-			<el-form inline ref="queryRef" @keyup.enter="getList(1)">
-				<el-form-item label="名称：" prop="keyWord">
-					<el-input v-model="params.keyWord" placeholder="请输入名称" clearable style="width: 240px" />
-				</el-form-item>
+	<div class="page page-full border bg padding">
+		<el-form inline ref="queryRef" @keyup.enter="getList(1)">
+			<el-form-item label="名称" prop="keyWord">
+				<el-input v-model="params.keyWord" placeholder="请输入名称" clearable style="width: 240px" />
+			</el-form-item>
 
-				<el-form-item>
-					<el-button type="primary" class="ml10" @click="getList(1)">
-						<el-icon>
-							<ele-Search />
-						</el-icon>
-						查询
-					</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="success" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						新增档案
-					</el-button>
-
-					<!-- <el-button type="primary" @click="addOrEdit()" v-if="productIno">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						批量添加
-					</el-button> -->
-
-					<el-button type="danger" @click="batchdel()" v-auth="'batchdel'">
-						<el-icon>
-							<ele-FolderAdd />
-						</el-icon>
-						批量删除
-					</el-button>
-				</el-form-item>
-			</el-form>
-			<el-row :gutter="16">
-				<el-col :span="6">
-          <el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" style="border: 1px solid #eee;padding: 10px;margin-right: 10px;" class="mt-4" :default-expand-all="true" :node-key="'id'" highlight-current>
-            <template #default="{ node, data }">
-              <div class="custom-tree-node">
-                  <span class="tree-label">
-                    <el-icon v-if="data.is_type == '2'">
-                      <Expand />
-                    </el-icon>
-                    {{ node.label }}
-                  </span>
-              </div>
-            </template>
-          </el-tree>
-				</el-col>
-				<el-col :span="18"><el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
+			<el-form-item>
+				<el-button type="primary" class="ml10" @click="getList(1)">
+					<el-icon>
+						<ele-Search />
+					</el-icon>
+					查询
+				</el-button>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="addOrEdit()" v-auth="'add'" v-if="productIno">
+					<el-icon>
+						<ele-FolderAdd />
+					</el-icon>
+					新增档案
+				</el-button>
+				<el-button type="info" @click="batchdel()" v-auth="'batchdel'">
+					<el-icon>
+						<ele-FolderAdd />
+					</el-icon>
+					删除
+				</el-button>
+			</el-form-item>
+		</el-form>
+		<div class="page page-full-part flex-row gap-4">
+			<el-card style="width: 250px;" shadow="nover">
+				<el-tree :data="mergedData" :props="defaultProps" accordion default-expand-all @node-click="handleNodeClick" :node-key="'id'" highlight-current>
+					<template #default="{ node, data }">
+						<div class="custom-tree-node">
+							<span class="tree-label">
+								<el-icon v-if="data.is_type != '2'">
+									<Folder />
+								</el-icon>
+                <SvgIcon name="iconfont icon-siweidaotu" v-if="data.is_type == '2'"></SvgIcon>
+								{{ node.label }}
+							</span>
+						</div>
+					</template>
+				</el-tree>
+			</el-card>
+			<el-card class="flex1" shadow="nover">
+				<div class="page page-full">
+					<el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" row-key="id" v-loading="loading">
 						<el-table-column type="selection" width="55" align="center" />
-
 						<el-table-column prop="deviceName" v-col="'deviceName'" label="设备名称" min-width="100" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="deviceKey" v-col="'deviceKey'" label="设备KEY" show-overflow-tooltip></el-table-column>
-
 						<el-table-column prop="deviceNumber" v-col="'deviceNumber'" label="设备编码" show-overflow-tooltip></el-table-column>
-
 						<el-table-column prop="deviceCategory" v-col="'deviceCategory'" label="设备类型" show-overflow-tooltip></el-table-column>
-
 						<el-table-column prop="installTime" v-col="'installTime'" label="安装时间" width="160" align="center"></el-table-column>
-						<el-table-column label="操作" width="200" align="center">
+						<el-table-column label="操作" width="120" align="center">
 							<template #default="scope">
 								<el-button size="small" text type="warning" v-auth="'edit'" @click="addOrEdit(scope.row)">编辑</el-button>
-
 								<el-button size="small" text type="info" v-auth="'del'" @click="del(scope.row)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
 					<pagination v-if="params.total" :total="params.total" v-model:page="params.pageNum" v-model:limit="params.pageSize" @pagination="getList()" />
-				</el-col>
-			</el-row>
-
-			<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
-		</el-card>
+				</div>
+			</el-card>
+		</div>
+		<EditForm ref="editFormRef" @getList="getList(1)"></EditForm>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import device from '/@/api/device'
 import { useSearch } from '/@/hooks/useCommon'
-import { Expand } from '@element-plus/icons-vue'
+import { Folder } from '@element-plus/icons-vue'
 
 import { ElMessageBox, ElMessage } from 'element-plus'
 import EditForm from './edit.vue'
@@ -115,7 +103,7 @@ onMounted(() => {
 })
 const addOrEdit = async (row?: any) => {
 	if (row) {
-    editFormRef.value.open(row, productIno.value)
+		editFormRef.value.open(row, productIno.value)
 		return
 	} else {
 		editFormRef.value.open({}, productIno.value)
@@ -130,10 +118,10 @@ const getCateList = () => {
 			productData.value = res.product
 			mergedData.value = matchProductsToCategories(productData.value, cateData.value)
 
-      // 默认加载第一个设备对应属性
-      if (productData.value.length > 0) {
-        handleNodeClick(mergedData.value[0].children[0])
-      }
+			// 默认加载第一个设备对应属性
+			if (productData.value.length > 0) {
+				handleNodeClick(mergedData.value[0].children[0])
+			}
 		})
 	})
 }
@@ -216,26 +204,26 @@ const del = (row: any) => {
 </script>
 <style scoped lang="scss">
 .custom-tree-node {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-  overflow: hidden;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 14px;
+	padding-right: 8px;
+	overflow: hidden;
 
-  .tree-label {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
+	.tree-label {
+		width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		margin-right: 10px;
+	}
 
-  &:hover {
-    .tree-options {
-      display: block;
-    }
-  }
+	&:hover {
+		.tree-options {
+			display: block;
+		}
+	}
 }
 </style>

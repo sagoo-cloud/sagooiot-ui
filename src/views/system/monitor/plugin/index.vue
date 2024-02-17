@@ -34,11 +34,7 @@
 				<el-table-column label="插件类型" v-col="'types'" align="center" prop="types" />
 				<el-table-column label="功能类型" v-col="'handleType'" align="center" prop="handleType" />
 				<el-table-column label="说明" v-col="'description'" show-overflow-tooltip align="left" prop="description" />
-				<el-table-column label="作者" v-col="'author'" align="center" prop="author">
-					<template #default="scope">
-						{{ JSON.parse(scope.row.author).join(" ") }}
-					</template>
-				</el-table-column>
+				<el-table-column label="作者" v-col="'author'" align="center" prop="author"></el-table-column>
 				<el-table-column label="状态" v-col="'status'" align="center" prop="status" width="80">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status === 1">正常</el-tag>
