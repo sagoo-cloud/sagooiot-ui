@@ -36,20 +36,19 @@
 	</el-dialog>
 </template>
 <script lang="ts" setup>
-import { computed, reactive, ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import api from '/@/api/ice104/index';
-import { useI18n } from 'vue-i18n';
 import { ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
 import apiDevice from '/@/api/device';
 
-const { params, tableData, getList, loading } = useSearch(api.template.getAll, 'data', { title: '', status: 1 });
+const { tableData, getList } = useSearch(api.template.getAll, 'data', { title: '', status: 1 });
 getList();
 
 const dialogVisible = ref(false);
 const btnLoading = ref(false);
-const productList = ref([]);
-const deviceList = ref([]);
+const productList = ref<any[]>([]);
+const deviceList = ref<any[]>([]);
 const emit = defineEmits(['updateList']);
 const formRef = ref();
 const ruleForm = ref({
@@ -95,14 +94,13 @@ const submitData = async () => {
 	})
 }
 
-const handleProductChange = (data: any) => {
+const handleProductChange = (productKey: string) => {
 	ruleForm.value.deviceKey = "";
-	let findItem: any = productList.value.find((v: any) => v.key === data);
-	getDeviceList(findItem.id)
+	getDeviceList(productKey)
 }
 
-const getDeviceList = (id: number) => {
-	apiDevice.device.allList({ productId: id }).then((res: any) => {
+const getDeviceList = (productKey: string) => {
+	apiDevice.device.allList({ productKey }).then((res: any) => {
 		deviceList.value = res.device
 	})
 }

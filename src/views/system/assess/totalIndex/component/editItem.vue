@@ -254,7 +254,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-form {
+:deep(.el-form) {
 
 	// display: flex;
 	// justify-self: center;
@@ -265,17 +265,17 @@ export default defineComponent({
 		margin: 8px auto;
 	}
 
-	::v-deep .el-input__inner,
-	::v-deep .el-textarea__inner {
+	:deep(.el-input__inner),
+	:deep(.el-textarea__inner) {
 		width: 400px;
 		// flex-grow: 0;
 	}
 
-	::v-deep .el-input__inner {
+	:deep(.el-input__inner) {
 		padding: 1px 10px;
 	}
 
-	::v-deep .el-input__wrapper {
+	:deep(.el-input__wrapper) {
 		flex-grow: 0;
 		padding: 0
 	}

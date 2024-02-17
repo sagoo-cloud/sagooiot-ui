@@ -159,13 +159,13 @@ const seletChange = (index: number, val: string) => {
       'operator': '',
       'value': ''
     }]];
-    getDeviceList(info.id)
+    getDeviceList(info.key)
   }
   EditPen(index);
 }
-const getDeviceList = (_id: any) => {
-  product.device.allList({ productId: _id }).then((res: any) => {
-    deviceListData.value = res.device
+const getDeviceList = (productKey: any) => {
+  product.device.allList({ productKey }).then((res: any) => {
+    deviceListData.value = res.device || []
   })
 }
 const getSelectcolumns=(index: number, val: string) => {
@@ -183,18 +183,18 @@ const getSelectcolumns=(index: number, val: string) => {
 const getAction = (val: string) => {
   switch (val) {
     case 'functionCall':
-      product.tabDeviceFucntion.getList({ key: product_key }).then((res: any) => {
+      product.tabDeviceFucntion.getList({ product_key }).then((res: any) => {
         functionCallList.value = res
       })
       break;
     case 'readAttribute':
-      datahub.node.getpropertyList({ key: product_key }).then((re: any) => {
+      datahub.node.getpropertyList({ product_key }).then((re: any) => {
         propertyCallList.value = re;
       });
 
       break;
     case 'modifyAttribute':
-      datahub.node.getpropertyList({ key: product_key }).then((re: any) => {
+      datahub.node.getpropertyList({ product_key }).then((re: any) => {
         propertyCallList.value = re;
       });
       break;
@@ -268,7 +268,7 @@ const intScenel=()=>{
           let info = props.sourceData?.find((pro: { key: any; }) => pro.key === val.productKey);
 
           if (info) {
-            getDeviceList(info.id)
+            getDeviceList(info.key)
           }
       }
       if(val.triggerType){

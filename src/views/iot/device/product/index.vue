@@ -36,7 +36,7 @@
             </el-icon>
             新增产品
           </el-button>
-          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+          <el-button type="info" class="ml10" @click="onRowDel()" v-auth="'del'">
             <el-icon>
               <ele-Delete />
             </el-icon>
@@ -46,7 +46,9 @@
       </el-form>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" min-width="130" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="标识" prop="key" min-width="130" show-overflow-tooltip v-col="'key'">
+          <template #default="{ row }"><copy :text="row.key"></copy></template>
+        </el-table-column>
         <el-table-column label="名称" prop="name" min-width="160" show-overflow-tooltip v-col="'name'" />
         <el-table-column label="分类" prop="categoryName" align="center" width="140" show-overflow-tooltip v-col="'categoryName'" />
         <el-table-column label="消息协议" prop="messageProtocol" align="center" min-width="150" show-overflow-tooltip v-col="'messageProtocol'" />
@@ -60,7 +62,7 @@
         </el-table-column>
         <el-table-column label="操作" width="130" align="center" fixed="right">
           <template #default="scope">
-            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.key" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link>
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
@@ -83,6 +85,7 @@ import api from '/@/api/device';
 // 定义接口来定义对象的类型
 interface TableDataRow {
   id: number;
+  key: string;
   name: string;
   deviceType: string;
   status: number;
@@ -90,7 +93,7 @@ interface TableDataRow {
   createBy: string;
 }
 interface TableDataState {
-  ids: number[];
+  keys: string[];
   tableData: {
     data: Array<TableDataRow>;
     total: number;
@@ -114,7 +117,7 @@ export default defineComponent({
     const editDicRef = ref();
     const queryRef = ref();
     const state = reactive<TableDataState>({
-      ids: [],
+      keys: [],
       tableData: {
         data: [],
         total: 0,
@@ -122,9 +125,9 @@ export default defineComponent({
         param: {
           pageNum: 1,
           pageSize: 10,
-          dictName: '',
-          dictType: '',
           status: '',
+          name: '',
+          deviceType: '',
           dateRange: [],
         },
       },
@@ -149,16 +152,16 @@ export default defineComponent({
       editDicRef.value.openDialog(row);
     };
     // 删除产品
-    const onRowDel = (row: TableDataRow) => {
+    const onRowDel = (row?: TableDataRow) => {
       let msg = '你确定要删除所选数据？';
-      let ids: number[] = [];
+      let keys: string[] = [];
       if (row) {
         msg = `此操作将永久删除产品：“${row.name}”，是否继续?`;
-        ids = [row.id];
+        keys = [row.key];
       } else {
-        ids = state.ids;
+        keys = state.keys;
       }
-      if (ids.length === 0) {
+      if (keys.length === 0) {
         ElMessage.error('请选择要删除的数据。');
         return;
       }
@@ -168,7 +171,7 @@ export default defineComponent({
         type: 'warning',
       })
         .then(() => {
-          api.product.delete(ids).then(() => {
+          api.product.delete(keys).then(() => {
             ElMessage.success('删除成功');
             typeList();
           });
@@ -187,7 +190,7 @@ export default defineComponent({
     };
     // 多选框选中数据
     const handleSelectionChange = (selection: TableDataRow[]) => {
-      state.ids = selection.map((item) => item.id);
+      state.keys = selection.map((item) => item.key);
     };
     return {
       addDicRef,

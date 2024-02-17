@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { reactive, ref, getCurrentInstance } from 'vue';
 
-const { proxy } = getCurrentInstance()
+const { proxy } = getCurrentInstance() as any
 
 interface Tag {
   key: string;

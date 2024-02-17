@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column label="所属产品" v-col="'productName'" align="center" show-overflow-tooltip>
           <template #default="scope">
-            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productId" class="link-type">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productKey" class="link-type">
               <span>{{ scope.row.productName }}</span>
             </router-link>
           </template>

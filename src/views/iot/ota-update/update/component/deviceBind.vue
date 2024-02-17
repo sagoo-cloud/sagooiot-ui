@@ -11,7 +11,11 @@
       </el-form>
       <el-table ref="multipleTable" :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
+        <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'">
+          <template #default="{ row }">
+            <copy :text="row.key"></copy>
+          </template>
+        </el-table-column>
         <el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
         <el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
 
@@ -34,20 +38,14 @@
 <script lang="ts">
 import { toRefs, reactive, defineComponent, nextTick, getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-
-import 'vue3-json-viewer/dist/index.css'
-
-import { useRoute } from 'vue-router'
-
 import api from '/@/api/device'
 
 interface TableDataState {
   isShowDialog: boolean,
   productData: object[],
   deviceKeyList: string[];
-  deviceIdList: string[];
   deviceNameList: string[];
-  checkIdList: string[];
+  checkKeyList: string[];
   tableData: {
     data: []
     total: number
@@ -56,11 +54,11 @@ interface TableDataState {
       pageNum: number
       pageSize: number
       name: string
-      productId: number
+      productKey: string
     }
   },
   ruleForm: {
-    productId: string | number
+    productKey: string
   },
   rules: {}
 }
@@ -69,14 +67,12 @@ export default defineComponent({
 
   setup(prop, { emit }) {
     const { proxy } = getCurrentInstance() as any;
-    const route = useRoute()
     const state = reactive<TableDataState>({
       deviceKeyList: [],
-      deviceIdList: [],
       deviceNameList: [],
       isShowDialog: false,
       productData: [],
-      checkIdList: [],
+      checkKeyList: [],
       tableData: {
         data: [],
         total: 0,
@@ -85,19 +81,19 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           name: '',
-          productId: 0,
+          productKey: '',
         },
       },
       ruleForm: {
-        productId: ''
+        productKey: ''
       },
       rules: {
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       }
     })
 
     const getDeviceList = () => {
-      // if (!state.ruleForm.productId) {
+      // if (!state.ruleForm.productKey) {
       //   state.tableData.data = [];
       //   state.tableData.total = 0;
       //   return;
@@ -114,23 +110,21 @@ export default defineComponent({
 
     const getProductList = () => {
       api.product.getSubList().then((res: any) => {
-        let productDataList = res.product
-        state.productData = productDataList;
-        state.ruleForm.productId = state.productData[0].id
+        state.productData = res.product;
+        state.ruleForm.productKey = res.product[0].key
         getDeviceList()
       });
     };
 
-    const openDialog = (checkIdData: any, productId: any) => {
-      state.checkIdList = checkIdData;
-      state.tableData.param.productId = productId;
+    const openDialog = (checkKeyList: string[], productKey: any) => {
+      state.checkKeyList = checkKeyList;
+      state.tableData.param.productKey = productKey;
       getDeviceList()
     };
 
     // 多选框选中数据
     const handleSelectionChange = (selection: any[]) => {
       state.deviceKeyList = selection.map((item) => item.key);
-      state.deviceIdList = selection.map((item) => item.id);
       state.deviceNameList = selection.map((item) => item.name);
     };
 
@@ -145,20 +139,20 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        emit('bindSuccess', state.deviceIdList, state.deviceNameList)
+        emit('bindSuccess', state.deviceKeyList, state.deviceNameList)
         state.isShowDialog = false;
       })
     };
 
-    const handleChange = (productId: number) => {
-      state.ruleForm.productId = productId;
+    const handleChange = (productKey: string) => {
+      state.ruleForm.productKey = productKey;
       getDeviceList()
     }
 
     const changeSelect = () => {
       nextTick(() => {
-        state.tableData.data.forEach((item) => {
-          if (state.checkIdList.includes(item.id)) {
+        state.tableData.data.forEach((item: any) => {
+          if (state.checkKeyList.includes(item.key)) {
             proxy.$refs.multipleTable.toggleRowSelection(item, true);
           }
         })

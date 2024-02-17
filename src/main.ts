@@ -17,6 +17,7 @@ import { getUpFileUrl, handleTree, selectDictLabel } from "/@/utils/common";
 import { useDict } from "/@/api/common/dict/data";
 // 分页组件
 import pagination from '/@/components/pagination/index.vue'
+import copy from '/@/components/copy/index.vue'
 // 引入百度地图组件
 // import BaiduMap from 'vue-baidu-map-3x'
 
@@ -32,6 +33,7 @@ directive(app);
 other.elSvg(app);
 
 app.component('pagination', pagination)
+app.component('copy', copy)
 app.use(router)
   .use(store, key)
   .use(ElementPlus, { i18n: i18n.global.t })

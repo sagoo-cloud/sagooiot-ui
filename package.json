@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
+    "build:golocal": "vite build --mode golocal",
     "build:open": "vite build --mode open",
     "build:test": "vite build --mode test",
     "deploy:zip": "npm run build && npm run zipAndUpload && npm run unzip && npm run success",
@@ -53,6 +54,7 @@
     "vue-grid-layout": "^3.0.0-beta1",
     "vue-i18n": "9.1.10",
     "vue-router": "^4.0.13",
+    "vue3-clipboard": "^1.0.0",
     "vue3-cron": "^1.1.8",
     "vue3-json-viewer": "^2.2.2",
     "vuex": "^4.0.2",

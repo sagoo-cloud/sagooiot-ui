@@ -4,34 +4,35 @@
 
 <script lang="ts" setup>
 import { TinyArea } from '@antv/g2plot';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
+
+let tinyArea: any = null
 
 const props = defineProps({
 	json: {
 		type: Object,
 		required: true,
 	},
-	antdid:{
+	antdid: {
 		type: String,
 		required: true,
 	}
 });
 
+// 数据更新之后更新图形
+watch(() => props.json, (data) => {
+	tinyArea && tinyArea.changeData(data.reverse());
+})
+
 onMounted(() => {
-	const tinyArea = new TinyArea(props.antdid, {
+	tinyArea = new TinyArea(props.antdid, {
 		height: 40,
 		autoFit: true,
-		data: props.json,
+		data: props.json.reverse(),
 		smooth: true,
 		areaStyle: {
 			fill: '#873bf4',
 		},
-	// 	tooltip: {
-	// 		customContent: (title, data) => {
-	// 			console.log(title,data);
-	// 		//return "<div>"+data2[index]+"</div><div>"+
-	// 	}
-    // },
 	});
 
 	tinyArea.render();

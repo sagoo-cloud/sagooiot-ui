@@ -5,9 +5,9 @@
         <el-form-item label="模块名称" prop="name">
           <el-input v-model="tableData.param.name" placeholder="请输入模块名称" clearable style="width: 200px;" />
         </el-form-item>
-        <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="tableData.param.productId" clearable filterable placeholder="请选择产品">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id.toString()" value-key="id"> </el-option>
+        <el-form-item label="所属产品" prop="productKey">
+          <el-select v-model="tableData.param.productKey" clearable filterable placeholder="请选择产品">
+            <el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" value-key="id"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -38,7 +38,7 @@
         <el-table-column label="模块别名" v-col="'nameAs'" prop="nameAs" show-overflow-tooltip />
         <el-table-column label="所属产品" v-col="'ProductName'" align="center" show-overflow-tooltip>
           <template #default="scope">
-            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productId" class="link-type">
+            <router-link :to="'/iotmanager/device/product/detail/' + scope.row.productKey" class="link-type">
               <span>{{ scope.row.ProductName }}</span>
             </router-link>
           </template>
@@ -74,6 +74,7 @@ interface TableDataRow {
 }
 interface TableDataState {
   ids: number[];
+  productData: any[];
   tableData: {
     data: Array<TableDataRow>;
     total: number;
@@ -82,7 +83,7 @@ interface TableDataState {
       pageNum: number;
       pageSize: number;
       keyWord: string;
-      productId: string;
+      productKey: string;
       dateRange: string[];
     };
   };
@@ -108,7 +109,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: 10,
           keyWord: '',
-          productId: '',
+          productKey: '',
         },
       },
       productData: [],
@@ -121,7 +122,7 @@ export default defineComponent({
     const initTableData = () => {
       moduleList();
     };
-    const getList = (pageNum: number) => {
+    const getList = (pageNum?: number) => {
       typeof pageNum === 'number' && (state.tableData.param.pageNum = pageNum)
       state.tableData.loading = true;
       api.module

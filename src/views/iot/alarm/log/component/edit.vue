@@ -56,7 +56,7 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null) => {
+		const openDialog = (row: any) => {
 			resetForm();
 			api.log.detail(row.id).then((res: any) => {
 				state.ruleForm.id = res.data.id;

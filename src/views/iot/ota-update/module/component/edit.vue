@@ -2,9 +2,9 @@
 	<div class="ota-edit-module-container">
 		<el-dialog :title="(ruleForm.id!==0?'修改':'添加')+'模块'" v-model="isShowDialog" width="769px">
 			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
-				<el-form-item label="所属产品" prop="productId">
-					<el-select v-model="ruleForm.productId" filterable placeholder="请选择产品">
-						<el-option v-for="item in productData" :key="item.name" :label="item.name" :value="item.id.toString()" />
+				<el-form-item label="所属产品" prop="productKey">
+					<el-select v-model="ruleForm.productKey" filterable placeholder="请选择产品">
+						<el-option v-for="item in productData" :key="item.key" :label="item.name" :value="item.key" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="模块名称" prop="name">
@@ -35,13 +35,13 @@ interface RuleFormState {
   id: number;
   name: string;
   nameAs: string;
-  productId: '';
+  productKey: '';
   describe: string;
 }
 interface ModuleState {
   isShowDialog: boolean;
   ruleForm: RuleFormState;
-  productData: [],
+  productData: any[],
   rules: {};
 }
 
@@ -55,12 +55,12 @@ export default defineComponent({
         id: 0,
         name: '',
         nameAs: '',
-        productId: '',
+        productKey: '',
 		    describe: '',
       },
 	    productData: [],
       rules: {
-        productId: [{ required: true, message: '产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '产品不能为空', trigger: 'blur' }],
         name: [{ required: true, message: '模块名称不能为空', trigger: 'blur' }],
         nameAs: [{ required: true, message: '模块别名不能为空', trigger: 'blur' }],
       },
@@ -89,7 +89,7 @@ export default defineComponent({
         id: 0,
         name: '',
         nameAs: '',
-        productId: '',
+        productKey: '',
         describe: '',
       };
     };

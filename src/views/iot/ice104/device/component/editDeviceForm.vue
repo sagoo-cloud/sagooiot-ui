@@ -18,7 +18,7 @@
 			</el-select>
 		</el-form-item>
 		<el-form-item label="产品key">
-			<el-select @change="(val) => handleProductChange(val, true)" v-model="ruleForm.productKey" placeholder="请选择产品key" class="width100">
+			<el-select @change="(val: string) => handleProductChange(val, true)" v-model="ruleForm.productKey" placeholder="请选择产品key" class="width100">
 				<el-option :label="item.name" :value="item.key" v-for="(item, index) in productList" :key="index" />
 			</el-select>
 		</el-form-item>
@@ -43,8 +43,8 @@ const { params, tableData, getList, loading } = useSearch(api.template.getAll, '
 getList();
 
 const btnLoading = ref(false);
-const productList = ref([]);
-const deviceList = ref([]);
+const productList = ref<any[]>([]);
+const deviceList = ref<any[]>([]);
 const emit = defineEmits(['updateList']);
 const formRef = ref();
 const ruleForm = ref({
@@ -80,21 +80,16 @@ const submitData = async () => {
 	})
 }
 
-const handleProductChange = (data: any, isClear: boolean) => {
-	if (isClear) {
-		ruleForm.value.deviceKey = "";
-	}
-	let findItem: any = productList.value.find((v: any) => v.key === data);
-	if (!findItem) return;
-	getDeviceList(findItem.id)
+const handleProductChange = (productKey: string, isClear: boolean) => {
+	if (isClear) ruleForm.value.deviceKey = ""
+	getDeviceList(productKey)
 }
 
-const getDeviceList = (id: number) => {
-	apiDevice.device.allList({ productId: id }).then((res: any) => {
+const getDeviceList = (productKey: string) => {
+	apiDevice.device.allList({ productKey }).then((res: any) => {
 		deviceList.value = res.device
 	})
 }
-
 
 const open = async (row: any) => {
 	if (row && row.number.toString()) {

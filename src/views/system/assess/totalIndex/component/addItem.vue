@@ -39,8 +39,8 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="tableData.param.pageNum" background v-model:page-size="tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+			<el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="tableData.param.pageNum" background
+				v-model:page-size="tableData.param.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 			</el-pagination>
 
 			<template #footer>
@@ -237,7 +237,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-form {
+:deep(.el-form) {
 
 	// display: flex;
 	// justify-self: center;
@@ -248,17 +248,17 @@ export default defineComponent({
 		margin: 8px auto;
 	}
 
-	::v-deep .el-input__inner,
-	::v-deep .el-textarea__inner {
+	:deep(.el-input__inner),
+	:deep(.el-textarea__inner) {
 		width: 400px;
 		// flex-grow: 0;
 	}
 
-	::v-deep .el-input__inner {
+	:deep(.el-input__inner) {
 		padding: 1px 10px;
 	}
 
-	::v-deep .el-input__wrapper {
+	:deep(.el-input__wrapper) {
 		flex-grow: 0;
 		padding: 0
 	}

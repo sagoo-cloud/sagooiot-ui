@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts">
+import { PropType } from 'vue';
 import api from '/@/api/device/modbus';
 import { ElMessage } from 'element-plus';
 
@@ -37,6 +38,7 @@ export default {
 	props: {
 		formatOptions: {
 			default: () => [],
+			type: Array as PropType<any[]>
 		},
 	},
 	data() {
@@ -57,17 +59,17 @@ export default {
 			},
 			dialogVisible: false,
 			listLoading: false,
-			dialogStatus: '',
+			dialogStatus: 'update' as 'update' | 'create',
 			textMap: {
 				update: '任务详情',
 				create: '添加任务',
 			},
-			templateOptions: '',
+			templateOptions: [] as any[],
 		};
 	},
 
 	methods: {
-		openDialog({ dialogStatus, row, deviceNumber }) {
+		openDialog({ dialogStatus, row, deviceNumber }: any) {
 			this.dialogStatus = dialogStatus;
 			this.temp.deviceNumber = deviceNumber;
 			if (row) {

@@ -10,24 +10,24 @@ export default {
   product: {
     // 设备属性设置
     propertySet: (data: object) => post('/product/property/set', data),
-    // 获取设备接入信息 /product/?id=35
-    connect_intro: (id: string) => get('/product/connect_intro', { id }),
+    // 获取设备接入信息
+    connect_intro: (productKey: string) => get('/product/connect_intro', { productKey }),
     getList: (params: object) => get('/product/page_list', params),
-    getLists: (params: object) => get('/product/list', params),
+    getLists: (params?: object) => get('/product/list', params),
     add: (data: object) => post('/product/add', data),
-    delete: (ids: number) => del('/product/del', { ids }),
+    delete: (keys: string[]) => del('/product/del', { keys }),
     edit: (data: object) => put('/product/edit', data),
-    detail: (id: number) => get('/product/detail', { id }),
+    detail: (productKey: string | string[]) => get('/product/detail', { productKey }),
     message_protocol_list: (params: object) => get('/product/protocol/message_protocol_list', params),
     trunsport_protocol_list: (params: object) => get('/product/protocol/trunsport_protocol_list', params),
     getDataType: (params: object) => get('/product/tsl/data_type', params),
-    deploy: (data: object) => post('/product/deploy', data),
-    undeploy: (data: object) => post('/product/undeploy', data),
+    deploy: (productKey: any) => post('/product/deploy', { productKey }),
+    undeploy: (productKey: any) => post('/product/undeploy', { productKey }),
     event: (data: object) => get('/product/tsl/event/all', data),
     getSubList: () => get('/product/sub_list'),
     export: (params: object) => file('/product/tsl/export', params),
 
-    deleteSubDevice: (id: number) => del('/product/device/del_sub', { id }),
+    deleteSubDevice: (deviceKey: number) => del('/product/device/del_sub', { deviceKey }),
     // 获取插件通信方式类型
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
     // 脚本更新
@@ -43,16 +43,16 @@ export default {
     getList: (params: object) => get('/product/device/page_list', params),
     add: (data: object) => post('/product/device/add', data),
     edit: (data: object) => put('/product/device/edit', data),
-    del: (ids: number) => del('/product/device/del', { ids }),
-    detail: (id: number) => get('/product/device/detail', { id }),
+    del: (keys: string[]) => del('/product/device/del', { keys }),
+    detail: (deviceKey: any) => get('/product/device/detail', { deviceKey }),
     getLogList: (params: object) => get('/product/log/search', params),
     getlogcate: (params: object) => get('/product/log/type', params),
     getrun_status: (params: object) => get('/product/device/run_status', params),
     getLogDetail: (params: object) => get('/product/device/property/list', params),
     devonline: (data: object) => post('/product/device/online', data),
     devoffline: (data: object) => post('/product/device/offline', data),
-    devdeploy: (data: object) => post('/product/device/deploy', data),
-    devundeploy: (data: object) => post('/product/device/undeploy', data),
+    devdeploy: (deviceKey: string) => post('/product/device/deploy', { deviceKey }),
+    devundeploy: (deviceKey: string) => post('/product/device/undeploy', { deviceKey }),
   },
   dept: {
     getList: (params: object) => get('/system/dept/tree', params),
@@ -66,23 +66,23 @@ export default {
     property: (params: object) => get('/product/tsl/property/list', params),
     propertyadd: (data: object) => post('/product/tsl/property/add', data),
     propertyedit: (data: object) => put('/product/tsl/property/edit', data),
-    propertydel: (productId: number, key: string) => del('/product/tsl/property/del', { productId, key }),
+    propertydel: (productKey: string, key: string) => del('/product/tsl/property/del', { productKey, key }),
 
     function: (params: object) => get('/product/tsl/function/list', params),
     functionadd: (data: object) => post('/product/tsl/function/add', data),
     functionedit: (data: object) => put('/product/tsl/function/edit', data),
-    functiondel: (productId: number, key: string) => del('/product/tsl/function/del', { productId, key }),
+    functiondel: (productKey: string, key: string) => del('/product/tsl/function/del', { productKey, key }),
 
 
     event: (params: object) => get('/product/tsl/event/list', params),
     eventadd: (data: object) => post('/product/tsl/event/add', data),
     eventedit: (data: object) => put('/product/tsl/event/edit', data),
-    eventdel: (productId: number, key: string) => del('/product/tsl/event/del', { productId, key }),
+    eventdel: (productKey: string, key: string) => del('/product/tsl/event/del', { productKey, key }),
 
     tag: (params: object) => get('/product/tsl/tag/list', params),
     tagadd: (data: object) => post('/product/tsl/tag/add', data),
     tagedit: (data: object) => put('/product/tsl/tag/edit', data),
-    tagdel: (productId: number, key: string) => del('/product/tsl/tag/del', { productId, key }),
+    tagdel: (productKey: string, key: string) => del('/product/tsl/tag/del', { productKey, key }),
   },
   tree: {
     getList: (params: object) => get('/product/device_tree/list', params),
@@ -105,14 +105,14 @@ export default {
     import: (data: object) => post('/product/device/import', data),
     export: (data: object) => file('/product/device/export', data),
   },
-  dev_asset:{
+  dev_asset: {
     getList: (params: object) => get('/product/dev_asset/list', params),
     add: (params: object) => post('/product/dev_asset/add', params),
     edit: (params: object) => put('/product/dev_asset/edit', params),
     detail: (params: object) => get('/product/dev_asset/get', params),
     delete: (params: object) => del('/product/dev_asset/delete', params),
   },
-  dev_asset_metadata:{
+  dev_asset_metadata: {
     getList: (params: object) => get('/product/dev_asset_metadata/list', params),
     add: (params: object) => post('/product/dev_asset_metadata/add', params),
     edit: (params: object) => put('/product/dev_asset_metadata/edit', params),

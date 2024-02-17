@@ -8,12 +8,6 @@
 					</el-icon>
 					新增告警
 				</el-button>
-				<el-button type="primary" @click="onOpenLevel" v-auth="'level'">
-					<el-icon>
-						<ele-Setting />
-					</el-icon>
-					级别设置
-				</el-button>
 			</el-form-item>
 		</el-form>
 		<el-divider class="my-5" />
@@ -98,7 +92,6 @@
 		</el-row>
 		<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		<EditDic ref="editDicRef" @dataList="dataList" />
-		<LevelDic ref="levelDicRef" @dataList="dataList" />
 	</div>
 </template>
 
@@ -106,35 +99,34 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/edit.vue';
-import LevelDic from './component/level.vue';
 import alarm from '/@/api/alarm';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
 	id: number;
+	status: number;
 	name: string;
 	key: string;
 	createBy: string;
 }
 interface TableDataState {
-	ids: number[];
 	tableData: {
-		data: Array<TableDataRow>;
+		data: any[];
 		total: number;
 		loading: boolean;
 		param: {
 			pageNum: number;
 			pageSize: number;
 			name: string;
-			level: number;
-			triggerType: number;
+			level: string;
+			triggerType: string;
 		};
 	};
 }
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic, LevelDic },
+	components: { EditDic },
 
 	setup() {
 		const addDicRef = ref();
@@ -174,9 +166,6 @@ export default defineComponent({
 		const onOpenAdd = () => {
 			editDicRef.value.openDialog();
 		};
-		const onOpenLevel = () => {
-			levelDicRef.value.openDialog();
-		};
 		// 打开修改模型弹窗
 		const onOpenEdit = (row: TableDataRow) => {
 			editDicRef.value.openDialog({ ...row });
@@ -187,24 +176,19 @@ export default defineComponent({
 		};
 		const onRowDel = (row?: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
-			let ids: number[] = [];
-			if (row) {
-				msg = `此操作将永久删除告警：“${row.name}”，是否继续?`;
-				ids = row.id;
-			} else {
-				ids = state.ids;
-			}
-			if (ids.length === 0) {
+			let ids: number[] | number = [];
+			if (!row?.id) {
 				ElMessage.error('请选择要删除的数据。');
 				return;
 			}
+			msg = `此操作将永久删除告警：“${row.name}”，是否继续?`;
 			ElMessageBox.confirm(msg, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					alarm.common.delete(ids).then(() => {
+					alarm.common.delete(row.id).then(() => {
 						ElMessage.success('删除成功');
 						dataList();
 					});
@@ -221,8 +205,8 @@ export default defineComponent({
 			formEl.resetFields();
 			dataList();
 		};
-		const onActionStatus = (item: TableDataRow[]) => {
-			if (item.status == 0) {
+		const onActionStatus = (item: TableDataRow) => {
+			if (item.status === 0) {
 				alarm.common.deploy({ id: item.id }).then(() => {
 					dataList();
 				});
@@ -241,7 +225,6 @@ export default defineComponent({
 			queryRef,
 			levelDicRef,
 			onOpenRecord,
-			onOpenLevel,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
@@ -253,6 +236,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }

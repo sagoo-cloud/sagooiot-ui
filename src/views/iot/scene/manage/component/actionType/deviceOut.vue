@@ -142,18 +142,18 @@ const selectAction=(val:string)=>{
 const getAction = (val: string) => {
   switch (val) {
     case 'functionCall':
-      product.tabDeviceFucntion.getList({ key: productKey.value }).then((res: any) => {
+      product.tabDeviceFucntion.getList({ productKey: productKey.value }).then((res: any) => {
         functionCallList.value = res
       })
       break;
     case 'getProperties':
-      datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
+      datahub.node.getpropertyList({ productKey: productKey.value }).then((re: any) => {
         propertyCallList.value = re;
       });
 
       break;
     case 'setProperties':
-      datahub.node.getpropertyList({ key: productKey.value }).then((re: any) => {
+      datahub.node.getpropertyList({ productKey: productKey.value }).then((re: any) => {
         propertyCallList.value = re;
       });
       break;
@@ -185,8 +185,8 @@ const saveData = () => {
   emit('SetSaveData', newdata);
 }
 
-const getDeviceList = (_id: any) => {
-  product.device.allList({ productId: _id }).then((res: any) => {
+const getDeviceList = (productKey: any) => {
+  product.device.allList({ productKey }).then((res: any) => {
     deviceListData.value = res.device
   })
 }
@@ -197,7 +197,7 @@ const seletChange = (val: string) => {
   if (info) {
     // 重置 deviceKey 的值
     fromData.value.deviceKey = '';
-    getDeviceList(info.id)
+    getDeviceList(info.key)
   }
   saveData();
 }
@@ -208,7 +208,7 @@ onMounted(() => {
     productKey.value = infoc.productKey;
     let info = props.sourceData?.find((pro: testIValueType) => pro.key === infoc.productKey);
     if (info) {
-       getDeviceList(info.id)
+       getDeviceList(info.key)
     }
   }
 

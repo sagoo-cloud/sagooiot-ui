@@ -610,7 +610,7 @@ watch(
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      ::v-deep .el-date-editor.el-input__wrapper {
+      :deep(.el-date-editor.el-input__wrapper) {
         width: 360px!important;
         margin-left: 12px;
       }
@@ -629,7 +629,7 @@ watch(
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      ::v-deep .el-date-editor.el-input__wrapper {
+      :deep(.el-date-editor.el-input__wrapper) {
         max-width: 220px!important;
       }
     }

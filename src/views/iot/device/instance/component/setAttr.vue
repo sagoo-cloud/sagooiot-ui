@@ -53,7 +53,6 @@ const loading = ref(false)
 const typeData = ref<any[]>([])
 
 const form = {
-
   "key": "",
   "name": "",
   "accessMode": 0,
@@ -65,7 +64,7 @@ const form = {
   "value": ""
 }
 
-const data = reactive({
+const data = reactive<any>({
   ...form
 })
 

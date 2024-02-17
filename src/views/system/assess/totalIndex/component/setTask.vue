@@ -306,7 +306,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .inline-row {
-	::v-deep .el-form-item__content {
+	:deep(.el-form-item__content) {
 		display: flex;
 
 		.el-input {

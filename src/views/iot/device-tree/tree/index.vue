@@ -377,11 +377,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.el-card ::v-deep(.el-card__body) {
+.el-card :deep(.el-card__body) {
   height: 100%;
 }
 
-.el-tree ::v-deep(.el-tree-node__label) {
+.el-tree :deep(.el-tree-node__label) {
   width: 100%;
   overflow: hidden;
   display: block;

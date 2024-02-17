@@ -180,7 +180,7 @@ const dateChange = (e: any) => {
 		align-items: center;
 
 		.personal-user-left {
-			::v-deep(.el-upload) {
+			:deep(.el-upload) {
 				height: 100%;
 				display: flex;
 				flex-direction: column;
@@ -234,7 +234,7 @@ const dateChange = (e: any) => {
 				.personal-item-value-edit {
 					width: 220px;
 
-					::v-deep(.el-input__wrapper) {
+					:deep(.el-input__wrapper) {
 						width: 100%;
 					}
 				}

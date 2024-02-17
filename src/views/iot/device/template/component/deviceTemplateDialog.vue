@@ -108,7 +108,7 @@ import api from '/@/api/device/modbus';
 export default {
 	props: {
 		templateNumber: String,
-		mode: String,
+		mode: Number,
 	},
 	data() {
 		return {
@@ -120,7 +120,7 @@ export default {
 				page: 1,
 				size: 20,
 				template_number: '',
-			},
+			} as any,
 			temp: {
 				title: '',
 				unit: '',
@@ -198,7 +198,7 @@ export default {
 			// this.listQuery.page = 1
 			this.getList();
 		},
-		handleDelete(row) {
+		handleDelete(row: any) {
 			this.$confirm('是否确认删除变量名称为"' + row.title + '"的数据项?', '警告', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -309,9 +309,7 @@ export default {
 	margin: 10px;
 }
 
-::v-deep {
-	.el-form-item__label {
-		text-align: right;
-	}
+:deep(.el-form-item__label) {
+	text-align: right;
 }
 </style>

@@ -153,7 +153,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 </script>
 
 <style scoped>
-.hide ::v-deep(.el-upload--picture-card) {
+.hide :deep(.el-upload--picture-card) {
 	display: none;
 }
 

@@ -2991,6 +2991,13 @@ vue-router@^4.0.13, vue-router@^4.0.14:
   dependencies:
     "@vue/devtools-api" "^6.1.4"
 
+vue3-clipboard@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/vue3-clipboard/-/vue3-clipboard-1.0.0.tgz#f7d17a00bce6579ba866df825541563b272610f2"
+  integrity sha512-GUqKh1oO79xDpq0z+cCv/NDVTpcJGNDzeNgT3PmTdTp/WJh3gcTrDqIYKycKhzMFOtIFJ7hO/+usgyWtT+fNhA==
+  dependencies:
+    clipboard "^2.0.6"
+
 vue3-cron@^1.1.8:
   version "1.1.8"
   resolved "https://registry.npmmirror.com/vue3-cron/-/vue3-cron-1.1.8.tgz"

@@ -27,43 +27,15 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import { Close } from '@element-plus/icons-vue';
-
 import api from '/@/api/device';
-import { ElMessage } from 'element-plus';
-
-interface DicState {
-	isShowDialog: boolean;
-}
-
-// 定义接口来定义对象的类型
-interface TableDataRow {
-	id: number;
-	name: string;
-	key: string;
-
-	createBy: string;
-}
-interface TableDataState {
-	ids: number[];
-	tableData: {
-		data: Array<TableDataRow>;
-		total: number;
-		loading: boolean;
-		param: {
-			pageNum: number;
-			pageSize: number;
-      deviceKey: string;
-		};
-	};
-}
 
 export default defineComponent({
 	name: 'deviceEditPro',
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null);
-		const state = reactive<DicState>({
+		const state = reactive({
 			isShowDialog: false,
 			dialogFullScreen: false,
 			tableData: {
@@ -73,13 +45,13 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
-          deviceKey: '',
+					deviceKey: '',
 					propertyKey: '',
 				},
 			},
 		});
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, deviceKey) => {
+		const openDialog = (row: any, deviceKey: string) => {
 			resetForm();
 			if (row) {
 				state.tableData.param.deviceKey = deviceKey;
@@ -107,6 +79,8 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 10,
+					deviceKey: '',
+					propertyKey: '',
 				},
 			}
 		};

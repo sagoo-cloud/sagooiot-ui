@@ -1,17 +1,14 @@
 <template>
   <div class="page bg page-full">
     <div class="content">
-      <div class="cont_box">
+      <div class="cont_box" style="align-items: center;">
         <div class="title">设备：{{ detail.name }}</div>
-        <div class="pro-status"><span :class="developer_status == 2 ? 'on' : 'off'"></span>{{ developer_status == 2 ? '在线'
-          : '离线' }}</div>
-        <!-- <div class="pro-option" @click="CkOption">{{ developer_status == 2 ? '下线' : '上线' }}</div> -->
+        <el-tag :type="developer_status == 2 ? 'success' : 'danger'" style="margin-left: 20px;">{{ developer_status == 2 ? '在线' : '离线' }}</el-tag>
       </div>
     </div>
 
     <div class="content-box page-full-part page-full">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-
         <el-tab-pane label="运行状态" name="3">
           <div style=" display: flex;flex-wrap: wrap;">
             <div class="ant-card">
@@ -78,10 +75,12 @@
           </div>
 
           <el-descriptions class="margin-top" :column="3" border>
-            <el-descriptions-item label="设备标识">{{ detail.key }}</el-descriptions-item>
+            <el-descriptions-item label="设备标识">
+              <copy :text="detail.key"></copy>
+            </el-descriptions-item>
             <el-descriptions-item label="设备名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="所属产品">
-              <router-link :to="'/iotmanager/device/product/detail/' + prodetail.id" class="link-type">{{
+              <router-link :to="'/iotmanager/device/product/detail/' + prodetail.key" class="link-type">{{
                 detail.productName }} </router-link>
             </el-descriptions-item>
             <el-descriptions-item label="消息协议">{{ prodetail.messageProtocol }}</el-descriptions-item>
@@ -241,7 +240,6 @@
                   <el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
                 </el-select>
               </el-form-item>
-
               <el-form-item label="创建时间" prop="dateRange">
                 <el-date-picker v-model="logtableData.param.dateRange" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
               </el-form-item>
@@ -284,10 +282,13 @@
                 <el-button v-auth="'cancleMutipleBind'" :disabled="!deviceKeyList.length" type="primary" @click="mutipleUnbind()">批量解绑</el-button>
               </div>
             </div>
-
             <el-table :data="deviceTableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="deviceTableData.loading">
               <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip />
+              <el-table-column label="标识" prop="key" width="130" show-overflow-tooltip>
+                <template #default="{ row }">
+                  <copy :text="row.key"></copy>
+                </template>
+              </el-table-column>
               <el-table-column label="设备名称" prop="name" show-overflow-tooltip />
               <el-table-column label="产品名称" prop="productName" show-overflow-tooltip />
 
@@ -314,38 +315,6 @@
         </el-tab-pane>
         <el-tab-pane label="设备档案" name="7" v-if="deviceAssetData">
           <el-form label-width="110px">
-
-            <!--            <FromData :DataList="Datalist" v-if="Datalist && Datalist.length > 0" disable="true"></FromData>-->
-            <!--            <div class="pro-box">-->
-            <!--              <div class="protitle">设备档案</div>-->
-            <!--              <div>-->
-            <!--                <el-button type="primary" v-auth="'edit'" @click="onOpenEditAsset">编辑</el-button>-->
-            <!--              </div>-->
-            <!--            </div>-->
-
-            <!--            <div class="ant-descriptions-view">-->
-            <!--              <table>-->
-            <!--                <tbody>-->
-            <!--                <tr class="ant-descriptions-row" v-for="(item, index) in dataList" :key="index">-->
-            <!--                  <th class="ant-descriptions-item-label ant-descriptions-item-colon">{{ item.title }}</th>-->
-            <!--                  <td class="ant-descriptions-item-content" colspan="1">-->
-            <!--                    <view v-if="item.types === 'file'">-->
-            <!--                      <img :src="deviceAssetMetadata[item.name]" class="avatar" />-->
-            <!--                    </view>-->
-            <!--                    <view v-else>-->
-            <!--                      <view v-if="item.pattern">-->
-            <!--                        <el-link :href="deviceAssetMetadata[item.name]" type="primary" target="_blank">{{ deviceAssetMetadata[item.name] }}</el-link>-->
-            <!--                      </view>-->
-            <!--                      <view v-else>-->
-            <!--                        {{ deviceAssetMetadata[item.name] }}-->
-            <!--                      </view>-->
-            <!--                    </view>-->
-            <!--                  </td>-->
-            <!--                </tr>-->
-            <!--                </tbody>-->
-            <!--              </table>-->
-            <!--            </div>-->
-
             <div class="pro-box">
               <div class="protitle">设备档案</div>
               <div>
@@ -370,12 +339,8 @@
                 </el-descriptions-item>
               </view>
             </el-descriptions>
-
           </el-form>
         </el-tab-pane>
-
-
-
       </el-tabs>
     </div>
     <EditDic ref="editDicRef" @typeList="initData" />
@@ -392,7 +357,7 @@
     <EditAssetRef ref="editAssetRef" @getList="getDeviceAssetMetadata"></EditAssetRef>
 
     <el-dialog v-model="dialogVisible" title="日志数据内容" width="30%">
-      <JsonViewer :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
+      <JsonViewer :value="jsonData" boxed sort theme="jv-dark" />
 
       <template #footer>
         <span class="dialog-footer">
@@ -403,12 +368,11 @@
   </div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, nextTick } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent, nextTick, onUnmounted } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import functionCom from './component/function.vue';
 import 'vue3-json-viewer/dist/index.css';
 import EditDic from './component/edit.vue';
-// import EditDic from '../product/component/editPro.vue';
 import EditAttr from '../product/component/editAttr.vue';
 import EditFun from '../product/component/editFun.vue';
 import EditEvent from '../product/component/editEvent.vue';
@@ -426,23 +390,22 @@ import EditAssetRef from "/@/views/iot/property/dossier/edit.vue";
 import { useRoute } from 'vue-router';
 
 interface TableDataState {
+  isShowDialog: boolean;
+  dialogVisible: boolean;
   phone: any[];
   certificate: any[];
+  logTypeData: any[];
+  prodetail: any;
+  areaData: any;
+  activetab: string;
+  activeName: string;
+  productKey: string;
+  jsonData: string;
   intro: string;
-  ids: number[];
+  developer_status: number;
   detail: any;
   deviceKeyList: string[];
-  deviceTableData: {
-    data: [];
-    total: number;
-    loading: boolean;
-    param: {
-      pageNum: number;
-      pageSize: number;
-      gatewayKey: string;
-      dateRange: string[];
-    };
-  };
+  deviceTableData: any;
   tableData: {
     data: [];
     total: number;
@@ -454,27 +417,28 @@ interface TableDataState {
       deviceType: string;
       status: string;
       dateRange: string[];
-    };
+    } | any;
   };
   logtableData: {
     data: [];
     total: number;
     loading: boolean;
-    param: {
-      pageNum: number;
-      pageSize: number;
-      name: string;
-      deviceType: string;
-      status: string;
-      dateRange: string[];
-    };
+    param: any;
   };
 }
 export default defineComponent({
   name: 'deviceEditPro',
   components: { EditAssetRef, FromData, SubDeviceMutipleBind, SubDevice, EditDic, EditAttr, EditFun, EditEvent, EditTab, devantd, ListDic, functionCom, setAttr },
 
-  setup(prop, context) {
+  props: {
+    deviceKey: String
+  },
+  setup(props, context) {
+
+    let timer: any
+
+    onUnmounted(() => clearInterval(timer))
+
     const logqueryRef = ref();
 
     // 属性列表，查询保留小数位使用
@@ -494,7 +458,7 @@ export default defineComponent({
     const editAssetRef = ref();
     const dataList = ref();
     const deviceAssetData = ref();
-    const deviceAssetMetadata = ref({});
+    const deviceAssetMetadata = ref<any>({});
     const state = reactive<TableDataState>({
       certificate: [],
       phone: [],
@@ -509,7 +473,7 @@ export default defineComponent({
       activetab: 'attr', // 分类数据
       detail: {},
       prodetail: [],
-      product_id: 0,
+      productKey: '',
       developer_status: 0,
       deviceTableData: {
         data: [],
@@ -528,7 +492,7 @@ export default defineComponent({
         loading: false,
         param: {
           pageNum: 1,
-          productId: 0,
+          productKey: '',
           pageSize: 10,
           status: '',
           dateRange: [],
@@ -540,7 +504,7 @@ export default defineComponent({
         loading: false,
         param: {
           pageNum: 1,
-          productId: 0,
+          productKey: '',
           pageSize: 10,
           status: '',
           dateRange: [],
@@ -553,14 +517,13 @@ export default defineComponent({
     });
 
     function initData() {
-
-      const ids = route.params && route.params.id;
-      api.instance.detail(ids).then((res: any) => {
+      // 如果是嵌入的就是子设备，看子设备详情，否则看页面参数
+      api.instance.detail(props.deviceKey || route.params?.id).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
-        state.tableData.param.productId = res.data.product.id;
-        state.product_id = res.data.product.id;
-        api.product.detail(res.data.product.id).then((res: any) => {
+        state.tableData.param.productKey = res.data.product.key;
+        state.productKey = res.data.product.key;
+        api.product.detail(res.data.product.key).then((res: any) => {
           state.prodetail = res.data;
         });
 
@@ -570,7 +533,7 @@ export default defineComponent({
         state.intro = intro
 
         //加载全部属性
-        datahub.node.getpropertyList({ key: state.detail.product.key }).then((re: any) => {
+        datahub.node.getpropertyList({ productKey: state.detail.product.key }).then((re: any) => {
           array_list.value = re;
           re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
@@ -579,6 +542,8 @@ export default defineComponent({
         getDeviceAssetMetadata()
 
         getrunData();
+
+        timer = setInterval(getrunData, 3000)
 
         getDeviceTableData()
       });
@@ -591,7 +556,7 @@ export default defineComponent({
         api.dev_asset.detail({ deviceKey: state.detail.key }).then((resde: any) => {
           // 存储设备档案信息
           deviceAssetData.value = resde;
-          const newArray = resde.data.map(obj => {
+          const newArray = (resde?.data || []).map((obj: any) => {
             const { name, value, ...rest } = obj;
             const newObj = { name, value, ...rest };
             newObj[name] = value ? value : '';
@@ -672,7 +637,7 @@ export default defineComponent({
 
     };
 
-    const onLogDetail = (row: TableDataRow) => {
+    const onLogDetail = (row: any) => {
       state.jsonData = JSON.parse(row.content);
       state.dialogVisible = true;
     };
@@ -683,51 +648,51 @@ export default defineComponent({
 
 
     //编辑属性
-    const onEditAttr = (row: TableDataRow) => {
-      editAttrRef.value.openDialog(row, state.product_id);
+    const onEditAttr = (row: any) => {
+      editAttrRef.value.openDialog(row, state.productKey);
     };
 
     //编辑功能
-    const onEditFun = (row: TableDataRow) => {
-      editFunRef.value.openDialog(row, state.product_id);
+    const onEditFun = (row: any) => {
+      editFunRef.value.openDialog(row, state.productKey);
     };
 
     //编辑事件
-    const onEditEvent = (row: TableDataRow) => {
-      editEventRef.value.openDialog(row, state.product_id);
+    const onEditEvent = (row: any) => {
+      editEventRef.value.openDialog(row, state.productKey);
     };
 
     //编辑标签
-    const onEditTag = (row: TableDataRow) => {
-      editTabRef.value.openDialog(row, state.product_id);
+    const onEditTag = (row: any) => {
+      editTabRef.value.openDialog(row, state.productKey);
     };
 
     //打开添加属性弹窗
     const onOpenEditAttr = () => {
-      editAttrRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
+      editAttrRef.value.openDialog({ productKey: state.productKey, id: 0, accessMode: 0 });
     };
 
     //打开添加功能弹窗
     const onOpenEditFun = () => {
-      editFunRef.value.openDialog({ product_id: state.product_id, id: 0 });
+      editFunRef.value.openDialog({ productKey: state.productKey, id: 0 });
     };
     //打开添加事件弹窗
     const onOpenEditEvent = () => {
-      editEventRef.value.openDialog({ product_id: state.product_id, id: 0, level: 0 });
+      editEventRef.value.openDialog({ productKey: state.productKey, id: 0, level: 0 });
     };
 
     //打开添加事件弹窗
     const onOpenEditTab = () => {
-      editTabRef.value.openDialog({ product_id: state.product_id, id: 0, accessMode: 0 });
+      editTabRef.value.openDialog({ productKey: state.productKey, id: 0, accessMode: 0 });
     };
 
     //查看日志列表
-    const onOpenListDetail = (row: TableDataRow) => {
+    const onOpenListDetail = (row: any) => {
       listDicRef.value.openDialog(row, state.detail.key);
     };
 
     // 打开修改产品弹窗
-    const onOpenEditDic = (row: TableDataRow) => {
+    const onOpenEditDic = (row: any) => {
       editDicRef.value.openDialog(row);
     };
 
@@ -737,7 +702,7 @@ export default defineComponent({
     };
 
     // 删除产品
-    const onRowDel = (key, type) => {
+    const onRowDel = (key: string, type: string) => {
       let msg = `此操作将永久删除该数据，是否继续?`;
 
       if (key.length === 0) {
@@ -751,27 +716,27 @@ export default defineComponent({
       })
         .then(() => {
           if (type == 'attr') {
-            api.model.propertydel(state.product_id, key).then(() => {
+            api.model.propertydel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getproperty();
             });
           }
           if (type == 'fun') {
-            api.model.functiondel(state.product_id, key).then(() => {
+            api.model.functiondel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getfunction();
             });
           }
           if (type == 'event') {
-            api.model.eventdel(state.product_id, key).then(() => {
+            api.model.eventdel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
               getevent();
             });
           }
           if (type == 'tab') {
-            api.model.tagdel(state.product_id, key).then(() => {
+            api.model.tagdel(state.productKey, key).then(() => {
               ElMessage.success('删除成功');
-              tagdel();
+              gettab();
             });
           }
         })
@@ -825,7 +790,7 @@ export default defineComponent({
       });
     };
 
-    const wuhandleClick = (tab: TabsPaneContext) => {
+    const wuhandleClick = (tab: any) => {
       state.activetab = tab.props.name;
       switch (tab.props.name) {
         case 'attr':
@@ -843,7 +808,7 @@ export default defineComponent({
       }
     };
 
-    const handleClick = (tab: TabsPaneContext, event: Event) => {
+    const handleClick = (tab: any, event: Event) => {
       if (tab.props.name == 4) {
         //获取日志
         getlog();
@@ -874,8 +839,8 @@ export default defineComponent({
         return value;
       }
     }
-    const getStatusText = (name, value) => {
-      let data = array_list.value;
+    const getStatusText = (name: any, value: string) => {
+      let data = array_list.value as any;
       for (let i = 0; i < data.length; i++) {
         const field = data[i];
         if (field.valueType.type === "object") {
@@ -883,7 +848,7 @@ export default defineComponent({
             const property = field.valueType.properties[j];
             if (property.key === name) {
               if (property.valueType.type === "enum") {
-                const element = property.valueType.elements.find((element) => element.value === value);
+                const element = property.valueType.elements.find((element: any) => element.value === value);
                 if (element) {
                   return `${property.name}: ${element.text}`;
                 } else {
@@ -896,7 +861,7 @@ export default defineComponent({
           }
         } else if (field.key === name) {
           if (field.valueType.type === "enum") {
-            const element = field.valueType.elements.find((element) => element.value === value);
+            const element = field.valueType.elements.find((element: any) => element.value === value);
             if (element) {
               return `${field.name}: ${element.text}`;
             }
@@ -918,13 +883,13 @@ export default defineComponent({
 
         var temp = new Array();
 
-        properties.forEach(function (item, index) {
+        properties.forEach(function (item: any, index: number) {
 
           let datalist = item.list || [];
           temp[index] = [];
           var temps = new Array();
 
-          datalist.forEach(function (a, b) {
+          datalist.forEach(function (a: any, b: number) {
             if (b < 15) {
               temps.push(a);
             }
@@ -932,10 +897,6 @@ export default defineComponent({
           if (item.type == 'object') {
             item.value = JSON.parse(item.value);
           }
-
-
-
-
 
           temp[index]['name'] = item.name
           temp[index]['key'] = item.key
@@ -982,20 +943,6 @@ export default defineComponent({
         });
       }
     };
-    const tinyAreas = () => {
-      var data = state.data;
-
-      const tinyArea = new TinyArea('container', {
-        height: 60,
-        autoFit: false,
-        data,
-        smooth: true,
-        areaStyle: {
-          fill: '#d6e3fd',
-        },
-      });
-      tinyArea.render();
-    }
     const onlineTimeoutUpdate = () => {
       if (!state.detail.onlineTimeout) return ElMessage('请先输入设备超时时间')
       api.device.updateOnlineTimeout({ id: state.detail.id, onlineTimeout: state.detail.onlineTimeout }).then(() => {
@@ -1014,7 +961,6 @@ export default defineComponent({
       getValueText,
       onlineTimeoutUpdate,
       setAttr,
-      tinyAreas,
       setAttrRef,
       editDicRef,
       editAttrRef,

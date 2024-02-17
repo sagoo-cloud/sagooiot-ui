@@ -62,7 +62,7 @@ const openDialog = (row: any) => {
     const { BMapGL: theBMapGL, centerPoint } = await initMap()
 
     BMapGL = theBMapGL
-    
+
     map = new BMapGL.Map(mapContainer.value!);
 
     // 如果添加了经纬度则进入地图后还原上次地址
@@ -132,7 +132,7 @@ const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
   // 创建地理编码实例, 并配置参数获取乡镇级数据
   const myGeo = new BMapGL.Geocoder({ extensions_town: true });
   // 根据坐标得到地址描述
-  myGeo.getLocation(new BMapGL.Point(lng, lat), function (result) {
+  myGeo.getLocation(new BMapGL.Point(lng, lat), function (result: any) {
     if (result) {
       address.value = result.content.poi_desc;
       if (oldAddress.value) {
@@ -141,7 +141,7 @@ const setAddressByCoordinate = (lng: string | number, lat: string | number) => {
     }
   });
 
-  // TODO旧查询经纬度方法
+  // 旧查询经纬度方法
   // const point = new BMapGL.Point(lng, lat);
   // const geocoder = new BMapGL.Geocoder();
   // geocoder.getPoint(point, (pointResult: any) => {
@@ -175,7 +175,7 @@ const searchByCoordinate = () => {
 const searchByKeyword = (keyword?: string) => {
   if (keyword) {
     const localSearch = new BMapGL.LocalSearch(map);
-    localSearch.setSearchCompleteCallback((searchResult) => {
+    localSearch.setSearchCompleteCallback((searchResult: any) => {
       if (searchResult) {
         const poi = searchResult.getPoi(0);
         if (poi) {

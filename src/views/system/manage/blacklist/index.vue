@@ -55,7 +55,7 @@
         <el-table-column v-col="'createdAt'" prop="createdAt" label="创建时间" align="center" width="180"></el-table-column>
         <el-table-column v-col="'handle'" label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
-            <!-- <router-link :to="'/iotmanager/device/product/detail/' + scope.row.id" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
+            <!-- <router-link :to="'/iotmanager/device/product/detail/' + scope.row.key" class="link-type" style="padding-right: 12px;font-size: 12px;color: #409eff;">
               <span>详情</span>
             </router-link> -->
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">编辑</el-button>

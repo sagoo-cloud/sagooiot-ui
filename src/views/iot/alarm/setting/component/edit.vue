@@ -8,7 +8,7 @@
 
 				<el-form-item label="告警级别" prop="level">
 					<el-radio-group v-model="ruleForm.level">
-						<el-radio :label="item.level" v-for="item in levelData" :key="item.level">{{ item.name }}</el-radio>
+						<el-radio :label="Number(item.value)" v-for="item in alarm_type" :key="item.value">{{ item.label }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
@@ -41,11 +41,11 @@
 					<el-select v-model="ruleForm.eventKey" filterable placeholder="请选择事件" @change="eventTypeChange">
 						<el-option v-for="item in eventList" :key="item.key" :label="item.name" :value="item.key"></el-option>
 					</el-select>
-				
+
 				</el-form-item>
 
 
-				<div v-if="ruleForm.triggerType>2" >
+				<div v-if="ruleForm.triggerType > 2">
 					<el-divider content-position="left">触发条件</el-divider>
 					<div class="box-content">
 						<div v-for="(item, index) in requestParams" :key="index">
@@ -197,10 +197,11 @@ interface RuleFormState {
 	eventKey: string;
 	productKey: string;
 	deviceKey: string;
-	triggerCondition: any;
+	triggerCondition: any[];
 	action: any;
 }
 interface DicState {
+	id: number;
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
 	rules: any;
@@ -209,9 +210,7 @@ interface DicState {
 	typeData: any;
 	triData: any;
 	operData: any;
-	levelData: any;
 	requestParams: any;
-	triggerCondition: any;
 	action: any;
 	tempData: any;
 	sendGatewayData: any;
@@ -228,7 +227,8 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const { proxy } = getCurrentInstance() as any;
 
-		const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
+		const { notice_send_gateway, alarm_type } = proxy.useDict('notice_send_gateway', 'alarm_type');
+
 		const state = reactive<DicState>({
 			id: 0,
 			isShowDialog: false,
@@ -312,11 +312,10 @@ export default defineComponent({
 			if (row) {
 				setType(true);
 
-
 				alarm.common.detail(row.id).then((res: any) => {
-					
+
 					state.requestParams = res.data.condition.triggerCondition;
-					let product_key=res.data.productKey;
+					let product_key = res.data.productKey;
 					res.data.performAction.action.forEach(function (value: { sendGateway: any; noticeConfig: number; }, index: string | number) {
 						notice.config.getList({ sendGateway: value.sendGateway }).then((res: any) => {
 							state.sendGatewayData[index] = res.Data;
@@ -334,21 +333,18 @@ export default defineComponent({
 							return { phone: p };
 						});
 					});
-					iotapi.product.event({key:res.data.productKey}).then((ress: any) => {
+					iotapi.product.event({ productKey: res.data.productKey }).then((ress: any) => {
 						state.eventList = ress || []
-						state.ruleForm.eventKey=row.eventKey
+						state.ruleForm.eventKey = row.eventKey
 					})
 					state.ruleForm = res.data;
 
-					if(product_key){
+					if (product_key) {
 						alarm.common.trigger_type(product_key).then((res: any) => {
 							state.typeData = res.list || [];
 						});
-						
 					}
 				});
-
-			
 			}
 			state.isShowDialog = true;
 		};
@@ -358,10 +354,7 @@ export default defineComponent({
 			iotapi.product.getLists({ status: 1 }).then((res: any) => {
 				state.productData = res.product || [];
 			});
-			alarm.common.levelall('').then((res: any) => {
-				state.levelData = res.list || [];
-			});
-			alarm.common.operator('').then((res: any) => {
+			alarm.common.operator().then((res: any) => {
 				state.operData = res.list || [];
 			});
 		};
@@ -399,6 +392,7 @@ export default defineComponent({
 				triggerType: 1,
 				level: '',
 				productKey: '',
+				eventKey: '',
 				deviceKey: '',
 				action: [
 					{
@@ -436,12 +430,12 @@ export default defineComponent({
 			gettriData()
 		};
 
-		watch(() => state.ruleForm.productKey, (key) => {
-			if (!key) return
+		watch(() => state.ruleForm.productKey, (productKey) => {
+			if (!productKey) return
 			// 切换产品时候重新获取事件列表，清空之前选中的事件
 			state.ruleForm.eventKey = ''
 
-			iotapi.product.event({ key }).then((res: any) => {
+			iotapi.product.event({ productKey }).then((res: any) => {
 				state.eventList = res || []
 			})
 		})
@@ -537,22 +531,16 @@ export default defineComponent({
 			});
 		};
 
-		const setType = (notResetDeviceKey: boolean) => {
+		const setType = (notResetDeviceKey?: boolean) => {
 			!notResetDeviceKey && (state.ruleForm.deviceKey = '')
-			let product_id = 0;
-			state.productData.forEach((item: { key: string; id: number; }) => {
-				if (item.key == state.ruleForm.productKey) {
-					product_id = item.id;
-				}
-			});
 
-			api.common.getdevList({ productId: product_id }).then((res: any) => {
+			api.common.getdevList({ productKey: state.ruleForm.deviceKey }).then((res: any) => {
 				state.sourceData = res.device;
 			});
 			alarm.common.trigger_type(state.ruleForm.productKey).then((res: any) => {
-						state.typeData = res.list || [];
-					});
-		
+				state.typeData = res.list || [];
+			});
+
 			gettriData();
 
 		};
@@ -583,7 +571,8 @@ export default defineComponent({
 			const triggerType = state.ruleForm.triggerType
 			const form = {
 				productKey: state.ruleForm.productKey,
-				triggerType
+				triggerType,
+				eventKey: ''
 			}
 
 			// 如果是事件上报，需要传eventKey参数
@@ -612,6 +601,7 @@ export default defineComponent({
 		};
 
 		return {
+			alarm_type,
 			getRadio,
 			gettriData,
 			getTem,
@@ -639,7 +629,8 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
+<style scoped lang="scss">
+
 .inline {
 	display: inline-flex;
 }
@@ -682,5 +673,6 @@ export default defineComponent({
 
 .jv-node {
 	margin-left: 25px;
-}</style>
+}
+</style>
  

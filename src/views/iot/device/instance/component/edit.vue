@@ -8,9 +8,9 @@
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入设备名称" />
         </el-form-item>
-        <el-form-item label="所属产品" prop="productId">
-          <el-select v-model="ruleForm.productId" @change="productIdChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
-            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.id" />
+        <el-form-item label="所属产品" prop="productKey">
+          <el-select v-model="ruleForm.productKey" @change="productKeyChange" :disabled="ruleForm.id" placeholder="请选择所属产品" class="w100">
+            <el-option v-for="item in productData" :key="item.id" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="设备坐标" prop="lng">
@@ -66,13 +66,13 @@
           <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
         </el-form-item>
         <el-form-item label="设备图片">
-<!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
+          <!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
           <uploadVue :img="phone" @set-imgs="setImgsPhone"></uploadVue>
-				</el-form-item>
+        </el-form-item>
         <el-form-item label="证书图片">
-<!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
+          <!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
           <uploadVue :img="certificate" @set-imgs="setImgsCertificate"></uploadVue>
-				</el-form-item>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -90,7 +90,7 @@
 import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/device';
 import apiSystem from '/@/api/system';
-import {ElMessage, UploadProps} from "element-plus";
+import { ElMessage, UploadProps } from "element-plus";
 import tagVue from './tag.vue';
 import Map from './map.vue';
 import UploadVue from '/@/components/upload/index.vue';
@@ -101,7 +101,7 @@ interface RuleFormState {
   key: string;
   name: string;
   version: string;
-  productId: number | string;
+  productKey: string | string;
   tags: Tag[];
   lng: string;
   lat: string;
@@ -119,7 +119,7 @@ const form: RuleFormState = {
   id: 0,
   key: '',
   name: '',
-  productId: '',
+  productKey: '',
   tags: [],
   lng: '',
   lat: '',
@@ -163,7 +163,7 @@ export default defineComponent({
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
     const mapRef = ref();
-    const certList = ref([])
+    const certList = ref<any[]>([])
     const state = reactive<DicState>({
       isShowDialog: false,
       product: {},
@@ -178,7 +178,7 @@ export default defineComponent({
         key: [
           { required: true, message: "设备标识不能为空", trigger: "blur" }
         ],
-        productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
+        productKey: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
       },
       deviceImgLimit: 0,
       certificateLimit: 0,
@@ -218,7 +218,7 @@ export default defineComponent({
         state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
         state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
         state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
-        productIdChange(row.productId as number)
+        productKeyChange(row.productKey as string)
       }
       state.isShowDialog = true;
     };
@@ -301,8 +301,8 @@ export default defineComponent({
     }
 
     // 所属产品变化的时候，更新产品详情
-    const productIdChange = (productId: number) => {
-      api.product.detail(productId).then((res: any) => {
+    const productKeyChange = (productKey: string) => {
+      api.product.detail(productKey).then((res: any) => {
         const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
         state.ruleForm.authType = authType
@@ -314,7 +314,7 @@ export default defineComponent({
     }
 
     //回调地图选点
-    const updateMap=(data:any)=>{
+    const updateMap = (data: any) => {
       state.ruleForm.lng = data.lng;
       state.ruleForm.lat = data.lat;
       state.ruleForm.address = data.address;
@@ -322,7 +322,7 @@ export default defineComponent({
 
     return {
       certList,
-      productIdChange,
+      productKeyChange,
       tagRef,
       selectMap,
       mapRef,

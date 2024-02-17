@@ -24,7 +24,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<el-link type="primary"  @click="editjson(index, 'fun')">编辑</el-link>
+								<el-link type="primary" @click="editjson(index, 'fun')">编辑</el-link>
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -32,7 +32,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson('fun')">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -59,25 +61,42 @@ import api from '/@/api/device';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
 import { validateNoSpace } from '/@/utils/validator';
-
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
-	id: number;
-	productId: number;
-	level: number;
+	id?: number;
+	productKey: string;
+	level: number | null;
+	key: string;
+	type: string;
 	name: string;
-	dictType: string;
-	inputs: Object;
-	outputs: Object [];
+	outputs: any[];
 	status: number;
 	desc: string;
 }
 interface DicState {
 	isShowDialog: boolean;
 	ruleForm: RuleFormState;
-	typeData: RuleFormState[];
-	rules: {};
+	type: string;
+	types: string;
+	productKey: string;
+	typeData: any[];
+	jsondata: any[];
+	enumdata: any[];
+	outputsdata: any[];
+	elementType: any;
+	rules: any;
+}
+
+const form = {
+	productKey: '',
+	type: '',
+	name: '',
+	level: null,
+	key: '',
+	status: 1,
+	outputs: [],
+	desc: '',
 }
 
 export default defineComponent({
@@ -91,7 +110,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: '',
 			elementType: {
 				type: '',
 				maxLength: '',
@@ -102,33 +121,26 @@ export default defineComponent({
 					value: '',
 				},
 			],
-
 			jsondata: [],
 			outputsdata: [],
-
-			ruleForm: {
-				productId: 0,
-				name: '',
-				key: '',
-				outputs: [],
-				desc: '',
-			},
+			ruleForm: JSON.parse(JSON.stringify(form)),
 			rules: {
-				name: [ { required: true, message: '事件定义名称不能为空', trigger: 'blur' },
-        				{ max: 32, message: '事件定义名称不能超过32个字符', trigger: 'blur' },
-						{ validator: validateNoSpace, message: '事件定义名称不能包含空格', trigger: 'blur' }
-					],
+				name: [
+					{ required: true, message: '事件定义名称不能为空', trigger: 'blur' },
+					{ max: 32, message: '事件定义名称不能超过32个字符', trigger: 'blur' },
+					{ validator: validateNoSpace, message: '事件定义名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '事件定义标识不能为空', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
 			},
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState, productKey: string) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
-				const datat = Object.values(res.dataType);
+				const datat: any[] = Object.values(res.dataType);
 				datat.forEach((item, index) => {
 					if (index == 0) {
 						datat[index]['label'] = '基础类型';
@@ -144,29 +156,24 @@ export default defineComponent({
 			state.ruleForm = row;
 			if (row.outputs) {
 				state.ruleForm = row;
-				state.productId = productId;
+				state.productKey = productKey;
 				state.outputsdata = row.outputs;
 			}
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
-			state.ruleForm = {
-				name: '',
-				key: '',
-				status: 1,
-				desc: '',
-			};
+			state.ruleForm = JSON.parse(JSON.stringify(form))
 			state.type = '';
 			state.types = '';
 			state.outputsdata = [];
 			state.elementType = [];
 		};
 
-		const seletChange = (val) => {
+		const seletChange = (val: string) => {
 			state.type = val;
 			state.ruleForm.type = val;
 		};
-		const seletChanges = (val) => {
+		const seletChanges = (val: string) => {
 			state.types = val;
 		};
 
@@ -176,18 +183,18 @@ export default defineComponent({
 				value: '',
 			});
 		};
-		const delEnum = (index) => {
+		const delEnum = (index: number) => {
 			state.enumdata.splice(index, 1);
 		};
 
-		const deljson = (index, type) => {
+		const deljson = (index: number, type: string) => {
 			if (type == 'fun') {
 				state.outputsdata.splice(index, 1);
 			} else {
 				state.jsondata.splice(index, 1);
 			}
 		};
-		const editjson=(index,type)=>{
+		const editjson = (index: number, type: string) => {
 			if (type == 'fun') {
 				editOptionRef.value.openDialog(state.outputsdata[index]);
 			} else {
@@ -196,10 +203,10 @@ export default defineComponent({
 			}
 		}
 
-		const addJson = (type) => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
+		const addJson = (type: string) => {
+			editOptionRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
-		const getOptionData = (data, type_data) => {
+		const getOptionData = (data: any, type_data: any) => {
 			if (type_data == 'fun') {
 				state.outputsdata.push(data);
 			} else {
@@ -225,7 +232,7 @@ export default defineComponent({
 					const theApi = state.ruleForm.id !== 0 ? api.model.eventedit : api.model.eventadd;
 
 					if (state.ruleForm.id !== 0) {
-						state.ruleForm.productId = state.productId;
+						state.ruleForm.productKey = state.productKey;
 					}
 
 					theApi(state.ruleForm).then(() => {
@@ -264,35 +271,41 @@ export default defineComponent({
 	justify-content: space-between;
 	margin-top: 10px;
 }
+
 .input-option {
 	line-height: 30px;
 	padding-top: 5px;
 	width: 140px;
 }
+
 .input-option i {
 	margin: 0px 5px;
 	border: 1px solid #c3c3c3;
 	font-size: 16px;
 }
+
 .input-options {
 	display: flex;
 	align-items: center;
 	color: #409eff;
 	cursor: pointer;
 }
+
 .jslist {
 	width: 100%;
 	border: 1px solid #e8e8e8;
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
 .jsonlist {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.jsonoption {
-}
+
+.jsonoption {}
+
 .jsonoption a {
 	margin: 0px 10px;
 }

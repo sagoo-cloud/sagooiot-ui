@@ -1,12 +1,10 @@
 <template>
 	<div class="page bg page-full">
 		<div class="content">
-			<div class="cont_box">
+			<div class="cont_box" style="align-items: center;">
 				<div class="title">产品：{{ detail.name }}</div>
-				<div class="pro-status"><span :class="developer_status == 1 ? 'on' : 'off'"></span>{{ developer_status == 1
-					? '已发布' : '未发布' }}</div>
-				<div class="pro-option" @click="CkOption" v-auth="'startOrStop'"> {{ developer_status == 1 ? '停用' : '启用' }}
-				</div>
+				<!-- <el-tag :type="developer_status == 1 ? 'success' : 'danger'" style="margin:0 20px;">{{ developer_status == 1 ? '已发布' : '未发布' }}</el-tag> -->
+				<el-switch v-auth="'startOrStop'" style="margin:0 20px;" v-model="developer_status" inline-prompt :active-value="1" :inactive-value="0" active-text="启用" inactive-text="停用" @change="CkOption"></el-switch>
 			</div>
 		</div>
 
@@ -18,7 +16,7 @@
 				</div>
 
 				<el-descriptions class="margin-top" :column="3" border>
-					<el-descriptions-item label="产品标识">{{ detail.key }}</el-descriptions-item>
+					<el-descriptions-item label="产品标识"><copy :text="detail.key"></copy></el-descriptions-item>
 					<el-descriptions-item label="产品分类">{{ detail.categoryName }}</el-descriptions-item>
 					<el-descriptions-item label="设备类型">{{ detail.deviceType }}</el-descriptions-item>
 					<el-descriptions-item label="产品图片">
@@ -159,7 +157,7 @@
 				</el-tabs>
 				<div class="import">
 					<div class="row_bet">
-						<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ key: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
+						<el-upload accept="json" :show-file-list="false" :limit="1" :data="{ productKey: detail.key }" :headers="headers" :action="uploadUrl" :on-success="updateImg">
 							<el-button size="small">
 								<el-icon> <ele-Upload /> </el-icon>
 								导入物模型
@@ -172,9 +170,7 @@
 							导出物模型
 						</el-button>
 					</div>
-
 				</div>
-
 				<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getList()" />
 			</el-tab-pane>
 			<el-tab-pane label="设备接入" name="3">
@@ -185,7 +181,7 @@
 				</dataParse>
 			</el-tab-pane>
 		</el-tabs>
-		<EditDic ref="editDicRef" @typeList="typeList" />
+		<EditDic ref="editDicRef" @typeList="productDetail" />
 		<EditAttr ref="editAttrRef" @typeList="getproperty" />
 		<EditFun ref="editFunRef" @typeList="getfunction" />
 		<EditEvent ref="editEventRef" @typeList="getevent" />
@@ -212,10 +208,12 @@ import { useRoute } from 'vue-router';
 
 import api from '/@/api/device';
 
-
 interface TableDataState {
-	ids: number[];
+	isShowDialog: boolean;
 	detail: any;
+	developer_status: number;
+	activeName: string;
+	activetab: string;
 	tableData: {
 		data: [];
 		total: number;
@@ -224,10 +222,11 @@ interface TableDataState {
 			pageNum: number;
 			pageSize: number;
 			name: string;
+			productKey: string | string[];
 			deviceType: string;
 			status: string;
 			dateRange: string[];
-		};
+		} | any;
 	};
 }
 export default defineComponent({
@@ -258,7 +257,7 @@ export default defineComponent({
 				loading: false,
 				param: {
 					pageNum: 1,
-					productId: route.params && route.params.id,
+					productKey: route.params?.id,
 					pageSize: 10,
 					status: '',
 					dateRange: [],
@@ -267,12 +266,7 @@ export default defineComponent({
 		});
 
 		onMounted(() => {
-			const ids = route.params && route.params.id;
-			api.product.detail(ids).then((res: any) => {
-				state.detail = res.data;
-				state.developer_status = res.data.status
-			});
-
+			productDetail()
 			//第一次加载
 			api.model.property(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.Data;
@@ -280,54 +274,63 @@ export default defineComponent({
 			});
 		});
 
+		function productDetail() {
+			const productKey = route.params?.id;
+			api.product.detail(productKey).then((res: any) => {
+				state.detail = res.data;
+				state.developer_status = res.data.status
+			});
+		}
+
+
 		//编辑属性
-		const onEditAttr = (row: TableDataRow) => {
+		const onEditAttr = (row: any) => {
 			editAttrRef.value.openDialog(row, route.params.id);
 		};
 
 		//编辑功能
-		const onEditFun = (row: TableDataRow) => {
+		const onEditFun = (row: any) => {
 			editFunRef.value.openDialog(row, route.params.id);
 		}
 
 
 		//编辑事件
-		const onEditEvent = (row: TableDataRow) => {
+		const onEditEvent = (row: any) => {
 			editEventRef.value.openDialog(row, route.params.id);
 		}
 
 		//编辑标签
-		const onEditTag = (row: TableDataRow) => {
+		const onEditTag = (row: any) => {
 			editTabRef.value.openDialog(row, route.params.id);
 		}
 
 		//打开添加属性弹窗
 		const onOpenEditAttr = () => {
-			editAttrRef.value.openDialog({ product_id: route.params.id, id: 0, accessMode: 1 });
+			editAttrRef.value.openDialog({ productKey: route.params.id, id: 0, accessMode: 1 });
 		};
 
 		//打开添加功能弹窗
 		const onOpenEditFun = () => {
-			editFunRef.value.openDialog({ product_id: route.params.id, id: 0 });
+			editFunRef.value.openDialog({ productKey: route.params.id, id: 0 });
 		};
 		//打开添加事件弹窗
 		const onOpenEditEvent = () => {
-			editEventRef.value.openDialog({ product_id: route.params.id, id: 0, level: 0 });
+			editEventRef.value.openDialog({ productKey: route.params.id, id: 0, level: 0 });
 		};
 
 		//打开添加事件弹窗
 		const onOpenEditTab = () => {
-			editTabRef.value.openDialog({ product_id: route.params.id, id: 0, accessMode: 1 });
+			editTabRef.value.openDialog({ productKey: route.params.id, id: 0, accessMode: 1 });
 		};
 
 		// 打开修改产品弹窗
-		const onOpenEditDic = (row: TableDataRow) => {
+		const onOpenEditDic = (row: any) => {
 			editDicRef.value.openDialog(row);
 		};
 
 
 		// 删除产品
-		const onRowDel = (key, type) => {
+		const onRowDel = (key: string, type: string) => {
 			let msg = `此操作将永久删除该数据，是否继续?`;
 
 			if (key.length === 0) {
@@ -340,28 +343,29 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
+					const productKey = route.params?.id as string
 					if (type == 'attr') {
-						api.model.propertydel(route.params.id, key).then(() => {
+						api.model.propertydel(productKey, key).then(() => {
 							ElMessage.success('删除成功');
 							getproperty();
 						});
 					}
 					if (type == 'fun') {
-						api.model.functiondel(route.params.id, key).then(() => {
+						api.model.functiondel(productKey, key).then(() => {
 							ElMessage.success('删除成功');
 							getfunction();
 						});
 					}
 					if (type == 'event') {
-						api.model.eventdel(route.params.id, key).then(() => {
+						api.model.eventdel(productKey, key).then(() => {
 							ElMessage.success('删除成功');
 							getevent();
 						});
 					}
 					if (type == 'tab') {
-						api.model.tagdel(route.params.id, key).then(() => {
+						api.model.tagdel(productKey, key).then(() => {
 							ElMessage.success('删除成功');
-							tagdel();
+							gettab();
 						});
 					}
 				})
@@ -414,7 +418,7 @@ export default defineComponent({
 			});
 		};
 
-		const wuhandleClick = (tab: TabsPaneContext) => {
+		const wuhandleClick = (tab: any) => {
 			state.activetab = tab.props.name;
 			switch (tab.props.name) {
 				case 'attr':
@@ -432,32 +436,31 @@ export default defineComponent({
 			}
 		};
 
-		const handleClick = (tab: TabsPaneContext, event: Event) => {
+		const handleClick = (tab: any, event: Event) => {
 		};
 
 		const updateScript = (scriptInfo: string) => {
 			state.detail.scriptInfo = scriptInfo
 		};
 
-		const CkOption = () => {
-
-			if (state.developer_status == 1) {
-				api.product.undeploy({ id: route.params.id }).then((res: any) => {
+		const CkOption = (developer_status: number) => {
+			if (developer_status == 0) {
+				api.product.undeploy(route.params.id).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 0;
-				});
+				}).catch(() => state.developer_status = 1)
 			} else {
-				api.product.deploy({ id: route.params.id }).then((res: any) => {
+				api.product.deploy(route.params.id).then((res: any) => {
 					ElMessage.success('操作成功');
 					state.developer_status = 1;
-				});
+				}).catch(() => state.developer_status = 0)
 			}
 		}
 
 		// 导出
 		const onRowExport = () => {
 
-			api.product.export({ key: state.detail.key }).then((res: any) => downloadFile(res, "TSL-" + state.detail.key + "-" + getCurrentTime() + ".json"))
+			api.product.export({ productKey: state.detail.key }).then((res: any) => downloadFile(res, "TSL-" + state.detail.key + "-" + getCurrentTime() + ".json"))
 		};
 
 
@@ -472,7 +475,7 @@ export default defineComponent({
 		}
 		const updateImg = (res: any) => {
 			if (res.code === 0) {
-				getList("attr");
+				getList();
 				ElMessage.success('物模型导入成功');
 			} else {
 				ElMessage.error(res.message);
@@ -506,6 +509,7 @@ export default defineComponent({
 			wuhandleClick,
 			onOpenEditTab,
 			onOpenEditEvent,
+			productDetail,
 			onOpenEditAttr,
 			onOpenEditFun,
 			onOpenEditDic,

@@ -24,7 +24,7 @@
           {{ ruleForm.createdAt }}
         </el-form-item>
         <el-form-item label="告警数据">
-          <JsonViewer style="width:100%;" :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
+          <JsonViewer style="width:100%;" :value="jsonData" boxed sort theme="jv-dark" />
         </el-form-item>
 
         <el-form-item label="处理意见">

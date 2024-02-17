@@ -16,7 +16,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<el-link type="primary"  @click="editjson(index, 'fun')">编辑</el-link>
+								<el-link type="primary" @click="editjson(index, 'fun')">编辑</el-link>
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -39,7 +39,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<el-link type="primary" @click="editjsonOut(index, 'fun')">编辑</el-link>
+								<el-link type="primary" @click="editjsonOut(index)">编辑</el-link>
 								<el-link type="primary" @click="deljsonOut(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -66,8 +66,8 @@
 				</span>
 			</template>
 		</el-dialog>
-		<EditOption ref="editOptionRef" key="editOptionRef" @typeList="getOptionData"  @editTypeList="editOptionDataOut" />
-		<EditOption ref="editOptionOutRef" key="editOptionOutRef" @typeList="getOptionDataOut"  @editTypeList="editOptionDataOut"/>
+		<EditOption ref="editOptionRef" key="editOptionRef" @typeList="getOptionData" />
+		<EditOption ref="editOptionOutRef" key="editOptionOutRef" @typeList="getOptionDataOut" />
 	</div>
 </template>
 
@@ -78,24 +78,51 @@ import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
 import { validateNoSpace } from '/@/utils/validator';
 
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
-	id: number;
-	productId: number;
+	id?: number;
+	key: string;
+	productKey: string;
 	name: string;
+	type: string;
 	dictType: string;
 	valueType: Object;
-	inputs: Object;
-	output: Object;
+	inputs: any;
+	outputs: any;
 	status: number;
 	desc: string;
 }
 interface DicState {
 	isShowDialog: boolean;
+	productKey: string;
+	type: string;
+	types: string;
 	ruleForm: RuleFormState;
-	typeData: RuleFormState[];
+	typeData: any[];
+	inputsdata: any[];
+	outputsdata: any[];
+	jsondata: any[];
+	elementType: any;
+	enumdata: any;
+	valueType: any;
 	rules: {};
+}
+
+const form = {
+	productKey: '',
+	type: '',
+	name: '',
+	key: '',
+	status: 1,
+	dictType: '',
+	inputs: [],
+	outputs: [],
+	valueType: {
+		type: '',
+		maxLength: '',
+	},
+	desc: '',
 }
 
 export default defineComponent({
@@ -110,7 +137,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: '',
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -129,56 +156,32 @@ export default defineComponent({
 					value: '',
 				},
 			],
-
 			jsondata: [],
 			inputsdata: [],
 			outputsdata: [],
-
-			ruleForm: {
-				productId: 0,
-				name: '',
-				key: '',
-				inputs: [],
-				outputs: [],
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			},
+			ruleForm: JSON.parse(JSON.stringify(form)),
 			rules: {
-				name: [ { required: true, message: '功能定义名称不能为空', trigger: 'blur' },
-        				{ max: 32, message: '功能定义名称不能超过32个字符', trigger: 'blur' },
-						{ validator: validateNoSpace, message: '功能定义名称不能包含空格', trigger: 'blur' }
-					],
+				name: [{ required: true, message: '功能定义名称不能为空', trigger: 'blur' },
+				{ max: 32, message: '功能定义名称不能超过32个字符', trigger: 'blur' },
+				{ validator: validateNoSpace, message: '功能定义名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '功能定义标识不能为空', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
 			},
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState, productKey: string) => {
 			resetForm();
 			state.ruleForm = row;
-			state.productId = productId;
+			state.productKey = productKey;
 			state.inputsdata = row.inputs || [];
 			state.outputsdata = row.outputs || [];
 			state.isShowDialog = true;
 
 		};
 		const resetForm = () => {
-			state.ruleForm = {
-				name: '',
-				key: '',
-				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			};
+			state.ruleForm = JSON.parse(JSON.stringify(form))
 			state.type = '';
 			state.types = '';
 			state.inputsdata = [];
@@ -187,12 +190,12 @@ export default defineComponent({
 			state.valueType = {};
 		};
 
-		const seletChange = (val) => {
+		const seletChange = (val: string) => {
 			state.type = val;
 			state.ruleForm.type = val;
 
 		};
-		const seletChanges = (val) => {
+		const seletChanges = (val: string) => {
 			state.types = val;
 		};
 
@@ -202,11 +205,11 @@ export default defineComponent({
 				value: '',
 			});
 		};
-		const delEnum = (index) => {
+		const delEnum = (index: number) => {
 			state.enumdata.splice(index, 1);
 		};
 
-		const editjson=(index,type)=>{
+		const editjson = (index: number, type: string) => {
 			if (type == 'fun') {
 				editOptionRef.value.openDialog(state.inputsdata[index]);
 			} else {
@@ -215,7 +218,7 @@ export default defineComponent({
 			}
 		}
 
-		const deljson = (index, type) => {
+		const deljson = (index: number, type: string) => {
 			if (type == 'fun') {
 				state.inputsdata.splice(index, 1);
 			} else {
@@ -223,7 +226,7 @@ export default defineComponent({
 			}
 		};
 
-		const deljsonOut = (index, type) => {
+		const deljsonOut = (index: number, type: string) => {
 			if (type == 'fun') {
 				state.outputsdata.splice(index, 1);
 			} else {
@@ -231,37 +234,32 @@ export default defineComponent({
 			}
 		};
 
-		const editjsonOut=(index,type)=>{
+		const editjsonOut = (index: number) => {
 			editOptionOutRef.value.openDialog(state.outputsdata[index]);
 		}
 
-		const addJson = (type) => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
+		const addJson = (type: string) => {
+			editOptionRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
 
-		const addJsonOut = (type) => {
-			editOptionOutRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
+		const addJsonOut = (type: string) => {
+			editOptionOutRef.value.openDialog({ productKey: '', id: 0, type_data: type });
 		};
 
-		const getOptionData = (data, type_data) => {
+		const getOptionData = (data: any, type_data: any) => {
 			if (type_data == 'fun') {
 				state.inputsdata.push(data);
 			} else {
 				state.jsondata.push(data);
 			}
 		};
-		const getOptionDataOut = (data, type_data) => {
-
+		const getOptionDataOut = (data: any, type_data: any) => {
 			if (type_data == 'fun') {
 				state.outputsdata.push(data);
 			} else {
 				state.outputsdata.push(data);
 			}
-
-			
 		};
-		const editOptionDataOut =(data,type_data)=>{
-		}
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -279,7 +277,7 @@ export default defineComponent({
 					state.ruleForm.inputs = state.inputsdata;
 					state.ruleForm.outputs = state.outputsdata;
 					if (state.ruleForm.id !== 0) {
-						state.ruleForm.productId = state.productId;
+						state.ruleForm.productKey = state.productKey;
 						api.model.functionedit(state.ruleForm).then(() => {
 							ElMessage.success('功能定义类型修改成功');
 							closeDialog(); // 关闭弹窗
@@ -299,7 +297,6 @@ export default defineComponent({
 		return {
 			editOptionRef,
 			editOptionOutRef,
-			editOptionDataOut,
 			getOptionData,
 			getOptionDataOut,
 			openDialog,

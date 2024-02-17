@@ -54,7 +54,7 @@ getData()
 
 function getData() {
 	loading.value = true
-	api.tabDeviceFucntion.getList({ key: props.productKey }).then((res: IListItem[]) => {
+	api.tabDeviceFucntion.getList({ productKey: props.productKey }).then((res: IListItem[]) => {
 		if (!res) return
 		res.forEach((item) => (item.result = ''))
 		list.value = res
@@ -118,11 +118,11 @@ function clear(row: IListItem) {
 		flex: 2;
 	}
 
-	::v-deep(.el-textarea__inner) {
+	:deep(.el-textarea__inner) {
 		height: 100%;
 	}
 
-	::v-deep(.el-select) {
+	:deep(.el-select) {
 		width: 100%;
 	}
 }
