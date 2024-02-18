@@ -19,6 +19,7 @@
       <el-table :data="tableData.data" style="width: 100%" row-key="id" v-loading="tableData.loading">
         <el-table-column prop="id" label="ID" width="100" show-overflow-tooltip></el-table-column>
         <el-table-column prop="deviceName" label="设备名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="deviceKey" label="设备标识"></el-table-column>
         <el-table-column prop="status" label="状态" show-overflow-tooltip>
           <template #default="scope">
             <el-tag size="small" v-if="scope.row.status == 0">待推送</el-tag>
@@ -143,7 +144,6 @@ export default defineComponent({
     }
     // 定时请求列表
     const timer = () => {
-      console.log(11);
       // 因列表更新数据不是实时更新，需设置定时后在请求列表
       state.timeoutTimer = setTimeout(() => {
         getDetail();
