@@ -68,6 +68,11 @@ let props = defineProps({
     required: false,
     default: () => {},
   },
+  cursorBlinkRate: {
+    type: Number,
+    required: false,
+    default: -1,
+  }
 })
 
 const editor = ref();
@@ -96,6 +101,7 @@ nextTick(() => {
   });
   coder.setValue(props.content)
   coder.on('change', props.onchange)
+  coder.setOption('cursorBlinkRate', props.cursorBlinkRate);
 });
 
 /**

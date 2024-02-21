@@ -33,14 +33,16 @@
             <el-switch v-model="onlineOpen" active-color="#13ce66" inactive-color="#ddd"></el-switch>
           </div>
         </div>
-        <div style="border: 1px solid #ccc; border-top: none">
+<!--        <div style="border: 1px solid #ccc; border-top: none">-->
+        <div style="border-top: none">
           <codeEditor
               class="params flex1"
               ref="mirrorRef"
               mode=""
               :onchange="onchange"
               :readOnly="true"
-              :content="currentConfig.configContent"></codeEditor>
+              :content="currentConfig.configContent"
+              :cursorBlinkRate="-1"></codeEditor>
         </div>
         <div class="btnContainer">
           <div v-if="!onlineOpen">
@@ -115,7 +117,8 @@
             mode=""
             :onchange="onchange"
             :readOnly="true"
-            :content="tableData.data[lookIndex!].content"></codeEditor>
+            :content="tableData.data[lookIndex!].content"
+            :cursorBlinkRate="-1"></codeEditor>
       </div>
       <template #footer>
 				<span class="dialog-footer">
@@ -194,6 +197,8 @@ export default defineComponent({
 
     const edit = () => {
       mirrorRef.value.setOption('readOnly', false)
+      // 显示光标
+      mirrorRef.value.setOption('cursorBlinkRate', 530);
       canSave.value = true
     }
 
@@ -207,6 +212,8 @@ export default defineComponent({
           if (!onlineOpen.value) {
             canSave.value = false
             mirrorRef.value.setOption('readOnly', true)
+            // 隐藏光标
+            mirrorRef.value.setOption('cursorBlinkRate', -1);
           }
         }
     )
@@ -225,7 +232,8 @@ export default defineComponent({
       api.remoteconf.queryThingConfig({ pageNum: 1, PageSize: 50, productKey: product.value })
         .then((res: any) => {
           if (res.remoteconf) {
-            tableData.data = res.remoteconf.slice(1)
+            // tableData.data = res.remoteconf.slice(1)
+            tableData.data = res.remoteconf
             // 重塑编号
             for (let i = 0; i < tableData.data.length; i++) {
               if ((i + 1) < 10) {
@@ -234,7 +242,6 @@ export default defineComponent({
                 tableData.data[i].configNumber = i + 1;
               }
             }
-            console.log(tableData.data);
             currentConfig.value = res.remoteconf[0]
             mirrorRef.value.setValue(currentConfig.value.configContent)
           }
@@ -357,10 +364,10 @@ article {
 }
 .editorTitle {
   width: 100%;
-  border: 1px solid #ccc;
+  //border: 1px solid #ccc;
   padding: 10px;
-  height: 50px;
-  background-color: #eee;
+  height: 50px
+  //background-color: #eee;
 }
 .leftLabel {
   float: left;
