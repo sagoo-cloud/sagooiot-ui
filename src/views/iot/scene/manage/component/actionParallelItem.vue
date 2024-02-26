@@ -11,9 +11,9 @@
       <div class="product flex flex-warp">
         <el-form-item label="动作类型：" prop="actionType">
           <el-select v-model="item.actionType" filterable clearable placeholder="请选择动作类型" @change="saveData">
-            <el-option v-for="it in sourceActionTypeData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
+            <el-option v-for="it in sence_action_type" :key="it.value" :label="it.label" :value="it.value">
+              <span style="float: left">{{ it.label }}</span>
+              <span style="float: right; font-size: 13px">{{ it.value }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref,watch  } from 'vue'
+import { PropType, ref, watch, getCurrentInstance  } from 'vue'
 import { DocumentAdd, CircleClose } from '@element-plus/icons-vue';
 import DeviceOut from './actionType/deviceOut.vue';
 import SendNotice from './actionType/sendNotice.vue';
@@ -43,8 +43,10 @@ import CallWebService from './actionType/callWebService.vue';
 import TriggerAlarm from './actionType/triggerAlarm.vue';
 import DelayExecution from './actionType/delayExecution.vue';
 import TriggerCustomEvent from './actionType/triggerCustomEvent.vue';
-const deviceListData = ref<testIValueType[]>([]);
-const emit = defineEmits(['addScenesDetail','delData','saveData']);
+const emit = defineEmits(['addScenesDetail', 'delData', 'saveData']);
+
+const { proxy } = getCurrentInstance() as any;
+const { sence_action_type } = proxy.useDict('sence_action_type');
 
 interface IValueType {
   actionType?:string;
@@ -52,7 +54,6 @@ interface IValueType {
 interface testIValueType {
   key?: string;
   name?: string;
-
 }
 
 const props = defineProps({
@@ -68,28 +69,6 @@ const props = defineProps({
   index: {
     type: Number ,
     default: () => []
-  },
-  sourceActionTypeData: {
-    type: Array as PropType<testIValueType[]>,
-    default: () => [{
-      'key': 'deviceOutput',
-      'name': '设备输出',
-    }, {
-      'key': 'sendNotice',
-      'name': '发送通知',
-    }, {
-      'key': 'callWebService',
-      'name': '调用WEB服务',
-    }, {
-      'key': "triggerAlarm",
-      'name': '触发告警',
-    }, {
-      'key': 'delayExecution',
-      'name': '延迟执行',
-    }, {
-      'key': 'triggerCustomEvent',
-      'name': '触发场景自定义事件',
-    }]
   }
 })
 const parallelValue = ref(props.parallel);

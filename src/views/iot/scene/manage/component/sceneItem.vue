@@ -28,9 +28,9 @@
         </el-form-item>
         <el-form-item label="触发类型：" prop="triggerType">
           <el-select v-model="item.triggerType" clearable filterable placeholder="请选择触发类型" @change="getSelectcolumns(index, item.triggerType!)">
-            <el-option v-for="it in sourceTypeData" :key="it.key" :label="it.name" :value="it.key">
-              <span style="float: left">{{ it.name }}</span>
-              <span style="float: right; font-size: 13px">{{ it.key }}</span>
+            <el-option v-for="it in sence_source_type" :key="it.value" :label="it.label" :value="it.value">
+              <span style="float: left">{{ it.label }}</span>
+              <span style="float: right; font-size: 13px">{{ it.value }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -71,6 +71,9 @@ import datahub from '/@/api/datahub';
 import Condition from './condition.vue';
 const { proxy } = getCurrentInstance() as any;
 const scene_type = proxy.useDict('scene_type');
+
+const { sence_source_type } = proxy.useDict('sence_source_type');
+
 const emit = defineEmits(['addScenesDetail', 'delScenesDetail', 'editScenesDetail']);
 const dialogVisible = ref();
 const deviceListData = ref<testIValueType[]>([]);
@@ -109,36 +112,6 @@ const props = defineProps({
     type: Array as PropType<testIValueType[]>,
     default: () => []
   },
-  sourceTypeData: {
-    type: Array as PropType<testIValueType[]>,
-    default: () => [{
-      'key': 'onLine',
-      'name': '设备上线',
-    }, {
-      'key': 'offLine',
-      'name': '设备离线',
-    },
-
-    {
-      'key': 'readAttribute',
-      'name': '读取属性',
-    }, {
-      'key': 'modifyAttribute',
-      'name': '修改属性',
-    },
-    {
-      'key': 'reportAttribute',
-      'name': '属性上报',
-    }, {
-      'key': 'reportEvent',
-      'name': '事件上报',
-    },
-    {
-      'key': 'functionCall',
-      'name': '功能调用',
-    }
-    ]
-  }
 })
 
 const seletChange = (index: number, val: string) => {
