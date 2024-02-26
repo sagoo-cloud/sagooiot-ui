@@ -4,7 +4,7 @@
 
       <div v-if="index > 0"><el-divider>或满足以下条件</el-divider></div>
       <div class="type-item">
-        <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red" v-if="index > 0">
+        <div class="conicon" style="width: 100%; text-align: right; position: relative; right: -15px; top: -5px; color: red" v-if="condition.length > 1">
           <el-icon @click="delScene(index)">
             <CircleClose />
           </el-icon>
@@ -13,7 +13,6 @@
         <div class="flex-warp item_list">
 
           <div v-for="(vo, i) in item" :key="i">
-
             <div class="items">
               <el-button style="background: #fff; color: #000;border: 1px solid #d9cde3;margin-left: 10px;margin-right: 10px;" v-if="(i as number) > 0">并且</el-button>
 
@@ -49,16 +48,14 @@
 
               <el-popover placement="bottom" trigger="click">
                 <template #reference>
-                  <el-button style="background: #bc7dee1a; color: #692ca7;border: 1px solid #bc7dee80;">{{ vo.value ||
-                    '参数值' }}</el-button>
+                  <el-button style="background: #bc7dee1a; color: #692ca7;border: 1px solid #bc7dee80;">{{ vo.value || '参数值' }}</el-button>
                 </template>
                 <div class="popover-content">
-                  <el-input v-model="vo.value" placeholder="请输入参数值" @input="saveData" />
-
+                  <el-input v-model="vo.value" placeholder="请输入参数值" @blur="saveData" />
                 </div>
               </el-popover>
 
-              <el-icon size="16" v-if="(i as number) > 0" @click="DelSceneItem(i as number, index)" style="position: relative;top: -13px;">
+              <el-icon size="16" v-if="item.length > 1" @click="DelSceneItem(i as number, index)" style="position: relative;top: -13px;">
                 <CircleClose />
               </el-icon>
 
@@ -79,7 +76,7 @@
 
     </div>
 
-    <div class="mt15"><el-button @click="addScene()">增加或条件</el-button></div>
+    <div class="mt15"><el-button @click="addScene()">增加条件</el-button></div>
 
   </div>
 </template>
@@ -149,9 +146,11 @@ const addScene = () => {
     'operator': '',
     'value': ''
   }]);
+  saveData();
 };
 const delScene = (index: number) => {
   props.condition.splice(index, 1);
+  saveData();
 }
 onMounted(() => {
   props.condition.forEach((item) => {
