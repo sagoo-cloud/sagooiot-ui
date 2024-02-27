@@ -1,0 +1,129 @@
+<template>
+	<div class="device-function">
+		<el-empty description="暂无功能列表，请先在物模型的功能定义中添加" v-if="!loading && !list.length"></el-empty>
+		<el-tabs tab-position="left">
+			<el-tab-pane :label="item.name" v-for="item in list" :key="item.key">
+				<div class="table-wrapper">
+					<el-table :data="item.inputs || []" border>
+						<el-table-column prop="name" label="参数名称" />
+						<el-table-column prop="valueType.type" label="输入类型" />
+						<el-table-column prop="name" label="值" min-width="200">
+							<template #default="{ row }">
+								<el-select v-model="row.value" clearable v-if="row.valueType.type === 'enum'" style="wdith: 100% !important;">
+									<el-option v-for="item in row.valueType.elements" :key="item.value" :value="item.text" :label="item.text"></el-option>
+								</el-select>
+								<el-input v-model="row.value" clearable v-else :placeholder="row.valueType.type === 'array' ? 'JSON.stringify(arr)结果去掉外层单引号' : '请输入'">
+									<template v-if="row.valueType.unit" #append>{{ row.valueType.unit }}</template>
+								</el-input>
+							</template>
+						</el-table-column>
+					</el-table>
+					<el-input type="textarea" :value="item.result" class="result" read-only placeholder="执行结果："> </el-input>
+				</div>
+				<div class="btn">
+					<el-button type="primary" :loading="item.loading" @click="run(item)">执行</el-button>
+					<el-button @click="clear(item)">清空</el-button>
+				</div>
+			</el-tab-pane>
+		</el-tabs>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import api from '/@/api/device'
+
+const props = defineProps({
+	productKey: String,
+	deviceKey: String,
+})
+
+interface IListItem {
+	key: string
+	name: string
+	inputs: any[]
+	result: string
+	loading: boolean
+}
+
+const list = ref<IListItem[]>([])
+const loading = ref(true)
+
+getData()
+
+function getData() {
+	loading.value = true
+	api.tabDeviceFucntion.getList({ productKey: props.productKey }).then((res: IListItem[]) => {
+		if (!res) return
+		res.forEach((item) => (item.result = ''))
+		list.value = res
+	}).finally(() => loading.value = false)
+}
+
+
+function run(row: IListItem) {
+	row.result = ''
+
+	const notValid = row.inputs.some((item) => !item.value)
+	if (notValid) return ElMessage.info('请输入完整参数')
+
+	const params: any = {}
+	row.inputs.forEach(({ key, value, valueType }) => {
+		if (valueType.type === 'array') {
+			try {
+				value = JSON.parse(value)
+				if (typeof value !== 'object') {
+					throw new Error()
+				}
+			} catch (error: any) {
+				ElMessage.error('请输入正确的JSON数组字符串格式')
+				throw (error)
+			}
+		}
+		params[key] = value
+	})
+	row.loading = true
+	api.tabDeviceFucntion
+		.do({
+			deviceKey: props.deviceKey,
+			funcKey: row.key,
+			params,
+		})
+		.then((res: any) => {
+			row.result = JSON.stringify(res, null, 2)
+		})
+		.finally(() => (row.loading = false))
+}
+
+function clear(row: IListItem) {
+	row.result = ''
+}
+</script>
+
+<style scoped lang="scss">
+.table-wrapper {
+	width: 100%;
+	padding: 10px;
+	display: flex;
+	align-items: stretch;
+	justify-content: space-between;
+	gap: 20px;
+
+	.el-table {
+		flex: 3;
+	}
+
+	.result {
+		flex: 2;
+	}
+
+	:deep(.el-textarea__inner) {
+		height: 100%;
+	}
+
+	:deep(.el-select) {
+		width: 100%;
+	}
+}
+</style>

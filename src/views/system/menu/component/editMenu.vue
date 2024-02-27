@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-menu-container">
 		<el-dialog :title="(acType === 'add' ? '新增' : '修改') + '菜单'" v-model="isShowDialog" width="769px" :close-on-click-modal="false">
-			<el-form :model="ruleForm" :rules="rules" ref="ruleFormRef" size="default" label-width="80px">
+			<el-form :model="ruleForm" :rules="rules" ref="ruleFormRef" label-width="80px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="上级菜单" prop="parentId">
@@ -54,7 +54,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="链接地址">
-							<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http:xxx.com）" clearable :disabled="ruleForm.isLink === 0">
+							<el-input v-model="ruleForm.linkUrl" placeholder="外链/内嵌时链接地址（http://xxx.com）" clearable :disabled="ruleForm.isLink === 0">
 							</el-input>
 						</el-form-item>
 					</el-col>
@@ -121,8 +121,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{ acType === 'add' ? '新 增' : '修 改' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" :loading="loading">提 交</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -189,7 +189,7 @@ export default defineComponent({
 				component: [{ required: true, message: '组件地址不能为空', trigger: 'blur' }],
 				path: [{ required: true, message: '路由地址不能为空', trigger: 'blur' }],
 				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
-				name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }],
 				menuType: [{ required: true, message: '菜单类型不能为空', trigger: 'blur' }],
 			},
 		});

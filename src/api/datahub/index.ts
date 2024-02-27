@@ -1,33 +1,33 @@
-import { get, post, del, put } from '/@/utils/request';
+import { get, post, del, put, file } from '/@/utils/request';
 
 export default {
 
-  common: {
-    getList: (params: object) => get('/source/search', params),
-    add: (data: object) => post('/source/api/add', data),
-    delete: (ids: number) => del('/source/del', { ids }),
-    edit: (data: object) => put('/source/api/edit', data),
-    detail: (sourceId: number) => get('/source/detail', { sourceId }),
-    deploy: (data: object) => post('/source/deploy', data),
-    undeploy: (data: object) => post('/source/undeploy', data),  
-    api: (sourceId: number) => get('/source/api/get', { sourceId }),
-    devadd: (data: object) => post('/source/device/add', data),
-    devedit: (data: object) => put('/source/device/edit', data),
-    devapi: (sourceId: number) => get('/source/device/get', { sourceId }),
-    getdevList: (params: object) => get('/product/device/list', params),
-    getdata: (params: object) => get('/source/getdata', params),
-    getLists: (params: object) => get('/source/list', params),
-    copy: (params: object) => post('/source/copy', params),
+   common: {
+      getList: (params: object) => get('/source/search', params),
+      add: (data: object) => post('/source/api/add', data),
+      delete: (ids: number) => del('/source/del', { ids }),
+      edit: (data: object) => put('/source/api/edit', data),
+      detail: (sourceId: number) => get('/source/detail', { sourceId }),
+      deploy: (data: object) => post('/source/deploy', data),
+      undeploy: (data: object) => post('/source/undeploy', data),
+      api: (sourceId: number) => get('/source/api/get', { sourceId }),
+      devadd: (data: object) => post('/source/device/add', data),
+      devedit: (data: object) => put('/source/device/edit', data),
+      devapi: (sourceId: number) => get('/source/device/get', { sourceId }),
+      getdevList: (params: object) => get('/product/device/list', params),
+      getdata: (params: object) => get('/source/getdata', params),
+      getLists: (params: object) => get('/source/list', params),
+      copy: (params: object) => post('/source/copy', params),
 
-    dbadd: (data: object) => post('/source/db/add', data),
-    dbedit: (data: object) => put('/source/db/edit', data),
-    getfields: (sourceId: number) => get('/source/db/fields', { sourceId }),
+      dbadd: (data: object) => post('/source/db/add', data),
+      dbedit: (data: object) => put('/source/db/edit', data),
+      getfields: (sourceId: number) => get('/source/db/fields', { sourceId }),
 
-    devdb: (sourceId: number) => get('/source/db/get', { sourceId }),
+      devdb: (sourceId: number) => get('/source/db/get', { sourceId }),
 
-    },
-   
-   node:{
+   },
+
+   node: {
       getList: (params: object) => get('/source/node/list', params),
       add: (data: object) => post('/source/node/add', data),
       delete: (nodeId: number) => del('/source/node/del', { nodeId }),
@@ -35,49 +35,64 @@ export default {
       getpropertyList: (params: object) => get('/product/tsl/property/all', params),
    },
 
-   template:{
+   template: {
       getList: (params: object) => get('/source/template/search', params),
       add: (data: object) => post('/source/template/add', data),
       delete: (ids: number) => del('/source/template/del', { ids }),
       edit: (data: object) => put('/source/template/edit', data),
-      detail: (id: number) => get('/source/template/detail', { id }),
+      detail: (id: string) => get('/source/template/detail', { id }),
       allList: (params: object) => get('/source/template/list', params), // 获取所有已发布列表
-      getdata: (params: object) => get('/source/template/getdata',  params ),
-      getDictData: (params: object) => get('/common/dict/data/getDictData',  params ),
-      cityTree: (params: object) => get('/common/city/tree',  params ),
+      getdata: (params: object) => get('/source/template/getdata', params),
+      getDictData: (params: object) => get('/common/dict/data/getDictData', params),
+      cityTree: (params: object) => get('/common/city/tree', params),
       copy: (params: object) => post('/source/template/copy', params),
       relation_check: (id: number) => get('/source/template/relation_check', { id }),
       source_list: (id: number) => get('/source/template/source_list', { id }),
+      aggregate_from: (id: number) => get('/source/template/aggregate_from', { id }),
       relation: (data: object) => post('/source/template/relation', data),
-      
-   } ,
+      aggregate: (data: object) => post('/source/template/aggregate', data),
+   },
 
-   tnode:{
+   tnode: {
       getList: (params: object) => get('/source/template/node/list', params),
       add: (data: object) => post('/source/template/node/add', data),
       delete: (id: number) => del('/source/template/node/del', { id }),
       edit: (data: object) => put('/source/template/node/edit', data),
       deploy: (data: object) => post('/source/template/deploy', data),
-      undeploy: (data: object) => post('/source/template/undeploy', data),  
+      undeploy: (data: object) => post('/source/template/undeploy', data),
    },
-  
-   weather:{
+
+   weather: {
       getCityWeatherList: () => get('/envirotronics/weather/cityWeatherList'),
       getWhichCityWeather: (params: object) => get('/envirotronics/weather/getInfoById', params),
       getTemperatureEchartById: (params: object) => get('/envirotronics/weather/getTemperatureEchartById', params),
       getWindpowerEchartById: (params: object) => get('/envirotronics/weather/getWindpowerEchartById', params),
+      getCityWeatherHistory: (params: object) => get('/envirotronics/weather/GetCityWeatherHistory', params),
+      getCityWeatherHistoryExport: (params: object) => file('/envirotronics/weather/GetCityWeatherHistoryExport', params),
    },
-   statistics:{
+   statistics: {
       getStatisticsChartData: (params: object) => get('/statistics/bar/chart/data', params),
       getStatisticsLineChartData: (params: object) => get('/statistics/broken/line/data', params),
       getStatisticsTotalData: (params: object) => get('/statistics/city/data', params),
       getStatisticsPieData: (params: object) => get('/statistics/tempering/ratio/data', params),
       getStatisticsOverview: (params: object) => get('/statistics/overview', params),
    },
-   iotManage:{
-      getOverviewData: () => get('/statistics/thing/overview'),
+   iotManage: {
+      getOverviewData: () => get('/thing/overview'),
       getAlarmList: (params: object) => get('/alarm/log/list', params),
       getAlarmDetail: (id: number) => get('/alarm/log/detail', { id }),
       getAlarmHandle: (data: object) => post('/alarm/log/handle', data),
+      // 设备消息总量本年统计
+      deviceDataTotalCount: (dateType: 'year' | 'month' | 'day') => get('/analysis/deviceDataTotalCount', { dateType }),
+      // 设备在线离线及总数统计
+      deviceOnlineOfflineCount: () => get('/analysis/deviceOnlineOfflineCount'),
+      // 本年度每月设备消息量统计 
+      deviceDataCount: (dateType: 'year' | 'month') => get('/analysis/deviceDataCount', { dateType }),
+      // 按年度每月设备告警数统计
+      deviceAlertCountByYearMonth: (year = '2023') => get('/analysis/deviceAlertCountByYearMonth', { year }),
+      // 按告警级别统计
+      deviceAlarmLevelCount: (dateType: 'year' | 'month' | 'day', date: string) => get('/analysis/deviceAlarmLevelCount', { dateType, date }),
+      // 产品数量统计
+      productCount: () => get('/analysis/productCount'),
    }
 }

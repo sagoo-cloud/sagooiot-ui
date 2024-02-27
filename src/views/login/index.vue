@@ -11,14 +11,16 @@
 			style="--el-switch-on-color: #fff; --el-switch-off-color: #151515"
 		></el-switch>
 		<div class="part left">
-			<div class="flex logo"><img class="logoimg" src="/@/assets/logo.png" />{{ sysinfo.systemName }}</div>
-			<img class="img" src="/@/assets/login-box-bg.svg" />
+			<div class="flex logo">
+				<el-image v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
+				<el-image v-else class="logoimg" src="/imgs/logo.png" />
+				{{ sysinfo.systemName }}</div>
+			<el-image class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
+			<el-image class="img" v-else src="/imgs/login-box-bg.svg" />
 			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
 			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
 		<div class="part">
-			<!-- <img :src="logoMini" />
-							<div class="login-icongroup-title-text font25">{{ getThemeConfig.globalViceTitle }}</div> -->
 			<div class="title">登录</div>
 			<Account />
 		</div>
@@ -29,11 +31,9 @@
 import { toRefs, reactive, computed, defineComponent } from 'vue';
 import Account from '/@/views/login/component/account.vue';
 import { useStore } from '/@/store/index';
-import logoMini from '/@/assets/logo.png';
+import logoMini from '/imgs/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
-
-const store = useStore();
 
 // 定义接口来定义对象的类型
 interface LoginState {
@@ -56,31 +56,12 @@ export default defineComponent({
 				systemName: '',
 				buildTime: '',
 				systemCopyright: '',
-			},
-			amisjson: {
-				type: 'page',
-				title: '表单页面',
-				body: {
-					type: 'form',
-					mode: 'horizontal',
-					api: '/saveForm',
-					body: [
-						{
-							label: 'Name1Name1Name1Name1',
-							type: 'input-text',
-							name: 'name123',
-						},
-						{
-							label: 'Email2Email2Email2Email2',
-							type: 'input-email',
-							name: 'email1',
-						},
-					],
-				},
+				systemLogo: '',
+				systemLoginPIC: '',
 			},
 		};
 	},
-	created() {
+	mounted() {
 		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
 	},
 	setup() {
@@ -97,8 +78,13 @@ export default defineComponent({
 		// 4、界面显示 --> 深色模式
 		const onAddDarkChange = () => {
 			const body = document.documentElement as HTMLElement;
-			if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
-			else body.setAttribute('data-theme', '');
+			if (getThemeConfig.value.isIsDark) {
+				body.setAttribute('data-theme', 'dark');
+				document.querySelector('html')!.className = 'dark'
+			} else {
+				body.setAttribute('data-theme', '');
+				document.querySelector('html')!.className = ''
+			}
 		};
 
 		return {

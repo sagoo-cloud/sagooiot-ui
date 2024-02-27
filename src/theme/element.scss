@@ -1,5 +1,15 @@
 @import 'mixins/index.scss';
 
+// 更改按钮样式
+:root {
+	//--el-color-danger: #909399; // 删除按钮
+}
+
+// 修复树形表格中 type index 的串行问题
+.el-table .cell:has(div) .el-table__placeholder {
+	display: unset;
+}
+
 /* Button 按钮
 ------------------------------- */
 // 第三方字体图标大小
@@ -17,10 +27,27 @@
 	margin-right: 5px;
 }
 
-.el-button.el-button--text.el-button--small{
+.el-image {
+	vertical-align: top;
+}
+
+.image-slot {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background: var(--el-fill-color-light);
+	color: var(--el-text-color-secondary);
+	font-size: 12px;
+	gap: 2px;
+}
+
+.el-button.el-button--text.el-button--small {
 	padding: 0;
 }
-.el-button.is-text.el-button--small{
+.el-button.is-text.el-button--small {
 	padding: 0;
 }
 
@@ -52,7 +79,8 @@
 ------------------------------- */
 // 鼠标 hover 时颜色
 .el-menu-hover-bg-color {
-	background-color: var(--next-color-menu-hover) !important;
+	background-color: var(--next-color-menu-hover-blue) !important;
+	// background-color: var(--next-color-menu-hover) !important;
 }
 // 默认样式修改
 .el-menu {
@@ -65,7 +93,8 @@
 }
 .el-menu-item,
 .el-sub-menu__title {
-	color: var(--next-bg-menuBarColor);
+	// color: var(--next-bg-menuBarColor);
+	color: var(--next-bg-menuBar-black);
 }
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;
@@ -89,13 +118,13 @@
 .el-sub-menu .fa {
 	@include generalIcon;
 }
-// 高亮时
+
 .el-menu-item.is-active,
 .el-sub-menu.is-active .el-sub-menu__title {
 	@extend .el-menu-hover-bg-color;
 	i,
 	span {
-		color: var(--el-menu-active-color) !important;
+		color: var(--next-color-menu-text-blue) !important;
 	}
 }
 .el-sub-menu.is-active.is-opened {
@@ -106,6 +135,10 @@
 	span {
 		color: unset !important;
 	}
+}
+// 高亮时
+.el-menu-item.is-active {
+	color: var(--next-color-menu-text-blue) !important;
 }
 // 鼠标 hover 时
 .el-menu-item:hover,
@@ -188,7 +221,7 @@
 .custom-dialog .el-dialog__body {
 	max-height: none !important;
 }
-.el-dialog.is-fullscreen{
+.el-dialog.is-fullscreen {
 	.el-dialog__body {
 		max-height: 100vh !important;
 	}
@@ -235,4 +268,14 @@
 		height: 100%;
 		overflow: auto;
 	}
+}
+
+.el-tree-node__label,
+.custom-tree-node {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.el-popper {
+	max-width: 50vw;
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-role-container">
 		<el-dialog :title="(formData.id === 0 ? '添加' : '修改') + '角色'" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
+			<el-form ref="formRef" :model="formData" :rules="rules" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="上级角色">
@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="角色名称" prop="name">
-							<el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
+							<el-input v-model.trim="formData.name" placeholder="请输入角色名称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -51,8 +51,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{ formData.id === 0 ? '新 增' : '修 改' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" :loading="loading">{{ formData.id === 0 ? '新 增' : '修 改' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -171,7 +171,7 @@ export default defineComponent({
 						//添加
 						api.role.addRole(state.formData)
 							.then(() => {
-								ElMessage.success('角色添加成功');
+								ElMessage.success('添加成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
 								emit('getList');
@@ -183,7 +183,7 @@ export default defineComponent({
 						//修改
 						api.role.editRole(state.formData)
 							.then(() => {
-								ElMessage.success('角色修改成功');
+								ElMessage.success('修改成功');
 								closeDialog(); // 关闭弹窗
 								resetMenuSession();
 								emit('getList');

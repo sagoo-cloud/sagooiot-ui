@@ -1,59 +1,56 @@
 <template>
-  <div class="system-role-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
-          <el-form-item label="角色名称" prop="name">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="roleList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery()">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddRole" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增角色
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
-        <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="name" v-col="'name'" label="角色名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="remark" v-col="'remark'" label="角色描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="listOrder" v-col="'listOrder'" label="排序" width="60" align="center"></el-table-column>
-        <el-table-column prop="status" v-col="'status'" label="角色状态" width="100" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
-            <el-tag type="info" size="small" v-else>禁用</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="170" align="center"></el-table-column>
-        <el-table-column label="操作" width="220" v-col="'handle'" align="center" fixed="right">
-          <template #default="scope">
-            <el-button size="small" type="text" @click="onOpenEditRole(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
-            <el-button size="small" text type="success" @click="permission(scope.row)" v-auth="'role-premission'">角色权限</el-button>
-            <el-button size="small" text type="info" @click="dataPermission(scope.row)" v-auth="'data-premission'">数据权限</el-button>
-            <!-- <el-dropdown size="small">
+  <el-card shadow="nover" class="page">
+    <el-form :model="tableData.param" inline ref="queryRef">
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="tableData.param.name" placeholder="请输入角色名称" class="w-50" clearable />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select placeholder="请选择状态" style="width: 80px;" v-model="tableData.param.status">
+          <el-option label="全部" :value="-1" />
+          <el-option label="启用" :value="1" />
+          <el-option label="禁用" :value="0" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="roleList">
+          <el-icon>
+            <ele-Search />
+          </el-icon>
+          查询
+        </el-button>
+        <el-button @click="resetQuery()">
+          <el-icon>
+            <ele-Refresh />
+          </el-icon>
+          重置
+        </el-button>
+        <el-button type="primary" @click="onOpenAddRole" v-auth="'add'">
+          <el-icon>
+            <ele-FolderAdd />
+          </el-icon>
+          新增角色
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <el-table :data="tableData.data" style="width: 100%" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
+      <el-table-column type="index" label="序号" width="60" align="center" />
+      <el-table-column prop="name" v-col="'name'" label="角色名称" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="remark" v-col="'remark'" label="角色描述" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="listOrder" v-col="'listOrder'" label="排序" width="60" align="center"></el-table-column>
+      <el-table-column prop="status" v-col="'status'" label="角色状态" width="100" align="center">
+        <template #default="scope">
+          <el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
+          <el-tag type="info" size="small" v-else>禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="170" align="center"></el-table-column>
+      <el-table-column label="操作" width="220" v-col="'handle'" align="center" fixed="right">
+        <template #default="scope">
+          <el-button size="small" type="text" @click="onOpenEditRole(scope.row)" v-auth="'edit'">修改</el-button>
+          <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+          <el-button size="small" text type="success" @click="permission(scope.row)" v-auth="'role-premission'">角色权限</el-button>
+          <el-button size="small" text type="info" @click="dataPermission(scope.row)" v-auth="'data-premission'">数据权限</el-button>
+          <!-- <el-dropdown size="small">
               <el-button type="text" size="small" style="margin-top:1px;margin-left:10px">更多
                 <el-icon>
                   <ele-ArrowDown />
@@ -66,15 +63,15 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown> -->
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
-    </el-card>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- <pagination v-show="tableData.total>0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="roleList" /> -->
+
     <EditRole ref="editRoleRef" @getList="roleList" :list="tableData.data" />
     <permissionVue ref="permissionRef" />
     <EditPer ref="dataPermissionRef" :dept-data="deptData" />
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">

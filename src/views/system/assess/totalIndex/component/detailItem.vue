@@ -12,7 +12,7 @@
         </div>
         <div class="table-item-wrap">
           <div class="label">SecretKey</div>
-          <div class="value">调用API的安全密码、请联系管理员获取</div>
+          <div class="value">调用API的安全密码，请联系管理员获取</div>
         </div>
         <div class="table-item-wrap">
           <div class="label" style="display: flex;flex-direction: column;justify-content: center;">
@@ -126,7 +126,7 @@ export default defineComponent({
     const onSubmit = () => {
       closeDialog();
     };
-    // 初始化部门数据
+    // 初始化组织数据
     const initTableData = () => {
 
     };
@@ -146,7 +146,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
 	border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 .table-wrap {

@@ -35,7 +35,7 @@
     <div class="layout-navbars-breadcrumb-user-icon">
       <el-popover placement="bottom" trigger="click" :width="300" v-model:visible="popoverVisible">
         <template #reference>
-          <el-badge :is-dot="true">
+          <el-badge :is-dot="false">
             <el-icon :title="$t('message.user.title4')">
               <ele-Bell />
             </el-icon>
@@ -49,7 +49,13 @@
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
       <span class="layout-navbars-breadcrumb-user-link">
-        <img :src="getUserInfos.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+        <el-image :src="getUserInfos.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" fit="cover">
+          <template #error>
+            <div class="image-slot">
+              <ele-Picture style="width: 16px;" />
+            </div>
+          </template>
+        </el-image>
         {{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
         <el-icon class="el-icon--right">
           <ele-ArrowDown />
@@ -57,8 +63,9 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
+          <!-- <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item> -->
           <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
+          <el-dropdown-item command="document">{{ $t('message.user.dropdown8') }}</el-dropdown-item>
           <el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -76,10 +83,11 @@ import { useI18n } from 'vue-i18n';
 import { resetRoute } from '/@/router/index';
 import { useStore } from '/@/store/index';
 import other from '/@/utils/other';
-import { Session, Local } from '/@/utils/storage';
+import { Local } from '/@/utils/storage';
 import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import api from '/@/api/system';
+
 export default defineComponent({
   name: 'layoutBreadcrumbUser',
   components: { UserNews, Search },
@@ -96,9 +104,9 @@ export default defineComponent({
       popoverVisible: false
     });
     // 获取用户信息 vuex
-    const getUserInfos = computed(() => {
-      return <any>store.state.userInfos.userInfos;
-    });
+
+    const getUserInfos = ref(Local.get('userInfo') || {})
+
     // 获取布局配置信息
     const getThemeConfig = computed(() => {
       return store.state.themeConfig.themeConfig;
@@ -163,13 +171,15 @@ export default defineComponent({
             await resetRoute(); // 删除/重置路由
             ElMessage.success(t('message.user.logOutSuccess'));
             setTimeout(() => {
-              Session.clear(); // 清除缓存/token等
+              localStorage.clear(); // 清除缓存/token等
               window.location.href = ''; // 去登录页
             }, 500);
           })
           .catch(() => { });
       } else if (path === 'wareHouse') {
         window.open('https://sagoo.cn');
+      } else if (path === 'document') {
+        window.open('https://iotdoc.sagoo.cn/')
       } else {
         router.push(path);
       }
@@ -256,47 +266,56 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb-user {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	&-link {
-		height: 100%;
-		display: flex;
-		align-items: center;
-		white-space: nowrap;
-		&-photo {
-			width: 25px;
-			height: 25px;
-			border-radius: 100%;
-		}
-	}
-	&-icon {
-		padding: 0 10px;
-		cursor: pointer;
-		color: var(--next-bg-topBarColor);
-		height: 50px;
-		line-height: 50px;
-		display: flex;
-		align-items: center;
-		&:hover {
-			background: var(--next-color-user-hover);
-			i {
-				display: inline-block;
-				animation: logoAnimation 0.3s ease-in-out;
-			}
-		}
-	}
-	::v-deep(.el-dropdown) {
-		color: var(--next-bg-topBarColor);
-	}
-	::v-deep(.el-badge) {
-		height: 40px;
-		line-height: 40px;
-		display: flex;
-		align-items: center;
-	}
-	::v-deep(.el-badge__content.is-fixed) {
-		top: 12px;
-	}
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &-link {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+    &-photo {
+      width: 25px;
+      height: 25px;
+      border-radius: 100%;
+    }
+  }
+
+  &-icon {
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--next-bg-topBarColor);
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: var(--next-color-user-hover);
+
+      i {
+        display: inline-block;
+        animation: logoAnimation 0.3s ease-in-out;
+      }
+    }
+  }
+
+  :deep(.el-dropdown) {
+    color: var(--next-bg-topBarColor);
+  }
+
+  :deep(.el-badge) {
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  :deep(.el-badge__content.is-fixed) {
+    top: 12px;
+  }
 }
+
 </style>

@@ -1,21 +1,15 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog :title="ruleForm.item_code ? '编辑指标' : '新增指标'" v-model="isShowDialog" width="769px">
-			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" size="default" label-width="90px">
-				<!-- <el-row :gutter="35">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
-						<el-form-item label="评价名称" prop="title" class="mb20">
-							<el-input size="small" v-model="ruleForm.title" placeholder="请输入评价名称" clearable></el-input>
-						</el-form-item>
-					<!-- </el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
-						<el-form-item label="描述">
-							<el-input width="400"  size="small" v-model="ruleForm.explain" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
-						</el-form-item>
-					<!-- </el-col>
-				</el-row> -->
+			<el-form ref="ruleFormRef" :rules="rules" :model="ruleForm" label-width="90px">
+				<el-form-item label="评价名称" prop="title" class="mb20">
+					<el-input size="small" v-model="ruleForm.title" placeholder="请输入评价名称" clearable></el-input>
+				</el-form-item>
+				<el-form-item label="描述">
+					<el-input width="400" size="small" v-model="ruleForm.explain" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
+				</el-form-item>
 			</el-form>
-			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
+			<el-button type="primary" class="mb10 mt10" @click="onOpenAddSign">
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
@@ -26,9 +20,9 @@
 				<el-table-column align="center" prop="name" label="标识" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="title" label="数据项" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="weight" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
+				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.ranges" :key="index">{{`${item.start_value}~${item.end_value}`}}</el-tag>
+						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.ranges" :key="index">{{ `${item.start_value}~${item.end_value}` }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column align="center" label="操作" width="160">
@@ -39,24 +33,11 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<!-- <el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="tableData.param.pageNum"
-				background
-				v-model:page-size="tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="tableData.total"
-			>
-			</el-pagination> -->
 
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit(ruleFormRef)" size="default">保 存</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit(ruleFormRef)">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -74,8 +55,6 @@ import SetTask from './setTask.vue';
 
 
 import api from '/@/api/assess';
-
-
 
 // 定义接口来定义对象的类型
 interface DeptData {
@@ -117,12 +96,9 @@ interface ItemState {
 	};
 }
 
-
-
-
 export default defineComponent({
 	name: 'systemAddUser',
-	components: { AddSign, SetTask},
+	components: { AddSign, SetTask },
 	setup(prop, { emit }) {
 		const addSignRef = ref();
 		const setTaskRef = ref();
@@ -135,7 +111,7 @@ export default defineComponent({
 				item_code: '',
 				targets: []
 			},
-			// deptData: [], // 部门数据
+			// deptData: [], // 组织数据
 			// 标识列表数据
 			tableData: {
 				data: [],
@@ -154,17 +130,14 @@ export default defineComponent({
 			]
 		})
 		// 打开弹窗
-		const openDialog = (row:any) => {
-			// if(!row) return
-			// console.log(row.item_code)
-			if(row) {
-				api.getList({itemcode: row.item_code}).then((res: any) => {
-					console.log(res)
+		const openDialog = (row: any) => {
+			if (row) {
+				api.getList({ itemcode: row.item_code }).then((res: any) => {
 					state.ruleForm = res;
 					state.tableData.data = res.targets
 					state.isShowDialog = true;
 				});
-			}else {
+			} else {
 				state.ruleForm = {
 					title: '', // 评价名称
 					explain: '', // 描述
@@ -172,12 +145,9 @@ export default defineComponent({
 					item_code: '',
 					targets: []
 				},
-				state.tableData.data = [];
+					state.tableData.data = [];
 				state.isShowDialog = true;
 			}
-	
-
-
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -191,19 +161,14 @@ export default defineComponent({
 		const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (!formEl) return
 			await formEl.validate((valid, fields) => {
-				console.log(valid)
 				if (valid) {
 					state.ruleForm.targets = state.tableData.data
-					
+
 					api.setItem(state.ruleForm).then((res: any) => {
-						console.log(res);
 						ElMessage.success('提交成功');
 						emit('fetchList');
 						closeDialog(); // 关闭弹窗
 					});
-					console.log('submit!')
-				} else {
-					console.log('error submit!', fields)
 				}
 			})
 		}
@@ -211,10 +176,9 @@ export default defineComponent({
 		const onOpenAddSign = () => {
 			addSignRef.value.openDialog(null, null, false);
 		};
-				
+
 		// 打开编辑弹窗
 		const onOpenEditSign = (row: TableDataRow, index: number) => {
-			console.log(index)
 			addSignRef.value.openDialog(row, index, true);
 		};
 		// 打开任务接口弹窗
@@ -223,19 +187,16 @@ export default defineComponent({
 		};
 		// 接收数据
 		const handleChange = (data: any, index: any, isEdit: Boolean) => {
-			if(!isEdit) {
+			if (!isEdit) {
 				// 新增
 				state.tableData.data.push(data)
-			}else {
+			} else {
 				state.tableData.data[index] = data
 			}
-			console.log(data);
-			console.log(index)
-			console.log(isEdit)
 		};
 		// 删除标识项
 		const onRowDel = (row: TableDataRow, index: number) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除指标：“${row.title}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
@@ -244,7 +205,6 @@ export default defineComponent({
 					state.tableData.data.splice(index, 1)
 					ElMessage.success('删除成功');
 				})
-				.catch(() => {});
 		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
@@ -254,7 +214,7 @@ export default defineComponent({
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 			const data: Array<TableDataRow> = [];
 			for (let i = 0; i < 6; i++) {
@@ -271,10 +231,6 @@ export default defineComponent({
 			state.tableData.data = data;
 			state.tableData.total = data.length;
 		};
-		// 页面加载时
-		onMounted(() => {
-			// initTableData();
-		});
 		return {
 			rules,
 			ruleFormRef,
@@ -284,12 +240,9 @@ export default defineComponent({
 			onOpenEditSign,// 打开编辑某一个标识项弹窗
 			onRowDel,// 删除某一个标识项
 			onRowDetail,// 打开数据源配置接口弹窗
-
 			onHandleSizeChange,// 标识项分页每页展示条数变化
 			onHandleCurrentChange,// 标识项分页页数变化变化
-
 			handleChange,
-
 			openDialog,
 			closeDialog,
 			onCancel,
@@ -301,9 +254,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-form) {
 
-
-::v-deep .el-form {
 	// display: flex;
 	// justify-self: center;
 	// flex-direction: column;
@@ -312,19 +264,20 @@ export default defineComponent({
 		width: 500px;
 		margin: 8px auto;
 	}
-	::v-deep .el-input__inner,
-	::v-deep .el-textarea__inner {
+
+	:deep(.el-input__inner),
+	:deep(.el-textarea__inner) {
 		width: 400px;
 		// flex-grow: 0;
 	}
-	::v-deep .el-input__inner {
+
+	:deep(.el-input__inner) {
 		padding: 1px 10px;
 	}
-	::v-deep .el-input__wrapper {
+
+	:deep(.el-input__wrapper) {
 		flex-grow: 0;
 		padding: 0
 	}
 }
-
-
 </style>

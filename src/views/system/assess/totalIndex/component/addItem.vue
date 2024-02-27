@@ -1,21 +1,21 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog title="新增指标" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" size="default" label-width="90px">
+			<el-form :model="ruleForm" label-width="90px">
 				<!-- <el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20"> -->
-						<el-form-item label="评价名称" required>
-							<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
-						</el-form-item>
-					<!-- </el-col>
+				<el-form-item label="评价名称" required>
+					<el-input size="small" v-model="ruleForm.userName" placeholder="请输入评价名称" clearable></el-input>
+				</el-form-item>
+				<!-- </el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20"> -->
-						<el-form-item label="描述">
-							<el-input width="400"  size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
-						</el-form-item>
-					<!-- </el-col> -->
+				<el-form-item label="描述">
+					<el-input width="400" size="small" v-model="ruleForm.describe" type="textarea" placeholder="请输入描述" maxlength="150"></el-input>
+				</el-form-item>
+				<!-- </el-col> -->
 				<!-- </el-row> -->
 			</el-form>
-			<el-button size="default" type="primary" class="mb10 mt10" @click="onOpenAddSign">
+			<el-button type="primary" class="mb10 mt10" @click="onOpenAddSign">
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
@@ -26,9 +26,9 @@
 				<el-table-column align="center" prop="userName" label="标识" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="dataType" label="数据项" show-overflow-tooltip></el-table-column>
 				<el-table-column align="center" prop="num" label="权重(%)" width="90" show-overflow-tooltip></el-table-column>
-				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200" >
+				<el-table-column align="center" prop="description" label="取值范围" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{item}}</el-tag>
+						<el-tag size="small" class="mr6" v-for="(item, index) in scope.row.range.split(', ')" :key="index">{{ item }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column align="center" label="操作" width="160">
@@ -39,24 +39,14 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="tableData.param.pageNum"
-				background
-				v-model:page-size="tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="tableData.total"
-			>
+			<el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15" :pager-count="5" :page-sizes="[10, 20, 30, 50, 100, 200, 300, 500]" v-model:current-page="tableData.param.pageNum" background
+				v-model:page-size="tableData.param.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 			</el-pagination>
 
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">保 存</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">保 存</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -124,7 +114,7 @@ interface ItemState {
 
 export default defineComponent({
 	name: 'systemAddUser',
-	components: { AddSign, SetTask},
+	components: { AddSign, SetTask },
 	setup() {
 		const addSignRef = ref();
 		const setTaskRef = ref();
@@ -132,9 +122,9 @@ export default defineComponent({
 			isShowDialog: false,
 			ruleForm: {
 				userName: '', // 账户名称
-				userNickname: '', // 用户昵称
+				userNickname: '', // 姓名
 				roleSign: '', // 关联角色
-				department: [], // 部门
+				department: [], // 组织
 				phone: '', // 手机号
 				email: '', // 邮箱
 				sex: '', // 性别
@@ -143,7 +133,7 @@ export default defineComponent({
 				status: true, // 用户状态
 				describe: '', // 用户描述
 			},
-			// deptData: [], // 部门数据
+			// deptData: [], // 组织数据
 			// 标识列表数据
 			tableData: {
 				data: [],
@@ -175,7 +165,7 @@ export default defineComponent({
 		const onOpenAddSign = () => {
 			addSignRef.value.openDialog();
 		};
-				
+
 		// 打开编辑弹窗
 		const onOpenEditSign = (row: TableDataRow) => {
 			addSignRef.value.openDialog(row);
@@ -186,7 +176,7 @@ export default defineComponent({
 		};
 		// 删除标识项
 		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除指数：“${row.userName}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
@@ -194,7 +184,7 @@ export default defineComponent({
 				.then(() => {
 					ElMessage.success('删除成功');
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
@@ -204,7 +194,7 @@ export default defineComponent({
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 			const data: Array<TableDataRow> = [];
 			for (let i = 0; i < 6; i++) {
@@ -247,9 +237,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-form) {
 
-
-::v-deep .el-form {
 	// display: flex;
 	// justify-self: center;
 	// flex-direction: column;
@@ -258,19 +247,20 @@ export default defineComponent({
 		width: 500px;
 		margin: 8px auto;
 	}
-	::v-deep .el-input__inner,
-	::v-deep .el-textarea__inner {
+
+	:deep(.el-input__inner),
+	:deep(.el-textarea__inner) {
 		width: 400px;
 		// flex-grow: 0;
 	}
-	::v-deep .el-input__inner {
+
+	:deep(.el-input__inner) {
 		padding: 1px 10px;
 	}
-	::v-deep .el-input__wrapper {
+
+	:deep(.el-input__wrapper) {
 		flex-grow: 0;
 		padding: 0
 	}
 }
-
-
 </style>

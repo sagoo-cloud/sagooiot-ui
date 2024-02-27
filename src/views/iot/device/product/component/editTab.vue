@@ -1,9 +1,9 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '标签定义'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
 				<el-form-item label="标签定义标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入标签定义标识" :disabled="ruleForm.id!== 0 ?true : false" />
+					<el-input v-model="ruleForm.key" placeholder="请输入标签定义标识" :disabled="ruleForm.id !== 0 ? true : false" />
 				</el-form-item>
 				<el-form-item label="标签定义名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入标签定义名称" />
@@ -49,13 +49,17 @@
 
 				<el-form-item label="枚举项" prop="maxLength" v-if="type == 'enum'">
 					<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-						<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-							><el-icon><Right /></el-icon
-						></span>
-						<el-input v-model="item.value" placeholder="请输入枚举文本" />
+						<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
+								<Right />
+							</el-icon></span>
+						<el-input v-model="item.value" placeholder="请输入枚举值" />
 						<div class="input-option">
-							<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-							<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+							<el-icon @click="addEnum" v-if="index == 0">
+								<Plus />
+							</el-icon>
+							<el-icon @click="delEnum(index)" v-if="index != 0">
+								<Minus />
+							</el-icon>
 						</div>
 					</div>
 				</el-form-item>
@@ -74,7 +78,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -119,13 +125,17 @@
 
 					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
 						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"
-								><el-icon><Right /></el-icon
-							></span>
-							<el-input v-model="item.value" placeholder="请输入枚举文本" />
+							<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
+									<Right />
+								</el-icon></span>
+							<el-input v-model="item.value" placeholder="请输入枚举值" />
 							<div class="input-option">
-								<el-icon @click="addEnum" v-if="index == 0"><Plus /></el-icon>
-								<el-icon @click="delEnum(index)" v-if="index != 0"><Minus /></el-icon>
+								<el-icon @click="addEnum" v-if="index == 0">
+									<Plus />
+								</el-icon>
+								<el-icon @click="delEnum(index)" v-if="index != 0">
+									<Minus />
+								</el-icon>
 							</div>
 						</div>
 					</el-form-item>
@@ -145,7 +155,9 @@
 
 					<div style="display: block; width: 100%">
 						<div class="input-options" @click="addJson">
-							<el-icon><Plus /></el-icon>
+							<el-icon>
+								<Plus />
+							</el-icon>
 							<div>添加参数</div>
 						</div>
 					</div>
@@ -155,9 +167,8 @@
 
 				<el-form-item label="是否只读" prop="accessMode">
 					<el-radio-group v-model="ruleForm.accessMode">
-						<el-radio :label="0">读写</el-radio>
-
 						<el-radio :label="1">只读</el-radio>
+						<el-radio :label="0">读写</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="标签定义描述	" prop="desc">
@@ -166,8 +177,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -178,27 +189,54 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
+import { validateNoSpace } from '/@/utils/validator';
 
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
-	productId: number;
+	productKey: string;
 	accessMode: number;
 	name: string;
+	key: string;
+	type: string;
+	transportProtocol: string;
 	dictType: string;
-	valueType: Object;
+	valueType: any;
 	status: number;
 	desc: string;
 }
 interface DicState {
 	isShowDialog: boolean;
+	productKey: string;
+	type: string;
+	types: string;
+	valueType: any;
+	elementType: any;
 	ruleForm: RuleFormState;
-	typeData: RuleFormState[];
+	jsondata: any;
+	typeData: any[];
+	enumdata: any[];
 	rules: {};
+}
+
+const ruleForm = {
+	id: 0,
+	productKey: '',
+	name: '',
+	dictType: '',
+	type: '',
+	key: '',
+	transportProtocol: '',
+	accessMode: 1,
+	status: 1,
+	valueType: {
+		type: '',
+		maxLength: '',
+	},
+	desc: '',
 }
 
 export default defineComponent({
@@ -212,7 +250,7 @@ export default defineComponent({
 			typeData: [], //
 			type: '',
 			types: '',
-			productId: 0,
+			productKey: '',
 			valueType: {
 				type: '',
 				maxLength: '',
@@ -234,23 +272,13 @@ export default defineComponent({
 
 			jsondata: [],
 
-			ruleForm: {
-				id: 0,
-				productId: 0,
-				name: '',
-				key: '',
-				transportProtocol: '',
-				accessMode: 0,
-				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			},
+			ruleForm: JSON.parse(JSON.stringify(ruleForm)),
 			rules: {
-				name: [{ required: true, message: '标签定义名称不能为空', trigger: 'blur' }],
+				name: [
+					{ required: true, message: '标签定义名称不能为空', trigger: 'blur' },
+					{ max: 32, message: '标签定义名称不能超过32个字符', trigger: 'blur' },
+					{ validator: validateNoSpace, message: '标签定义名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '标签定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
@@ -258,11 +286,11 @@ export default defineComponent({
 		});
 
 		// 打开弹窗
-		const openDialog = (row: RuleFormState | null, productId: number | null) => {
+		const openDialog = (row: RuleFormState, productKey: string) => {
 			resetForm();
 
 			api.product.getDataType({ status: -1 }).then((res: any) => {
-				const datat = Object.values(res.dataType);
+				const datat = Object.values(res.dataType) as any[];
 				datat.forEach((item, index) => {
 					if (index == 0) {
 						datat[index]['label'] = '基础类型';
@@ -275,12 +303,11 @@ export default defineComponent({
 
 				state.typeData = datat || [];
 			});
-			console.log(row);
 			state.ruleForm = row;
 			if (row.valueType) {
 				state.ruleForm = row;
 
-				state.productId = productId;
+				state.productKey = productKey;
 				state.valueType = row.valueType;
 				state.ruleForm.valueType.type = row.valueType.type;
 				state.ruleForm.type = row.valueType.type;
@@ -299,52 +326,36 @@ export default defineComponent({
 					state.jsondata = row.valueType.properties;
 				}
 
-				if(row.type == 'array' && state.types=='enum'){
-					state.enumdata=row.valueType.elementType.elements
+				if (row.type == 'array' && state.types == 'enum') {
+					state.enumdata = row.valueType.elementType.elements
 				}
-				if(row.type == 'array' && state.types=='object'){
-					state.jsondata=row.valueType.elementType.properties
+				if (row.type == 'array' && state.types == 'object') {
+					state.jsondata = row.valueType.elementType.properties
 				}
 			}
 
-			console.log(row);
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
-			state.ruleForm = {
-				name: '',
-				key: '',
-				transportProtocol: '',
-				accessMode: 0,
-				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
-				desc: '',
-			};
+			state.ruleForm = JSON.parse(JSON.stringify(ruleForm))
 			state.type = '';
 			state.types = '';
 			state.valueType = {};
 			state.elementType = {};
 			state.jsondata = [];
 			state.enumdata = [{
-					text: '',
-					value: '',
-				},];
+				text: '',
+				value: '',
+			},];
 		};
 
-		const seletChange = (val) => {
+		const seletChange = (val: string) => {
 			state.type = val;
 			state.ruleForm.type = val;
 
-			console.log(val);
 		};
-		const seletChanges = (val) => {
-			console.log(val);
+		const seletChanges = (val: string) => {
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {
@@ -353,21 +364,19 @@ export default defineComponent({
 				value: '',
 			});
 		};
-		const delEnum = (index) => {
+		const delEnum = (index: number) => {
 			state.enumdata.splice(index, 1);
 		};
 
-		const deljson = (index) => {
+		const deljson = (index: number) => {
 			state.jsondata.splice(index, 1);
 		};
 
 		const addJson = () => {
-			editOptionRef.value.openDialog({ product_id: 0, id: 0 });
+			editOptionRef.value.openDialog({ productKey: '', id: 0 });
 		};
-		const getOptionData = (data) => {
+		const getOptionData = (data: any) => {
 			state.jsondata.push(data);
-
-			console.log(state.jsondata);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -396,14 +405,14 @@ export default defineComponent({
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 							//如果是选中数组，并选择了枚举
-							if(state.types=='enum'){
+							if (state.types == 'enum') {
 								state.valueType.elementType = {
 									elements: state.enumdata,
 									type: 'enum'
 								}
 							}
 							//如果是选中数组，并选择了object
-							if(state.types=='object'){
+							if (state.types == 'object') {
 								state.valueType.elementType = {
 									properties: state.jsondata,
 									type: 'object'
@@ -411,9 +420,8 @@ export default defineComponent({
 							}
 						}
 						state.ruleForm.valueType = state.valueType;
-						state.ruleForm.productId = state.productId;
+						state.ruleForm.productKey = state.productKey;
 
-						console.log(state.ruleForm);
 						api.model.tagedit(state.ruleForm).then(() => {
 							ElMessage.success('标签定义类型修改成功');
 							closeDialog(); // 关闭弹窗
@@ -432,13 +440,13 @@ export default defineComponent({
 						if (state.type == 'array') {
 							state.valueType.elementType = state.elementType;
 							//如果是选中数组，并选择了枚举
-							if(state.types=='enum'){
+							if (state.types == 'enum') {
 								state.valueType.elementType = {
 									elements: state.enumdata
 								}
 							}
 							//如果是选中数组，并选择了object
-							if(state.types=='object'){
+							if (state.types == 'object') {
 								state.valueType.elementType = {
 									properties: state.jsondata,
 									type: 'object'
@@ -476,42 +484,48 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .input-box {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	margin-top: 10px;
 }
+
 .input-option {
 	line-height: 30px;
 	padding-top: 5px;
 	width: 140px;
 }
+
 .input-option i {
 	margin: 0px 5px;
 	border: 1px solid #c3c3c3;
 	font-size: 16px;
 }
+
 .input-options {
 	display: flex;
 	align-items: center;
 	color: #409eff;
 	cursor: pointer;
 }
+
 .jslist {
 	width: 100%;
 	border: 1px solid #e8e8e8;
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
 .jsonlist {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.jsonoption {
-}
+
+.jsonoption {}
+
 .jsonoption a {
 	margin: 0px 10px;
 }

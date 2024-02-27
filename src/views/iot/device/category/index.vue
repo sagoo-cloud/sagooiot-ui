@@ -1,36 +1,34 @@
 <template>
-  <div class="system-dept-container">
-    <el-card shadow="hover">
-      <div class="system-dept-search mb15">
-        <el-form :inline="true">
-          <el-form-item label="分类名称">
-            <el-input size="default" v-model="tableData.param.name" placeholder="请输入分类名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="getCateList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAdd" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增分类
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+  <div class="page">
+    <el-card shadow="nover">
+      <el-form inline>
+        <el-form-item label="分类名称">
+          <el-input v-model="tableData.param.name" placeholder="请输入分类名称" @keyup.enter.native="getCateList" class="w-50" clearable />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" class="ml10" @click="getCateList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <el-button type="primary" class="ml10" @click="onOpenAdd" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增分类
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
         <el-table-column prop="name" label="分类名称" v-col="'name'" show-overflow-tooltip> </el-table-column>
-
-        <el-table-column prop="desc" label="描述" align="center" min-width="180" v-col="'desc'"></el-table-column>
+        <el-table-column prop="desc" label="描述" align="center" v-col="'desc'"></el-table-column>
+        <el-table-column prop="sort" v-col="'sort'" label="排序" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template #default="scope">
             <el-button size="small" type="text" @click="onOpenAdd(scope.row)" v-auth="'add'">新增</el-button>
             <el-button size="small" text type="warning" @click="onOpenEdit(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onTabelRowDel(scope.row)" v-auth="'del'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -32,7 +32,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			// 是否开启顶栏背景颜色渐变
 			isTopBarColorGradual: false,
 			// 默认菜单导航背景颜色
-			menuBar: '#354E67',
+			menuBar: '#ffffff',
 			// 默认菜单导航字体颜色
 			menuBarColor: '#eaeaea',
 			// 是否开启菜单背景颜色渐变
@@ -89,8 +89,8 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			isGrayscale: false,
 			// 是否开启色弱模式
 			isInvert: false,
-			// 是否开启深色模式
-			isIsDark: false,
+			// 是否开启深色模式, 自动获取当前模式
+			isIsDark: window.matchMedia('(prefers-color-scheme: light)').matches,
 			// 是否开启水印
 			isWartermark: false,
 			// 水印文案

@@ -1,7 +1,7 @@
 <template>
   <el-drawer v-model="drawer" :title="title" direction="rtl" size="700px">
     <div class="p-3">
-      <el-button size="default" type="success" class="mr-3" @click="onAddRow">
+      <el-button type="success" class="mr-3" @click="onAddRow">
         <el-icon>
           <ele-FolderAdd />
         </el-icon>
@@ -21,9 +21,12 @@
             <el-dropdown-item command="detail-详情">详情</el-dropdown-item>
             <el-dropdown-item command="del-删除">删除</el-dropdown-item>
             <el-dropdown-item command="upload-导入">导入</el-dropdown-item>
-            <el-dropdown-item command="dwonload-导出">导出</el-dropdown-item>
+            <el-dropdown-item command="download-导出">导出</el-dropdown-item>
             <el-dropdown-item command="reset-重置">重置</el-dropdown-item>
             <el-dropdown-item command="more-更多">更多</el-dropdown-item>
+            <el-dropdown-item command="save-保存">保存</el-dropdown-item>
+            <el-dropdown-item command="startOrStop-启用停用">启用停用</el-dropdown-item>
+            <el-dropdown-item command="status-切换状态">切换状态</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -70,7 +73,6 @@ const getList = async () => {
 };
 
 const open = async (row: any) => {
-  // console.log(row);
   title.value = '按钮权限 - ' + row.title;
   drawer.value = true;
   menuRow.value = row;

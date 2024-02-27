@@ -1,48 +1,37 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="hover">
-			<div class="system-user-search mb15" v-if="false">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-					<!-- <el-form-item label="登录IP" prop="ipaddr">
-            <el-input v-model="tableData.param.ipaddr" placeholder="请输入登录地址" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
-          </el-form-item>
+	<div class="page">
+		<el-card shadow="nover">
+			<el-form :model="tableData.param" v-if="false" ref="queryRef" inline label-width="68px">
+				<el-form-item label="登录时间" prop="dateRange">
+					<el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+				</el-form-item>
 
-          <el-form-item label="用户名称" prop="loginLocation">
-            <el-input v-model="tableData.param.loginLocation" placeholder="请输入登录地点" clearable style="width: 180px;" size="default" @keyup.enter.native="dataList" />
-          </el-form-item> -->
-
-					<el-form-item label="登录时间" prop="dateRange">
-						<el-date-picker v-model="tableData.param.dateRange" size="default" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-					</el-form-item>
-
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="dataList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="dataList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
-				<el-table-column type="selection" width="55" align="center" />
-				<el-table-column label="编号" align="center" width="60" prop="id" />
-				<el-table-column label="用户名" v-col="'userName'" align="center" prop="userName" />
-				<el-table-column label="token" align="center" prop="token" :show-overflow-tooltip="true" />
-				<el-table-column label="登录地址" v-col="'ip'" align="center" prop="ip" :show-overflow-tooltip="true" />
-				<el-table-column label="登录时间" align="createdAt" prop="createdAt" :show-overflow-tooltip="true" />
+				<el-table-column label="编号" align="center" width="100" prop="id" />
+				<el-table-column label="用户名" v-col="'userName'" width="100" align="center" prop="userName" />
+				<el-table-column label="token" align="center" prop="token" show-overflow-tooltip />
+				<el-table-column label="登录地址" v-col="'ip'" align="center" prop="ip" width="160" />
+				<el-table-column label="登录时间" align="center" prop="createdAt" width="160" />
 				<el-table-column label="浏览器" align="center" prop="explorer" />
 				<el-table-column label="操作系统" v-col="'os'" show-overflow-tooltip align="center" prop="os" />
-				<el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-col="'handle'">
+				<el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-col="'handle'" width="100" >
 					<template #default="scope">
-						<el-button size="mini" type="text" @click="handleForceLogout(scope.row)" v-auth="'out'">强退</el-button>
+						<el-button  type="text" @click="handleForceLogout(scope.row)" v-auth="'out'">强退</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -52,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent, getCurrentInstance } from 'vue';
+import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/system';
 

@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Session } from '/@/utils/storage';
 import getOrigin from '/@/utils/origin'
 
 // 配置新建一个 axios 实例
 const service = axios.create({
 	baseURL: getOrigin(import.meta.env.VITE_API_URL),
-	timeout: 50000,
+	timeout: 120000,
 	headers: { 'Content-Type': 'application/json' },
 });
 
@@ -14,8 +13,8 @@ const service = axios.create({
 service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
-		if (Session.get('token')) {
-			(<any>config.headers).common['Authorization'] = `Bearer ${Session.get('token')}`;
+		if (localStorage.token) {
+			(<any>config.headers).common['Authorization'] = `Bearer ${localStorage.token}`;
 		}
 		return config;
 	},
@@ -32,16 +31,20 @@ service.interceptors.response.use(
 		const res = response.data;
 		const code = response.data.code
 		if (code === 401) {
+			if (Date.now() - sessionStorage.comeTime < 1000) {
+				localStorage.clear(); // 清除浏览器全部临时缓存
+				window.location.href = '/'; // 去登录页
+			}
 			ElMessageBox.alert('登录状态已过期，请重新登录', '提示',
 				{ confirmButtonText: '确定', showCancelButton: false, closeOnHashChange: false, closeOnPressEscape: false, closeOnClickModal: false, showClose: false })
 				.then(() => {
-					Session.clear(); // 清除浏览器全部临时缓存
+					localStorage.clear(); // 清除浏览器全部临时缓存
 					window.location.href = '/'; // 去登录页
 				})
-				.catch(() => { });
 		} else if (code === undefined && res.message === undefined) { // 可能是下载文件
 			return response
 		} else if (code !== 0) {
+			ElMessage.closeAll()
 			ElMessage.error(res.message)
 			return Promise.reject(new Error(res.message))
 		} else {
@@ -63,10 +66,15 @@ service.interceptors.response.use(
 			if (res.data?.Data === undefined) {
 				return res.data
 			}
+			// 兼容环路监测页面的Report字段
+			if (res.data?.Report !== undefined) {
+				return res.data
+			}
 			return res.data.Data
 		}
 	},
 	(error) => {
+		ElMessage.closeAll()
 		// 对响应错误做点什么
 		if (error.message.indexOf('timeout') != -1) {
 			ElMessage.error('网络超时');
@@ -121,14 +129,14 @@ export function file(url: string, params?: any, method: 'get' | 'post' = 'get'):
 			url,
 			method,
 			params,
-			timeout: 30000,
+			timeout: 120000,
 			responseType: 'arraybuffer',
 		});
 	} else {
 		return service({
 			url,
 			method,
-			timeout: 100000,
+			timeout: 120000,
 			data: params,
 			responseType: 'blob',
 		});

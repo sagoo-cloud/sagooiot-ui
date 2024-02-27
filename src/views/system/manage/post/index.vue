@@ -1,73 +1,69 @@
 <template>
-  <div class="system-post-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" :inline="true" ref="queryRef">
-          <el-form-item label="岗位名称" prop="postName">
-            <el-input size="default" v-model="tableData.param.postName" placeholder="请输入岗位名称" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="岗位编码" prop="postCode">
-            <el-input size="default" v-model="tableData.param.postCode" placeholder="请输入岗位编码" class="w-50" clearable />
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select size="default" placeholder="请选择状态" class="w-50" v-model="tableData.param.status">
-              <el-option label="全部" :value="-1" />
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="postList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery()">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddPost" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增岗位
-            </el-button>
-            <!-- <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)">
+  <el-card shadow="nover" class="page">
+    <el-form :model="tableData.param" inline ref="queryRef">
+      <el-form-item label="岗位名称" prop="postName">
+        <el-input v-model="tableData.param.postName" placeholder="请输入岗位名称" class="w-50" clearable />
+      </el-form-item>
+      <el-form-item label="岗位编码" prop="postCode">
+        <el-input v-model="tableData.param.postCode" placeholder="请输入岗位编码" class="w-50" clearable />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select placeholder="请选择状态" style="width: 80px;" v-model="tableData.param.status">
+          <el-option label="全部" :value="-1" />
+          <el-option label="启用" :value="1" />
+          <el-option label="禁用" :value="0" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="ml10" @click="postList">
+          <el-icon>
+            <ele-Search />
+          </el-icon>
+          查询
+        </el-button>
+        <el-button @click="resetQuery()">
+          <el-icon>
+            <ele-Refresh />
+          </el-icon>
+          重置
+        </el-button>
+        <el-button type="primary" class="ml10" @click="onOpenAddPost" v-auth="'add'">
+          <el-icon>
+            <ele-FolderAdd />
+          </el-icon>
+          新增岗位
+        </el-button>
+        <!-- <el-button type="info" class="ml10" @click="onRowDel(null)">
               <el-icon>
                 <ele-Delete />
               </el-icon>
               删除岗位
             </el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="postCode" v-col="'postCode'" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="postName" v-col="'postName'" label="岗位名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="postSort" v-col="'postSort'" label="排序" width="60" align="center"></el-table-column>
-        <el-table-column prop="status" v-col="'status'" label="岗位状态" width="120" align="center">
-          <template #default="scope">
-            <el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
-            <el-tag type="info" size="small" v-else>禁用</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="remark" v-col="'remark'" label="岗位描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="180" align="center"></el-table-column>
-        <el-table-column label="操作" width="100" v-col="'handle'">
-          <template #default="scope">
-            <el-button size="small" text type="warning" @click="onOpenEditPost(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+      </el-form-item>
+    </el-form>
+    <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" row-key="postId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" v-loading="tableData.loading">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="index" label="序号" width="60" align="center" />
+      <el-table-column prop="postCode" v-col="'postCode'" label="岗位编码" width="220" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="postName" v-col="'postName'" label="岗位名称" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="postSort" v-col="'postSort'" label="排序" width="60" align="center"></el-table-column>
+      <el-table-column prop="status" v-col="'status'" label="岗位状态" width="120" align="center">
+        <template #default="scope">
+          <el-tag type="success" size="small" v-if="scope.row.status === 1">启用</el-tag>
+          <el-tag type="info" size="small" v-else>禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="remark" v-col="'remark'" label="岗位描述" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="createdAt" v-col="'createdAt'" label="创建时间" width="180" align="center"></el-table-column>
+      <el-table-column label="操作" width="100" v-col="'handle'">
+        <template #default="scope">
+          <el-button size="small" text type="warning" @click="onOpenEditPost(scope.row)" v-auth="'edit'">修改</el-button>
+          <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <EditPost ref="editPostRef" @getPostList="postList" />
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">

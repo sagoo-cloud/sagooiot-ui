@@ -1,27 +1,21 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '配置'" v-model="isShowDialog" width="50%">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="名称" prop="title">
-					<el-input v-model="ruleForm.title" placeholder="请输入名称" />
+					<el-input v-model.trim="ruleForm.title" placeholder="请输入名称" />
 				</el-form-item>
-
 				<el-form-item label="通知类型" prop="types">
 					<el-radio-group v-model="ruleForm.types">
 						<el-radio label="1"  value="1">即时发送</el-radio>
 						<el-radio label="2" value="2">预约发送</el-radio>
 					</el-radio-group>
 				</el-form-item>
-
-			
-
-				
-
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -41,8 +35,6 @@ interface RuleFormState {
 	name: string;
 	type: string;
 	sendGateway:string;
-	
-	
 }
 interface DicState {
 	isShowDialog: boolean;
@@ -121,7 +113,7 @@ export default defineComponent({
 						api.config.edit(state.ruleForm).then(() => {
 							ElMessage.success('配置修改成功');
 							closeDialog(); // 关闭弹窗
-							emit('typeList');
+							emit('dataList');
 						});
 					} else {
 						//添加
@@ -151,7 +143,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .inline {
 	display: inline-flex;
 }

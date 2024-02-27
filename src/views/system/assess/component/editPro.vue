@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '产品'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
         <el-form-item label="产品标识" prop="key">
           <el-input v-model="ruleForm.key" placeholder="请输入产品标识" />
         </el-form-item>
@@ -23,8 +23,8 @@
           </el-cascader>
         </el-form-item>
 
-        <el-form-item label="所属部门" prop="deptId">
-          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属部门" clearable class="w100" v-model="ruleForm.deptId">
+        <el-form-item label="所属组织" prop="deptId">
+          <el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择所属组织" clearable class="w100" v-model="ruleForm.deptId">
             <template #default="{ node, data }">
               <span>{{ data.deptName }}</span>
               <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -41,10 +41,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="传输协议" prop="transportProtocol">
+        <el-form-item label="接入方式" prop="transportProtocol">
 
 
-          <el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议">
+          <el-select v-model="ruleForm.transportProtocol" placeholder="请选择接入方式">
             <el-option v-for="item in tranData" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -63,8 +63,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -105,10 +105,10 @@ export default defineComponent({
     const state = reactive<DicState>({
       isShowDialog: false,
       cateData: [], // 分类数据
-      deptData: [], // 
-      messageData: [], // 
-      tranData: [], // 
-      imageUrl: "", // 
+      deptData: [], //
+      messageData: [], //
+      tranData: [], //
+      imageUrl: "", //
       singleImg: baseURL + "/product/icon/upload",
 
       ruleForm: {
@@ -130,9 +130,9 @@ export default defineComponent({
           { required: true, message: "产品标识不能为空", trigger: "blur" }
         ],
         parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        deptId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
-        transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
+        transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
     });
@@ -142,8 +142,6 @@ export default defineComponent({
 
     const handleAvatarSuccess: UploadProps['onSuccess'] = (
       response) => {
-
-      console.log(response);
 
       state.imageUrl = response
       state.ruleForm.imageUrl = response
@@ -206,7 +204,6 @@ export default defineComponent({
             })
           } else {
             //添加
-            console.log(state.ruleForm);
             api.product.add(state.ruleForm).then(() => {
               ElMessage.success('产品类型添加成功');
               closeDialog(); // 关闭弹窗
@@ -239,7 +236,7 @@ export default defineComponent({
 }
 </style>
 
-<style>
+<style scoped>
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;

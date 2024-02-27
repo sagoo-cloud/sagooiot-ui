@@ -1,7 +1,7 @@
 <template>
 	<el-drawer v-model="drawer" :title="title" direction="rtl" size="700px">
 		<div class="p-3">
-			<el-button size="default" type="success" class="mr-3" @click="onAddRow">
+			<el-button type="success" class="mr-3" @click="onAddRow">
 				<el-icon>
 					<ele-FolderAdd />
 				</el-icon>
@@ -18,6 +18,7 @@
 						<el-dropdown-item command="status-状态">状态</el-dropdown-item>
 						<el-dropdown-item command="createdAt-创建时间">创建时间</el-dropdown-item>
 						<el-dropdown-item command="handle-操作">操作</el-dropdown-item>
+						<el-dropdown-item command="selection-复选框">复选框</el-dropdown-item>
 					</el-dropdown-menu>
 				</template>
 			</el-dropdown>
@@ -82,7 +83,6 @@ const addCommonType = async (command: string) => {
 };
 
 const open = async (row: any) => {
-	// console.log(row);
 	title.value = '列表权限 - ' + row.title;
 	drawer.value = true;
 	menuRow.value = row;

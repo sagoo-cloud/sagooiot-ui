@@ -5,8 +5,11 @@ export default {
   login: {
     login: (data: object) => post('/login', data),
     currentUser: () => get('/system/user/currentUser'),
+    editPassword: (data: object) => post('/user/editPassword', data),
     captcha: () => get('/captcha'),
     logout: () => post('/loginOut'),
+    ssoList: () => get('/system/sys_oauth/list_front'),
+    oauth: (data: object) => post('/oauth', data),
   },
   api: {
     getList: (params?: object) => get('/system/api/tree', params),
@@ -15,6 +18,8 @@ export default {
     add: (data: object) => post('/system/api/add', data),
     del: (id: number) => del('/system/api/del', { id }),
     edit: (data: object) => put('/system/api/edit', data),
+    bindMenus: (bindMenus: any[]) => post('/system/api/bindMenus', { bindMenus }),
+    import: () => post('/system/api/import'),
   },
   menu: {
     getList: (params: object) => get('/system/menu/tree', params),
@@ -29,6 +34,10 @@ export default {
       del: (id: number) => del('/system/menu/button/del', { id }),
       edit: (data: object) => put('/system/menu/button/edit', data),
       setStatus: (id: number, menuId: number, status: number) => put('/system/menu/button/editStatus', { id, menuId, status })
+    },
+    api: {
+      getList: (params: object) => get('/system/menu/api/tree', params),
+      add: (data: object) => post('/system/menu/api/add', data),
     },
     list: {
       getList: (params: object) => get('/system/menu/column/tree', params),
@@ -82,6 +91,7 @@ export default {
     resetPassword: (id: number, userPassword: string) => post('/system/user/resetPassword', { id, userPassword }),
     del: (id: number) => del('/system/user/delInfoById', { id }),
     edit: (data: object) => put('/system/user/edit', data),
+    editUserInfo: (data: object) => put('/system/user/editUserInfo', data),
     setStatus: (id: number, status: number) => put('/system/user/editStatus', { id, status }),
     setAvatar: (id: number, avatar: string) => put('/system/user/editAvatar', { id, avatar }),
   },
@@ -131,7 +141,8 @@ export default {
     detail: (id: number) => get('/system/job/getJobById', { id }),
     run: (id: number) => put('/system/job/run', { id }),
     start: (id: number) => put('/system/job/start', { id }),
-    stop: (id: number) => put('/system/job/stop', { id })
+    stop: (id: number) => put('/system/job/stop', { id }),
+    getFunList: () => get('system/job/fun_list'),
   },
   city: {
     getList: (params: object) => get('/common/city/tree', params),
@@ -142,6 +153,41 @@ export default {
   },
   plugin: {
     getList: (params: object) => get('/system/plugins/list', params),
-    changeStatus: (params: object) => post('/system/plugins/set', params),
-  }
+    del: (ids: object) => del('/system/plugins/del', { ids }),
+    changeStatus: (data: object) => post('/system/plugins/set', data),
+    edit: (data: any) => put('/system/plugins/edit', data),
+    addPluginFile: (formatDate: FormData) => post('/system/plugins/add', formatDate),
+  },
+  blackList: {
+    getList: (params: object) => get('/system/blacklist/list', params),
+    add: (data: object) => post('/system/blacklist/add', data),
+    delete: (ids: number) => del('/system/blacklist/delete', { ids }),
+    edit: (data: object) => put('/system/blacklist/edit', data),
+    detail: (params: object) => get('/system/blacklist/get', params),
+    changeStatus: (data: object) => post('/system/blacklist/status', data),
+  },
+  basicConfig: {
+    getDetails: (params: object) => get('/common/getSysConfigSetting', params),
+    setDetails: (data: object) => put('/common/editSysConfigSetting', data),
+    getEmailSetting: () => get('/common/getEmailSetting'),
+    editEmailSetting: (data: object) => put('/common/editEmailSetting', data),
+    getSecuritySetting: () => get('/common/getSecuritySetting'),
+    editSecuritySetting: (data: object) => put('/common/editSecuritySetting', data),
+  },
+  certificate: {
+    getList: () => get('/system/certificate/getAll')
+  },
+  // 远程配置
+  remoteconf: {
+    getProductList: (params: object) => get('/product/list', params),
+    queryThingConfig: (params: object) => get('/operate/remoteconf/queryThingConfig', params),
+    saveThisConfig: (params: object) => post('/operate/remoteconf/addThingConfig', params),
+  },
+  lastLinesLog: {
+    getList: (params: object) => get('/system/monitor/listLogs', params),
+    detail: (params: object) => get('/system/monitor/lastLinesLog', params),
+    down: (params: object) => file('/system/monitor/downloadLog', params),
+    delete: (params: object) => del('/system/monitor/lastLinesLog/delete', params),
+  },
+  getInfoByKey: (ConfigKey: string) => get('/common/config/getInfoByKey', { ConfigKey })
 }

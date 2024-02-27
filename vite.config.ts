@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue';
+import viteCompression from 'vite-plugin-compression'
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 
@@ -14,7 +15,16 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
-		plugins: [vue()],
+		plugins: [
+			vue(),
+			viteCompression({
+				threshold: 1024 * 20, // 对大于 20k 的文件进行压缩
+				// filter: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, // 需要压缩的文件
+				algorithm: 'gzip', // 压缩方式
+				ext: 'gz', // 后缀名
+				deleteOriginFile: false, // 压缩后是否删除压缩源文件
+			})
+		],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
@@ -51,6 +61,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					},
 				},
 			},
+			minify: 'terser', // 使用terser进行压缩
 			terserOptions: {
 				compress: {
 					drop_console: true,

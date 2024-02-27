@@ -2,7 +2,6 @@ import { get, post, del, put } from '/@/utils/request';
 import getOrigin from '/@/utils/origin';
 
 const baseUrl = getOrigin(import.meta.env.VITE_ASSESS_URL);
-console.log(baseUrl)
 
 export default {
   getList: (params?: object) => get(baseUrl + '/setup', params),

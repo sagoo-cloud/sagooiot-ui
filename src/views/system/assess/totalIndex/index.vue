@@ -1,15 +1,15 @@
 <template>
-  <div class="assess-total-container">
-    <el-card shadow="hover">
+  <div class="page">
+    <el-card shadow="nover">
       <div class="system-user-search mb15">
-        <!-- <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="success" class="ml10">
+        <!-- <el-input placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
+				<el-button type="success" class="ml10">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
 					查询
 				</el-button> -->
-        <el-button size="default" type="primary" class="ml10" @click="onOpenAddItem" v-auth="'add'">
+        <el-button type="primary" class="ml10" @click="onOpenAddItem" v-auth="'add'">
           <el-icon>
             <ele-FolderAdd />
           </el-icon>
@@ -30,7 +30,6 @@
     </el-card>
     <EditOrAddItem ref="EditOrAddItem" @fetchList="fetchList" />
     <DetailItem ref="detailItemRef" />
-
   </div>
 </template>
 
@@ -114,13 +113,11 @@ export default defineComponent({
       state.tableData.loading = true
       api.getList().then((res: any) => {
         state.tableData.data = res;
-        state.tableData.loading = false
         // state.tableData.total = res.total;
-      });
+      }).finally(()  => state.tableData.loading = false)
     };
     // 打开新增用户弹窗
     const onOpenAddItem = () => {
-      console.log(111)
       EditOrAddItem.value.openDialog();
     };
     // 打开修改用户弹窗
@@ -133,13 +130,13 @@ export default defineComponent({
     };
     // 删除
     const onRowDel = (row: TableDataRow) => {
-      ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.title}”，是否继续?`, '提示', {
+      ElMessageBox.confirm(`此操作将永久删除指数：“${row.title}”，是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          api.deleteItem({ itemcode: row.item_code }).then((res: any) => {
+          api.deleteItem({ itemcode: row.item_code }).then(() => {
             fetchList()
             ElMessage.success('删除成功');
           });
@@ -176,7 +173,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-dialog__body {
-	border-top: 1px var(--el-border-color) var(--el-border-style);
+:deep(.el-dialog__body) {
+  border-top: 1px var(--el-border-color) var(--el-border-style);
 }
 </style>

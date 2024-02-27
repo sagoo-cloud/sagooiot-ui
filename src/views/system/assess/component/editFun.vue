@@ -1,29 +1,14 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '功能定义'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
         <el-form-item label="功能定义标识" prop="key">
           <el-input v-model="ruleForm.key" placeholder="请输入功能定义标识" />
         </el-form-item>
         <el-form-item label="功能定义名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入功能定义名称" />
         </el-form-item>
-
-
-
-
-
         <el-form-item label="数据类型" prop="valueType">
-
-          <!--    <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型">
-              <el-option
-                v-for="item in typeData"
-                :key="item.key"
-                :label="item.name"
-                :value="item.key"
-              />
-            </el-select> -->
-
           <el-select v-model="ruleForm.valueType" placeholder="请选择数据类型">
             <el-option-group v-for="group in typeData" :key="group" :label="group">
               <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
@@ -31,14 +16,10 @@
           </el-select>
         </el-form-item>
 
-
-
-
         <el-form-item label="是否只读" prop="accessMode">
-          <el-radio-group v-model="ruleForm.accessMode" model-value="0">
-            <el-radio label="0">读写</el-radio>
-
+          <el-radio-group v-model="ruleForm.accessMode">
             <el-radio label="1">只读</el-radio>
+            <el-radio label="0">读写</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="功能定义描述	" prop="desc">
@@ -47,8 +28,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -58,8 +39,7 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from "element-plus";
+import { ElMessage } from "element-plus";
 
 interface RuleFormState {
   id: number;
@@ -77,21 +57,19 @@ interface DicState {
 
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { uploadVue },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
 
     const state = reactive<DicState>({
       isShowDialog: false,
-      typeData: [], // 
-
+      typeData: [], //
 
       ruleForm: {
         id: 0,
         name: '',
         key: '',
         transportProtocol: '',
-        accessMode: '0',
+        accessMode: '1',
         status: 1,
         desc: ''
       },
@@ -103,7 +81,7 @@ export default defineComponent({
           { required: true, message: "功能定义标识不能为空", trigger: "blur" }
         ],
         accessMode: [{ required: true, message: '功能定义分类不能为空', trigger: 'blur' }],
-        deptId: [{ required: true, message: '所属部门不能为空', trigger: 'blur' }],
+        deptId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
       }
     });
@@ -113,23 +91,10 @@ export default defineComponent({
       resetForm();
 
       api.product.getDataType({ status: -1 }).then((res: any) => {
-
-
-        // const  datat=Object.values(res.dataType);
-        // datat.forEach((item, index) => {
-
-        // });
-
         state.typeData = res.dataType || [];
-
-
       });
 
       if (row) {
-        // api.dict.getType(row.dictId).then((res:any)=>{
-        //   state.ruleForm = res.data.dictType
-        // }
-        console.log(row);
         state.ruleForm = row;
       }
       state.isShowDialog = true;
@@ -166,7 +131,6 @@ export default defineComponent({
             })
           } else {
             //添加
-            console.log(state.ruleForm);
             api.product.add(state.ruleForm).then(() => {
               ElMessage.success('功能定义类型添加成功');
               closeDialog(); // 关闭弹窗
@@ -198,7 +162,7 @@ export default defineComponent({
 }
 </style>
 
-<style>
+<style scoped>
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;

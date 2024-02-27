@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
-    <el-dialog title="日志详情" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+    <el-dialog title="日志详情" v-model="isShowDialog" width="700">
+      <el-form label-width="90px" label-position="left">
         <el-form-item label="规则名称">
           {{ ruleForm.ruleName }}
         </el-form-item>
@@ -24,12 +24,16 @@
           {{ ruleForm.createdAt }}
         </el-form-item>
         <el-form-item label="告警数据">
-          <JsonViewer style="width:100%;" :value="jsonData" boxed sort theme="jv-dark" @click="onKeyclick" />
+          <JsonViewer style="width:100%;" :value="jsonData" boxed sort theme="jv-dark" />
+        </el-form-item>
+
+        <el-form-item label="处理意见">
+          {{ ruleForm.content }}
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
+          <el-button @click="onCancel">取 消</el-button>
         </span>
       </template>
     </el-dialog>
@@ -37,23 +41,13 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
+import { reactive, toRefs, defineComponent, ref } from 'vue';
 import api from '/@/api/alarm';
-import { ElMessage } from 'element-plus';
 import 'vue3-json-viewer/dist/index.css';
 
-import vue3cron from '/@/components/vue3cron/vue3cron.vue';
-
-interface RuleFormState {
-  id?: number;
-  name: string;
-  interval: string;
-  key: string;
-  desc: string;
-}
 interface DicState {
   isShowDialog: boolean;
-  ruleForm: RuleFormState;
+  ruleForm: any;
   product_name: '';
   devcie_name: '';
   alarmLevel_name: '';
@@ -62,10 +56,8 @@ interface DicState {
 
 export default defineComponent({
   name: 'Edit',
-  components: { vue3cron },
 
-  setup(prop, { emit }) {
-    const formRef = ref<HTMLElement | null>(null);
+  setup() {
     const state = reactive<DicState>({
       isShowDialog: false,
       product_name: '',
@@ -76,7 +68,7 @@ export default defineComponent({
     });
 
     // 打开弹窗
-    const openDialog = (row: RuleFormState | null) => {
+    const openDialog = (row: any) => {
       //resetForm();
       api.log.detail(row.id).then((res: any) => {
         state.ruleForm = res.data;
@@ -88,9 +80,9 @@ export default defineComponent({
 
       state.isShowDialog = true;
     };
-    const resetForm = () => {
-      state.ruleForm = {};
-    };
+    // const resetForm = () => {
+    //   state.ruleForm = {};
+    // };
 
     // 关闭弹窗
     const closeDialog = () => {
@@ -105,10 +97,14 @@ export default defineComponent({
       openDialog,
       closeDialog,
       onCancel,
-      formRef,
       ...toRefs(state),
     };
   },
 });
 </script>
 
+<style scoped lang="scss">
+.el-form-item {
+  margin-bottom: 0;
+}
+</style>
