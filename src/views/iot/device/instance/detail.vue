@@ -945,7 +945,7 @@ export default defineComponent({
     };
     const onlineTimeoutUpdate = () => {
       if (!state.detail.onlineTimeout) return ElMessage('请先输入设备超时时间')
-      api.device.updateOnlineTimeout({ id: state.detail.id, onlineTimeout: state.detail.onlineTimeout }).then(() => {
+      api.device.updateOnlineTimeout({ deviceKey: state.detail.key, onlineTimeout: state.detail.onlineTimeout }).then(() => {
         ElMessage.success('设置成功')
       })
     }
