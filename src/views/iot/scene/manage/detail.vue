@@ -214,15 +214,20 @@ export default defineComponent({
 		const editScenesDetail = (index: number) => {
 			let saveData = state.sceneList[index];
 			let ids = originalSceneList.value[index].id;
+
+			// 如果触发条件关闭，则清空触发条件的数据
+			if (!saveData.triggerSwitch) {
+				saveData.condition = []
+			}
+
 			api.manage.editDetail({ id: ids, bodyjson: saveData }).then((res: any) => {
 				getOneDetail();
 			});
-
 		}
+
 		const addOrEdit = async (row?: any) => {
 			editFormRef.value.open(row);
 		};
-
 
 		onMounted(() => {
 			getDetail();

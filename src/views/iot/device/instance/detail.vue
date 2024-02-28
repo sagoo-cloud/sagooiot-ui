@@ -60,7 +60,7 @@
                   </div>
                 </div>
                 <div>
-                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string'" />
+                  <devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float' || item.type == 'string' || item.type == 'double'" />
                 </div>
               </div>
             </div>
