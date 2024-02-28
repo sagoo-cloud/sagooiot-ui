@@ -65,12 +65,12 @@
     <el-table :data="setPropertiesItem">
       <el-table-column>
         <template #default="{ row }">
-          <span>{{ row.name }}</span>
+          <span v-for="val,key in row">{{ key }}</span>
         </template>
       </el-table-column>
       <el-table-column>
         <template #default="{ row }">
-          <el-input v-model="row.value" @input="saveSetData"></el-input>
+          <el-input v-for="val, key in row" v-model="row[key]" @input="saveSetData"></el-input>
         </template>
       </el-table-column>
     </el-table>
@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref,onMounted } from 'vue'
+import { PropType, ref, onMounted } from 'vue'
 import product from '/@/api/device';
 import datahub from '/@/api/datahub';
 const emit = defineEmits(['SetSaveData']);
@@ -134,7 +134,7 @@ const fromData = ref({
   setProperties_temp: [],
 })
 
-const selectAction=(val:string)=>{
+const selectAction = (val: string) => {
   saveData();
   getAction(val);
 }
@@ -168,8 +168,7 @@ const saveSetData = () => {
 const setProperties = (val: any) => {
   setPropertiesItem.value = val.map((item: string) => {
     return {
-      name: item,
-      value: ''
+      [item]: ''
     };
   });
 
@@ -203,31 +202,31 @@ const seletChange = (val: string) => {
 }
 
 onMounted(() => {
-    let infoc = props.data;
-    if (infoc.productKey) {
+  let infoc = props.data;
+  if (infoc.productKey) {
     productKey.value = infoc.productKey;
     let info = props.sourceData?.find((pro: testIValueType) => pro.key === infoc.productKey);
     if (info) {
-       getDeviceList(info.key)
+      getDeviceList(info.key)
     }
   }
 
-    getAction(infoc.executeAction);
-    if (props.data && props.data.setProperties) {
-      setPropertiesItem.value =props.data.setProperties
-    }
+  getAction(infoc.executeAction);
+  if (props.data && props.data.setProperties) {
+    setPropertiesItem.value = props.data.setProperties
+  }
 
-    fromData.value = infoc as typeof fromData.value;
+  fromData.value = infoc as typeof fromData.value;
 
-    if (props.data && props.data.functionCall) {
-      fromData.value.functionCall = props.data.functionCall;
-    } else {
-      fromData.value.functionCall = {
-        functionName: "",
-        parameter: ""
-      };
-}
-    
+  if (props.data && props.data.functionCall) {
+    fromData.value.functionCall = props.data.functionCall;
+  } else {
+    fromData.value.functionCall = {
+      functionName: "",
+      parameter: ""
+    };
+  }
+
 });
 
 
