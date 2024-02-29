@@ -339,7 +339,8 @@ export default defineComponent({
 					x: 'left',
 					textStyle: { fontSize: '15', color: state.charts.color },
 				},
-				tooltip: { trigger: 'item', formatter: '{b} <br/> {c}%' },
+				// tooltip: { trigger: 'item', formatter: '{b} <br/> {c}%' },
+				tooltip: { trigger: 'item' },
 				graphic: {
 					elements: [
 						{
@@ -557,12 +558,6 @@ export default defineComponent({
 			() => state.lineChartMsgTotalData,
 			() => {
 				initLineChart();
-			}
-		);
-		watch(
-			() => state.pieChartData,
-			() => {
-				initPieChart();
 			}
 		);
 		return {
