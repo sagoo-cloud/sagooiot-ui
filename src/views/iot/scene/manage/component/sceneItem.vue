@@ -236,7 +236,7 @@ const intScenel = () => {
       product_key = val.productKey;
       let info = props.sourceData?.find((pro: { key: any; }) => pro.key === val.productKey);
       if (info) {
-        getDeviceList(info.id)
+        getDeviceList(info.key)
       }
     }
     if (val.triggerType) {

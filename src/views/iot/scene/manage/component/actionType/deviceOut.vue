@@ -28,23 +28,22 @@
     </el-select>
   </el-form-item>
 
-  <el-form-item label="功能调用" prop="type" class="form-item" v-if="fromData.executeAction == 'functionCall'">
-    <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择功能调用" @change="saveData">
-      <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
-        <span style="float: left">{{ it.name }}</span>
-        <span style="float: right; font-size: 13px">{{ it.key }}</span>
-      </el-option>
-    </el-select>
-  </el-form-item>
+  <template v-if="fromData.executeAction == 'functionCall'">
+    <el-form-item label="功能调用" prop="type" class="form-item">
+      <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择功能调用" @change="saveData">
+        <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
+          <span style="float: left">{{ it.name }}</span>
+          <span style="float: right; font-size: 13px">{{ it.key }}</span>
+        </el-option>
+      </el-select>
+    </el-form-item>
 
+    <el-form-item label="参数" prop="type" class="form-item">
+      <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" />
+    </el-form-item>
+  </template>
 
-  <el-form-item label="参数" prop="type" class="form-item" v-if="fromData.executeAction == 'functionCall'">
-    <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" />
-  </el-form-item>
-
-
-
-  <el-form-item label="读取属性" prop="type" class="form-item" v-if="fromData.executeAction == 'getProperties'">
+  <el-form-item label="读取属性" prop="getProperties" class="form-item" v-else-if="fromData.executeAction == 'getProperties'">
     <el-select v-model="fromData.getProperties" filterable multiple placeholder="请选择读取属性" @change="saveData">
       <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
         <span style="float: left">{{ it.name }}</span>
@@ -53,28 +52,31 @@
     </el-select>
   </el-form-item>
 
-  <el-form-item label="设置属性" prop="type" class="form-item" v-if="fromData.executeAction == 'setProperties'">
-    <el-select v-model="fromData.setProperties_temp" filterable multiple placeholder="请选择设置属性" @change="setProperties">
-      <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
-        <span style="float: left">{{ it.name }}</span>
-        <span style="float: right; font-size: 13px">{{ it.key }}</span>
-      </el-option>
-    </el-select>
-  </el-form-item>
-  <div class="form-item" v-if="fromData.executeAction == 'setProperties'">
-    <el-table :data="setPropertiesItem">
-      <el-table-column>
-        <template #default="{ row }">
-          <span v-for="val,key in row">{{ key }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column>
-        <template #default="{ row }">
-          <el-input v-for="val, key in row" v-model="row[key]" @input="saveSetData"></el-input>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <template v-else-if="fromData.executeAction == 'setProperties'">
+    <el-form-item label="设置属性" prop="setProperties_temp" class="form-item">
+      <el-select v-model="fromData.setProperties_temp" filterable multiple placeholder="请选择设置属性" @change="setProperties">
+        <el-option v-for="it in propertyCallList" :key="it.key" :label="it.name" :value="it.key">
+          <span style="float: left">{{ it.name }}</span>
+          <span style="float: right; font-size: 13px">{{ it.key }}</span>
+        </el-option>
+      </el-select>
+    </el-form-item>
+
+    <div class="form-item">
+      <el-table :data="setPropertiesItem">
+        <el-table-column>
+          <template #default="{ row }">
+            <span v-for="val, key in row">{{ key }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template #default="{ row }">
+            <el-input v-for="val, key in row" v-model="row[key]" @input="saveSetData"></el-input>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -129,12 +131,19 @@ const fromData = ref({
     functionName: "",
     parameter: ""
   },
-  getProperties: {},
+  getProperties: [],
   setProperties: [],
   setProperties_temp: [],
 })
 
 const selectAction = (val: string) => {
+  fromData.value.functionCall = {
+    functionName: "",
+    parameter: ""
+  }
+  fromData.value.setProperties = []
+  fromData.value.setProperties_temp = []
+  fromData.value.getProperties = []
   saveData();
   getAction(val);
 }
@@ -147,11 +156,6 @@ const getAction = (val: string) => {
       })
       break;
     case 'getProperties':
-      datahub.node.getpropertyList({ productKey: productKey.value }).then((re: any) => {
-        propertyCallList.value = re;
-      });
-
-      break;
     case 'setProperties':
       datahub.node.getpropertyList({ productKey: productKey.value }).then((re: any) => {
         propertyCallList.value = re;
