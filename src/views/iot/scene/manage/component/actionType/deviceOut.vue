@@ -30,7 +30,7 @@
 
   <template v-if="fromData.executeAction == 'functionCall'">
     <el-form-item label="功能调用" prop="type" class="form-item">
-      <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择功能调用" @change="saveData">
+      <el-select v-model="fromData.functionCall.functionName" filterable placeholder="请选择功能调用" @change="changeFunc">
         <el-option v-for="it in functionCallList" :key="it.key" :label="it.name" :value="it.key">
           <span style="float: left">{{ it.name }}</span>
           <span style="float: right; font-size: 13px">{{ it.key }}</span>
@@ -39,7 +39,21 @@
     </el-form-item>
 
     <el-form-item label="参数" prop="type" class="form-item">
-      <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" />
+      <!-- <el-input v-model="fromData.functionCall.parameter" placeholder="请输入参数" @input="saveData" /> -->
+      <el-table :data="inputs" border>
+        <el-table-column prop="name" label="参数名称" />
+        <el-table-column prop="valueType.type" label="输入类型" />
+        <el-table-column prop="name" label="值" min-width="200">
+          <template #default="{ row }">
+            <el-select v-model="fromData.functionCall.parameter[row.key]" clearable v-if="row.valueType.type === 'enum'" style="wdith: 100% !important;" @change="saveData">
+              <el-option v-for="item in row.valueType.elements" :key="item.value" :value="item.text" :label="item.text"></el-option>
+            </el-select>
+            <el-input v-model="fromData.functionCall.parameter[row.key]" clearable v-else :placeholder="row.valueType.type === 'array' ? 'JSON.stringify(arr)结果去掉外层单引号' : '请输入'" @input="saveData">
+              <template v-if="row.valueType.unit" #append>{{ row.valueType.unit }}</template>
+            </el-input>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-form-item>
   </template>
 
@@ -118,8 +132,9 @@ const props = defineProps({
   },
 })
 const deviceListData = ref<testIValueType[]>([]);
-const functionCallList = ref<testIValueType[]>([]);
+const functionCallList = ref<any[]>([]);
 const propertyCallList = ref<testIValueType[]>([]);
+const inputs = ref<any[]>([]);
 const productKey = ref();
 const setPropertiesItem = ref([]);
 const fromData = ref({
@@ -129,8 +144,8 @@ const fromData = ref({
   executeAction: "",
   functionCall: {
     functionName: "",
-    parameter: ""
-  },
+    parameter: {}
+  } as any,
   getProperties: [],
   setProperties: [],
   setProperties_temp: [],
@@ -139,7 +154,7 @@ const fromData = ref({
 const selectAction = (val: string) => {
   fromData.value.functionCall = {
     functionName: "",
-    parameter: ""
+    parameter: {}
   }
   fromData.value.setProperties = []
   fromData.value.setProperties_temp = []
@@ -147,16 +162,25 @@ const selectAction = (val: string) => {
   saveData();
   getAction(val);
 }
+
+function changeFunc(functionName: string) {
+  inputs.value = functionCallList.value.find(item => item.key === functionName)?.inputs || []
+  saveData()
+}
+
 //获取类型数据
 const getAction = (val: string) => {
   switch (val) {
     case 'functionCall':
+      functionCallList.value = []
       product.tabDeviceFucntion.getList({ productKey: productKey.value }).then((res: any) => {
         functionCallList.value = res
+        if(fromData.value.functionCall?.functionName) changeFunc(fromData.value.functionCall?.functionName)
       })
       break;
     case 'getProperties':
     case 'setProperties':
+      propertyCallList.value = []
       datahub.node.getpropertyList({ productKey: productKey.value }).then((re: any) => {
         propertyCallList.value = re;
       });
@@ -202,7 +226,16 @@ const seletChange = (val: string) => {
     fromData.value.deviceKey = '';
     getDeviceList(info.key)
   }
+  // 清空选项
+  fromData.value.functionCall = {
+    functionName: "",
+    parameter: {}
+  }
+  fromData.value.setProperties = []
+  fromData.value.setProperties_temp = []
+  fromData.value.getProperties = []
   saveData();
+  getAction(fromData.value.executeAction)
 }
 
 onMounted(() => {
@@ -227,7 +260,7 @@ onMounted(() => {
   } else {
     fromData.value.functionCall = {
       functionName: "",
-      parameter: ""
+      parameter: {}
     };
   }
 
