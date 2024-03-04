@@ -1,24 +1,24 @@
 <template>
 	<div class="system-edit-user-container">
 		<el-dialog :title="(ruleForm.id ? '修改' : '添加') + '用户'" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
+			<el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="90px">
 				<el-row :gutter="35">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20" v-if="!ruleForm.id">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!ruleForm.id">
 						<el-form-item label="用户名" prop="userName">
-							<el-input v-model="ruleForm.userName" placeholder="请输入账户名称" clearable></el-input>
+							<el-input v-model.trim="ruleForm.userName" placeholder="请输入用户名" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20" v-if="!ruleForm.id">
-						<el-form-item label="账户密码" prop="userPassword">
-							<el-input v-model="ruleForm.userPassword" placeholder="请输入" type="password" clearable></el-input>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!ruleForm.id">
+						<el-form-item label="密码" prop="userPassword">
+							<el-input v-model="ruleForm.userPassword" placeholder="请输入密码" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称" prop="userNickname">
-							<el-input v-model="ruleForm.userNickname" placeholder="请输入用户昵称" clearable></el-input>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="姓名" prop="userNickname">
+							<el-input v-model.trim="ruleForm.userNickname" placeholder="请输入姓名" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="关联角色" prop="roleIds">
 							<el-cascader :options="roleData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择角色" clearable class="w100" v-model="ruleForm.roleIds">
 								<template #default="{ node, data }">
@@ -28,9 +28,9 @@
 							</el-cascader>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="部门" prop="deptId">
-							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.deptId">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						<el-form-item label="组织" prop="deptId">
+							<el-cascader :options="deptData" :props="{ checkStrictly: true, emitPath: false, value: 'deptId', label: 'deptName' }" placeholder="请选择组织" clearable class="w100" v-model="ruleForm.deptId">
 								<template #default="{ node, data }">
 									<span>{{ data.deptName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -38,17 +38,17 @@
 							</el-cascader>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="手机号" prop="mobile">
 							<el-input v-model="ruleForm.mobile" placeholder="请输入手机号" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="邮箱" prop="userEmail">
 							<el-input v-model="ruleForm.userEmail" placeholder="请输入" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="性别" prop="sex">
 							<el-select v-model="ruleForm.sex" placeholder="请选择" clearable class="w100">
 								<el-option label="保密" :value="0" />
@@ -57,9 +57,9 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="岗位" prop="postIds">
-							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择部门" clearable class="w100" v-model="ruleForm.postIds">
+							<el-cascader :options="postData" :props="{ checkStrictly: true, multiple: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择岗位" clearable class="w100" v-model="ruleForm.postIds">
 								<template #default="{ node, data }">
 									<span>{{ data.postName }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -67,20 +67,20 @@
 							</el-cascader>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="用户状态">
 							<el-switch v-model="ruleForm.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁"></el-switch>
 						</el-form-item>
 					</el-col>
-					<el-col :span="24">
+					<!-- <el-col :span="24">
 						<el-form-item label="用户类型">
 							<el-radio-group v-model="ruleForm.isAdmin">
 								<el-radio :label="1">后台管理员</el-radio>
 								<el-radio :label="0">前台用户</el-radio>
 							</el-radio-group>
 						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+					</el-col> -->
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="用户描述">
 							<el-input v-model="ruleForm.remark" type="textarea" placeholder="请输入用户描述" maxlength="150"></el-input>
 						</el-form-item>
@@ -89,8 +89,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -106,7 +106,7 @@ interface DialogRow {
 	id?: number;
 	userName: string; // 用户名
 	userNickname: string; // 用户昵称
-	deptId: number | null; // 部门id
+	deptId: number | null; // 组织id
 	mobile: string; // 中国手机不带国家代码，国际手机号格式为：国家代码-手机号
 	roleIds: number[]; // 角色ID数组
 	postIds: number[]; // 岗位ID数组
@@ -169,9 +169,9 @@ export default defineComponent({
 			},
 			//表单校验
 			rules: {
-				userName: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
-				userNickname: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
-				deptId: [{ required: true, message: '归属部门不能为空', trigger: 'blur' }],
+				userName: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+				userNickname: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+				deptId: [{ required: true, message: '归属组织不能为空', trigger: 'blur' }],
 				postIds: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
 				roleIds: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
 				mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
@@ -191,9 +191,11 @@ export default defineComponent({
 			if (row) {
 				api.user.detail(row.id).then((user: any) => {
 					state.ruleForm = user;
+					state.isShowDialog = true;
 				});
+			} else {
+				state.isShowDialog = true;
 			}
-			state.isShowDialog = true;
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -227,7 +229,7 @@ export default defineComponent({
 				}
 			});
 		};
-		// 初始化部门数据
+		// 初始化组织数据
 		const initTableData = () => {
 		};
 		// 页面加载时

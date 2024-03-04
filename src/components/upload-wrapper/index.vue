@@ -1,18 +1,19 @@
 <template>
   <div class="upload">
-    <el-upload class="hide" :accept="accept" :limit="1" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl" :on-success="updateImg">
+    <el-upload class="hide" :accept="accept" :limit="1" :data="{ source }" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :on-error="uploadErr" :action="uploadUrl" :on-success="updateImg">
       <slot></slot>
     </el-upload>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin'
 
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/singleImg');
+
+const source = localStorage.uploadFileWay
 
 const headers = {
   Authorization: 'Bearer ' + localStorage.token,
@@ -36,8 +37,10 @@ const props = defineProps({
 });
 
 const updateImg = (res: any) => {
-  const url = getOrigin(import.meta.env.VITE_SERVER_URL + '/' + res.data?.path)
-  console.log(url)
+  if (res.code !== 0) {
+    return ElMessage.error(res.message)
+  }
+  const url = res?.data?.full_path
   emit('setImg', url, props.name);
 };
 
@@ -52,13 +55,13 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 <style scoped>
 .hide ::v-deep(.el-upload-list) {
-	display: none;
+  display: none;
 }
 
 .preview {
-	max-width: 100%;
-	max-height: 60vh;
-	display: block;
-	margin: 0 auto;
+  max-width: 100%;
+  max-height: 60vh;
+  display: block;
+  margin: 0 auto;
 }
 </style>

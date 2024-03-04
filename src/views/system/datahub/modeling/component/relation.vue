@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置主源、关联字段" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 
 				<el-form-item label="数据源节点" prop="mainSourceId">
 						<el-select v-model="ruleForm.mainSourceId" filterable placeholder="请选择数据源" @change="setNode">
@@ -24,8 +24,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">设置</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">设置</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -37,7 +37,6 @@
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/datahub';
 import { ElMessage } from 'element-plus';
-import { stat } from 'fs';
 
 interface RuleFormState {
 	id?: number;

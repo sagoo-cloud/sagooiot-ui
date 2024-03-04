@@ -8,6 +8,8 @@ import { staticRoutes, dynamicRoutes } from '/@/router/route';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 
+const whiteList = ['/login', '/sso/gitee']
+
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
  * @method createRouter(options: RouterOptions): Router
@@ -220,7 +222,7 @@ router.beforeEach(async (to, from, next) => {
 
 	// 正常流程
 	const token = localStorage.token;
-	if (to.path === '/login' && !token) {
+	if (whiteList.includes(to.path) && !token) {
 		next();
 		NProgress.done();
 	} else {
@@ -234,7 +236,7 @@ router.beforeEach(async (to, from, next) => {
 			Session.clear();
 			resetRoute();
 			NProgress.done();
-		} else if (token && to.path === '/login') {
+		} else if (token && whiteList.includes(to.path)) {
 			next('/');
 			NProgress.done();
 		} else {

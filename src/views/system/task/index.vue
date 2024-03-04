@@ -1,55 +1,53 @@
 <template>
-  <div class="system-dic-container">
-    <el-card shadow="hover">
-      <div class="system-user-search mb15">
-        <el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-          <el-form-item label="任务名称" prop="jobName">
-            <el-input v-model="tableData.param.jobName" placeholder="请输入参数名称" clearable size="default" @keyup.enter="dataList" />
-          </el-form-item>
-          <el-form-item label="任务组名" prop="jobGroup">
-            <el-select v-model="tableData.param.jobGroup" size="mini" placeholder="请选择">
-              <el-option v-for="dict in sys_job_group" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="任务状态" prop="status" style="width: 200px">
-            <el-select v-model="tableData.param.status" size="mini" placeholder="请选择">
-              <el-option label="正常" :value="0" />
-              <el-option label="暂停" :value="1" />
-            </el-select>
-          </el-form-item>
+  <div class="page">
+    <el-card shadow="nover">
+      <el-form :model="tableData.param" ref="queryRef" inline>
+        <el-form-item label="任务名称" prop="jobName">
+          <el-input v-model="tableData.param.jobName" placeholder="请输入" clearable style="width: 150px;" @keyup.enter="dataList" />
+        </el-form-item>
+        <el-form-item label="任务组名" prop="jobGroup">
+          <el-select v-model="tableData.param.jobGroup" placeholder="请选择" style="width: 150px;">
+            <el-option v-for="dict in sys_job_group" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="任务状态" prop="status">
+          <el-select v-model="tableData.param.status" style="width: 100px" placeholder="请选择">
+            <el-option label="启用" :value="0" />
+            <el-option label="禁用" :value="1" />
+          </el-select>
+        </el-form-item>
 
-          <el-form-item>
-            <el-button size="default" type="primary" class="ml10" @click="dataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" @click="resetQuery(queryRef)">
-              <el-icon>
-                <ele-Refresh />
-              </el-icon>
-              重置
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddDic" v-auth="'add'">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增任务
-            </el-button>
-            <el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-              <el-icon>
-                <ele-Delete />
-              </el-icon>
-              删除任务
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+        <el-form-item>
+          <el-button type="primary" class="ml10" @click="dataList">
+            <el-icon>
+              <ele-Search />
+            </el-icon>
+            查询
+          </el-button>
+          <!-- <el-button @click="resetQuery(queryRef)">
+            <el-icon>
+              <ele-Refresh />
+            </el-icon>
+            重置
+          </el-button> -->
+          <el-button type="primary" class="ml10" @click="onOpenAddDic" v-auth="'add'">
+            <el-icon>
+              <ele-FolderAdd />
+            </el-icon>
+            新增任务
+          </el-button>
+          <el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+            <el-icon>
+              <ele-Delete />
+            </el-icon>
+            删除任务
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="60" />
-        <el-table-column label="任务名称" v-col="'jobName'" prop="jobName" :show-overflow-tooltip="true" />
+        <el-table-column label="ID" align="center" v-col="'jobId'" prop="jobId" width="100" />
+        <el-table-column label="任务名称" v-col="'jobName'" prop="jobName" show-overflow-tooltip />
         <el-table-column label="任务描述" v-col="'remark'" prop="remark" show-overflow-tooltip />
         <el-table-column label="任务分组" v-col="'jobGroup'" prop="jobGroup" width="120" :formatter="jobGroupFormat" />
         <el-table-column label="任务方法名" v-col="'invokeTarget'" prop="invokeTarget" />
@@ -57,14 +55,15 @@
         <el-table-column label="状态" v-col="'status'" align="center" prop="status" width="100">
           <template #default="scope">
             <!-- {{ row.status ? '正常' : '暂停' }} -->
-            <el-switch v-model="scope.row.status" inline-prompt :active-value="0" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
+            <el-switch v-model="scope.row.status" inline-prompt :active-value="0" v-auth="'status'" :inactive-value="1" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)">
             </el-switch>
+            <span v-noauth="'status'">{{ scope.row.status ? '正常' : '暂停' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180" align="center" fixed="right" v-col="'handle'">
           <template #default="scope">
             <el-button size="small" text type="warning" @click="onOpenEditDic(scope.row)" v-auth="'edit'">修改</el-button>
-            <el-button size="small" text type="danger" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
+            <el-button size="small" text type="info" @click="onRowDel(scope.row)" v-auth="'del'">删除</el-button>
             <el-button size="small" text type="primary" @click="onRowRun(scope.row)" v-auth="'do'">执行一次</el-button>
           </template>
         </el-table-column>

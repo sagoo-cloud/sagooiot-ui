@@ -1,25 +1,13 @@
 <template>
 	<div class="upload">
-		<el-upload
-			v-model:file-list="fileList"
-			:class="{ hide: fileList.length >= limit }"
-			:accept="accept"
-			list-type="picture-card"
-			:limit="limit"
-			:multiple="multiple"
-			:headers="headers"
-			:before-upload="beforeAvatarUpload"
-			:action="uploadUrl"
-			:on-success="updateImg"
-			:on-preview="handlePictureCardPreview"
-			:on-remove="updateImg"
-		>
+		<el-upload v-model:file-list="fileList" :class="{ hide: fileList.length >= limit }" :accept="accept" list-type="picture-card" :limit="limit" :data="{ source }" :multiple="multiple" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl"
+			:on-success="updateImg" :on-preview="handlePictureCardPreview" :on-remove="updateImg">
 			<el-icon>
 				<ele-Plus />
 			</el-icon>
 		</el-upload>
 		<el-dialog v-model="dialogVisible">
-			<img class="preview" :src="dialogImageUrl" alt="Preview Image" />
+			<el-image class="preview" :src="dialogImageUrl" alt="Preview Image" />
 		</el-dialog>
 
 		<!-- 上传单张图片 -->
@@ -50,6 +38,8 @@ const headers = {
 
 const emit = defineEmits(['setImg', 'setImgs'])
 
+const source = localStorage.uploadFileWay
+
 const props = defineProps({
 	multiple: {
 		type: Boolean,
@@ -75,6 +65,10 @@ const props = defineProps({
 		type: String,
 		default: '',
 	},
+	// keyName: {
+	// 	type: String,
+	// 	default: '',
+	// },
 })
 
 const fileList = ref<any[]>([
@@ -84,21 +78,32 @@ const fileList = ref<any[]>([
 	// },
 ])
 
-const updateImg = () => {
+const updateImg = (res?: any) => {
+	if (res && res.code !== undefined && res.code !== 0) {
+		return ElMessage.error(res.message)
+	}
+
 	const list = fileList.value.map((item) => {
 		if (item.response) {
-			return getOrigin(import.meta.env.VITE_SERVER_URL + '/' + item.response?.data?.path)
-			// return item.response?.data?.path;
+			return item.response?.data?.full_path
 		} else {
 			return item.url
 		}
 	})
-
 	if (props.limit === 1) {
 		const img = list[0]
-		emit('setImg', props.widthHost ? img : img.replace(getOrigin(import.meta.env.VITE_SERVER_URL + '/'), ''))
+		if (!img) {
+			emit('setImg', '');
+			return;
+		}
+		emit('setImg', img);
 	} else {
 		emit('setImgs', list)
+		// if(props.keyName) {
+		// 	emit('setImgs', { list: list, keyName: props.keyName})
+		// }else {
+		// 	emit('setImgs', list)
+		// }
 	}
 }
 
@@ -121,8 +126,7 @@ watch(
 	() => props.img,
 	(img) => {
 		if (img) {
-			const theImg = props.widthHost ? img : getOrigin(import.meta.env.VITE_SERVER_URL + '/' + img)
-			fileList.value = [{ name: theImg, url: theImg }]
+			fileList.value = [{ name: img, url: img }]
 			updateImg()
 		} else {
 			fileList.value = []

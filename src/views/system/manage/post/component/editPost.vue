@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-post-container">
 		<el-dialog v-model="isShowDialog" :title="(!formData.postId ? '添加' : '修改') + '岗位'" width="769px">
-			<el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="90px">
+			<el-form ref="formRef" :model="formData" :rules="rules" label-width="90px">
 				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 					<el-form-item label="上级岗位">
 						<el-cascader :options="postData" :props="{ checkStrictly: true, emitPath: false, value: 'postId', label: 'postName' }" placeholder="请选择岗位" clearable class="w100" v-model="formData.parentId">
@@ -13,7 +13,7 @@
 					</el-form-item>
 				</el-col>
 				<el-form-item label="岗位名称" prop="postName">
-					<el-input v-model="formData.postName" placeholder="请输入岗位名称" />
+					<el-input v-model.trim="formData.postName" placeholder="请输入岗位名称" />
 				</el-form-item>
 				<!-- <el-form-item label="岗位编码" prop="postCode">
           <el-input v-model="formData.postCode" placeholder="请输入编码名称" />
@@ -30,8 +30,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default" :loading="loading">{{ formData.postId === 0 ? '新 增' : '修 改' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" :loading="loading">{{ formData.postId === 0 ? '新 增' : '修 改' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

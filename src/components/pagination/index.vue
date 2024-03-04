@@ -1,21 +1,11 @@
 <template>
-  <div :class="{'hidden':hidden}" class="pagination-container">
-    <el-pagination
-        :background="background"
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :layout="layout"
-        :page-sizes="pageSizes"
-        :pager-count="pagerCount"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-    />
+  <div :class="{ 'hidden': hidden }" class="pagination-container">
+    <el-pagination :background="background" v-model:current-page="currentPage" v-model:page-size="pageSize" :layout="layout" :page-sizes="pageSizes" :pager-count="pagerCount" :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, defineComponent,computed } from 'vue';
+import { toRefs, defineComponent, computed } from 'vue';
 const props = {
   total: {
     required: true,
@@ -32,7 +22,7 @@ const props = {
   pageSizes: {
     type: Array,
     default() {
-      return [10, 20, 30, 50]
+      return [10, 20, 30, 50, 100, 200, 300, 500]
     }
   },
   // 移动端页码按钮的数量端默认值5
@@ -56,8 +46,8 @@ const props = {
 export default defineComponent({
   name: 'pagination',
   props: props,
-  setup(props,{emit}){
-    const { page,limit,pageSizes } = toRefs(props);
+  setup(props, { emit }) {
+    const { page, limit, pageSizes } = toRefs(props);
     const currentPage = computed({
       get() {
         return page.value;
@@ -78,7 +68,7 @@ export default defineComponent({
       currentPage.value = 1
       emit('pagination', { page: currentPage.value, limit: val })
     };
-    const handleCurrentChange=(val:number) => {
+    const handleCurrentChange = (val: number) => {
       emit('pagination', { page: val, limit: pageSizes.value })
     }
     return {
@@ -93,9 +83,11 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .pagination-container {
-  background: #fff;
-  padding: 32px 16px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0 0 !important
 }
+
 .pagination-container.hidden {
   display: none;
 }

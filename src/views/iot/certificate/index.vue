@@ -1,61 +1,59 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="hover">
-			<div class="system-user-search mb15">
-				<el-form :model="state.tableData.param" ref="queryRef" :inline="true" label-width="60px">
-					<el-form-item label="关键字" prop="keyWord">
-						<el-input v-model="state.tableData.param.name" placeholder="请输入关键字" clearable size="default" @keyup.enter="queryList" />
-					</el-form-item>
-					<el-form-item>
-						<el-button v-auth="'query'" size="default" type="primary" class="ml10" @click="queryList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button v-auth="'reset'" size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button v-auth="'add'" size="default" type="success" class="ml10" @click="operate('add')">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增证书
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<!--  -->
+	<div class="page">
+		<el-card shadow="nover">
+			<el-form :model="state.tableData.param" ref="queryRef" inline @submit.prevent @keyup.enter="queryList">
+				<el-form-item label="证书名称" prop="keyWord">
+					<el-input v-model="state.tableData.param.name" placeholder="请输入证书名称" clearable />
+				</el-form-item>
+				<el-form-item>
+					<el-button v-auth="'query'" type="primary" class="ml10" @click="queryList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button v-auth="'reset'" @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button v-auth="'add'" type="primary" class="ml10" @click="operate('add')">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增证书
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<!-- <el-table-column type="selection" width="55" align="center" /> -->
-				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="60" />
-				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" :show-overflow-tooltip="true" />
-				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" :show-overflow-tooltip="true">
+				<el-table-column v-col="'id'" label="ID" align="center" prop="id" width="100" />
+				<el-table-column v-col="'name'" label="证书名称" prop="name" min-width="120" show-overflow-tooltip />
+				<el-table-column v-col="'standard'" label="证书标准" prop="standard" min-width="120" show-overflow-tooltip>
 					<template #default="scope">
 						{{ filterStandard(scope.row.standard) }}
 						<!-- <el-button size="small" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button> -->
 						<!-- <el-button size="small" text type="danger" @click="operate('delete', scope.row)">删除</el-button> -->
 					</template>
 				</el-table-column>
-				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" :show-overflow-tooltip="true" />
+				<el-table-column v-col="'description'" label="说明" prop="description" min-width="120" show-overflow-tooltip />
 				<el-table-column label="状态" width="120" align="center">
 					<template #default="scope">
-						<el-switch v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
+						<el-switch v-auth="'startOrStop'" v-model="scope.row.status" inline-prompt :active-value="1" :inactive-value="0" active-text="启" inactive-text="禁" @change="handleStatusChange(scope.row)"></el-switch>
+						<span v-noauth="'startOrStop'">{{ scope.row.status ? '正常' : '暂停' }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column v-col="'handle'" label="操作" width="180" align="center" fixed="right">
+				<el-table-column v-col="'handle'" label="操作" width="100" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" v-auth="'edit'" text type="primary" @click="operate('editParams', scope.row)">编辑</el-button>
-						<el-button size="small" v-auth="'del'" text type="danger" @click="operate('delete', scope.row)">删除</el-button>
+						<el-button size="small" v-auth="'del'" text type="info" @click="operate('delete', scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<pagination v-show="state.tableData.total > 0" :total="state.tableData.total" v-model:page="state.tableData.param.pageNum" v-model:limit="state.tableData.param.pageSize" @pagination="queryList" />
+			<EditParams ref="editParamsRef" @update="queryList" />
 		</el-card>
-		<EditParams ref="editParamsRef" @update="queryList" />
 	</div>
 </template>
 
@@ -108,7 +106,7 @@ const filterStandard = (type: any) => {
 // 状态修改
 const handleStatusChange = (row: any) => {
 	let text = row.status === 1 ? '启用' : '停用';
-	ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"楼宇吗?', '警告', {
+	ElMessageBox.confirm('确认要"' + text + '"："' + row.name + '"证书吗?', '警告', {
 		confirmButtonText: '确定',
 		cancelButtonText: '取消',
 		type: 'warning',
@@ -138,18 +136,16 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 const operate = (type: string, row: any) => {
 	switch (type) {
 		case 'preview':
-			console.log(previewRef.value)
-			previewRef.value.openDialog(row)
+			previewRef.value.openDialog({ ...row })
 			break
 		case 'add':
-			// console.log(previewRef.value)
 			editParamsRef.value.openDialog()
 			break
 		case 'editParams':
-			editParamsRef.value.openDialog(row)
+			editParamsRef.value.openDialog({ ...row })
 			break
 		case 'buildConfig':
-			buildConfigRef.value.openDialog(row)
+			buildConfigRef.value.openDialog({ ...row })
 			break
 		case 'delete':
 			ElMessageBox.confirm(`是否确认删除编号为"${row.id}"的数据项?`, '提示', {

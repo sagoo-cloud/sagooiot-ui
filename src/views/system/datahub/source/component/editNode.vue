@@ -1,9 +1,9 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.nodeId !== 0 ? '修改' : '添加') + '数据节点'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="数据节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey==1 && ruleForm.nodeId !== 0" />
+					<el-input v-model="ruleForm.key" placeholder="请输入数据节点名称" :disabled="detail.lockKey == 1 && ruleForm.nodeId !== 0" />
 				</el-form-item>
 				<el-form-item label="数据节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入数据节点名称" />
@@ -60,7 +60,9 @@
 						<!-- <el-input v-model="rule[index].params.name" placeholder="请输入键值" class="w-35" />
 						<el-input v-model="rule[index].params.value" placeholder="请输入值" class="w-35" /> -->
 						<div class="conicon">
-							<el-icon @click="delRule(index)" v-if="index > 0"><Delete /></el-icon>
+							<el-icon @click="delRule(index)" v-if="index > 0">
+								<Delete />
+							</el-icon>
 						</div>
 					</el-form-item>
 				</div>
@@ -70,8 +72,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.nodeId !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.nodeId !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -94,7 +96,7 @@ import 'vue3-json-viewer/dist/index.css';
 import jsontree from '/@/components/jsontree/index.vue';
 
 import { ElMessage } from 'element-plus';
-import { Delete, Minus, Right } from '@element-plus/icons-vue';
+import { Delete, } from '@element-plus/icons-vue';
 
 interface RuleFormState {
 	nodeId: number;
@@ -115,10 +117,9 @@ interface DicState {
 
 export default defineComponent({
 	name: 'Edit',
-	components: { Delete, Minus, Right, jsontree },
+	components: { Delete, jsontree },
 
 	setup(prop, { emit }) {
-		const editDicRef = ref();
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
@@ -249,7 +250,6 @@ export default defineComponent({
 				state.ruleForm = row;
 
 				var data = JSON.parse(row.rule);
-				console.log(data);
 				data.forEach((item, index) => {
 					state.rule[index].expression = item.expression;
 					state.rule[index].replace = item.replace;
@@ -333,30 +333,18 @@ export default defineComponent({
 		};
 
 		const getNodeList = (e) => {
-			state.propertyData.forEach((item, index) => {
+			state.propertyData.forEach((item) => {
 				if (item.key === e) {
 					state.ruleForm.dataType = item.valueType.type;
 				}
 			});
 		};
 
-		const getDbList = (e)=>{
+		const getDbList = (e) => {
 			state.ruleForm.dataType = state.dbData[e].Type;
 		}
 
-		const onKeyclick = (e) => {
-			//console.log(e);
-			// if (e.target.innerText && e.target.className == 'jv-key') {
-			// 	let str = e.target.innerText;
-			// 	str = str.substr(0, str.length - 1);
-			// 	state.ruleForm.value = str;
-			// 	state.dialogVisible = false;
-			// 	var con = {
-			// 		...state.jsonData,
-			// 	};
-			// 	// var jsonstr = getOrgIdArr([], str, con);
-			// 	// state.ruleForm.value = jsonstr.join('.');
-			// }
+		const onKeyclick = () => {
 		};
 
 		const jsonPath = (arr, json, basePath) => {
@@ -437,7 +425,6 @@ export default defineComponent({
 					break;
 				} else {
 					if (treeData[key] instanceof Object) {
-						// console.log(treeData[key]);
 						parents.push(key);
 
 						//没找到，遍历该节点的子节点
@@ -470,7 +457,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-input__wrapper {
 	width: 98%;
 }
@@ -485,9 +472,11 @@ export default defineComponent({
 	display: flex;
 	margin-bottom: 10px;
 }
+
 .content-f .el-input__wrapper {
 	margin-right: 5px;
 }
+
 .addbutton {
 	width: 100%;
 	margin-top: 10px;

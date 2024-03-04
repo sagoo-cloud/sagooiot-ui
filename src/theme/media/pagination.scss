@@ -12,4 +12,6 @@
 // 默认居中对齐
 .el-pagination {
 	text-align: center !important;
+	display: flex;
+	justify-content: flex-end;
 }

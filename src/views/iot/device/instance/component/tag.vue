@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="标签设置" v-model="isShowDialog" width="500px">
-    <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+    <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
       <el-form-item label="标签键名" prop="key">
         <el-input v-model="ruleForm.key" placeholder="请输入标签键名" />
       </el-form-item>
@@ -14,8 +14,8 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="isShowDialog = false" size="default">取 消</el-button>
-      <el-button type="primary" @click="onSubmit" size="default">添 加</el-button>
+      <el-button @click="isShowDialog = false">取 消</el-button>
+      <el-button type="primary" @click="onSubmit">添 加</el-button>
     </template>
   </el-dialog>
 </template>

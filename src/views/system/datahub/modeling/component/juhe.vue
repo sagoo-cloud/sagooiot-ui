@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置聚合" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="分组节点" prop="GroupNodeKey">
 					<el-select v-model="ruleForm.GroupNodeKey" filterable placeholder="请选择分组节点" class="w100">
 						<el-option v-for="item in sourceData" :key="item.id" :label="item.name" :value="item.key">
@@ -29,8 +29,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">设置</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">设置</el-button>
 				</span>
 			</template>
 		</el-dialog>

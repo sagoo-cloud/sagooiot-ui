@@ -12,7 +12,10 @@ export default function getOrigin(suffix: string = '', type: string = 'http') {
     return `ws://${import.meta.env.VITE_SERVER_HOSTNAME}${suffix}`
   }
 
-  if (import.meta.env.VITE_SERVER_HOSTNAME) {
+  // 如果配置的第三方服务直接是http开头的，就直接使用即可
+  if (suffix.includes('http')) {
+    return suffix
+  } else if (import.meta.env.VITE_SERVER_HOSTNAME) {
     return `${import.meta.env.VITE_SERVER_PROTOCOL}//${import.meta.env.VITE_SERVER_HOSTNAME}${suffix}`
   } else {
     return `${window.location.protocol}//${window.location.host}${suffix}`

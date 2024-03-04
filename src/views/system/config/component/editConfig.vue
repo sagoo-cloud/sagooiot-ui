@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.configId!==0?'修改':'添加')+'参数'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
         <el-form-item label="参数名称" prop="configName">
           <el-input v-model="ruleForm.configName" placeholder="请输入参数名称" />
         </el-form-item>
@@ -9,8 +9,8 @@
           <el-input v-model="ruleForm.configKey" placeholder="请输入参数键名" />
         </el-form-item>
         <!-- 字典类型下拉框 -->
-        <el-form-item label="字典分类" prop="moduleClassify">
-          <el-select v-model="ruleForm.moduleClassify" placeholder="字典分类" clearable size="default" style="width: 240px">
+        <el-form-item label="参数分类" prop="moduleClassify">
+          <el-select v-model="ruleForm.moduleClassify" placeholder="参数分类" clearable style="width: 240px">
             <el-option v-for="dict in param_class_type" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
@@ -28,8 +28,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ruleForm.configId!==0?'修 改':'添 加'}}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ruleForm.configId!==0?'修 改':'添 加'}}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -45,7 +45,7 @@ interface RuleFormState {
   configName: string;
   configKey: string;
   configValue: string;
-  configType: string;
+  configType: number;
   remark: string;
   moduleClassify:string; // 字典分类
 }
@@ -53,6 +53,16 @@ interface DicState {
   isShowDialog: boolean;
   ruleForm: RuleFormState;
   rules: {};
+}
+
+const baseForm: RuleFormState = {
+  configId: 0,
+  configName: '',
+  configKey: '',
+  configValue: '',
+  configType: 0,
+  remark: '',
+  moduleClassify: '',
 }
 
 export default defineComponent({
@@ -70,42 +80,30 @@ export default defineComponent({
     const state = reactive<DicState>({
       isShowDialog: false,
       ruleForm: {
-        configId: 0,
-        configName: '',
-        configKey: '',
-        configValue: '',
-        configType: '0',
-        remark: '',
-        moduleClassify: '',
+        ...baseForm
       },
       rules: {
-        configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
-        configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
-        configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }],
+        configName: [{ required: true, message: '参数名称不能为空', trigger: 'change' }],
+        configKey: [{ required: true, message: '参数键名不能为空', trigger: 'change' }],
+        moduleClassify: [{ required: true, message: '字典分类不能为空', trigger: 'change' }],
+        configValue: [{ required: true, message: '参数键值不能为空', trigger: 'change' }],
       },
     });
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
       if (row) {
+        state.ruleForm = row;
         api.config.detail(row.configId).then((res: any) => {
-          const data: RuleFormState = res.data.data;
-          data.configType = String(data.configType);
+          const data: RuleFormState = res.data;
           state.ruleForm = data;
         });
-        state.ruleForm = row;
       }
       state.isShowDialog = true;
     };
     const resetForm = () => {
       state.ruleForm = {
-        configId: 0,
-        configName: '',
-        configKey: '',
-        configValue: '',
-        configType: '0',
-        moduleClassify: '',
-        remark: '',
+        ...baseForm
       };
     };
     // 关闭弹窗

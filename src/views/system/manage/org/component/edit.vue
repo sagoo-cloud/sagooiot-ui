@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dept-container">
     <el-dialog :title="(ruleForm.id ? '修改' : '添加') + '区域'" v-model="isShowDialog" width="769px">
-      <el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="90px">
+      <el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="90px">
         <el-row :gutter="35">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
             <el-form-item label="上级区域">
@@ -15,12 +15,12 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="区域名称" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入区域名称" clearable></el-input>
+              <el-input v-model.trim="ruleForm.name" show-word-limit maxlength="20" placeholder="请输入区域名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="负责人" prop="leader">
-              <el-select v-model="ruleForm.leader" placeholder="请输入负责人" filterable clearable>
+              <el-select v-model.trim="ruleForm.leader" placeholder="请输入负责人" filterable clearable>
                 <el-option :value="user.userNickname" :label="user.userNickname" v-for="user in userList" :key="user.id"></el-option>
               </el-select>
             </el-form-item>
@@ -49,8 +49,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>

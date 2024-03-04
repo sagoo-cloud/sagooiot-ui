@@ -11,7 +11,7 @@
 			</div>
 
 			<div class="content-box">
-				<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+				<el-tabs v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="运行状态" name="3">
 						<div style="display: flex; padding: 10px; flex-wrap: wrap">
 							<div class="ant-card">
@@ -50,7 +50,7 @@
 									</div>
 
 									<div class="statusname">{{ item.value }}{{ item.unit }}</div>
-									<div class="">
+									<div>
 										<devantd :json="item.list" :antdid="item.key" v-if="item.type == 'int' || item.type == 'float'" />
 									</div>
 								</div>
@@ -61,7 +61,7 @@
 						<div class="pro-box">
 							<div class="protitle">设备信息</div>
 							<div>
-								<el-button type="primary" @click="onOpenEditDic(detail)">编辑</el-button>
+								<el-button type="primary" v-auth="'edit'" @click="onOpenEditDic(detail)">编辑</el-button>
 							</div>
 						</div>
 
@@ -88,13 +88,13 @@
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">固件版本</th>
 										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.version }}</td>
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">注册时间</th>
-										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.updatedAt }}</td>
+										<td class="ant-descriptions-item-content" colspan="1">{{ detail.updatedAt }}</td>
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">最后上线时间</th>
-										<td class="ant-descriptions-item-content" colspan="1">{{ prodetail.lastOnlineTime || '' }}</td>
+										<td class="ant-descriptions-item-content" colspan="1">{{ detail.lastOnlineTime || '' }}</td>
 									</tr>
 									<tr class="ant-descriptions-row">
 										<th class="ant-descriptions-item-label ant-descriptions-item-colon">说明</th>
-										<td class="ant-descriptions-item-content" colspan="5">{{ prodetail.desc }}</td>
+										<td class="ant-descriptions-item-content" colspan="5">{{ detail.desc }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -113,10 +113,10 @@
 
 									<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
 										<el-table-column label="属性标识" align="center" prop="key" />
-										<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+										<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
 										<el-table-column prop="valueType" label="数据类型" width="100" align="center">
 											<template #default="scope">
-												<span>{{ scope.row.valueType.type }}</span>
+												<span>{{ scope.row.valueType?.type }}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="decimals" label="精度" width="60" align="center">
@@ -135,7 +135,7 @@
 												<el-tag type="success" size="small" v-else>读写</el-tag>
 											</template>
 										</el-table-column>
-										<el-table-column label="说明" prop="desc" :show-overflow-tooltip="true" />
+										<el-table-column label="说明" prop="desc" show-overflow-tooltip />
 										<el-table-column label="操作" width="300" align="center" fixed="right">
 											<template #default="scope">
 												<el-button size="small" text type="warning" @click="onEditAttr(scope.row)">修改</el-button>
@@ -154,9 +154,9 @@
 
 									<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
 										<el-table-column label="功能标识" align="center" prop="key" />
-										<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+										<el-table-column label="名称" prop="name" show-overflow-tooltip />
 
-										<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+										<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 										<el-table-column label="操作" width="300" align="center" fixed="right">
 											<template #default="scope">
 												<el-button size="small" text type="warning" @click="onEditFun(scope.row)">修改</el-button>
@@ -169,13 +169,13 @@
 									<div class="wu-title">
 										<div class="title">事件定义</div>
 										<div>
-											<el-button type="primary" @click="onOpenEditEvent()">添加</el-button>
+											<el-button size="small" type="primary" @click="onOpenEditEvent()">添加</el-button>
 										</div>
 									</div>
 
 									<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
 										<el-table-column label="事件标识" align="center" prop="key" />
-										<el-table-column label="名称" prop="name" :show-overflow-tooltip="true" />
+										<el-table-column label="名称" prop="name" show-overflow-tooltip />
 										<el-table-column prop="level" label="事件级别" width="120" align="center">
 											<template #default="scope">
 												<el-tag type="primary" size="small" v-if="scope.row.level == 0">普通</el-tag>
@@ -183,7 +183,7 @@
 												<el-tag type="danger" size="small" v-if="scope.row.level == 2">紧急</el-tag>
 											</template>
 										</el-table-column>
-										<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+										<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 
 										<el-table-column label="操作" width="300" align="center" fixed="right">
 											<template #default="scope">
@@ -203,7 +203,7 @@
 
 									<el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
 										<el-table-column label="属性标识" align="center" prop="key" />
-										<el-table-column label="属性名称" prop="name" :show-overflow-tooltip="true" />
+										<el-table-column label="属性名称" prop="name" show-overflow-tooltip />
 										<el-table-column prop="valueType" label="数据类型" width="120" align="center">
 											<template #default="scope">
 												<span>{{ scope.row.valueType.type }}</span>
@@ -215,7 +215,7 @@
 												<el-tag type="success" size="small" v-else>读写</el-tag>
 											</template>
 										</el-table-column>
-										<el-table-column label="描述" prop="desc" :show-overflow-tooltip="true" />
+										<el-table-column label="描述" prop="desc" show-overflow-tooltip />
 										<el-table-column label="操作" width="300" align="center" fixed="right">
 											<template #default="scope">
 												<el-button size="small" text type="warning" @click="onEditTag(scope.row)">修改</el-button>
@@ -230,7 +230,7 @@
 								:total="tableData.total"
 								v-model:page="tableData.param.pageNum"
 								v-model:limit="tableData.param.pageSize"
-								@pagination="getList"
+								@pagination="getList()"
 							/>
 						</div>
 					</el-tab-pane>
@@ -239,9 +239,9 @@
 					</el-tab-pane>
 					<el-tab-pane label="日志管理" name="4">
 						<div class="system-user-search mb15">
-							<el-form :model="logtableData.param" ref="queryRef" :inline="true" label-width="68px">
+							<el-form :model="logtableData.param" ref="queryRef" inline label-width="68px">
 								<el-form-item label="日志类型" prop="types">
-									<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable size="default">
+									<el-select v-model="logtableData.param.types" placeholder="日志类型" clearable>
 										<el-option v-for="item in logTypeData" :key="item" :label="item" :value="item" />
 									</el-select>
 								</el-form-item>
@@ -258,13 +258,13 @@
 									></el-date-picker>
 								</el-form-item>
 								<el-form-item>
-									<el-button size="default" type="primary" class="ml10" @click="getlog">
+									<el-button type="primary" class="ml10" @click="getlog">
 										<el-icon>
 											<ele-Search />
 										</el-icon>
 										查询
 									</el-button>
-									<el-button size="default" @click="resetQuery(queryRef)">
+									<el-button @click="resetQuery(queryRef)">
 										<el-icon>
 											<ele-Refresh />
 										</el-icon>
@@ -275,9 +275,9 @@
 						</div>
 						<el-table style="width: 100%" :data="logtableData.data">
 							<el-table-column label="类型" align="center" prop="type" />
-							<el-table-column label="时间" prop="ts" :show-overflow-tooltip="true" />
+							<el-table-column label="时间" prop="ts" show-overflow-tooltip />
 
-							<el-table-column label="内容" prop="content" :show-overflow-tooltip="true" />
+							<el-table-column label="内容" prop="content" show-overflow-tooltip />
 							<el-table-column label="操作" width="300" align="center" fixed="right">
 								<template #default="scope">
 									<el-button size="small" text type="warning" @click="onLogDetail(scope.row)">查看</el-button>
@@ -533,7 +533,7 @@ export default defineComponent({
 
 		// 删除产品
 		const onRowDel = (key, type) => {
-			let msg = `此操作将永久删除该数据吗？，是否继续?`
+			let msg = `此操作将永久删除该数据，是否继续?`
 
 			if (key.length === 0) {
 				ElMessage.error('请选择要删除的数据。')
@@ -756,17 +756,14 @@ export default defineComponent({
 	},
 })
 </script>
-  <style>
+  <style scoped>
 .content {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
 }
 .content-box {
-	background: #fff;
 	width: 100%;
 	padding: 20px;
-	margin-top: 20px;
 }
 .cont_box {
 	display: flex;

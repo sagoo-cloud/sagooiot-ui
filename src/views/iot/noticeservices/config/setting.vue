@@ -1,162 +1,97 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="hover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true">
-					<el-form-item label="配置名称" prop="name">
-						<el-input
-							v-model="tableData.param.title"
-							placeholder="请输入配置名称"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item>
-					<!-- <el-form-item label="通知方式" prop="name">
-						<el-input
-							v-model="tableData.param.sendGateway"
-							placeholder="请输入通知方式"
-							clearable
-							size="default"
-							style="width: 240px"
-							@keyup.enter.native="dataList"
-						/>
-					</el-form-item> -->
-
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="dataList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
-							<el-icon>
-								<ele-FolderAdd />
-							</el-icon>
-							新增通知
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-			<div>
-				<div style="border: 1px solid var(--next-border-color-light)"></div>
-				<el-row>
-					<el-col :span="8" v-for="(item, index) in tableData.data" :key="index"
-						><div class="grid-content card">
-							<div class="ant-card">
-								<div class="ant-card-body">
-									<div class="pro-table-card-item">
-										<div class="card-item-avatar">
-											<img
-												width="88"
-												height="88"
-												:src="'/imgs/notice/'+tableData.param.sendGateway+'.svg'"
-												alt=""
-											/>
+	<el-card shadow="nover" class="page">
+		<div class="system-user-search">
+			<el-form :model="tableData.param" ref="queryRef" inline @keyup.enter.native="dataList">
+				<el-form-item label="配置名称" prop="keyWord">
+					<el-input v-model="tableData.param.keyWord" placeholder="请输入配置名称" clearable style="width: 240px" />
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="dataList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="primary" class="ml10" @click="onOpenAdd">
+						<el-icon>
+							<ele-FolderAdd />
+						</el-icon>
+						新增通知
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		<el-row class="flex1">
+			<el-col :span="8" v-for="(item, index) in tableData.data" :key="index">
+				<div class="grid-content card">
+					<div class="ant-card">
+						<div class="ant-card-body">
+							<div class="pro-table-card-item">
+								<div class="card-item-avatar">
+									<img width="88" height="88" :src="'/imgs/notice/' + tableData.param.sendGateway + '.svg'" alt="" />
+								</div>
+								<div class="card-item-body">
+									<div class="card-item-header">
+										<div class="ellipsis">
+											<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.title }}</div>
+											<div class="card-item-header-name" style="display: none"></div>
 										</div>
-										<div class="card-item-body">
-											<div class="card-item-header">
-												<div class="ellipsis">
-													<div class="ellipsis card-item-header-name" style="width: 100%; height: 45px">{{ item.title }}</div>
-													<div class="card-item-header-name" style="display: none"></div>
-												</div>
-											</div>
-											<div class="card-item-content">
-												<div>
-													<label>通知方式</label>
-													<div class="">
-														<div style="width: 100%">{{item.types==1?'即时发送':'预约发送'}}</div>
-													</div>
-												</div>
-												<div>
-													<label>说明</label>
-													<div class="ellipsis">
-														<div style="width: 100%"></div>
-													</div>
-												</div>
-											</div>
-										</div>
+									</div>
+									<div class="card-item-content">
+										通知方式：<el-tag>{{ item.types == 1 ? '即时发送' : '预约发送' }}</el-tag>
 									</div>
 								</div>
 							</div>
-							<div class="card-tools">
-								<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="primary" class="ml10" text bg>
-										<el-icon>
-											<ele-Edit />
-										</el-icon>
-										修改
-									</el-button>
-								</div>
-								<div class="card-button" @click="onOpenEditTem(item)">
-									<el-button size="default" type="primary" text bg>
-										<el-icon>
-											<ele-Wallet />
-										</el-icon>
-										模板配置
-									</el-button>
-								</div>
-								<!--<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="primary" text bg>
-										<el-icon>
-											<ele-View />
-										</el-icon>
-										调试
-									</el-button>
-								</div>
-
-							 	<div class="card-button" @click="onOpenEdit(item)">
-									<el-button size="default" type="info" text bg>
-										<el-icon>
-											<ele-Document />
-										</el-icon>
-										通知记录
-									</el-button>
-								</div> -->
-
-								<div class="card-button" @click="onRowDel(item)">
-									<el-button size="default" type="danger" text bg>
-										<el-icon>
-											<ele-Delete />
-										</el-icon>
-										删除
-									</el-button>
-								</div>
-							</div>
 						</div>
-					</el-col>
-				</el-row>
-			</div>
-			<div  style="text-align: center;padding: 28px;" v-if="(tableData.total==0)">暂无数据</div>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="dataList"
-			/>
-		</el-card>
+					</div>
+					<div class="card-tools">
+						<div class="card-button" @click="onOpenEdit(item)">
+							<el-button type="primary" class="ml10" text bg>
+								<el-icon>
+									<ele-Edit />
+								</el-icon>
+								修改
+							</el-button>
+						</div>
+						<div class="card-button" @click="onOpenEditTem(item)">
+							<el-button type="primary" text bg>
+								<el-icon>
+									<ele-Wallet />
+								</el-icon>
+								模板配置
+							</el-button>
+						</div>
 
+						<div class="card-button" @click="onRowDel(item)">
+							<el-button type="danger" text bg>
+								<el-icon>
+									<ele-Delete />
+								</el-icon>
+								删除
+							</el-button>
+						</div>
+					</div>
+				</div>
+			</el-col>
+		</el-row>
+		<div style="text-align: center;padding: 28px;" v-if="(tableData.total == 0)">暂无数据</div>
+		<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="dataList" />
 		<EditDic ref="editDicRef" @dataList="dataList" />
 		<EditTemDic ref="temeditDicRef" @dataList="dataList" />
-	<!-- 	<LevelDic ref="levelDicRef" @dataList="dataList" /> -->
-	</div>
+	</el-card>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref,getCurrentInstance,defineComponent } from 'vue';
+import { toRefs, reactive, onMounted, ref, getCurrentInstance, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import EditDic from './component/setEdit.vue';
 import EditTemDic from './component/temEdit.vue';
-//import LevelDic from './component/level.vue';
 
 import api from '/@/api/notice';
 import { useRoute } from 'vue-router';
@@ -164,7 +99,7 @@ import { useRoute } from 'vue-router';
 // 定义接口来定义对象的类型
 interface TableDataRow {
 	id: number;
-	title: string;
+	keyWord: string;
 	sendGateway: string;
 	type: string;
 }
@@ -177,7 +112,7 @@ interface TableDataState {
 		param: {
 			pageNum: number;
 			pageSize: number;
-			title: string;
+			keyWord: string;
 			sendGateway: string;
 			types: string;
 		};
@@ -186,11 +121,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'setlist',
-	components: { EditDic,EditTemDic },
+	components: { EditDic, EditTemDic },
 
 	setup() {
-		
-   		 const { proxy } = getCurrentInstance() as any;
+
+		const { proxy } = getCurrentInstance() as any;
 		// const { notice_send_gateway } = proxy.useDict('notice_send_gateway');
 		const addDicRef = ref();
 		const editDicRef = ref();
@@ -200,7 +135,7 @@ export default defineComponent({
 		const route = useRoute();
 
 		const state = reactive<TableDataState>({
-			type:'',
+			type: '',
 			tableData: {
 				data: [],
 				total: 0,
@@ -208,7 +143,7 @@ export default defineComponent({
 				param: {
 					pageNum: 1,
 					pageSize: 20,
-					title: '',
+					keyWord: '',
 					sendGateway: '',
 					types: '',
 				},
@@ -216,7 +151,7 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const initTableData = () => {
-			state.tableData.param.sendGateway=route.params.id;
+			state.tableData.param.sendGateway = route.params.id;
 			dataList();
 		};
 		const dataList = () => {
@@ -230,24 +165,24 @@ export default defineComponent({
 				.finally(() => (state.tableData.loading = false));
 		};
 		// 打开新增菜单弹窗
-		const onOpenAdd = (row?: TableDataRow ) => {
-			editDicRef.value.openDialog(null,state.tableData.param.sendGateway);
-		};
-	
-		// 打开修改模型弹窗
-		const onOpenEdit = (row: TableDataRow ) => {
-			editDicRef.value.openDialog({ ...row },state.tableData.param.sendGateway);
+		const onOpenAdd = (row?: TableDataRow) => {
+			editDicRef.value.openDialog(null, state.tableData.param.sendGateway);
 		};
 
-		const onOpenEditTem = (row: TableDataRow ) => {
-			temeditDicRef.value.opentemDialog(row.id,state.tableData.param.sendGateway);
+		// 打开修改模型弹窗
+		const onOpenEdit = (row: TableDataRow) => {
+			editDicRef.value.openDialog({ ...row }, state.tableData.param.sendGateway);
+		};
+
+		const onOpenEditTem = (row: TableDataRow) => {
+			temeditDicRef.value.opentemDialog(row.id, state.tableData.param.sendGateway);
 		};
 
 		const onRowDel = (row?: TableDataRow) => {
 			let msg = '你确定要删除所选数据？';
 			let ids: number[] = [];
 			if (row) {
-				msg = `此操作将永久删除模型：“${row.title}”，是否继续?`;
+				msg = `此操作将永久删除：“${row.title}”，是否继续?`;
 				ids = row.id;
 			} else {
 				ids = state.ids;
@@ -267,7 +202,7 @@ export default defineComponent({
 						dataList();
 					});
 				})
-				.catch(() => {});
+				.catch(() => { });
 		};
 
 		// 页面加载时
@@ -299,7 +234,7 @@ export default defineComponent({
 			addDicRef,
 			editDicRef,
 			detailRef,
-			queryRef,			
+			queryRef,
 			onOpenAdd,
 			onOpenEdit,
 			onRowDel,
@@ -310,7 +245,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-col-12 {
 	padding: 10px;
 }
@@ -318,9 +253,11 @@ export default defineComponent({
 .el-button.is-text:not(.is-disabled).is-has-bg {
 	background-color: var(--next-border-color-light);
 }
+
 .card {
 	padding: 10px;
 }
+
 .ant-card {
 	box-sizing: border-box;
 	margin: 10px;
@@ -342,12 +279,15 @@ export default defineComponent({
 	zoom: 1;
 	overflow: hidden;
 }
+
 .pro-table-card-item {
 	display: flex;
 }
+
 .pro-table-card-item .card-item-avatar {
 	margin-right: 16px;
 }
+
 .pro-table-card-item .card-item-body {
 	display: flex;
 	flex-direction: column;
@@ -363,9 +303,11 @@ export default defineComponent({
 	display: flex;
 	flex-wrap: wrap;
 }
-.pro-table-card-item .card-item-body .card-item-content > div {
+
+.pro-table-card-item .card-item-body .card-item-content>div {
 	width: 50%;
 }
+
 .ellipsis {
 	display: -webkit-box;
 	overflow: hidden;
@@ -388,21 +330,27 @@ export default defineComponent({
 	background-color: rgba(89, 149, 245, 0.15);
 	transform: skewX(45deg);
 }
+
 .card-state.success {
 	background-color: #f6ffed;
 }
+
 .iot-card .card-warp .card-content .card-state.error {
 	background-color: rgba(229, 0, 18, 0.1);
 }
+
 .card-state .card-state-content {
 	transform: skewX(-45deg);
 }
+
 .ant-badge-status-success {
 	background-color: #52c41a;
 }
+
 .ant-badge-status-error {
 	background-color: #ff4d4f;
 }
+
 .ant-badge-status-dot {
 	position: relative;
 	top: -1px;
@@ -417,14 +365,17 @@ export default defineComponent({
 	display: flex;
 	margin-top: 2px;
 }
+
 .card-tools .card-button:not(:last-child) {
 	margin-right: 8px;
 }
+
 .card-tools .card-button {
 	display: flex;
 	flex-grow: 1;
 }
-.card-tools .card-button > span,
+
+.card-tools .card-button>span,
 .card-tools .card-button button {
 	width: 100%;
 	border-radius: 0;
@@ -461,10 +412,12 @@ export default defineComponent({
 	border-radius: 2px;
 
 }
-.ant-btn > .anticon {
+
+.ant-btn>.anticon {
 	line-height: 1;
 }
-.ant-btn > span {
+
+.ant-btn>span {
 	display: inline-block;
 }
 
