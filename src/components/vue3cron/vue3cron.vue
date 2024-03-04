@@ -573,7 +573,7 @@ export default defineComponent({
   }
 });
 </script>
-<style >
+<style lang="scss">
 .vue3-cron-div {
 
   .el-input-number__decrease,
