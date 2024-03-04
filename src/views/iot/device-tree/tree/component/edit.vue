@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dept-container">
 		<el-dialog :title="(ruleForm.id ? '修改' : '添加') + '设备树'" v-model="isShowDialog" width="769px">
-			<el-form ref="formRef" :model="ruleForm" :rules="rules" size="default" label-width="120px">
+			<el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备树" prop="parentId">
@@ -11,7 +11,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="名称" prop="name">
-							<el-input v-model="ruleForm.name" placeholder="请输入名称" clearable></el-input>
+							<el-input v-model.trim="ruleForm.name" placeholder="请输入名称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -40,8 +40,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-						<el-form-item label="类型" prop="template">
-							<el-select v-model="ruleForm.template" filterable clearable placeholder="请选择类型" style="width: 100%;">
+						<el-form-item label="页面模板" prop="template">
+							<el-select v-model="ruleForm.template" filterable clearable placeholder="请选择页面模板" style="width: 100%;">
 								<el-option v-for="dict in tree_types" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -60,7 +60,6 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="设备所属区域" prop="area">
-
 							<el-cascader :options="orgData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择区域" clearable class="w100" v-model="ruleForm.area">
 								<template #default="{ node, data }">
 									<span>{{ data.name }}</span>
@@ -87,8 +86,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -171,9 +170,7 @@ export default defineComponent({
 			treeData: [] as any[]
 		});
 
-		// const { tree_types_2 } = proxy.useDict('tree_types_2');
-
-		const { tree_types, tree_category } = proxy.useDict('tree_types', 'tree_category');
+		const { tree_types_2, tree_types, tree_category } = proxy.useDict('tree_types_2', 'tree_types', 'tree_category');
 
 		// 打开弹窗
 		const openDialog = (type: string, row?: any) => {
@@ -209,7 +206,7 @@ export default defineComponent({
 		const getDetail = () => {
 			api.tree.detail({ infoId: state.ruleForm.id })
 				.then((res: any) => {
-					state.ruleForm = { ...res.data }
+					state.ruleForm = { ...res.data, area: Number(res.data.area) }
 				})
 		}
 		// 新增
@@ -247,7 +244,7 @@ export default defineComponent({
 			onCancel,
 			onSubmit,
 			formRef,
-			// tree_types_2,
+			tree_types_2,
 			tree_types,
 			tree_category,
 			...toRefs(state),

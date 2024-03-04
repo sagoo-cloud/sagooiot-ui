@@ -1,10 +1,10 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
-		<img :src="sysinfo.systemLogo" class="logo" />
+		<el-image :src="sysinfo.systemLogo" class="logo" />
 		<span>{{ sysinfo.systemName }}</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
-		<img :src="sysinfo.systemLogoMini" class="logo-mini" />
+		<el-image :src="sysinfo.systemLogoMini" class="logo-mini" />
 	</div>
 </template>
 

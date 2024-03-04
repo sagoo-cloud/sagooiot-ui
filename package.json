@@ -8,6 +8,7 @@
     "dev": "vite --force",
     "build": "vite build",
     "build:open": "vite build --mode open",
+    "build:test": "vite build --mode test",
     "deploy:zip": "npm run build && npm run zipAndUpload && npm run unzip && npm run success",
     "zipAndUpload": "cd dist && rm -rf zhgy.sagoo.cn.zip && zip -r -q zhgy.sagoo.cn.zip ./ && ssh iot 'sudo rm /www/wwwroot/zhgy.sagoo.cn-old.zip' | ssh iot 'sudo mv /www/wwwroot/zhgy.sagoo.cn.zip /www/wwwroot/zhgy.sagoo.cn-old.zip' | scp -r -O zhgy.sagoo.cn.zip iot:/www/wwwroot",
     "unzip": "ssh iot 'cd /www/wwwroot/ && sudo unzip -q -o -d ./zhgy.sagoo.cn zhgy.sagoo.cn.zip'",
@@ -16,10 +17,6 @@
     "deploy:rm": "ssh iot 'rm -rf /www/wwwroot/zhgy.sagoo.cn-copy/* && rm -rf /www/wwwroot/zhgy.sagoo.cn-pre/*'",
     "deploy:scp": "scp -r -O ./dist/* iot:/www/wwwroot/zhgy.sagoo.cn-pre/ && ssh iot 'cd /www/wwwroot/zhgy.sagoo.cn/ && mv `ls | grep -v plugin` ../zhgy.sagoo.cn-copy && mv ../zhgy.sagoo.cn-pre/* ./'",
     "deploy:auth": "ssh iot 'chown -R www /www/wwwroot/zhgy.sagoo.cn/'",
-    "deploy:heating": "npm run build && npm run deploy:heating:rm && npm run deploy:heating:scp && npm run deploy:heating:auth",
-    "deploy:heating:rm": "ssh heating 'rm -rf /www/wwwroot/huanbao.lngxny.com-copy/* && rm -rf /www/wwwroot/huanbao.lngxny.com-pre/*'",
-    "deploy:heating:scp": "scp -r -O ./dist/* heating:/www/wwwroot/huanbao.lngxny.com-pre/ && ssh heating 'cd /www/wwwroot/huanbao.lngxny.com/ && mv `ls | grep -v plugin` ../huanbao.lngxny.com-copy && mv ../huanbao.lngxny.com-pre/* ./'",
-    "deploy:heating:auth": "ssh heating 'chown -R www /www/wwwroot/huanbao.lngxny.com/'",
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
   },
   "dependencies": {
@@ -38,6 +35,7 @@
     "element-plus": "2.2.28",
     "event-source-polyfill": "^1.0.31",
     "jsplumb": "^2.15.6",
+    "jsrsasign": "^10.8.6",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pako": "^1.0.11",
@@ -76,7 +74,8 @@
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
     "typescript": "^4.6.2",
-    "vite": "^2.8.6",
+    "vite": "^2.9.16",
+    "vite-plugin-compression": "^0.5.1",
     "vue-eslint-parser": "^8.3.0"
   },
   "browserslist": [

@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, nextTick, watch } from 'vue';
+import { reactive } from 'vue';
 import api from '/@/api/device';
 import { useRoute } from 'vue-router';
 
@@ -56,10 +56,9 @@ const data = reactive({
 	"certificateId": 0
 })
 
-// api.product.connect_intro(route.params.id as string).then((res: any) => {
-// 	console.log(res.data)
-// 	Object.assign(data, res.data)
-// })
+api.product.connect_intro(route.params.id as string).then((res: any) => {
+	Object.assign(data, res.data)
+})
 
 </script>
 <style lang="scss" scoped>

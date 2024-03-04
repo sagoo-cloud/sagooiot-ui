@@ -1,7 +1,7 @@
 <template>
   <div class="system-edit-dic-container">
     <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '设备'" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
         <el-form-item label="设备标识" prop="key">
           <el-input v-model="ruleForm.key" placeholder="请输入设备标识" :disabled="ruleForm.id" />
         </el-form-item>
@@ -14,13 +14,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备坐标" prop="lng">
-          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectPosition" read-only />
+          <el-input :value="ruleForm.lng ? (ruleForm.lng + ' , ' + ruleForm.lat) : ''" placeholder="选择设备坐标" @click="selectMap(ruleForm)" read-only />
         </el-form-item>
+
         <el-form-item label="标签设置" prop="lng">
           <div class="tags-wrapper">
             <el-button type="primary" size="small" @click="toAddTag">添加标签</el-button>
             <div class="tags">
-              <div class="tag flex" v-for="tag, i in ruleForm.tags">
+              <div class="tag flex" v-for="tag, i in ruleForm.tags" :key="tag.key">
                 <el-tag>{{ tag.key }} : {{ tag.name }} : {{ tag.value }}</el-tag>
                 <el-button type="danger" size="small" @click="delTagRow(i)">删除</el-button>
               </div>
@@ -61,26 +62,38 @@
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
+        <el-form-item label="设备说明">
+          <el-input v-model="intro" type="textarea" placeholder="请输入设备说明"></el-input>
+        </el-form-item>
+        <el-form-item label="设备图片">
+<!--					<upload-vue :imgs="phone" @set-imgs="setImgsPhone" :limit="deviceImgLimit"></upload-vue>-->
+          <uploadVue :img="phone" @set-imgs="setImgsPhone"></uploadVue>
+				</el-form-item>
+        <el-form-item label="证书图片">
+<!--					<upload-vue :imgs="certificate" @set-imgs="setImgsCertificate" :limit="deviceImgLimit"></upload-vue>-->
+          <uploadVue :img="certificate" @set-imgs="setImgsCertificate"></uploadVue>
+				</el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>
-    <el-dialog title="地图选点（点击地图即可）" v-model="mapVisible" width="1000px" append-to-body>
-      <div class="map" id="map-container-conpany" style="height: 65vh"></div>
-    </el-dialog>
     <tagVue ref="tagRef"></tagVue>
+    <Map ref="mapRef" @updateMap="updateMap"></Map>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent, ref, unref, nextTick } from 'vue';
+import { reactive, toRefs, defineComponent, ref, unref, nextTick, onMounted } from 'vue';
 import api from '/@/api/device';
-import { ElMessage } from "element-plus";
-import tagVue from './tag.vue'
+import apiSystem from '/@/api/system';
+import {ElMessage, UploadProps} from "element-plus";
+import tagVue from './tag.vue';
+import Map from './map.vue';
+import UploadVue from '/@/components/upload/index.vue';
 import certApi from '/@/api/certificateManagement';
 
 interface RuleFormState {
@@ -98,6 +111,8 @@ interface RuleFormState {
   authPasswd: string;
   accessToken: string;
   certificateId: string;
+  extensionInfo: string;
+  address: string;
 }
 
 const form: RuleFormState = {
@@ -114,7 +129,9 @@ const form: RuleFormState = {
   authPasswd: '',
   accessToken: '',
   certificateId: '',
-  desc: ''
+  desc: '',
+  extensionInfo: '',
+  address: '',
 }
 
 interface DicState {
@@ -122,7 +139,12 @@ interface DicState {
   product: any;
   isShowDialog: boolean;
   ruleForm: RuleFormState;
-  rules: {}
+  rules: {};
+  deviceImgLimit: number;
+  certificateLimit: number;
+  phone: string;
+  certificate: string;
+  intro: string;
 }
 interface Tag {
   key: string;
@@ -134,11 +156,13 @@ export default defineComponent({
   name: 'deviceEditPro',
   components: {
     tagVue,
+    Map,
+    UploadVue
   },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);
-    const mapVisible = ref(false);
+    const mapRef = ref();
     const certList = ref([])
     const state = reactive<DicState>({
       isShowDialog: false,
@@ -155,16 +179,33 @@ export default defineComponent({
           { required: true, message: "设备标识不能为空", trigger: "blur" }
         ],
         productId: [{ required: true, message: '所属产品不能为空', trigger: 'blur' }],
-      }
+      },
+      deviceImgLimit: 0,
+      certificateLimit: 0,
+      phone: "",
+      certificate: "",
+      intro: ""
     });
+
+    //地图选点
+    const selectMap = (row: any) => {
+      mapRef.value.openDialog(row);
+    }
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
 
+      apiSystem.getInfoByKey('sys.device.phone.limit').then((res: any) => {
+        state.deviceImgLimit = parseInt(res.data.configValue);
+      });
+      apiSystem.getInfoByKey('sys.device.certificate.limit').then((res: any) => {
+        state.certificateLimit = parseInt(res.data.configValue);
+      });
+
       // 证书列表
-      // certApi.certificateManagement.getAll().then((res: any) => {
-      //   certList.value = res.Info || []
-      // });
+      certApi.certificateManagement.getAll().then((res: any) => {
+        certList.value = res.Info || []
+      });
 
       api.product.getLists({ status: 1 }).then((res: any) => {
         state.productData = res.product || [];
@@ -172,11 +213,11 @@ export default defineComponent({
 
 
       if (row) {
-        // api.dict.getType(row.id).then((res:any)=>{
-        //   state.ruleForm = res.data.dictType
-        // })
         state.ruleForm = row;
-        state.ruleForm.tags = row.tags || []
+        state.ruleForm.tags = row.tags || [];
+        state.phone = row.extensionInfo ? JSON.parse(row.extensionInfo).phone : [];
+        state.certificate = row.extensionInfo ? JSON.parse(row.extensionInfo).certificate : [];
+        state.intro = row.extensionInfo ? JSON.parse(row.extensionInfo).intro : "";
         productIdChange(row.productId as number)
       }
       state.isShowDialog = true;
@@ -186,6 +227,20 @@ export default defineComponent({
         ...form
       }
     };
+    // 上传设备图
+    // const setImgsPhone = (res:any) => {
+    //   state.phone = res;
+    // }
+    const setImgsPhone: UploadProps['onSuccess'] = (response) => {
+      state.phone = response
+    }
+    // 上传设备资格证书
+    // const setImgsCertificate = (res:any) => {
+    //   state.certificate = res;
+    // }
+    const setImgsCertificate: UploadProps['onSuccess'] = (response) => {
+      state.certificate = response
+    }
     // 关闭弹窗
     const closeDialog = () => {
       state.isShowDialog = false;
@@ -202,14 +257,30 @@ export default defineComponent({
         if (valid) {
           if (state.ruleForm.id !== 0) {
             //修改
-            api.instance.edit(state.ruleForm).then(() => {
+            const params = {
+              ...state.ruleForm,
+              extensionInfo: JSON.stringify({
+                "phone": state.phone,
+                "certificate": state.certificate,
+                "intro": state.intro
+              })
+            }
+            api.instance.edit(params).then(() => {
               ElMessage.success('设备类型修改成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
             })
           } else {
             //添加
-            api.instance.add(state.ruleForm).then(() => {
+            const params = {
+              ...state.ruleForm,
+              extensionInfo: JSON.stringify({
+                "phone": state.phone,
+                "certificate": state.certificate,
+                "intro": state.intro
+              })
+            }
+            api.instance.add(params).then(() => {
               ElMessage.success('设备类型添加成功');
               closeDialog(); // 关闭弹窗
               emit('typeList')
@@ -221,32 +292,17 @@ export default defineComponent({
     function toAddTag() {
       const tag = tagRef.value as any
       tag.addRow()
-    };
+    }
     function addTag(row: Tag) {
-      console.log(row)
       state.ruleForm.tags.push(row)
-    };
+    }
     function delTagRow(i: number) {
       state.ruleForm.tags.splice(i, 1)
-    };
-    function selectPosition() {
-      mapVisible.value = true;
-      nextTick(() => {
-        var map = new BMapGL.Map("map-container-conpany");
-        map.centerAndZoom("沈阳市", 8);
-        map.enableScrollWheelZoom(true);
-        map.addEventListener("click", (e) => {
-          console.log("点击位置经纬度：" + e.latlng.lng + "," + e.latlng.lat);
-          state.ruleForm.lng = e.latlng.lng.toFixed(5);
-          state.ruleForm.lat = e.latlng.lat.toFixed(5);
-          mapVisible.value = false;
-        });
-      });
     }
+
     // 所属产品变化的时候，更新产品详情
     const productIdChange = (productId: number) => {
       api.product.detail(productId).then((res: any) => {
-        // console.log(res.data)
         const { authType, authUser, authPasswd, accessToken, certificateId } = res.data
         state.product = res.data
         state.ruleForm.authType = authType
@@ -257,19 +313,29 @@ export default defineComponent({
       })
     }
 
+    //回调地图选点
+    const updateMap=(data:any)=>{
+      state.ruleForm.lng = data.lng;
+      state.ruleForm.lat = data.lat;
+      state.ruleForm.address = data.address;
+    }
+
     return {
       certList,
       productIdChange,
       tagRef,
+      selectMap,
+      mapRef,
+      updateMap,
       delTagRow,
       toAddTag,
       addTag,
-      mapVisible,
-      selectPosition,
       openDialog,
       closeDialog,
       onCancel,
       onSubmit,
+      setImgsPhone,
+      setImgsCertificate,
       formRef,
       ...toRefs(state),
     };

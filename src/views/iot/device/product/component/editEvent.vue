@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '事件定义'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
 				<el-form-item label="事件定义标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入事件定义标识" :disabled="ruleForm.id !== 0 ? true : false" />
 				</el-form-item>
@@ -9,21 +9,22 @@
 					<el-input v-model="ruleForm.name" placeholder="请输入事件定义名称" />
 				</el-form-item>
 
-				<el-form-item label="事件级别" prop="level">
+				<el-form-item label="事件类型" prop="level">
 					<el-radio-group v-model="ruleForm.level">
-						<el-radio :label="0">普通</el-radio>
-						<el-radio :label="1">警告</el-radio>
-						<el-radio :label="2">紧急</el-radio>
+						<el-radio :label="0">信息</el-radio>
+						<el-radio :label="1">告警</el-radio>
+						<el-radio :label="2">故障</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
 				<el-form-item label="输出参数" prop="maxLength">
 					<div v-for="(item, index) in outputsdata" :key="index" class="jslist">
 						<div class="jsonlist">
-							<div>参数名称：</div>
-							<div style="width: 60%">{{ item.name }}</div>
+							<div>参数标识：{{ item.key }}</div>
+							<div>参数名称：{{ item.name }}</div>
+							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<!-- <el-link type="primary">编辑</el-link> -->
+								<el-link type="primary"  @click="editjson(index, 'fun')">编辑</el-link>
 								<el-link type="primary" @click="deljson(index, 'fun')">删除</el-link>
 							</div>
 						</div>
@@ -43,8 +44,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -55,9 +56,9 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
+import { validateNoSpace } from '/@/utils/validator';
 
 import { ElMessage, UploadProps } from 'element-plus';
 
@@ -113,7 +114,10 @@ export default defineComponent({
 				desc: '',
 			},
 			rules: {
-				name: [{ required: true, message: '事件定义名称不能为空', trigger: 'blur' }],
+				name: [ { required: true, message: '事件定义名称不能为空', trigger: 'blur' },
+        				{ max: 32, message: '事件定义名称不能超过32个字符', trigger: 'blur' },
+						{ validator: validateNoSpace, message: '事件定义名称不能包含空格', trigger: 'blur' }
+					],
 				key: [{ required: true, message: '事件定义标识不能为空', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
 			},
@@ -134,11 +138,9 @@ export default defineComponent({
 						datat[index]['options'] = item;
 					}
 				});
-				// console.log(datat);
 				state.typeData = datat || [];
 			});
 
-			// console.log(row);
 			state.ruleForm = row;
 			if (row.outputs) {
 				state.ruleForm = row;
@@ -185,6 +187,14 @@ export default defineComponent({
 				state.jsondata.splice(index, 1);
 			}
 		};
+		const editjson=(index,type)=>{
+			if (type == 'fun') {
+				editOptionRef.value.openDialog(state.outputsdata[index]);
+			} else {
+				editOptionRef.value.openDialog(state.jsondata[index]);
+
+			}
+		}
 
 		const addJson = (type) => {
 			editOptionRef.value.openDialog({ product_id: 0, id: 0, type_data: type });
@@ -218,8 +228,6 @@ export default defineComponent({
 						state.ruleForm.productId = state.productId;
 					}
 
-					console.log(JSON.parse(JSON.stringify(state.ruleForm)));
-
 					theApi(state.ruleForm).then(() => {
 						ElMessage.success('事件定义类型操作成功');
 						closeDialog(); // 关闭弹窗
@@ -234,6 +242,7 @@ export default defineComponent({
 			getOptionData,
 			openDialog,
 			deljson,
+			editjson,
 			addEnum,
 			delEnum,
 			addJson,
@@ -248,7 +257,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .input-box {
 	display: flex;
 	flex-direction: row;

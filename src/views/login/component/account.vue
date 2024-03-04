@@ -35,7 +35,7 @@
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
 				<div class="login-content-code">
-					<img class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
+					<el-image class="login-content-code-img" @click="getCaptcha" width="130" height="38" :src="captchaSrc" style="cursor: pointer" />
 				</div>
 			</el-col>
 		</el-form-item>
@@ -44,19 +44,25 @@
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
+		<!-- <el-form-item class="login-animation4">
+			<img src="/@/assets/gitee.svg" alt="" class="gitee" @click="authLogin('gitee')">
+		</el-form-item> -->
+		<changePwd ref="changePwdRef"></changePwd>
 	</el-form>
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, defineComponent, computed, onMounted, getCurrentInstance } from 'vue';
+import { ref, toRefs, reactive, defineComponent, computed, onMounted, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import changePwd from './changePwd.vue';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { useStore } from '/@/store/index';
-import { Session } from '/@/utils/storage';
+import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
+import { encrypt } from '/@/utils/rsa'
 import api from '/@/api/system';
 
 // 是否是开源版本
@@ -64,7 +70,11 @@ const ISOPEN = import.meta.env.VITE_ISOPEN
 
 export default defineComponent({
 	name: 'loginAccount',
+	components: {
+		changePwd
+	},
 	setup() {
+		const changePwdRef = ref();
 		const { t } = useI18n();
 		const store = useStore();
 		const route = useRoute();
@@ -90,6 +100,7 @@ export default defineComponent({
 		});
 		onMounted(() => {
 			getCaptcha();
+			// api.login.ssoList()
 		});
 		// 时间获取
 		const currentTime = computed(() => {
@@ -103,22 +114,62 @@ export default defineComponent({
 			});
 		};
 
+		function authLogin(type: string) {
+			if (type === 'gitee') {
+				const client_id = 'a0585ded445f240f2adc7957989bdd644fa2cdf0db7d98b0a940ec92df6a0934'
+				const redirect_uri = 'http://localhost:8888/#/sso/gitee'
+				window.open(`https://gitee.com/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code`)
+				return
+			}
+		}
+
 		// 登录
 		const onSignIn = () => {
 			// 验证表单
 			proxy.$refs.loginForm
-				.validate((valid: boolean) => {
+				.validate(async (valid: boolean) => {
 					if (valid) {
 						state.loading.signIn = true;
+						let password: string
+						if (sessionStorage.isRsaEnabled) {
+							password = await encrypt(state.ruleForm.password)
+						} else {
+							password = state.ruleForm.password
+						}
 						api.login
-							.login(state.ruleForm)
+							.login({
+								...state.ruleForm,
+								password
+							})
 							.then(async (res: any) => {
+								// 检查是否需要更换密码
+								if (res.isChangePwd) {
+									ElMessage.error(`密码已超过${sessionStorage.sysPasswordChangePeriod}天未修改，请先修改密码再登录`)
+									state.loading.signIn = false;
+									getCaptcha();
+									return changePwdRef.value.toShow({
+										userName: state.ruleForm.userName,
+										oldUserPassword: state.ruleForm.password,
+									})
+								}
+
+								localStorage.setItem('token', res.token);
 								const userInfos = res.userInfo;
 								userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 								// 存储 token 到浏览器缓存
-								localStorage.setItem('token', res.token);
+								Local.set('userInfo', userInfos);
 								// 存储用户信息到浏览器缓存
 								Session.set('userInfo', userInfos);
+
+
+								// 获取权限配置，上传文件类型等
+								const [columnRes, buttonRes, uploadFileRes] = await Promise.all([api.getInfoByKey('sys.column.switch'), api.getInfoByKey('sys.button.switch'), api.getInfoByKey('sys.uploadFile.way')])
+
+								const isSecurityControlEnabled = sessionStorage.isSecurityControlEnabled || null
+								localStorage.setItem('btnNoAuth', (isSecurityControlEnabled && Number(buttonRes?.data?.configValue)) ? '' : '1');
+								localStorage.setItem('colNoAuth', (isSecurityControlEnabled && Number(columnRes?.data?.configValue)) ? '' : '1');
+								localStorage.setItem('uploadFileWay', uploadFileRes?.data?.configValue || '0');
+
 								await store.dispatch('userInfos/setUserInfos', userInfos);
 
 								currentUser();
@@ -181,8 +232,10 @@ export default defineComponent({
 			ElMessage.success(`${currentTimeInfo}，${signInText}`);
 		};
 		return {
+			changePwdRef,
 			onSignIn,
 			getCaptcha,
+			authLogin,
 			...toRefs(state),
 		};
 	},

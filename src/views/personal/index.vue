@@ -3,21 +3,21 @@
 		<el-row>
 			<!-- 个人信息 -->
 			<el-col :xs="24" :sm="24">
-				<el-card shadow="hover" header="个人信息" v-loading="!info.userName">
+				<el-card shadow="nover" header="个人信息" v-loading="!info.userName">
 					<div class="personal-user">
 						<div class="personal-user-left">
-							<img v-if="isEditStatus && info.avatar" style="width: 140px; height: 140px" :src="info.avatar" />
+							<el-image v-if="isEditStatus && info.avatar" style="width: 140px; height: 140px" :src="info.avatar" />
 							<uploadVue v-else @set-img="setImg">
-								<img style="width: 140px; height: 140px" :src="info.avatar" />
+								<el-image style="width: 140px; height: 140px" :src="info.avatar" />
 								<div class="tips">点击上方照片，即可更改头像</div>
 							</uploadVue>
 						</div>
 						<div class="personal-user-right">
 							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{ info.userName }}，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
+								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，{{ info.userName }} </el-col>
 								<!-- 昵称 -->
 								<el-col :xs="24" :sm="24" class="personal-item mb6">
-									<div class="personal-item-label">昵称：</div>
+									<div class="personal-item-label">姓名：</div>
 									<div v-if="isEditStatus" class="personal-item-value">{{ info.userNickname }}</div>
 									<el-input v-else class="personal-item-value personal-item-value-edit" v-model="info.userNickname"></el-input>
 								</el-col>
@@ -36,15 +36,7 @@
 								<el-col :xs="24" :sm="24" class="personal-item mb6">
 									<div class="personal-item-label">生日：</div>
 									<div v-if="isEditStatus" class="personal-item-value">{{ info.birthday }}</div>
-									<el-date-picker
-										v-else
-										@change="dateChange"
-										v-model="info.birthday"
-										type="date"
-										placeholder="请选择出生日期"
-										format="YYYY/MM/DD"
-										value-format="YYYY-MM-DD"
-									/>
+									<el-date-picker v-else @change="dateChange" v-model="info.birthday" type="date" placeholder="请选择出生日期" format="YYYY/MM/DD" value-format="YYYY-MM-DD" />
 								</el-col>
 								<!-- 登录密码 -->
 								<el-col v-if="!isEditStatus" :xs="24" :sm="24" class="personal-item mb6">
@@ -109,12 +101,6 @@ const store = useStore();
 const info = ref<any>({})
 const isEditStatus = ref<Boolean>(true)
 
-// api.login.currentUser().then((res: any) => {
-//   info.value = res.Info
-//   			// api.user.detail(localStorage.userId).then((user: any) => {
-// 			// 		state.ruleForm = user;
-// 			// 	});
-// });
 api.user.detail(localStorage.userId).then((user: any) => {
 	info.value = user
 })
@@ -125,10 +111,10 @@ const currentTime = computed(() => {
 })
 
 const setImg = (img: string) => {
-	api.user.setAvatar(info.value.id, img).then((res: any) => {
+	api.user.setAvatar(info.value.id, img).then(() => {
 		ElMessage.success('更新成功')
 		info.value.avatar = img
-		
+
 		const userInfos = {
 			userNickname: info.value?.userNickname,
 			avatar: img,
@@ -171,7 +157,7 @@ const submitData = () => {
 		address,
 		describe,
 	}
-	api.user.editUserInfo(params).then((res: any) => {
+	api.user.editUserInfo(params).then(() => {
 		ElMessage.success('更新成功')
 		isEditStatus.value = true
 	})
@@ -215,9 +201,11 @@ const dateChange = (e: any) => {
 				}
 			}
 		}
+
 		.personal-user-right {
 			flex: 1;
 			padding: 0 15px;
+
 			.personal-title {
 				font-size: 18px;
 				@include text-ellipsis(1);
@@ -232,11 +220,14 @@ const dateChange = (e: any) => {
 					width: 70px;
 					text-align: right;
 				}
+
 				.personal-item-value {
 					@include text-ellipsis(1);
 				}
+
 				.personal-item-value-edit {
 					width: 220px;
+
 					::v-deep(.el-input__wrapper) {
 						width: 100%;
 					}
@@ -244,9 +235,11 @@ const dateChange = (e: any) => {
 			}
 		}
 	}
+
 	.edit-btn {
 		padding: 30px 0 0 222px;
 	}
+
 	.personal-info {
 		.personal-info-more {
 			float: right;
@@ -257,14 +250,18 @@ const dateChange = (e: any) => {
 				cursor: pointer;
 			}
 		}
+
 		.personal-info-box {
 			height: 130px;
 			overflow: hidden;
+
 			.personal-info-ul {
 				list-style: none;
+
 				.personal-info-li {
 					font-size: 13px;
 					padding-bottom: 10px;
+
 					.personal-info-li-title {
 						display: inline-block;
 						@include text-ellipsis(1);
@@ -332,17 +329,21 @@ const dateChange = (e: any) => {
 				background: var(--color-primary);
 			}
 		}
+
 		.personal-edit-safe-box {
 			border-bottom: 1px solid var(--el-border-color-light, #ebeef5);
 			padding: 15px 0;
+
 			.personal-edit-safe-item {
 				width: 100%;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+
 				.personal-edit-safe-item-left {
 					flex: 1;
 					overflow: hidden;
+
 					.personal-edit-safe-item-left-label {
 						color: var(--el-text-color-regular);
 						margin-bottom: 5px;

@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog title="设置配置信息" v-model="isShowDialog" width="65%">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<div style="display: flex; justify-content: space-between">
 					<div style="width: 50%; padding: 10px">
 						<div>配置内容</div>
@@ -15,8 +15,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '设 置' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '设 置' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -131,7 +131,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .el-textarea__inner{
 	min-height: 420px !important;
 }

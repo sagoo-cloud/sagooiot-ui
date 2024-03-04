@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '字段节点'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="110px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="110px">
 				<el-form-item label="类型" prop="from">
 					<el-radio-group v-model="ruleForm.from">
 						<el-radio :label="1">自定义</el-radio>
@@ -13,7 +13,7 @@
 					<el-form-item label="数据源" prop="sourceId">
 						<el-select v-model="ruleForm.sourceId" filterable placeholder="请选择数据源" @change="getNodeList">
 							<el-option v-for="item in sourceData" :key="item.sourceId" :label="item.key" :value="item.sourceId">
-								<span style="float: left">{{ item.name}}</span>
+								<span style="float: left">{{ item.name }}</span>
 								<span style="float: right; font-size: 13px">{{ item.key }}</span>
 							</el-option>
 						</el-select>
@@ -30,15 +30,11 @@
 				</div>
 
 				<el-form-item label="字段节点标识" prop="key">
-					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称"  />
+					<el-input v-model="ruleForm.key" placeholder="请输入字段节点名称" />
 				</el-form-item>
 				<el-form-item label="字段节点名称" prop="name">
 					<el-input v-model="ruleForm.name" placeholder="请输入字段节点名称" />
 				</el-form-item>
-
-
-
-
 
 				<el-form-item label="数据类型" prop="dataType">
 					<el-select v-model="ruleForm.dataType" filterable placeholder="请选择数据类型">
@@ -53,19 +49,19 @@
 				</el-form-item> -->
 
 
-				<el-form-item label="默认值" prop="default" v-if="ruleForm.from==1">
+				<el-form-item label="默认值" prop="default" v-if="ruleForm.from == 1">
 					<el-input v-model="ruleForm.default" placeholder="请输入取值项" />
 				</el-form-item>
 
 				<el-form-item label="是否主键" prop="isPk">
-					<el-radio-group v-model="ruleForm.isPk" >
+					<el-radio-group v-model="ruleForm.isPk">
 						<el-radio :label="0">否</el-radio>
 						<el-radio :label="1">是</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
 				<el-form-item label="是否排序" prop="isSorting">
-					<el-radio-group v-model="ruleForm.isSorting" >
+					<el-radio-group v-model="ruleForm.isSorting">
 						<el-radio :label="0">否</el-radio>
 						<el-radio :label="1">是</el-radio>
 					</el-radio-group>
@@ -73,20 +69,20 @@
 
 
 				<el-form-item label="排序方式" prop="isDesc">
-					<el-radio-group v-model="ruleForm.isDesc" >
+					<el-radio-group v-model="ruleForm.isDesc">
 						<el-radio :label="0">倒序</el-radio>
 						<el-radio :label="1">正序</el-radio>
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item label="描述" prop="desc">
+				<el-form-item label="备注说明" prop="desc">
 					<el-input v-model="ruleForm.desc" type="textarea" placeholder="请输入内容"></el-input>
 				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -129,14 +125,14 @@ export default defineComponent({
 		const formRef = ref<HTMLElement | null>(null);
 		const state = reactive<DicState>({
 			isShowDialog: false,
-			methodData:[
+			methodData: [
 				{
 					label: 'max',
 					value: 'max',
-				},{
+				}, {
 					label: 'min',
 					value: 'min',
-				},{
+				}, {
 					label: 'avg',
 					value: 'avg',
 				}
@@ -191,7 +187,7 @@ export default defineComponent({
 			rules: {
 				key: [{ required: true, message: '字段节点标识不能为空', trigger: 'blur' }],
 				name: [{ required: true, message: '字段节点名称不能为空', trigger: 'blur' }],
-				dataType: [{ required: true, message: '字段节点类型不能为空', trigger: 'blur' }],
+				dataType: [{ required: true, message: '数据类型不能为空', trigger: 'blur' }],
 				value: [{ required: true, message: '字段节点取值项不能为空', trigger: 'blur' }],
 				method: [{ required: true, message: '请选择取值方式', trigger: 'blur' }],
 				isSorting: [{ required: true, message: '请选择是否参与排序', trigger: 'blur' }],
@@ -205,7 +201,6 @@ export default defineComponent({
 
 			if (row?.id) {
 				state.ruleForm = row;
-				console.log(state.ruleForm);
 			}
 
 			if (row.sourceId) {
@@ -215,14 +210,11 @@ export default defineComponent({
 			state.isShowDialog = true;
 
 			getSouData();
-		
-
 		};
 
 		const getSouData = () => {
 			api.common
 				.getLists({
-					
 				})
 				.then((res: any) => {
 					state.sourceData = res.list;

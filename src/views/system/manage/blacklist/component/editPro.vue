@@ -1,9 +1,9 @@
 <template>
   <div class="system-edit-dic-container">
-    <el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加')" v-model="isShowDialog" width="769px">
-      <el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="90px">
+    <el-dialog :title="(ruleForm.id ? '修改' : '添加')" v-model="isShowDialog" width="769px">
+      <el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="90px">
         <el-form-item label="IP地址" prop="ip">
-          <el-input type="textarea" v-model="ruleForm.ip" placeholder="请输入IP地址" />
+          <el-input type="textarea" v-model.trim="ruleForm.ip" placeholder="请输入IP地址" />
           <div style="color: #a4a4a4;line-height: 20px;">
             <div>支持添加IP：如果添加多个IP请用“,”隔开</div>
             <div v-if="ruleForm.id == 0">支持添加IP段，如192.168.0.0/24</div>
@@ -23,8 +23,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="onCancel" size="default">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit">{{ ruleForm.id ? '修 改' : '添 加' }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -34,54 +34,30 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } from 'vue';
 import api from '/@/api/system';
-import uploadVue from '/@/components/upload/index.vue';
-import { ElMessage, UploadProps } from "element-plus";
-import getOrigin from '/@/utils/origin'
+import { ElMessage } from "element-plus";
 
 interface RuleFormState {
   id: number;
-  // name: string;
-  // dictType: string;
+  ip: string;
   status: string;
   remark: string;
 }
 interface DicState {
   isShowDialog: boolean;
   ruleForm: RuleFormState;
-  cateData: RuleFormState[];
-  deptData: RuleFormState[];
-  messageData: RuleFormState[];
-  tranData: RuleFormState[];
   rules: {}
 }
 
 export default defineComponent({
   name: 'deviceEditPro',
-  components: { uploadVue },
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
-    const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
-
-    const { proxy } = getCurrentInstance() as any;
-    const { network_server_type, network_protocols } = proxy.useDict('network_server_type', 'network_protocols');
 
     const state = reactive<DicState>({
       isShowDialog: false,
-      cateData: [], // 分类数据
-      deptData: [], // 
-      messageData: [], // 
-      tranData: [], // 
-      imageUrl: "", // 
-      singleImg: baseURL + "/product/icon/upload",
-
       ruleForm: {
         id: 0,
-        // name: '',
-        // categoryId: '',
-        // deptId: '',
-        // messageProtocol: '',
-        // transportProtocol: '',
-        // deviceType: '设备',
+        ip: '',
         status: '1',
         remark: ''
       },
@@ -98,19 +74,6 @@ export default defineComponent({
       }
     });
 
-
-
-
-    // const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    //   response) => {
-
-    //   console.log(response);
-
-    //   state.imageUrl = response
-    //   state.ruleForm.icon = response
-    // }
-
-
     // 打开弹窗
     const openDialog = (row: RuleFormState | null) => {
       resetForm();
@@ -122,9 +85,7 @@ export default defineComponent({
     const resetForm = () => {
       state.ruleForm = {
         id: 0,
-        // name: '',
-        // dictType: '',
-        // deviceType: '设备',
+        ip: '',
         status: '1',
         remark: ''
       }
@@ -153,7 +114,6 @@ export default defineComponent({
           } else {
             //添加
             delete state.ruleForm.id;
-            console.log(state.ruleForm);
             api.blackList.add(state.ruleForm).then(() => {
               ElMessage.success('黑名单添加成功');
               closeDialog(); // 关闭弹窗
@@ -164,15 +124,11 @@ export default defineComponent({
       });
     };
 
-
     return {
       openDialog,
-      // handleAvatarSuccess,
       closeDialog,
       onCancel,
       onSubmit,
-      network_server_type,
-      network_protocols,
       formRef,
       ...toRefs(state),
     };
@@ -188,7 +144,7 @@ export default defineComponent({
 }
 </style>
 
-<style>
+<style scoped>
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;

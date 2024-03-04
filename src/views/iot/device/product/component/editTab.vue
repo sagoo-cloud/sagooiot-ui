@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '标签定义'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="120px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="120px">
 				<el-form-item label="标签定义标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入标签定义标识" :disabled="ruleForm.id !== 0 ? true : false" />
 				</el-form-item>
@@ -125,10 +125,10 @@
 
 					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
 						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
-							<el-input v-model="item.text" placeholder="请输入枚举值" /><span style="margin: 0px 10px"><el-icon>
+							<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
 									<Right />
 								</el-icon></span>
-							<el-input v-model="item.value" placeholder="请输入枚举文本" />
+							<el-input v-model="item.value" placeholder="请输入枚举值" />
 							<div class="input-option">
 								<el-icon @click="addEnum" v-if="index == 0">
 									<Plus />
@@ -177,8 +177,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -189,11 +189,11 @@
 <script lang="ts">
 import { reactive, toRefs, defineComponent, ref, unref } from 'vue';
 import api from '/@/api/device';
-import uploadVue from '/@/components/upload/index.vue';
 import { Plus, Minus, Right } from '@element-plus/icons-vue';
 import EditOption from './editOption.vue';
+import { validateNoSpace } from '/@/utils/validator';
 
-import { ElMessage, UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 interface RuleFormState {
 	id: number;
@@ -261,7 +261,10 @@ export default defineComponent({
 				desc: '',
 			},
 			rules: {
-				name: [{ required: true, message: '标签定义名称不能为空', trigger: 'blur' }],
+				name: [ { required: true, message: '标签定义名称不能为空', trigger: 'blur' },
+        				{ max: 32, message: '标签定义名称不能超过32个字符', trigger: 'blur' },
+						{ validator: validateNoSpace, message: '标签定义名称不能包含空格', trigger: 'blur' }
+					],
 				key: [{ required: true, message: '标签定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
@@ -286,7 +289,6 @@ export default defineComponent({
 
 				state.typeData = datat || [];
 			});
-			console.log(row);
 			state.ruleForm = row;
 			if (row.valueType) {
 				state.ruleForm = row;
@@ -318,7 +320,6 @@ export default defineComponent({
 				}
 			}
 
-			console.log(row);
 			state.isShowDialog = true;
 		};
 		const resetForm = () => {
@@ -350,12 +351,9 @@ export default defineComponent({
 			state.type = val;
 			state.ruleForm.type = val;
 
-			console.log(val);
 		};
 		const seletChanges = (val) => {
-			console.log(val);
 			state.types = val;
-			console.log(val);
 		};
 
 		const addEnum = () => {
@@ -377,8 +375,6 @@ export default defineComponent({
 		};
 		const getOptionData = (data) => {
 			state.jsondata.push(data);
-
-			console.log(state.jsondata);
 		};
 		// 关闭弹窗
 		const closeDialog = () => {
@@ -424,7 +420,6 @@ export default defineComponent({
 						state.ruleForm.valueType = state.valueType;
 						state.ruleForm.productId = state.productId;
 
-						console.log(state.ruleForm);
 						api.model.tagedit(state.ruleForm).then(() => {
 							ElMessage.success('标签定义类型修改成功');
 							closeDialog(); // 关闭弹窗
@@ -487,7 +482,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style>
+<style scoped>
 .input-box {
 	display: flex;
 	flex-direction: row;

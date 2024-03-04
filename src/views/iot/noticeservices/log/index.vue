@@ -1,50 +1,37 @@
 <template>
-	<div class="system-dic-container">
-		<el-card shadow="hover">
-			<div class="system-user-search mb15">
-				<el-form :model="tableData.param" ref="queryRef" :inline="true" label-width="68px">
-					<el-form-item label="创建时间" prop="dateRange">
-						<el-date-picker
-							v-model="tableData.param.dateRange"
-							size="default"
-							style="width: 240px"
-							value-format="YYYY-MM-DD"
-							type="daterange"
-							range-separator="-"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-						></el-date-picker>
-					</el-form-item>
-					<el-form-item>
-						<el-button size="default" type="primary" class="ml10" @click="typeList">
-							<el-icon>
-								<ele-Search />
-							</el-icon>
-							查询
-						</el-button>
-						<el-button size="default" @click="resetQuery(queryRef)">
-							<el-icon>
-								<ele-Refresh />
-							</el-icon>
-							重置
-						</el-button>
-						<el-button size="default" type="danger" class="ml10" @click="onRowDel(null)" v-auth="'del'">
-							<el-icon>
-								<ele-Delete />
-							</el-icon>
-							删除
-							</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+	<div class="page">
+		<el-card shadow="nover">
+			<el-form :model="tableData.param" ref="queryRef" inline label-width="68px">
+				<el-form-item label="创建时间" prop="dateRange">
+					<el-date-picker v-model="tableData.param.dateRange" style="width: 240px" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" class="ml10" @click="typeList">
+						<el-icon>
+							<ele-Search />
+						</el-icon>
+						查询
+					</el-button>
+					<el-button @click="resetQuery(queryRef)">
+						<el-icon>
+							<ele-Refresh />
+						</el-icon>
+						重置
+					</el-button>
+					<el-button type="info" class="ml10" @click="onRowDel(null)" v-auth="'del'">
+						<el-icon>
+							<ele-Delete />
+						</el-icon>
+						删除
+					</el-button>
+				</el-form-item>
+			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-
-				<el-table-column label="ID" align="center" prop="id" width="60" v-col="'ID'" />
-			
-				<el-table-column label="标题" prop="title" :show-overflow-tooltip="true" v-col="'title'" />
-				<el-table-column label="发送方式" prop="gateway" :show-overflow-tooltip="true" v-col="'title'" />
-				<el-table-column prop="status" label="发送状态"  align="center" v-col="'status'">
+				<el-table-column label="ID" align="center" prop="id" width="100" v-col="'ID'" />
+				<el-table-column label="标题" prop="title" align="center" show-overflow-tooltip v-col="'title'" />
+				<el-table-column label="发送方式" prop="gateway" align="center" show-overflow-tooltip v-col="'title'" />
+				<el-table-column prop="status" label="发送状态" align="center" v-col="'status'">
 					<template #default="scope">
 						<el-tag type="success" size="small" v-if="scope.row.status">发送成功</el-tag>
 						<el-tag type="info" size="small" v-else>发送失败</el-tag>
@@ -57,13 +44,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="typeList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="typeList" />
 		</el-card>
 
 		<EditDic ref="editDicRef" @dataList="typeList" />
@@ -71,7 +52,7 @@
 	</div>
 </template>
   
-  <script lang="ts">
+<script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage, FormInstance } from 'element-plus';
 import api from '/@/api/notice';
@@ -103,7 +84,7 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'log',
-	components: {  DetailDic },
+	components: { DetailDic },
 
 	setup() {
 		const addDicRef = ref();
@@ -184,13 +165,13 @@ export default defineComponent({
 				type: 'warning',
 			})
 				.then(() => {
-				api.log.delete(ids).then(() => {
-					ElMessage.success('删除成功');
-					typeList();
-				});
+					api.log.delete(ids).then(() => {
+						ElMessage.success('删除成功');
+						typeList();
+					});
 				})
 				.catch(() => { });
-			};
+		};
 		return {
 			onRowDel,
 			addDicRef,

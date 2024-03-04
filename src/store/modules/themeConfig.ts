@@ -89,8 +89,8 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			isGrayscale: false,
 			// 是否开启色弱模式
 			isInvert: false,
-			// 是否开启深色模式
-			isIsDark: false,
+			// 是否开启深色模式, 自动获取当前模式
+			isIsDark: window.matchMedia('(prefers-color-scheme: light)').matches,
 			// 是否开启水印
 			isWartermark: false,
 			// 水印文案

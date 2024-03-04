@@ -6,8 +6,8 @@
 			<el-input class="output" v-model="outputData" type="textarea" readonly placeholder="此处显示执行结果"></el-input>
 		</div>
 	</div>
-	<el-button type="primary" style="margin-top:20px" @click="saveCode">保存脚本</el-button>
-	<el-button type="primary" style="margin-top:20px" @click="mock">调试</el-button>
+	<el-button type="primary" style="margin-top:20px" v-auth="'save'" @click="saveCode">保存脚本</el-button>
+	<el-button type="primary" style="margin-top:20px" v-auth="'debug'" @click="mock">调试</el-button>
 </template>
 
 <script lang="ts" setup>
@@ -85,13 +85,13 @@ function mock() {
 </script>
 <style lang="scss" scoped>
 ::v-deep(.CodeMirror) {
-	height: calc(100vh - 360px);
+	height: calc(100vh - 320px);
 }
 
 .input,
 .output {
 	::v-deep(.el-textarea__inner) {
-		height: calc(50vh - 190px);
+		height: calc(50vh - 170px);
 	}
 }
 

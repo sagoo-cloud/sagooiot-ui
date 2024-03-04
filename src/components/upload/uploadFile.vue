@@ -1,14 +1,5 @@
 <template>
-	<el-upload
-		:accept="accept"
-		:show-file-list="false"
-		v-model:file-list="fileList"
-		:limit="1"
-		:headers="headers"
-		:before-upload="beforeAvatarUpload"
-		:action="uploadUrl"
-		:on-success="updateImg"
-	>
+	<el-upload :accept="accept" :show-file-list="false" v-model:file-list="fileList" :limit="1" :data="{ source }" :headers="headers" :before-upload="beforeAvatarUpload" :action="uploadUrl" :on-success="updateImg">
 		<el-button>
 			<el-icon> <ele-Upload /> </el-icon>
 			数据导入
@@ -21,6 +12,8 @@ import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { UploadProps } from 'element-plus';
 import getOrigin from '/@/utils/origin';
+
+const source = localStorage.uploadFileWay
 
 const headers = {
 	Authorization: 'Bearer ' + localStorage.token,
@@ -37,7 +30,6 @@ const props = defineProps({
 		type: String,
 		default: '/common/singleFile',
 	},
-	// https://zhgy.sagoo.cn/api/v1/common/singleFile
 });
 
 const fileList = ref<any[]>([
@@ -50,14 +42,14 @@ const fileList = ref<any[]>([
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + props.url);
 
 const updateImg = (res: any) => {
-	console.log(res)
-	if (res.code === 0) {
-		ElMessage.success('文件上传成功');
-	} else {
-		ElMessage.error(res.message);
+
+	if (res.code !== 0) {
+		return ElMessage.error(res.message)
 	}
+
+	ElMessage.success('文件上传成功');
 	fileList.value = []
-	emit('update', res.data.path)
+	emit('update', res.data.full_path)
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

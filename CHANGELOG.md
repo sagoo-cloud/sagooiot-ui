@@ -77,7 +77,7 @@
 - 🌟 更新 依赖更新最新版本
 - 🎯 优化 深色模式
 - 🎯 优化 `/@/utils` 文件夹，合并删除单一内容
-- 🎯 优化 系统设置：菜单管理（新增、修改）、角色管理（新增菜单权限）、用户管理、部门管理、字典管理
+- 🎯 优化 系统设置：菜单管理（新增、修改）、角色管理（新增菜单权限）、用户管理、组织管理、字典管理
 - 🎯 优化 登录界面逻辑、权限管理逻辑
 - 🎯 优化 同步 [vue-next-admin-images](https://gitee.com/lyt-top/vue-next-admin-images/tree/master/menu) 后端控制菜单模拟数据
 - 🎉 新增 适配 Font Icon 向 SVG Icon 迁移（改动大，"element-plus": "^1.2.0-beta.4" 谨慎更新）

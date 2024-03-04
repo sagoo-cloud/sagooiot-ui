@@ -57,7 +57,17 @@ let props = defineProps({
     type: String,
     required: false,
     default: ''
-  }
+  },
+  readOnly: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  onchange: {
+    type: Object as any,
+    required: false,
+    default: () => {},
+  },
 })
 
 const editor = ref();
@@ -81,17 +91,17 @@ nextTick(() => {
     extraKeys: {
       "Alt-F": "findPersistent",
     },
+    readOnly: props.readOnly,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "breakpoints"]
   });
-  console.log(props)
-  coder.setValue(props.content);
+  coder.setValue(props.content)
+  coder.on('change', props.onchange)
 });
 
 /**
  * 对外提供赋值
  */
 const setValue = (val: string) => {
-  console.log(val)
   coder.setValue(val);
 };
 
@@ -99,7 +109,6 @@ const setValue = (val: string) => {
  * 设置模式
  */
 const setMode = (mode: string) => {
-  console.info(mode)
   coder.setOption("mode", mode);
 }
 
@@ -110,9 +119,14 @@ const getValue = () => {
   return coder.getValue();
 };
 
+const setOption = (name: string, value: any) => {
+  return coder.setOption(name, value)
+}
+
 defineExpose({
   setValue,
   getValue,
   setMode,
+  setOption,
 })
 </script>

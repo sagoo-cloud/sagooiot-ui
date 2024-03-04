@@ -12,35 +12,29 @@
 			</el-form>
 			<el-table :data="tableData.data" style="width: 100%" @selection-change="handleSelectionChange" v-loading="tableData.loading">
 				<el-table-column type="selection" width="55" align="center" />
-				<el-table-column label="标识" prop="key" width="130" :show-overflow-tooltip="true" v-col="'key'" />
-				<el-table-column label="设备名称" prop="name" :show-overflow-tooltip="true" v-col="'name'" />
-				<el-table-column label="产品名称" prop="productName" :show-overflow-tooltip="true" v-col="'productName'" />
+				<el-table-column label="标识" prop="key" width="130" show-overflow-tooltip v-col="'key'" />
+				<el-table-column label="设备名称" prop="name" show-overflow-tooltip v-col="'name'" />
+				<el-table-column label="产品名称" prop="productName" show-overflow-tooltip v-col="'productName'" />
 
 				<el-table-column prop="status" label="状态" width="100" align="center" v-col="'status'">
-				<template #default="scope">
-					<el-tag type="info" size="small" v-if="scope.row.status==1">离线</el-tag>
-					<el-tag type="success" size="small" v-if="scope.row.status==2">在线</el-tag>
-					<el-tag type="info" size="small" v-if="scope.row.status==0">未启用</el-tag>
-				</template>
+					<template #default="scope">
+						<el-tag type="info" size="small" v-if="scope.row.status == 1">离线</el-tag>
+						<el-tag type="success" size="small" v-if="scope.row.status == 2">在线</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.status == 0">未启用</el-tag>
+					</template>
 				</el-table-column>
 				<el-table-column prop="registryTime" label="激活时间" align="center" width="150" v-col="'registryTime'"></el-table-column>
 				<el-table-column prop="desc" label="说明" v-col="'desc'"></el-table-column>
 
 			</el-table>
-			<pagination
-				v-show="tableData.total > 0"
-				:total="tableData.total"
-				v-model:page="tableData.param.pageNum"
-				v-model:limit="tableData.param.pageSize"
-				@pagination="getDeviceList"
-			/>
+			<pagination v-show="tableData.total > 0" :total="tableData.total" v-model:page="tableData.param.pageNum" v-model:limit="tableData.param.pageSize" @pagination="getDeviceList" />
 
 		</el-dialog>
 	</div>
 </template>
 <script lang="ts">
-import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue'
-import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
+import { toRefs, reactive, defineComponent } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 import 'vue3-json-viewer/dist/index.css'
 
@@ -49,7 +43,7 @@ import { useRoute } from 'vue-router'
 import api from '/@/api/device'
 
 interface TableDataState {
-    isShowDialog: boolean,
+	isShowDialog: boolean,
 	productData: object[],
 	deviceKeyList: string[];
 	gatewayKey: string;
@@ -66,11 +60,9 @@ interface TableDataState {
 		}
 	},
 	ruleForm: {
-		productId: string|number
+		productId: string | number
 	},
 	rules: {}
-
-
 }
 export default defineComponent({
 	name: 'MutipleBindDialog',
@@ -103,7 +95,7 @@ export default defineComponent({
 		})
 
 		const getDeviceList = () => {
-			if(!state.ruleForm.productId) {
+			if (!state.ruleForm.productId) {
 				state.tableData.data = [];
 				state.tableData.total = 0;
 				return;
@@ -136,7 +128,7 @@ export default defineComponent({
 			getProductList()
 		};
 
-		    // 多选框选中数据
+		// 多选框选中数据
 		const handleSelectionChange = (selection: any[]) => {
 			state.deviceKeyList = selection.map((item) => item.key);
 		};
@@ -152,17 +144,16 @@ export default defineComponent({
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
-			.then(() => {
-				api.device.mutipleBind({
-					"gatewayKey":state.gatewayKey,
-					"subKeys": state.deviceKeyList
-				}).then(() => {
-					ElMessage.success('绑定成功');
-					emit('bindSuccess')
-					state.isShowDialog = false;
-				});
-			})
-			.catch(() => { });
+				.then(() => {
+					api.device.mutipleBind({
+						"gatewayKey": state.gatewayKey,
+						"subKeys": state.deviceKeyList
+					}).then(() => {
+						ElMessage.success('绑定成功');
+						emit('bindSuccess')
+						state.isShowDialog = false;
+					});
+				})
 		};
 
 		const handleChange = (productId: number) => {

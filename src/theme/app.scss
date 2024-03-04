@@ -127,7 +127,7 @@ body,
 	}
 	.layout-scrollbar {
 		@extend .el-scrollbar;
-		padding: 15px;
+		padding: 15px 15px 0;
 	}
 	.layout-mian-height-50 {
 		height: calc(100vh - 50px);

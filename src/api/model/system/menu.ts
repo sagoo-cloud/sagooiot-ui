@@ -23,6 +23,7 @@ export interface ApiRow {
   parentId?: number; // parentId
   menuIds: number[]; // 名称
   types: 1 | 2; // 1 分类 2接口
+  apiTypes: string; // IOT modbus 104
   method: string; // 请求方式
   name: string; // 名称
   address: string; // 接口地址

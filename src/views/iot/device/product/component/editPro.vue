@@ -1,7 +1,7 @@
 <template>
 	<div class="system-edit-dic-container">
 		<el-dialog :title="(ruleForm.id !== 0 ? '修改' : '添加') + '产品'" v-model="isShowDialog" width="769px">
-			<el-form :model="ruleForm" ref="formRef" :rules="rules" size="default" label-width="100px">
+			<el-form :model="ruleForm" ref="formRef" :rules="rules" label-width="100px">
 				<el-form-item label="产品标识" prop="key">
 					<el-input v-model="ruleForm.key" placeholder="请输入产品标识" :disabled="ruleForm.id" />
 				</el-form-item>
@@ -13,24 +13,27 @@
 				</el-form-item>
 
 				<el-form-item label="产品分类" prop="categoryId">
-					<el-cascader :options="cateData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" clearable class="w100" v-model="ruleForm.categoryId">
+					<el-cascader :options="cateData" :props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择分类" class="w" clearable v-model="ruleForm.categoryId">
 						<template #default="{ node, data }">
 							<span>{{ data.name }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
 						</template>
 					</el-cascader>
+
+          <!-- 添加产品分类 -->
+          <el-button type="success" @click="onOpenAddCategory()" style="margin-left: 5px;">添加产品分类</el-button>
 				</el-form-item>
 
 				<el-form-item label="消息协议" prop="messageProtocol">
 					<el-select v-model="ruleForm.messageProtocol" placeholder="请选择消息协议">
-						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.types"> </el-option>
+						<el-option v-for="dict in messageData" :key="dict.types" :label="dict.title" :value="dict.name"> </el-option>
 						<!-- 增加系统默认的mqtt选项 -->
 						<el-option label="Sagoo Mqtt" value="SagooMqtt"> </el-option>
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="传输协议" prop="transportProtocol">
-					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择传输协议" @change="transportProtocolChange">
+				<el-form-item label="接入方式" prop="transportProtocol">
+					<el-select v-model="ruleForm.transportProtocol" placeholder="请选择接入方式" @change="transportProtocolChange">
 						<el-option v-for="dict in network_server_type" :key="dict.value" :label="dict.label" :value="dict.value"> </el-option>
 					</el-select>
 				</el-form-item>
@@ -67,13 +70,13 @@
 						</el-form-item>
 					</template>
 				</template>
-<!--				<template v-else-if="ruleForm.authType === 3">-->
-<!--					<el-form-item label="认证证书" prop="certificateId">-->
-<!--						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">-->
-<!--							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>-->
-<!--						</el-select>-->
-<!--					</el-form-item>-->
-<!--				</template>-->
+				<template v-else-if="ruleForm.authType === 3">
+					<el-form-item label="认证证书" prop="certificateId">
+						<el-select v-model="ruleForm.certificateId" placeholder="请选择证书">
+							<el-option v-for="cert in certList" :key="cert.id" :label="cert.name" :value="cert.id"> </el-option>
+						</el-select>
+					</el-form-item>
+				</template>
 
 				<el-form-item label="设备类型" prop="deviceType">
 					<el-radio-group v-model="ruleForm.deviceType">
@@ -88,11 +91,12 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" :loading="submitLoading" size="default">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
+					<el-button @click="onCancel">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" :loading="submitLoading">{{ ruleForm.id !== 0 ? '修 改' : '添 加' }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
+    <EditCategory ref="editCategoryRef" @getCateList="getCategoryList" />
 	</div>
 </template>
 
@@ -101,8 +105,11 @@ import { reactive, toRefs, defineComponent, ref, unref, getCurrentInstance } fro
 import api from '/@/api/device'
 import certApi from '/@/api/certificateManagement';
 import uploadVue from '/@/components/upload/index.vue'
+import { validateNoSpace } from '/@/utils/validator';
+
 import { ElMessage, UploadProps } from 'element-plus'
 import getOrigin from '/@/utils/origin'
+import EditCategory from "/@/views/iot/device/category/component/edit.vue";
 
 interface RuleFormState {
 	id: number
@@ -149,7 +156,7 @@ const form = {
 
 export default defineComponent({
 	name: 'deviceEditPro',
-	components: { uploadVue },
+	components: {EditCategory, uploadVue },
 	setup(prop, { emit }) {
 		const formRef = ref<HTMLElement | null>(null)
 		const baseURL: string | undefined | boolean = getOrigin(import.meta.env.VITE_API_URL)
@@ -159,6 +166,7 @@ export default defineComponent({
 
 		const certList = ref([])
 		const submitLoading = ref(false)
+    const editCategoryRef = ref();
 
 		const state = reactive<DicState | any>({
 			isShowDialog: false,
@@ -173,18 +181,20 @@ export default defineComponent({
 				...form
 			},
 			rules: {
-				name: [{ required: true, message: '产品名称不能为空', trigger: 'blur' }],
-				key: [{ required: true, message: '产品标识不能为空', trigger: 'blur' }],
-				parentId: [{ required: true, message: '产品分类不能为空', trigger: 'blur' }],
-				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'blur' }],
-				transportProtocol: [{ required: true, message: '传输协议不能为空', trigger: 'blur' }],
-				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
+				name: [{ required: true, message: '产品名称不能为空', trigger: 'change' },
+				{ max: 32, message: '产品名称不能超过32个字符', trigger: 'change' },
+				{ validator: validateNoSpace, message: '产品名称不能包含空格', trigger: 'change' }
+				],
+				key: [{ required: true, message: '产品标识不能为空', trigger: 'change' },
+				{ validator: validateNoSpace, message: '产品标识不能包含空格', trigger: 'change' }],
+				messageProtocol: [{ required: true, message: '消息协议不能为空', trigger: 'change' }],
+				transportProtocol: [{ required: true, message: '接入方式不能为空', trigger: 'change' }],
+				categoryId: [{ required: true, message: '产品分类不能为空', trigger: 'change' }],
+				deviceType: [{ required: true, message: '设备类型不能为空', trigger: 'change' }],
 			},
 		})
 
 		const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
-			// console.log(response)
-
 			state.imageUrl = response
 			state.ruleForm.icon = response
 		}
@@ -203,9 +213,9 @@ export default defineComponent({
 			});
 
 			// 证书列表
-			// certApi.certificateManagement.getAll().then((res: any) => {
-			// 	certList.value = res.Info || []
-			// });
+			certApi.certificateManagement.getAll().then((res: any) => {
+				certList.value = res.Info || []
+			});
 			// api.product.trunsport_protocol_list({ status: -1 }).then((res: any) => {
 			//   state.tranData = res.data || [];
 			// });
@@ -228,9 +238,15 @@ export default defineComponent({
 			state.ruleForm = {
 				...form
 			}
+			const formWrap = unref(formRef) as any;
+			if (formWrap) {
+				formWrap.resetFields();
+			}
 		}
 		// 关闭弹窗
 		const closeDialog = () => {
+			resetForm();
+
 			state.isShowDialog = false
 		}
 		// 取消
@@ -254,15 +270,14 @@ export default defineComponent({
 					if (state.ruleForm.id !== 0) {
 						//修改
 						api.product.edit(state.ruleForm).then(() => {
-							ElMessage.success('产品类型修改成功')
+							ElMessage.success('产品修改成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
 						}).finally(() => submitLoading.value = false)
 					} else {
 						//添加
-						// console.log(state.ruleForm)
 						api.product.add(state.ruleForm).then(() => {
-							ElMessage.success('产品类型添加成功')
+							ElMessage.success('产品添加成功')
 							closeDialog() // 关闭弹窗
 							emit('typeList')
 						}).finally(() => submitLoading.value = false)
@@ -270,18 +285,31 @@ export default defineComponent({
 				}
 			})
 		}
+    // 打开新增产品分类弹窗
+    const onOpenAddCategory = () => {
+      editCategoryRef.value.openDialog();
+    };
+    // 获取产品分类列表
+    const getCategoryList = () => {
+      api.category.getList({ status: 1 }).then((res: any) => {
+        state.cateData = res.category || []
+      })
+    }
 
 		return {
 			transportProtocolChange,
 			submitLoading,
 			certList,
 			openDialog,
+      onOpenAddCategory,
 			handleAvatarSuccess,
 			closeDialog,
 			onCancel,
 			onSubmit,
 			network_server_type,
+      getCategoryList,
 			formRef,
+      editCategoryRef,
 			...toRefs(state),
 		}
 	},
@@ -296,7 +324,7 @@ export default defineComponent({
 }
 </style>
 
-<style>
+<style scoped>
 .avatar-uploader .el-upload {
 	border: 1px dashed var(--el-border-color);
 	border-radius: 6px;

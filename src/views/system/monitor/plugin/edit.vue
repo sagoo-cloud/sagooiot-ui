@@ -1,7 +1,7 @@
 <template>
 	<el-dialog class="api-edit" v-model="showDialog" title="编辑插件内容" width="600px" :close-on-click-modal="false" :close-on-press-escape="false">
 		<el-form ref="formRef" :model="formData" :rules="ruleForm" label-width="110px" @keyup.enter="onSubmit">
-			<el-form-item label="通信方式" prop="types">
+			<el-form-item label="插件类型" prop="types">
 				<el-input v-model="formData.types" placeholder="输入接口名称" />
 			</el-form-item>
 			<el-form-item label="功能类型" prop="handleType">
@@ -23,8 +23,7 @@
 				<el-input v-model="formData.author" placeholder="输入作者" />
 			</el-form-item>
 			<el-form-item label="插件图标" prop="icon">
-				<!-- <el-input v-model="formData.icon" placeholder="输入插件图标" /> -->
-				<uploadVue :width-host="false" :img="formData.icon" @set-img="formData.icon = $event"></uploadVue>
+				<uploadVue :img="formData.icon" @set-img="setImage"></uploadVue>
 			</el-form-item>
 			<el-form-item label="插件网址" prop="link">
 				<el-input v-model="formData.link" placeholder="输入插件网址" />
@@ -89,15 +88,19 @@ const formData = reactive({
 })
 
 const ruleForm = {
-	types: [ruleRequired('通信方式不能为空')],
-	handleType: [ruleRequired('功能类型不能为空')],
+	types: [ruleRequired('插件类型不能为空')],
+	handleType: [ruleRequired('处理方式类型不能为空')],
 	name: [ruleRequired('名称不能为空')],
 	title: [ruleRequired('标题不能为空')],
-	version: [ruleRequired('版本不能为空')],
-	author: [ruleRequired('作者不能为空')],
-	icon: [ruleRequired('插件图标不能为空')],
-	command: [ruleRequired('运行指令不能为空')],
-	args: [ruleRequired('指令参数不能为空')],
+	// version: [ruleRequired('版本不能为空')],
+	// author: [ruleRequired('作者不能为空')],
+	// icon: [ruleRequired('插件图标不能为空')],
+	// command: [ruleRequired('运行指令不能为空')],
+	// args: [ruleRequired('指令参数不能为空')],
+}
+
+const setImage = (data:string) => {
+	formData.icon = data
 }
 
 const onSubmit = async () => {
@@ -121,6 +124,7 @@ const open = async (row: any) => {
 	showDialog.value = true
 	nextTick(() => {
 		Object.assign(formData, row)
+		formData.author = JSON.parse(row.author).join(",");
 	})
 }
 
