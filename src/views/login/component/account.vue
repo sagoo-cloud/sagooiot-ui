@@ -44,9 +44,10 @@
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
-		<!-- <el-form-item class="login-animation4">
+		<el-form-item class="login-animation4">
+			第三方账号登录
 			<img src="/@/assets/gitee.svg" alt="" class="gitee" @click="authLogin('gitee')">
-		</el-form-item> -->
+		</el-form-item>
 		<changePwd ref="changePwdRef"></changePwd>
 	</el-form>
 </template>
@@ -118,6 +119,7 @@ export default defineComponent({
 			if (type === 'gitee') {
 				const client_id = 'a0585ded445f240f2adc7957989bdd644fa2cdf0db7d98b0a940ec92df6a0934'
 				const redirect_uri = 'http://localhost:8888/#/sso/gitee'
+				// 'http://localhost:8888/#/iotmanager/dashboard'
 				window.open(`https://gitee.com/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code`)
 				return
 			}
@@ -243,6 +245,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.gitee {
+	width: 40px;
+	// height: 60px;
+}
 .login-content-form {
 	width: 400px;
 	margin-top: 20px;
