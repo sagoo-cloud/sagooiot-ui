@@ -101,12 +101,18 @@ export default defineComponent({
 		});
 		onMounted(() => {
 			getCaptcha();
-			// api.login.ssoList()
+			getSsoList();
 		});
 		// 时间获取
 		const currentTime = computed(() => {
 			return formatAxis(new Date());
 		});
+
+		const getSsoList = () => {
+			api.login.ssoList().then((res: any) => {
+				console.log(res)
+			});
+		};
 
 		const getCaptcha = () => {
 			api.login.captcha().then((res: any) => {
@@ -237,6 +243,7 @@ export default defineComponent({
 			changePwdRef,
 			onSignIn,
 			getCaptcha,
+			getSsoList,
 			authLogin,
 			...toRefs(state),
 		};
