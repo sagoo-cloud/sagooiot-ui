@@ -23,10 +23,9 @@
 	</el-dialog>
 </template>
 <script lang="ts" setup>
-import { computed, reactive, ref, onMounted } from 'vue';
+import { computed, ref } from 'vue';
 import api from '/@/api/ice104/index';
 import { ElMessage } from 'element-plus';
-import apiDevice from '/@/api/device';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

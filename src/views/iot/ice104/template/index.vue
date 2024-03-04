@@ -59,17 +59,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import EditForm from './component/edit.vue';
+import { ref, defineAsyncComponent } from 'vue';
 import api from '/@/api/ice104/index';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useSearch } from '/@/hooks/useCommonIce104';
 import { useRouter } from 'vue-router';
 
+const EditForm =  defineAsyncComponent(() => import('./component/edit.vue'));
+
 const router = useRouter();
 
 const editFormRef = ref();
-const detailFormRef = ref();
 const queryRef = ref();
 
 const { params, tableData, getList, loading } = useSearch(api.template.getList, 'data', { title: '' });
