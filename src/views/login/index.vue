@@ -1,22 +1,12 @@
 <template>
-	<div class="login-container flex-row">
-		<el-switch
-			class="switch"
-			v-model="getThemeConfig.isIsDark"
-			size="large"
-			inline-prompt
-			@change="onAddDarkChange"
-			:active-icon="Sunny"
-			:inactive-icon="Moon"
-			style="--el-switch-on-color: #fff; --el-switch-off-color: #151515"
-		></el-switch>
+	<div class="login-container flex-row" v-if="showImg">
+		<el-switch class="switch" v-model="getThemeConfig.isIsDark" size="large" inline-prompt @change="onAddDarkChange" :active-icon="Sunny" :inactive-icon="Moon" style="--el-switch-on-color: #fff; --el-switch-off-color: #151515"></el-switch>
 		<div class="part left">
 			<div class="flex logo">
-				<el-image v-if="sysinfo.systemLogo" class="logoimg" :src="sysinfo.systemLogo" />
-				<el-image v-else class="logoimg" src="/imgs/logo.png" />
-				{{ sysinfo.systemName }}</div>
-			<el-image class="img" v-if="sysinfo.systemLoginPIC" :src="sysinfo.systemLoginPIC" />
-			<el-image class="img" v-else src="/imgs/login-box-bg.svg" />
+				<el-image class="logoimg" :src="sysinfo.systemLogo" />
+				{{ sysinfo.systemName }}
+			</div>
+			<el-image class="img" :src="sysinfo.systemLoginPIC" />
 			<span class="text" v-if="sysinfo.buildTime">{{ sysinfo.buildVersion }} </span>
 			<span class="text" v-if="sysinfo.buildTime">{{ dayjs(sysinfo.buildTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
 		</div>
@@ -34,6 +24,8 @@ import { useStore } from '/@/store/index';
 import logoMini from '/imgs/logo.png';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
+import CloseFull from '/@/layout/navBars/breadcrumb/closeFull.vue';
+import api from '/@/api/system';
 
 // 定义接口来定义对象的类型
 interface LoginState {
@@ -51,6 +43,7 @@ export default defineComponent({
 			Sunny,
 			Moon,
 			dayjs,
+			showImg: false,
 			sysinfo: {
 				buildVersion: '',
 				systemName: '',
@@ -62,7 +55,9 @@ export default defineComponent({
 		};
 	},
 	mounted() {
-		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
+		api.sysinfo().then((res: any) => {
+			this.sysinfo = res
+		}).finally(() => this.showImg = true)
 	},
 	setup() {
 		const store = useStore();
@@ -102,50 +97,61 @@ html[data-theme='dark'] {
 	.login-container {
 		background: #293146;
 	}
+
 	.left {
 		background-image: url(/@/assets/login-bg-dark.svg);
 	}
+
 	.title {
 		color: #aaa;
 	}
 }
+
 .flex {
 	display: flex;
 	align-items: center;
 }
+
 .text {
 	color: #fff;
 }
+
 .switch {
 	position: fixed;
 	right: 20px;
 	top: 20px;
 }
+
 .login-container {
 	width: 100vw;
 	height: 100vh;
 	position: relative;
 	background: #fff;
+
 	.title {
 		font-size: 30px;
 		color: #333;
 		font-weight: bold;
 		letter-spacing: 20px;
 	}
+
 	.logo {
 		font-size: 30px;
 		color: #fff;
+
 		.logoimg {
 			height: 50px;
 			display: block;
 			margin-right: 12px;
 		}
 	}
+
 	.img {
 		width: 50%;
 		display: block;
 		margin: 15vh 0;
 	}
+
 	.part {
 		flex: 1;
 		display: flex;
@@ -153,6 +159,7 @@ html[data-theme='dark'] {
 		justify-content: center;
 		align-items: center;
 	}
+
 	.left {
 		height: 100vh;
 		background-image: url(/@/assets/login-bg.svg);
@@ -162,24 +169,29 @@ html[data-theme='dark'] {
 		align-items: flex-start;
 		padding-left: 8%;
 	}
+
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
 		position: relative;
+
 		.login-icon-group-title {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			margin: 12px 0;
+
 			img {
 				width: auto;
 				height: 40px;
 			}
+
 			&-text {
 				padding-left: 20px;
 				color: var(--el-color-primary);
 			}
 		}
+
 		&-icon {
 			width: 60%;
 			height: 70%;
@@ -188,11 +200,13 @@ html[data-theme='dark'] {
 			bottom: 0;
 		}
 	}
+
 	.login-content-out {
 		width: 100%;
 		height: 100%;
 		padding-top: calc(50vh - 227px);
 	}
+
 	.login-content {
 		width: 500px;
 		padding: 20px;
@@ -203,9 +217,11 @@ html[data-theme='dark'] {
 		overflow: hidden;
 		z-index: 1;
 		position: relative;
+
 		.login-content-main {
 			margin: 0 auto;
 			width: 80%;
+
 			.login-content-title {
 				color: var(--el-text-color-primary);
 				font-weight: 500;
@@ -219,6 +235,7 @@ html[data-theme='dark'] {
 				transition: all 0.3s ease;
 			}
 		}
+
 		.login-content-main-sacn {
 			position: absolute;
 			top: 0;
@@ -229,6 +246,7 @@ html[data-theme='dark'] {
 			cursor: pointer;
 			transition: all ease 0.3s;
 			color: var(--el-text-color-primary);
+
 			&-delta {
 				position: absolute;
 				width: 35px;
@@ -239,11 +257,13 @@ html[data-theme='dark'] {
 				background: var(--el-color-white);
 				transform: rotate(-45deg);
 			}
+
 			&:hover {
 				opacity: 1;
 				transition: all ease 0.3s;
 				color: var(--el-color-primary) !important;
 			}
+
 			i {
 				width: 47px;
 				height: 50px;
@@ -255,13 +275,16 @@ html[data-theme='dark'] {
 			}
 		}
 	}
+
 	.login-footer {
 		position: absolute;
 		bottom: 5px;
 		width: 100%;
+
 		&-content {
 			width: 100%;
 			display: flex;
+
 			&-warp {
 				margin: auto;
 				color: #e0e3e9;
