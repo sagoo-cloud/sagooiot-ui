@@ -1,31 +1,4 @@
 SagooIoT-UI
-=======
-
-SagooIoT 前端UI系统工程代码
-
-
-**注意：**
-
-当前主分支为V2.0版本，V1.0版本请切换到V1.0分支
-
-
-# 前端介绍
-
-基于 vue3.x + CompositionAPI + typescript + vite + element plus + vue-router-next + next.vuex开发。
-
-详情见开源前端模版项目 [https://gitee.com/lyt-top/vue-next-admin](https://gitee.com/lyt-top/vue-next-admin)
-
-[前端模版项目开发文档](https://lyt-top.gitee.io/vue-next-admin-doc-preview/)
-
-## 环境支持
-
-| Edge      | Firefox      | Chrome      | Safari      |
-| --------- | ------------ | ----------- | ----------- |
-| Edge ≥ 79 | Firefox ≥ 78 | Chrome ≥ 64 | Safari ≥ 12 |
-
-
-
-## 依赖安装方式
 
 用 yarn 安装依赖
 

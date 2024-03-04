@@ -12,8 +12,14 @@
 					<el-col :span="12">
 						<el-form-item label="系统LOGO" prop="keyWord">
 							<uploadVue accept=".jpg,.png,.jpeg,.gif,.svg" :name="'logo'" @set-img="setImg">
-								<el-image style="width: 100%;" :src="state.info.logo" />
-								<!-- <div class="tips">点击上方照片，即可更改头像</div> -->
+								<el-image style="width: 100%;min-width: 100px;min-height: 100px;" :src="state.info.logo" fit="contain">
+									<template #error>
+										<div class="image-slot">
+											<ele-Picture style="width: 26px;" />
+											图片加载失败
+										</div>
+									</template>
+								</el-image>
 							</uploadVue>
 						</el-form-item>
 					</el-col>
@@ -21,8 +27,14 @@
 					<el-col :span="12">
 						<el-form-item label="系统LOGO（小图标）" prop="keyWord">
 							<uploadVue accept=".jpg,.png,.jpeg,.gif,.svg" :name="'mini'" @set-img="setImg">
-								<el-image style="width: 100%;" :src="state.info.mini" />
-								<!-- <div class="tips">点击上方照片，即可更改头像</div> -->
+								<el-image style="width: 100%;min-width: 100px;min-height: 100px;" :src="state.info.mini" fit="contain">
+									<template #error>
+										<div class="image-slot">
+											<ele-Picture style="width: 26px;" />
+											图片加载失败
+										</div>
+									</template>
+								</el-image>
 							</uploadVue>
 						</el-form-item>
 					</el-col>
@@ -34,7 +46,14 @@
 			<div class="right-wrap">
 				<el-form-item label="登录展示图" prop="keyWord">
 					<uploadVue accept=".jpg,.png,.jpeg,.gif,.svg" :name="'pic'" @set-img="setImg">
-						<el-image style="width: 100%;" :src="state.info.pic" fit="contain" />
+						<el-image style="width: 100%;min-width: 100px;min-height: 100px;" :src="state.info.pic" fit="contain">
+							<template #error>
+								<div class="image-slot">
+									<ele-Picture style="width: 26px;" />
+									图片加载失败
+								</div>
+							</template>
+						</el-image>
 					</uploadVue>
 				</el-form-item>
 			</div>
