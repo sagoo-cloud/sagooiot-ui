@@ -273,6 +273,23 @@
 
           <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
         </el-tab-pane>
+        <el-tab-pane label="Topic列表" name="topic">
+          SagooMqtt协议 ，涉及的topic如下：
+          <el-table style="width: 100%;margin-top: 20px;" :data="topicData" border>
+            <el-table-column label="描述" prop="info" width="200" />
+            <el-table-column label="请求" prop="req">
+              <template #default="{ row }">
+                <copy :text="row.req"></copy>
+              </template>
+            </el-table-column>
+            <el-table-column label="响应" prop="res">
+              <template #default="{ row }">
+                <copy :text="row.res"></copy>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
+        </el-tab-pane>
         <el-tab-pane v-if="prodetail.deviceType == '网关'" label="子设备" name="6">
           <div class="wu-box">
             <div class="wu-title">
@@ -441,6 +458,8 @@ export default defineComponent({
 
     const logqueryRef = ref();
 
+    const topicData = ref<any[]>([])
+
     // 属性列表，查询保留小数位使用
     const propertyMap = new Map()
 
@@ -518,10 +537,11 @@ export default defineComponent({
 
     function initData() {
       // 如果是嵌入的就是子设备，看子设备详情，否则看页面参数
-      api.instance.detail(props.deviceKey || route.params?.id).then((res: any) => {
+      const deviceKey = props.deviceKey || route.params?.id
+      api.instance.detail(deviceKey).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
-        state.tableData.param.productKey = res.data.product.key;
+        state.tableData.param.productKey = res.data.productKey;
         state.productKey = res.data.product.key;
         api.product.detail(res.data.product.key).then((res: any) => {
           state.prodetail = res.data;
@@ -533,10 +553,28 @@ export default defineComponent({
         state.intro = intro
 
         //加载全部属性
-        datahub.node.getpropertyList({ productKey: state.detail.product.key }).then((re: any) => {
+        datahub.node.getpropertyList({ productKey: state.detail.productKey }).then((re: any) => {
           array_list.value = re;
           re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
+
+        topicData.value = [
+          {
+            req: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post`,
+            res: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post_reply`,
+            info: '设备上报属性(设备端发起)',
+          },
+          {
+            req: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set`,
+            res: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set_reply`,
+            info: '设备属性设置(平台侧发起)',
+          },
+          {
+            req: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            res: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+          }
+        ]
 
         // 加载对应设备档案
         getDeviceAssetMetadata()
@@ -954,6 +992,7 @@ export default defineComponent({
     }
 
     return {
+      topicData,
       initData,
       logqueryRef,
       resetQuery,
@@ -1157,5 +1196,3 @@ tr {
   line-height: 30px;
 }
 </style>
-
-
