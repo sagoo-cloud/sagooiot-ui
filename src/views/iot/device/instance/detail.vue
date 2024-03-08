@@ -81,7 +81,7 @@
             <el-descriptions-item label="设备名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="所属产品">
               <router-link :to="'/iotmanager/device/product/detail/' + prodetail.key" class="link-type">{{
-                detail.productName }} </router-link>
+          detail.productName }} </router-link>
             </el-descriptions-item>
             <el-descriptions-item label="消息协议">{{ prodetail.messageProtocol }}</el-descriptions-item>
             <el-descriptions-item label="链接协议">{{ prodetail.transportProtocol }}</el-descriptions-item>
@@ -276,15 +276,11 @@
         <el-tab-pane label="Topic列表" name="topic">
           SagooMqtt协议 ，涉及的topic如下：
           <el-table style="width: 100%;margin-top: 20px;" :data="topicData" border>
-            <el-table-column label="描述" prop="info" width="200" />
-            <el-table-column label="请求" prop="req">
+            <el-table-column label="描述" prop="info" width="250" />
+            <el-table-column label="类型" prop="type" width="80" align="center" />
+            <el-table-column label="Topic类" prop="url">
               <template #default="{ row }">
-                <copy :text="row.req"></copy>
-              </template>
-            </el-table-column>
-            <el-table-column label="响应" prop="res">
-              <template #default="{ row }">
-                <copy :text="row.res"></copy>
+                <copy :text="row.url"></copy>
               </template>
             </el-table-column>
           </el-table>
@@ -560,19 +556,54 @@ export default defineComponent({
 
         topicData.value = [
           {
-            req: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post`,
-            res: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post_reply`,
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post`,
             info: '设备上报属性(设备端发起)',
+            type: '请求',
           },
           {
-            req: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set`,
-            res: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set_reply`,
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post_reply`,
+            info: '设备上报属性(设备端发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/${'${eventIdentifier}'}/property/post`,
+            info: '设备上报事件(设备端发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/${'${eventIdentifier}'}/property/post_reply`,
+            info: '设备上报事件(设备端发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set`,
             info: '设备属性设置(平台侧发起)',
+            type: '请求',
           },
           {
-            req: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
-            res: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set_reply`,
+            info: '设备属性设置(平台侧发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
             info: '网关批量上传事件和属性(网关发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/${'${tsl.service.identifier}'}`,
+            info: '服务调用(平台侧发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}//thing/service/${'${tsl.service.identifier}'}_reply`,
+            info: '服务调用(平台侧发起)',
+            type: '响应',
           }
         ]
 
