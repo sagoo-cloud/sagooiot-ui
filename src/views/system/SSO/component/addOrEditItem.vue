@@ -10,11 +10,11 @@
           <el-option v-for="item in oauth_name_list" :key="item.value" :label="item.label" :value="item.value" />
         </el-select> 
       </el-form-item>
+			<el-form-item label="Client Id" prop="clientId">
+				<el-input v-model="ruleForm.clientId" placeholder="请输入Client Id" />
+			</el-form-item>
 			<el-form-item label="Client Secret" prop="clientSecret">
 				<el-input v-model="ruleForm.clientSecret" placeholder="请输入Client Secret" />
-			</el-form-item>
-      <el-form-item label="Client Id" prop="clientId">
-				<el-input v-model="ruleForm.clientId" placeholder="请输入Client Id" />
 			</el-form-item>
       <el-form-item label="回调地址" prop="redirectUrl">
 				<el-input v-model="ruleForm.redirectUrl" placeholder="请输入回调地址" />
