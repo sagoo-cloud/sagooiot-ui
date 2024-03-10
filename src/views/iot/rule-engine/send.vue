@@ -57,7 +57,7 @@ const editFormRef = ref();
 const { params, tableData, getList, loading } = useSearch<any[]>(api.getList, 'Data', { types: 1 });
 
 const headers = {
-  Authorization: 'Bearer ' + localStorage.token,
+  Authorization: 'Bearer ' + sessionStorage.token,
 };
 const flowsUrl = window.location.origin + '/rule-engine/flows';
 
@@ -101,7 +101,7 @@ const setStatus = async (row: any, status: number) => {
 };
 
 const edit = async (row: any) => {
-  localStorage.setItem('auth-tokens', `{"access_token":"${localStorage.token}"}`);
+  localStorage.setItem('auth-tokens', `{"access_token":"${sessionStorage.token}"}`);
   const url = '/rule-engine/#flow/' + row.flowId;
   window.open(url);
 };

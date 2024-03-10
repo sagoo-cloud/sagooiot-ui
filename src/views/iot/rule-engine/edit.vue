@@ -41,7 +41,7 @@ const props = defineProps({
 });
 
 const headers = {
-	Authorization: 'Bearer ' + localStorage.token,
+	Authorization: 'Bearer ' + sessionStorage.token,
 };
 const flowsUrl = window.location.origin + '/rule-engine/flow';
 // const flowsUrl = 'http://zhgy.sagoo.cn/rule-engine/flow';

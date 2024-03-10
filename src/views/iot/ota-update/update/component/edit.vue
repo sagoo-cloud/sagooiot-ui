@@ -135,7 +135,7 @@ export default defineComponent({
   name: 'otaEditUpdateData',
   setup(prop, { emit }) {
     const formRef = ref<HTMLElement | null>(null);
-    const headers = { Authorization: 'Bearer ' + localStorage.token, };
+    const headers = { Authorization: 'Bearer ' + sessionStorage.token, };
     const source = JSON.parse(localStorage.sysinfo || '{"uploadFileWay": 0}').uploadFileWay;
     const productRef = ref();
     const editDicRef = ref();

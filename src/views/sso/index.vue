@@ -60,7 +60,7 @@ export default defineComponent({
 			state: ''
 		}).then(async (res: any) => {
 
-			localStorage.setItem('token', res.token);
+			sessionStorage.setItem('token', res.token);
 			const userInfos = res.userInfo;
 			userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
 			// 存储 token 到浏览器缓存
