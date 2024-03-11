@@ -44,9 +44,10 @@
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
-		<!-- <el-form-item class="login-animation4">
-			<img src="/@/assets/gitee.svg" alt="" class="gitee" @click="authLogin('gitee')">
-		</el-form-item> -->
+		<el-form-item class="login-animation4 sso-login-wrap">
+			<span class="sso-title">第三方账号登录</span>
+			<img v-for="(item, index) in ssoList" :key="index " :src="item.img" alt="" class="gitee" @click="authLogin(item)">
+		</el-form-item>
 		<changePwd ref="changePwdRef"></changePwd>
 	</el-form>
 </template>
@@ -88,6 +89,7 @@ export default defineComponent({
 				captcha: '',
 				VerifyKey: '',
 			},
+			ssoList: [],
 			formRules: {
 				userName: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
 				password: [{ required: true, trigger: 'blur', message: '密码不能为空' }],
@@ -100,12 +102,19 @@ export default defineComponent({
 		});
 		onMounted(() => {
 			getCaptcha();
-			// api.login.ssoList()
+			getSsoList();
 		});
 		// 时间获取
 		const currentTime = computed(() => {
 			return formatAxis(new Date());
 		});
+
+		const getSsoList = () => {
+			api.login.ssoList().then((res: any) => {
+				console.log(res)
+				state.ssoList = res.list;
+			});
+		};
 
 		const getCaptcha = () => {
 			api.login.captcha().then((res: any) => {
@@ -114,11 +123,13 @@ export default defineComponent({
 			});
 		};
 
-		function authLogin(type: string) {
-			if (type === 'gitee') {
-				const client_id = 'a0585ded445f240f2adc7957989bdd644fa2cdf0db7d98b0a940ec92df6a0934'
-				const redirect_uri = 'http://localhost:8888/#/sso/gitee'
-				window.open(`https://gitee.com/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code`)
+		function authLogin(item: any) {
+			if (item.name === 'gitee') {
+				console.log(item)
+				
+				// const client_id = 'a0585ded445f240f2adc7957989bdd644fa2cdf0db7d98b0a940ec92df6a0934'
+				// const redirect_uri = 'http://localhost:8888/#/sso/gitee'
+				window.open(`https://gitee.com/oauth/authorize?client_id=${item.clientId}&redirect_uri=${encodeURIComponent(item.redirectUrl)}&response_type=code`)
 				return
 			}
 		}
@@ -235,6 +246,7 @@ export default defineComponent({
 			changePwdRef,
 			onSignIn,
 			getCaptcha,
+			getSsoList,
 			authLogin,
 			...toRefs(state),
 		};
@@ -243,6 +255,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+
 .login-content-form {
 	width: 400px;
 	margin-top: 20px;
@@ -295,6 +308,17 @@ export default defineComponent({
 		letter-spacing: 2px;
 		font-weight: 300;
 		margin-top: 15px;
+	}
+}
+.sso-login-wrap {
+	.sso-title {
+		margin-right: 20px;
+	}
+	.gitee {
+		width: 40px;
+		border-radius: 50%;
+		cursor: pointer;
+
 	}
 }
 </style>

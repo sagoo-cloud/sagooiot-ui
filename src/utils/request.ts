@@ -5,7 +5,7 @@ import getOrigin from '/@/utils/origin'
 // 配置新建一个 axios 实例
 const service = axios.create({
 	baseURL: getOrigin(import.meta.env.VITE_API_URL),
-	timeout: 50000,
+	timeout: 120000,
 	headers: { 'Content-Type': 'application/json' },
 });
 
@@ -74,6 +74,7 @@ service.interceptors.response.use(
 		}
 	},
 	(error) => {
+		ElMessage.closeAll()
 		// 对响应错误做点什么
 		if (error.message.indexOf('timeout') != -1) {
 			ElMessage.error('网络超时');
@@ -128,14 +129,14 @@ export function file(url: string, params?: any, method: 'get' | 'post' = 'get'):
 			url,
 			method,
 			params,
-			timeout: 100000,
+			timeout: 120000,
 			responseType: 'arraybuffer',
 		});
 	} else {
 		return service({
 			url,
 			method,
-			timeout: 100000,
+			timeout: 120000,
 			data: params,
 			responseType: 'blob',
 		});
