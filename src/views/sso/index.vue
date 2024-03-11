@@ -60,6 +60,7 @@ export default defineComponent({
 			state: ''
 		}).then(async (res: any) => {
 
+			sessionStorage.setItem('token', res.token);
 			localStorage.setItem('token', res.token);
 			const userInfos = res.userInfo;
 			userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
