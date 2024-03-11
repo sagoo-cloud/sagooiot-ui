@@ -172,6 +172,7 @@ export default defineComponent({
             ElMessage.success(t('message.user.logOutSuccess'));
             setTimeout(() => {
               localStorage.clear(); // 清除缓存/token等
+              sessionStorage.clear(); // 清除缓存/token等
               window.location.href = ''; // 去登录页
             }, 500);
           })

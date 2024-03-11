@@ -81,7 +81,7 @@
             <el-descriptions-item label="设备名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="所属产品">
               <router-link :to="'/iotmanager/device/product/detail/' + prodetail.key" class="link-type">{{
-                detail.productName }} </router-link>
+          detail.productName }} </router-link>
             </el-descriptions-item>
             <el-descriptions-item label="消息协议">{{ prodetail.messageProtocol }}</el-descriptions-item>
             <el-descriptions-item label="链接协议">{{ prodetail.transportProtocol }}</el-descriptions-item>
@@ -273,6 +273,19 @@
 
           <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
         </el-tab-pane>
+        <el-tab-pane label="Topic列表" name="topic">
+          SagooMqtt协议 ，涉及的topic如下：
+          <el-table style="width: 100%;margin-top: 20px;" :data="topicData" border>
+            <el-table-column label="描述" prop="info" width="250" />
+            <el-table-column label="类型" prop="type" width="80" align="center" />
+            <el-table-column label="Topic类" prop="url">
+              <template #default="{ row }">
+                <copy :text="row.url"></copy>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="logtableData.total > 0" :total="logtableData.total" v-model:page="logtableData.param.pageNum" v-model:limit="logtableData.param.pageSize" @pagination="getlog" />
+        </el-tab-pane>
         <el-tab-pane v-if="prodetail.deviceType == '网关'" label="子设备" name="6">
           <div class="wu-box">
             <div class="wu-title">
@@ -441,6 +454,8 @@ export default defineComponent({
 
     const logqueryRef = ref();
 
+    const topicData = ref<any[]>([])
+
     // 属性列表，查询保留小数位使用
     const propertyMap = new Map()
 
@@ -518,10 +533,11 @@ export default defineComponent({
 
     function initData() {
       // 如果是嵌入的就是子设备，看子设备详情，否则看页面参数
-      api.instance.detail(props.deviceKey || route.params?.id).then((res: any) => {
+      const deviceKey = props.deviceKey || route.params?.id
+      api.instance.detail(deviceKey).then((res: any) => {
         state.detail = res.data;
         state.developer_status = res.data.status;
-        state.tableData.param.productKey = res.data.product.key;
+        state.tableData.param.productKey = res.data.productKey;
         state.productKey = res.data.product.key;
         api.product.detail(res.data.product.key).then((res: any) => {
           state.prodetail = res.data;
@@ -533,10 +549,63 @@ export default defineComponent({
         state.intro = intro
 
         //加载全部属性
-        datahub.node.getpropertyList({ productKey: state.detail.product.key }).then((re: any) => {
+        datahub.node.getpropertyList({ productKey: state.detail.productKey }).then((re: any) => {
           array_list.value = re;
           re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
+
+        topicData.value = [
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post`,
+            info: '设备上报属性(设备端发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post_reply`,
+            info: '设备上报属性(设备端发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/${'${eventIdentifier}'}/property/post`,
+            info: '设备上报事件(设备端发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/${'${eventIdentifier}'}/property/post_reply`,
+            info: '设备上报事件(设备端发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set`,
+            info: '设备属性设置(平台侧发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set_reply`,
+            info: '设备属性设置(平台侧发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+            type: '响应',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/${'${tsl.service.identifier}'}`,
+            info: '服务调用(平台侧发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}//thing/service/${'${tsl.service.identifier}'}_reply`,
+            info: '服务调用(平台侧发起)',
+            type: '响应',
+          }
+        ]
 
         // 加载对应设备档案
         getDeviceAssetMetadata()
@@ -832,7 +901,7 @@ export default defineComponent({
         if (option) {
           return option.text;
         }
-      } else if (item?.type === 'float' && item?.decimals) {
+      } else if (['float', 'double'].includes(item?.type) && item?.decimals) {
         //  根据属性确定保留小数位数
         return Number(value).toFixed(item.decimals)
       } else {
@@ -954,6 +1023,7 @@ export default defineComponent({
     }
 
     return {
+      topicData,
       initData,
       logqueryRef,
       resetQuery,
@@ -1157,5 +1227,3 @@ tr {
   line-height: 30px;
 }
 </style>
-
-

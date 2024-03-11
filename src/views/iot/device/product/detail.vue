@@ -237,7 +237,7 @@ export default defineComponent({
 
 		const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/product/tsl/import");
 		const headers = {
-			Authorization: 'Bearer ' + localStorage.token,
+			Authorization: 'Bearer ' + sessionStorage.token,
 		};
 		const route = useRoute();
 		const editDicRef = ref();

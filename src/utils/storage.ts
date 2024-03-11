@@ -21,7 +21,8 @@ export const Local = {
 	},
 	// 移除全部永久缓存
 	clear() {
-		window.localStorage.clear();
+		localStorage.clear(); // 清除缓存/token等
+		sessionStorage.clear(); // 清除缓存/token等
 	},
 };
 

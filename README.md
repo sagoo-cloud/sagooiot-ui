@@ -1,11 +1,15 @@
-SagooIoT-UI
+# sagoo-admin-ui
+
+业务管理系统前端
+
+### 依赖安装方式
 
 用 yarn 安装依赖
 
 1. 全局安装yarn： npm i yarn -g ,如果是非windows环境需要加 sudo
 2. 用yarn在项目中安装依赖： yarn i
 
-## 环境变量配置
+### 环境变量配置
 
 **.env** 
 

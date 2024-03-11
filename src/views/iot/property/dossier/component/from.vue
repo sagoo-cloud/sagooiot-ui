@@ -54,7 +54,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     const uploadUrl = getOrigin(import.meta.env.VITE_API_URL + '/common/singleFile')
     const headers = {
-      Authorization: 'Bearer ' + localStorage.token,
+      Authorization: 'Bearer ' + sessionStorage.token,
     }
     // const emit = defineEmits(['SetSaveData'])
 

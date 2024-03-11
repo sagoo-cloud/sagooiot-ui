@@ -68,7 +68,7 @@ export default defineComponent({
 
     const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + "/product/device/import");
     const headers = {
-      Authorization: 'Bearer ' + localStorage.token,
+      Authorization: 'Bearer ' + sessionStorage.token,
     };
     const formRef = ref<HTMLElement | null>(null);
     const tagRef = ref<HTMLElement | null>(null);

@@ -221,7 +221,7 @@ router.beforeEach(async (to, from, next) => {
 
 
 	// 正常流程
-	const token = localStorage.token;
+	const token = sessionStorage.token;
 	if (whiteList.includes(to.path) && !token) {
 		next();
 		NProgress.done();

@@ -33,7 +33,7 @@ import getOrigin from '/@/utils/origin'
 const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/singleImg')
 
 const headers = {
-	Authorization: 'Bearer ' + localStorage.token,
+	Authorization: 'Bearer ' + sessionStorage.token,
 }
 
 const emit = defineEmits(['setImg', 'setImgs'])

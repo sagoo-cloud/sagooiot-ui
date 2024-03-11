@@ -14,8 +14,8 @@ const service = axios.create({
 service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
-		if (localStorage.token) {
-			(<any>config.headers).common['Authorization'] = `Bearer ${localStorage.token}`;
+		if (sessionStorage.token) {
+			(<any>config.headers).common['Authorization'] = `Bearer ${sessionStorage.token}`;
 		}
 		return config;
 	},
@@ -35,7 +35,8 @@ service.interceptors.response.use(
 			ElMessageBox.alert('登录状态已过期，请重新登录', '提示',
 				{ confirmButtonText: '确定', showCancelButton: false, closeOnHashChange: false, closeOnPressEscape: false, closeOnClickModal: false, showClose: false })
 				.then(() => {
-					localStorage.clear(); // 清除浏览器全部临时缓存
+					localStorage.clear(); // 清除缓存/token等
+					sessionStorage.clear(); // 清除缓存/token等
 					window.location.href = '/'; // 去登录页
 				})
 				.catch(() => { });
