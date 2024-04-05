@@ -8,7 +8,7 @@ export default {
     editPassword: (data: object) => post('/user/editPassword', data),
     captcha: () => get('/captcha'),
     logout: () => post('/loginOut'),
-    ssoList: () => get('/system/sys_oauth/list_front'),
+    ssoList: () => get('/sys_oauth/list_front'),
     oauth: (data: object) => post('/oauth', data),
   },
   api: {

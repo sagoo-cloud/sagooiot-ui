@@ -865,7 +865,7 @@ export default defineComponent({
         if (option) {
           return option.text;
         }
-      } else if (item?.type === 'float' && item?.decimals) {
+      } else if (['float', 'double'].includes(item?.type) && item?.decimals) {
         //  根据属性确定保留小数位数
         return Number(value).toFixed(item.decimals)
       } else {

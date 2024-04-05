@@ -6,8 +6,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { toRefs, reactive, computed, defineComponent, getCurrentInstance } from 'vue';
+<script lang="ts"  setup>
+import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '/@/store/index';
 import dayjs from 'dayjs';
@@ -18,114 +18,33 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { formatAxis } from '/@/utils/formatTime';
 import { ElMessage } from 'element-plus';
 
-// 定义接口来定义对象的类型
-interface LoginState {
-	tabsActiveName: string;
-	isScan: boolean;
+const getQueryString = (params:string) => {
+		var urlObj:any = {};
+		if (!window.location.search) {
+			return false;
+		}
+		var urlParams = window.location.search.substring(1);
+		var urlArr = urlParams.split('&');
+		for (var i = 0; i < urlArr.length; i++) {
+			var urlArrItem = urlArr[i].split('=');
+			urlObj[urlArrItem[0]] = urlArrItem[1]
+		}
+		return urlObj[params]
 }
 
-export default defineComponent({
-	components: {
-	},
-	data: function () {
-		return {
-			dayjs,
-			sysinfo: {
-				buildVersion: '',
-				systemName: '',
-				buildTime: '',
-				systemCopyright: '',
-				systemLogo: '',
-				systemLoginPIC: '',
-			},
-		};
-	},
-	mounted() {
-		this.sysinfo = JSON.parse(localStorage.sysinfo || '{}');
-	},
-	setup() {
-		const route = useRoute()
-		const router = useRouter();
-		const store = useStore();
-		const { proxy } = getCurrentInstance() as any;
+const toLogin = async (code:string) => {
+	const res = await api.login.oauth({ "code": code, "isCreate": 0, "types": "gitee"});
+	console.log(res)
+}
 
-		// 时间获取
-		const currentTime = computed(() => {
-			return formatAxis(new Date());
-		});
-
-		api.login.oauth({
-			code: location.search.split('=')[1],
-			types: route.params.type,
-			state: ''
-		}).then(async (res: any) => {
-
-			localStorage.setItem('token', res.token);
-			const userInfos = res.userInfo;
-			userInfos.avatar = proxy.getUpFileUrl(userInfos.avatar);
-			// 存储 token 到浏览器缓存
-			Local.set('userInfo', userInfos);
-			// 存储用户信息到浏览器缓存
-			Session.set('userInfo', userInfos);
-
-
-			// 获取权限配置，上传文件类型等
-			// const [columnRes, buttonRes, uploadFileRes] = await Promise.all([api.getInfoByKey('sys.column.switch'), api.getInfoByKey('sys.button.switch'), api.getInfoByKey('sys.uploadFile.way')])
-
-			// const isSecurityControlEnabled = sessionStorage.isSecurityControlEnabled || null
-			// localStorage.setItem('btnNoAuth', (isSecurityControlEnabled && Number(buttonRes?.data?.configValue)) ? '' : '1');
-			// localStorage.setItem('colNoAuth', (isSecurityControlEnabled && Number(columnRes?.data?.configValue)) ? '' : '1');
-			// localStorage.setItem('uploadFileWay', uploadFileRes?.data?.configValue || '0');
-
-			await store.dispatch('userInfos/setUserInfos', userInfos);
-
-			currentUser();
-		})
-
-		// 获取登录用户信息
-		const currentUser = async () => {
-			api.login.currentUser().then(async (res: any) => {
-				localStorage.setItem('userId', res.Info.id);
-				// 设置用户菜单
-				Session.set('userMenu', res.Data || []);
-				store.dispatch('requestOldRoutes/setBackEndControlRoutes', res || []);
-				if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
-					// 前端控制路由，2、请注意执行顺序
-					await initFrontEndControlRoutes();
-					signInSuccess();
-				} else {
-					// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-					// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-					await initBackEndControlRoutes();
-					// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-					signInSuccess();
-				}
-			});
-			// // 设置按钮权限
-			// Session.set('permissions', res.data.permissions);
-			// // 1、请注意执行顺序(存储用户信息到vuex)
-			// await store.dispatch('userInfos/setPermissions', res.data.permissions);
-		};
-		// 登录成功后的跳转
-		const signInSuccess = () => {
-			// 修改首页重定向的地址，从后台配置中获取首页的地址并在登录之后和刷新页面时进行修改
-			const sysinfo = JSON.parse(localStorage.sysinfo || '{}');
-			const homePage = router.getRoutes().find((item) => item.path === '/');
-			homePage && (homePage.redirect = sysinfo.systemHomePageRoute || '/home');
-			if (route.query?.redirect) {
-				router.push({
-					path: route.query?.redirect as string,
-					query: route.query.params ? (Object.keys(route.query?.params as string).length > 0 ? JSON.parse(route.query?.params as string) : '') : '',
-				});
-			} else {
-				router.push('/');
-			}
-			// 登录成功提示
-			ElMessage.success('登录成功');
-		};
-
-		return {};
-	},
+// 页面加载时
+onMounted(() => {
+	const code:string = getQueryString('code');
+	console.log(code)
+	if(code) {
+		toLogin(code);
+	}
+	
 });
 </script>
 
