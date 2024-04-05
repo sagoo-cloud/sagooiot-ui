@@ -16,7 +16,7 @@ import getOrigin from '/@/utils/origin';
 const source = localStorage.uploadFileWay
 
 const headers = {
-	Authorization: 'Bearer ' + localStorage.token,
+	Authorization: 'Bearer ' + sessionStorage.token,
 };
 
 const emit = defineEmits(['update']);
