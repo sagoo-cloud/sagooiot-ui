@@ -37,6 +37,7 @@
     "event-source-polyfill": "^1.0.31",
     "jsplumb": "^2.15.6",
     "jsrsasign": "^10.8.6",
+    "loadsh": "^0.0.4",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pako": "^1.0.11",

@@ -34,18 +34,18 @@
 						</el-icon>
 						新增接口
 					</el-button>
-					<!-- <el-button type="primary" :disabled="!ids.length" @click="bindMenus()" v-auth="'batch'">
-							<el-icon>
-								<ele-Grid />
-							</el-icon>
-							批量绑定菜单
-						</el-button>
-						<el-button type="primary" @click="apiImport()" :loading="importing" v-auth="'import'">
-							<el-icon>
-								<ele-Download />
-							</el-icon>
-							系统API同步
-						</el-button> -->
+					<el-button type="primary" :disabled="!ids.length" @click="bindMenus()" v-auth="'batch'">
+						<el-icon>
+							<ele-Grid />
+						</el-icon>
+						批量绑定菜单
+					</el-button>
+					<el-button type="primary" @click="apiImport()" :loading="importing" v-auth="'import'">
+						<el-icon>
+							<ele-Download />
+						</el-icon>
+						系统API同步
+					</el-button>
 				</el-form-item>
 			</el-form>
 			<el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%" v-loading="loading" :expand-row-keys="[]" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">

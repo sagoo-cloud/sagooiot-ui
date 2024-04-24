@@ -111,7 +111,7 @@
                 </div>
               </div>
 
-              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'attr'">
+              <el-table style="width: 100%" :data="tableData.data" v-loading="tableLoading" v-if="activetab == 'attr'">
                 <el-table-column label="属性标识" align="center" prop="key" />
                 <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
                 <el-table-column prop="valueType" label="数据类型" width="100" align="center">
@@ -153,7 +153,7 @@
                 </div>
               </div>
 
-              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'fun'">
+              <el-table style="width: 100%" :data="tableData.data" v-loading="tableLoading" v-if="activetab == 'fun'">
                 <el-table-column label="功能标识" align="center" prop="key" />
                 <el-table-column label="名称" prop="name" show-overflow-tooltip />
 
@@ -174,7 +174,7 @@
                 </div>
               </div>
 
-              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'event'">
+              <el-table style="width: 100%" :data="tableData.data" v-loading="tableLoading" v-if="activetab == 'event'">
                 <el-table-column label="事件标识" align="center" prop="key" />
                 <el-table-column label="名称" prop="name" show-overflow-tooltip />
                 <el-table-column prop="level" label="事件级别" width="120" align="center">
@@ -203,7 +203,7 @@
               </div>
 
 
-              <el-table style="width: 100%" :data="tableData.data" v-if="activetab == 'tab'">
+              <el-table style="width: 100%" :data="tableData.data" v-loading="tableLoading" v-if="activetab == 'tab'">
                 <el-table-column label="属性标识" align="center" prop="key" />
                 <el-table-column label="属性名称" prop="name" show-overflow-tooltip />
                 <el-table-column prop="valueType" label="数据类型" width="120" align="center">
@@ -460,6 +460,7 @@ export default defineComponent({
     const propertyMap = new Map()
 
     const array_list = ref([]);
+    const tableLoading = ref(false);
     const route = useRoute();
     const editDicRef = ref();
     const setAttrRef = ref();
@@ -554,7 +555,22 @@ export default defineComponent({
           re.forEach((item: any) => propertyMap.set(item.key, item?.valueType));
         });
 
-        topicData.value = [
+
+        const deviceType = res.data?.product?.deviceType
+
+        topicData.value = deviceType === '网关' ? [
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+            type: '请求',
+          },
+          {
+            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
+            info: '网关批量上传事件和属性(网关发起)',
+            type: '响应',
+          }
+        ] : [
+
           {
             url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/property/post`,
             info: '设备上报属性(设备端发起)',
@@ -573,36 +589,6 @@ export default defineComponent({
           {
             url: `/sys/${res.data.productKey}/${deviceKey}/thing/event/${'${eventIdentifier}'}/property/post_reply`,
             info: '设备上报事件(设备端发起)',
-            type: '响应',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set`,
-            info: '设备属性设置(平台侧发起)',
-            type: '请求',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/set_reply`,
-            info: '设备属性设置(平台侧发起)',
-            type: '响应',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
-            info: '网关批量上传事件和属性(网关发起)',
-            type: '请求',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/property/pack/post`,
-            info: '网关批量上传事件和属性(网关发起)',
-            type: '响应',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}/thing/service/${'${tsl.service.identifier}'}`,
-            info: '服务调用(平台侧发起)',
-            type: '请求',
-          },
-          {
-            url: `/sys/${res.data.productKey}/${deviceKey}//thing/service/${'${tsl.service.identifier}'}_reply`,
-            info: '服务调用(平台侧发起)',
             type: '响应',
           }
         ]
@@ -672,12 +658,12 @@ export default defineComponent({
     }
 
     const getDeviceTableData = () => {
+      state.deviceTableData.data = []
       state.deviceTableData.param.gatewayKey = state.detail.key;
       api.device.getList(state.deviceTableData.param).then((res: any) => {
         state.deviceTableData.data = res.list;
-
         state.deviceTableData.total = res.Total;
-      });
+      })
     };
 
     // 多选框选中数据
@@ -831,32 +817,38 @@ export default defineComponent({
     };
 
     const getproperty = () => {
+      state.tableData.data = []
+      tableLoading.value = true
       api.model.property(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
-
         state.tableData.total = res.Total;
-      });
+      }).finally(() => tableLoading.value = false)
     };
 
     const getfunction = () => {
+      state.tableData.data = []
+      tableLoading.value = true
       api.model.function(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
-      });
+      }).finally(() => tableLoading.value = false)
     };
     const getevent = () => {
+      state.tableData.data = []
+      tableLoading.value = true
       api.model.event(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
         state.tableData.total = res.Total;
-      });
+      }).finally(() => tableLoading.value = false)
     };
 
     const gettab = () => {
+      state.tableData.data = []
+      tableLoading.value = true
       api.model.tag(state.tableData.param).then((res: any) => {
         state.tableData.data = res.Data;
-
         state.tableData.total = res.Total;
-      });
+      }).finally(() => tableLoading.value = false)
     };
 
     const wuhandleClick = (tab: any) => {
@@ -1040,6 +1032,7 @@ export default defineComponent({
       editTabRef,
       subDeviceRef,
       mutipleBindRef,
+      tableLoading,
       editAssetRef,
       dataList,
       deviceAssetMetadata,

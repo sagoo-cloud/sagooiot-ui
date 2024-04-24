@@ -106,6 +106,7 @@ html[data-theme='dark'] {
 		color: #aaa;
 	}
 }
+
 .flex {
 	display: flex;
 	align-items: center;
@@ -120,11 +121,13 @@ html[data-theme='dark'] {
 	right: 20px;
 	top: 20px;
 }
+
 .login-container {
 	width: 100vw;
 	height: 100vh;
 	position: relative;
 	background: #fff;
+
 	.title {
 		font-size: 30px;
 		color: #333;
@@ -142,11 +145,13 @@ html[data-theme='dark'] {
 			margin-right: 12px;
 		}
 	}
+
 	.img {
 		width: 50%;
 		display: block;
 		margin: 15vh 0;
 	}
+
 	.part {
 		flex: 1;
 		display: flex;
@@ -154,6 +159,7 @@ html[data-theme='dark'] {
 		justify-content: center;
 		align-items: center;
 	}
+
 	.left {
 		height: 100vh;
 		background-image: url(/@/assets/login-bg.svg);
@@ -163,24 +169,29 @@ html[data-theme='dark'] {
 		align-items: flex-start;
 		padding-left: 8%;
 	}
+
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
 		position: relative;
+
 		.login-icon-group-title {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			margin: 12px 0;
+
 			img {
 				width: auto;
 				height: 40px;
 			}
+
 			&-text {
 				padding-left: 20px;
 				color: var(--el-color-primary);
 			}
 		}
+
 		&-icon {
 			width: 60%;
 			height: 70%;
@@ -189,11 +200,13 @@ html[data-theme='dark'] {
 			bottom: 0;
 		}
 	}
+
 	.login-content-out {
 		width: 100%;
 		height: 100%;
 		padding-top: calc(50vh - 227px);
 	}
+
 	.login-content {
 		width: 500px;
 		padding: 20px;
@@ -222,6 +235,7 @@ html[data-theme='dark'] {
 				transition: all 0.3s ease;
 			}
 		}
+
 		.login-content-main-sacn {
 			position: absolute;
 			top: 0;
@@ -232,6 +246,7 @@ html[data-theme='dark'] {
 			cursor: pointer;
 			transition: all ease 0.3s;
 			color: var(--el-text-color-primary);
+
 			&-delta {
 				position: absolute;
 				width: 35px;
@@ -242,11 +257,13 @@ html[data-theme='dark'] {
 				background: var(--el-color-white);
 				transform: rotate(-45deg);
 			}
+
 			&:hover {
 				opacity: 1;
 				transition: all ease 0.3s;
 				color: var(--el-color-primary) !important;
 			}
+
 			i {
 				width: 47px;
 				height: 50px;
@@ -258,6 +275,7 @@ html[data-theme='dark'] {
 			}
 		}
 	}
+
 	.login-footer {
 		position: absolute;
 		bottom: 5px;

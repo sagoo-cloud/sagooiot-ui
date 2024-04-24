@@ -32,6 +32,7 @@ export default {
     getTypesAll: (data: object) => get('/system/plugins/getTypesAll', data),
     // 脚本更新
     script: (data: object) => put('/product/script/update', data),
+    getpropertyList: (params: object) => get('/product/tsl/property/all', params),
   },
   category: {
     getList: (params: object) => get('/product/category/list', params),
@@ -93,6 +94,10 @@ export default {
     statistic: (params: object) => get('/envirotronics/device_tree/statistic', params),
     record: (params: object) => get('/envirotronics/device_tree/record', params),
     param: (params: object) => get('/envirotronics/device_tree/param', params),
+  },
+  analysis: {
+    deviceIndicatorTrend: (params: object) => get('/analysis/deviceIndicatorTrend', params),
+    deviceIndicatorPolymerize: (params: object) => get('/analysis/deviceIndicatorPolymerize', params),
   },
   device: {
     getList: (params: object) => get('/product/device/bind_list', params),

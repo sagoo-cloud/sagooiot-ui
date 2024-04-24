@@ -25,22 +25,25 @@
     </el-form-item>
 
     <el-form-item label="布尔值" v-else-if="valueType.type === 'boolean'">
-      <div class="input-box">
-        <el-input v-model="valueType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
-        <el-input v-model="valueType.trueValue" placeholder="请输入布尔值" value="true" />
+      <div class="input-box flex-row">
+        <el-input v-model="valueType.trueText" placeholder="请输入true时显示的文字" /><span style="margin: 0px 10px">~</span>
+        <el-input v-model="valueType.trueValue" placeholder="请输入布尔值" disabled />
       </div>
 
-      <div class="input-box">
-        <el-input v-model="valueType.falseText" placeholder="请输入布尔值" value="否" /> <span style="margin: 0px 10px">~</span>
-        <el-input v-model="valueType.falseValue" placeholder="请输入布尔值" value="false" />
+      <div class="input-box flex-row">
+        <el-input v-model="valueType.falseText" placeholder="请输入false时显示的文字" /> <span style="margin: 0px 10px">~</span>
+        <el-input v-model="valueType.falseValue" placeholder="请输入布尔值" disabled />
       </div>
     </el-form-item>
 
     <el-form-item label="枚举项" prop="" v-else-if="valueType.type === 'enum'">
-      <div class="input-box" v-for="(item, index) in valueType.elements" :key="index">
-        <el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
+      <div class="input-box flex-row" v-for="(item, index) in valueType.elements" :key="index">
+        <el-input v-model="item.text" placeholder="请输入枚举文本" />
+        <span style="margin: 0px 10px">
+          <el-icon>
             <Right />
-          </el-icon></span>
+          </el-icon>
+        </span>
         <el-input v-model="item.value" placeholder="请输入枚举值" />
         <div class="input-option">
           <el-icon @click="addEnum" v-if="index == 0">
@@ -90,8 +93,8 @@ interface IValyeType {
   decimals?: string | null;
   trueText?: string | null;
   falseText?: string | null;
-  trueValue?: string | null;
-  falseValue?: string | null;
+  trueValue?: boolean | null;
+  falseValue?: boolean | null;
   maxLength?: string | null;
   elements: { text: string, value: string }[];
   elementType?: IValyeType;
@@ -104,10 +107,10 @@ const valueTypeBase = {
   // min: null,
   unit: null,
   decimals: null,
-  trueText: null,
-  falseText: null,
-  trueValue: null,
-  falseValue: null,
+  trueText: '是',
+  falseText: '否',
+  trueValue: true,
+  falseValue: false,
   maxLength: null,
   elements: [{
     'text': '',
@@ -140,7 +143,7 @@ const addObject = () => {
     'key': '',
     'name': '',
     'desc': '',
-    valueType: { ...valueTypeBase }
+    valueType: JSON.parse(JSON.stringify(valueTypeBase))
   })
 };
 
@@ -152,6 +155,7 @@ const setNull = (row: any, key: string, val: string) => {
   if (!val) row[key] = null
 }
 </script>
+
 <style scoped lang="scss">
 .type-item {
   width: 100%;

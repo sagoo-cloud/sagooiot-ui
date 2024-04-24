@@ -36,19 +36,19 @@
 				</el-form-item>
 
 				<el-form-item label="布尔值" prop="trueText" v-if="type == 'boolean'">
-					<div class="input-box">
-						<el-input v-model="valueType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
-						<el-input v-model="valueType.trueValue" placeholder="请输入布尔值" value="true" />
+					<div class="input-box flex-row">
+						<el-input v-model="valueType.trueText" placeholder="请输入true时显示的文字" /><span style="margin: 0px 10px">~</span>
+						<el-input v-model="valueType.trueValue" placeholder="请输入布尔值" disabled />
 					</div>
 
-					<div class="input-box">
-						<el-input v-model="valueType.falseText" placeholder="请输入布尔值" value="否" /> <span style="margin: 0px 10px">~</span>
-						<el-input v-model="valueType.falseValue" placeholder="请输入布尔值" value="false" />
+					<div class="input-box flex-row">
+						<el-input v-model="valueType.falseText" placeholder="请输入false时显示的文字" /> <span style="margin: 0px 10px">~</span>
+						<el-input v-model="valueType.falseValue" placeholder="请输入布尔值" disabled />
 					</div>
 				</el-form-item>
 
 				<el-form-item label="枚举项" prop="maxLength" v-if="type == 'enum'">
-					<div class="input-box" v-for="(item, index) in enumdata" :key="index">
+					<div class="input-box flex-row" v-for="(item, index) in enumdata" :key="index">
 						<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
 								<Right />
 							</el-icon></span>
@@ -71,7 +71,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<el-link type="primary"  @click="editjson(index)">编辑</el-link>
+								<el-link type="primary" @click="editjson(index)">编辑</el-link>
 								<el-link type="primary" @click="deljson(index)">删除</el-link>
 							</div>
 						</div>
@@ -113,19 +113,19 @@
 					</el-form-item>
 
 					<el-form-item label="布尔值" prop="maxLength" v-if="types == 'boolean'">
-						<div class="input-box">
-							<el-input v-model="elementType.trueText" placeholder="请输入布尔值" value="是" /><span style="margin: 0px 10px">~</span>
-							<el-input v-model="elementType.trueValue" placeholder="请输入布尔值" value="true" />
+						<div class="input-box flex-row">
+							<el-input v-model="elementType.trueText" placeholder="请输入true时显示的文字" /><span style="margin: 0px 10px">~</span>
+							<el-input v-model="elementType.trueValue" placeholder="请输入布尔值" disabled />
 						</div>
 
-						<div class="input-box">
-							<el-input v-model="elementType.falseText" placeholder="请输入布尔值" value="否" /> <span style="margin: 0px 10px">~</span>
-							<el-input v-model="elementType.falseValue" placeholder="请输入布尔值" value="false" />
+						<div class="input-box flex-row">
+							<el-input v-model="elementType.falseText" placeholder="请输入false时显示的文字" /> <span style="margin: 0px 10px">~</span>
+							<el-input v-model="elementType.falseValue" placeholder="请输入布尔值" disabled />
 						</div>
 					</el-form-item>
 
 					<el-form-item label="枚举项" prop="maxLength" v-if="types == 'enum'">
-						<div class="input-box" v-for="(item, index) in enumdata" :key="index">
+						<div class="input-box flex-row" v-for="(item, index) in enumdata" :key="index">
 							<el-input v-model="item.text" placeholder="请输入枚举文本" /><span style="margin: 0px 10px"><el-icon>
 									<Right />
 								</el-icon></span>
@@ -150,7 +150,7 @@
 							<div>参数名称：{{ item.name }}</div>
 							<div>数据类型：{{ item.valueType.type }}</div>
 							<div class="jsonoption">
-								<el-link type="primary"  @click="editjson(index)">编辑</el-link>
+								<el-link type="primary" @click="editjson(index)">编辑</el-link>
 								<el-link type="primary" @click="deljson(index)">删除</el-link>
 							</div>
 						</div>
@@ -213,6 +213,15 @@ interface DicState {
 	rules: {};
 }
 
+const valueType = {
+	type: '',
+	maxLength: '',
+	trueText: '是',
+	trueValue: true,
+	falseText: '否',
+	falseValue: false,
+}
+
 export default defineComponent({
 	name: 'deviceEditPro',
 	components: { Plus, Minus, Right, EditOption },
@@ -225,18 +234,8 @@ export default defineComponent({
 			type: '',
 			types: '',
 			productKey: '',
-			valueType: {
-				type: '',
-				maxLength: '',
-				trueText: '是',
-				trueValue: 'true',
-				falseText: '否',
-				falseValue: 'false',
-			},
-			elementType: {
-				type: '',
-				maxLength: '',
-			},
+			valueType: JSON.parse(JSON.stringify(valueType)),
+			elementType: JSON.parse(JSON.stringify(valueType)),
 			enumdata: [
 				{
 					text: '',
@@ -254,18 +253,14 @@ export default defineComponent({
 				transportProtocol: '',
 				accessMode: 1,
 				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
+				valueType: JSON.parse(JSON.stringify(valueType)),
 				desc: '',
 			},
 			rules: {
-				name: [ { required: true, message: '属性定义名称不能为空', trigger: 'blur' },
-        				{ max: 32, message: '属性定义名称不能超过32个字符', trigger: 'blur' },
-						{ validator: validateNoSpace, message: '属性定义名称不能包含空格', trigger: 'blur' }
-					],
+				name: [{ required: true, message: '属性定义名称不能为空', trigger: 'blur' },
+				{ max: 32, message: '属性定义名称不能超过32个字符', trigger: 'blur' },
+				{ validator: validateNoSpace, message: '属性定义名称不能包含空格', trigger: 'blur' }
+				],
 				key: [{ required: true, message: '属性定义标识不能为空', trigger: 'blur' }],
 				accessMode: [{ required: true, message: '请选择是否只读', trigger: 'blur' }],
 				type: [{ required: true, message: '请选择数据类型', trigger: 'blur' }],
@@ -330,18 +325,14 @@ export default defineComponent({
 				transportProtocol: '',
 				accessMode: 1,
 				status: 1,
-				valueType: {
-					type: '',
-					maxLength: '',
-				},
-
+				valueType: JSON.parse(JSON.stringify(valueType)),
 				desc: '',
 
 			};
 			state.type = '';
 			state.types = '';
-			state.valueType = {};
-			state.elementType = {};
+			state.valueType = JSON.parse(JSON.stringify(valueType));
+			state.elementType = JSON.parse(JSON.stringify(valueType));
 			state.jsondata = [];
 			state.enumdata = [{
 				text: '',
@@ -367,7 +358,7 @@ export default defineComponent({
 			state.enumdata.splice(index, 1);
 		};
 
-		const editjson=(index)=>{
+		const editjson = (index) => {
 
 			editOptionRef.value.openDialog(state.jsondata[index]);
 
