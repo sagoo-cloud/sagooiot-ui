@@ -18,6 +18,7 @@ import LockScreen from '/@/layout/lockScreen/index.vue';
 import Setings from '/@/layout/navBars/breadcrumb/setings.vue';
 import CloseFull from '/@/layout/navBars/breadcrumb/closeFull.vue';
 import api from '/@/api/system';
+import _ from 'loadsh'
 // 进入系统的时间
 sessionStorage.setItem('comeTime', Date.now().toString())
 
@@ -38,6 +39,11 @@ export default defineComponent({
 		});
 	},
 	setup() {
+		// 监听屏幕尺寸变化
+		window.onresize = _.debounce(() => {
+			store.commit('global/setResize')
+		}, 200)
+		
 		const { proxy } = <any>getCurrentInstance();
 		const setingsRef = ref();
 		const route = useRoute();

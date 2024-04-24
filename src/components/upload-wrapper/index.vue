@@ -16,7 +16,7 @@ const uploadUrl: string = getOrigin(import.meta.env.VITE_API_URL + '/common/sing
 const source = localStorage.uploadFileWay
 
 const headers = {
-  Authorization: 'Bearer ' + localStorage.token,
+  Authorization: 'Bearer ' + sessionStorage.token,
 };
 
 const emit = defineEmits(['setImg', 'setImgs']);

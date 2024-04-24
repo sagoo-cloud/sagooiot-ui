@@ -96,3 +96,11 @@ export interface RootStateTypes {
 	userInfos: UserInfosState;
 	requestOldRoutes: RequestOldRoutesState;
 }
+
+// global
+export interface GlobalState {
+	resize: {
+		innerHeight: number;
+		innerWidth: number;
+	};
+}

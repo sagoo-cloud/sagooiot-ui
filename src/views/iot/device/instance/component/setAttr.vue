@@ -21,7 +21,7 @@
           </el-input>
         </template>
         <template v-else-if="['enum'].includes(data.valueType.type)">
-          <el-select v-model="data.value" clearable style="wdith: 100% !important;">
+          <el-select v-model="data.value" clearable style="width: 100% !important;">
             <el-option v-for="item in data.valueType.elements" :key="item.value" :value="item.value" :label="item.text"></el-option>
           </el-select>
         </template>

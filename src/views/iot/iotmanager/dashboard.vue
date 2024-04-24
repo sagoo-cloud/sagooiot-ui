@@ -101,13 +101,11 @@ export default defineComponent({
 	name: 'home',
 	components: { EditDic, DetailDic },
 	setup() {
-
-		let timer1: any
-		let timer2: any
+		// 页面是显示状态
+		let isActice = true
 
 		onUnmounted(() => {
-			clearInterval(timer1)
-			clearInterval(timer2)
+			isActice = false
 		})
 
 		const { proxy } = getCurrentInstance() as any;
@@ -121,8 +119,8 @@ export default defineComponent({
 				alarmTypeMap[item.value] = item.label
 			});
 
-			getChartData()
-
+			// 预警类型需要类型返回后才能请求
+			getDeviceAlarmLevelCount()
 		}, {
 			immediate: true
 		})
@@ -247,7 +245,7 @@ export default defineComponent({
 						splitLine: { show: true, lineStyle: { type: 'dashed', color: '#f5f5f5' } },
 						axisLabel: {
 							margin: 2,
-							formatter: function (value:any) {
+							formatter: function (value: any) {
 								if (value >= 10000 && value < 10000000) {
 									value = value / 10000 + "W";
 								} else if (value >= 10000000) {
@@ -417,48 +415,30 @@ export default defineComponent({
 		};
 
 		// 定时获取设备，在线信息，告警数量更新
-		function getLoopData() {
-			// 产品数量
-			api.iotManage.productCount().then((res: any) => {
-				state.homeOne[0].allnum = res.total;
-				state.homeOne[0].num1 = res.enable
-				state.homeOne[0].num2 = res.disable
-			})
+		const getOverviewData = () => {
+			getProductCount()
+			getDeviceDataTotalCount()
+			getDeviceDataTotalCountMonth()
+			getDeviceDataTotalCountDay()
+			getDeviceOnlineOfflineCount()
+			getDeviceAlarmLevelCountYear()
+			getDeviceAlarmLevelCountMonth()
+			getDeviceAlarmLevelCountDay()
+			// 图形数据
+			getDeviceDataCount()
+		};
 
-			api.iotManage.deviceDataTotalCount('year').then((res: any) => {
-				state.homeOne[2].allnum = res.number;
-			})
-			api.iotManage.deviceDataTotalCount('month').then((res: any) => {
-				state.homeOne[2].num1 = res.number;
-			})
-			api.iotManage.deviceDataTotalCount('day').then((res: any) => {
-				state.homeOne[2].num2 = res.number;
-			})
-			api.iotManage.deviceOnlineOfflineCount().then((res: any) => {
-				// console.log(res)
-				state.homeOne[1].allnum = res.online;
-				state.homeOne[1].num1 = res.total - res.disable
-				state.homeOne[1].num2 = res.disable
-			})
+		// 普通数据3秒更新
+		const intervalTimeLong = 3000
 
-			// 按告警级别统计
-			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
-				const list = (res.data || [])
-				const total = list.reduce((a: any, b: any) => a + b.Value, 0)
-				state.homeOne[3].allnum = total;
-			})
-			api.iotManage.deviceAlarmLevelCount('month', dayjs().format('M')).then((res: any) => {
-				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
-				state.homeOne[3].num1 = total;
-			})
-			api.iotManage.deviceAlarmLevelCount('day', dayjs().format('D')).then((res: any) => {
-				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
-				state.homeOne[3].num2 = total;
-			})
+		function loopRquest(fun: Function, timeLong?: number) {
+			setTimeout(() => {
+				isActice && fun()
+			}, timeLong || intervalTimeLong)
 		}
 
 		// 获取告警告警数量和消息数量绘图
-		function getChartData() {
+		function getDeviceDataCount() {
 			// 获取年度消息，年度告警数量
 			Promise.all([api.iotManage.deviceDataCount('year'), api.iotManage.deviceAlertCountByYearMonth(dayjs().format('YYYY'))]).then(([msg, alarm]: any) => {
 				const msgArr = msg?.data || []
@@ -467,25 +447,84 @@ export default defineComponent({
 				state.lineChartMsgTotalData = msgArr.map((item: any) => item.Value)
 				state.lineChartXAxisData = msgArr.map((item: any) => item.Title)
 				state.lineChartAlarmTotalData = alarmArr.map((item: any) => item.Value)
-			})
+			}).finally(() => loopRquest(getDeviceDataCount, 60000))
+		}
+
+		// 获取告警告警数量和消息数量绘图
+		function getDeviceAlarmLevelCount() {
 			// 按告警级别统计 绘制饼图
 			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
 				const list = (res.data || []).sort((a: any, b: any) => b.Title - a.Title)
 				state.pieChartLegend = list.map((item: any) => alarmTypeMap[item.Title])
 				state.pieChartLevel = list.map((item: any) => item.Title)
 				state.pieChartData = list.map((item: any) => item.Value)
-			})
+			}).finally(() => loopRquest(getDeviceAlarmLevelCount, 60000))
 		}
 
-		// 每隔3秒更新数据
-		timer1 = setInterval(getLoopData, 3000)
+		// 产品数量
+		function getProductCount() {
+			api.iotManage.productCount().then((res: any) => {
+				state.homeOne[0].allnum = res.total;
+				state.homeOne[0].num1 = res.enable
+				state.homeOne[0].num2 = res.disable
+			}).finally(() => loopRquest(getProductCount))
+		}
 
-		// 每隔一分钟秒更新图形
-		timer2 = setInterval(getChartData, 60000)
+		// 设备数据总数
+		function getDeviceDataTotalCount() {
+			api.iotManage.deviceDataTotalCount('year').then((res: any) => {
+				state.homeOne[2].allnum = res.number;
+			}).finally(() => loopRquest(getDeviceDataTotalCount))
+		}
 
-		const getOverviewData = () => {
-			getLoopData()
-		};
+		// 设备数据总数-月
+		function getDeviceDataTotalCountMonth() {
+			api.iotManage.deviceDataTotalCount('month').then((res: any) => {
+				state.homeOne[2].num1 = res.number;
+			}).finally(() => loopRquest(getDeviceDataTotalCountMonth))
+		}
+
+		// 设备数据总数-月
+		function getDeviceDataTotalCountDay() {
+			api.iotManage.deviceDataTotalCount('day').then((res: any) => {
+				state.homeOne[2].num2 = res.number;
+			}).finally(() => loopRquest(getDeviceDataTotalCountDay))
+		}
+
+		// 设备数量
+		function getDeviceOnlineOfflineCount() {
+			api.iotManage.deviceOnlineOfflineCount().then((res: any) => {
+				state.homeOne[1].allnum = res.online;
+				state.homeOne[1].num1 = res.total - res.disable
+				state.homeOne[1].num2 = res.disable
+			}).finally(() => loopRquest(getDeviceOnlineOfflineCount))
+		}
+
+		// 告警数量-年
+		function getDeviceAlarmLevelCountYear() {
+			api.iotManage.deviceAlarmLevelCount('year', dayjs().format('YYYY')).then((res: any) => {
+				const list = (res.data || [])
+				const total = list.reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].allnum = total;
+			}).finally(() => loopRquest(getDeviceAlarmLevelCountYear))
+		}
+
+		// 告警数量-月
+		function getDeviceAlarmLevelCountMonth() {
+			api.iotManage.deviceAlarmLevelCount('month', dayjs().format('M')).then((res: any) => {
+				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].num1 = total;
+			}).finally(() => loopRquest(getDeviceAlarmLevelCountMonth))
+		}
+
+		// 告警数量-日
+		function getDeviceAlarmLevelCountDay() {
+			api.iotManage.deviceAlarmLevelCount('day', dayjs().format('D')).then((res: any) => {
+				const total = (res.data || []).reduce((a: any, b: any) => a + b.Value, 0)
+				state.homeOne[3].num2 = total;
+			}).finally(() => loopRquest(getDeviceAlarmLevelCountDay))
+		}
+
 		const getAlarmList = () => {
 			api.iotManage.getAlarmList(state.tableData.param).then((res: any) => {
 				state.tableData.data = res.list;

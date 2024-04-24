@@ -67,22 +67,22 @@ const valueTypeBase = {
 	// min: null,
 	unit: null,
 	decimals: null,
-	trueText: null,
-	falseText: null,
-	trueValue: null,
-	falseValue: null,
+	trueText: '是',
+	falseText: '否',
+	trueValue: true,
+	falseValue: false,
 	type: null,
 	maxLength: null,
 }
 
 const valueType = {
-	...valueTypeBase,
+	...JSON.parse(JSON.stringify(valueTypeBase)),
 	properties: [{
 		'key': '',
 		'name': '',
 		'desc': '',
 		'valueType': {
-			...valueTypeBase,
+			...JSON.parse(JSON.stringify(valueTypeBase)),
 			elements: [{
 				'text': '',
 				'value': ''
